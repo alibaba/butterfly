@@ -4,7 +4,7 @@ Butterflies是什么是一个基于数据驱动文档的一款JavaScript函数�
 
 # 安装
 ```
-npm install butterfl-dag
+npm install butterfly-dag
 ```
 
 # 使用方法
