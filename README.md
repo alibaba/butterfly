@@ -2,6 +2,11 @@
 
 Butterflies是什么是一个基于数据驱动文档的一款JavaScript函数库，让你有能力借助HTML，SVG，CSS来方便快捷生成可视化流程图表。
 
+# 安装
+```
+npm install butterfly-dag
+```
+
 # 使用方法
 ```
 let canvas = new Canvas({
