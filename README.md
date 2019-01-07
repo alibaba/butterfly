@@ -249,7 +249,6 @@ emit = (string, obj) => {}
   */
 on = (string, callback) => {}
 ```
-```
 
 ## Node
 
@@ -350,7 +349,6 @@ emit = (string, obj) => {}
 on = (string, callback) => {}
 ```
 
-```
 
 ## 线
 
@@ -368,6 +366,7 @@ on = (string, callback) => {}
 | label | 线条上加注释 | string/dom (Option) | -
 
 ### 方法
+
 ```
 /**
   * @return {dom} - 自定义节点的dom
@@ -387,17 +386,14 @@ drawArrow = () => {}
   * @return {string} - path的路径
   */
 calcPath = () => {}
-
 /**
   * 发送事件
   */
 emit = (string, obj) => {}
-
 /**
   * 接受事件
   */
 on = (string, callback) => {}
-```
 ```
 
 ## 锚点
