@@ -52,8 +52,8 @@ class SelectCanvas {
     this.clearCanvas();
     const startX = this.startX;
     const startY = this.startY;
-    const endX = this.endX;
-    const endY = this.endY;
+    const endX = this.endX = evt.clientX;
+    const endY = this.endY = evt.clientY;
 
     const startLeft = startX > endX ? endX : startX;
     const startTop = startY > endY ? endY : startY;

@@ -33232,8 +33232,8 @@ var SelectCanvas = function () {
       this.clearCanvas();
       var startX = this.startX;
       var startY = this.startY;
-      var endX = this.endX;
-      var endY = this.endY;
+      var endX = this.endX = evt.clientX;
+      var endY = this.endY = evt.clientY;
 
       var startLeft = startX > endX ? endX : startX;
       var startTop = startY > endY ? endY : startY;
