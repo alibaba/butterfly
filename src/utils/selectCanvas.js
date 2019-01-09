@@ -1,4 +1,4 @@
-'use strict';
+
 
 const $ = require('jquery');
 
@@ -18,9 +18,10 @@ class SelectCanvas {
     this._emit = null;
     this.isDraw = false;
   }
+
   init(opts) {
-    let root = opts.root;
-    let offset = $(root).offset();
+    const root = opts.root;
+    const offset = $(root).offset();
     this.canvasTop = offset.top;
     this.canvasLeft = offset.left;
     this.canvasHeight = $(root).height();
@@ -32,29 +33,32 @@ class SelectCanvas {
     this.addEventLinster();
     $(this.dom).appendTo(root);
   }
+
   addEventLinster() {
     this.dom.addEventListener('mousedown', this.mouseDown.bind(this));
     this.dom.addEventListener('mouseup', this.mouseUp.bind(this));
     this.dom.addEventListener('mousemove', this.mouseMove.bind(this));
     this.dom.addEventListener('mouseleave', this.mouseLeave.bind(this));
   }
+
   mouseDown(evt) {
     this.startX = evt.clientX;
     this.startY = evt.clientY;
     this.isDraw = true;
   }
+
   mouseUp(evt) {
     this.isDraw = false;
     this.clearCanvas();
-    let startX = this.startX;
-    let startY = this.startY;
-    let endX = this.endX;
-    let endY = this.endY;
+    const startX = this.startX;
+    const startY = this.startY;
+    const endX = this.endX;
+    const endY = this.endY;
 
-    let startLeft = startX > endX ? endX : startX;
-    let startTop = startY > endY ? endY : startY;
-    let endLeft = startX > endX ? startX : endX;
-    let endTop = startY > endY ? startY : endY;
+    const startLeft = startX > endX ? endX : startX;
+    const startTop = startY > endY ? endY : startY;
+    const endLeft = startX > endX ? startX : endX;
+    const endTop = startY > endY ? startY : endY;
 
 
     this._emit('InnerEvents', {
@@ -62,6 +66,7 @@ class SelectCanvas {
       range: [startLeft, startTop, endLeft, endTop]
     });
   }
+
   mouseMove(evt) {
     if (!this.isDraw) {
       return;
@@ -71,19 +76,21 @@ class SelectCanvas {
     this.endY = evt.clientY;
     this.drawRect();
   }
+
   mouseLeave(evt) {
     this.isDraw = false;
     this.clearCanvas();
   }
+
   drawRect() {
     if (!this.isDraw) {
       return;
     }
     this.clearCanvas();
-    let startX = Math.min(this.startX, this.endX) - this.canvasLeft;
-    let startY = Math.min(this.startY, this.endY) - this.canvasTop;
-    let width = Math.abs(this.startX - this.endX);
-    let height = Math.abs(this.startY - this.endY);
+    const startX = Math.min(this.startX, this.endX) - this.canvasLeft;
+    const startY = Math.min(this.startY, this.endY) - this.canvasTop;
+    const width = Math.abs(this.startX - this.endX);
+    const height = Math.abs(this.startY - this.endY);
 
     this.cxt.beginPath();
     this.cxt.rect(startX, startY, width, height);
@@ -93,15 +100,19 @@ class SelectCanvas {
     this.cxt.strokeStyle = '#3da4ff';
     this.cxt.stroke();
   }
+
   clearCanvas() {
     this.cxt.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
   }
+
   getCanvas() {
     return this.dom;
   }
+
   active() {
     $(this.dom).addClass('warpper-up');
   }
+
   unActive() {
     $(this.dom).removeClass('warpper-up');
   }

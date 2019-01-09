@@ -1,4 +1,4 @@
-'use strict';
+
 
 const $ = require('jquery');
 const _ = require('lodash');
@@ -38,8 +38,8 @@ class Endpoint {
       this._isInitedDom = true;
     }
   }
-  _init(obj) {
 
+  _init(obj) {
     this._coordinateService = obj._coordinateService;
 
     // 计算锚点起始值
@@ -67,6 +67,7 @@ class Endpoint {
       this.makeSource();
     }
   }
+
   draw(obj) {
     let _dom = obj.dom;
     if (!_dom) {
@@ -74,6 +75,7 @@ class Endpoint {
     }
     return _dom;
   }
+
   updatePos(dom = this.dom, orientation = this.orientation, pos = this.pos) {
     if (this._isInitedDom) {
       // 计算width,height,left,top
@@ -87,8 +89,8 @@ class Endpoint {
       this._posTop = this._top;
     } else {
       // 分情况弄好方向和位置
-      let nodeW = $(this._node.dom).outerWidth();
-      let nodeH = $(this._node.dom).outerHeight();
+      const nodeW = $(this._node.dom).outerWidth();
+      const nodeH = $(this._node.dom).outerHeight();
 
       let targetDom = null;
       let targetDomW = 0;
@@ -103,23 +105,23 @@ class Endpoint {
       this._height = $(dom).outerHeight();
 
       // 计算节点本身的偏移量
-      let eOffsetX = this._width / 2;
-      let eOffsetY = this._height / 2;
+      const eOffsetX = this._width / 2;
+      const eOffsetY = this._height / 2;
 
       let _offsetTop = 0;
       let _offsetLeft = 0;
 
-      let _orientation = orientation || [0, -1];
-      let _pos = pos || [0.5, 0];
+      const _orientation = orientation || [0, -1];
+      const _pos = pos || [0.5, 0];
 
-      let result = [0, 0];
+      const result = [0, 0];
 
-      let _ox = _orientation[0];
-      let _oy = _orientation[1];
-      let _px = _pos[0];
-      let _py = _pos[1];
+      const _ox = _orientation[0];
+      const _oy = _orientation[1];
+      const _px = _pos[0];
+      const _py = _pos[1];
       if (_ox === 0) {
-        result[0] = !this.root ?  nodeW * _px - eOffsetX : targetDomW * _px - eOffsetX;
+        result[0] = !this.root ? nodeW * _px - eOffsetX : targetDomW * _px - eOffsetX;
       } else if (_ox === -1) {
         result[0] = 0 - eOffsetX;
       } else if (_ox === 1) {
@@ -140,8 +142,8 @@ class Endpoint {
         _offsetLeft += this._node.left;
       } else if (this._node && this.root) {
         // 计算传入的dom距离跟节点
-        let nodeDomOffsets = $(this._node.dom).offset();
-        let targetDomOffsets = targetDom.offset();
+        const nodeDomOffsets = $(this._node.dom).offset();
+        const targetDomOffsets = targetDom.offset();
         // 先计算目标节点和父节点得差值再加上父节点的offset
         _offsetTop += (targetDomOffsets.top - nodeDomOffsets.top + this._node.top);
         _offsetLeft += (targetDomOffsets.left - nodeDomOffsets.left + this._node.left);
@@ -160,6 +162,7 @@ class Endpoint {
         .css('left', this._left);
     }
   }
+
   moveTo(x, y) {
     this._top = y;
     this._left = x;
@@ -177,6 +180,7 @@ class Endpoint {
       }
     }
   }
+
   makeSource() {
     $(this.dom).on('mousedown', (e) => {
       e.preventDefault();
@@ -187,9 +191,11 @@ class Endpoint {
       });
     });
   }
+
   unMakeSource() {
     $(this.dom).off();
   }
+
   destroy() {
     $(this.dom).remove();
   }

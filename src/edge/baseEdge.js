@@ -166,12 +166,12 @@ class Edge {
     }
   }
   _create(opts) {
-    this.id = _.get(opts, 'id');
-    this.targetNode = _.get(opts, 'targetNode');
-    this.targetEndpoint = _.get(opts, 'targetEndpoint');
-    this.sourceNode = _.get(opts, 'sourceNode');
-    this.sourceEndpoint = _.get(opts, 'sourceEndpoint');
-    this.type = _.get(opts, 'type');
+    this.id = _.get(opts, 'id') || this.id;
+    this.targetNode = _.get(opts, 'targetNode') || this.targetNode;
+    this.targetEndpoint = _.get(opts, 'targetEndpoint') || this.targetEndpoint;
+    this.sourceNode = _.get(opts, 'sourceNode') || this.sourceNode;
+    this.sourceEndpoint = _.get(opts, 'sourceEndpoint') || this.sourceEndpoint;
+    this.type = _.get(opts, 'type') || this.type;
     this.redraw();
   }
 }
