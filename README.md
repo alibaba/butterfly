@@ -126,7 +126,7 @@ setZoomable = (boolean) => {}
 setMoveable = (boolean) => {}
 
 /**
-  * 获取画布的数据模型
+  * 聚焦节点或节点组
   * @param {string/function} nodeId/groupId or filter  - 节点的id或者过滤器
   * @param {string} type  - 节点的类型(node or group)
   * @param {function} callback  - 聚焦后的回调
