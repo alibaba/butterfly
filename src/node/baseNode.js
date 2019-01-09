@@ -19,64 +19,66 @@ class BaseNode extends Node {
     this.endpoints = [];
     this._endpointsData = opts.endpoints;
   }
+
   draw(obj) {
     let _dom = obj.dom;
     if (!_dom) {
       _dom = $('<div></div>')
-                .attr('class', 'node')
-                .attr('id', obj.id);
+        .attr('class', 'node')
+        .attr('id', obj.id);
     }
-    let node = $(_dom);
+    const node = $(_dom);
     if (obj.top) {
-      node.css('top', obj.top + 'px');
+      node.css('top', `${obj.top}px`);
     }
     if (obj.left) {
-      node.css('left', obj.left + 'px');
+      node.css('left', `${obj.left}px`);
     }
     return _dom[0];
   }
+
   focus() {}
+
   unFocus() {}
+
   addEndpoint(obj, isInited) {
     if (isInited) {
       this._emit('InnerEvents', {
         type: 'node:addEndpoint',
         data: obj,
-        isInited: isInited
+        isInited
       });
       return obj;
-    } else {
-      // 这部分可能还需要想一下
-      let EndpointClass = obj.Class || Endpoint;
-      let endpoint = new EndpointClass(_.assign({
-        _on: this._on,
-        _emit: this._emit,
-        _node: this
-      }, obj));
+    } 
+    // 这部分可能还需要想一下
+    const EndpointClass = obj.Class || Endpoint;
+    const endpoint = new EndpointClass(_.assign({
+      _on: this._on,
+      _emit: this._emit,
+      _node: this
+    }, obj));
 
-      this._emit('InnerEvents', {
-        type: 'node:addEndpoint',
-        data: endpoint,
-      });
-      this.endpoints.push(endpoint);
-      return endpoint;
-    }
-  }
-  rmEndpoint(pointId) {
-    let rmEndpointIndex = _.findIndex(this.endpoints, (point) => {
-      return point.id === pointId;
+    this._emit('InnerEvents', {
+      type: 'node:addEndpoint',
+      data: endpoint,
     });
+    this.endpoints.push(endpoint);
+    return endpoint;
+  }
+
+  rmEndpoint(pointId) {
+    const rmEndpointIndex = _.findIndex(this.endpoints, point => point.id === pointId);
     if (rmEndpointIndex !== -1) {
-      let rmEndpoint = this.endpoints.splice(rmEndpointIndex, 1)[0];
+      const rmEndpoint = this.endpoints.splice(rmEndpointIndex, 1)[0];
       rmEndpoint.destroy();
       return rmEndpoint;
     }
   }
+
   getEndpoint(pointId) {
-    return _.find(this.endpoints, (point) => {
-      return pointId === point.id;
-    });
+    return _.find(this.endpoints, point => pointId === point.id);
   }
+
   _init(obj = {}) {
     if (this._isInited) {
       return;
@@ -111,6 +113,7 @@ class BaseNode extends Node {
       this._addEventLinster();
     }
   }
+
   // drag的时候移动的api
   moveTo(x, y) {
     // 自身移动
@@ -122,25 +125,23 @@ class BaseNode extends Node {
     this.top = y;
     this.left = x;
   }
+
   getWidth() {
     return $(this.dom).width();
   }
+
   getHeight() {
     return $(this.dom).height();
   }
+
   _createEndpoint(isInited) {
     if (isInited) {
-      this.endpoints.forEach((item) => {
-        return this.addEndpoint(item, isInited);
-      });
-    } else {
-      if (this._endpointsData) {
-        this._endpointsData.map((item) => {
-          return this.addEndpoint(item);
-        });
-      }
+      this.endpoints.forEach(item => this.addEndpoint(item, isInited));
+    } else if (this._endpointsData) {
+      this._endpointsData.map(item => this.addEndpoint(item));
     }
   }
+
   _addEventLinster() {
     $(this.dom).on('click', (e) => {
       e.preventDefault();
@@ -155,8 +156,8 @@ class BaseNode extends Node {
     });
 
     $(this.dom).on('mousedown', (e) => {
-      let LEFT_KEY = 0;
-      if (!e.button === LEFT_KEY) {
+      const LEFT_KEY = 0;
+      if (e.button !== LEFT_KEY) {
         return;
       }
       e.preventDefault();
@@ -167,6 +168,7 @@ class BaseNode extends Node {
       });
     });
   }
+
   destroy(isNotEvent) {
     if (!isNotEvent) {
       this._emit('system.node.delete', {

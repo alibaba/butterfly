@@ -1,9 +1,9 @@
-'use strict';
 
-const Canvas = require('../interface/canvas');
-const Node = require('../node/baseNode');
+
 const $ = require('jquery');
 const _ = require('lodash');
+const Canvas = require('../interface/canvas');
+const Node = require('../node/baseNode');
 const Edge = require('../edge/baseEdge');
 const Group = require('../group/baseGroup');
 const Layout = require('../utils/layout');
@@ -18,11 +18,11 @@ class BaseCanvas extends Canvas {
     super(options);
     this.root = options.root;
     this.layout = options.layout; // layout部分也需要重新review
-    this.zoomable = options.zoomable || false;        // 可缩放
-    this.moveable = options.moveable || false;        // 可平移
-    this.draggable = options.draggable || false;      // 可拖动
-    this.linkable = options.linkable || false;        // 可连线
-    this.disLinkable = options.disLinkable || false;  // 可拆线
+    this.zoomable = options.zoomable || false; // 可缩放
+    this.moveable = options.moveable || false; // 可平移
+    this.draggable = options.draggable || false; // 可拖动
+    this.linkable = options.linkable || false; // 可连线
+    this.disLinkable = options.disLinkable || false; // 可拆线
 
     this.css = options.css || {}; // 这部分需要废弃,因为复写了jsplumb这个模块
     this.theme = {
@@ -70,7 +70,7 @@ class BaseCanvas extends Canvas {
     this._dragType = null;
     this._dragNode = null;
     this._dragEndpoint = null;
-    this._dragEdge = null; 
+    this._dragEdges = []; 
 
     // 初始化一些参数
     this._rootOffsetX = $(this.root).offset().left;
@@ -100,15 +100,15 @@ class BaseCanvas extends Canvas {
     this.unionItem = {
       nodes: [],
       edges: [],
-      groups: []
+      groups: [],
+      endpoints: []
     };
   }
 
   draw(opts) {
-
-    let groups = opts.groups || [];
-    let nodes = opts.nodes || [];
-    let edges = opts.edges || [];
+    const groups = opts.groups || [];
+    const nodes = opts.nodes || [];
+    const edges = opts.edges || [];
 
     // 自动布局需要重新review
     if (this.layout) {
@@ -136,31 +136,28 @@ class BaseCanvas extends Canvas {
   }
 
   getNode(id) {
-    return _.find(this.nodes, (item) => {
-      return item.id === id;
-    });
+    return _.find(this.nodes, item => item.id === id);
   }
+
   getEdge(id) {
-    return _.find(this.edges, (item) => {
-      return item.id === id;
-    });
+    return _.find(this.edges, item => item.id === id);
   }
+
   getGroup(id) {
-    return _.find(this.groups, (item) => {
-      return item.id === id;
-    });
+    return _.find(this.groups, item => item.id === id);
   }
+
   addGroup(group) {
-    let container = $(this.warpper);
-    let GroupClass = group.Class || Group;
-    let _groupObj = new GroupClass(_.assign(_.cloneDeep(group), {
+    const container = $(this.warpper);
+    const GroupClass = group.Class || Group;
+    const _groupObj = new GroupClass(_.assign(_.cloneDeep(group), {
       _emit: this.emit.bind(this),
       _on: this.on.bind(this),
     }));
     if (this._isExistGroup(_groupObj)) {
       // 后续用新的group代码旧的group
-      console.log('group:' + _groupObj.id + 'has existed' );
-      return ;
+      console.log(`group:${_groupObj.id}has existed`);
+      return;
     }
     _groupObj.init();
     container.prepend(_groupObj.dom);
@@ -170,15 +167,14 @@ class BaseCanvas extends Canvas {
   }
 
   addNodes(nodes, isNotEventEmit) {
-    
-    let _canvasFragment = document.createDocumentFragment();
-    let container = $(this.warpper);
-    let result = nodes.map((node) => {
+    const _canvasFragment = document.createDocumentFragment();
+    const container = $(this.warpper);
+    const result = nodes.map((node) => {
       let _nodeObj = null;
       if (node instanceof Node) {
         _nodeObj = node;
       } else {
-        let _Node = node.Class || Node;
+        const _Node = node.Class || Node;
         _nodeObj = new _Node(_.assign(_.cloneDeep(node), {
           _on: this.on.bind(this),
           _emit: this.emit.bind(this),
@@ -188,16 +184,16 @@ class BaseCanvas extends Canvas {
 
       if (this._isExistNode(_nodeObj)) {
         // 后续用新的node代码旧的node
-        console.log('node:' + _nodeObj.id + ' has existed' );
-        return ;
+        console.log(`node:${_nodeObj.id} has existed`);
+        return;
       }
 
       // 节点初始化
       _nodeObj._init();
 
       // 假如节点存在group，即放进对应的节点组里
-      let existGroup = _nodeObj.group ? this.getGroup(_nodeObj.group) : null;
-      if (!!existGroup) {
+      const existGroup = _nodeObj.group ? this.getGroup(_nodeObj.group) : null;
+      if (existGroup) {
         existGroup.addNode(_nodeObj, existGroup.id);
       } else {
         _canvasFragment.appendChild(_nodeObj.dom);
@@ -227,18 +223,18 @@ class BaseCanvas extends Canvas {
   addEdges(links) {
     $(this.svg).css('display', 'none');
 
-    let _edgeFragment = document.createDocumentFragment();
-    let _labelFragment = document.createDocumentFragment();
-    let _arrowFragment = document.createDocumentFragment();
+    const _edgeFragment = document.createDocumentFragment();
+    const _labelFragment = document.createDocumentFragment();
+    const _arrowFragment = document.createDocumentFragment();
 
-    let result = links.map((link) => {
-      let EdgeClass = this.theme.edge.Class;
+    const result = links.map((link) => {
+      const EdgeClass = this.theme.edge.Class;
       
       if (link.type === 'endpoint') {
-        let sourceNode = this.getNode(link.sourceNode);
-        let targetNode = this.getNode(link.targetNode);
-        let sourceEndpoint = sourceNode.getEndpoint(link.source);
-        let targetEndpoint = targetNode.getEndpoint(link.target);
+        const sourceNode = this.getNode(link.sourceNode);
+        const targetNode = this.getNode(link.targetNode);
+        const sourceEndpoint = sourceNode.getEndpoint(link.source);
+        const targetEndpoint = targetNode.getEndpoint(link.target);
 
         let sourceGroup;
         let targetGroup;
@@ -250,22 +246,22 @@ class BaseCanvas extends Canvas {
         }
 
         if (!sourceEndpoint || !targetEndpoint) {
-          console.log('butterflies error: can not connect edge. link sourceId:' + link.source + ';link targetId:' + link.target);
+          console.log(`butterflies error: can not connect edge. link sourceId:${link.source};link targetId:${link.target}`);
           return;
         }
 
-        let edge = new EdgeClass({
+        const edge = new EdgeClass({
           type: 'endpoint',
           id: link.id,
           label: link.label,
           shapeType: link.shapeType || this.theme.edge.type,
           orientationLimit: this.theme.endpoint.position,
-          sourceNode: sourceNode,
-          targetNode: targetNode,
-          sourceEndpoint: sourceEndpoint,
-          targetEndpoint: targetEndpoint,
-          sourceGroup: sourceGroup,
-          targetGroup: targetGroup,
+          sourceNode,
+          targetNode,
+          sourceEndpoint,
+          targetEndpoint,
+          sourceGroup,
+          targetGroup,
           arrow: link.arrow,
           arrowPosition: link.arrowPosition,
           options: link,
@@ -287,58 +283,55 @@ class BaseCanvas extends Canvas {
         this.edges.push(edge);
 
         return edge;
-      } else {
-        let sourceNode = this.getNode(link.source);
-        let targetNode = this.getNode(link.target);
-        let sourceGroup;
-        let targetGroup;
+      } 
+      const sourceNode = this.getNode(link.source);
+      const targetNode = this.getNode(link.target);
+      let sourceGroup;
+      let targetGroup;
 
-        if (sourceNode.group) {
-          sourceGroup = this.getGroup(sourceNode.group);
-        }
-        if (targetNode.group) {
-          targetGroup = this.getGroup(targetGroup.group);
-        }
-
-        if (!sourceNode || !targetNode) {
-          console.log('butterflies error: can not connect edge. link sourceId:' + link.source + ';link targetId:' + link.target);
-          return;
-        }
-
-        let edge = new EdgeClass({
-          type: 'node',
-          id: link.id,
-          label: link.label,
-          sourceNode: sourceNode,
-          targetNode: targetNode,
-          sourceGroup: sourceGroup,
-          targetGroup: targetGroup,
-          shapeType: link.shapeType || this.theme.edge.type,
-          orientationLimit: this.theme.endpoint.position,
-          arrow: link.arrow,
-          arrowPosition: link.arrowPosition,
-          _on: this.on.bind(this),
-          _emit: this.emit.bind(this),
-        });
-        edge._init();
-        
-        _edgeFragment.appendChild(edge.dom);
-
-        if (edge.labelDom) {
-          _labelFragment.appendChild(edge.labelDom);
-        }
-
-        if (edge.arrowDom) {
-          _arrowFragment.appendChild(edge.arrowDom);
-        }
-
-        this.edges.push(edge);
-
-        return edge;
+      if (sourceNode.group) {
+        sourceGroup = this.getGroup(sourceNode.group);
       }
-    }).filter((item) => {
-      return item;
-    });
+      if (targetNode.group) {
+        targetGroup = this.getGroup(targetGroup.group);
+      }
+
+      if (!sourceNode || !targetNode) {
+        console.log(`butterflies error: can not connect edge. link sourceId:${link.source};link targetId:${link.target}`);
+        return;
+      }
+
+      const edge = new EdgeClass({
+        type: 'node',
+        id: link.id,
+        label: link.label,
+        sourceNode,
+        targetNode,
+        sourceGroup,
+        targetGroup,
+        shapeType: link.shapeType || this.theme.edge.type,
+        orientationLimit: this.theme.endpoint.position,
+        arrow: link.arrow,
+        arrowPosition: link.arrowPosition,
+        _on: this.on.bind(this),
+        _emit: this.emit.bind(this),
+      });
+      edge._init();
+        
+      _edgeFragment.appendChild(edge.dom);
+
+      if (edge.labelDom) {
+        _labelFragment.appendChild(edge.labelDom);
+      }
+
+      if (edge.arrowDom) {
+        _arrowFragment.appendChild(edge.arrowDom);
+      }
+
+      this.edges.push(edge);
+
+      return edge;
+    }).filter(item => item);
 
     $(this.svg).append(_edgeFragment, _arrowFragment);
 
@@ -375,30 +368,22 @@ class BaseCanvas extends Canvas {
   }
 
   addGroups(datas) {
-    return datas.map((item) => {
-      return this.addGroup(item);
-    }).filter((item) => {
-      return item;
-    });
+    return datas.map(item => this.addGroup(item)).filter(item => item);
   }
 
   removeNode(nodeId, isNotDelEdge, isNotEventEmit) {
-    let index = _.findIndex(this.nodes, (_node) => {
-      return _node.id === nodeId;
-    });
+    const index = _.findIndex(this.nodes, _node => _node.id === nodeId);
     if (index === -1) {
-      console.log('找不到id为：' + nodeId + '的节点');
+      console.log(`找不到id为：${nodeId}的节点`);
       return;
     }
 
     // 删除邻近的线条
-    let neighborEdges = this.getNeighborEdges(nodeId);
+    const neighborEdges = this.getNeighborEdges(nodeId);
     if (!isNotDelEdge) {
       this.edges = this.edges.filter((edge) => {
-        let _edge = _.find(neighborEdges, (item) => {
-          return item.id === edge.id;
-        });
-        return !!!_edge;
+        const _edge = _.find(neighborEdges, item => item.id === edge.id);
+        return !_edge;
       });
 
       neighborEdges.forEach((item) => {
@@ -407,17 +392,15 @@ class BaseCanvas extends Canvas {
     }
 
     // 删除节点
-    let node = this.nodes[index];
+    const node = this.nodes[index];
     node.destroy(isNotEventEmit);
 
-    let _rmNodes = this.nodes.splice(index, 1);
+    const _rmNodes = this.nodes.splice(index, 1);
     // 假如在group里面
     if (node.group) {
-      let group = this.getGroup(node.group);
+      const group = this.getGroup(node.group);
       if (group) {
-        group.nodes = group.nodes.filter((item) => {
-          return item.id !== node.id;
-        });
+        group.nodes = group.nodes.filter(item => item.id !== node.id);
       }
     }
 
@@ -426,20 +409,17 @@ class BaseCanvas extends Canvas {
         nodes: [_rmNodes[0]],
         edges: neighborEdges,
       };
-    } else {
-      return {
-        nodes: [],
-        edges: []
-      };
-    }
+    } 
+    return {
+      nodes: [],
+      edges: []
+    };
   }
 
   removeNodes(nodeIds, isNotDelEdge, isNotEventEmit) {
     let rmNodes = [];
     let rmEdges = [];
-    nodeIds.map((id) => {
-      return this.removeNode(id, isNotDelEdge, isNotEventEmit);
-    }).forEach((result) => {
+    nodeIds.map(id => this.removeNode(id, isNotDelEdge, isNotEventEmit)).forEach((result) => {
       rmNodes = rmNodes.concat(result.nodes);
       rmEdges = rmEdges.concat(result.edges);
     });
@@ -450,41 +430,30 @@ class BaseCanvas extends Canvas {
   }
 
   removeEdge(edgeId) {
-    let edgeIndex = _.findIndex(this.edges, (item) => {
-      return item.id === edgeId;
-    });
+    const edgeIndex = _.findIndex(this.edges, item => item.id === edgeId);
     if (edgeIndex !== -1) {
-      let edge = this.edges[edgeIndex];
-      this.edges = this.edges.filter((item) => {
-        return item.id !== edgeId;
-      });
+      const edge = this.edges[edgeIndex];
+      this.edges = this.edges.filter(item => item.id !== edgeId);
       edge.destroy();
       return edge;
-    } else {
-      console.log(`删除线条错误，不存在id为${edgeId}的线`);
-    }
+    } 
+    console.log(`删除线条错误，不存在id为${edgeId}的线`);
   }
 
   removeEdges(edgeIds) {
-    return edgeIds.map((item) => {
-      return this.removeEdge(item);
-    }).filter((item) => {
-      return item;
-    });
+    return edgeIds.map(item => this.removeEdge(item)).filter(item => item);
   }
 
   removeGroup(groupId) {
-    let index = _.findIndex(this.groups, (_group) => {
-      return _group.id === groupId;
-    });
+    const index = _.findIndex(this.groups, _group => _group.id === groupId);
     // 删除group
-    let group = this.groups.splice(index, 1)[0];
+    const group = this.groups.splice(index, 1)[0];
     // group.offEvents();
 
     this.nodes.forEach((node) => {
       if (node.group === group.id) {
-        node.top = node.top + group.top;
-        node.left = node.left + group.top;
+        node.top += group.top;
+        node.left += group.top;
         delete node.group;
       }
     });
@@ -498,20 +467,14 @@ class BaseCanvas extends Canvas {
   }
 
   getNeighborEdges(nodeId) {
-    let node = _.find(this.nodes, (item) => {
-      return nodeId === item.id;
-    });
+    const node = _.find(this.nodes, item => nodeId === item.id);
 
-    return this.edges.filter((item) => {
-      return _.get(item, 'sourceNode.id') === node.id || _.get(item, 'targetNode.id') === node.id;
-    });
+    return this.edges.filter(item => _.get(item, 'sourceNode.id') === node.id || _.get(item, 'targetNode.id') === node.id);
   }
 
   getNeighborNodes(nodeId) {
-    let result = [];
-    let node = _.find(this.nodes, (item) => {
-      return nodeId === item.id;
-    });
+    const result = [];
+    const node = _.find(this.nodes, item => nodeId === item.id);
     if (!node) {
       console.log(`找不到id为${nodeId}的节点`);
     }
@@ -523,32 +486,30 @@ class BaseCanvas extends Canvas {
       }
     });
 
-    return result.map((id) => {
-      return this.getNode(id);
-    });
+    return result.map(id => this.getNode(id));
   }
+
   setZoomable(flat) {
     if (!this._zoomCb) {
       this._zoomCb = (event) => {
-
         event.preventDefault();
-        let deltaY = event.deltaY;
+        const deltaY = event.deltaY;
         this._zoomData += deltaY * 0.01;
   
         if (this._zoomData < 0.25) {
           this._zoomData = 0.25;
           return;
-        } else if (this._zoomData > 5) {
+        } if (this._zoomData > 5) {
           this._zoomData = 5;
           return;
         }
   
-        let platform = ['webkit', 'moz', 'ms', 'o'];
-        let scale = 'scale(' + this._zoomData + ')';
-        for (var i = 0; i < platform.length; i++) {
-          this.warpper.style[platform[i] + 'Transform'] = scale;
+        const platform = ['webkit', 'moz', 'ms', 'o'];
+        const scale = `scale(${this._zoomData})`;
+        for (let i = 0; i < platform.length; i++) {
+          this.warpper.style[`${platform[i]}Transform`] = scale;
         }
-        this.warpper.style['transform'] = scale;
+        this.warpper.style.transform = scale;
         this._coordinateService._changeCanvasInfo({
           scale: this._zoomData
         });
@@ -563,7 +524,7 @@ class BaseCanvas extends Canvas {
   }
 
   setMoveable(flat) {
-    if (!!flat) {
+    if (flat) {
       this.moveable = true;
       if (this._dragType === 'canvas:drag') {
         this.moveable = false;
@@ -579,50 +540,44 @@ class BaseCanvas extends Canvas {
     if (_.isFunction(param)) { // 假如传入的是filter，则按照用户自定义的规则来寻找
       node = type === 'node' ? _.find(this.nodes, param) : _.find(this.groups, param);
     } else { // 假如传入的是id，则按照默认规则寻找
-      node = type === 'node' ? _.find(this.nodes, (item) => {
-        return item.id === param;
-      }) : _.find(this.groups, (item) => {
-        return item.id === param;
-      });
+      node = type === 'node' ? _.find(this.nodes, item => item.id === param) : _.find(this.groups, item => item.id === param);
     }
 
     let top = 0;
     let left = 0;
     if (!node) {
       return;
-    } else {
-      top = node.top || node.y;
-      left = node.left || node.x;
-      if (node.height) {
-        top += node.height / 2;
-      }
-      if (node.width) {
-        left += node.width / 2;
-      }
-
-      if (node.group) {
-        let group = _.find(this.groups, (_group) => {
-          return _group.id === node.group;
-        });
-        if (!group) return;
-        top += group.top || group.y;
-        left += group.left || group.x;
-        if (group.height) {
-          top += group.height / 2;
-        }
-        if (group.width) {
-          left += group.width / 2;
-        }
-      }
+    } 
+    top = node.top || node.y;
+    left = node.left || node.x;
+    if (node.height) {
+      top += node.height / 2;
+    }
+    if (node.width) {
+      left += node.width / 2;
     }
 
-    let containerW = this._rootWidth;
-    let containerH = this._rootHeight;
+    if (node.group) {
+      const group = _.find(this.groups, _group => _group.id === node.group);
+      if (!group) return;
+      top += group.top || group.y;
+      left += group.left || group.x;
+      if (group.height) {
+        top += group.height / 2;
+      }
+      if (group.width) {
+        left += group.width / 2;
+      }
+    }
+    
 
-    let targetY = containerH / 2 - top;
-    let targetX = containerW / 2 - left;
+    const containerW = this._rootWidth;
+    const containerH = this._rootHeight;
 
-    let time = 500;
+    const targetY = containerH / 2 - top;
+    const targetX = containerW / 2 - left;
+
+    const time = 500;
     
     // animate不支持scale，使用setInterval自己实现
     $(this.warpper).animate({
@@ -643,13 +598,13 @@ class BaseCanvas extends Canvas {
   zoom(param, callback) {
     if (param < 0.25) {
       return;
-    } else if (param > 5) {
+    } if (param > 5) {
       return;
     }
-    let time = 50;
+    const time = 50;
     let frame = 0;
-    let gap = param - this._zoomData;
-    let interval = gap / 20;
+    const gap = param - this._zoomData;
+    const interval = gap / 20;
     let timer = null;
     if (gap !== 0) {
       timer = setInterval(() => {
@@ -662,12 +617,13 @@ class BaseCanvas extends Canvas {
           scale: this._zoomData
         });
         $(this.warpper).css({
-          'transform': 'scale(' + this._zoomData + ')'
+          transform: `scale(${this._zoomData})`
         });
         frame++;
       }, time / 20);
     }
   }
+
   move(position) {
     $(this.warpper)
       .css('left', position[0])
@@ -678,12 +634,15 @@ class BaseCanvas extends Canvas {
     });
     this._moveData = position;
   }
+
   getZoom() {
     return this._zoomData;
   }
-  getMovePosition()  {
+
+  getMovePosition() {
     return this._moveData;
   }
+
   getDataMap() {
     return {
       nodes: this.nodes,
@@ -691,9 +650,12 @@ class BaseCanvas extends Canvas {
       groups: this.groups
     };
   }
+
   setSelectMode(flat = true, type = ['node']) {
+    console.log(flat);
     if (flat) {
       this.isSelectMode = true;
+      this.clearUnion();
       this.selecModel = type;
       this.canvasWarpper.active();
       this._remarkMove = this.moveable;
@@ -710,39 +672,53 @@ class BaseCanvas extends Canvas {
       if (this._remarkZoom) {
         this.setZoomable(true);
       }
-      this.unionItem = {
-        nodes: [],
-        edges: [],
-        groups: []
-      };
     }
   }
+
   add2Union(obj) {
-    let item = null;
-    switch (obj.type) {
-      case 'node':
-        item = this.getNode(obj.id);
-        item && (this.unionItem.nodes.push(item));
-        break;
-      case 'group':
-        item = this.getGroup(obj.id);
-        item && (this.unionItem.groups.push(item));
-        break;
-      case 'edge':
-        item = this.getEdge(obj.id);
-        item && (this.unionItem.edges.push(item));
-        break;
+    let data = obj.data;
+    if (!data) {
+      return;
     }
-    // if (item) {
-    //   this.unionItem.push(item);
-    // }
+    data = [].concat(data);
+    data.filter((item) => {
+      return !!item;
+    }).forEach((item) => {
+      let isId = _.isString(item);
+      switch (obj.type) {
+        case 'node':
+          let node = isId ? this.getNode(item) : item;
+          node && (this.unionItem.nodes.push(node));
+          break;
+        case 'group':
+          let group = isId ? this.getGroup(item) : item;
+          group && (this.unionItem.groups.push(group));
+          break;
+        case 'edge':
+          let edge = isId ? this.getEdge(item) : item;
+          edge && (this.unionItem.edges.push(edge));
+          break;
+        case 'endpoint':
+          this.unionItem.endpoints.push(item);
+          break;
+      }
+    });
   }
+
   rmFromUnion(obj) {
 
   }
+
+  clearUnion() {
+    this.unionItem.nodes = [];
+    this.unionItem.edges = [];
+    this.unionItem.groups = [];
+    this.unionItem.endpoints = [];
+  }
+
   _genSvgWarpper() {
     // 生成svg的warpper
-    let svg = $(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
+    const svg = $(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
       .attr('class', 'butterfly-svg')
       .attr('width', '100%')
       .attr('height', '100%')
@@ -752,12 +728,14 @@ class BaseCanvas extends Canvas {
       .appendTo(this.warpper);
     return this.svg = svg;
   }
+
   _genWarpper() {
     // 生成warpper
-    let warpper = $('<div class="butterfly-warpper"></div>')
-                    .appendTo(this.root);
+    const warpper = $('<div class="butterfly-warpper"></div>')
+      .appendTo(this.root);
     return this.warpper = warpper[0];
   }
+
   _genCanvasWarpper() {
     // 生成canvas warpper
     this.canvasWarpper = new SelectCanvas();
@@ -767,6 +745,7 @@ class BaseCanvas extends Canvas {
       _emit: this.emit.bind(this)
     });
   }
+
   _addEventLinster() {
     if (this.zoomable) {
       this.setZoomable(true);
@@ -801,7 +780,10 @@ class BaseCanvas extends Canvas {
         this._dragType = 'endpoint:drag';
         this._dragEndpoint = data.data;
       } else if (data.type === 'multiple:select') {
-        let result = this._selectMytiplyItem(data.range);
+        const result = this._selectMytiplyItem(data.range);
+        // 把框选的加到union的数组
+        _.assign(this.unionItem, this.selectItem);
+
         this.emit('system.multiple.select', {
           data: result
         });
@@ -809,9 +791,6 @@ class BaseCanvas extends Canvas {
           type: 'multiple:select',
           data: result
         });
-
-        // 把框选的加到union的数组
-        this.unionItem = this.selectItem;
         
         this.selectItem = {
           nodes: [],
@@ -824,18 +803,17 @@ class BaseCanvas extends Canvas {
     // 绑定拖动事件
     this._attachMouseDownEvent();
   }
+
   _isExistNode(node) {
-    let hasNodes = this.nodes.filter((item) => {
-      return item.id === node.id;
-    });
+    const hasNodes = this.nodes.filter(item => item.id === node.id);
     return hasNodes.length > 0;
   }
+
   _isExistGroup(group) {
-    let hasGroups = this.groups.filter((item) => {
-      return item.id === group.id;
-    });
+    const hasGroups = this.groups.filter(item => item.id === group.id);
     return hasGroups.length > 0;
   }
+
   _addEndpoint(endpoint, isInited) {
     endpoint._init({
       _coordinateService: this._coordinateService
@@ -843,9 +821,9 @@ class BaseCanvas extends Canvas {
 
     // 非自定义dom，自定义dom不需要定位
     if (!endpoint._isInitedDom) {
-      let endpointDom = endpoint.dom;
+      const endpointDom = endpoint.dom;
       if (endpoint._node.group) {
-        let group = this.getGroup(endpoint._node.group);
+        const group = this.getGroup(endpoint._node.group);
         $(group.dom).append(endpointDom);
       } else {
         $(this.warpper).prepend(endpointDom);
@@ -853,19 +831,24 @@ class BaseCanvas extends Canvas {
       endpoint.updatePos();
     }
   }
+
   _attachMouseDownEvent() {
-    let originPos = {
+    let canvasOriginPos = {
+      x: 0,
+      y: 0
+    };
+    let nodeOriginPos = {
       x: 0,
       y: 0
     };
 
-    let rootOffsetX = this._rootOffsetX;
-    let rootOffsetY = this._rootOffsetY;
+    const rootOffsetX = this._rootOffsetX;
+    const rootOffsetY = this._rootOffsetY;
 
-    let rootWidth = this._rootWidth;
-    let rootHeight = this._rootHeight;
+    const rootWidth = this._rootWidth;
+    const rootHeight = this._rootHeight;
 
-    let mouseDownEvent = (event) => {
+    const mouseDownEvent = (event) => {
       const LEFT_BUTTON = 0;
       if (event.button !== LEFT_BUTTON) {
         return;
@@ -874,219 +857,241 @@ class BaseCanvas extends Canvas {
       if (!this._dragType && this.moveable) {
         this._dragType = 'canvas:drag';
       }
-      let originLeft = $(this.warpper).css('left');
-      let originTop = $(this.warpper).css('top');
-      originPos = {
-        x: event.clientX - parseInt(originLeft),
-        y: event.clientY - parseInt(originTop)
+
+      canvasOriginPos = {
+        x: event.clientX,
+        y: event.clientY
       };
+
       this.emit('system.drag.start', {
-        dragType: this._dragType
+        dragType: this._dragType,
+        position: {
+          clientX: event.clientX,
+          clientY: event.clientY,
+          canvasX: this._coordinateService.terminal2canvas('x', event.clientX),
+          canvasY: this._coordinateService.terminal2canvas('y', event.clientY)
+        }
       });
       this.emit('events', {
         type: 'drag:start',
-        dragType: this._dragType
+        dragType: this._dragType,
+        position: {
+          clientX: event.clientX,
+          clientY: event.clientY,
+          canvasX: this._coordinateService.terminal2canvas('x', event.clientX),
+          canvasY: this._coordinateService.terminal2canvas('y', event.clientY)
+        }
       });
     };
 
-    let mouseMoveEvent = (event) => {
+    const mouseMoveEvent = (event) => {
       const LEFT_BUTTON = 0;
       if (event.button !== LEFT_BUTTON) {
         return;
       }
-
       if (this._dragType) {
-        let canvasX = this._coordinateService.terminal2canvas('x', event.clientX);
-        let canvasY = this._coordinateService.terminal2canvas('y', event.clientY);
-        let offsetX = canvasX - originPos.x;
-        let offsetY = canvasY - originPos.y;
+        const canvasX = this._coordinateService.terminal2canvas('x', event.clientX);
+        const canvasY = this._coordinateService.terminal2canvas('y', event.clientY);
+        const offsetX = event.clientX - canvasOriginPos.x;
+        const offsetY = event.clientY - canvasOriginPos.y;
         if (this._dragType === 'canvas:drag') {
-          this.move([event.clientX - originPos.x, event.clientY - originPos.y]);
+          this.move([offsetX + this._moveData[0], offsetY + this._moveData[1]]);
+          canvasOriginPos = {
+            x: event.clientX,
+            y: event.clientY
+          };
         } else if (this._dragType === 'node:drag') {
-          if (originPos.x === 0 && originPos.y === 0) {
-            originPos = {
+          if (nodeOriginPos.x === 0 && nodeOriginPos.y === 0) {
+            nodeOriginPos = {
               x: canvasX,
               y: canvasY
             };
             return;
           }
-          originPos = {
-            x: canvasX,
-            y: canvasY
-          };
           if (this._dragNode) {
             let moveNodes = [this._dragNode];
-            let isUnion = _.find(this.unionItem.nodes, (_node) => {
-              return _node.id === this._dragNode.id;
-            });
+            const isUnion = _.find(this.unionItem.nodes, _node => _node.id === this._dragNode.id);
             if (isUnion) {
               moveNodes = this.unionItem.nodes;
+            } else {
+              this.clearUnion();
             }
             $(this.svg).css('display', 'none');
             $(this.warpper).css('display', 'none');
             moveNodes.forEach((node) => {
-              node.moveTo(node.left + offsetX, node.top + offsetY);
+              node.moveTo(node.left + (canvasX - nodeOriginPos.x), node.top + (canvasY - nodeOriginPos.y));
               $(this.svg).css('display', 'none');
               this.edges.forEach((edge) => {
                 if (edge.type === 'endpoint') {
-                  let isLink = _.find(node.endpoints, (point) => {
-                    return point.id === edge.sourceEndpoint.id || point.id === edge.targetEndpoint.id;
-                  });
+                  const isLink = _.find(node.endpoints, point => point.id === edge.sourceEndpoint.id || point.id === edge.targetEndpoint.id);
                   isLink && edge.redraw();
-                } else {
-                  if (edge.sourceNode.id === node.id || edge.targetNode.id === node.id) {
-                    edge.redraw();
-                  }
+                } else if (edge.sourceNode.id === node.id || edge.targetNode.id === node.id) {
+                  edge.redraw();
                 }
               });
             });
             $(this.svg).css('display', 'block');
             $(this.warpper).css('display', 'block');
-            // let node = this._dragNode;
-            // node.moveTo(node.left + offsetX, node.top + offsetY);
-            // $(this.svg).css('display', 'none');
-            // this.edges.forEach((edge) => {
-            //   if (edge.type === 'endpoint') {
-            //     let isLink = _.find(node.endpoints, (point) => {
-            //       return point.id === edge.sourceEndpoint.id || point.id === edge.targetEndpoint.id;
-            //     });
-            //     isLink && edge.redraw();
-            //   } else {
-            //     if (edge.sourceNode.id === node.id || edge.targetNode.id === node.id) {
-            //       edge.redraw();
-            //     }
-            //   }
-            // });
-            // $(this.svg).css('display', 'block');
+            nodeOriginPos = {
+              x: canvasX,
+              y: canvasY
+            };
           }
         } else if (this._dragType === 'group:drag') {
-          if (originPos.x === 0 && originPos.y === 0) {
-            originPos = {
+          if (nodeOriginPos.x === 0 && nodeOriginPos.y === 0) {
+            nodeOriginPos = {
               x: canvasX,
               y: canvasY
             };
             return;
           }
-          originPos = {
-            x: canvasX,
-            y: canvasY
-          };
           if (this._dragNode) {
-            let group = this._dragNode;
-            group.moveTo(group.left + offsetX, group.top + offsetY);
+            const group = this._dragNode;
+            group.moveTo(group.left + (canvasX - nodeOriginPos.x), group.top + (canvasY - nodeOriginPos.y));
             this.edges.forEach((edge) => {
               if (edge.sourceNode.group === group.id || edge.targetNode.group === group.id) {
                 edge.redraw();
               }
             });
+            nodeOriginPos = {
+              x: canvasX,
+              y: canvasY
+            };
           }
         } else if (this._dragType === 'endpoint:drag') {
-          let beginX = this._dragEndpoint._posLeft + this._dragEndpoint._width / 2;
-          let beginY = this._dragEndpoint._posTop + this._dragEndpoint._height / 2;
 
-          let endX = this._coordinateService.terminal2canvas('x', event.clientX);
-          let endY = this._coordinateService.terminal2canvas('y', event.clientY);
+          let isUnion = !!_.find(this.unionItem.endpoints || [], (item) => {
+            return item.id === this._dragEndpoint.id;
+          });
 
-          let edge = null;
-          if (!this._dragEdge) {
-            let EdgeClass = this.theme.edge.Class;
-            edge = this._dragEdge = new EdgeClass({
-              shapeType: this.theme.edge.type,
-              orientationLimit: this.theme.endpoint.position,
-              _on: this.on.bind(this),
-              _emit: this.emit.bind(this),
+          // const beginX = this._dragEndpoint._posLeft + this._dragEndpoint._width / 2;
+          // const beginY = this._dragEndpoint._posTop + this._dragEndpoint._height / 2;
+
+          const endX = this._coordinateService.terminal2canvas('x', event.clientX);
+          const endY = this._coordinateService.terminal2canvas('y', event.clientY);
+
+          let edges = [];
+          if (!this._dragEdges || this._dragEdges.length === 0) {
+            const EdgeClass = this.theme.edge.Class;
+            let endpoints = isUnion ? this.unionItem.endpoints : [this._dragEndpoint];
+            endpoints.forEach((point) => {
+              let _newEdge = new EdgeClass({
+                shapeType: this.theme.edge.type,
+                orientationLimit: this.theme.endpoint.position,
+                sourceNode: this.getNode(point.nodeId),
+                sourceEndpoint: point,
+                _on: this.on.bind(this),
+                _emit: this.emit.bind(this),
+              });
+              _newEdge._init();
+              $(this.svg).append(_newEdge.dom);
+              if (_newEdge.labelDom) {
+                $(this.warpper).append(_newEdge.labelDom);
+              }
+              if (_newEdge.arrowDom) {
+                $(this.svg).append(_newEdge.arrowDom);
+              }
+              edges.push(_newEdge);
             });
-            edge._init();
-            $(this.svg).append(edge.dom);
+            this._dragEdges = edges;
           } else {
-            edge = this._dragEdge;
+            edges = this._dragEdges;
           }
-          let _soucePoint = {
-            pos: [beginX, beginY]
-          };
-          let _targetPoint = {
-            pos: [endX, endY],
-          };
-          if (edge.labelDom) {
-            $(this.warpper).append(edge.labelDom);
-          }
-          if (edge.arrowDom) {
-            $(this.svg).append(edge.arrowDom);
-          }
-          edge.redraw(_soucePoint, _targetPoint);
+
+          $(this.svg).css('display', 'none');
+          $(this.warpper).css('display', 'none');
+          edges.forEach((edge) => {
+            let beginX =  edge.sourceEndpoint._posLeft + edge.sourceEndpoint._width / 2;
+            let beginY = edge.sourceEndpoint._posTop + edge.sourceEndpoint._height / 2;
+            const _soucePoint = {
+              pos: [beginX, beginY]
+            };
+            const _targetPoint = {
+              pos: [endX, endY],
+            };
+            edge.redraw(_soucePoint, _targetPoint);
+          });
+          $(this.svg).css('display', 'block');
+          $(this.warpper).css('display', 'block');
+
+          this.emit('system.drag.move', {
+            dragType: this._dragType,
+            pos: [event.clientX, event.clientY],
+            dragNode: this._dragNode,
+            dragEndpoint: this._dragEndpoint,
+            dragEdges: edges
+          });
+          this.emit('events', {
+            type: 'drag:move',
+            dragType: this._dragType,
+            pos: [event.clientX, event.clientY],
+            dragNode: this._dragNode,
+            dragEndpoint: this._dragEndpoint,
+            dragEdges: edges
+          });
         }
-        this.emit('system.drag.move', {
-          dragType: this._dragType,
-          pos: [event.clientX, event.clientY],
-          dragNode: this._dragNode,
-          dragEndpoint: this._dragEndpoint,
-          dragEdge: this._dragEdge
-        });
-        this.emit('events', {
-          type: 'drag:move',
-          dragType: this._dragType,
-          pos: [event.clientX, event.clientY],
-          dragNode: this._dragNode,
-          dragEndpoint: this._dragEndpoint,
-          dragEdge: this._dragEdge
-        });
       }
     };
 
-    let mouseEndEvent = (event) => {
-
+    const mouseEndEvent = (event) => {
       const LEFT_BUTTON = 0;
       if (event.button !== LEFT_BUTTON) {
         return;
       }
 
       // 处理线条的问题
-      if (this._dragEdge) {
-
+      if (this._dragEdges && this._dragEdges.length !== 0) {
         // 释放对应画布上的x,y
-        let x = this._coordinateService.terminal2canvas('x', event.clientX);
-        let y = this._coordinateService.terminal2canvas('y', event.clientY);
+        const x = this._coordinateService.terminal2canvas('x', event.clientX);
+        const y = this._coordinateService.terminal2canvas('y', event.clientY);
 
         let _targetEndpoint = null;
 
         this.nodes.forEach((_node) => {
           if (_node.endpoints) {
             _node.endpoints.forEach((_point) => {
-              let _maxX = _point._posLeft + _point._width + 10;
-              let _maxY = _point._posTop + _point._height + 10;
-              let _minX = _point._posLeft - 10;
-              let _minY = _point._posTop - 10;
+              const _maxX = _point._posLeft + _point._width + 10;
+              const _maxY = _point._posTop + _point._height + 10;
+              const _minX = _point._posLeft - 10;
+              const _minY = _point._posTop - 10;
               if (x > _minX && x < _maxX && y > _minY && y < _maxY) {
                 _targetEndpoint = _point;
-                return;
               }
             });
           }
         });
-        // 找不到点 || scope不同 || 目标节点不是target 
-        if (!_targetEndpoint || _targetEndpoint.scope !== this._dragEndpoint.scope || _targetEndpoint.type !== 'target') {
-          this._dragEdge.destroy();
+
+        let isDestoryEdges = false;
+
+        // 找不到点 或者 目标节点不是target 
+        if (!_targetEndpoint || _targetEndpoint.type !== 'target') {
+          isDestoryEdges = true;
+        }
+
+        // scope不同
+        if (!isDestoryEdges) {
+          isDestoryEdges = _.some(this._dragEdges, (edge) => {
+            return edge.sourceEndpoint.scope !== this._dragEndpoint.scope;
+          });
+        }
+
+        if (isDestoryEdges) {
+          this._dragEdges.forEach((edge) => {
+            edge.destroy();
+          });
         } else {
-          this._dragEdge._create({
-            id: this._dragEndpoint.id + '-' + _targetEndpoint.id,
-            sourceNode: this.getNode(this._dragEndpoint.nodeId),
-            sourceEndpoint: this._dragEndpoint,
-            targetNode: this.getNode(_targetEndpoint.nodeId),
-            targetEndpoint: _targetEndpoint,
-            type: 'endpoint'
-          });
-          this.edges.push(this._dragEdge);
-          this.emit('system.link.connect', {
-            link: this._dragEdge
-          });
-          this.emit('events', {
-            type: 'link:connect',
-            link: this._dragEdge
+          this._dragEdges.forEach((edge) => {
+            edge._create({
+              id: `${edge.sourceEndpoint.id}-${_targetEndpoint.id}`,
+              targetNode: this.getNode(_targetEndpoint.nodeId),
+              targetEndpoint: _targetEndpoint,
+              type: 'endpoint'
+            });
+            this.edges.push(edge);
           });
         }
       }
       if (this._dragType === 'node:drag' && this._dragNode) {
-
         let sourceGroup = null;
 
         let _nodeLeft = this._dragNode.left;
@@ -1095,11 +1100,11 @@ class BaseCanvas extends Canvas {
         let _nodeBottom = this._dragNode.top + this._dragNode.getHeight();
 
         if (this._dragNode.group) {
-          let _group = this.getGroup(this._dragNode.group);
-          let _groupLeft = _group.left;
-          let _groupRight = _group.left + _group.getWidth();
-          let _groupTop = _group.top;
-          let _groupBottom = _group.top + _group.getHeight();
+          const _group = this.getGroup(this._dragNode.group);
+          const _groupLeft = _group.left;
+          const _groupRight = _group.left + _group.getWidth();
+          const _groupTop = _group.top;
+          const _groupBottom = _group.top + _group.getHeight();
           // if (_nodeLeft > _groupRight || _nodeRight < _groupLeft || _nodeTop > _groupBottom || _nodeBottom < _groupTop) {
           //   _nodeLeft += _groupLeft;
           //   _nodeTop += _groupTop;
@@ -1116,11 +1121,11 @@ class BaseCanvas extends Canvas {
 
         let targetGroup = null;
         for (let i = 0; i < this.groups.length; i++) {
-          let _group = this.groups[i];
-          let _groupLeft = _group.left;
-          let _groupRight = _group.left + _group.getWidth();
-          let _groupTop = _group.top;
-          let _groupBottom = _group.top + _group.getHeight();
+          const _group = this.groups[i];
+          const _groupLeft = _group.left;
+          const _groupRight = _group.left + _group.getWidth();
+          const _groupTop = _group.top;
+          const _groupBottom = _group.top + _group.getHeight();
           if (_groupLeft <= _nodeLeft && _groupRight >= _nodeRight && _groupTop <= _nodeTop && _groupBottom >= _nodeBottom) {
             if (_group.id !== this._dragNode.group) {
               targetGroup = _group;
@@ -1131,10 +1136,10 @@ class BaseCanvas extends Canvas {
 
         let neighborEdges = [];
         if (sourceGroup) {
-          let rmItem = this.removeNode(this._dragNode.id, true, true);
-          let rmNode = rmItem.nodes[0];
+          const rmItem = this.removeNode(this._dragNode.id, true, true);
+          const rmNode = rmItem.nodes[0];
           neighborEdges = rmItem.edges;
-          let nodeData = {
+          const nodeData = {
             top: _nodeTop,
             left: _nodeLeft,
             _isDeleteGroup: true
@@ -1143,23 +1148,21 @@ class BaseCanvas extends Canvas {
           if (targetGroup) {
             nodeData.top -= targetGroup.top;
             nodeData.left -= targetGroup.left;
-            nodeData['group'] = targetGroup.id;
-            nodeData['_isDeleteGroup'] = false;
+            nodeData.group = targetGroup.id;
+            nodeData._isDeleteGroup = false;
           }
           rmNode._init(nodeData);
           this.addNode(rmNode, true);
-        } else {
-          if (targetGroup) {
-            let rmItem = this.removeNode(this._dragNode.id, true, true);
-            let rmNode = rmItem.nodes[0];
-            neighborEdges = rmItem.edges;
-            rmNode._init({
-              top: _nodeTop - targetGroup.top,
-              left: _nodeLeft - targetGroup.left,
-              group: targetGroup.id
-            });
-            this.addNode(rmNode, true);
-          }
+        } else if (targetGroup) {
+          const rmItem = this.removeNode(this._dragNode.id, true, true);
+          const rmNode = rmItem.nodes[0];
+          neighborEdges = rmItem.edges;
+          rmNode._init({
+            top: _nodeTop - targetGroup.top,
+            left: _nodeLeft - targetGroup.left,
+            group: targetGroup.id
+          });
+          this.addNode(rmNode, true);
         }
         neighborEdges.forEach((item) => {
           item.redraw();
@@ -1177,8 +1180,12 @@ class BaseCanvas extends Canvas {
       this._dragType = null;
       this._dragNode = null;
       this._dragEndpoint = null;
-      this._dragEdge = null;
-      originPos = {
+      this._dragEdges = [];
+      nodeOriginPos = {
+        x: 0,
+        y: 0
+      };
+      canvasOriginPos = {
         x: 0,
         y: 0
       };
@@ -1190,15 +1197,16 @@ class BaseCanvas extends Canvas {
     // this.root.addEventListener('mouseout', mouseEndEvent);
     this.root.addEventListener('mouseup', mouseEndEvent);
   }
-  _autoLayout(data) {
-    let width = this._rootWidth;
-    let height = this._rootHeight;
 
-    let _opts = $.extend({
+  _autoLayout(data) {
+    const width = this._rootWidth;
+    const height = this._rootHeight;
+
+    const _opts = $.extend({
       // 布局画布总宽度
-      width: width,
+      width,
       // 布局画布总长度
-      height: height,
+      height,
       // 布局相对中心点
       center: {
         x: width / 2,
@@ -1224,34 +1232,32 @@ class BaseCanvas extends Canvas {
           groups: data.groups,
           nodes: data.nodes,
           // 加工线条数据，兼容endpoint为id的属性，d3没这个概念
-          edges: data.edges.map((item) => {
-            return {
-              source: item.type === 'endpoint' ? item.sourceNodeCode : item.source,
-              target: item.type === 'endpoint' ? item.targetNodeCode : item.target
-            };
-          })
+          edges: data.edges.map(item => ({
+            source: item.type === 'endpoint' ? item.sourceNodeCode : item.source,
+            target: item.type === 'endpoint' ? item.targetNodeCode : item.target
+          }))
         }
       });
     }
   }
-  _selectMytiplyItem(range) {
 
+  _selectMytiplyItem(range) {
     // 确认一下终端的偏移值
-    let startX = this._coordinateService.terminal2canvas('x', range[0]);
-    let startY = this._coordinateService.terminal2canvas('y', range[1]);
-    let endX = this._coordinateService.terminal2canvas('x', range[2]);
-    let endY = this._coordinateService.terminal2canvas('y', range[3]);
+    const startX = this._coordinateService.terminal2canvas('x', range[0]);
+    const startY = this._coordinateService.terminal2canvas('y', range[1]);
+    const endX = this._coordinateService.terminal2canvas('x', range[2]);
+    const endY = this._coordinateService.terminal2canvas('y', range[3]);
     
-    let includeNode = _.includes(this.selecModel, 'node');
-    let includeEdge = _.includes(this.selecModel, 'edge');
-    let includeEndpoint = _.includes(this.selecModel, 'endpoint');
+    const includeNode = _.includes(this.selecModel, 'node');
+    const includeEdge = _.includes(this.selecModel, 'edge');
+    const includeEndpoint = _.includes(this.selecModel, 'endpoint');
     // 框选节点
     if (includeNode) {
       this.nodes.forEach((item) => {
-        let nodeLeft = item.left;
-        let nodeRight = item.left + $(item.dom).width();
-        let nodeTop = item.top;
-        let nodeBottom = item.top + $(item.dom).height();
+        const nodeLeft = item.left;
+        const nodeRight = item.left + $(item.dom).width();
+        const nodeTop = item.top;
+        const nodeBottom = item.top + $(item.dom).height();
         if (startX < nodeLeft && endX > nodeRight && startY < nodeTop && endY > nodeBottom) {
           this.selectItem.nodes.push(item);
         }
@@ -1262,10 +1268,10 @@ class BaseCanvas extends Canvas {
     if (includeEndpoint) {
       this.nodes.forEach((node) => {
         node.endpoints.forEach((item) => {
-          let pointLeft = item._posLeft;
-          let pointRight = item._posLeft + $(item.dom).width();
-          let pointTop = item._posTop;
-          let pointBottom = item._posTop + $(item.dom).height();
+          const pointLeft = item._posLeft;
+          const pointRight = item._posLeft + $(item.dom).width();
+          const pointTop = item._posTop;
+          const pointBottom = item._posTop + $(item.dom).height();
           if (startX < pointLeft && endX > pointRight && startY < pointTop && endY > pointBottom) {
             this.selectItem.endpoints.push(item);
           }
@@ -1277,10 +1283,10 @@ class BaseCanvas extends Canvas {
     if (includeEdge) {
       this.edges.forEach((item) => {
         if (item.type === 'endpoint') {
-          let left = item.sourceEndpoint._posLeft < item.targetEndpoint._posLeft ? item.sourceEndpoint._posLeft : item.targetEndpoint._posLeft;
-          let right = (item.sourceEndpoint._posLeft + item.sourceEndpoint._width) > (item.targetEndpoint._posLeft + item.targetEndpoint._width) ? (item.sourceEndpoint._posLeft + item.sourceEndpoint._width) : (item.targetEndpoint._posLeft + item.targetEndpoint._width);
-          let top = item.sourceEndpoint._posTop < item.targetEndpoint._posTop ? item.sourceEndpoint._posTop : item.targetEndpoint._posTop;
-          let bottom = (item.sourceEndpoint._posTop + item.sourceEndpoint._height) > (item.targetEndpoint._posTop + item.targetEndpoint._height) ? (item.sourceEndpoint._posTop + item.sourceEndpoint._height) : (item.targetEndpoint._posTop + item.targetEndpoint._height);
+          const left = item.sourceEndpoint._posLeft < item.targetEndpoint._posLeft ? item.sourceEndpoint._posLeft : item.targetEndpoint._posLeft;
+          const right = (item.sourceEndpoint._posLeft + item.sourceEndpoint._width) > (item.targetEndpoint._posLeft + item.targetEndpoint._width) ? (item.sourceEndpoint._posLeft + item.sourceEndpoint._width) : (item.targetEndpoint._posLeft + item.targetEndpoint._width);
+          const top = item.sourceEndpoint._posTop < item.targetEndpoint._posTop ? item.sourceEndpoint._posTop : item.targetEndpoint._posTop;
+          const bottom = (item.sourceEndpoint._posTop + item.sourceEndpoint._height) > (item.targetEndpoint._posTop + item.targetEndpoint._height) ? (item.sourceEndpoint._posTop + item.sourceEndpoint._height) : (item.targetEndpoint._posTop + item.targetEndpoint._height);
           if (startX < left && endX > right && startY < top && endY > bottom) {
             this.selectItem.edges.push(item);
           }
@@ -1291,7 +1297,6 @@ class BaseCanvas extends Canvas {
     }
 
     // 框选节点组，准备支持
-
 
     return this.selectItem;
   }

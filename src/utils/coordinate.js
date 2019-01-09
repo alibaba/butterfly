@@ -1,4 +1,4 @@
-'use strict';
+
 
 class CoordinateService {
   constructor(opts) {
@@ -10,6 +10,7 @@ class CoordinateService {
     this.canOffsetY = opts.canOffsetY || 0;
     this.scale = opts.scale || 1;
   }
+
   _changeCanvasInfo(data) {
     if (data.terOffsetX) {
       this.terOffsetX = data.terOffsetX;
@@ -33,15 +34,19 @@ class CoordinateService {
       this.scale = data.scale;
     }
   }
+
   canvas2terminal(pos, coordinate) {
 
   }
+
   terminal2canvas(pos, coordinate) {
     if (pos === 'x') {
-      let terCenter = this.terOffsetX + this.terWidth / 2;
+      const terCenter = this.terOffsetX + this.terWidth / 2;
+      // console.log((coordinate - terCenter - this.canOffsetX) / this.scale + this.terWidth / 2);
       return (coordinate - terCenter - this.canOffsetX) / this.scale + this.terWidth / 2;
-    } else if (pos === 'y') {
-      let terCenter = this.terOffsetY + this.terHeight / 2;
+    } if (pos === 'y') {
+      const terCenter = this.terOffsetY + this.terHeight / 2;
+      // console.log((coordinate - terCenter - this.canOffsetY) / this.scale + this.terHeight / 2);
       return (coordinate - terCenter - this.canOffsetY) / this.scale + this.terHeight / 2;
     }
   }
