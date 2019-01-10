@@ -29612,6 +29612,13 @@ var BaseCanvas = function (_Canvas) {
               });
               _this13.edges.push(edge);
             });
+            _this13.emit('system.link.connect', {
+              links: _this13._dragEdges
+            });
+            _this13.emit('events', {
+              type: 'link:connect',
+              links: _this13._dragEdges
+            });
           }
         }
         if (_this13._dragType === 'node:drag' && _this13._dragNode) {
