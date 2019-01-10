@@ -1089,6 +1089,13 @@ class BaseCanvas extends Canvas {
             });
             this.edges.push(edge);
           });
+          this.emit('system.link.connect', {
+            links: this._dragEdges
+          });
+          this.emit('events', {
+            type: 'link:connect',
+            links: this._dragEdges
+          });
         }
       }
       if (this._dragType === 'node:drag' && this._dragNode) {
