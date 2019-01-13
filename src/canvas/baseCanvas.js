@@ -70,7 +70,8 @@ class BaseCanvas extends Canvas {
     this._dragType = null;
     this._dragNode = null;
     this._dragEndpoint = null;
-    this._dragEdges = []; 
+    this._dragEdges = [];
+    this._dragGroup = null;
 
     // 初始化一些参数
     this._rootOffsetX = $(this.root).offset().left;
@@ -156,7 +157,7 @@ class BaseCanvas extends Canvas {
     }));
     if (this._isExistGroup(_groupObj)) {
       // 后续用新的group代码旧的group
-      console.log(`group:${_groupObj.id}has existed`);
+      console.log(`group:${_groupObj.id} has existed`);
       return;
     }
     _groupObj.init();
@@ -448,22 +449,40 @@ class BaseCanvas extends Canvas {
     const index = _.findIndex(this.groups, _group => _group.id === groupId);
     // 删除group
     const group = this.groups.splice(index, 1)[0];
-    // group.offEvents();
 
-    this.nodes.forEach((node) => {
-      if (node.group === group.id) {
-        node.top += group.top;
-        node.left += group.top;
-        delete node.group;
-      }
+    // this.nodes.forEach((node) => {
+    //   if (node.group === group.id) {
+    //     node.top += group.top;
+    //     node.left += group.top;
+    //     delete node.group;
+    //   }
+    // });
+
+    group.nodes.forEach((_node) => {
+      let rmItem = this.removeNode(_node.id, true, true);
+      let rmNode = rmItem.nodes[0];
+      let neighborEdges = rmItem.edges;
+      rmNode._init({
+        top: _node.top + group.top,
+        left: _node.left + group.left,
+        _isDeleteGroup: true
+      });
+      this.addNode(rmNode, true);
+      neighborEdges.forEach((item) => {
+        item.redraw();
+      });
     });
-    this.emit('system.node.delete', {
-      node: group
-    });
-    this.emit('events', {
-      type: 'node:delete',
-      node: group
-    });
+
+    // const rmItem = this.removeNode(this._dragNode.id, true, true);
+    // const rmNode = rmItem.nodes[0];
+    // neighborEdges = rmItem.edges;
+    // rmNode._init({
+    //   top: _nodeTop - targetGroup.top,
+    //   left: _nodeLeft - targetGroup.left,
+    //   group: targetGroup.id
+    // });
+    // this.addNode(rmNode, true);
+    group.destroy();
   }
 
   getNeighborEdges(nodeId) {
@@ -547,7 +566,7 @@ class BaseCanvas extends Canvas {
     let left = 0;
     if (!node) {
       return;
-    } 
+    }
     top = node.top || node.y;
     left = node.left || node.x;
     if (node.height) {
@@ -569,7 +588,6 @@ class BaseCanvas extends Canvas {
         left += group.width / 2;
       }
     }
-    
 
     const containerW = this._rootWidth;
     const containerH = this._rootHeight;
@@ -652,7 +670,6 @@ class BaseCanvas extends Canvas {
   }
 
   setSelectMode(flat = true, type = ['node']) {
-    console.log(flat);
     if (flat) {
       this.isSelectMode = true;
       this.clearUnion();
@@ -797,6 +814,13 @@ class BaseCanvas extends Canvas {
           edges: [],
           endpoints: []
         };
+      } else if (data.type === 'group:resize') {
+        this._dragType = 'group:resize';
+        this._dragGroup = data.group;
+      } else if (data.type === 'node:delete') {
+        this.removeNode(data.data.id);
+      } else if (data.type === 'group:delete') {
+        this.removeGroup(data.data.id);
       }
     });
 
@@ -1029,6 +1053,14 @@ class BaseCanvas extends Canvas {
             dragEndpoint: this._dragEndpoint,
             dragEdges: edges
           });
+        } else if (this._dragType === 'group:resize') {
+          let canvasX = this._coordinateService.terminal2canvas('x', event.clientX);
+          let canvasY = this._coordinateService.terminal2canvas('y', event.clientY);
+
+          let _newWidth = canvasX - this._dragGroup.left;
+          let _newHeight = canvasY - this._dragGroup.top;
+          this._dragGroup.setSize(_newWidth, _newHeight);
+
         }
       }
     };
@@ -1147,6 +1179,7 @@ class BaseCanvas extends Canvas {
           const rmNode = rmItem.nodes[0];
           neighborEdges = rmItem.edges;
           const nodeData = {
+            id: rmNode.id,
             top: _nodeTop,
             left: _nodeLeft,
             _isDeleteGroup: true
@@ -1176,6 +1209,11 @@ class BaseCanvas extends Canvas {
         });
       }
 
+      // 节点组放大缩小
+      if (this._dragType === 'group:resize' && this._dragGroup) {
+
+      }
+
       this.emit('system.drag.end', {
         dragType: this._dragType
       });
@@ -1187,6 +1225,7 @@ class BaseCanvas extends Canvas {
       this._dragType = null;
       this._dragNode = null;
       this._dragEndpoint = null;
+      this._dragGroup = null;
       this._dragEdges = [];
       nodeOriginPos = {
         x: 0,
@@ -1204,7 +1243,6 @@ class BaseCanvas extends Canvas {
     // this.root.addEventListener('mouseout', mouseEndEvent);
     this.root.addEventListener('mouseup', mouseEndEvent);
   }
-
   _autoLayout(data) {
     const width = this._rootWidth;
     const height = this._rootHeight;
