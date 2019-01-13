@@ -32,7 +32,7 @@ module.exports = {
             loader: "less-loader" // compiles Less to CSS
         }]
       }, {
-        test: /\.(woff|woff2|eot|ttf|otf)$/,
+        test: /\.(woff|woff2|eot|ttf|otf|svg)$/,
         use: {
           loader: 'url-loader',
           options: {
