@@ -312,7 +312,7 @@ focus = () => {}
 unFocus = () => {}
 
 /**
-  * @param {obj} data - 锚点基本信息 
+  * @param {obj} data - 锚点基本信息(此方法必须在节点挂载后执行才有效)
   */
 addEndpoint = (obj) => {}
 
@@ -356,10 +356,10 @@ on = (string, callback) => {}
 | key | 说明 | 类型 | 默认值 
 | :------ | :------ | :------ | :------ 
 | id | 节点唯一标识 | string (Require) | - 
-| targetNode | 连接目标节点id | string (Option) | - 
-| targetEndpoint | 连接目标锚点id | string (Option) | - 
-| sourceNode | 连接源节点id | string (Option) | - 
-| sourceEndpoint | 连接源锚点id | string (Option) | - 
+| target | 连接目标节点id | string (Require) | - 
+| targetEndpoint | 连接目标锚点id | string (Require) | - 
+| source | 连接源节点id | string (Require) | - 
+| sourceEndpoint | 连接源锚点id | string (Require) | - 
 | type | 标志线条连接到节点还是连接到锚点 | string (Option) | endpoint/node
 | orientationLimit | 线条出口的位置 | array (Option) | - 
 | shapeType | 线条的类型 | string (Option) | Bezier/Flow/Straight

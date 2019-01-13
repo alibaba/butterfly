@@ -15,6 +15,7 @@ class BaseGroup extends Group {
     this.left = opts.left;
     this.width = opts.width || 300;
     this.height = opts.height || 150;
+    this.resize = opts.resize;
     this.dom = null;
     this.nodes = [];
     this.options = opts.options;
@@ -32,7 +33,6 @@ class BaseGroup extends Group {
       dom: this.dom,
       options: this.options
     });
-
     this._addEventLinster();
   }
   draw(obj) {
@@ -57,6 +57,11 @@ class BaseGroup extends Group {
       .attr('class', 'container');
     
     group.append(this._container);
+
+    // 默认resize打开
+    if (this.resize !== false) {
+      this.setResize(true);
+    }
 
     if (obj.top) {
       group.css('top', obj.top + 'px');
@@ -98,11 +103,31 @@ class BaseGroup extends Group {
   removeNode(node) {
     return this.removeNodes([node]);
   }
-  setResize() {
-    // 这里待定，warpper这部分以后会放弃
+  setResize(flat, container = this.dom) {
+    let mouseDown = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      this._emit('InnerEvents', {
+        type: 'group:resize',
+        group: this
+      });
+    };
+    if (flat) {
+      let icon = $('<span class="group-icon-resize butterfly-icon icon-drag"></span>')
+        .appendTo(container);
+      icon.on('mousedown', mouseDown);
+    }
+  }
+  setSize(width = this.width, height = this.height) {
+    this.width = width;
+    this.height = height;
+    $(this.dom).css('width', this.width).css('height', this.height);
   }
   remove() {
-    // 这部分canvas会传下来
+    this._emit('InnerEvents', {
+      type: 'group:delete',
+      data: this
+    });
   }
   moveTo(x, y) {
     // 自身移动
@@ -150,6 +175,17 @@ class BaseGroup extends Group {
         type: 'group:dragBegin',
         data: this
       });
+    });
+  }
+  destroy() {
+    $(this.dom).off();
+    $(this.dom).remove();
+    this._emit('system.group.delete', {
+      group: this
+    });
+    this._emit('events', {
+      type: 'group:delete',
+      group: this
     });
   }
 }

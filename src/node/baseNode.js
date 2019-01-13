@@ -34,7 +34,7 @@ class BaseNode extends Node {
     if (obj.left) {
       node.css('left', `${obj.left}px`);
     }
-    return _dom[0];
+    return node[0];
   }
 
   focus() {}
@@ -168,7 +168,12 @@ class BaseNode extends Node {
       });
     });
   }
-
+  remove() {
+    this._emit('InnerEvents', {
+      type: 'node:delete',
+      data: this
+    });
+  }
   destroy(isNotEvent) {
     if (!isNotEvent) {
       this._emit('system.node.delete', {

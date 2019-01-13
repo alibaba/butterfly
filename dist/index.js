@@ -27180,7 +27180,7 @@ var BaseNode = function (_Node) {
       if (obj.left) {
         node.css('left', obj.left + 'px');
       }
-      return _dom[0];
+      return node[0];
     }
   }, {
     key: 'focus',
@@ -27341,6 +27341,14 @@ var BaseNode = function (_Node) {
           type: 'node:dragBegin',
           data: _this4
         });
+      });
+    }
+  }, {
+    key: 'remove',
+    value: function remove() {
+      this._emit('InnerEvents', {
+        type: 'node:delete',
+        data: this
       });
     }
   }, {
@@ -27950,6 +27958,7 @@ var BaseGroup = function (_Group) {
     _this.left = opts.left;
     _this.width = opts.width || 300;
     _this.height = opts.height || 150;
+    _this.resize = opts.resize;
     _this.dom = null;
     _this.nodes = [];
     _this.options = opts.options;
@@ -27971,7 +27980,6 @@ var BaseGroup = function (_Group) {
         dom: this.dom,
         options: this.options
       });
-
       this._addEventLinster();
     }
   }, {
@@ -27994,6 +28002,11 @@ var BaseGroup = function (_Group) {
       this._container = $('<div></div>').attr('class', 'container');
 
       group.append(this._container);
+
+      // 默认resize打开
+      if (this.resize !== false) {
+        this.setResize(true);
+      }
 
       if (obj.top) {
         group.css('top', obj.top + 'px');
@@ -28051,13 +28064,41 @@ var BaseGroup = function (_Group) {
     }
   }, {
     key: 'setResize',
-    value: function setResize() {
-      // 这里待定，warpper这部分以后会放弃
+    value: function setResize(flat) {
+      var _this3 = this;
+
+      var container = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.dom;
+
+      var mouseDown = function mouseDown(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        _this3._emit('InnerEvents', {
+          type: 'group:resize',
+          group: _this3
+        });
+      };
+      if (flat) {
+        var icon = $('<span class="group-icon-resize butterfly-icon icon-drag"></span>').appendTo(container);
+        icon.on('mousedown', mouseDown);
+      }
+    }
+  }, {
+    key: 'setSize',
+    value: function setSize() {
+      var width = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.width;
+      var height = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.height;
+
+      this.width = width;
+      this.height = height;
+      $(this.dom).css('width', this.width).css('height', this.height);
     }
   }, {
     key: 'remove',
     value: function remove() {
-      // 这部分canvas会传下来
+      this._emit('InnerEvents', {
+        type: 'group:delete',
+        data: this
+      });
     }
   }, {
     key: 'moveTo',
@@ -28091,17 +28132,17 @@ var BaseGroup = function (_Group) {
   }, {
     key: '_addEventLinster',
     value: function _addEventLinster() {
-      var _this3 = this;
+      var _this4 = this;
 
       $(this.dom).on('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
-        _this3._emit('system.group.click', {
-          group: _this3
+        _this4._emit('system.group.click', {
+          group: _this4
         });
-        _this3._emit('events', {
+        _this4._emit('events', {
           type: 'group:click',
-          group: _this3
+          group: _this4
         });
       });
       $(this.dom).on('mousedown', function (e) {
@@ -28111,10 +28152,23 @@ var BaseGroup = function (_Group) {
         }
         e.preventDefault();
         e.stopPropagation();
-        _this3._emit('InnerEvents', {
+        _this4._emit('InnerEvents', {
           type: 'group:dragBegin',
-          data: _this3
+          data: _this4
         });
+      });
+    }
+  }, {
+    key: 'destroy',
+    value: function destroy() {
+      $(this.dom).off();
+      $(this.dom).remove();
+      this._emit('system.group.delete', {
+        group: this
+      });
+      this._emit('events', {
+        type: 'group:delete',
+        group: this
       });
     }
   }]);
@@ -28482,6 +28536,7 @@ var BaseCanvas = function (_Canvas) {
     _this._dragNode = null;
     _this._dragEndpoint = null;
     _this._dragEdges = [];
+    _this._dragGroup = null;
 
     // 初始化一些参数
     _this._rootOffsetX = $(_this.root).offset().left;
@@ -28582,7 +28637,7 @@ var BaseCanvas = function (_Canvas) {
       }));
       if (this._isExistGroup(_groupObj)) {
         // 后续用新的group代码旧的group
-        console.log('group:' + _groupObj.id + 'has existed');
+        console.log('group:' + _groupObj.id + ' has existed');
         return;
       }
       _groupObj.init();
@@ -28913,27 +28968,47 @@ var BaseCanvas = function (_Canvas) {
   }, {
     key: 'removeGroup',
     value: function removeGroup(groupId) {
+      var _this8 = this;
+
       var index = _.findIndex(this.groups, function (_group) {
         return _group.id === groupId;
       });
       // 删除group
       var group = this.groups.splice(index, 1)[0];
-      // group.offEvents();
 
-      this.nodes.forEach(function (node) {
-        if (node.group === group.id) {
-          node.top += group.top;
-          node.left += group.top;
-          delete node.group;
-        }
+      // this.nodes.forEach((node) => {
+      //   if (node.group === group.id) {
+      //     node.top += group.top;
+      //     node.left += group.top;
+      //     delete node.group;
+      //   }
+      // });
+
+      group.nodes.forEach(function (_node) {
+        var rmItem = _this8.removeNode(_node.id, true, true);
+        var rmNode = rmItem.nodes[0];
+        var neighborEdges = rmItem.edges;
+        rmNode._init({
+          top: _node.top + group.top,
+          left: _node.left + group.left,
+          _isDeleteGroup: true
+        });
+        _this8.addNode(rmNode, true);
+        neighborEdges.forEach(function (item) {
+          item.redraw();
+        });
       });
-      this.emit('system.node.delete', {
-        node: group
-      });
-      this.emit('events', {
-        type: 'node:delete',
-        node: group
-      });
+
+      // const rmItem = this.removeNode(this._dragNode.id, true, true);
+      // const rmNode = rmItem.nodes[0];
+      // neighborEdges = rmItem.edges;
+      // rmNode._init({
+      //   top: _nodeTop - targetGroup.top,
+      //   left: _nodeLeft - targetGroup.left,
+      //   group: targetGroup.id
+      // });
+      // this.addNode(rmNode, true);
+      group.destroy();
     }
   }, {
     key: 'getNeighborEdges',
@@ -28949,7 +29024,7 @@ var BaseCanvas = function (_Canvas) {
   }, {
     key: 'getNeighborNodes',
     value: function getNeighborNodes(nodeId) {
-      var _this8 = this;
+      var _this9 = this;
 
       var result = [];
       var node = _.find(this.nodes, function (item) {
@@ -28967,36 +29042,36 @@ var BaseCanvas = function (_Canvas) {
       });
 
       return result.map(function (id) {
-        return _this8.getNode(id);
+        return _this9.getNode(id);
       });
     }
   }, {
     key: 'setZoomable',
     value: function setZoomable(flat) {
-      var _this9 = this;
+      var _this10 = this;
 
       if (!this._zoomCb) {
         this._zoomCb = function (event) {
           event.preventDefault();
           var deltaY = event.deltaY;
-          _this9._zoomData += deltaY * 0.01;
+          _this10._zoomData += deltaY * 0.01;
 
-          if (_this9._zoomData < 0.25) {
-            _this9._zoomData = 0.25;
+          if (_this10._zoomData < 0.25) {
+            _this10._zoomData = 0.25;
             return;
-          }if (_this9._zoomData > 5) {
-            _this9._zoomData = 5;
+          }if (_this10._zoomData > 5) {
+            _this10._zoomData = 5;
             return;
           }
 
           var platform = ['webkit', 'moz', 'ms', 'o'];
-          var scale = 'scale(' + _this9._zoomData + ')';
+          var scale = 'scale(' + _this10._zoomData + ')';
           for (var i = 0; i < platform.length; i++) {
-            _this9.warpper.style[platform[i] + 'Transform'] = scale;
+            _this10.warpper.style[platform[i] + 'Transform'] = scale;
           }
-          _this9.warpper.style.transform = scale;
-          _this9._coordinateService._changeCanvasInfo({
-            scale: _this9._zoomData
+          _this10.warpper.style.transform = scale;
+          _this10._coordinateService._changeCanvasInfo({
+            scale: _this10._zoomData
           });
         };
       }
@@ -29094,7 +29169,7 @@ var BaseCanvas = function (_Canvas) {
   }, {
     key: 'zoom',
     value: function zoom(param, callback) {
-      var _this10 = this;
+      var _this11 = this;
 
       if (param < 0.25) {
         return;
@@ -29112,12 +29187,12 @@ var BaseCanvas = function (_Canvas) {
             clearInterval(timer);
             callback && callback();
           }
-          _this10._zoomData += interval;
-          _this10._coordinateService._changeCanvasInfo({
-            scale: _this10._zoomData
+          _this11._zoomData += interval;
+          _this11._coordinateService._changeCanvasInfo({
+            scale: _this11._zoomData
           });
-          $(_this10.warpper).css({
-            transform: 'scale(' + _this10._zoomData + ')'
+          $(_this11.warpper).css({
+            transform: 'scale(' + _this11._zoomData + ')'
           });
           frame++;
         }, time / 20);
@@ -29158,7 +29233,6 @@ var BaseCanvas = function (_Canvas) {
       var flat = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
       var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ['node'];
 
-      console.log(flat);
       if (flat) {
         this.isSelectMode = true;
         this.clearUnion();
@@ -29183,7 +29257,7 @@ var BaseCanvas = function (_Canvas) {
   }, {
     key: 'add2Union',
     value: function add2Union(obj) {
-      var _this11 = this;
+      var _this12 = this;
 
       var data = obj.data;
       if (!data) {
@@ -29196,19 +29270,19 @@ var BaseCanvas = function (_Canvas) {
         var isId = _.isString(item);
         switch (obj.type) {
           case 'node':
-            var node = isId ? _this11.getNode(item) : item;
-            node && _this11.unionItem.nodes.push(node);
+            var node = isId ? _this12.getNode(item) : item;
+            node && _this12.unionItem.nodes.push(node);
             break;
           case 'group':
-            var group = isId ? _this11.getGroup(item) : item;
-            group && _this11.unionItem.groups.push(group);
+            var group = isId ? _this12.getGroup(item) : item;
+            group && _this12.unionItem.groups.push(group);
             break;
           case 'edge':
-            var edge = isId ? _this11.getEdge(item) : item;
-            edge && _this11.unionItem.edges.push(edge);
+            var edge = isId ? _this12.getEdge(item) : item;
+            edge && _this12.unionItem.edges.push(edge);
             break;
           case 'endpoint':
-            _this11.unionItem.endpoints.push(item);
+            _this12.unionItem.endpoints.push(item);
             break;
         }
       });
@@ -29254,7 +29328,7 @@ var BaseCanvas = function (_Canvas) {
   }, {
     key: '_addEventLinster',
     value: function _addEventLinster() {
-      var _this12 = this;
+      var _this13 = this;
 
       if (this.zoomable) {
         this.setZoomable(true);
@@ -29264,13 +29338,13 @@ var BaseCanvas = function (_Canvas) {
       }
 
       $(window).resize(function () {
-        _this12._rootWidth = $(_this12.root).width();
-        _this12._rootHeight = $(_this12.root).height();
+        _this13._rootWidth = $(_this13.root).width();
+        _this13._rootHeight = $(_this13.root).height();
       });
 
       $(this.warpper).on('click', function (e) {
-        _this12.emit('system.canvas.click');
-        _this12.emit('events', {
+        _this13.emit('system.canvas.click');
+        _this13.emit('events', {
           type: 'canvas:click'
         });
       });
@@ -29278,34 +29352,41 @@ var BaseCanvas = function (_Canvas) {
       // 绑定一大堆事件，group:addMember，groupDragStop，group:removeMember，beforeDetach，connection，
       this.on('InnerEvents', function (data) {
         if (data.type === 'node:addEndpoint') {
-          _this12._addEndpoint(data.data, data.isInited);
+          _this13._addEndpoint(data.data, data.isInited);
         } else if (data.type === 'node:dragBegin') {
-          _this12._dragType = 'node:drag';
-          _this12._dragNode = data.data;
+          _this13._dragType = 'node:drag';
+          _this13._dragNode = data.data;
         } else if (data.type === 'group:dragBegin') {
-          _this12._dragType = 'group:drag';
-          _this12._dragNode = data.data;
+          _this13._dragType = 'group:drag';
+          _this13._dragNode = data.data;
         } else if (data.type === 'endpoint:linkBegin') {
-          _this12._dragType = 'endpoint:drag';
-          _this12._dragEndpoint = data.data;
+          _this13._dragType = 'endpoint:drag';
+          _this13._dragEndpoint = data.data;
         } else if (data.type === 'multiple:select') {
-          var result = _this12._selectMytiplyItem(data.range);
+          var result = _this13._selectMytiplyItem(data.range);
           // 把框选的加到union的数组
-          _.assign(_this12.unionItem, _this12.selectItem);
+          _.assign(_this13.unionItem, _this13.selectItem);
 
-          _this12.emit('system.multiple.select', {
+          _this13.emit('system.multiple.select', {
             data: result
           });
-          _this12.emit('events', {
+          _this13.emit('events', {
             type: 'multiple:select',
             data: result
           });
 
-          _this12.selectItem = {
+          _this13.selectItem = {
             nodes: [],
             edges: [],
             endpoints: []
           };
+        } else if (data.type === 'group:resize') {
+          _this13._dragType = 'group:resize';
+          _this13._dragGroup = data.group;
+        } else if (data.type === 'node:delete') {
+          _this13.removeNode(data.data.id);
+        } else if (data.type === 'group:delete') {
+          _this13.removeGroup(data.data.id);
         }
       });
 
@@ -29350,7 +29431,7 @@ var BaseCanvas = function (_Canvas) {
   }, {
     key: '_attachMouseDownEvent',
     value: function _attachMouseDownEvent() {
-      var _this13 = this;
+      var _this14 = this;
 
       var canvasOriginPos = {
         x: 0,
@@ -29373,8 +29454,8 @@ var BaseCanvas = function (_Canvas) {
           return;
         }
 
-        if (!_this13._dragType && _this13.moveable) {
-          _this13._dragType = 'canvas:drag';
+        if (!_this14._dragType && _this14.moveable) {
+          _this14._dragType = 'canvas:drag';
         }
 
         canvasOriginPos = {
@@ -29382,23 +29463,23 @@ var BaseCanvas = function (_Canvas) {
           y: event.clientY
         };
 
-        _this13.emit('system.drag.start', {
-          dragType: _this13._dragType,
+        _this14.emit('system.drag.start', {
+          dragType: _this14._dragType,
           position: {
             clientX: event.clientX,
             clientY: event.clientY,
-            canvasX: _this13._coordinateService.terminal2canvas('x', event.clientX),
-            canvasY: _this13._coordinateService.terminal2canvas('y', event.clientY)
+            canvasX: _this14._coordinateService.terminal2canvas('x', event.clientX),
+            canvasY: _this14._coordinateService.terminal2canvas('y', event.clientY)
           }
         });
-        _this13.emit('events', {
+        _this14.emit('events', {
           type: 'drag:start',
-          dragType: _this13._dragType,
+          dragType: _this14._dragType,
           position: {
             clientX: event.clientX,
             clientY: event.clientY,
-            canvasX: _this13._coordinateService.terminal2canvas('x', event.clientX),
-            canvasY: _this13._coordinateService.terminal2canvas('y', event.clientY)
+            canvasX: _this14._coordinateService.terminal2canvas('x', event.clientX),
+            canvasY: _this14._coordinateService.terminal2canvas('y', event.clientY)
           }
         });
       };
@@ -29408,18 +29489,18 @@ var BaseCanvas = function (_Canvas) {
         if (event.button !== LEFT_BUTTON) {
           return;
         }
-        if (_this13._dragType) {
-          var canvasX = _this13._coordinateService.terminal2canvas('x', event.clientX);
-          var canvasY = _this13._coordinateService.terminal2canvas('y', event.clientY);
+        if (_this14._dragType) {
+          var canvasX = _this14._coordinateService.terminal2canvas('x', event.clientX);
+          var canvasY = _this14._coordinateService.terminal2canvas('y', event.clientY);
           var offsetX = event.clientX - canvasOriginPos.x;
           var offsetY = event.clientY - canvasOriginPos.y;
-          if (_this13._dragType === 'canvas:drag') {
-            _this13.move([offsetX + _this13._moveData[0], offsetY + _this13._moveData[1]]);
+          if (_this14._dragType === 'canvas:drag') {
+            _this14.move([offsetX + _this14._moveData[0], offsetY + _this14._moveData[1]]);
             canvasOriginPos = {
               x: event.clientX,
               y: event.clientY
             };
-          } else if (_this13._dragType === 'node:drag') {
+          } else if (_this14._dragType === 'node:drag') {
             if (nodeOriginPos.x === 0 && nodeOriginPos.y === 0) {
               nodeOriginPos = {
                 x: canvasX,
@@ -29427,22 +29508,22 @@ var BaseCanvas = function (_Canvas) {
               };
               return;
             }
-            if (_this13._dragNode) {
-              var moveNodes = [_this13._dragNode];
-              var isUnion = _.find(_this13.unionItem.nodes, function (_node) {
-                return _node.id === _this13._dragNode.id;
+            if (_this14._dragNode) {
+              var moveNodes = [_this14._dragNode];
+              var isUnion = _.find(_this14.unionItem.nodes, function (_node) {
+                return _node.id === _this14._dragNode.id;
               });
               if (isUnion) {
-                moveNodes = _this13.unionItem.nodes;
+                moveNodes = _this14.unionItem.nodes;
               } else {
-                _this13.clearUnion();
+                _this14.clearUnion();
               }
-              $(_this13.svg).css('display', 'none');
-              $(_this13.warpper).css('display', 'none');
+              $(_this14.svg).css('display', 'none');
+              $(_this14.warpper).css('display', 'none');
               moveNodes.forEach(function (node) {
                 node.moveTo(node.left + (canvasX - nodeOriginPos.x), node.top + (canvasY - nodeOriginPos.y));
-                $(_this13.svg).css('display', 'none');
-                _this13.edges.forEach(function (edge) {
+                $(_this14.svg).css('display', 'none');
+                _this14.edges.forEach(function (edge) {
                   if (edge.type === 'endpoint') {
                     var isLink = _.find(node.endpoints, function (point) {
                       return point.id === edge.sourceEndpoint.id || point.id === edge.targetEndpoint.id;
@@ -29453,14 +29534,14 @@ var BaseCanvas = function (_Canvas) {
                   }
                 });
               });
-              $(_this13.svg).css('display', 'block');
-              $(_this13.warpper).css('display', 'block');
+              $(_this14.svg).css('display', 'block');
+              $(_this14.warpper).css('display', 'block');
               nodeOriginPos = {
                 x: canvasX,
                 y: canvasY
               };
             }
-          } else if (_this13._dragType === 'group:drag') {
+          } else if (_this14._dragType === 'group:drag') {
             if (nodeOriginPos.x === 0 && nodeOriginPos.y === 0) {
               nodeOriginPos = {
                 x: canvasX,
@@ -29468,10 +29549,10 @@ var BaseCanvas = function (_Canvas) {
               };
               return;
             }
-            if (_this13._dragNode) {
-              var group = _this13._dragNode;
+            if (_this14._dragNode) {
+              var group = _this14._dragNode;
               group.moveTo(group.left + (canvasX - nodeOriginPos.x), group.top + (canvasY - nodeOriginPos.y));
-              _this13.edges.forEach(function (edge) {
+              _this14.edges.forEach(function (edge) {
                 if (edge.sourceNode.group === group.id || edge.targetNode.group === group.id) {
                   edge.redraw();
                 }
@@ -29481,48 +29562,48 @@ var BaseCanvas = function (_Canvas) {
                 y: canvasY
               };
             }
-          } else if (_this13._dragType === 'endpoint:drag') {
+          } else if (_this14._dragType === 'endpoint:drag') {
 
-            var _isUnion = !!_.find(_this13.unionItem.endpoints || [], function (item) {
-              return item.id === _this13._dragEndpoint.id;
+            var _isUnion = !!_.find(_this14.unionItem.endpoints || [], function (item) {
+              return item.id === _this14._dragEndpoint.id;
             });
 
             // const beginX = this._dragEndpoint._posLeft + this._dragEndpoint._width / 2;
             // const beginY = this._dragEndpoint._posTop + this._dragEndpoint._height / 2;
 
-            var endX = _this13._coordinateService.terminal2canvas('x', event.clientX);
-            var endY = _this13._coordinateService.terminal2canvas('y', event.clientY);
+            var endX = _this14._coordinateService.terminal2canvas('x', event.clientX);
+            var endY = _this14._coordinateService.terminal2canvas('y', event.clientY);
 
             var edges = [];
-            if (!_this13._dragEdges || _this13._dragEdges.length === 0) {
-              var EdgeClass = _this13.theme.edge.Class;
-              var endpoints = _isUnion ? _this13.unionItem.endpoints : [_this13._dragEndpoint];
+            if (!_this14._dragEdges || _this14._dragEdges.length === 0) {
+              var EdgeClass = _this14.theme.edge.Class;
+              var endpoints = _isUnion ? _this14.unionItem.endpoints : [_this14._dragEndpoint];
               endpoints.forEach(function (point) {
                 var _newEdge = new EdgeClass({
-                  shapeType: _this13.theme.edge.type,
-                  orientationLimit: _this13.theme.endpoint.position,
-                  sourceNode: _this13.getNode(point.nodeId),
+                  shapeType: _this14.theme.edge.type,
+                  orientationLimit: _this14.theme.endpoint.position,
+                  sourceNode: _this14.getNode(point.nodeId),
                   sourceEndpoint: point,
-                  _on: _this13.on.bind(_this13),
-                  _emit: _this13.emit.bind(_this13)
+                  _on: _this14.on.bind(_this14),
+                  _emit: _this14.emit.bind(_this14)
                 });
                 _newEdge._init();
-                $(_this13.svg).append(_newEdge.dom);
+                $(_this14.svg).append(_newEdge.dom);
                 if (_newEdge.labelDom) {
-                  $(_this13.warpper).append(_newEdge.labelDom);
+                  $(_this14.warpper).append(_newEdge.labelDom);
                 }
                 if (_newEdge.arrowDom) {
-                  $(_this13.svg).append(_newEdge.arrowDom);
+                  $(_this14.svg).append(_newEdge.arrowDom);
                 }
                 edges.push(_newEdge);
               });
-              _this13._dragEdges = edges;
+              _this14._dragEdges = edges;
             } else {
-              edges = _this13._dragEdges;
+              edges = _this14._dragEdges;
             }
 
-            $(_this13.svg).css('display', 'none');
-            $(_this13.warpper).css('display', 'none');
+            $(_this14.svg).css('display', 'none');
+            $(_this14.warpper).css('display', 'none');
             edges.forEach(function (edge) {
               var beginX = edge.sourceEndpoint._posLeft + edge.sourceEndpoint._width / 2;
               var beginY = edge.sourceEndpoint._posTop + edge.sourceEndpoint._height / 2;
@@ -29534,24 +29615,31 @@ var BaseCanvas = function (_Canvas) {
               };
               edge.redraw(_soucePoint, _targetPoint);
             });
-            $(_this13.svg).css('display', 'block');
-            $(_this13.warpper).css('display', 'block');
+            $(_this14.svg).css('display', 'block');
+            $(_this14.warpper).css('display', 'block');
 
-            _this13.emit('system.drag.move', {
-              dragType: _this13._dragType,
+            _this14.emit('system.drag.move', {
+              dragType: _this14._dragType,
               pos: [event.clientX, event.clientY],
-              dragNode: _this13._dragNode,
-              dragEndpoint: _this13._dragEndpoint,
+              dragNode: _this14._dragNode,
+              dragEndpoint: _this14._dragEndpoint,
               dragEdges: edges
             });
-            _this13.emit('events', {
+            _this14.emit('events', {
               type: 'drag:move',
-              dragType: _this13._dragType,
+              dragType: _this14._dragType,
               pos: [event.clientX, event.clientY],
-              dragNode: _this13._dragNode,
-              dragEndpoint: _this13._dragEndpoint,
+              dragNode: _this14._dragNode,
+              dragEndpoint: _this14._dragEndpoint,
               dragEdges: edges
             });
+          } else if (_this14._dragType === 'group:resize') {
+            var _canvasX = _this14._coordinateService.terminal2canvas('x', event.clientX);
+            var _canvasY = _this14._coordinateService.terminal2canvas('y', event.clientY);
+
+            var _newWidth = _canvasX - _this14._dragGroup.left;
+            var _newHeight = _canvasY - _this14._dragGroup.top;
+            _this14._dragGroup.setSize(_newWidth, _newHeight);
           }
         }
       };
@@ -29563,14 +29651,14 @@ var BaseCanvas = function (_Canvas) {
         }
 
         // 处理线条的问题
-        if (_this13._dragEdges && _this13._dragEdges.length !== 0) {
+        if (_this14._dragEdges && _this14._dragEdges.length !== 0) {
           // 释放对应画布上的x,y
-          var x = _this13._coordinateService.terminal2canvas('x', event.clientX);
-          var y = _this13._coordinateService.terminal2canvas('y', event.clientY);
+          var x = _this14._coordinateService.terminal2canvas('x', event.clientX);
+          var y = _this14._coordinateService.terminal2canvas('y', event.clientY);
 
           var _targetEndpoint = null;
 
-          _this13.nodes.forEach(function (_node) {
+          _this14.nodes.forEach(function (_node) {
             if (_node.endpoints) {
               _node.endpoints.forEach(function (_point) {
                 var _maxX = _point._posLeft + _point._width + 10;
@@ -29593,44 +29681,44 @@ var BaseCanvas = function (_Canvas) {
 
           // scope不同
           if (!isDestoryEdges) {
-            isDestoryEdges = _.some(_this13._dragEdges, function (edge) {
-              return edge.sourceEndpoint.scope !== _this13._dragEndpoint.scope;
+            isDestoryEdges = _.some(_this14._dragEdges, function (edge) {
+              return edge.sourceEndpoint.scope !== _this14._dragEndpoint.scope;
             });
           }
 
           if (isDestoryEdges) {
-            _this13._dragEdges.forEach(function (edge) {
+            _this14._dragEdges.forEach(function (edge) {
               edge.destroy();
             });
           } else {
-            _this13._dragEdges.forEach(function (edge) {
+            _this14._dragEdges.forEach(function (edge) {
               edge._create({
                 id: edge.sourceEndpoint.id + '-' + _targetEndpoint.id,
-                targetNode: _this13.getNode(_targetEndpoint.nodeId),
+                targetNode: _this14.getNode(_targetEndpoint.nodeId),
                 targetEndpoint: _targetEndpoint,
                 type: 'endpoint'
               });
-              _this13.edges.push(edge);
+              _this14.edges.push(edge);
             });
-            _this13.emit('system.link.connect', {
-              links: _this13._dragEdges
+            _this14.emit('system.link.connect', {
+              links: _this14._dragEdges
             });
-            _this13.emit('events', {
+            _this14.emit('events', {
               type: 'link:connect',
-              links: _this13._dragEdges
+              links: _this14._dragEdges
             });
           }
         }
-        if (_this13._dragType === 'node:drag' && _this13._dragNode) {
+        if (_this14._dragType === 'node:drag' && _this14._dragNode) {
           var sourceGroup = null;
 
-          var _nodeLeft = _this13._dragNode.left;
-          var _nodeRight = _this13._dragNode.left + _this13._dragNode.getWidth();
-          var _nodeTop = _this13._dragNode.top;
-          var _nodeBottom = _this13._dragNode.top + _this13._dragNode.getHeight();
+          var _nodeLeft = _this14._dragNode.left;
+          var _nodeRight = _this14._dragNode.left + _this14._dragNode.getWidth();
+          var _nodeTop = _this14._dragNode.top;
+          var _nodeBottom = _this14._dragNode.top + _this14._dragNode.getHeight();
 
-          if (_this13._dragNode.group) {
-            var _group = _this13.getGroup(_this13._dragNode.group);
+          if (_this14._dragNode.group) {
+            var _group = _this14.getGroup(_this14._dragNode.group);
             var _groupLeft = _group.left;
             var _groupRight = _group.left + _group.getWidth();
             var _groupTop = _group.top;
@@ -29650,14 +29738,14 @@ var BaseCanvas = function (_Canvas) {
           }
 
           var targetGroup = null;
-          for (var i = 0; i < _this13.groups.length; i++) {
-            var _group2 = _this13.groups[i];
+          for (var i = 0; i < _this14.groups.length; i++) {
+            var _group2 = _this14.groups[i];
             var _groupLeft2 = _group2.left;
             var _groupRight2 = _group2.left + _group2.getWidth();
             var _groupTop2 = _group2.top;
             var _groupBottom2 = _group2.top + _group2.getHeight();
             if (_groupLeft2 <= _nodeLeft && _groupRight2 >= _nodeRight && _groupTop2 <= _nodeTop && _groupBottom2 >= _nodeBottom) {
-              if (_group2.id !== _this13._dragNode.group) {
+              if (_group2.id !== _this14._dragNode.group) {
                 targetGroup = _group2;
                 break;
               }
@@ -29666,10 +29754,11 @@ var BaseCanvas = function (_Canvas) {
 
           var neighborEdges = [];
           if (sourceGroup) {
-            var rmItem = _this13.removeNode(_this13._dragNode.id, true, true);
+            var rmItem = _this14.removeNode(_this14._dragNode.id, true, true);
             var rmNode = rmItem.nodes[0];
             neighborEdges = rmItem.edges;
             var nodeData = {
+              id: rmNode.id,
               top: _nodeTop,
               left: _nodeLeft,
               _isDeleteGroup: true
@@ -29682,9 +29771,9 @@ var BaseCanvas = function (_Canvas) {
               nodeData._isDeleteGroup = false;
             }
             rmNode._init(nodeData);
-            _this13.addNode(rmNode, true);
+            _this14.addNode(rmNode, true);
           } else if (targetGroup) {
-            var _rmItem = _this13.removeNode(_this13._dragNode.id, true, true);
+            var _rmItem = _this14.removeNode(_this14._dragNode.id, true, true);
             var _rmNode = _rmItem.nodes[0];
             neighborEdges = _rmItem.edges;
             _rmNode._init({
@@ -29692,25 +29781,29 @@ var BaseCanvas = function (_Canvas) {
               left: _nodeLeft - targetGroup.left,
               group: targetGroup.id
             });
-            _this13.addNode(_rmNode, true);
+            _this14.addNode(_rmNode, true);
           }
           neighborEdges.forEach(function (item) {
             item.redraw();
           });
         }
 
-        _this13.emit('system.drag.end', {
-          dragType: _this13._dragType
+        // 节点组放大缩小
+        if (_this14._dragType === 'group:resize' && _this14._dragGroup) {}
+
+        _this14.emit('system.drag.end', {
+          dragType: _this14._dragType
         });
-        _this13.emit('events', {
+        _this14.emit('events', {
           type: 'drag:end',
-          dragType: _this13._dragType
+          dragType: _this14._dragType
         });
 
-        _this13._dragType = null;
-        _this13._dragNode = null;
-        _this13._dragEndpoint = null;
-        _this13._dragEdges = [];
+        _this14._dragType = null;
+        _this14._dragNode = null;
+        _this14._dragEndpoint = null;
+        _this14._dragGroup = null;
+        _this14._dragEdges = [];
         nodeOriginPos = {
           x: 0,
           y: 0
@@ -29775,7 +29868,7 @@ var BaseCanvas = function (_Canvas) {
   }, {
     key: '_selectMytiplyItem',
     value: function _selectMytiplyItem(range) {
-      var _this14 = this;
+      var _this15 = this;
 
       // 确认一下终端的偏移值
       var startX = this._coordinateService.terminal2canvas('x', range[0]);
@@ -29794,7 +29887,7 @@ var BaseCanvas = function (_Canvas) {
           var nodeTop = item.top;
           var nodeBottom = item.top + $(item.dom).height();
           if (startX < nodeLeft && endX > nodeRight && startY < nodeTop && endY > nodeBottom) {
-            _this14.selectItem.nodes.push(item);
+            _this15.selectItem.nodes.push(item);
           }
         });
       }
@@ -29808,7 +29901,7 @@ var BaseCanvas = function (_Canvas) {
             var pointTop = item._posTop;
             var pointBottom = item._posTop + $(item.dom).height();
             if (startX < pointLeft && endX > pointRight && startY < pointTop && endY > pointBottom) {
-              _this14.selectItem.endpoints.push(item);
+              _this15.selectItem.endpoints.push(item);
             }
           });
         });
@@ -29823,7 +29916,7 @@ var BaseCanvas = function (_Canvas) {
             var top = item.sourceEndpoint._posTop < item.targetEndpoint._posTop ? item.sourceEndpoint._posTop : item.targetEndpoint._posTop;
             var bottom = item.sourceEndpoint._posTop + item.sourceEndpoint._height > item.targetEndpoint._posTop + item.targetEndpoint._height ? item.sourceEndpoint._posTop + item.sourceEndpoint._height : item.targetEndpoint._posTop + item.targetEndpoint._height;
             if (startX < left && endX > right && startY < top && endY > bottom) {
-              _this14.selectItem.edges.push(item);
+              _this15.selectItem.edges.push(item);
             }
           } else if (item.type === 'node') {
             // 后续补
@@ -31520,7 +31613,7 @@ exports = module.exports = __webpack_require__(3)(false);
 
 
 // module
-exports.push([module.i, ".butterfly-warpper .group {\n  position: absolute;\n  border-radius: 9px;\n}\n.butterfly-warpper .group .title {\n  width: 100%;\n  height: 30px;\n  cursor: move;\n  font-size: 12px;\n  color: #fff;\n  line-height: 30px;\n  padding-left: 12px;\n  border-radius: 9px 9px 0 0;\n  background: rgba(0, 0, 0, 0.6);\n}\n.butterfly-warpper .group .container {\n  width: 100%;\n  height: calc(100% - 30px);\n  background: rgba(0, 0, 0, 0.1);\n  border-radius: 0 0 9px 9px;\n}\n", ""]);
+exports.push([module.i, ".butterfly-warpper .group {\n  position: absolute;\n  border-radius: 9px;\n}\n.butterfly-warpper .group .title {\n  width: 100%;\n  height: 30px;\n  cursor: move;\n  font-size: 12px;\n  color: #fff;\n  line-height: 30px;\n  padding-left: 12px;\n  border-radius: 9px 9px 0 0;\n  background: rgba(0, 0, 0, 0.6);\n}\n.butterfly-warpper .group .container {\n  width: 100%;\n  height: calc(100% - 30px);\n  background: rgba(0, 0, 0, 0.1);\n  border-radius: 0 0 9px 9px;\n}\n.butterfly-warpper .group .group-icon-resize {\n  position: absolute;\n  right: -4px;\n  bottom: -8px;\n  color: #666;\n  cursor: se-resize;\n}\n", ""]);
 
 // exports
 
@@ -33370,14 +33463,37 @@ if(false) {
 /* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
+var escape = __webpack_require__(85);
 exports = module.exports = __webpack_require__(3)(false);
 // imports
 
 
 // module
-exports.push([module.i, ".butterfly-warpper {\n  position: relative;\n  width: 100%;\n  height: 100%;\n}\n.butterfly-svg {\n  overflow: visible!important;\n}\n.butterfly-canvas-warpper {\n  position: absolute;\n  top: 0;\n  left: 0;\n  z-index: 0;\n  pointer-events: auto;\n  opacity: 0.5;\n  display: none;\n}\n.butterfly-canvas-warpper.warpper-up {\n  z-index: 999;\n  display: block;\n}\n", ""]);
+exports.push([module.i, "@font-face {\n  font-family: \"butterfly-icon\";\n  src: url(" + escape(__webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../../static/butterfly.eot?t=1547220351215\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()))) + ");\n  /* IE9 */\n  src: url(" + escape(__webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../../static/butterfly.eot?t=1547220351215\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()))) + "#iefix) format('embedded-opentype'),  url('data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAALIAAsAAAAABqAAAAJ8AAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEIGVgCCcApkdgE2AiQDCAsGAAQgBYU1By4b4gUR1Ytnsj9AJrf6AYTQUcQWe8bI7RsxP20WgJF70ALxCisgAQAAAACC5//39+1z7/lk0kirT4MimIQ0oblC0S2P66xJgPLbnOtJ1agIM5SzTx7tMBmVLk0flPjk2UJL5tieo5sH9qPlAQW8LNzYBkw/W97GNvCDFXpJOXgZAC2ymaysM7a8/vxx7/SPBrWB1gPKbY5tYwpmaRfQXkARlkjGDWM3qMDh5xDAT44apPliO+BFSdYJIFNzEYF3FERRK+NFcAOOKrKBC69ZNDas15+X11K8YHBZkpqOSSuF+gfSHLvgsP4SIQSCdtoFWKAGUJAeYLINi1gsiz+pFMG+KgUecJzSjOzVgFh/XVIeBCCjCu9JlItvtdwAoO1kBihhugVMKDL9Z2KqfSqluAvjWsd29POi+PYWTY+r/I+LNvmqniyOhlOtXfd/ueW6vlBP8jObMhsIIPCm+xr59wYUgPPOrvUKmRu8u3MJ/BYR4YCGksRk1BcB3YYM01oD+PEDju6Nc8GqTd1DVgiTuhO3h+IeLGGqUCXWgosAreAmTCf4qWbodIAESxZRH1DFngJChn0whLkFS4ZvRCkSAhdpqZS7QcQ68NMnXRmgTLDVkbEVHKD7wdw7S9lcUV0UQSb9S6bT3HCMumW7xSj2Qg6zOgaKNF/MXNEii94R3mMpQkDsDFykvIZaO/DsFuwlnUR8lWUEelPaO7NRHBlbwQG6H8y9s1TaRanOKARsJk1Ovv+GY9QtE3UMVr4AzjBrs4cizYnRq9ICW+69OLzHkolBwM/OwAWVZq0dePCiBXtJJ4a4r7J0FJEq03XV5iMLrA4SnZG00XIY53bcbAAAAA==') format('woff2'), url(" + escape(__webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../../static/butterfly.woff?t=1547220351215\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()))) + ") format('woff'), url(" + escape(__webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../../static/butterfly.ttf?t=1547220351215\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()))) + ") format('truetype'),  url(" + escape(__webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../../static/butterfly.svg?t=1547220351215\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()))) + "#butterfly-icon) format('svg');\n  /* iOS 4.1- */\n}\n.butterfly-icon {\n  font-family: \"butterfly-icon\" !important;\n  font-size: 16px;\n  font-style: normal;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n}\n.icon-drag:before {\n  content: \"\\E619\";\n}\n.butterfly-warpper {\n  position: relative;\n  width: 100%;\n  height: 100%;\n}\n.butterfly-svg {\n  overflow: visible!important;\n}\n.butterfly-canvas-warpper {\n  position: absolute;\n  top: 0;\n  left: 0;\n  z-index: 0;\n  pointer-events: auto;\n  opacity: 0.5;\n  display: none;\n}\n.butterfly-canvas-warpper.warpper-up {\n  z-index: 999;\n  display: block;\n}\n", ""]);
 
 // exports
+
+
+/***/ }),
+/* 85 */
+/***/ (function(module, exports) {
+
+module.exports = function escape(url) {
+    if (typeof url !== 'string') {
+        return url
+    }
+    // If url is already wrapped in quotes, remove them
+    if (/^['"].*['"]$/.test(url)) {
+        url = url.slice(1, -1);
+    }
+    // Should url be wrapped?
+    // See https://drafts.csswg.org/css-values-3/#urls
+    if (/["'() \t\n]/.test(url)) {
+        return '"' + url.replace(/"/g, '\\"').replace(/\n/g, '\\n') + '"'
+    }
+
+    return url
+}
 
 
 /***/ })
