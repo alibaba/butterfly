@@ -24,7 +24,6 @@ class BaseCanvas extends Canvas {
     this.linkable = options.linkable || false; // 可连线
     this.disLinkable = options.disLinkable || false; // 可拆线
 
-    this.css = options.css || {}; // 这部分需要废弃,因为复写了jsplumb这个模块
     this.theme = {
       edge: {
         type: _.get(options, 'theme.edge.type') || 'Bezier',
@@ -79,13 +78,6 @@ class BaseCanvas extends Canvas {
     this._rootWidth = $(this.root).width();
     this._rootHeight = $(this.root).height();
 
-    // this.terOffsetX = opts.terOffsetX || 0;
-    // this.terOffsetY = opts.terOffsetY || 0;
-    // this.terWidth = opts.terWidth || 0;
-    // this.terHeight = opts.terHeight || 0;
-    // this.canOffsetX = 0;
-    // this.canOffsetY = 0;
-    // this.scale = 1;
     this._coordinateService = new CoordinateService({
       terOffsetX: $(this.root).offset().left,
       terOffsetY: $(this.root).offset().top,
@@ -164,6 +156,8 @@ class BaseCanvas extends Canvas {
     container.prepend(_groupObj.dom);
 
     this.groups.push(_groupObj);
+
+    _groupObj.mounted && _groupObj.mounted();
     return _groupObj;
   }
 
@@ -282,6 +276,8 @@ class BaseCanvas extends Canvas {
         }
 
         this.edges.push(edge);
+
+        edge.mounted && edge.mounted();
 
         return edge;
       } 
@@ -853,6 +849,7 @@ class BaseCanvas extends Canvas {
         $(this.warpper).prepend(endpointDom);
       }
       endpoint.updatePos();
+      endpoint.mounted && endpoint.mounted();
     }
   }
 

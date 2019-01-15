@@ -182,7 +182,7 @@ canvas.on('type', (data) => {
 ## Group
 ### 用法
 ```
-const Group = require('@ali/butterflies').Group;
+const Group = require('butterfly-dag').Group;
 class TestGroup extends Group {
   draw(obj) {
     // 这里可以根据业务需要，自己生成dom
@@ -220,6 +220,10 @@ canvas.draw({
   */
 draw = (obj) => {}
 /**
+  * 节点组挂载后的回调
+  */
+mounted = () => {}
+/**
   * group添加节点
   * @param {obj} node - 节点数据
   */
@@ -254,7 +258,7 @@ on = (string, callback) => {}
 
 ### 用法
 ```
-const Node = require('@ali/butterflies').Node;
+const Node = require('butterfly-dag').Node;
 class TestNode extends Node {
   draw(obj) {
     // 这里可以根据业务需要，自己生成dom
@@ -356,10 +360,10 @@ on = (string, callback) => {}
 | key | 说明 | 类型 | 默认值 
 | :------ | :------ | :------ | :------ 
 | id | 节点唯一标识 | string (Require) | - 
-| target | 连接目标节点id | string (Require) | - 
-| targetEndpoint | 连接目标锚点id | string (Require) | - 
-| source | 连接源节点id | string (Require) | - 
-| sourceEndpoint | 连接源锚点id | string (Require) | - 
+| targetNode | 连接目标节点id | string (Require) | - 
+| target | 连接目标锚点id | string (Require) | - 
+| sourceNode | 连接源节点id | string (Require) | - 
+| source | 连接源锚点id | string (Require) | - 
 | type | 标志线条连接到节点还是连接到锚点 | string (Option) | endpoint/node
 | orientationLimit | 线条出口的位置 | array (Option) | - 
 | shapeType | 线条的类型 | string (Option) | Bezier/Flow/Straight
@@ -372,6 +376,10 @@ on = (string, callback) => {}
   * @return {dom} - 自定义节点的dom
   */
 draw = () => {}
+/**
+  * 线条挂载后的回调
+  */
+mounted = () => {}
 /**
   * @return {dom} - 自定义label的dom
   */
@@ -415,6 +423,10 @@ on = (string, callback) => {}
   * @return {dom} - 自定义节点的dom
   */
 draw = () => {}
+/**
+  * 锚点挂载后的回调
+  */
+mounted = () => {}
 /**
   * @param {number} x - 移动位置的x坐标 
   * @param {number} y - 移动位置的y坐标 
