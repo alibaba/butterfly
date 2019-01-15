@@ -66,6 +66,8 @@ class Endpoint {
     if (this.type === 'source') {
       this.makeSource();
     }
+
+    this._attachEvent();
   }
 
   draw(obj) {
