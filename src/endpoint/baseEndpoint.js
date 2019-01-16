@@ -183,6 +183,10 @@ class Endpoint {
 
   makeSource() {
     $(this.dom).on('mousedown', (e) => {
+      const LEFT_KEY = 0;
+      if (e.button !== LEFT_KEY) {
+        return;
+      }
       e.preventDefault();
       e.stopPropagation();
       this._emit('InnerEvents', {
@@ -197,6 +201,7 @@ class Endpoint {
   }
 
   destroy() {
+    $(this.dom).off();
     $(this.dom).remove();
   }
 }
