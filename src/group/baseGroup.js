@@ -105,6 +105,10 @@ class BaseGroup extends Group {
   }
   setResize(flat, container = this.dom) {
     let mouseDown = (event) => {
+      const LEFT_KEY = 0;
+      if (event.button !== LEFT_KEY) {
+        return;
+      }
       event.preventDefault();
       event.stopPropagation();
       this._emit('InnerEvents', {
@@ -165,8 +169,8 @@ class BaseGroup extends Group {
       });
     });
     $(this.dom).on('mousedown', (e) => {
-      let LEFT_KEY = 0;
-      if (!e.button === LEFT_KEY) {
+      const LEFT_KEY = 0;
+      if (e.button !== LEFT_KEY) {
         return;
       }
       e.preventDefault();

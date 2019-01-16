@@ -27,7 +27,9 @@ class BaseCanvas extends Canvas {
     this.theme = {
       edge: {
         type: _.get(options, 'theme.edge.type') || 'Bezier',
-        Class: _.get(options, 'theme.edge.Class') || Edge
+        Class: _.get(options, 'theme.edge.Class') || Edge,
+        isRepeat: _.get(options, 'theme.edge.isRepeat') || false,
+        isLinkMyself: _.get(options, 'theme.edge.isLinkMyself') || false,
       },
       endpoint: {
         position: _.get(options, 'theme.endpoint.position')
@@ -243,6 +245,20 @@ class BaseCanvas extends Canvas {
         if (!sourceEndpoint || !targetEndpoint) {
           console.log(`butterflies error: can not connect edge. link sourceId:${link.source};link targetId:${link.target}`);
           return;
+        }
+
+        // 线条去重
+        if (!this.theme.edge.isRepeat) {
+          let _isRepeat = _.some(this.edges, (_edge) => {
+            return _edge.sourceNode.id === sourceNode.id &&
+              _edge.sourceEndpoint.id === sourceEndpoint.id &&
+              _edge.targetNode.id === targetNode.id &&
+              _edge.targetEndpoint.id === targetEndpoint.id;
+          });
+          if (_isRepeat) {
+            console.log(`id为${edge.sourceEndpoint.id}-${_targetEndpoint.id}的线条连接重复，请检查`);
+            return;
+          }
         }
 
         const edge = new EdgeClass({
@@ -1110,6 +1126,20 @@ class BaseCanvas extends Canvas {
           });
         } else {
           this._dragEdges.forEach((edge) => {
+            // 线条去重
+            if (!this.theme.edge.isRepeat) {
+              let _isRepeat = _.some(this.edges, (_edge) => {
+                return _edge.sourceNode.id === edge.sourceNode.id &&
+                  _edge.sourceEndpoint.id === edge.sourceEndpoint.id &&
+                  _edge.targetNode.id === _targetEndpoint.nodeId &&
+                  _edge.targetEndpoint.id === _targetEndpoint.id;
+              });
+              if (_isRepeat) {
+                console.log(`id为${edge.sourceEndpoint.id}-${_targetEndpoint.id}的线条连接重复，请检查`);
+                edge.destroy();
+                return;
+              }
+            }
             edge._create({
               id: `${edge.sourceEndpoint.id}-${_targetEndpoint.id}`,
               targetNode: this.getNode(_targetEndpoint.nodeId),
