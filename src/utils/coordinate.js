@@ -1,4 +1,6 @@
+'use strict';
 
+const _ = require('lodash');
 
 class CoordinateService {
   constructor(opts) {
@@ -35,19 +37,37 @@ class CoordinateService {
     }
   }
 
-  canvas2terminal(pos, coordinate) {
-
+  canvas2terminal(pos, coordinate, options) {
+    let scale = _.get(options, 'scale') || this.scale;
+    let canOffsetX = _.get(options, 'canOffsetX') !== undefined ? _.get(options, 'canOffsetX') : this.canOffsetX;
+    let canOffsetY = _.get(options, 'canOffsetY') !== undefined ? _.get(options, 'canOffsetY') : this.canOffsetY;
+    let terOffsetX = _.get(options, 'terOffsetX') !== undefined ? _.get(options, 'terOffsetX') : this.terOffsetX;
+    let terOffsetY = _.get(options, 'terOffsetY') !== undefined ? _.get(options, 'terOffsetY') : this.terOffsetY;
+    if (pos === 'x') {
+      const terCenter = terOffsetX + this.terWidth / 2;
+      return (coordinate - this.terWidth / 2) * scale + terCenter + canOffsetX;
+    }
+    if (pos === 'y') {
+      const terCenter = terOffsetY + this.terHeight / 2;
+      return (coordinate - this.terHeight / 2) * scale + terCenter + canOffsetY;
+    }
   }
 
-  terminal2canvas(pos, coordinate) {
+  terminal2canvas(pos, coordinate, options) {
+    let scale = _.get(options, 'scale') || this.scale;
+    let canOffsetX = _.get(options, 'canOffsetX') !== undefined ? _.get(options, 'canOffsetX') : this.canOffsetX;
+    let canOffsetY = _.get(options, 'canOffsetY') !== undefined ? _.get(options, 'canOffsetY') : this.canOffsetY;
+    let terOffsetX = _.get(options, 'terOffsetX') !== undefined ? _.get(options, 'terOffsetX') : this.terOffsetX;
+    let terOffsetY = _.get(options, 'terOffsetY') !== undefined ? _.get(options, 'terOffsetY') : this.terOffsetY;
     if (pos === 'x') {
-      const terCenter = this.terOffsetX + this.terWidth / 2;
+      const terCenter = terOffsetX + this.terWidth / 2;
       // console.log((coordinate - terCenter - this.canOffsetX) / this.scale + this.terWidth / 2);
-      return (coordinate - terCenter - this.canOffsetX) / this.scale + this.terWidth / 2;
-    } if (pos === 'y') {
-      const terCenter = this.terOffsetY + this.terHeight / 2;
+      return (coordinate - terCenter - canOffsetX) / scale + this.terWidth / 2;
+    }
+    if (pos === 'y') {
+      const terCenter = terOffsetY + this.terHeight / 2;
       // console.log((coordinate - terCenter - this.canOffsetY) / this.scale + this.terHeight / 2);
-      return (coordinate - terCenter - this.canOffsetY) / this.scale + this.terHeight / 2;
+      return (coordinate - terCenter - canOffsetY) / scale + this.terHeight / 2;
     }
   }
 }
