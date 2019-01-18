@@ -100,7 +100,7 @@ class BaseCanvas extends Canvas {
     };
   }
 
-  draw(opts) {
+  draw(opts, callback) {
     const groups = opts.groups || [];
     const nodes = opts.nodes || [];
     const edges = opts.edges || [];
@@ -115,19 +115,30 @@ class BaseCanvas extends Canvas {
     }
 
     // 首次加载，异步逐步加载
-
-    setTimeout(() => {
-      // 生成groups
-      this.addGroups(groups);
+    let groupPromise = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        // 生成groups
+        this.addGroups(groups);
+        resolve();
+      });
     });
-    setTimeout(() => {
-      // 生成nodes
-      this.addNodes(nodes);
-    }, 10);
-    setTimeout(() => {
-      // 生成edges
-      this.addEdges(edges);
-    }, 20);
+    let nodePromise = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        // 生成nodes
+        this.addNodes(nodes);
+        resolve();
+      }, 10);
+    });
+    let edgePromise = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        // 生成edges
+        this.addEdges(edges);
+        resolve();
+      }, 20);
+    });
+    Promise.all([groupPromise, nodePromise, edgePromise]).then(() => {
+      callback && callback();
+    });
   }
 
   getNode(id) {
@@ -256,7 +267,7 @@ class BaseCanvas extends Canvas {
               _edge.targetEndpoint.id === targetEndpoint.id;
           });
           if (_isRepeat) {
-            console.log(`id为${edge.sourceEndpoint.id}-${_targetEndpoint.id}的线条连接重复，请检查`);
+            console.log(`id为${sourceEndpoint.id}-${targetEndpoint.id}的线条连接重复，请检查`);
             return;
           }
         }
@@ -564,7 +575,142 @@ class BaseCanvas extends Canvas {
       this.moveable = false;
     }
   }
+  focusNodesWithAnimate(param, type = ['node'], callback) {
+    // 画布里的可视区域
+    let canLeft = Infinity;
+    let canRight = -Infinity;
+    let canTop = Infinity;
+    let canBottom = -Infinity;
 
+    if (_.includes(type, 'node')) {
+      let nodeIds = param.nodes;
+      this.nodes.filter((_node) => {
+        return _.find(nodeIds, (id) => {
+          return _node.id === id;
+        });
+      }).forEach((_node) => {
+        let _nodeLeft = _node.left;
+        let _nodeRight = _node.left + _node.getWidth();
+        let _nodeTop = _node.top;
+        let _nodeBottom = _node.top + _node.getHeight();
+        if (_node.group) {
+          let group = this.getGroup(_node.group);
+          if (group) {
+            _nodeLeft += group.left;
+            _nodeRight += group.left;
+            _nodeTop += group.top;
+            _nodeBottom += group.top;
+          }
+        }
+        if (_nodeLeft < canLeft) {
+          canLeft = _nodeLeft;
+        }
+        if (_nodeRight > canRight) {
+          canRight = _nodeRight;
+        }
+        if (_nodeTop < canTop) {
+          canTop = _nodeTop;
+        }
+        if (_nodeBottom > canBottom) {
+          canBottom = _nodeBottom;
+        }
+      });
+    }
+
+    if (_.includes(type, 'group')) {
+      let groupIds = param.groups;
+      this.groups.filter((_group) => {
+        return _.find(groupIds, (id) => {
+          return id === _group.id;
+        });
+      }).forEach((_group) => {
+        let _groupLeft = _group.left;
+        let _groupRight = _group.left + _group.getWidth();
+        let _groupTop = _group.top;
+        let _groupBottom = _group.top + _group.getHeight();
+        if (_groupLeft < canLeft) {
+          canLeft = _groupLeft;
+        }
+        if (_groupRight > canRight) {
+          canRight = _groupRight;
+        }
+        if (_groupTop < canTop) {
+          canTop = _groupTop;
+        }
+        if (_groupBottom > canBottom) {
+          canBottom = _groupBottom;
+        }
+      });
+    }
+
+    let canDisX = canRight - canLeft;
+    let terDisX = this._rootWidth;
+    let canDisY = canBottom - canTop;
+    let terDisY = this._rootHeight;
+    let scaleX = terDisX / canDisX;
+    let scaleY = terDisY / canDisY;
+
+    // 这里要根据scale来判断
+    let scale = scaleX < scaleY ? scaleX : scaleY;
+    scale = 1 < scale ? 1 : scale;
+
+    let terLeft = this._coordinateService.canvas2terminal('x', canLeft, {
+      scale: scale,
+      canOffsetX: 0,
+      canOffsetY: 0,
+      terOffsetX: 0,
+      terOffsetY: 0
+    });
+    let terRight = this._coordinateService.canvas2terminal('x', canRight, {
+      scale: scale,
+      canOffsetX: 0,
+      canOffsetY: 0,
+      terOffsetX: 0,
+      terOffsetY: 0
+    });
+    let terTop = this._coordinateService.canvas2terminal('y', canTop, {
+      scale: scale,
+      canOffsetX: 0,
+      canOffsetY: 0,
+      terOffsetX: 0,
+      terOffsetY: 0
+    });
+    let terBottom = this._coordinateService.canvas2terminal('y', canBottom, {
+      scale: scale,
+      canOffsetX: 0,
+      canOffsetY: 0,
+      terOffsetX: 0,
+      terOffsetY: 0
+    });
+
+    let offsetX = (terLeft + terRight - this._rootWidth) / 2;
+    let offsetY = (terTop + terBottom - this._rootHeight) / 2;
+
+    offsetX = -offsetX;
+    offsetY = -offsetY;
+
+    const time = 500;
+    $(this.warpper).animate({
+      top: offsetY,
+      left: offsetX,
+    }, time);
+    this._moveData = [offsetX, offsetY];
+
+    this.zoom(scale, callback);
+  }
+  focusCenterWithAnimate(callback) {
+    let nodeIds = this.nodes.map((item) => {
+      return item.id;
+    });
+    let groupIds = this.groups.map((item) => {
+      return item.id;
+    });
+
+    this.focusNodesWithAnimate({
+      nodes: nodeIds,
+      groups: groupIds
+    }, ['node', 'group'], callback);
+  }
   focusNodeWithAnimate(param, type = 'node', callback) {
     let node = null;
 
@@ -627,12 +773,12 @@ class BaseCanvas extends Canvas {
 
   zoom(param, callback) {
     if (param < 0.25) {
-      return;
+      param = 0.25;
     } if (param > 5) {
-      return;
+      param = 5;
     }
     const time = 50;
-    let frame = 0;
+    let frame = 1;
     const gap = param - this._zoomData;
     const interval = gap / 20;
     let timer = null;

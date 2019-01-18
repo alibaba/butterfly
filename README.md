@@ -57,8 +57,9 @@ canvas.draw({
 /**
   * 渲染方法
   * @param {data} data  - 里面包含分组，节点，连线
+  * @param {function} callback  - `*渲染过程是异步的过程，需要的用户请留意回调`
   */
-draw = (data) => {}
+draw = (data, calllback) => {}
 
 /**
   * 添加分组
@@ -126,12 +127,26 @@ setZoomable = (boolean) => {}
 setMoveable = (boolean) => {}
 
 /**
-  * 获取画布的数据模型
+  * 聚焦某个节点/节点组
   * @param {string/function} nodeId/groupId or filter  - 节点的id或者过滤器
   * @param {string} type  - 节点的类型(node or group)
   * @param {function} callback  - 聚焦后的回调
   */
 focusNodeWithAnimate = (string, type) => {}
+
+/**
+  * 聚焦某多个节点/节点组
+  * @param {object} {node: [], group: []}  - 节点和节点组的id数组
+  * @param {array} type  - 节点的类型(node or group)
+  * @param {function} callback  - 聚焦后的回调
+  */
+focusNodesWithAnimate = (string, type) => {}
+
+/**
+  * 聚焦整个画布，会自动调整画布位置和缩放
+  * @param {function} callback  - 聚焦后的回调
+  */
+focusCenterWithAnimate = (string, type) => {}
 
 /**
   * 设置框选模式
