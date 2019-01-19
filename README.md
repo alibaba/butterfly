@@ -2,6 +2,9 @@
 
 Butterflies是什么是一个基于数据驱动文档的一款JavaScript函数库，让你有能力借助HTML，SVG，CSS来方便快捷生成可视化流程图表。
 
+# 在线调试DEMO
+* 虽然还不是很完善的demo，但还是给大家做个[DEMO](https://noonnightstorm.github.io/)，加载会稍微有点慢，后续会优化
+
 # 安装
 ```
 npm install butterfly-dag
@@ -146,7 +149,7 @@ focusNodesWithAnimate = (string, type) => {}
   * 聚焦整个画布，会自动调整画布位置和缩放
   * @param {function} callback  - 聚焦后的回调
   */
-focusCenterWithAnimate = (string, type) => {}
+focusCenterWithAnimate = () => {}
 
 /**
   * 设置框选模式
@@ -188,6 +191,8 @@ canvas.on('type', (data) => {
 | system.link.delete | 删除连线 | -
 | system.link.connect | 连线成功 | -
 | system.group.delete | 删除节点组 | -
+| system.group.addMember | 节点组添加节点 | -
+| system.group.removeMember | 节点组删除节点 | -
 | system.multiple.select | 框选结果 | -
 | system.drag.start | 拖动开始 | -
 | system.drag.move | 拖动 | -

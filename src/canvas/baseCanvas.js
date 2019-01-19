@@ -28,6 +28,7 @@ class BaseCanvas extends Canvas {
       edge: {
         type: _.get(options, 'theme.edge.type') || 'Bezier',
         Class: _.get(options, 'theme.edge.Class') || Edge,
+        arrow: _.get(options, 'theme.edge.arrow'),
         isRepeat: _.get(options, 'theme.edge.isRepeat') || false,
         isLinkMyself: _.get(options, 'theme.edge.isLinkMyself') || false,
       },
@@ -1163,6 +1164,7 @@ class BaseCanvas extends Canvas {
                 orientationLimit: this.theme.endpoint.position,
                 sourceNode: this.getNode(point.nodeId),
                 sourceEndpoint: point,
+                arrow: this.theme.edge.arrow,
                 _on: this.on.bind(this),
                 _emit: this.emit.bind(this),
               });
@@ -1187,7 +1189,8 @@ class BaseCanvas extends Canvas {
             let beginX =  edge.sourceEndpoint._posLeft + edge.sourceEndpoint._width / 2;
             let beginY = edge.sourceEndpoint._posTop + edge.sourceEndpoint._height / 2;
             const _soucePoint = {
-              pos: [beginX, beginY]
+              pos: [beginX, beginY],
+              orientation: edge.sourceEndpoint.orientation
             };
             const _targetPoint = {
               pos: [endX, endY],
@@ -1358,11 +1361,30 @@ class BaseCanvas extends Canvas {
             _isDeleteGroup: true
           };
 
+          this.emit('events', {
+            type: 'system.group.rmoveMember',
+            group: sourceGroup,
+            node: rmNode
+          });
+          this.emit('system.group.rmoveMember', {
+            group: sourceGroup,
+            node: rmNode
+          });
+
           if (targetGroup) {
             nodeData.top -= targetGroup.top;
             nodeData.left -= targetGroup.left;
             nodeData.group = targetGroup.id;
             nodeData._isDeleteGroup = false;
+            this.emit('events', {
+              type: 'system.group.addMember',
+              node: rmNode,
+              group: targetGroup
+            });
+            this.emit('system.group.addMember', {
+              node: rmNode,
+              group: targetGroup
+            });
           }
           rmNode._init(nodeData);
           this.addNode(rmNode, true);
@@ -1376,6 +1398,15 @@ class BaseCanvas extends Canvas {
             group: targetGroup.id
           });
           this.addNode(rmNode, true);
+          this.emit('events', {
+            type: 'system.group.addMember',
+            node: rmNode,
+            group: targetGroup
+          });
+          this.emit('system.group.addMember', {
+            node: rmNode,
+            group: targetGroup
+          });
         }
         neighborEdges.forEach((item) => {
           item.redraw();
