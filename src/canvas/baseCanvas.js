@@ -1415,7 +1415,13 @@ class BaseCanvas extends Canvas {
 
       // 节点组放大缩小
       if (this._dragType === 'group:resize' && this._dragGroup) {
-
+        this.emit('events', {
+          type: 'system.group.resize',
+          group: this._dragGroup
+        });
+        this.emit('system.group.resize', {
+          group: this._dragGroup
+        });
       }
 
       this.emit('system.drag.end', {
