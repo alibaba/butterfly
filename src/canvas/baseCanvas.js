@@ -901,6 +901,13 @@ class BaseCanvas extends Canvas {
     this.unionItem.endpoints = [];
   }
 
+  canvas2terminal(coordinates, options) {
+    return this._coordinateService.canvas2terminal(coordinates, options);
+  }
+  terminal2canvas(coordinates, options) {
+    return this._coordinateService.terminal2canvas(coordinates, options);
+  }
+
   _genSvgWarpper() {
     // 生成svg的warpper
     const svg = $(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))

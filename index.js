@@ -6,13 +6,11 @@ const Edge = require('./src/edge/baseEdge');
 const Endpoint = require('./src/endpoint/baseEndpoint');
 const Group = require('./src/group/baseGroup');
 const Node = require('./src/node/baseNode');
-const Coordinate = require('./src/utils/coordinate');
 
 module.exports = {
   Canvas,
   Edge,
   Endpoint,
   Group,
-  Node,
-  Coordinate
+  Node
 };
