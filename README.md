@@ -466,3 +466,22 @@ mounted = () => {}
   */
 moveTo = (obj) => {}
 ```
+
+## Coordinate (坐标转换)
+
+### 方法
+```
+/**
+  * 画布转换为屏幕的坐标
+  * @param {array[number]} coordinates - 需要换算的坐标
+  * @return {number} - 转换后的坐标
+  */
+canvas2terminal = (coordinates) => {}
+
+/**
+  * 屏幕转换为画布的坐标
+  * @param {array[number]} coordinates - 需要换算的坐标
+  * @return {number} - 转换后的坐标
+  */
+terminal2canvas = (coordinates) => {}
+```

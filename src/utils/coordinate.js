@@ -36,8 +36,13 @@ class CoordinateService {
       this.scale = data.scale;
     }
   }
-
-  canvas2terminal(pos, coordinate, options) {
+  canvas2terminal(coordinates, options) {
+    return [this._canvas2terminal('x', coordinates[0], options), this._canvas2terminal('y', coordinates[1], options)];
+  }
+  terminal2canvas(coordinates, options) {
+    return [this._terminal2canvas('x', coordinates[0], options), this._terminal2canvas('y', coordinates[1], options)];
+  }
+  _canvas2terminal(pos, coordinate, options) {
     let scale = _.get(options, 'scale') || this.scale;
     let canOffsetX = _.get(options, 'canOffsetX') !== undefined ? _.get(options, 'canOffsetX') : this.canOffsetX;
     let canOffsetY = _.get(options, 'canOffsetY') !== undefined ? _.get(options, 'canOffsetY') : this.canOffsetY;
@@ -53,7 +58,7 @@ class CoordinateService {
     }
   }
 
-  terminal2canvas(pos, coordinate, options) {
+  _terminal2canvas(pos, coordinate, options) {
     let scale = _.get(options, 'scale') || this.scale;
     let canOffsetX = _.get(options, 'canOffsetX') !== undefined ? _.get(options, 'canOffsetX') : this.canOffsetX;
     let canOffsetY = _.get(options, 'canOffsetY') !== undefined ? _.get(options, 'canOffsetY') : this.canOffsetY;
@@ -73,32 +78,3 @@ class CoordinateService {
 }
 
 module.exports = CoordinateService;
-
-// let terOffsetX = 0;
-// let terOffsetY = 0;
-// let terWidth = 0;
-// let terHeight = 0;
-// let canOffsetX = 0;
-// let canOffsetY = 0;
-// let scale = 1;
-
-// function _initCanvasPos(opts) {
-
-// }
-
-// function canvas2terminal(data) {
-
-// }
-
-// function terminal2canvas(data) {
-//   let {sourCoordinate, terOffset, terSize, canOffset, canScale} = data;
-//   let terCenter = terOffset + terSize / 2;
-//   let canCoordinate = (sourCoordinate - terCenter - canOffset) / canScale +  terSize / 2;
-//   return canCoordinate;
-// }
-
-// module.exports = {
-//   _initCanvasPos,
-//   canvas2terminal,
-//   terminal2canvas
-// };
