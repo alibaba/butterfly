@@ -664,28 +664,28 @@ class BaseCanvas extends Canvas {
     let scale = scaleX < scaleY ? scaleX : scaleY;
     scale = 1 < scale ? 1 : scale;
 
-    let terLeft = this._coordinateService.canvas2terminal('x', canLeft, {
+    let terLeft = this._coordinateService._canvas2terminal('x', canLeft, {
       scale: scale,
       canOffsetX: 0,
       canOffsetY: 0,
       terOffsetX: 0,
       terOffsetY: 0
     });
-    let terRight = this._coordinateService.canvas2terminal('x', canRight, {
+    let terRight = this._coordinateService._canvas2terminal('x', canRight, {
       scale: scale,
       canOffsetX: 0,
       canOffsetY: 0,
       terOffsetX: 0,
       terOffsetY: 0
     });
-    let terTop = this._coordinateService.canvas2terminal('y', canTop, {
+    let terTop = this._coordinateService._canvas2terminal('y', canTop, {
       scale: scale,
       canOffsetX: 0,
       canOffsetY: 0,
       terOffsetX: 0,
       terOffsetY: 0
     });
-    let terBottom = this._coordinateService.canvas2terminal('y', canBottom, {
+    let terBottom = this._coordinateService._canvas2terminal('y', canBottom, {
       scale: scale,
       canOffsetX: 0,
       canOffsetY: 0,
@@ -1061,8 +1061,8 @@ class BaseCanvas extends Canvas {
         position: {
           clientX: event.clientX,
           clientY: event.clientY,
-          canvasX: this._coordinateService.terminal2canvas('x', event.clientX),
-          canvasY: this._coordinateService.terminal2canvas('y', event.clientY)
+          canvasX: this._coordinateService._terminal2canvas('x', event.clientX),
+          canvasY: this._coordinateService._terminal2canvas('y', event.clientY)
         }
       });
       this.emit('events', {
@@ -1071,8 +1071,8 @@ class BaseCanvas extends Canvas {
         position: {
           clientX: event.clientX,
           clientY: event.clientY,
-          canvasX: this._coordinateService.terminal2canvas('x', event.clientX),
-          canvasY: this._coordinateService.terminal2canvas('y', event.clientY)
+          canvasX: this._coordinateService._terminal2canvas('x', event.clientX),
+          canvasY: this._coordinateService._terminal2canvas('y', event.clientY)
         }
       });
     };
@@ -1083,8 +1083,8 @@ class BaseCanvas extends Canvas {
         return;
       }
       if (this._dragType) {
-        const canvasX = this._coordinateService.terminal2canvas('x', event.clientX);
-        const canvasY = this._coordinateService.terminal2canvas('y', event.clientY);
+        const canvasX = this._coordinateService._terminal2canvas('x', event.clientX);
+        const canvasY = this._coordinateService._terminal2canvas('y', event.clientY);
         const offsetX = event.clientX - canvasOriginPos.x;
         const offsetY = event.clientY - canvasOriginPos.y;
         if (this._dragType === 'canvas:drag') {
@@ -1161,8 +1161,8 @@ class BaseCanvas extends Canvas {
             return item.id === this._dragEndpoint.id;
           });
 
-          const endX = this._coordinateService.terminal2canvas('x', event.clientX);
-          const endY = this._coordinateService.terminal2canvas('y', event.clientY);
+          const endX = this._coordinateService._terminal2canvas('x', event.clientX);
+          const endY = this._coordinateService._terminal2canvas('y', event.clientY);
 
           let edges = [];
           if (!this._dragEdges || this._dragEdges.length === 0) {
@@ -1232,8 +1232,8 @@ class BaseCanvas extends Canvas {
             dragEdges: edges
           });
         } else if (this._dragType === 'group:resize') {
-          let canvasX = this._coordinateService.terminal2canvas('x', event.clientX);
-          let canvasY = this._coordinateService.terminal2canvas('y', event.clientY);
+          let canvasX = this._coordinateService._terminal2canvas('x', event.clientX);
+          let canvasY = this._coordinateService._terminal2canvas('y', event.clientY);
 
           let _newWidth = canvasX - this._dragGroup.left;
           let _newHeight = canvasY - this._dragGroup.top;
@@ -1252,8 +1252,8 @@ class BaseCanvas extends Canvas {
       // 处理线条的问题
       if (this._dragEdges && this._dragEdges.length !== 0) {
         // 释放对应画布上的x,y
-        const x = this._coordinateService.terminal2canvas('x', event.clientX);
-        const y = this._coordinateService.terminal2canvas('y', event.clientY);
+        const x = this._coordinateService._terminal2canvas('x', event.clientX);
+        const y = this._coordinateService._terminal2canvas('y', event.clientY);
 
         let _targetEndpoint = null;
 
@@ -1531,10 +1531,10 @@ class BaseCanvas extends Canvas {
 
   _selectMytiplyItem(range) {
     // 确认一下终端的偏移值
-    const startX = this._coordinateService.terminal2canvas('x', range[0]);
-    const startY = this._coordinateService.terminal2canvas('y', range[1]);
-    const endX = this._coordinateService.terminal2canvas('x', range[2]);
-    const endY = this._coordinateService.terminal2canvas('y', range[3]);
+    const startX = this._coordinateService._terminal2canvas('x', range[0]);
+    const startY = this._coordinateService._terminal2canvas('y', range[1]);
+    const endX = this._coordinateService._terminal2canvas('x', range[2]);
+    const endY = this._coordinateService._terminal2canvas('y', range[3]);
     
     const includeNode = _.includes(this.selecModel, 'node');
     const includeEdge = _.includes(this.selecModel, 'edge');
