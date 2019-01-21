@@ -260,7 +260,7 @@ class BaseCanvas extends Canvas {
               _result = sourceNode.id === _edge.sourceNode.id && sourceEndpoint.id === _edge.sourceEndpoint.id;
             }
 
-            if (targetNode) {
+            if (sourceGroup) {
               _result = sourceGroup.id === _edge.sourceGroup.id && sourceEndpoint.id === _edge.sourceEndpoint.id;
             }
 
