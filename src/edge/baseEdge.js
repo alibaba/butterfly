@@ -10,8 +10,10 @@ class Edge {
   constructor(opts) {
     this.id = _.get(opts, 'id');
     this.targetNode = _.get(opts, 'targetNode');
+    this.targetGroup = _.get(opts, 'sourceGroup');
     this.targetEndpoint = _.get(opts, 'targetEndpoint');
     this.sourceNode = _.get(opts, 'sourceNode');
+    this.sourceGroup = _.get(opts, 'sourceGroup');
     this.sourceEndpoint = _.get(opts, 'sourceEndpoint');
     this.type = _.get(opts, 'type');
     this.orientationLimit = _.get(opts, 'orientationLimit');
@@ -168,8 +170,10 @@ class Edge {
   _create(opts) {
     this.id = _.get(opts, 'id') || this.id;
     this.targetNode = _.get(opts, 'targetNode') || this.targetNode;
+    this.targetGroup = _.get(opts, 'targetGroup') || this.targetGroup;
     this.targetEndpoint = _.get(opts, 'targetEndpoint') || this.targetEndpoint;
     this.sourceNode = _.get(opts, 'sourceNode') || this.sourceNode;
+    this.sourceGroup = _.get(opts, 'sourceGroup') || this.sourceGroup;
     this.sourceEndpoint = _.get(opts, 'sourceEndpoint') || this.sourceEndpoint;
     this.type = _.get(opts, 'type') || this.type;
     this.redraw();
