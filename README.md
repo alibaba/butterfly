@@ -162,7 +162,20 @@ setSelectMode = (boolean, type) => {}
   * 获取画布的数据模型
   * @return {data} - 画布的数据
   */
-getDataSource = (string) => {}
+getDataMap = (string) => {}
+
+/**
+  * 手动设置画布偏移
+  * @param {[x, y]} array  - x,y坐标
+  */
+move = (postion) => {}
+
+/**
+  * 手动设置画布缩放
+  * @param {scale} float  - 0-1之间的缩放值
+  * @param {function} callback  - 缩放后的回调
+  */
+zoom = (postion) => {}
 
 /**
   * 发送事件

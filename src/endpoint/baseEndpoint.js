@@ -13,11 +13,16 @@ class Endpoint {
     this.orientation = opts.orientation;
     this.pos = opts.pos;
     this.type = opts.type;
-    this.nodeId = opts._node.id;
+    // @无惟，一定要注意这个值的影响面
+    this.nodeId = _.get(opts, '_node.id');
+    this.groupId = _.get(opts, '_group.id');
     this.root = opts.root;
     this.scope = opts.scope;
     this.options = opts;
+    // 假如锚点在节点上则有值
     this._node = opts._node;
+    // 假如锚点在节点组上则有值
+    this._group = opts._group;
     this._on = opts._on;
     this._emit = opts._emit;
     // 相对坐标
@@ -88,15 +93,28 @@ class Endpoint {
       this._posLeft = this._left;
       this._posTop = this._top;
     } else {
+      let _currentDom = undefined;
+      let _currentNode = undefined;
+      let _currentNodeType = undefined;
+      if (this._node) {
+        _currentNode = this._node;
+        _currentDom = $(this._node.dom);
+        _currentNodeType = 'node';
+      } else if (this._group) {
+        _currentNode = this._group;
+        _currentDom = $(this._group.dom);
+        _currentNodeType = 'group';
+      }
+
       // 分情况弄好方向和位置
-      const nodeW = $(this._node.dom).outerWidth();
-      const nodeH = $(this._node.dom).outerHeight();
+      const nodeW = _currentDom.outerWidth();
+      const nodeH = _currentDom.outerHeight();
 
       let targetDom = null;
       let targetDomW = 0;
       let targetDomH = 0;
       if (this.root) {
-        targetDom = $(this._node.dom).find(this.root);
+        targetDom = _currentDom.find(this.root);
         targetDomW = targetDom.width();
         targetDomH = targetDom.height();
       }
@@ -112,7 +130,7 @@ class Endpoint {
       let _offsetLeft = 0;
 
       const _orientation = orientation || [0, -1];
-      const _pos = pos || [0.5, 0];
+      const _pos = pos || [_orientation[0] === 0 ? 0.5 : 0, _orientation[1] === 0 ? 0.5 : 0];
 
       const result = [0, 0];
 
@@ -137,24 +155,24 @@ class Endpoint {
       }
 
       // 计算绝对定位
-      if (this._node && !this.root) {
-        _offsetTop += this._node.top;
-        _offsetLeft += this._node.left;
-      } else if (this._node && this.root) {
+      if (_currentNode && !this.root) {
+        _offsetTop += _currentNode.top;
+        _offsetLeft += _currentNode.left;
+      } else if (_currentNode && this.root) {
         // 计算传入的dom距离跟节点
-        const nodeDomOffsets = $(this._node.dom).offset();
+        const nodeDomOffsets = _currentDom.offset();
         const targetDomOffsets = targetDom.offset();
         // 先计算目标节点和父节点得差值再加上父节点的offset
-        _offsetTop += (targetDomOffsets.top - nodeDomOffsets.top + this._node.top);
-        _offsetLeft += (targetDomOffsets.left - nodeDomOffsets.left + this._node.left);
+        _offsetTop += (targetDomOffsets.top - nodeDomOffsets.top + _currentNode.top);
+        _offsetLeft += (targetDomOffsets.left - nodeDomOffsets.left + _currentNode.left);
       }
       this._top = result[1] + _offsetTop;
       this._left = result[0] + _offsetLeft;
       this._posTop = this._top;
       this._posLeft = this._left;
-      if (_.get(this, '_node._group')) {
-        this._posTop += this._node._group.top;
-        this._posLeft += this._node._group.left;
+      if (_currentNodeType === 'node' && _currentNode._group) {
+        this._posTop += _currentNode._group.top;
+        this._posLeft += _currentNode._group.left;
       }
 
       $(dom)
@@ -168,10 +186,6 @@ class Endpoint {
     this._left = x;
     this._posTop = this._top;
     this._posLeft = this._left;
-    // if (this.options.rule) {
-    //   console.log(x);
-    //   console.log(y);
-    // }
     if (!this._isInitedDom) {
       $(this.dom).css('top', y).css('left', x);
       if (_.get(this, '_node._group')) {

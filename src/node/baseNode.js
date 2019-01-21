@@ -12,6 +12,7 @@ class BaseNode extends Node {
     this.top = opts.top || 0;
     this.left = opts.left || 0;
     this.dom = opts.dom || null;
+    this.draggable = opts.draggable;
     this.options = opts;
     this._on = opts._on;
     this._emit = opts._emit;
@@ -155,18 +156,20 @@ class BaseNode extends Node {
       });
     });
 
-    $(this.dom).on('mousedown', (e) => {
-      const LEFT_KEY = 0;
-      if (e.button !== LEFT_KEY) {
-        return;
-      }
-      e.preventDefault();
-      e.stopPropagation();
-      this._emit('InnerEvents', {
-        type: 'node:dragBegin',
-        data: this
+    if (this.draggable) {
+      $(this.dom).on('mousedown', (e) => {
+        const LEFT_KEY = 0;
+        if (e.button !== LEFT_KEY) {
+          return;
+        }
+        e.preventDefault();
+        e.stopPropagation();
+        this._emit('InnerEvents', {
+          type: 'node:dragBegin',
+          data: this
+        });
       });
-    });
+    }
   }
   remove() {
     this._emit('InnerEvents', {

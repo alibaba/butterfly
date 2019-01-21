@@ -6,6 +6,7 @@ const $ = require('jquery');
 const _ = require('lodash');
 
 const Group = require('../interface/group');
+const Endpoint = require('../endpoint/baseEndpoint');
 
 class BaseGroup extends Group {
   constructor(opts) {
@@ -22,6 +23,9 @@ class BaseGroup extends Group {
     this._on = opts._on;
     this._emit = opts._emit;
     this._container = null;
+    // endpoint 这部分需要考虑
+    this.endpoints = [];
+    this._endpointsData = opts.endpoints;
   }
   init() {
     this.dom = this.draw({
@@ -36,7 +40,7 @@ class BaseGroup extends Group {
     this._addEventLinster();
   }
   draw(obj) {
-    let _dom = $(obj.dom);
+    let _dom = obj.dom;
     if (!_dom) {
       _dom = $('<div></div>')
         .attr('class', 'group')
@@ -75,7 +79,8 @@ class BaseGroup extends Group {
     if (obj.height) {
       group.css('height', obj.height + 'px');
     }
-    return _dom[0];
+
+    return group[0];
   }
   addNodes(nodes = []) {
     nodes.forEach((item) => {
@@ -136,10 +141,15 @@ class BaseGroup extends Group {
   moveTo(x, y) {
     // 自身移动
     $(this.dom).css('top', y).css('left', x);
+    // 所在节点的锚点移动
     this.nodes.forEach((node) => {
       node.endpoints.forEach((point) => {
         point.updatePos();
       });
+    });
+    // 节点组的锚点移动
+    this.endpoints.forEach((item) => {
+      item.moveTo(x - this.left + item._left, y - this.top + item._top);
     });
     this.top = y;
     this.left = x;
@@ -180,6 +190,37 @@ class BaseGroup extends Group {
         data: this
       });
     });
+  }
+  _createEndpoint(isInited) {
+    if (isInited) {
+      this.endpoints.forEach(item => this.addEndpoint(item, isInited));
+    } else if (this._endpointsData) {
+      this._endpointsData.map(item => this.addEndpoint(item));
+    }
+  }
+  addEndpoint(obj, isInited) {
+    if (isInited) {
+      this._emit('InnerEvents', {
+        type: 'group:addEndpoint',
+        data: obj,
+        isInited
+      });
+      return obj;
+    }
+    // 这部分可能还需要想一下
+    const EndpointClass = obj.Class || Endpoint;
+    const endpoint = new EndpointClass(_.assign({
+      _on: this._on,
+      _emit: this._emit,
+      _group: this
+    }, obj));
+
+    this._emit('InnerEvents', {
+      type: 'group:addEndpoint',
+      data: endpoint,
+    });
+    this.endpoints.push(endpoint);
+    return endpoint;
   }
   destroy() {
     $(this.dom).off();
