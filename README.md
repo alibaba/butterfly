@@ -28,7 +28,8 @@ let canvas = new Canvas({
     endpoint: {
       position: []        //限制锚点位置['Top', 'Bottom', 'Left', 'Right']
     }
-  }
+  },
+  global: {}              //自定义配置，会贯穿所有canvas，group，node，edge，endpoint对象
 });
 canvas.draw({
   groups: [],  //分组信息
@@ -139,11 +140,11 @@ focusNodeWithAnimate = (string, type) => {}
 
 /**
   * 聚焦某多个节点/节点组
-  * @param {object} {node: [], group: []}  - 节点和节点组的id数组
+  * @param {object} {nodes: [], groups: []}  - 节点和节点组的id数组
   * @param {array} type  - 节点的类型(node or group)
   * @param {function} callback  - 聚焦后的回调
   */
-focusNodesWithAnimate = (string, type) => {}
+focusNodesWithAnimate = (objs, type) => {}
 
 /**
   * 聚焦整个画布，会自动调整画布位置和缩放

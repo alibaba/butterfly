@@ -37,6 +37,9 @@ class BaseCanvas extends Canvas {
       }
     };
 
+    // 贯穿所有对象的配置
+    this.global = _.get(options, 'global' , {});
+
     // 放大缩小和平移的数值
     this._zoomData = 1;
     this._moveData = [0, 0];
@@ -158,6 +161,7 @@ class BaseCanvas extends Canvas {
     const container = $(this.warpper);
     const GroupClass = group.Class || Group;
     const _groupObj = new GroupClass(_.assign(_.cloneDeep(group), {
+      _global: this.global,
       _emit: this.emit.bind(this),
       _on: this.on.bind(this),
     }));
@@ -186,6 +190,7 @@ class BaseCanvas extends Canvas {
       } else {
         const _Node = node.Class || Node;
         _nodeObj = new _Node(_.assign(_.cloneDeep(node), {
+          _global: this.global,
           _on: this.on.bind(this),
           _emit: this.emit.bind(this),
           draggable: node.draggable !== undefined ? node.draggable :  this.draggable
@@ -220,7 +225,7 @@ class BaseCanvas extends Canvas {
       item._createEndpoint(isNotEventEmit);
 
       // 节点挂载
-      item.mounted && item.mounted();
+      !isNotEventEmit && item.mounted && item.mounted();
     });
     return result;
   }
@@ -295,6 +300,7 @@ class BaseCanvas extends Canvas {
           arrow: link.arrow,
           arrowPosition: link.arrowPosition,
           options: link,
+          _global: this.global,
           _on: this.on.bind(this),
           _emit: this.emit.bind(this),
         });
@@ -334,6 +340,7 @@ class BaseCanvas extends Canvas {
           orientationLimit: this.theme.endpoint.position,
           arrow: link.arrow,
           arrowPosition: link.arrowPosition,
+          _global: this.global,
           _on: this.on.bind(this),
           _emit: this.emit.bind(this),
         });
@@ -1188,6 +1195,7 @@ class BaseCanvas extends Canvas {
                 pointObj.sourceGroup = this.getGroup(point.groupId);
               }
               let _newEdge = new EdgeClass(_.assign(pointObj, {
+                _global: this.global,
                 _on: this.on.bind(this),
                 _emit: this.emit.bind(this),
               }));

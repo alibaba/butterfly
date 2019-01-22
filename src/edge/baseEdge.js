@@ -26,6 +26,7 @@ class Edge {
     this.labelDom = null;
     this.arrowDom = null;
     this.options = opts.options;
+    this._global = opts._global;
     this._on = opts._on;
     this._emit = opts._emit;
     // 性能优化
