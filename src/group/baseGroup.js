@@ -20,6 +20,7 @@ class BaseGroup extends Group {
     this.dom = null;
     this.nodes = [];
     this.options = opts.options;
+    this._global = opts._global;
     this._on = opts._on;
     this._emit = opts._emit;
     this._container = null;
@@ -212,7 +213,8 @@ class BaseGroup extends Group {
     const endpoint = new EndpointClass(_.assign({
       _on: this._on,
       _emit: this._emit,
-      _group: this
+      _group: this,
+      _global: this._global,
     }, obj));
 
     this._emit('InnerEvents', {

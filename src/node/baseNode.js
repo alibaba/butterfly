@@ -16,6 +16,7 @@ class BaseNode extends Node {
     this.options = opts;
     this._on = opts._on;
     this._emit = opts._emit;
+    this._global = opts._global;
     // endpoint 这部分需要考虑
     this.endpoints = [];
     this._endpointsData = opts.endpoints;
@@ -56,7 +57,8 @@ class BaseNode extends Node {
     const endpoint = new EndpointClass(_.assign({
       _on: this._on,
       _emit: this._emit,
-      _node: this
+      _node: this,
+      _global: this.global,
     }, obj));
 
     this._emit('InnerEvents', {

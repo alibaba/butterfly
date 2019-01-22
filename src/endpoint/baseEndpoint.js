@@ -13,7 +13,7 @@ class Endpoint {
     this.orientation = opts.orientation;
     this.pos = opts.pos;
     this.type = opts.type;
-    // @无惟，一定要注意这个值的影响面
+    
     this.nodeId = _.get(opts, '_node.id');
     this.groupId = _.get(opts, '_group.id');
     this.root = opts.root;
@@ -23,6 +23,7 @@ class Endpoint {
     this._node = opts._node;
     // 假如锚点在节点组上则有值
     this._group = opts._group;
+    this._global = opts._global;
     this._on = opts._on;
     this._emit = opts._emit;
     // 相对坐标
