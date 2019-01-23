@@ -219,8 +219,8 @@ canvas.on('type', (data) => {
 | system.link.delete | 删除连线 | -
 | system.link.connect | 连线成功 | -
 | system.group.delete | 删除节点组 | -
-| system.group.addMember | 节点组添加节点 | -
-| system.group.removeMember | 节点组删除节点 | -
+| system.group.addMembers | 节点组添加节点 | -
+| system.group.removeMembers | 节点组删除节点 | -
 | system.multiple.select | 框选结果 | -
 | system.drag.start | 拖动开始 | -
 | system.drag.move | 拖动 | -
