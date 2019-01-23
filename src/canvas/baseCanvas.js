@@ -1398,6 +1398,27 @@ class BaseCanvas extends Canvas {
         }
 
         let neighborEdges = [];
+
+        // 更新edge里面的字段，以防外面操作了里面dom
+        let _updateNeighborEdge = (node, neighborEdges) => {
+          neighborEdges.forEach((_edge) => {
+            if (_edge.sourceNode.id === node.id) {
+              _edge.sourceNode = node;
+              let _sourceEndpoint = _.find(_edge.sourceNode.endpoints, (_point) => {
+                return _edge.sourceEndpoint.id === _point.id;
+              });
+              _edge.sourceEndpoint = _sourceEndpoint;
+            }
+            if (_edge.targetNode.id === node.id) {
+              _edge.targetNode = node;
+              let _targetEndpoint = _.find(_edge.targetNode.endpoints, (_point) => {
+                return _edge.targetEndpoint.id === _point.id;
+              });
+              _edge.targetEndpoint = _targetEndpoint;
+            }
+          });
+        };
+
         if (sourceGroup) {
           const rmItem = this.removeNode(this._dragNode.id, true, true);
           const rmNode = rmItem.nodes[0];
@@ -1406,15 +1427,16 @@ class BaseCanvas extends Canvas {
             id: rmNode.id,
             top: _nodeTop,
             left: _nodeLeft,
+            dom: rmNode.dom,
             _isDeleteGroup: true
           };
 
           this.emit('events', {
-            type: 'system.group.rmoveMember',
+            type: 'system.group.removeMember',
             group: sourceGroup,
             node: rmNode
           });
-          this.emit('system.group.rmoveMember', {
+          this.emit('system.group.removeMember', {
             group: sourceGroup,
             node: rmNode
           });
@@ -1436,6 +1458,7 @@ class BaseCanvas extends Canvas {
           }
           rmNode._init(nodeData);
           this.addNode(rmNode, true);
+          _updateNeighborEdge(rmNode, neighborEdges);
         } else if (targetGroup) {
           const rmItem = this.removeNode(this._dragNode.id, true, true);
           const rmNode = rmItem.nodes[0];
@@ -1443,6 +1466,7 @@ class BaseCanvas extends Canvas {
           rmNode._init({
             top: _nodeTop - targetGroup.top,
             left: _nodeLeft - targetGroup.left,
+            dom: rmNode.dom,
             group: targetGroup.id
           });
           this.addNode(rmNode, true);
@@ -1455,6 +1479,7 @@ class BaseCanvas extends Canvas {
             node: rmNode,
             group: targetGroup
           });
+          _updateNeighborEdge(rmNode, neighborEdges);
         }
         neighborEdges.forEach((item) => {
           item.redraw();
