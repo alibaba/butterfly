@@ -496,7 +496,7 @@ class BaseCanvas extends Canvas {
   }
 
   removeEdge(edge) {
-    return this.removeEdges(edge)[0];
+    return this.removeEdges([edge])[0];
   }
 
   removeGroup(groupId) {
