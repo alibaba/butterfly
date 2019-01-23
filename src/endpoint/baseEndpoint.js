@@ -13,7 +13,7 @@ class Endpoint {
     this.orientation = opts.orientation;
     this.pos = opts.pos;
     this.type = opts.type;
-    
+    // @无惟，一定要注意这个值的影响面
     this.nodeId = _.get(opts, '_node.id');
     this.groupId = _.get(opts, '_group.id');
     this.root = opts.root;

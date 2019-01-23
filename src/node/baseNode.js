@@ -104,6 +104,9 @@ class BaseNode extends Node {
     this._isInited = true;
     if (obj.dom) {
       this.dom = obj.dom;
+      obj.left && ($(this.dom).css('left', `${obj.left}px`));
+      obj.top && ($(this.dom).css('top', `${obj.top}px`));
+
     } else {
       this.dom = this.draw(_.assign({
         id: this.id,
@@ -191,13 +194,14 @@ class BaseNode extends Node {
       this.endpoints.forEach((item) => {
         item.destroy();
       });
+      $(this.dom).remove();
     } else {
       this.endpoints.forEach((item) => {
         !item._isInitedDom && item.destroy();
       });
+      $(this.dom).detach();
     }
     this._isInited = false;
-    $(this.dom).remove();
   }
 }
 
