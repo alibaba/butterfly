@@ -83,17 +83,33 @@ class BaseGroup extends Group {
 
     return group[0];
   }
-  addNodes(nodes = []) {
+  addNodes(nodes = [], noEvent) {
     nodes.forEach((item) => {
       item._group = this;
+      item.group = this.id;
       $(this.dom).append(item.dom);
       this.nodes.push(item);
     });
+    this._emit('InnerEvents', {
+      type: 'group:addNodes',
+      nodes: nodes
+    });
+    if (!noEvent) {
+      this.emit('events', {
+        type: 'system.group.addMembers',
+        nodes: nodes,
+        group: this
+      });
+      this.emit('system.group.addMembers', {
+        nodes: nodes,
+        group: this
+      });
+    }
   }
   addNode(node) {
     this.addNodes([node]);
   }
-  removeNodes(nodes = []) {
+  removeNodes(nodes = [], noEvent) {
     let rmNodes = [];
     this.nodes.forEach((item) => {
       let _node = _.find(nodes, (_node) => {
@@ -104,6 +120,21 @@ class BaseGroup extends Group {
         _node.dom.remove();
       }
     });
+    this._emit('InnerEvents', {
+      type: 'group:removeNodes',
+      nodes: rmNodes
+    });
+    if (!noEvent) {
+      this.emit('events', {
+        type: 'system.group.addMembers',
+        nodes: [rmNode],
+        group: targetGroup
+      });
+      this.emit('system.group.addMembers', {
+        nodes: [rmNode],
+        group: targetGroup
+      });
+    }
     return rmNodes;
   }
   removeNode(node) {

@@ -205,15 +205,16 @@ class BaseCanvas extends Canvas {
 
       // 节点初始化
       _nodeObj._init();
+      // 一定要比group的addNode执行的之前，不然会重复把node加到this.nodes里面
+      this.nodes.push(_nodeObj);
 
       // 假如节点存在group，即放进对应的节点组里
       const existGroup = _nodeObj.group ? this.getGroup(_nodeObj.group) : null;
       if (existGroup) {
-        existGroup.addNode(_nodeObj, existGroup.id);
+        existGroup.addNode(_nodeObj, true);
       } else {
         _canvasFragment.appendChild(_nodeObj.dom);
       }
-      this.nodes.push(_nodeObj);
       return _nodeObj;
     });
 
@@ -1003,6 +1004,24 @@ class BaseCanvas extends Canvas {
         this.removeNode(data.data.id);
       } else if (data.type === 'group:delete') {
         this.removeGroup(data.data.id);
+      } else if (data.type === 'group:addNodes') {
+        _.get(data.nodes, []).forEach((item) => {
+          let _hasNode = _.find(this.nodes, (_node) => {
+            return item.id === _node.id;
+          });
+          if (!hasNodes) {
+            this.nodes.push(item);
+          }
+        });
+      } else if (data.type === 'group:removeNodes') {
+        _.get(data.nodes, []).forEach((item) => {
+          let _nodeIndex = _.findIndex(this.nodes, (_node) => {
+            return item.id === _node.id;
+          });
+          if (_nodeIndex !== -1) {
+            this.nodes.splice(_nodeIndex, 1);
+          }
+        });
       }
     });
 
@@ -1432,13 +1451,13 @@ class BaseCanvas extends Canvas {
           };
 
           this.emit('events', {
-            type: 'system.group.removeMember',
+            type: 'system.group.removeMembers',
             group: sourceGroup,
-            node: rmNode
+            nodes: [rmNode]
           });
-          this.emit('system.group.removeMember', {
+          this.emit('system.group.removeMembers', {
             group: sourceGroup,
-            node: rmNode
+            nodes: [rmNode]
           });
 
           if (targetGroup) {
@@ -1447,12 +1466,12 @@ class BaseCanvas extends Canvas {
             nodeData.group = targetGroup.id;
             nodeData._isDeleteGroup = false;
             this.emit('events', {
-              type: 'system.group.addMember',
-              node: rmNode,
+              type: 'system.group.addMembers',
+              nodes: [rmNode],
               group: targetGroup
             });
-            this.emit('system.group.addMember', {
-              node: rmNode,
+            this.emit('system.group.addMembers', {
+              nodes: [rmNode],
               group: targetGroup
             });
           }
@@ -1471,12 +1490,12 @@ class BaseCanvas extends Canvas {
           });
           this.addNode(rmNode, true);
           this.emit('events', {
-            type: 'system.group.addMember',
-            node: rmNode,
+            type: 'system.group.addMembers',
+            nodes: [rmNode],
             group: targetGroup
           });
-          this.emit('system.group.addMember', {
-            node: rmNode,
+          this.emit('system.group.addMembers', {
+            nodes: [rmNode],
             group: targetGroup
           });
           _updateNeighborEdge(rmNode, neighborEdges);
