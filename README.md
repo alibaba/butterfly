@@ -118,6 +118,20 @@ removeNode = (string) => {}
 removeGroup = (string) => {}
 
 /**
+  * 根据id或者Edge对象来删除线
+  * @param {string or Edge} id or Edge  - 线的id或者Edge对象
+  * @return {Edge} - 删除的线
+  */
+removeEdge = (param) => {}
+
+/**
+  * 根据id或者Edge对象来批量删除线
+  * @param {array} string or Edge  - 线的id或者Edge对象的数组
+  * @return {array} Edge - 删除的线
+  */
+removeEdges = (param) => {}
+
+/**
   * 根据id删除分组
   * @param {string} id  - group id
   * @return {Node} - 删除的对象
