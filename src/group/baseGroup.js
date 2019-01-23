@@ -90,11 +90,11 @@ class BaseGroup extends Group {
       $(this.dom).append(item.dom);
       this.nodes.push(item);
     });
-    this._emit('InnerEvents', {
-      type: 'group:addNodes',
-      nodes: nodes
-    });
     if (!noEvent) {
+      this._emit('InnerEvents', {
+        type: 'group:addNodes',
+        nodes: nodes
+      });
       this.emit('events', {
         type: 'system.group.addMembers',
         nodes: nodes,
@@ -106,8 +106,8 @@ class BaseGroup extends Group {
       });
     }
   }
-  addNode(node) {
-    this.addNodes([node]);
+  addNode(node, noEvent) {
+    this.addNodes([node], noEvent);
   }
   removeNodes(nodes = [], noEvent) {
     let rmNodes = [];
@@ -120,11 +120,11 @@ class BaseGroup extends Group {
         _node.dom.remove();
       }
     });
-    this._emit('InnerEvents', {
-      type: 'group:removeNodes',
-      nodes: rmNodes
-    });
     if (!noEvent) {
+      this._emit('InnerEvents', {
+        type: 'group:removeNodes',
+        nodes: rmNodes
+      });
       this.emit('events', {
         type: 'system.group.addMembers',
         nodes: [rmNode],
@@ -137,7 +137,7 @@ class BaseGroup extends Group {
     }
     return rmNodes;
   }
-  removeNode(node) {
+  removeNode(node, noEvent) {
     return this.removeNodes([node]);
   }
   setResize(flat, container = this.dom) {

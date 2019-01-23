@@ -459,19 +459,44 @@ class BaseCanvas extends Canvas {
     };
   }
 
-  removeEdge(edgeId) {
-    const edgeIndex = _.findIndex(this.edges, item => item.id === edgeId);
-    if (edgeIndex !== -1) {
-      const edge = this.edges[edgeIndex];
-      this.edges = this.edges.filter(item => item.id !== edgeId);
-      edge.destroy();
-      return edge;
-    } 
-    console.log(`删除线条错误，不存在id为${edgeId}的线`);
+  removeEdges(edges) {
+    let result = [];
+    edges.forEach((_edge) => {
+      let edgeIndex = -1;
+      if (_edge instanceof Edge) {
+        edgeIndex = _.findIndex(this.edges, (item) => {
+          if (item.type === 'node') {
+            return _edge.sourceNode.id === item.sourceNode.id && _edge.targetNode.id === item.targetNode.id;
+          } else {
+            return _edge.sourceNode.id === item.sourceNode.id &&
+              _edge.sourceEndpoint.id === item.sourceEndpoint.id &&
+              _edge.targetNode.id && item.targetNode.id &&
+              _edge.targetEndpoint.id === item.targetEndpoint.id;
+          }
+        });
+      } else if (_.isString(_edge)) {
+        edgeIndex = _.findIndex(this.edges, (item) => {
+          return _edge === item.id;
+        });
+      } else {
+        console.log(`删除线条错误，传入参数有误，请检查`);
+        return;
+      }
+      if (edgeIndex !== -1) {
+        result = result.concat(this.edges.splice(edgeIndex, 1));
+      } else {
+        console.log(`删除线条错误，不存在值为${JSON.stringify(_edge)}的线`);
+      }
+    });
+
+    result.forEach((item) => {
+      item.destroy();
+    });
+    return result;
   }
 
-  removeEdges(edgeIds) {
-    return edgeIds.map(item => this.removeEdge(item)).filter(item => item);
+  removeEdge(edge) {
+    return this.removeEdges(edge)[0];
   }
 
   removeGroup(groupId) {
