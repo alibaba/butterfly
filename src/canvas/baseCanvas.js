@@ -1403,7 +1403,7 @@ class BaseCanvas extends Canvas {
         let _updateNeighborEdge = (node, neighborEdges) => {
           neighborEdges.forEach((_edge) => {
             if (_edge.sourceNode.id === node.id) {
-              _edge.sourceNode = node.id;
+              _edge.sourceNode = node;
               let _sourceEndpoint = _.find(_edge.sourceNode.endpoints, (_point) => {
                 return _edge.sourceEndpoint.id === _point.id;
               });
