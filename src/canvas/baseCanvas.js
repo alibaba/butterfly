@@ -1030,16 +1030,16 @@ class BaseCanvas extends Canvas {
       } else if (data.type === 'group:delete') {
         this.removeGroup(data.data.id);
       } else if (data.type === 'group:addNodes') {
-        _.get(data.nodes, []).forEach((item) => {
+        _.get(data, 'nodes', []).forEach((item) => {
           let _hasNode = _.find(this.nodes, (_node) => {
             return item.id === _node.id;
           });
-          if (!hasNodes) {
+          if (!_hasNode) {
             this.nodes.push(item);
           }
         });
       } else if (data.type === 'group:removeNodes') {
-        _.get(data.nodes, []).forEach((item) => {
+        _.get(data, 'nodes', []).forEach((item) => {
           let _nodeIndex = _.findIndex(this.nodes, (_node) => {
             return item.id === _node.id;
           });
