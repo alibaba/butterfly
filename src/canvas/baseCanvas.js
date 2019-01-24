@@ -468,10 +468,12 @@ class BaseCanvas extends Canvas {
           if (item.type === 'node') {
             return _edge.sourceNode.id === item.sourceNode.id && _edge.targetNode.id === item.targetNode.id;
           } else {
-            return _edge.sourceNode.id === item.sourceNode.id &&
-              _edge.sourceEndpoint.id === item.sourceEndpoint.id &&
-              _edge.targetNode.id && item.targetNode.id &&
-              _edge.targetEndpoint.id === item.targetEndpoint.id;
+            return (_.get(_edge, 'sourceNode.id') === _.get(item, 'sourceNode.id') ||
+              _.get(_edge, 'sourceGroup.id') === _.get(item, 'sourceGroup.id')) &&
+              _.get(_edge, 'sourceEndpoint.id') === _.get(item, 'sourceEndpoint.id') &&
+              (_.get(_edge, 'targetNode.id') === _.get(item, 'targetNode.id') ||
+              _.get(_edge, 'targetGroup.id') === _.get(item, 'targetGroup.id')) &&
+              _.get(_edge, 'targetEndpoint.id') === _.get(item, 'targetEndpoint.id')
           }
         });
       } else if (_.isString(_edge)) {
