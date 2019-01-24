@@ -211,7 +211,7 @@ class BaseCanvas extends Canvas {
       // 假如节点存在group，即放进对应的节点组里
       const existGroup = _nodeObj.group ? this.getGroup(_nodeObj.group) : null;
       if (existGroup) {
-        existGroup.addNode(_nodeObj, true);
+        existGroup._appendNodes([_nodeObj]);
       } else {
         _canvasFragment.appendChild(_nodeObj.dom);
       }
@@ -1030,16 +1030,31 @@ class BaseCanvas extends Canvas {
       } else if (data.type === 'group:delete') {
         this.removeGroup(data.data.id);
       } else if (data.type === 'group:addNodes') {
-        _.get(data.nodes, []).forEach((item) => {
+        _.get(data, 'nodes', []).forEach((item) => {
           let _hasNode = _.find(this.nodes, (_node) => {
             return item.id === _node.id;
           });
-          if (!hasNodes) {
-            this.nodes.push(item);
+          if (!_hasNode) {
+            this.addNode(item, true);
+          } else {
+            let neighborEdges = [];
+            let rmItem = this.removeNode(item.id, true, true);
+            let rmNode = rmItem.nodes[0];
+            neighborEdges = rmItem.edges;
+            rmNode._init({
+              top: item.top,
+              left: item.left,
+              dom: rmNode.dom,
+              group: data.group.id
+            });
+            this.addNode(rmNode, true);
+            neighborEdges.forEach((item) => {
+              item.redraw();
+            });
           }
         });
       } else if (data.type === 'group:removeNodes') {
-        _.get(data.nodes, []).forEach((item) => {
+        _.get(data, 'nodes', []).forEach((item) => {
           let _nodeIndex = _.findIndex(this.nodes, (_node) => {
             return item.id === _node.id;
           });

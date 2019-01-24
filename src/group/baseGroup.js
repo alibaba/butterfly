@@ -83,33 +83,27 @@ class BaseGroup extends Group {
 
     return group[0];
   }
-  addNodes(nodes = [], noEvent) {
-    nodes.forEach((item) => {
-      item._group = this;
-      item.group = this.id;
-      $(this.dom).append(item.dom);
-      this.nodes.push(item);
+  addNodes(nodes = []) {
+    this._emit('InnerEvents', {
+      type: 'group:addNodes',
+      nodes: nodes,
+      group: this
     });
-    if (!noEvent) {
-      this._emit('InnerEvents', {
-        type: 'group:addNodes',
-        nodes: nodes
-      });
-      this.emit('events', {
-        type: 'system.group.addMembers',
-        nodes: nodes,
-        group: this
-      });
-      this.emit('system.group.addMembers', {
-        nodes: nodes,
-        group: this
-      });
-    }
+    this._emit('events', {
+      type: 'system.group.addMembers',
+      nodes: nodes,
+      group: this
+    });
+    this._emit('system.group.addMembers', {
+      nodes: nodes,
+      group: this
+    });
   }
-  addNode(node, noEvent) {
-    this.addNodes([node], noEvent);
+  addNode(node) {
+    this.addNodes([node]);
   }
-  removeNodes(nodes = [], noEvent) {
+  removeNodes(nodes = []) {
+    // 这里需要斟酌下
     let rmNodes = [];
     this.nodes.forEach((item) => {
       let _node = _.find(nodes, (_node) => {
@@ -120,24 +114,22 @@ class BaseGroup extends Group {
         _node.dom.remove();
       }
     });
-    if (!noEvent) {
-      this._emit('InnerEvents', {
-        type: 'group:removeNodes',
-        nodes: rmNodes
-      });
-      this.emit('events', {
-        type: 'system.group.addMembers',
-        nodes: [rmNode],
-        group: targetGroup
-      });
-      this.emit('system.group.addMembers', {
-        nodes: [rmNode],
-        group: targetGroup
-      });
-    }
+    this._emit('InnerEvents', {
+      type: 'group:removeNodes',
+      nodes: rmNodes
+    });
+    this.emit('events', {
+      type: 'system.group.addMembers',
+      nodes: [rmNode],
+      group: targetGroup
+    });
+    this.emit('system.group.addMembers', {
+      nodes: [rmNode],
+      group: targetGroup
+    });
     return rmNodes;
   }
-  removeNode(node, noEvent) {
+  removeNode(node) {
     return this.removeNodes([node]);
   }
   setResize(flat, container = this.dom) {
@@ -197,6 +189,14 @@ class BaseGroup extends Group {
   }
   getHeight() {
     return this.height;
+  }
+  _appendNodes(nodes = []) {
+    nodes.forEach((item) => {
+      item._group = this;
+      item.group = this.id;
+      $(this.dom).append(item.dom);
+      this.nodes.push(item);
+    });
   }
   _addEventLinster() {
     $(this.dom).on('click', (e) => {
