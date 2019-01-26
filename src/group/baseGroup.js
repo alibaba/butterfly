@@ -8,6 +8,9 @@ const _ = require('lodash');
 const Group = require('../interface/group');
 const Endpoint = require('../endpoint/baseEndpoint');
 
+// scope的比较
+const ScopeCompare = require('../utils/scopeCompare');
+
 class BaseGroup extends Group {
   constructor(opts) {
     super(opts);
@@ -84,6 +87,14 @@ class BaseGroup extends Group {
     return group[0];
   }
   addNodes(nodes = []) {
+    let _nodes = [];
+    nodes.forEach((item) => {
+      if (ScopeCompare(item.scope, this.scope, _.get(this, '_global.isStrict'))) {
+        _nodes.push(item);
+      } else {
+        console.log(`nodeId为${item.id}的节点和groupId${this.id}的节点组scope值不符，无法加入`);
+      }
+    });
     this._emit('InnerEvents', {
       type: 'group:addNodes',
       nodes: nodes,
@@ -244,7 +255,7 @@ class BaseGroup extends Group {
     const endpoint = new EndpointClass(_.assign({
       _on: this._on,
       _emit: this._emit,
-      _group: this,
+      _node: this,
       _global: this._global,
     }, obj));
 

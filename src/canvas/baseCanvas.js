@@ -10,6 +10,8 @@ const Layout = require('../utils/layout');
 const SelectCanvas = require('../utils/selectCanvas');
 // 画布和屏幕坐标地换算
 const CoordinateService = require('../utils/coordinate');
+// scope的比较
+const ScopeCompare = require('../utils/scopeCompare');
 
 require('./baseCanvas.less');
 
@@ -38,7 +40,9 @@ class BaseCanvas extends Canvas {
     };
 
     // 贯穿所有对象的配置
-    this.global = _.get(options, 'global' , {});
+    this.global = _.get(options, 'global', {
+      isStrict: _.get(options, 'global.isStrict') // 是否为scope的严格模式
+    });
 
     // 放大缩小和平移的数值
     this._zoomData = 1;
@@ -211,7 +215,11 @@ class BaseCanvas extends Canvas {
       // 假如节点存在group，即放进对应的节点组里
       const existGroup = _nodeObj.group ? this.getGroup(_nodeObj.group) : null;
       if (existGroup) {
-        existGroup._appendNodes([_nodeObj]);
+        if (ScopeCompare(_nodeObj.scope, existGroup.scope, _.get(this, 'global.isStrict'))) {
+          existGroup._appendNodes([_nodeObj]);
+        } else {
+          console.log(`nodeId为${_nodeObj.id}的节点和groupId${existGroup.id}的节点组scope值不符，无法加入`);
+        }
       } else {
         _canvasFragment.appendChild(_nodeObj.dom);
       }
@@ -245,13 +253,37 @@ class BaseCanvas extends Canvas {
     const result = links.map((link) => {
       const EdgeClass = this.theme.edge.Class;
       if (link.type === 'endpoint') {
-        const sourceNode = this.getNode(link.sourceNode);
-        const targetNode = this.getNode(link.targetNode);
+        let sourceNode = null;
+        let targetNode = null;
+        let sourceType = link.sourceType;
+        let targetType = link.targetType;
+        if (link.sourceType) {
+          sourceNode = sourceType === 'node' ? this.getNode(link.sourceNode) : this.getGroup(link.sourceNode);
+        } else {
+          let _node = this.getNode(link.sourceNode);
+          if (_node) {
+            sourceType = 'node';
+            sourceNode = _node;
+          } else {
+            sourceType = 'group';
+            sourceNode = this.getGroup(link.sourceNode);
+          }
+        }
+        if (link.targetType) {
+          targetNode = targetType === 'node' ? this.getNode(link.targetNode) : this.getGroup(link.targetNode);
+        } else {
+          let _node = this.getNode(link.targetNode);
+          if (_node) {
+            targetType = 'node';
+            targetNode = _node;
+          } else {
+            targetType = 'group';
+            targetNode = this.getGroup(link.targetNode);
+          }
+        }
+        
         const sourceEndpoint = sourceNode.getEndpoint(link.source);
         const targetEndpoint = targetNode.getEndpoint(link.target);
-
-        let sourceGroup = this.getGroup(link.sourceGroup);
-        let targetGroup = this.getGroup(link.targetGroup);
 
         if (!sourceEndpoint || !targetEndpoint) {
           console.log(`butterflies error: can not connect edge. link sourceId:${link.source};link targetId:${link.target}`);
@@ -263,19 +295,11 @@ class BaseCanvas extends Canvas {
           let _isRepeat = _.some(this.edges, (_edge) => {
             let _result = false;
             if (sourceNode) {
-              _result = sourceNode.id === _edge.sourceNode.id && sourceEndpoint.id === _edge.sourceEndpoint.id;
-            }
-
-            if (sourceGroup) {
-              _result = sourceGroup.id === _edge.sourceGroup.id && sourceEndpoint.id === _edge.sourceEndpoint.id;
+              _result = sourceNode.id === _edge.sourceNode.id && sourceEndpoint.id === _edge.sourceEndpoint.id && sourceType === _edge.sourceEndpoint.nodeType;
             }
 
             if (targetNode) {
-              _result = _result && (targetNode.id === _edge.targetNode.id && targetEndpoint === _edge.targetEndpoint.id);
-            }
-
-            if (targetGroup) {
-              _result = _result && (targetGroup === _edge.targetNode.id && targetEndpoint === _edge.targetEndpoint.id);
+              _result = _result && (targetNode.id === _edge.targetNode.id && targetEndpoint === _edge.targetEndpoint.id && targetType === _edge.targetEndpoint.nodeType);
             }
 
             return _result;
@@ -296,8 +320,6 @@ class BaseCanvas extends Canvas {
           targetNode,
           sourceEndpoint,
           targetEndpoint,
-          sourceGroup,
-          targetGroup,
           arrow: link.arrow,
           arrowPosition: link.arrowPosition,
           options: link,
@@ -468,10 +490,15 @@ class BaseCanvas extends Canvas {
           if (item.type === 'node') {
             return _edge.sourceNode.id === item.sourceNode.id && _edge.targetNode.id === item.targetNode.id;
           } else {
-            return _edge.sourceNode.id === item.sourceNode.id &&
-              _edge.sourceEndpoint.id === item.sourceEndpoint.id &&
-              _edge.targetNode.id && item.targetNode.id &&
-              _edge.targetEndpoint.id === item.targetEndpoint.id;
+            return (
+              _.get(_edge, 'sourceNode.id') === _.get(item, 'sourceNode.id') &&
+              _.get(_edge, 'sourceEndpoint.id') === _.get(item, 'sourceEndpoint.id') &&
+              _.get(_edge, 'sourceEndpoint.nodeType') === _.get(item, 'sourceEndpoint.nodeType')
+            ) && (
+              _.get(_edge, 'targetNode.id') === _.get(item, 'targetNode.id') &&
+              _.get(_edge, 'targetEndpoint.id') === _.get(item, 'targetEndpoint.id') &&
+              _.get(_edge, 'targetEndpoint.nodeType') === _.get(item, 'targetEndpoint.nodeType')
+            );
           }
         });
       } else if (_.isString(_edge)) {
@@ -526,33 +553,28 @@ class BaseCanvas extends Canvas {
         item.redraw();
       });
     });
-
-    // const rmItem = this.removeNode(this._dragNode.id, true, true);
-    // const rmNode = rmItem.nodes[0];
-    // neighborEdges = rmItem.edges;
-    // rmNode._init({
-    //   top: _nodeTop - targetGroup.top,
-    //   left: _nodeLeft - targetGroup.left,
-    //   group: targetGroup.id
-    // });
-    // this.addNode(rmNode, true);
     group.destroy();
   }
 
-  getNeighborEdges(id, type = 'node') {
+  getNeighborEdges(id, type) {
     let node = undefined;
     let group = undefined;
     if (type === 'node') {
       node = _.find(this.nodes, item => id === item.id);
     } else if (type === 'group') {
       group = _.find(this.groups, item => id === item.id);
+    } else {
+      node = _.find(this.nodes, item => id === item.id);
+      node && !type && (type = 'node');
+      group = _.find(this.groups, item => id === item.id);
+      group && !type && (type = 'group');
     }
 
     return this.edges.filter((item) => {
       if (type === 'node') {
         return _.get(item, 'sourceNode.id') === node.id || _.get(item, 'targetNode.id') === node.id;
       } else {
-        return _.get(item, 'sourceGroup.id') === group.id || _.get(item, 'targetGroup.id') === group.id;
+        return _.get(item, 'sourceNode.id') === group.id || _.get(item, 'targetNode.id') === group.id;
       }
     });
   }
@@ -993,8 +1015,10 @@ class BaseCanvas extends Canvas {
 
     // 绑定一大堆事件，group:addMember，groupDragStop，group:removeMember，beforeDetach，connection，
     this.on('InnerEvents', (data) => {
-      if (data.type === 'node:addEndpoint' || data.type === 'group:addEndpoint') {
-        this._addEndpoint(data.data, data.isInited);
+      if (data.type === 'node:addEndpoint') {
+        this._addEndpoint(data.data, 'node', data.isInited);
+      } else if (data.type === 'group:addEndpoint') {
+        this._addEndpoint(data.data, 'group', data.isInited);
       } else if (data.type === 'node:dragBegin') {
         this._dragType = 'node:drag';
         this._dragNode = data.data;
@@ -1079,8 +1103,9 @@ class BaseCanvas extends Canvas {
     return hasGroups.length > 0;
   }
 
-  _addEndpoint(endpoint, isInited) {
+  _addEndpoint(endpoint, type, isInited) {
     endpoint._init({
+      nodeType: type,
       _coordinateService: this._coordinateService
     });
 
@@ -1107,12 +1132,6 @@ class BaseCanvas extends Canvas {
       x: 0,
       y: 0
     };
-
-    const rootOffsetX = this._rootOffsetX;
-    const rootOffsetY = this._rootOffsetY;
-
-    const rootWidth = this._rootWidth;
-    const rootHeight = this._rootHeight;
 
     const mouseDownEvent = (event) => {
       const LEFT_BUTTON = 0;
@@ -1218,8 +1237,8 @@ class BaseCanvas extends Canvas {
             this.edges.forEach((edge) => {
               let hasUpdate = _.get(edge, 'sourceNode.group') === group.id ||
                 _.get(edge, 'targetNode.group') === group.id ||
-                _.get(edge, 'sourceGroup.id') === group.id ||
-                _.get(edge, 'targetGroup.id') === group.id;
+                (_.get(edge, 'sourceType') === 'group' && _.get(edge, 'sourceNode.id') === group.id) ||
+                (_.get(edge, 'targetType') === 'group' && _.get(edge, 'targetNode.id') === group.id);
 
               hasUpdate && (edge.redraw());
             });
@@ -1245,14 +1264,11 @@ class BaseCanvas extends Canvas {
               let pointObj = {
                 shapeType: this.theme.edge.type,
                 orientationLimit: this.theme.endpoint.position,
+                sourceType: point.nodeType,
+                sourceNode: point.nodeType === 'node' ? this.getNode(point.nodeId) : this.getGroup(point.nodeId),
                 sourceEndpoint: point,
                 arrow: this.theme.edge.arrow,
               };
-              if (point.nodeId) {
-                pointObj.sourceNode = this.getNode(point.nodeId);
-              } else if (point.groupId) {
-                pointObj.sourceGroup = this.getGroup(point.groupId);
-              }
               let _newEdge = new EdgeClass(_.assign(pointObj, {
                 _global: this.global,
                 _on: this.on.bind(this),
@@ -1375,16 +1391,8 @@ class BaseCanvas extends Canvas {
                   _result = edge.sourceNode.id === _edge.sourceNode.id && edge.sourceEndpoint.id === _edge.sourceEndpoint.id;
                 }
 
-                if (edge.sourceGroup) {
-                  _result = edge.sourceGroup.id === _edge.sourceGroup.id && edge.sourceEndpoint.id === _edge.sourceEndpoint.id;
-                }
-
                 if (_targetEndpoint.nodeId) {
                   _result = _result && (_targetEndpoint.nodeId === _edge.targetNode.id && _targetEndpoint.id === _edge.targetEndpoint.id);
-                }
-
-                if (_targetEndpoint.groupId) {
-                  _result = _result && (_targetEndpoint.groupId === _edge.targetNode.id && _targetEndpoint.id === _edge.targetEndpoint.id);
                 }
 
                 return _result;
@@ -1395,10 +1403,11 @@ class BaseCanvas extends Canvas {
                 return;
               }
             }
+
             edge._create({
               id: `${edge.sourceEndpoint.id}-${_targetEndpoint.id}`,
-              targetNode: _targetEndpoint.nodeId ? this.getNode(_targetEndpoint.nodeId) : undefined,
-              targetGroup: _targetEndpoint.groupId ? this.getGroup(_targetEndpoint.groupId) : undefined,
+              targetNode: _targetEndpoint.nodeType === 'node' ? this.getNode(_targetEndpoint.nodeId) : this.getGroup(_targetEndpoint.nodeId),
+              targetType: _targetEndpoint.nodeType,
               targetEndpoint: _targetEndpoint,
               type: 'endpoint'
             });
@@ -1427,11 +1436,7 @@ class BaseCanvas extends Canvas {
           const _groupRight = _group.left + _group.getWidth();
           const _groupTop = _group.top;
           const _groupBottom = _group.top + _group.getHeight();
-          // if (_nodeLeft > _groupRight || _nodeRight < _groupLeft || _nodeTop > _groupBottom || _nodeBottom < _groupTop) {
-          //   _nodeLeft += _groupLeft;
-          //   _nodeTop += _groupTop;
-          //   sourceGroup = _group;
-          // }
+
           if (_nodeRight < 0 || _nodeLeft > _group.getWidth() || _nodeBottom < 0 || _nodeTop > _group.getHeight()) {
             _nodeLeft += _groupLeft;
             _nodeTop += _groupTop;
@@ -1501,10 +1506,39 @@ class BaseCanvas extends Canvas {
           });
 
           if (targetGroup) {
-            nodeData.top -= targetGroup.top;
-            nodeData.left -= targetGroup.left;
-            nodeData.group = targetGroup.id;
-            nodeData._isDeleteGroup = false;
+            if (ScopeCompare(this._dragNode.scope, targetGroup.scope, _.get(this, 'global.isStrict'))) {
+              nodeData.top -= targetGroup.top;
+              nodeData.left -= targetGroup.left;
+              nodeData.group = targetGroup.id;
+              nodeData._isDeleteGroup = false;
+              this.emit('events', {
+                type: 'system.group.addMembers',
+                nodes: [rmNode],
+                group: targetGroup
+              });
+              this.emit('system.group.addMembers', {
+                nodes: [rmNode],
+                group: targetGroup
+              });
+            } else {
+              console.log(`nodeId为${this._dragNode.id}的节点和groupId${targetGroup.id}的节点组scope值不符，无法加入`);
+            }
+          }
+          rmNode._init(nodeData);
+          this.addNode(rmNode, true);
+          _updateNeighborEdge(rmNode, neighborEdges);
+        } else if (targetGroup) {
+          if (ScopeCompare(this._dragNode.scope, targetGroup.scope, _.get(this, 'global.isStrict'))) {
+            const rmItem = this.removeNode(this._dragNode.id, true, true);
+            const rmNode = rmItem.nodes[0];
+            neighborEdges = rmItem.edges;
+            rmNode._init({
+              top: _nodeTop - targetGroup.top,
+              left: _nodeLeft - targetGroup.left,
+              dom: rmNode.dom,
+              group: targetGroup.id
+            });
+            this.addNode(rmNode, true);
             this.emit('events', {
               type: 'system.group.addMembers',
               nodes: [rmNode],
@@ -1514,31 +1548,10 @@ class BaseCanvas extends Canvas {
               nodes: [rmNode],
               group: targetGroup
             });
+            _updateNeighborEdge(rmNode, neighborEdges);
+          } else {
+            console.log(`nodeId为${this._dragNode.id}的节点和groupId${targetGroup.id}的节点组scope值不符，无法加入`);
           }
-          rmNode._init(nodeData);
-          this.addNode(rmNode, true);
-          _updateNeighborEdge(rmNode, neighborEdges);
-        } else if (targetGroup) {
-          const rmItem = this.removeNode(this._dragNode.id, true, true);
-          const rmNode = rmItem.nodes[0];
-          neighborEdges = rmItem.edges;
-          rmNode._init({
-            top: _nodeTop - targetGroup.top,
-            left: _nodeLeft - targetGroup.left,
-            dom: rmNode.dom,
-            group: targetGroup.id
-          });
-          this.addNode(rmNode, true);
-          this.emit('events', {
-            type: 'system.group.addMembers',
-            nodes: [rmNode],
-            group: targetGroup
-          });
-          this.emit('system.group.addMembers', {
-            nodes: [rmNode],
-            group: targetGroup
-          });
-          _updateNeighborEdge(rmNode, neighborEdges);
         }
         neighborEdges.forEach((item) => {
           item.redraw();

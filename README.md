@@ -29,7 +29,9 @@ let canvas = new Canvas({
       position: []        //限制锚点位置['Top', 'Bottom', 'Left', 'Right']
     }
   },
-  global: {}              //自定义配置，会贯穿所有canvas，group，node，edge，endpoint对象
+  global: {               //自定义配置，会贯穿所有canvas，group，node，edge，endpoint对象
+    isStrict: false       //scope是否为严格模式(默认为false)
+  }
 });
 canvas.draw({
   groups: [],  //分组信息
@@ -270,6 +272,7 @@ canvas.draw({
 | left | x轴坐标 | number (Require) | - 
 | width | 宽度 | number (Option) | - 
 | height | 高度 | number (Option) | - 
+| scope | 作用域 | boolean (Option) | 当node的scope和group的scope一致才能加入到节点组。默认不设置即可随意加入
 
 `* 节点的返回的dom必须设置position: absolute;`
 
@@ -346,6 +349,7 @@ canvas.draw({
 | left | x轴坐标 | number (Require) | - 
 | group | group的唯一标识 | string (Option) | - 
 | endpoints | 锚点信息 | array (Option) | - 
+| scope | 作用域 | boolean (Option) | 当node的scope和group的scope一致才能加入到节点组。默认不设置即可随意加入
 
 `* 节点的返回的dom必须设置position: absolute;`
 
