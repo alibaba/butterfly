@@ -13,15 +13,13 @@ class Endpoint {
     this.orientation = opts.orientation;
     this.pos = opts.pos;
     this.type = opts.type;
+    this.nodeType = _.get(opts, 'nodeType', 'node');
     this.nodeId = _.get(opts, '_node.id');
-    this.groupId = _.get(opts, '_group.id');
     this.root = opts.root;
     this.scope = opts.scope;
     this.options = opts;
     // 假如锚点在节点上则有值
     this._node = opts._node;
-    // 假如锚点在节点组上则有值
-    this._group = opts._group;
     this._global = opts._global;
     this._on = opts._on;
     this._emit = opts._emit;
@@ -46,6 +44,11 @@ class Endpoint {
 
   _init(obj) {
     this._coordinateService = obj._coordinateService;
+    
+    if (obj.nodeType) {
+      this.nodeType = obj.nodeType;
+      // this.
+    }
 
     // 计算锚点起始值
     if (!this._isInitedDom) {
@@ -93,18 +96,9 @@ class Endpoint {
       this._posLeft = this._left;
       this._posTop = this._top;
     } else {
-      let _currentDom = undefined;
-      let _currentNode = undefined;
-      let _currentNodeType = undefined;
-      if (this._node) {
-        _currentNode = this._node;
-        _currentDom = $(this._node.dom);
-        _currentNodeType = 'node';
-      } else if (this._group) {
-        _currentNode = this._group;
-        _currentDom = $(this._group.dom);
-        _currentNodeType = 'group';
-      }
+      let _currentNode = this._node;
+      let _currentDom = $(this._node.dom);
+      let _currentNodeType = this.nodeType;
 
       // 分情况弄好方向和位置
       const nodeW = _currentDom.outerWidth();
