@@ -1373,10 +1373,10 @@ class BaseCanvas extends Canvas {
         // scope不同
         if (!isDestoryEdges) {
           isDestoryEdges = _.some(this._dragEdges, (edge) => {
-            return edge.sourceEndpoint.scope !== this._dragEndpoint.scope;
+            return !ScopeCompare(edge.sourceEndpoint.scope, _targetEndpoint.scope, _.get(this, 'global.isStrict'));
           });
         }
-        
+
         if (isDestoryEdges) {
           this._dragEdges.forEach((edge) => {
             edge.destroy();
