@@ -255,29 +255,29 @@ class BaseCanvas extends Canvas {
       if (link.type === 'endpoint') {
         let sourceNode = null;
         let targetNode = null;
-        let sourceType = link.sourceType;
-        let targetType = link.targetType;
-        if (link.sourceType) {
-          sourceNode = sourceType === 'node' ? this.getNode(link.sourceNode) : this.getGroup(link.sourceNode);
+        let _sourceType = link._sourceType;
+        let _targetType = link._targetType;
+        if (link._sourceType) {
+          sourceNode = _sourceType === 'node' ? this.getNode(link.sourceNode) : this.getGroup(link.sourceNode);
         } else {
           let _node = this.getNode(link.sourceNode);
           if (_node) {
-            sourceType = 'node';
+            _sourceType = 'node';
             sourceNode = _node;
           } else {
-            sourceType = 'group';
+            _sourceType = 'group';
             sourceNode = this.getGroup(link.sourceNode);
           }
         }
-        if (link.targetType) {
-          targetNode = targetType === 'node' ? this.getNode(link.targetNode) : this.getGroup(link.targetNode);
+        if (link._targetType) {
+          targetNode = _targetType === 'node' ? this.getNode(link.targetNode) : this.getGroup(link.targetNode);
         } else {
           let _node = this.getNode(link.targetNode);
           if (_node) {
-            targetType = 'node';
+            _targetType = 'node';
             targetNode = _node;
           } else {
-            targetType = 'group';
+            _targetType = 'group';
             targetNode = this.getGroup(link.targetNode);
           }
         }
@@ -295,11 +295,11 @@ class BaseCanvas extends Canvas {
           let _isRepeat = _.some(this.edges, (_edge) => {
             let _result = false;
             if (sourceNode) {
-              _result = sourceNode.id === _edge.sourceNode.id && sourceEndpoint.id === _edge.sourceEndpoint.id && sourceType === _edge.sourceEndpoint.nodeType;
+              _result = sourceNode.id === _edge.sourceNode.id && sourceEndpoint.id === _edge.sourceEndpoint.id && _sourceType === _edge.sourceEndpoint.nodeType;
             }
 
             if (targetNode) {
-              _result = _result && (targetNode.id === _edge.targetNode.id && targetEndpoint === _edge.targetEndpoint.id && targetType === _edge.targetEndpoint.nodeType);
+              _result = _result && (targetNode.id === _edge.targetNode.id && targetEndpoint === _edge.targetEndpoint.id && _targetType === _edge.targetEndpoint.nodeType);
             }
 
             return _result;
@@ -323,6 +323,8 @@ class BaseCanvas extends Canvas {
           arrow: link.arrow,
           arrowPosition: link.arrowPosition,
           options: link,
+          _sourceType,
+          _targetType,
           _global: this.global,
           _on: this.on.bind(this),
           _emit: this.emit.bind(this),
@@ -531,14 +533,6 @@ class BaseCanvas extends Canvas {
     // 删除group
     const group = this.groups.splice(index, 1)[0];
 
-    // this.nodes.forEach((node) => {
-    //   if (node.group === group.id) {
-    //     node.top += group.top;
-    //     node.left += group.top;
-    //     delete node.group;
-    //   }
-    // });
-
     group.nodes.forEach((_node) => {
       let rmItem = this.removeNode(_node.id, true, true);
       let rmNode = rmItem.nodes[0];
@@ -546,6 +540,7 @@ class BaseCanvas extends Canvas {
       rmNode._init({
         top: _node.top + group.top,
         left: _node.left + group.left,
+        dom: _node.dom,
         _isDeleteGroup: true
       });
       this.addNode(rmNode, true);
@@ -1237,8 +1232,8 @@ class BaseCanvas extends Canvas {
             this.edges.forEach((edge) => {
               let hasUpdate = _.get(edge, 'sourceNode.group') === group.id ||
                 _.get(edge, 'targetNode.group') === group.id ||
-                (_.get(edge, 'sourceType') === 'group' && _.get(edge, 'sourceNode.id') === group.id) ||
-                (_.get(edge, 'targetType') === 'group' && _.get(edge, 'targetNode.id') === group.id);
+                (_.get(edge, '_sourceType') === 'group' && _.get(edge, 'sourceNode.id') === group.id) ||
+                (_.get(edge, '_targetType') === 'group' && _.get(edge, 'targetNode.id') === group.id);
 
               hasUpdate && (edge.redraw());
             });
@@ -1264,7 +1259,7 @@ class BaseCanvas extends Canvas {
               let pointObj = {
                 shapeType: this.theme.edge.type,
                 orientationLimit: this.theme.endpoint.position,
-                sourceType: point.nodeType,
+                _sourceType: point.nodeType,
                 sourceNode: point.nodeType === 'node' ? this.getNode(point.nodeId) : this.getGroup(point.nodeId),
                 sourceEndpoint: point,
                 arrow: this.theme.edge.arrow,
@@ -1407,7 +1402,7 @@ class BaseCanvas extends Canvas {
             edge._create({
               id: `${edge.sourceEndpoint.id}-${_targetEndpoint.id}`,
               targetNode: _targetEndpoint.nodeType === 'node' ? this.getNode(_targetEndpoint.nodeId) : this.getGroup(_targetEndpoint.nodeId),
-              targetType: _targetEndpoint.nodeType,
+              _targetType: _targetEndpoint.nodeType,
               targetEndpoint: _targetEndpoint,
               type: 'endpoint'
             });
