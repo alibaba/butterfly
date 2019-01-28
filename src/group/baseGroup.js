@@ -271,6 +271,9 @@ class BaseGroup extends Group {
     return endpoint;
   }
   destroy() {
+    this.endpoints.forEach((item) => {
+      item.destroy();
+    });
     $(this.dom).off();
     $(this.dom).remove();
     this._emit('system.group.delete', {
