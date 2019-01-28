@@ -201,6 +201,9 @@ class BaseGroup extends Group {
   getHeight() {
     return this.height;
   }
+  getEndpoint(pointId) {
+    return _.find(this.endpoints, point => pointId === point.id);
+  }
   _appendNodes(nodes = []) {
     nodes.forEach((item) => {
       item._group = this;
