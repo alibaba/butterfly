@@ -8,6 +8,7 @@ class BaseNode extends Node {
   constructor(opts) {
     super(opts);
     this.id = opts.id;
+    this.scope = opts.scope;
     this.group = opts.group;
     this.top = opts.top || 0;
     this.left = opts.left || 0;

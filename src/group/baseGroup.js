@@ -15,6 +15,7 @@ class BaseGroup extends Group {
   constructor(opts) {
     super(opts);
     this.id = opts.id;
+    this.scope = opts.scope;
     this.top = opts.top;
     this.left = opts.left;
     this.width = opts.width || 300;
