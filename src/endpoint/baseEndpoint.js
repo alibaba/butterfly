@@ -172,6 +172,8 @@ class Endpoint {
       $(dom)
         .css('top', this._top)
         .css('left', this._left);
+
+    this.updated && this.updated();
     }
   }
 
