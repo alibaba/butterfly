@@ -21,10 +21,12 @@ class Edge {
     this.label = _.get(opts, 'label');
     this.arrow = _.get(opts, 'arrow');
     this.arrowPosition = _.get(opts, 'arrowPosition', 0.5);
+    this.isExpandWidth = _.get(opts, 'isExpandWidth', false);
     this.options = opts;
     this.dom = null;
     this.labelDom = null;
     this.arrowDom = null;
+    this.eventHandlerDom = null;
     this.options = opts.options;
     this._global = opts._global;
     this._on = opts._on;
@@ -54,6 +56,12 @@ class Edge {
   draw(obj) {
     let path = document.createElementNS('http://www.w3.org/2000/svg', 'path')
     path.setAttribute('class', 'butterflies-link');
+    
+    if (this.isExpandWidth) {
+      // 扩大线选中范围
+      this.eventHandlerDom = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      this.eventHandlerDom.setAttribute('class', 'butterflies-link-event-handler');
+    }
     return path;
   }
   calcPath(sourcePoint, targetPoint) {
@@ -141,6 +149,10 @@ class Edge {
     // 重新计算线条path
     let path = this.calcPath(sourcePoint, targetPoint);
     this.dom.setAttribute('d', path);
+    if (this.isExpandWidth) {
+      this.eventHandlerDom.setAttribute('d', path);
+      $(this.eventHandlerDom).insertAfter(this.dom);
+    }
     // 重新计算label
     if (this.labelDom) {
       this.redrawLabel();
@@ -149,6 +161,8 @@ class Edge {
     if (this.arrowDom) {
       this.redrawArrow(path);
     }
+
+    this.updated && this.updated();
   }
   destroy(isNotEventEmit) {
     if (this.labelDom) {
@@ -156,6 +170,9 @@ class Edge {
     }
     if (this.arrowDom) {
       $(this.arrowDom).remove();
+    }
+    if (this.eventHandlerDom) {
+      $(this.eventHandlerDom).remove();
     }
     $(this.dom).remove();
     if (this.id && !isNotEventEmit) {

@@ -33,6 +33,7 @@ class BaseCanvas extends Canvas {
         arrow: _.get(options, 'theme.edge.arrow'),
         isRepeat: _.get(options, 'theme.edge.isRepeat') || false,
         isLinkMyself: _.get(options, 'theme.edge.isLinkMyself') || false,
+        isExpandWidth: _.get(options, 'theme.edge.isExpandWidth') || false
       },
       endpoint: {
         position: _.get(options, 'theme.endpoint.position')
@@ -316,6 +317,7 @@ class BaseCanvas extends Canvas {
           label: link.label,
           shapeType: link.shapeType || this.theme.edge.type,
           orientationLimit: this.theme.endpoint.position,
+          isExpandWidth: this.theme.edge.isExpandWidth, 
           sourceNode,
           targetNode,
           sourceEndpoint,
@@ -365,6 +367,7 @@ class BaseCanvas extends Canvas {
           orientationLimit: this.theme.endpoint.position,
           arrow: link.arrow,
           arrowPosition: link.arrowPosition,
+          isExpandWidth: this.theme.edge.isExpandWidth,
           _global: this.global,
           _on: this.on.bind(this),
           _emit: this.emit.bind(this),

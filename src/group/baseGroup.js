@@ -85,6 +85,7 @@ class BaseGroup extends Group {
       group.css('height', obj.height + 'px');
     }
 
+    this.updated && this.updated();
     return group[0];
   }
   addNodes(nodes = []) {

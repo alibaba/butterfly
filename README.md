@@ -23,7 +23,8 @@ let canvas = new Canvas({
   theme: {                //主题定制(可传) 
     edge: {
       type: 'Bezier',     //线条类型：贝塞尔曲线，折线，直线
-      Class: XXClass      //自己拓展的class
+      Class: XXClass,     //自己拓展的class
+      isExpandWidth: false //增加线条交互区域
     },
     endpoint: {
       position: []        //限制锚点位置['Top', 'Bottom', 'Left', 'Right']
@@ -367,6 +368,11 @@ draw = (obj) => {}
 mounted = () => {}
 
 /**
+  * 节点更新后的回调
+  */
+updated = () => {}
+
+/**
   * 删除节点
   */
 remove = () => {}
@@ -435,6 +441,8 @@ on = (string, callback) => {}
 | shapeType | 线条的类型 | string (Option) | Bezier/Flow/Straight
 | label | 线条上加注释 | string/dom (Option) | -
 
+`* 设置 isExpandWidth 为 true 时，获取 eventHandlerDom 用于挂载事件`
+
 ### 方法
 
 ```
@@ -446,6 +454,10 @@ draw = () => {}
   * 线条挂载后的回调
   */
 mounted = () => {}
+/**
+  * 线条重绘后的回调
+  */
+updated = () => {}
 /**
   * @return {dom} - 自定义label的dom
   */
@@ -493,6 +505,10 @@ draw = () => {}
   * 锚点挂载后的回调
   */
 mounted = () => {}
+/**
+  * 锚点更新后的回调
+  */
+updated = () => {}
 /**
   * @param {number} x - 移动位置的x坐标 
   * @param {number} y - 移动位置的y坐标 

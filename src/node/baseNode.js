@@ -37,6 +37,7 @@ class BaseNode extends Node {
     if (obj.left) {
       node.css('left', `${obj.left}px`);
     }
+    this.updated && this.updated();
     return node[0];
   }
 
