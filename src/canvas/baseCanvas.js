@@ -550,9 +550,7 @@ class BaseCanvas extends Canvas {
     });
     // 删除邻近的线条
     const neighborEdges = this.getNeighborEdges(group.id, 'group');
-    neighborEdges.forEach((item) => {
-      item.destroy();
-    });
+    this.removeEdges(neighborEdges);
     // 删除group
     const index = _.findIndex(this.groups, _group => _group.id === groupId);
     this.groups.splice(index, 1)[0];
@@ -1061,7 +1059,7 @@ class BaseCanvas extends Canvas {
             return item.id === _node.id;
           });
           if (!_hasNode) {
-            this.addNode(item, true);
+            this.addNode(item);
           } else {
             let neighborEdges = [];
             let rmItem = this.removeNode(item.id, true, true);
@@ -1078,6 +1076,15 @@ class BaseCanvas extends Canvas {
               item.redraw();
             });
           }
+        });
+        this.emit('events', {
+          type: 'system.group.addMembers',
+          nodes: data.nodes,
+          group: data.group
+        });
+        this.emit('system.group.addMembers', {
+          nodes: data.nodes,
+          group: data.group
         });
       } else if (data.type === 'group:removeNodes') {
         _.get(data, 'nodes', []).forEach((item) => {
