@@ -102,15 +102,6 @@ class BaseGroup extends Group {
       nodes: nodes,
       group: this
     });
-    this._emit('events', {
-      type: 'system.group.addMembers',
-      nodes: nodes,
-      group: this
-    });
-    this._emit('system.group.addMembers', {
-      nodes: nodes,
-      group: this
-    });
   }
   addNode(node) {
     this.addNodes([node]);
