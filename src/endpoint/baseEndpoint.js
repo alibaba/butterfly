@@ -47,7 +47,6 @@ class Endpoint {
     
     if (obj.nodeType) {
       this.nodeType = obj.nodeType;
-      // this.
     }
 
     // 计算锚点起始值
@@ -71,9 +70,13 @@ class Endpoint {
       this._posTop = this._top;
       this._posLeft = this._left;
     }
-    if (this.type === 'source') {
-      this.makeSource();
-    }
+
+    // if (this.type === 'source') {
+    //   this.makeSource();
+    // } else {
+    //   this
+    // }
+    this.attachEvent();
   }
 
   draw(obj) {
@@ -191,7 +194,7 @@ class Endpoint {
     }
   }
 
-  makeSource() {
+  attachEvent() {
     $(this.dom).on('mousedown', (e) => {
       const LEFT_KEY = 0;
       if (e.button !== LEFT_KEY) {
@@ -200,14 +203,10 @@ class Endpoint {
       e.preventDefault();
       e.stopPropagation();
       this._emit('InnerEvents', {
-        type: 'endpoint:linkBegin',
+        type: 'endpoint:drag',
         data: this
       });
     });
-  }
-
-  unMakeSource() {
-    $(this.dom).off();
   }
 
   destroy() {

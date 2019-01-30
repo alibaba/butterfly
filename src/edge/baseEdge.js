@@ -22,12 +22,12 @@ class Edge {
     this.arrow = _.get(opts, 'arrow');
     this.arrowPosition = _.get(opts, 'arrowPosition', 0.5);
     this.isExpandWidth = _.get(opts, 'isExpandWidth', false);
-    this.options = opts;
     this.dom = null;
     this.labelDom = null;
     this.arrowDom = null;
     this.eventHandlerDom = null;
     this.options = opts.options;
+    this._isDeletingEdge = opts._isDeletingEdge;
     this._global = opts._global;
     this._on = opts._on;
     this._emit = opts._emit;
@@ -194,6 +194,7 @@ class Edge {
     this._sourceType = _.get(opts, '_sourceType') || this._sourceType;
     this.sourceEndpoint = _.get(opts, 'sourceEndpoint') || this.sourceEndpoint;
     this.type = _.get(opts, 'type') || this.type;
+    this._isDeletingEdge = false;
     this.redraw();
   }
 }
