@@ -562,7 +562,7 @@ function _findControlPoint(point, sourcePoint, targetPoint, _so, _to) {
     }
 
     if (_so[1] === 0) {
-      result.push(sourcePoint.pos[1] < targetPoint.pos[1] ? point[1] - minorAnchor : point[1] + minorAnchor);
+      result.push(sourcePoint.pos[1] < targetPoint.pos[1] ? point[1] + minorAnchor : point[1] - minorAnchor);
     } else {
       result.push(point[1] - (majorAnchor * _to[1]));
     }
@@ -574,7 +574,7 @@ function _findControlPoint(point, sourcePoint, targetPoint, _so, _to) {
     }
 
     if (_to[1] === 0) {
-      result.push(targetPoint.pos[1] < sourcePoint.pos[1] ? point[1] - minorAnchor : point[1] + minorAnchor);
+      result.push(targetPoint.pos[1] < sourcePoint.pos[1] ? point[1] + minorAnchor : point[1] - minorAnchor);
     } else {
       result.push(point[1] + (majorAnchor * _so[1]));
     }
