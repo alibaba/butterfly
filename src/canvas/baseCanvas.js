@@ -1025,7 +1025,7 @@ class BaseCanvas extends Canvas {
       } else if (data.type === 'group:dragBegin') {
         this._dragType = 'group:drag';
         this._dragNode = data.data;
-      } else if (data.type === 'endpoint:linkBegin') {
+      } else if (data.type === 'endpoint:drag') {
         this._dragType = 'endpoint:drag';
         this._dragEndpoint = data.data;
       } else if (data.type === 'multiple:select') {
@@ -1258,26 +1258,101 @@ class BaseCanvas extends Canvas {
           }
         } else if (this._dragType === 'endpoint:drag') {
 
-          let isUnion = !!_.find(this.unionItem.endpoints || [], (item) => {
-            return item.id === this._dragEndpoint.id;
-          });
-
           const endX = this._coordinateService._terminal2canvas('x', event.clientX);
           const endY = this._coordinateService._terminal2canvas('y', event.clientY);
 
-          let edges = [];
-          if (!this._dragEdges || this._dragEdges.length === 0) {
-            const EdgeClass = this.theme.edge.Class;
-            let endpoints = isUnion ? this.unionItem.endpoints : [this._dragEndpoint];
-            endpoints.forEach((point) => {
+          if (this._dragEndpoint.type === 'source') {
+            let isUnion = !!_.find(this.unionItem.endpoints || [], (item) => {
+              return item.id === this._dragEndpoint.id;
+            });
+  
+            let edges = [];
+            if (!this._dragEdges || this._dragEdges.length === 0) {
+              const EdgeClass = this.theme.edge.Class;
+              let endpoints = isUnion ? this.unionItem.endpoints : [this._dragEndpoint];
+              endpoints.forEach((point) => {
+                let pointObj = {
+                  shapeType: this.theme.edge.type,
+                  orientationLimit: this.theme.endpoint.position,
+                  _sourceType: point.nodeType,
+                  sourceNode: point.nodeType === 'node' ? this.getNode(point.nodeId) : this.getGroup(point.nodeId),
+                  sourceEndpoint: point,
+                  arrow: this.theme.edge.arrow,
+                };
+                let _newEdge = new EdgeClass(_.assign(pointObj, {
+                  _global: this.global,
+                  _on: this.on.bind(this),
+                  _emit: this.emit.bind(this),
+                }));
+                _newEdge._init();
+                $(this.svg).append(_newEdge.dom);
+                if (_newEdge.labelDom) {
+                  $(this.warpper).append(_newEdge.labelDom);
+                }
+                if (_newEdge.arrowDom) {
+                  $(this.svg).append(_newEdge.arrowDom);
+                }
+                edges.push(_newEdge);
+              });
+              this._dragEdges = edges;
+            } else {
+              edges = this._dragEdges;
+            }
+  
+            $(this.svg).css('display', 'none');
+            $(this.warpper).css('display', 'none');
+            edges.forEach((edge) => {
+              let beginX =  edge.sourceEndpoint._posLeft + edge.sourceEndpoint._width / 2;
+              let beginY = edge.sourceEndpoint._posTop + edge.sourceEndpoint._height / 2;
+              const _soucePoint = {
+                pos: [beginX, beginY],
+                orientation: edge.sourceEndpoint.orientation
+              };
+              const _targetPoint = {
+                pos: [endX, endY],
+              };
+              edge.redraw(_soucePoint, _targetPoint);
+            });
+            $(this.svg).css('display', 'block');
+            $(this.warpper).css('display', 'block');
+  
+            this.emit('system.drag.move', {
+              dragType: this._dragType,
+              pos: [event.clientX, event.clientY],
+              dragNode: this._dragNode,
+              dragEndpoint: this._dragEndpoint,
+              dragEdges: edges
+            });
+            this.emit('events', {
+              type: 'drag:move',
+              dragType: this._dragType,
+              pos: [event.clientX, event.clientY],
+              dragNode: this._dragNode,
+              dragEndpoint: this._dragEndpoint,
+              dragEdges: edges
+            });
+          } else {
+            // 从后面搜索线
+            let targetEdge = null;
+            for (let i = this.edges.length - 1; i >= 0; i--) {
+              if (this._dragEndpoint.id === _.get(this.edges, [i, 'targetEndpoint', 'id']) && this._dragEndpoint.nodeId === _.get(this.edges, [i, 'targetNode', 'id'])) {
+                targetEdge = this.edges[i];
+                break;
+              }
+            }
+            if (targetEdge && this._dragEdges.length === 0) {
+              this.removeEdge(targetEdge);
               let pointObj = {
+                id: targetEdge.id,
                 shapeType: this.theme.edge.type,
                 orientationLimit: this.theme.endpoint.position,
-                _sourceType: point.nodeType,
-                sourceNode: point.nodeType === 'node' ? this.getNode(point.nodeId) : this.getGroup(point.nodeId),
-                sourceEndpoint: point,
+                _sourceType: targetEdge._sourceType,
+                sourceNode: targetEdge.sourceNode,
+                sourceEndpoint: targetEdge.sourceEndpoint,
                 arrow: this.theme.edge.arrow,
+                _isDeletingEdge: true
               };
+              let EdgeClass = this.theme.edge.Class;
               let _newEdge = new EdgeClass(_.assign(pointObj, {
                 _global: this.global,
                 _on: this.on.bind(this),
@@ -1291,45 +1366,23 @@ class BaseCanvas extends Canvas {
               if (_newEdge.arrowDom) {
                 $(this.svg).append(_newEdge.arrowDom);
               }
-              edges.push(_newEdge);
-            });
-            this._dragEdges = edges;
-          } else {
-            edges = this._dragEdges;
+              this._dragEdges = [_newEdge];
+            }
+
+            if (this._dragEdges.length !== 0) {
+              let edge = this._dragEdges[0];
+              let beginX =  edge.sourceEndpoint._posLeft + edge.sourceEndpoint._width / 2;
+              let beginY = edge.sourceEndpoint._posTop + edge.sourceEndpoint._height / 2;
+              const _soucePoint = {
+                pos: [beginX, beginY],
+                orientation: edge.sourceEndpoint.orientation
+              };
+              const _targetPoint = {
+                pos: [endX, endY],
+              };
+              edge.redraw(_soucePoint, _targetPoint);
+            }
           }
-
-          $(this.svg).css('display', 'none');
-          $(this.warpper).css('display', 'none');
-          edges.forEach((edge) => {
-            let beginX =  edge.sourceEndpoint._posLeft + edge.sourceEndpoint._width / 2;
-            let beginY = edge.sourceEndpoint._posTop + edge.sourceEndpoint._height / 2;
-            const _soucePoint = {
-              pos: [beginX, beginY],
-              orientation: edge.sourceEndpoint.orientation
-            };
-            const _targetPoint = {
-              pos: [endX, endY],
-            };
-            edge.redraw(_soucePoint, _targetPoint);
-          });
-          $(this.svg).css('display', 'block');
-          $(this.warpper).css('display', 'block');
-
-          this.emit('system.drag.move', {
-            dragType: this._dragType,
-            pos: [event.clientX, event.clientY],
-            dragNode: this._dragNode,
-            dragEndpoint: this._dragEndpoint,
-            dragEdges: edges
-          });
-          this.emit('events', {
-            type: 'drag:move',
-            dragType: this._dragType,
-            pos: [event.clientX, event.clientY],
-            dragNode: this._dragNode,
-            dragEndpoint: this._dragEndpoint,
-            dragEdges: edges
-          });
         } else if (this._dragType === 'group:resize') {
           let canvasX = this._coordinateService._terminal2canvas('x', event.clientX);
           let canvasY = this._coordinateService._terminal2canvas('y', event.clientY);
@@ -1389,6 +1442,15 @@ class BaseCanvas extends Canvas {
         if (isDestoryEdges) {
           this._dragEdges.forEach((edge) => {
             edge.destroy();
+            if (edge._isDeletingEdge) {
+              this.emit('system.link.delete', {
+                link: edge
+              });
+              this.emit('events', {
+                type: 'link:delete',
+                link: edge
+              });
+            }
           });
         } else {
           this._dragEdges.forEach((edge) => {
@@ -1412,9 +1474,8 @@ class BaseCanvas extends Canvas {
                 return;
               }
             }
-
             edge._create({
-              id: `${edge.sourceEndpoint.id}-${_targetEndpoint.id}`,
+              id: edge.id ? edge.id : `${edge.sourceEndpoint.id}-${_targetEndpoint.id}`,
               targetNode: _targetEndpoint.nodeType === 'node' ? this.getNode(_targetEndpoint.nodeId) : this.getGroup(_targetEndpoint.nodeId),
               _targetType: _targetEndpoint.nodeType,
               targetEndpoint: _targetEndpoint,
