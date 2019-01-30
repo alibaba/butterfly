@@ -4,13 +4,13 @@ const _ = require('lodash');
 
 function drawBezier(sourcePoint, targetPoint) {
 
-  // if (!sourcePoint.orientation) {
+  if (!sourcePoint.orientation) {
     sourcePoint.orientation = _calcOrientation(targetPoint.pos[0], targetPoint.pos[1], sourcePoint.pos[0], sourcePoint.pos[1]);
-  // }
+  }
 
-  // if (!targetPoint.orientation) {
+  if (!targetPoint.orientation) {
     targetPoint.orientation = _calcOrientation(sourcePoint.pos[0], sourcePoint.pos[1], targetPoint.pos[0], targetPoint.pos[1]);
-  // }
+  }
 
   // 控制点
 
@@ -26,6 +26,7 @@ function drawBezier(sourcePoint, targetPoint) {
 
   let sourceCtrlPoint = _findControlPoint([_sx, _sy], sourcePoint, targetPoint, _so, _to);
   let targetCtrlPoint = _findControlPoint([_tx, _ty], targetPoint, sourcePoint, _to, _so);
+
 
   let offsetX = sourcePoint.pos[0] < targetPoint.pos[0] ? sourcePoint.pos[0] : targetPoint.pos[0];
   let offsetY = sourcePoint.pos[1] < targetPoint.pos[1] ? sourcePoint.pos[1] : targetPoint.pos[1];
@@ -479,6 +480,7 @@ function _calcOrientation(beginX, beginY, endX, endY, orientationLimit) {
 
   // 斜率
   let k = Math.abs(posY / posX);
+
   if (posX === 0 || posY === 0) {
     orientation = posX > 0 ? _calcWithLimit(['Right', 'Top', 'Bottom', 'Left']) : orientation;
     orientation = posX < 0 ? _calcWithLimit(['Left', 'Top', 'Bottom', 'Right']) : orientation;
@@ -494,10 +496,10 @@ function _calcOrientation(beginX, beginY, endX, endY, orientationLimit) {
     }
   } else if (posX < 0 && posY > 0) {
     if (k > 1) {
-      orientation = _calcWithLimit(['Left', 'Top', 'Bottom', 'Right']);
+      orientation = _calcWithLimit(['Top', 'Left', 'Right', 'Bottom']);
       // orientation = [0, -1];
     } else {
-      orientation = _calcWithLimit(['Top', 'Left', 'Right', 'Bottom']);
+      orientation = _calcWithLimit(['Left', 'Top', 'Bottom', 'Right']);
       // orientation = [1, 0];
     }
   } else if (posX < 0 && posY < 0) {
@@ -539,8 +541,19 @@ function _findControlPoint(point, sourcePoint, targetPoint, _so, _to) {
 
   let result = [];
 
-  var perpendicular = _so[0] !== _to[0] || _so[1] === _to[1];
+  // 特殊处理完全水平和垂直的情况
+  if (sourcePoint.pos[0] === targetPoint.pos[0] && _so[1] !== _to[1] && _so[0] === 0 && _to[0] === 0) {
+    result = [point[0], point[1] + majorAnchor * _so[1]];
+    return result;
+  }
 
+  if (sourcePoint.pos[1] === targetPoint.pos[1] && _so[0] !== _to[0] && _so[1] === 0 && _to[1] === 0) {
+    result = [point[0] + majorAnchor * _so[0], point[1]];
+    return result;
+  }
+
+  // 平常情况
+  var perpendicular = _so[0] !== _to[0] || _so[1] === _to[1];
   if (!perpendicular) {
     if (_so[0] === 0) {
       result.push(sourcePoint.pos[0] < targetPoint.pos[0] ? point[0] + minorAnchor : point[0] - minorAnchor);
