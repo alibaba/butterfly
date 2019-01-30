@@ -486,7 +486,7 @@ class BaseCanvas extends Canvas {
     };
   }
 
-  removeEdges(edges) {
+  removeEdges(edges, isNotEventEmit) {
     let result = [];
     edges.forEach((_edge) => {
       let edgeIndex = -1;
@@ -522,13 +522,13 @@ class BaseCanvas extends Canvas {
     });
 
     result.forEach((item) => {
-      item.destroy();
+      item.destroy(isNotEventEmit);
     });
     return result;
   }
 
-  removeEdge(edge) {
-    return this.removeEdges([edge])[0];
+  removeEdge(edge, isNotEventEmit) {
+    return this.removeEdges([edge], isNotEventEmit)[0];
   }
 
   removeGroup(groupId) {
@@ -1006,13 +1006,6 @@ class BaseCanvas extends Canvas {
       this._rootHeight = $(this.root).height();
     });
 
-    $(this.warpper).on('click', (e) => {
-      this.emit('system.canvas.click');
-      this.emit('events', {
-        type: 'canvas:click'
-      });
-    });
-
     // 绑定一大堆事件，group:addMember，groupDragStop，group:removeMember，beforeDetach，connection，
     this.on('InnerEvents', (data) => {
       if (data.type === 'node:addEndpoint') {
@@ -1341,7 +1334,7 @@ class BaseCanvas extends Canvas {
               }
             }
             if (targetEdge && this._dragEdges.length === 0) {
-              this.removeEdge(targetEdge);
+              this.removeEdge(targetEdge, true);
               let pointObj = {
                 id: targetEdge.id,
                 shapeType: this.theme.edge.type,
@@ -1441,16 +1434,7 @@ class BaseCanvas extends Canvas {
 
         if (isDestoryEdges) {
           this._dragEdges.forEach((edge) => {
-            edge.destroy();
-            if (edge._isDeletingEdge) {
-              this.emit('system.link.delete', {
-                link: edge
-              });
-              this.emit('events', {
-                type: 'link:delete',
-                link: edge
-              });
-            }
+            edge.destroy(!edge._isDeletingEdge);
           });
         } else {
           this._dragEdges.forEach((edge) => {
@@ -1636,6 +1620,14 @@ class BaseCanvas extends Canvas {
         });
         this.emit('system.group.resize', {
           group: this._dragGroup
+        });
+      }
+
+      // 触发click
+      if (this._dragType === 'canvas:drag' || !this._dragType) {
+        this.emit('system.canvas.click');
+        this.emit('events', {
+          type: 'canvas:click'
         });
       }
 
