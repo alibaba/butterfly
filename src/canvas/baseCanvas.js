@@ -282,6 +282,11 @@ class BaseCanvas extends Canvas {
             targetNode = this.getGroup(link.targetNode);
           }
         }
+
+        if (!sourceNode || !targetNode) {
+          console.log(`butterflies error: can not connect edge. link sourceNodeId:${link.sourceNode};link targetNodeId:${link.targetNode}`);
+          return;
+        }
         
         const sourceEndpoint = sourceNode.getEndpoint(link.source);
         const targetEndpoint = targetNode.getEndpoint(link.target);
@@ -1334,32 +1339,8 @@ class BaseCanvas extends Canvas {
               }
             }
             if (targetEdge && this._dragEdges.length === 0) {
-              this.removeEdge(targetEdge, true);
-              let pointObj = {
-                id: targetEdge.id,
-                shapeType: this.theme.edge.type,
-                orientationLimit: this.theme.endpoint.position,
-                _sourceType: targetEdge._sourceType,
-                sourceNode: targetEdge.sourceNode,
-                sourceEndpoint: targetEdge.sourceEndpoint,
-                arrow: this.theme.edge.arrow,
-                _isDeletingEdge: true
-              };
-              let EdgeClass = this.theme.edge.Class;
-              let _newEdge = new EdgeClass(_.assign(pointObj, {
-                _global: this.global,
-                _on: this.on.bind(this),
-                _emit: this.emit.bind(this),
-              }));
-              _newEdge._init();
-              $(this.svg).append(_newEdge.dom);
-              if (_newEdge.labelDom) {
-                $(this.warpper).append(_newEdge.labelDom);
-              }
-              if (_newEdge.arrowDom) {
-                $(this.svg).append(_newEdge.arrowDom);
-              }
-              this._dragEdges = [_newEdge];
+              targetEdge._isDeletingEdge = true;
+              this._dragEdges = [targetEdge];
             }
 
             if (this._dragEdges.length !== 0) {
@@ -1395,7 +1376,7 @@ class BaseCanvas extends Canvas {
       }
 
       // 处理线条的问题
-      if (this._dragEdges && this._dragEdges.length !== 0) {
+      if (this._dragType === 'endpoint:drag' && this._dragEdges && this._dragEdges.length !== 0) {
         // 释放对应画布上的x,y
         const x = this._coordinateService._terminal2canvas('x', event.clientX);
         const y = this._coordinateService._terminal2canvas('y', event.clientY);
@@ -1434,10 +1415,21 @@ class BaseCanvas extends Canvas {
 
         if (isDestoryEdges) {
           this._dragEdges.forEach((edge) => {
-            edge.destroy(!edge._isDeletingEdge);
+            if (edge._isDeletingEdge) {
+              this.removeEdge(edge);
+            } else {
+              edge.destroy(!edge._isDeletingEdge);
+            }
           });
         } else {
-          this._dragEdges.forEach((edge) => {
+          let _emitEdges = this._dragEdges.filter((edge) => {
+
+            // 正在删除的线重现连接
+            if (edge._isDeletingEdge) {
+              edge._isDeletingEdge = true;
+              return false;
+            }
+
             // 线条去重
             if (!this.theme.edge.isRepeat) {
               let _isRepeat = _.some(this.edges, (_edge) => {
@@ -1455,7 +1447,7 @@ class BaseCanvas extends Canvas {
               if (_isRepeat) {
                 console.log(`id为${edge.sourceEndpoint.id}-${_targetEndpoint.id}的线条连接重复，请检查`);
                 edge.destroy();
-                return;
+                return false;
               }
             }
             edge._create({
@@ -1466,14 +1458,17 @@ class BaseCanvas extends Canvas {
               type: 'endpoint'
             });
             this.edges.push(edge);
+            return edge;
           });
-          this.emit('system.link.connect', {
-            links: this._dragEdges
-          });
-          this.emit('events', {
-            type: 'link:connect',
-            links: this._dragEdges
-          });
+          if (_emitEdges.length !== 0) {
+            this.emit('system.link.connect', {
+              links: this._dragEdges
+            });
+            this.emit('events', {
+              type: 'link:connect',
+              links: this._dragEdges
+            });
+          }
         }
       }
       if (this._dragType === 'node:drag' && this._dragNode) {
