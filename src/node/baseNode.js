@@ -135,11 +135,11 @@ class BaseNode extends Node {
   }
 
   getWidth() {
-    return $(this.dom).width();
+    return $(this.dom).outerWidth();
   }
 
   getHeight() {
-    return $(this.dom).height();
+    return $(this.dom).outerHeight();
   }
 
   _createEndpoint(isInited) {
