@@ -1211,17 +1211,7 @@ class BaseCanvas extends Canvas {
             $(this.svg).css('display', 'none');
             $(this.warpper).css('display', 'none');
             moveNodes.forEach((node) => {
-              node.moveTo(node.left + (canvasX - nodeOriginPos.x), node.top + (canvasY - nodeOriginPos.y));
-              $(this.svg).css('display', 'none');
-              this.edges.forEach((edge) => {
-                if (edge.type === 'endpoint') {
-                  const isLink = _.find(node.endpoints, point => point.id === edge.sourceEndpoint.id || point.id === edge.targetEndpoint.id);
-                  isLink && edge.redraw();
-                } else if (edge.type === 'node') {
-                  const isLink = edge.sourceNode.id === node.id || edge.targetNode.id === node.id;
-                  isLink && edge.redraw();
-                }
-              });
+              this._moveNode(node, node.left + (canvasX - nodeOriginPos.x), node.top + (canvasY - nodeOriginPos.y));
             });
             $(this.svg).css('display', 'block');
             $(this.warpper).css('display', 'block');
@@ -1240,15 +1230,7 @@ class BaseCanvas extends Canvas {
           }
           if (this._dragNode) {
             const group = this._dragNode;
-            group.moveTo(group.left + (canvasX - nodeOriginPos.x), group.top + (canvasY - nodeOriginPos.y));
-            this.edges.forEach((edge) => {
-              let hasUpdate = _.get(edge, 'sourceNode.group') === group.id ||
-                _.get(edge, 'targetNode.group') === group.id ||
-                (_.get(edge, '_sourceType') === 'group' && _.get(edge, 'sourceNode.id') === group.id) ||
-                (_.get(edge, '_targetType') === 'group' && _.get(edge, 'targetNode.id') === group.id);
-
-              hasUpdate && (edge.redraw());
-            });
+            this._moveGroup(group, group.left + (canvasX - nodeOriginPos.x),  group.top + (canvasY - nodeOriginPos.y));
             nodeOriginPos = {
               x: canvasX,
               y: canvasY
@@ -1341,6 +1323,32 @@ class BaseCanvas extends Canvas {
             if (targetEdge && this._dragEdges.length === 0) {
               targetEdge._isDeletingEdge = true;
               this._dragEdges = [targetEdge];
+              // this.removeEdge(targetEdge, true);
+              // let pointObj = {
+              //   id: targetEdge.id,
+              //   shapeType: this.theme.edge.type,
+              //   orientationLimit: this.theme.endpoint.position,
+              //   _sourceType: targetEdge._sourceType,
+              //   sourceNode: targetEdge.sourceNode,
+              //   sourceEndpoint: targetEdge.sourceEndpoint,
+              //   arrow: this.theme.edge.arrow,
+              //   _isDeletingEdge: true
+              // };
+              // let EdgeClass = this.theme.edge.Class;
+              // let _newEdge = new EdgeClass(_.assign(pointObj, {
+              //   _global: this.global,
+              //   _on: this.on.bind(this),
+              //   _emit: this.emit.bind(this),
+              // }));
+              // _newEdge._init();
+              // $(this.svg).append(_newEdge.dom);
+              // if (_newEdge.labelDom) {
+              //   $(this.warpper).append(_newEdge.labelDom);
+              // }
+              // if (_newEdge.arrowDom) {
+              //   $(this.svg).append(_newEdge.arrowDom);
+              // }
+              // this._dragEdges = [_newEdge];
             }
 
             if (this._dragEdges.length !== 0) {

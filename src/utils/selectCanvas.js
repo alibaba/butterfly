@@ -1,10 +1,10 @@
-
+'use strict';
 
 const $ = require('jquery');
 
 class SelectCanvas {
   constructor() {
-    this.dom = $('<canvas class="butterfly-canvas-warpper"></canvas>')[0];
+    this.dom = $('<canvas class="butterfly-selected-canvas"></canvas>')[0];
     this.cxt = this.dom.getContext('2d');
     this.canvasTop = 0;
     this.canvasLeft = 0;
