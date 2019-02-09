@@ -7,13 +7,13 @@ class GridService {
   constructor(opts) {
     this.root = opts.root;
     this.canvas = opts.canvas;
+
     this.domWarpper = _.get(opts, 'canvas.warpper');
     this.canvasHeight = 0;
     this.canvasWidth = 0;
 
-    this.container = null;
-    this.gridCanvas = null;
-    this.guideLineCanvas = null;
+    this.dom = null;
+    this.isActive = false;
     this.theme = opts.theme || {
       shapeType: 'circle',  // 展示的类型，支持line & circle
       gap: 5,            // 网格间隙
@@ -31,28 +31,21 @@ class GridService {
     this.canvasHeight = $(this.root).height();
     this.canvasWidth = $(this.root).width();
 
-    this.container = $('<div class="butterfly-gird-canvas-warpper"></div>');
+    this.dom = $('<canvas class="butterfly-gird-canvas"></canvas>')[0];
+    $(this.dom).attr('width', this.canvasWidth);
+    $(this.dom).attr('height', this.canvasHeight);
 
-    this.gridCanvas = $('<canvas class="butterfly-gird-canvas"></canvas>')[0];
-    $(this.gridCanvas).attr('width', this.canvasWidth);
-    $(this.gridCanvas).attr('height', this.canvasHeight);
-    this.container.append(this.gridCanvas);
-
-    this.guideLineCanvas = $('<canvas class="butterfly-guideline-canvas"></canvas>')[0];
-    $(this.guideLineCanvas).attr('width', this.canvasWidth);
-    $(this.guideLineCanvas).attr('height', this.canvasHeight);
-    this.container.append(this.guideLineCanvas);
-
-    this.container.appendTo(this.root);
+    $(this.dom).appendTo(this.root);
 
     if (this.theme.shapeType === 'circle') {
       this.createCircle();
     } else if (this.theme.shapeType === 'line') {
       this.createLine();
     }
+    this.isActive = true;
   }
   createCircle() {
-    let _ctx = this.gridCanvas.getContext('2d');
+    let _ctx = this.dom.getContext('2d');
     _ctx.fillStyle = this.theme.circleColor || '#000';
     let _p = Math.PI * 2;
     let _gap = parseInt(this.theme.gap);
@@ -66,7 +59,7 @@ class GridService {
     _ctx.fill();
   }
   createLine() {
-    let _ctx = this.gridCanvas.getContext('2d');
+    let _ctx = this.dom.getContext('2d');
     _ctx.strokeStyle = this.theme.lineColor || '#000';
     _ctx.lineWidth = this.theme.lineWidth || 1;
     let _gap = parseInt(this.theme.gap);
@@ -164,7 +157,6 @@ class GridService {
 
     groups.forEach((_group) => {
       _justifyItem(_group, 'group');
-      // nodes也需要
       (_group.nodes || []).forEach((_node) => {
         _justifyItem(_node, 'node');
       });
@@ -175,7 +167,8 @@ class GridService {
     });
   }
   destroy() {
-
+    this.dom.remove();
+    this.isActive = false;
   }
 }
 
