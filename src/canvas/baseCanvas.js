@@ -12,6 +12,10 @@ const SelectCanvas = require('../utils/selectCanvas');
 const CoordinateService = require('../utils/coordinate');
 // scope的比较
 const ScopeCompare = require('../utils/scopeCompare');
+// 网格模式
+const GridService = require('../utils/girdService');
+// 辅助线模式
+const GuidelineService = require('../utils/guidelineService');
 
 require('./baseCanvas.less');
 
@@ -97,6 +101,18 @@ class BaseCanvas extends Canvas {
       canOffsetX: this._moveData[0],
       canOffsetY: this._moveData[1],
       scale: this._zoomData
+    });
+
+    // 网格布局
+    this._gridService = new GridService({
+      root: this.root,
+      canvas: this
+    });
+
+    // 辅助线
+    this._guidelineService = new GuidelineService({
+      root: this.root,
+      canvas: this
     });
 
     this._addEventLinster();
@@ -625,6 +641,7 @@ class BaseCanvas extends Canvas {
         this._coordinateService._changeCanvasInfo({
           scale: this._zoomData
         });
+        this._guidelineService.zoom(this._zoomData);
       };
     }
 
@@ -839,6 +856,7 @@ class BaseCanvas extends Canvas {
       canOffsetY: targetY,
       scale: 1
     });
+    this._guidelineService.clearCanvas();
   }
 
   zoom(param, callback) {
@@ -862,6 +880,7 @@ class BaseCanvas extends Canvas {
         this._coordinateService._changeCanvasInfo({
           scale: this._zoomData
         });
+        this._guidelineService.zoom(this._zoomData);
         $(this.warpper).css({
           transform: `scale(${this._zoomData})`
         });
@@ -878,6 +897,7 @@ class BaseCanvas extends Canvas {
       canOffsetX: position[0],
       canOffsetY: position[1]
     });
+    this._guidelineService.move(position[0], position[1]);
     this._moveData = position;
   }
 
@@ -917,6 +937,22 @@ class BaseCanvas extends Canvas {
       if (this._remarkZoom) {
         this.setZoomable(true);
       }
+    }
+  }
+
+  setGirdMode(flat = true, options) {
+    if (flat) {
+      this._gridService.create(options);
+    } else {
+      this._gridService.destroy();
+    }
+  }
+
+  setGiudeLine(flat = true, options) {
+    if (flat) {
+      this._guidelineService.create(options);
+    } else {
+      this._guidelineService.destroy();
     }
   }
 
@@ -966,6 +1002,10 @@ class BaseCanvas extends Canvas {
   }
   terminal2canvas(coordinates, options) {
     return this._coordinateService.terminal2canvas(coordinates, options);
+  }
+
+  justifyCoordinate() {
+    this._gridService.justifyAllCoordinate();
   }
 
   _genSvgWarpper() {
@@ -1212,6 +1252,9 @@ class BaseCanvas extends Canvas {
             $(this.warpper).css('display', 'none');
             moveNodes.forEach((node) => {
               this._moveNode(node, node.left + (canvasX - nodeOriginPos.x), node.top + (canvasY - nodeOriginPos.y));
+              if (this._guidelineService.isActive) {
+                this._guidelineService.draw(node, 'node');
+              }
             });
             $(this.svg).css('display', 'block');
             $(this.warpper).css('display', 'block');
@@ -1229,8 +1272,15 @@ class BaseCanvas extends Canvas {
             return;
           }
           if (this._dragNode) {
+            $(this.svg).css('display', 'none');
+            $(this.warpper).css('display', 'none');
             const group = this._dragNode;
             this._moveGroup(group, group.left + (canvasX - nodeOriginPos.x),  group.top + (canvasY - nodeOriginPos.y));
+            if (this._guidelineService.isActive) {
+              this._guidelineService.draw(group, 'group');
+            }
+            $(this.svg).css('display', 'block');
+            $(this.warpper).css('display', 'block');
             nodeOriginPos = {
               x: canvasX,
               y: canvasY
@@ -1655,6 +1705,7 @@ class BaseCanvas extends Canvas {
         x: 0,
         y: 0
       };
+      this._guidelineService.isActive && this._guidelineService.clearCanvas();
     };
 
 
@@ -1662,6 +1713,29 @@ class BaseCanvas extends Canvas {
     this.root.addEventListener('mousemove', mouseMoveEvent);
     // this.root.addEventListener('mouseout', mouseEndEvent);
     this.root.addEventListener('mouseup', mouseEndEvent);
+  }
+  _moveNode(node, x, y) {
+    node.moveTo(x, y);
+    this.edges.forEach((edge) => {
+      if (edge.type === 'endpoint') {
+        const isLink = _.find(node.endpoints, point => point.id === edge.sourceEndpoint.id || point.id === edge.targetEndpoint.id);
+        isLink && edge.redraw();
+      } else if (edge.type === 'node') {
+        const isLink = edge.sourceNode.id === node.id || edge.targetNode.id === node.id;
+        isLink && edge.redraw();
+      }
+    });
+  }
+  _moveGroup(group, x, y) {
+    group.moveTo(x, y);
+    this.edges.forEach((edge) => {
+      let hasUpdate = _.get(edge, 'sourceNode.group') === group.id ||
+        _.get(edge, 'targetNode.group') === group.id ||
+        (_.get(edge, '_sourceType') === 'group' && _.get(edge, 'sourceNode.id') === group.id) ||
+        (_.get(edge, '_targetType') === 'group' && _.get(edge, 'targetNode.id') === group.id);
+
+      hasUpdate && (edge.redraw());
+    });
   }
   _autoLayout(data) {
     const width = this._rootWidth;
