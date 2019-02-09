@@ -69,8 +69,8 @@ class AGroup extend Group {
 ```
 
 ## API文档
-* [画布(canvas)](https://github.com/alibaba/butterfly/docs/canvas.md)
-* [节点组(group)](https://github.com/alibaba/butterfly/docs/group.md)
-* [节点(node)](https://github.com/alibaba/butterfly/docs/node.md)
-* [线(edge)](https://github.com/alibaba/butterfly/docs/edge.md)
-* [锚点(endpoint)](https://github.com/alibaba/butterfly/docs/endpoint.md)
+* [画布(canvas)](https://github.com/alibaba/butterfly/blob/master/docs/canvas.md)
+* [节点组(group)](https://github.com/alibaba/butterfly/blob/master/docs/group.md)
+* [节点(node)](https://github.com/alibaba/butterfly/blob/master/docs/node.md)
+* [线(edge)](https://github.com/alibaba/butterfly/blob/master/docs/edge.md)
+* [锚点(endpoint)](https://github.com/alibaba/butterfly/blob/master/docs/endpoint.md)
