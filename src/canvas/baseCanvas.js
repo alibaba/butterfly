@@ -948,7 +948,7 @@ class BaseCanvas extends Canvas {
     }
   }
 
-  setGiudeLine(flat = true, options) {
+  setGuideLine(flat = true, options) {
     if (flat) {
       this._guidelineService.create(options);
     } else {
