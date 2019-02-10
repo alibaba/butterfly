@@ -8,12 +8,13 @@
 
 <div align="center">
   <h3>一个基于JS的数据驱动的节点式编排组件库</h3>
+  [![Build Status](https://dev.azure.com/noonnightstorm/butterfly/_apis/build/status/alibaba.butterfly?branchName=master)](https://dev.azure.com/noonnightstorm/butterfly/_build/latest?definitionId=1&branchName=master)
 </div>
 
 ## 特性
 * 开箱即用的参考[DEMO](https://noonnightstorm.github.io/)，可在线调试
-* 全方位管理全画布，开发者只需要更专注定制化的需求
-* 灵活性，可塑性，拓展性比较强
+* 全方位管理画布，开发者只需要更专注定制化的需求
+* 灵活性，可塑性，拓展性优秀
 
 ## 安装
 ```
