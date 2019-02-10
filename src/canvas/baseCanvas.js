@@ -46,7 +46,7 @@ class BaseCanvas extends Canvas {
 
     // 贯穿所有对象的配置
     this.global = _.get(options, 'global', {
-      isStrict: _.get(options, 'global.isStrict') // 是否为scope的严格模式
+      isScopeStrict: _.get(options, 'global.isScopeStrict') // 是否为scope的严格模式
     });
 
     // 放大缩小和平移的数值
@@ -232,7 +232,7 @@ class BaseCanvas extends Canvas {
       // 假如节点存在group，即放进对应的节点组里
       const existGroup = _nodeObj.group ? this.getGroup(_nodeObj.group) : null;
       if (existGroup) {
-        if (ScopeCompare(_nodeObj.scope, existGroup.scope, _.get(this, 'global.isStrict'))) {
+        if (ScopeCompare(_nodeObj.scope, existGroup.scope, _.get(this, 'global.isScopeStrict'))) {
           existGroup._appendNodes([_nodeObj]);
         } else {
           console.log(`nodeId为${_nodeObj.id}的节点和groupId${existGroup.id}的节点组scope值不符，无法加入`);
@@ -1481,7 +1481,7 @@ class BaseCanvas extends Canvas {
         // scope不同
         if (!isDestoryEdges) {
           isDestoryEdges = _.some(this._dragEdges, (edge) => {
-            return !ScopeCompare(edge.sourceEndpoint.scope, _targetEndpoint.scope, _.get(this, 'global.isStrict'));
+            return !ScopeCompare(edge.sourceEndpoint.scope, _targetEndpoint.scope, _.get(this, 'global.isScopeStrict'));
           });
         }
 
@@ -1627,7 +1627,7 @@ class BaseCanvas extends Canvas {
           });
 
           if (targetGroup) {
-            if (ScopeCompare(this._dragNode.scope, targetGroup.scope, _.get(this, 'global.isStrict'))) {
+            if (ScopeCompare(this._dragNode.scope, targetGroup.scope, _.get(this, 'global.isScopeStrict'))) {
               nodeData.top -= targetGroup.top;
               nodeData.left -= targetGroup.left;
               nodeData.group = targetGroup.id;
@@ -1649,7 +1649,7 @@ class BaseCanvas extends Canvas {
           this.addNode(rmNode, true);
           _updateNeighborEdge(rmNode, neighborEdges);
         } else if (targetGroup) {
-          if (ScopeCompare(this._dragNode.scope, targetGroup.scope, _.get(this, 'global.isStrict'))) {
+          if (ScopeCompare(this._dragNode.scope, targetGroup.scope, _.get(this, 'global.isScopeStrict'))) {
             const rmItem = this.removeNode(this._dragNode.id, true, true);
             const rmNode = rmItem.nodes[0];
             neighborEdges = rmItem.edges;
