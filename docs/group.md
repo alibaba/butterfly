@@ -9,18 +9,18 @@ class AGroup extends Group {
 }
 
 canvas.draw({
-  groups: {
+  groups: [{
     id: 'xxxx',
     top: 100,
     left: 100,
     Class: AGroup //设置基类之后，画布会根据自定义的类来渲染
-  },
+  }],
   nodes: ...
   edges: ...
 })
 ```
 
-### 属性
+## 属性
 
 | key | 说明 | 类型 | 默认值 
 | :------ | :------ | :------ | :------ 
@@ -30,11 +30,12 @@ canvas.draw({
 | width | 宽度 | number (Option) | - 
 | height | 高度 | number (Option) | - 
 | endpoints | 锚点信息 | array (Option) | - 
+| Class | 拓展类 | Class (Option) | 当传入拓展类的时候，该节点组则会按拓展类的draw方法进行渲染，拓展类的相关方法也会覆盖父类的方法
 | scope | 作用域 | boolean (Option) | 当node的scope和group的scope一致才能加入到节点组。默认不设置即可随意加入
 
 `* 节点的返回的dom必须设置position: absolute;`
 
-### 方法
+## 方法
 
 ```
 /**
@@ -94,4 +95,4 @@ emit = (string, obj) => {}
 on = (string, callback) => {}
 ```
 
-### 详细说明
+## 详细说明

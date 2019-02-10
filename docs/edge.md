@@ -1,6 +1,24 @@
 # 线(Edge)
 
-### 属性
+## 用法
+```
+canvas.draw({
+  edges: [{
+    source: 'point_1',
+    target: 'point_2',
+    sourceNode: 'node_1',
+    targetNode: 'node_2',
+    type: 'endpoint',
+    arrow: ture,
+    arrowPosition: 0.5,
+    label: 'I am label'   //这里也可以传dom，当然也可以拓展父类的drawLabel来自定义label
+  }],
+  groups: ...
+  nodes: ...
+})
+```
+
+## 属性
 | key | 说明 | 类型 | 默认值 
 | :------ | :------ | :------ | :------ 
 | id | 节点唯一标识 | string (Require) | - 
@@ -13,12 +31,13 @@
 | shapeType | 线条的类型 | string (Option) | Bezier/Flow/Straight
 | label | 线条上加注释 | string/dom (Option) | -
 | arrow | 线条上加箭头 | boolean (Option) | 默认false
+| Class | 拓展类 | Class (Option) | `一般来说已经满足需要了，因为逻辑较为复杂，不建议拓展线的基类。`当传入拓展类的时候，该节点组则会按拓展类的draw方法进行渲染，拓展类的相关方法也会覆盖父类的方法
 | arrowPosition | 箭头在线条的位置 | float (Option) | 0-1之间，默认0.5
 
 
 `* 设置 isExpandWidth 为 true 时，获取 eventHandlerDom 用于挂载事件`
 
-### 方法
+## 方法
 
 ```
 /**
@@ -56,5 +75,3 @@ emit = (string, obj) => {}
   */
 on = (string, callback) => {}
 ```
-
-### 详细说明
