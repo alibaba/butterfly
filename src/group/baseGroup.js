@@ -91,7 +91,7 @@ class BaseGroup extends Group {
   addNodes(nodes = []) {
     let _nodes = [];
     nodes.forEach((item) => {
-      if (ScopeCompare(item.scope, this.scope, _.get(this, '_global.isStrict'))) {
+      if (ScopeCompare(item.scope, this.scope, _.get(this, '_global.isScopeStrict'))) {
         _nodes.push(item);
       } else {
         console.log(`nodeId为${item.id}的节点和groupId${this.id}的节点组scope值不符，无法加入`);
