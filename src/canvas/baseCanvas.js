@@ -1262,6 +1262,13 @@ class BaseCanvas extends Canvas {
               x: canvasX,
               y: canvasY
             };
+            this.emit('system.node.move', {
+              nodes: moveNodes
+            });
+            this.emit('events', {
+              type: 'node:move',
+              nodes: moveNodes
+            });
           }
         } else if (this._dragType === 'group:drag') {
           if (nodeOriginPos.x === 0 && nodeOriginPos.y === 0) {
@@ -1285,6 +1292,13 @@ class BaseCanvas extends Canvas {
               x: canvasX,
               y: canvasY
             };
+            this.emit('system.group.move', {
+              group: group
+            });
+            this.emit('events', {
+              type: 'group:move',
+              group: group
+            });
           }
         } else if (this._dragType === 'endpoint:drag') {
 

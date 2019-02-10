@@ -2,30 +2,30 @@
 
 ```
 let canvas = new Canvas({
-  root: dom,              //canvas的根节点(必传)
-  layout: 'ForceLayout'   //布局设置(可传)
-  zoomable: true,         //可缩放(可传)
-  moveable: true,         //可平移(可传)
-  draggable: true,        //节点可拖动(可传)
-  linkable: true,         //节点可连接(可传)
-  disLinkable: true,      //节点可取消连接(可传)
-  theme: {                //主题定制(可传) 
+  root: dom,               //canvas的根节点(必传)
+  layout: 'ForceLayout'    //布局设置(可传)
+  zoomable: true,          //可缩放(可传)
+  moveable: true,          //可平移(可传)
+  draggable: true,         //节点可拖动(可传)
+  linkable: true,          //节点可连接(可传)
+  disLinkable: true,       //节点可取消连接(可传)
+  theme: {                 //主题定制(可传) 
     edge: {
-      type: 'Bezier',     //线条类型：贝塞尔曲线，折线，直线
-      Class: XXClass,     //自己拓展的class
+      type: 'Bezier',      //线条类型：贝塞尔曲线，折线，直线。分别为Bezier/Flow/Straight
+      Class: XXClass,      //自己拓展的class,拖动连线的时候会采用该拓展类
       isExpandWidth: false //增加线条交互区域
     },
     endpoint: {
-      position: []        //限制锚点位置['Top', 'Bottom', 'Left', 'Right']
+      position: []         //限制锚点位置['Top', 'Bottom', 'Left', 'Right']
     }
   },
-  global: {               //自定义配置，会贯穿所有canvas，group，node，edge，endpoint对象
-    isStrict: false       //scope是否为严格模式(默认为false)
+  global: {                //自定义配置，会贯穿所有canvas，group，node，edge，endpoint对象
+    isScopeStrict: false   //scope是否为严格模式(默认为false)
   }
 });
 ```
 
-### 属性：
+## 属性：
 
 | key | 说明 | 类型 | 默认值 
 | :------ | :------ | :------ | :------ 
@@ -37,7 +37,7 @@ let canvas = new Canvas({
 | linkable | 画布节点是否可连接 | boolean (Option) | false 
 | disLinkable | 画布节点是否可取消连接 | boolean (Option) | false 
 | theme | 画布主题 | object (Option) | undefined
-| global | 全局属性 | object (Option) | undefined
+| <a href="#global">global</a> | 全局属性 | object (Option) | undefined
 
 
 ### API：
@@ -206,6 +206,12 @@ justifyCoordinate = () => {}
   */
 setGuideLine = (show, options) => {}
 
+/**
+  * 屏幕转换为画布的坐标
+  * @param {array[number]} coordinates - 需要换算的坐标([x,y])
+  * @return {number} - 转换后的坐标
+  */
+terminal2canvas = (coordinates) => {}
 
 /**
   * 画布转换为屏幕的坐标
@@ -214,17 +220,10 @@ setGuideLine = (show, options) => {}
   */
 canvas2terminal = (coordinates) => {}
 
-/**
-  * 屏幕转换为画布的坐标
-  * @param {array[number]} coordinates - 需要换算的坐标([x,y])
-  * @return {number} - 转换后的坐标
-  */
-terminal2canvas = (coordinates) => {}
-
 ```
 
 
-### 事件
+## 事件
 
 ```
 let canvas = new Canvas({...});
@@ -250,4 +249,53 @@ canvas.on('type', (data) => {
 | system.drag.end | 拖动结束 | -
 
 
-### 详细说明
+## 详细说明
+
+### 属性说明
+
+#### <a name='global'>global</a>
+* **isScopeStrict**，用于设置全局scope严格模式
+ * 默认为false。假如该值设置为true，当scope必须完全一致才能匹配；假如该值为false，当scope为undefined时，都能匹配所有值。
+
+### 方法说明
+
+* **setGirdMode**，设置网格布局
+ * `show`，设置是否开启网格布局
+ * `options`，设置网格布局的参数，如下注释所示
+
+```
+this.canvas.setGirdMode(true, {
+  isAdsorb: false,         // 是否自动吸附,默认关闭
+  theme: {
+    shapeType: 'line',     // 展示的类型，支持line & circle
+    gap: 23,               // 网格间隙
+    adsorbGap: 8,          // 吸附间距
+    backgroud: '#fff',     // 网格背景颜色
+    lineColor: '#000',     // 网格线条颜色
+    lineWidth: 1,          // 网格粗细
+    circleRadiu: 1,        // 圆点半径
+    circleColor: '#000'    // 断电颜色
+  }
+});
+```
+
+* setGuideLine
+  * `show`，设置是否开启辅助线
+  * `options`，设置辅助线的参数，如下注释所示
+
+```
+this.canvas.setGuideLine(true, {
+  limit: 1,             // 限制辅助线条数
+  theme: {
+    lineColor: 'red',   // 网格线条颜色
+    lineWidth: 1,       // 网格粗细
+  }
+});
+```
+
+* **canvas2terminal**，屏幕转换为画布的坐标
+ * 如图所示，画布缩放，移动后的坐标和原来画布的坐标并不匹配，需要此方法来转换。特别注意：有拖动添加节点的用户们注意这两个`e.clientX`和`e.clientY`，需要调用此方法进行转换。
+<img width="400" src="http://img.alicdn.com/tfs/TB1lWIAFHvpK1RjSZPiXXbmwXXa-973-850.jpg">
+
+* **terminal2canvas**，画布转换屏幕为的坐标
+ * 与`canvas2terminal`的逆转转换
