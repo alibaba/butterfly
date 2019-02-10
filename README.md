@@ -6,9 +6,12 @@
 
 <h1 align="center">小蝴蝶</h1>
 
+<h3 align="center">一个基于JS的数据驱动的节点式编排组件库</h3>
+
 <div align="center">
-  <h3>一个基于JS的数据驱动的节点式编排组件库</h3>
-  [![Build Status](https://dev.azure.com/noonnightstorm/butterfly/_apis/build/status/alibaba.butterfly?branchName=master)](https://dev.azure.com/noonnightstorm/butterfly/_build/latest?definitionId=1&branchName=master)
+
+[![Build Status](https://dev.azure.com/noonnightstorm/butterfly/_apis/build/status/alibaba.butterfly?branchName=master)](https://dev.azure.com/noonnightstorm/butterfly/_build/latest?definitionId=1&branchName=master)
+
 </div>
 
 ## 特性
