@@ -34,10 +34,6 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-            
-      - run:
-         name: install-npm-webpack
-         command: npm install webpack -g
 
-      # run build
-      - run: webpack
+      # run compile
+      - run: npm run compile
