@@ -11,6 +11,7 @@
 <div align="center">
 
 [![Build Status](https://dev.azure.com/noonnightstorm/butterfly/_apis/build/status/alibaba.butterfly?branchName=master)](https://dev.azure.com/noonnightstorm/butterfly/_build/latest?definitionId=1&branchName=master)
+[![CircleCI](https://circleci.com/gh/alibaba/butterfly.svg?style=svg)](https://circleci.com/gh/alibaba/butterfly)
 
 </div>
 
