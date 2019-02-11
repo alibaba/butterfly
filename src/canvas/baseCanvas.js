@@ -1322,6 +1322,7 @@ class BaseCanvas extends Canvas {
                   sourceNode: point.nodeType === 'node' ? this.getNode(point.nodeId) : this.getGroup(point.nodeId),
                   sourceEndpoint: point,
                   arrow: this.theme.edge.arrow,
+                  isExpandWidth: this.theme.edge.isExpandWidth
                 };
                 let _newEdge = new EdgeClass(_.assign(pointObj, {
                   _global: this.global,
@@ -1529,6 +1530,7 @@ class BaseCanvas extends Canvas {
               targetEndpoint: _targetEndpoint,
               type: 'endpoint'
             });
+            edge.mounted();
             this.edges.push(edge);
             return edge;
           });
