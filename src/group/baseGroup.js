@@ -143,7 +143,7 @@ class BaseGroup extends Group {
         return;
       }
       event.preventDefault();
-      event.stopPropagation();
+      // event.stopPropagation();
       this._emit('InnerEvents', {
         type: 'group:resize',
         group: this
@@ -223,7 +223,7 @@ class BaseGroup extends Group {
         return;
       }
       e.preventDefault();
-      e.stopPropagation();
+      // e.stopPropagation();
       this._emit('InnerEvents', {
         type: 'group:dragBegin',
         data: this

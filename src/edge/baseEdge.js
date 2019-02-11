@@ -64,7 +64,7 @@ class Edge {
     }
     return path;
   }
-  calcPath(sourcePoint, targetPoint) {
+  _calcPath(sourcePoint, targetPoint) {
     if (!sourcePoint) {
       sourcePoint = {
         pos: [
@@ -89,7 +89,9 @@ class Edge {
       };
     }
     let path = '';
-    if (this.shapeType === 'Bezier') {
+    if (this.calcPath) {
+      path = this.calcPath(sourcePoint, targetPoint);
+    } else if (this.shapeType === 'Bezier') {
       path = DrawUtil.drawBezier(sourcePoint, targetPoint);
     } else if (this.shapeType === 'Straight') {
       path = DrawUtil.drawStraight(sourcePoint, targetPoint);
@@ -147,7 +149,7 @@ class Edge {
   }
   redraw(sourcePoint, targetPoint, options) {
     // 重新计算线条path
-    let path = this.calcPath(sourcePoint, targetPoint);
+    let path = this._calcPath(sourcePoint, targetPoint);
     this.dom.setAttribute('d', path);
     if (this.isExpandWidth) {
       this.eventHandlerDom.setAttribute('d', path);

@@ -170,7 +170,7 @@ class BaseNode extends Node {
           return;
         }
         e.preventDefault();
-        e.stopPropagation();
+        // e.stopPropagation();
         this._emit('InnerEvents', {
           type: 'node:dragBegin',
           data: this

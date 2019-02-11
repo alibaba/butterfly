@@ -3,7 +3,7 @@
 ```
 let canvas = new Canvas({
   root: dom,               //canvas的根节点(必传)
-  layout: 'ForceLayout'    //布局设置(可传)
+  layout: 'ForceLayout'    //布局设置(可传)，可使用集成的，也可自定义布局
   zoomable: true,          //可缩放(可传)
   moveable: true,          //可平移(可传)
   draggable: true,         //节点可拖动(可传)
@@ -30,7 +30,7 @@ let canvas = new Canvas({
 | key | 说明 | 类型 | 默认值 
 | :------ | :------ | :------ | :------ 
 | root | 渲染画布的跟节点 | Dom (Require) | `*这个dom必须设置position:relative`
-| layout | 自动布局 | string (Option) | null 
+| <a href='#layout'>layout</a> | 自动布局 | string/function (Option) | null 
 | zoomable | 画布是否可缩放 | boolean (Option) | false 
 | moveable | 画布是否可移动 | boolean (Option) | false 
 | draggable | 画布节点是否可拖动 | boolean (Option) | false 
@@ -256,6 +256,24 @@ canvas.on('type', (data) => {
 #### <a name='global'>global</a>
 * **isScopeStrict**，用于设置全局scope严格模式
  * 默认为false。假如该值设置为true，当scope必须完全一致才能匹配；假如该值为false，当scope为undefined时，都能匹配所有值。
+
+#### <a name='layout'>layout</a>
+* **重力布局**，传入`'ForceLayout'`即可，小蝴蝶内置布局
+* **自定义布局**，传入一个方法，里面可以按照用户需求进行布局。注:`除此之外，记得把Edge的calcPath的方法复写掉，不然会由小蝴蝶的内置计算线段的方法代替，无法实现所得的线段`
+
+```
+let canvas = new Canvas({
+  layout: (opts) => {
+    // 画布长宽
+    let width = opts.width;
+    let height = opts. height;
+    // 即将渲染的节点，节点组，以及线段数据
+    let data = opts.data;
+    // 布局逻辑，把节点，节点组的left和top值赋值即可
+    ......
+  }
+})
+```
 
 ### 方法说明
 
