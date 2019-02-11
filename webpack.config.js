@@ -1,6 +1,10 @@
 let webpack = require('webpack');
 
 module.exports = {
+  mode: 'production',
+  performance: {
+    hints: false
+  },
   entry: './index.js',
   output: {
     path: __dirname,
