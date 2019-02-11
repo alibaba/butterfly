@@ -1197,6 +1197,10 @@ class BaseCanvas extends Canvas {
 
       this.emit('system.drag.start', {
         dragType: this._dragType,
+        dragNode: this._dragNode,
+        dragEndpoint: this._dragEndpoint,
+        dragEdges: this._dragEdges,
+        dragGroup: this._dragGroup,
         position: {
           clientX: event.clientX,
           clientY: event.clientY,
@@ -1207,6 +1211,10 @@ class BaseCanvas extends Canvas {
       this.emit('events', {
         type: 'drag:start',
         dragType: this._dragType,
+        dragNode: this._dragNode,
+        dragEndpoint: this._dragEndpoint,
+        dragEdges: this._dragEdges,
+        dragGroup: this._dragGroup,
         position: {
           clientX: event.clientX,
           clientY: event.clientY,
@@ -1701,11 +1709,19 @@ class BaseCanvas extends Canvas {
       }
 
       this.emit('system.drag.end', {
-        dragType: this._dragType
+        dragType: this._dragType,
+        dragNode: this._dragNode,
+        dragEndpoint: this._dragEndpoint,
+        dragEdges: this._dragEdges,
+        dragGroup: this._dragGroup,
       });
       this.emit('events', {
         type: 'drag:end',
-        dragType: this._dragType
+        dragType: this._dragType,
+        dragNode: this._dragNode,
+        dragEndpoint: this._dragEndpoint,
+        dragEdges: this._dragEdges,
+        dragGroup: this._dragGroup,
       });
 
       this._dragType = null;
