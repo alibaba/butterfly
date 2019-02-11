@@ -856,7 +856,7 @@ class BaseCanvas extends Canvas {
       canOffsetY: targetY,
       scale: 1
     });
-    this._guidelineService.clearCanvas();
+    this._guidelineService.isActive && this._guidelineService.clearCanvas();
   }
 
   zoom(param, callback) {
@@ -897,7 +897,7 @@ class BaseCanvas extends Canvas {
       canOffsetX: position[0],
       canOffsetY: position[1]
     });
-    this._guidelineService.move(position[0], position[1]);
+    this._guidelineService.isActive && this._guidelineService.move(position[0], position[1]);
     this._moveData = position;
   }
 

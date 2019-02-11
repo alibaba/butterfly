@@ -205,7 +205,7 @@ class GuidelineService {
     this.clearCanvas();
   }
   clearCanvas() {
-    this.cxt.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+    this.cxt && this.cxt.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
   }
   destroy() {
     $(this.dom).destroy();
