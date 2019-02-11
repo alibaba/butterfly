@@ -1755,45 +1755,55 @@ class BaseCanvas extends Canvas {
     const width = this._rootWidth;
     const height = this._rootHeight;
 
-    const _opts = $.extend({
-      // 布局画布总宽度
-      width,
-      // 布局画布总长度
-      height,
-      // 布局相对中心点
-      center: {
-        x: width / 2,
-        y: height / 2
-      },
-      // 节点互斥力，像电荷原理一样
-      chargeStrength: -150,
-      link: {
-        // 以node的什么字段为寻找id，跟d3原理一样
-        id: 'id',
-        // 线条的距离
-        distance: 200,
-        // 线条的粗细
-        strength: 1
-      }
-    }, _.get(this.layout, 'options'), true);
-
-    // 自动布局
-    if (_.get(this.layout, 'type') === 'forceLayout') {
-      Layout.forceLayout({
-        opts: _opts,
-        data: {
-          groups: data.groups,
-          nodes: data.nodes,
-          // 加工线条数据，兼容endpoint为id的属性，d3没这个概念
-          edges: data.edges.map(item => ({
-            source: item.type === 'endpoint' ? item.sourceNodeCode : item.source,
-            target: item.type === 'endpoint' ? item.targetNodeCode : item.target
-          }))
-        }
+    if (_.isFunction(this.layout)) {
+      this.layout({
+        width: width,
+        height: height,
+        data: data
       });
+    } else {
+      // 重力布局
+      if (_.get(this.layout, 'type') === 'forceLayout') {
+        const _opts = $.extend({
+          // 布局画布总宽度
+          width,
+          // 布局画布总长度
+          height,
+          // 布局相对中心点
+          center: {
+            x: width / 2,
+            y: height / 2
+          },
+          // 节点互斥力，像电荷原理一样
+          chargeStrength: -150,
+          link: {
+            // 以node的什么字段为寻找id，跟d3原理一样
+            id: 'id',
+            // 线条的距离
+            distance: 200,
+            // 线条的粗细
+            strength: 1
+          }
+        }, _.get(this.layout, 'options'), true);
+    
+        // 自动布局
+        if (_.get(this.layout, 'type') === 'forceLayout') {
+          Layout.forceLayout({
+            opts: _opts,
+            data: {
+              groups: data.groups,
+              nodes: data.nodes,
+              // 加工线条数据，兼容endpoint为id的属性，d3没这个概念
+              edges: data.edges.map(item => ({
+                source: item.type === 'endpoint' ? item.sourceNodeCode : item.source,
+                target: item.type === 'endpoint' ? item.targetNodeCode : item.target
+              }))
+            }
+          });
+        }
+      }
     }
   }
-
   _selectMytiplyItem(range) {
     // 确认一下终端的偏移值
     const startX = this._coordinateService._terminal2canvas('x', range[0]);
