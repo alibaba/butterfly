@@ -117,11 +117,13 @@ class BaseCanvas extends Canvas {
 
     this._addEventLinster();
 
-    this.unionItem = {
-      nodes: [],
-      edges: [],
-      groups: [],
-      endpoints: []
+    this._unionData = {
+      __system: {
+        nodes: [],
+        edges: [],
+        groups: [],
+        endpoints: []
+      }
     };
   }
 
@@ -922,7 +924,7 @@ class BaseCanvas extends Canvas {
   setSelectMode(flat = true, type = ['node']) {
     if (flat) {
       this.isSelectMode = true;
-      this.clearUnion();
+      this._rmSystemUnion();
       this.selecModel = type;
       this.canvasWarpper.active();
       this._remarkMove = this.moveable;
@@ -958,45 +960,101 @@ class BaseCanvas extends Canvas {
     }
   }
 
-  add2Union(obj) {
-    let data = obj.data;
-    if (!data) {
+  getUnion(name) {
+    if (!name) {
+      console.error('传入正确的name');
       return;
     }
-    data = [].concat(data);
-    data.filter((item) => {
-      return !!item;
-    }).forEach((item) => {
-      let isId = _.isString(item);
-      switch (obj.type) {
-        case 'node':
-          let node = isId ? this.getNode(item) : item;
-          node && (this.unionItem.nodes.push(node));
-          break;
-        case 'group':
-          let group = isId ? this.getGroup(item) : item;
-          group && (this.unionItem.groups.push(group));
-          break;
-        case 'edge':
-          let edge = isId ? this.getEdge(item) : item;
-          edge && (this.unionItem.edges.push(edge));
-          break;
-        case 'endpoint':
-          this.unionItem.endpoints.push(item);
-          break;
+    return this._unionData[name];
+  }
+
+  getAllUnion() {
+    return this._unionData;
+  }
+
+  add2Union(name, obj) {
+    if (!name || !obj) {
+      return;
+    }
+
+    if (!this._unionData[name]) {
+      this._unionData[name] = {
+        nodes: [],
+        groups : [],
+        edges: [],
+        endpoints: []
       }
-    });
+    }
+
+    let _data = this._unionData[name];
+    if (obj.nodes) {
+      obj.nodes.forEach((item) => {
+        let isId = _.isString(item);
+        let node = isId ? this.getNode(item) : item;
+        _data.nodes.push(node);
+      });
+      _data.nodes = _.uniqBy(_data.nodes, 'id');
+    }
+
+    if (obj.groups) {
+      obj.groups.forEach((item) => {
+        let isId = _.isString(item);
+        let group = isId ? this.getGroup(item) : item;
+        _data.groups.push(group);
+      });
+      _data.groups = _.uniqBy(_data.groups, 'id');
+    }
+
+    if (obj.edges) {
+      obj.edges.forEach((item) => {
+        let isId = _.isString(item);
+        let edge = isId ? this.getEdge(item) : item;
+        _data.edges.push(edge);
+      });
+      _data.edges = _.uniqBy(_data.edges, 'id');
+    }
+
+    if (obj.endpoints) {
+      _data.endpoints = _data.endpoints.concat(obj.endpoints);
+    }
   }
 
-  rmFromUnion(obj) {
-
+  removeUnion(name) {
+    this._unionData[name] = {
+      nodes: [],
+      edges: [],
+      groups: [],
+      endpoints: []
+    };
   }
 
-  clearUnion() {
-    this.unionItem.nodes = [];
-    this.unionItem.edges = [];
-    this.unionItem.groups = [];
-    this.unionItem.endpoints = [];
+  removeAllUnion() {
+    this._unionData = {
+      __system: {
+        nodes: [],
+        edges: [],
+        groups: [],
+        endpoints: []
+      }
+    };
+  }
+
+  _rmSystemUnion() {
+    this._unionData['__system'].nodes = [];
+    this._unionData['__system'].edges = [];
+    this._unionData['__system'].groups = [];
+    this._unionData['__system'].endpoints = [];
+  }
+
+  _findUnion(type, item) {
+    for (let key in this._unionData) {
+      let isExist = _.find(_.get(this._unionData, [key, type], []), (_item) => {
+        return _.toString(_item.id)  === _.toString(item.id);
+      });
+      if (isExist) {
+        return key;
+      }
+    }
   }
 
   canvas2terminal(coordinates, options) {
@@ -1071,7 +1129,7 @@ class BaseCanvas extends Canvas {
       } else if (data.type === 'multiple:select') {
         const result = this._selectMytiplyItem(data.range);
         // 把框选的加到union的数组
-        _.assign(this.unionItem, this.selectItem);
+        _.assign(this._unionData['__system'], this.selectItem);
 
         this.emit('system.multiple.select', {
           data: result
@@ -1252,11 +1310,11 @@ class BaseCanvas extends Canvas {
           }
           if (this._dragNode) {
             let moveNodes = [this._dragNode];
-            const isUnion = _.find(this.unionItem.nodes, _node => _node.id === this._dragNode.id);
-            if (isUnion) {
-              moveNodes = this.unionItem.nodes;
+            const unionKey = this._findUnion('nodes', this._dragNode);
+            if (unionKey) {
+              moveNodes = this._unionData[unionKey].nodes;
             } else {
-              this.clearUnion();
+              this._rmSystemUnion();
             }
             $(this.svg).css('display', 'none');
             $(this.warpper).css('display', 'none');
@@ -1316,14 +1374,12 @@ class BaseCanvas extends Canvas {
           const endY = this._coordinateService._terminal2canvas('y', event.clientY);
 
           if (this._dragEndpoint.type === 'source') {
-            let isUnion = !!_.find(this.unionItem.endpoints || [], (item) => {
-              return item.id === this._dragEndpoint.id;
-            });
-  
+            let unionKey = this._findUnion('endpoints', this._dragEndpoint);
+            
             let edges = [];
             if (!this._dragEdges || this._dragEdges.length === 0) {
               const EdgeClass = this.theme.edge.Class;
-              let endpoints = isUnion ? this.unionItem.endpoints : [this._dragEndpoint];
+              let endpoints = unionKey ? this._unionData[unionKey].endpoints : [this._dragEndpoint];
               endpoints.forEach((point) => {
                 let pointObj = {
                   shapeType: this.theme.edge.type,

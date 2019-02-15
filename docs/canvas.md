@@ -177,6 +177,35 @@ move = (postion) => {}
 zoom = (postion) => {}
 
 /**
+  * 获取聚合组
+  * @param {name} string  - 聚合组的名称
+  */
+getUnion = (name) => {}
+
+/**
+  * 获取所有聚合组
+  */
+getAllUnion = () => {}
+
+/**
+  * 添加聚合组 || 添加聚合组元素
+  * @param {name} string  - 聚合组的名称
+  * @param {obj} object  - 聚合组的元素
+  */
+add2Union = (name, obj) => {}
+
+/**
+  * 去除聚合组
+  * @param {name} string  - 聚合组的名称
+  */
+removeUnion = (name) => {}
+
+/**
+  * 去除所有聚合组
+  */
+removeAllUnion = () => {}
+
+/**
   * 发送事件
   */
 emit = (string, obj) => {}
@@ -297,7 +326,7 @@ this.canvas.setGirdMode(true, {
 });
 ```
 
-* setGuideLine
+* **setGuideLine**
   * `show`，设置是否开启辅助线
   * `options`，设置辅助线的参数，如下注释所示
 
@@ -311,9 +340,23 @@ this.canvas.setGuideLine(true, {
 });
 ```
 
+* **add2Union**
+  * `name`，聚合组名称。假如不存在，则添加聚合组；假如已存在，则添加聚合组元素
+  * `object`，聚合组的元素
+
+```
+this.canvas.add2Union('我的聚合组', {
+  nodes: []     // Node对象或者nodeId
+  groups: []    // Group对象或者groupId
+  edges: []     // Edge对象或者edgeId
+  endpoints: [] // Endpoint对象
+});
+```
+
 * **canvas2terminal**，屏幕转换为画布的坐标
  * 如图所示，画布缩放，移动后的坐标和原来画布的坐标并不匹配，需要此方法来转换。特别注意：有拖动添加节点的用户们注意这两个`e.clientX`和`e.clientY`，需要调用此方法进行转换。
 <img width="400" src="http://img.alicdn.com/tfs/TB1lWIAFHvpK1RjSZPiXXbmwXXa-973-850.jpg">
 
 * **terminal2canvas**，画布转换屏幕为的坐标
  * 与`canvas2terminal`的逆转转换
+ 
