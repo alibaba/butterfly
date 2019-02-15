@@ -420,10 +420,12 @@ class BaseCanvas extends Canvas {
       let _targetPoint = {};
       if (link.type === 'endpoint') {
         _soucePoint = {
-          pos: [link.sourceEndpoint._posLeft + link.sourceEndpoint._width / 2, link.sourceEndpoint._posTop + link.sourceEndpoint._height / 2]
+          pos: [link.sourceEndpoint._posLeft + link.sourceEndpoint._width / 2, link.sourceEndpoint._posTop + link.sourceEndpoint._height / 2],
+          orientation: link.sourceEndpoint.orientation ? link.sourceEndpoint.orientation : undefined
         };
         _targetPoint = {
-          pos: [link.targetEndpoint._posLeft + link.targetEndpoint._width / 2, link.targetEndpoint._posTop + link.targetEndpoint._height / 2]
+          pos: [link.targetEndpoint._posLeft + link.targetEndpoint._width / 2, link.targetEndpoint._posTop + link.targetEndpoint._height / 2],
+          orientation: link.targetEndpoint.orientation ? link.targetEndpoint.orientation : undefined
         };
       } else if (link.type === 'node') {
         _soucePoint = {

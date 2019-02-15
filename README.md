@@ -1,10 +1,8 @@
 <p align="center">
   <a href="http://noonnightstorm.github.io">
-    <img width="200" src="http://img.alicdn.com/tfs/TB1cHHLFMDqK1RjSZSyXXaxEVXa-116-88.png">
+    <img width="600" src="http://img.alicdn.com/tfs/TB1_Ui8GPDpK1RjSZFrXXa78VXa-900-540.png">
   </a>
 </p>
-
-<h1 align="center">小蝴蝶</h1>
 
 <h3 align="center">一个基于JS的数据驱动的节点式编排组件库</h3>
 
