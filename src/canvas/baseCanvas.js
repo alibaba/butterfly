@@ -1596,7 +1596,7 @@ class BaseCanvas extends Canvas {
               targetEndpoint: _targetEndpoint,
               type: 'endpoint'
             });
-            edge.mounted();
+            edge.mounted && edge.mounted();
             this.edges.push(edge);
             return edge;
           });
