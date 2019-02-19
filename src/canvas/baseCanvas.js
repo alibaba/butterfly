@@ -263,7 +263,7 @@ class BaseCanvas extends Canvas {
   }
 
   addEdges(links) {
-    $(this.svg).css('display', 'none');
+    $(this.svg).css('visibility', 'hidden');
 
     const _edgeFragment = document.createDocumentFragment();
     const _labelFragment = document.createDocumentFragment();
@@ -441,7 +441,7 @@ class BaseCanvas extends Canvas {
       link.redraw(_soucePoint, _targetPoint);
     });
 
-    $(this.svg).css('display', 'block');
+    $(this.svg).css('visibility', 'visible');
     return result;
   }
 
@@ -1316,16 +1316,16 @@ class BaseCanvas extends Canvas {
             } else {
               this._rmSystemUnion();
             }
-            $(this.svg).css('display', 'none');
-            $(this.warpper).css('display', 'none');
+            $(this.svg).css('visibility', 'hidden');
+            $(this.warpper).css('visibility', 'hidden');
             moveNodes.forEach((node) => {
               this._moveNode(node, node.left + (canvasX - nodeOriginPos.x), node.top + (canvasY - nodeOriginPos.y));
               if (this._guidelineService.isActive) {
                 this._guidelineService.draw(node, 'node');
               }
             });
-            $(this.svg).css('display', 'block');
-            $(this.warpper).css('display', 'block');
+            $(this.svg).css('visibility', 'visible');
+            $(this.warpper).css('visibility', 'visible');
             nodeOriginPos = {
               x: canvasX,
               y: canvasY
@@ -1347,15 +1347,15 @@ class BaseCanvas extends Canvas {
             return;
           }
           if (this._dragNode) {
-            $(this.svg).css('display', 'none');
-            $(this.warpper).css('display', 'none');
+            $(this.svg).css('visibility', 'hidden');
+            $(this.warpper).css('visibility', 'hidden');
             const group = this._dragNode;
             this._moveGroup(group, group.left + (canvasX - nodeOriginPos.x),  group.top + (canvasY - nodeOriginPos.y));
             if (this._guidelineService.isActive) {
               this._guidelineService.draw(group, 'group');
             }
-            $(this.svg).css('display', 'block');
-            $(this.warpper).css('display', 'block');
+            $(this.svg).css('visibility', 'visible');
+            $(this.warpper).css('visibility', 'visible');
             nodeOriginPos = {
               x: canvasX,
               y: canvasY
@@ -1410,8 +1410,8 @@ class BaseCanvas extends Canvas {
               edges = this._dragEdges;
             }
   
-            $(this.svg).css('display', 'none');
-            $(this.warpper).css('display', 'none');
+            $(this.svg).css('visibility', 'hidden');
+            $(this.warpper).css('visibility', 'hidden');
             edges.forEach((edge) => {
               let beginX =  edge.sourceEndpoint._posLeft + edge.sourceEndpoint._width / 2;
               let beginY = edge.sourceEndpoint._posTop + edge.sourceEndpoint._height / 2;
@@ -1424,8 +1424,8 @@ class BaseCanvas extends Canvas {
               };
               edge.redraw(_soucePoint, _targetPoint);
             });
-            $(this.svg).css('display', 'block');
-            $(this.warpper).css('display', 'block');
+            $(this.svg).css('visibility', 'visible');
+            $(this.warpper).css('visibility', 'visible');
   
             this.emit('system.drag.move', {
               dragType: this._dragType,
@@ -1745,6 +1745,8 @@ class BaseCanvas extends Canvas {
         neighborEdges.forEach((item) => {
           item.redraw();
         });
+
+        this._dragNode._isMoving = false;
       }
 
       // 节点组放大缩小
