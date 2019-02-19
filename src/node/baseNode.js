@@ -21,6 +21,8 @@ class BaseNode extends Node {
     // endpoint 这部分需要考虑
     this.endpoints = [];
     this._endpointsData = opts.endpoints;
+    // 标识是否在移动做，兼容冒泡
+    this._isMoving = false;
   }
 
   draw(obj) {
@@ -171,6 +173,7 @@ class BaseNode extends Node {
         }
         e.preventDefault();
         // e.stopPropagation();
+        this._isMoving = true;
         this._emit('InnerEvents', {
           type: 'node:dragBegin',
           data: this

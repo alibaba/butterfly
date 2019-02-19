@@ -218,6 +218,15 @@ class BaseGroup extends Group {
       });
     });
     $(this.dom).on('mousedown', (e) => {
+
+      // 兼容节点冒泡上来的事件
+      let isChildNodeMoving = _.some(this.nodes, (item) => {
+        return item._isMoving;
+      });
+      if (isChildNodeMoving) {
+        return;
+      }
+
       const LEFT_KEY = 0;
       if (e.button !== LEFT_KEY) {
         return;
