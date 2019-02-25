@@ -1065,10 +1065,10 @@ class BaseCanvas extends Canvas {
     return this._coordinateService.terminal2canvas(coordinates, options);
   }
 
-  save2img(type, quality = 1.0) {
+  save2img(options) {
     let method = 'toPng';
 
-    switch (type) {
+    switch (options.type) {
       case 'jpeg':
       case '.jpeg':
         method = 'toJpeg';
@@ -1083,7 +1083,7 @@ class BaseCanvas extends Canvas {
         break;
     }
 
-    return domtoimage[method](this.root, { quality: quality })
+    return domtoimage[method](this.root, options)
           .then(function (dataUrl) {
             return dataUrl;
           })
