@@ -1047,14 +1047,16 @@ class BaseCanvas extends Canvas {
   }
 
   _findUnion(type, item) {
+    let result = [];
     for (let key in this._unionData) {
       let isExist = _.find(_.get(this._unionData, [key, type], []), (_item) => {
         return _.toString(_item.id)  === _.toString(item.id);
       });
       if (isExist) {
-        return key;
+        result.push(key);
       }
     }
+    return result;
   }
 
   canvas2terminal(coordinates, options) {
@@ -1310,9 +1312,12 @@ class BaseCanvas extends Canvas {
           }
           if (this._dragNode) {
             let moveNodes = [this._dragNode];
-            const unionKey = this._findUnion('nodes', this._dragNode);
-            if (unionKey) {
-              moveNodes = this._unionData[unionKey].nodes;
+            const unionKeys = this._findUnion('nodes', this._dragNode);
+            if (unionKeys && unionKeys.length > 0) {
+              unionKeys.forEach((key) => {
+                moveNodes = moveNodes.concat(this._unionData[key].nodes);
+              });
+              moveNodes = _.uniqBy(moveNodes, 'id');
             } else {
               this._rmSystemUnion();
             }
@@ -1374,12 +1379,20 @@ class BaseCanvas extends Canvas {
           const endY = this._coordinateService._terminal2canvas('y', event.clientY);
 
           if (this._dragEndpoint.type === 'source') {
-            let unionKey = this._findUnion('endpoints', this._dragEndpoint);
+            let unionKeys = this._findUnion('endpoints', this._dragEndpoint);
             
             let edges = [];
             if (!this._dragEdges || this._dragEdges.length === 0) {
               const EdgeClass = this.theme.edge.Class;
-              let endpoints = unionKey ? this._unionData[unionKey].endpoints : [this._dragEndpoint];
+              let endpoints = [];
+              if (unionKeys && unionKeys.length > 0) {
+                unionKeys.forEach((key) => {
+                  endpoints = endpoints.concat(this._unionData[key].endpoints);
+                });
+                endpoints = _.uniqBy(endpoints, 'id');
+              } else {
+                endpoints = [this._dragEndpoint];
+              }
               endpoints.forEach((point) => {
                 let pointObj = {
                   shapeType: this.theme.edge.type,

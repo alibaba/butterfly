@@ -62,7 +62,7 @@ class BaseNode extends Node {
       _on: this._on,
       _emit: this._emit,
       _node: this,
-      _global: this.global,
+      _global: this.global
     }, obj));
 
     this._emit('InnerEvents', {
