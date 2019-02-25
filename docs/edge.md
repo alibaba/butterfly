@@ -49,6 +49,10 @@ draw = () => {}
   */
 mounted = () => {}
 /**
+  * @return {boolean} - 可以自定义复杂的连接条件
+  */
+isConnect = () => {}
+/**
   * 线条重绘后的回调
   */
 updated = () => {}

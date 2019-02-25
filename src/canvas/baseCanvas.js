@@ -1213,10 +1213,14 @@ class BaseCanvas extends Canvas {
   }
 
   _addEndpoint(endpoint, type, isInited) {
-    endpoint._init({
+    let initOtps = {
       nodeType: type,
       _coordinateService: this._coordinateService
-    });
+    };
+    if (endpoint.type === 'target') {
+      initOtps._disLinkable = endpoint._disLinkable !== undefined ? endpoint._disLinkable : this.disLinkable;
+    }
+    endpoint._init(initOtps);
 
     // 非自定义dom，自定义dom不需要定位
     if (!endpoint._isInitedDom) {
@@ -1609,6 +1613,12 @@ class BaseCanvas extends Canvas {
               targetEndpoint: _targetEndpoint,
               type: 'endpoint'
             });
+            let _isConnect = edge.isConnect ? edge.isConnect() : true;
+            if (!_isConnect) {
+              console.log(`id为${edge.sourceEndpoint.id}-${_targetEndpoint.id}的线条无法连接，请检查`);
+              edge.destroy();
+              return false;
+            }
             edge.mounted && edge.mounted();
             this.edges.push(edge);
             return edge;
