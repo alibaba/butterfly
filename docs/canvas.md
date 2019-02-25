@@ -249,6 +249,14 @@ terminal2canvas = (coordinates) => {}
   */
 canvas2terminal = (coordinates) => {}
 
+/**
+  * 画布保存为图片
+  * @param {string} type - 图片格式(png/jpeg/svg,默认png)
+  * @param {float} quality - 0-1之间
+  * @return {Promise}
+  */
+save2img = (type, quality = 1.0) => {}
+
 ```
 
 
@@ -360,3 +368,16 @@ this.canvas.add2Union('我的聚合组', {
 * **terminal2canvas**，画布转换屏幕为的坐标
  * 与`canvas2terminal`的逆转转换
  
+* **save2img**，画布保存为图片
+ * `type`，图片类型
+ * `quality`，图片质量
+
+```
+this.canvas.save2img('png', 1)
+  .then(dataUrl => {
+    var link = document.createElement('a');
+    link.download = 'XXX.png';
+    link.href = dataUrl;
+    link.click();
+  });
+```
