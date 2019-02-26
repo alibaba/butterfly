@@ -2,6 +2,7 @@
 
 const $ = require('jquery');
 const _ = require('lodash');
+const domtoimage = require('dom-to-image');
 const Canvas = require('../interface/canvas');
 const Node = require('../node/baseNode');
 const Edge = require('../edge/baseEdge');
@@ -305,7 +306,7 @@ class BaseCanvas extends Canvas {
           console.log(`butterflies error: can not connect edge. link sourceNodeId:${link.sourceNode};link targetNodeId:${link.targetNode}`);
           return;
         }
-        
+
         const sourceEndpoint = sourceNode.getEndpoint(link.source);
         const targetEndpoint = targetNode.getEndpoint(link.target);
 
@@ -340,7 +341,7 @@ class BaseCanvas extends Canvas {
           label: link.label,
           shapeType: link.shapeType || this.theme.edge.type,
           orientationLimit: this.theme.endpoint.position,
-          isExpandWidth: this.theme.edge.isExpandWidth, 
+          isExpandWidth: this.theme.edge.isExpandWidth,
           sourceNode,
           targetNode,
           sourceEndpoint,
@@ -396,7 +397,7 @@ class BaseCanvas extends Canvas {
           _emit: this.emit.bind(this),
         });
         edge._init();
-          
+
         _edgeFragment.appendChild(edge.dom);
 
         if (edge.labelDom) {
@@ -491,7 +492,7 @@ class BaseCanvas extends Canvas {
         nodes: [_rmNodes[0]],
         edges: neighborEdges,
       };
-    } 
+    }
     return {
       nodes: [],
       edges: []
@@ -525,10 +526,10 @@ class BaseCanvas extends Canvas {
               _.get(_edge, 'sourceEndpoint.id') === _.get(item, 'sourceEndpoint.id') &&
               _.get(_edge, 'sourceEndpoint.nodeType') === _.get(item, 'sourceEndpoint.nodeType')
             ) && (
-              _.get(_edge, 'targetNode.id') === _.get(item, 'targetNode.id') &&
-              _.get(_edge, 'targetEndpoint.id') === _.get(item, 'targetEndpoint.id') &&
-              _.get(_edge, 'targetEndpoint.nodeType') === _.get(item, 'targetEndpoint.nodeType')
-            );
+                _.get(_edge, 'targetNode.id') === _.get(item, 'targetNode.id') &&
+                _.get(_edge, 'targetEndpoint.id') === _.get(item, 'targetEndpoint.id') &&
+                _.get(_edge, 'targetEndpoint.nodeType') === _.get(item, 'targetEndpoint.nodeType')
+              );
           }
         });
       } else if (_.isString(_edge)) {
@@ -627,7 +628,7 @@ class BaseCanvas extends Canvas {
         event.preventDefault();
         const deltaY = event.deltaY;
         this._zoomData += deltaY * 0.01;
-  
+
         if (this._zoomData < 0.25) {
           this._zoomData = 0.25;
           return;
@@ -635,7 +636,7 @@ class BaseCanvas extends Canvas {
           this._zoomData = 5;
           return;
         }
-  
+
         const platform = ['webkit', 'moz', 'ms', 'o'];
         const scale = `scale(${this._zoomData})`;
         for (let i = 0; i < platform.length; i++) {
@@ -845,14 +846,14 @@ class BaseCanvas extends Canvas {
     const targetX = containerW / 2 - left;
 
     const time = 500;
-    
+
     // animate不支持scale，使用setInterval自己实现
     $(this.warpper).animate({
       top: targetY,
       left: targetX,
     }, time);
     this._moveData = [targetX, targetY];
-    
+
     this.zoom(1, callback);
 
     this._coordinateService._changeCanvasInfo({
@@ -1066,6 +1067,33 @@ class BaseCanvas extends Canvas {
     return this._coordinateService.terminal2canvas(coordinates, options);
   }
 
+  save2img(options) {
+    let method = 'toPng';
+
+    switch (options.type) {
+      case 'jpeg':
+      case '.jpeg':
+        method = 'toJpeg';
+        break;
+      case 'png':
+      case '.png':
+        method = 'toPng';
+        break;
+      case 'svg':
+      case '.svg':
+        method = 'toSvg';
+        break;
+    }
+
+    return domtoimage[method](this.root, options)
+          .then(function (dataUrl) {
+            return dataUrl;
+          })
+          .catch(function (error) {
+            console.error('oops, something went wrong!', error);
+          });
+  }
+
   justifyCoordinate() {
     this._gridService.justifyAllCoordinate();
   }
@@ -1140,7 +1168,7 @@ class BaseCanvas extends Canvas {
           type: 'multiple:select',
           data: result
         });
-        
+
         this.selectItem = {
           nodes: [],
           edges: [],
@@ -1426,7 +1454,7 @@ class BaseCanvas extends Canvas {
             } else {
               edges = this._dragEdges;
             }
-  
+
             $(this.svg).css('visibility', 'hidden');
             $(this.warpper).css('visibility', 'hidden');
             edges.forEach((edge) => {
@@ -1443,7 +1471,7 @@ class BaseCanvas extends Canvas {
             });
             $(this.svg).css('visibility', 'visible');
             $(this.warpper).css('visibility', 'visible');
-  
+
             this.emit('system.drag.move', {
               dragType: this._dragType,
               pos: [event.clientX, event.clientY],
@@ -1887,7 +1915,7 @@ class BaseCanvas extends Canvas {
             strength: 1
           }
         }, _.get(this.layout, 'options'), true);
-    
+
         // 自动布局
         if (_.get(this.layout, 'type') === 'forceLayout') {
           Layout.forceLayout({
@@ -1912,7 +1940,7 @@ class BaseCanvas extends Canvas {
     const startY = this._coordinateService._terminal2canvas('y', range[1]);
     const endX = this._coordinateService._terminal2canvas('x', range[2]);
     const endY = this._coordinateService._terminal2canvas('y', range[3]);
-    
+
     const includeNode = _.includes(this.selecModel, 'node');
     const includeEdge = _.includes(this.selecModel, 'edge');
     const includeEndpoint = _.includes(this.selecModel, 'endpoint');
