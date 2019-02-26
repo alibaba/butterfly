@@ -1608,12 +1608,6 @@ class BaseCanvas extends Canvas {
         } else {
           let _emitEdges = this._dragEdges.filter((edge) => {
 
-            // 正在删除的线重现连接
-            if (edge._isDeletingEdge) {
-              edge._isDeletingEdge = true;
-              return false;
-            }
-
             // 线条去重
             if (!this.theme.edge.isRepeat) {
               let _isRepeat = _.some(this.edges, (_edge) => {
@@ -1647,8 +1641,15 @@ class BaseCanvas extends Canvas {
               edge.destroy();
               return false;
             }
+            
             edge.mounted && edge.mounted();
             this.edges.push(edge);
+
+            // 正在删除的线重新连接
+            if (edge._isDeletingEdge) {
+              delete edge._isDeletingEdge;
+            }
+
             return edge;
           });
           if (_emitEdges.length !== 0) {
