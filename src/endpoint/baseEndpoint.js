@@ -32,6 +32,11 @@ class Endpoint {
     this._width = 0;
     this._height = 0;
 
+    // 不能断开线条
+    if (this.type === 'target') {
+      this._disLinkable = opts.disLinkable;
+    }
+
     this._coordinateService = null;
 
     this.dom = null;
@@ -197,6 +202,9 @@ class Endpoint {
     $(this.dom).on('mousedown', (e) => {
       const LEFT_KEY = 0;
       if (e.button !== LEFT_KEY) {
+        return;
+      }
+      if (this.type === 'target' && this._disLinkable) {
         return;
       }
       e.preventDefault();
