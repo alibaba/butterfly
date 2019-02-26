@@ -42,6 +42,7 @@ canvas.draw({
   * @return {dom} - 返回渲染dom的根节点
   */
 draw = (obj) => {}
+
 /**
   * 节点挂载后的回调
   */

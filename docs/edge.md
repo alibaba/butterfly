@@ -44,36 +44,44 @@ canvas.draw({
   * @return {dom} - 自定义节点的dom
   */
 draw = () => {}
+
 /**
   * 线条挂载后的回调
   */
 mounted = () => {}
+
 /**
   * @return {boolean} - 可以自定义复杂的连接条件
   */
 isConnect = () => {}
+
 /**
   * 线条重绘后的回调
   */
 updated = () => {}
+
 /**
   * @return {dom} - 自定义label的dom
   */
 drawLabel = () => {}
+
 /**
   * @return {dom} - 自定义箭头的dom
   */
 drawArrow = () => {}
+
 /**
   * @param {obj} sourcePoint(可选参数) - 源节点的坐标和方向 
   * @param {obj} targetPoint(可选参数) - 目标节点的坐标和方向 
   * @return {string} - path的路径
   */
 calcPath = () => {}
+
 /**
   * 发送事件
   */
 emit = (string, obj) => {}
+
 /**
   * 接受事件
   */

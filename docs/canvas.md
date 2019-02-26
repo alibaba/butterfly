@@ -295,7 +295,7 @@ canvas.on('type', (data) => {
 
 #### <a name='global'>global</a>
 * **isScopeStrict**，用于设置全局scope严格模式
- * 默认为false。假如该值设置为true，当scope必须完全一致才能匹配；假如该值为false，当scope为undefined时，都能匹配所有值。
+  * 默认为false。假如该值设置为true，当scope必须完全一致才能匹配；假如该值为false，当scope为undefined时，都能匹配所有值。
 
 #### <a name='layout'>layout</a>
 * **重力布局**，传入`'ForceLayout'`即可，小蝴蝶内置布局
@@ -318,8 +318,8 @@ let canvas = new Canvas({
 ### 方法说明
 
 * **setGirdMode**，设置网格布局
- * `show`，设置是否开启网格布局
- * `options`，设置网格布局的参数，如下注释所示
+  * `show`，设置是否开启网格布局
+  * `options`，设置网格布局的参数，如下注释所示
 
 ```
 this.canvas.setGirdMode(true, {
@@ -365,18 +365,18 @@ this.canvas.add2Union('我的聚合组', {
 ```
 
 * **canvas2terminal**，屏幕转换为画布的坐标
- * 如图所示，画布缩放，移动后的坐标和原来画布的坐标并不匹配，需要此方法来转换。特别注意：有拖动添加节点的用户们注意这两个`e.clientX`和`e.clientY`，需要调用此方法进行转换。
+  * 如图所示，画布缩放，移动后的坐标和原来画布的坐标并不匹配，需要此方法来转换。特别注意：有拖动添加节点的用户们注意这两个`e.clientX`和`e.clientY`，需要调用此方法进行转换。
 <img width="400" src="http://img.alicdn.com/tfs/TB1lWIAFHvpK1RjSZPiXXbmwXXa-973-850.jpg">
 
-* **terminal2canvas**，画布转换屏幕为的坐标
- * 与`canvas2terminal`的逆转转换
+* **terminal2canvas**，画布转换为屏幕的坐标
+  * `canvas2terminal`的逆转转换
  
 * **save2img**，画布保存为图片
- * `options`，图片参数
- * `options.type`，图片类型
- * `options.quality`，图片质量
- * `options.width`，图片宽度
- * `options.height`，图片高度
+  * `options`，图片参数
+  * `options.type`，图片类型
+  * `options.quality`，图片质量
+  * `options.width`，图片宽度
+  * `options.height`，图片高度
 
 ```
 this.canvas.save2img({type: 'png', width: 1920, height: 1080, quality: 1})
