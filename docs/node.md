@@ -73,6 +73,12 @@ unFocus = () => {}
 addEndpoint = (obj) => {}
 
 /**
+  * @param {string} pointId - 锚点的Id(此方法必须在节点挂载后执行才有效)
+  * @return {Endpoint} - Endpoint的对象
+  */
+removeEndpoint = (obj) => {}
+
+/**
   * @param {string} pointId - 锚点的信息 
   * @return {Endpoint} - Endpoint的对象
   */
