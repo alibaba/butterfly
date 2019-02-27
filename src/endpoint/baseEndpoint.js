@@ -130,8 +130,8 @@ class Endpoint {
       let _offsetTop = 0;
       let _offsetLeft = 0;
 
-      const _orientation = orientation || [0, -1];
-      const _pos = pos || [_orientation[0] === 0 ? 0.5 : 0, _orientation[1] === 0 ? 0.5 : 0];
+      const _orientation = orientation || this.orientation || [0, -1];
+      const _pos = pos || this.pos || [_orientation[0] === 0 ? 0.5 : 0, _orientation[1] === 0 ? 0.5 : 0];
 
       const result = [0, 0];
 
