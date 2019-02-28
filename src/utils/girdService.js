@@ -8,7 +8,7 @@ class GridService {
     this.root = opts.root;
     this.canvas = opts.canvas;
 
-    this.domWarpper = _.get(opts, 'canvas.warpper');
+    this.domWrapper = _.get(opts, 'canvas.wrapper');
     this.canvasHeight = 0;
     this.canvasWidth = 0;
 
