@@ -110,11 +110,11 @@ class SelectCanvas {
   }
 
   active() {
-    $(this.dom).addClass('warpper-up');
+    $(this.dom).addClass('wrapper-up');
   }
 
   unActive() {
-    $(this.dom).removeClass('warpper-up');
+    $(this.dom).removeClass('wrapper-up');
   }
 }
 

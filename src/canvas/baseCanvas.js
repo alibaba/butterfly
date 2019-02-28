@@ -72,14 +72,14 @@ class BaseCanvas extends Canvas {
     this._remarkMove = undefined;
 
     this.svg = null;
-    this.warpper = null;
-    this.canvasWarpper = null;
-    // 加一层warpper方便处理缩放，平移
-    this._genWarpper();
+    this.wrapper = null;
+    this.canvasWrapper = null;
+    // 加一层wrapper方便处理缩放，平移
+    this._genWrapper();
     // 加一层svg画线条
-    this._genSvgWarpper();
+    this._genSvgWrapper();
     // 加一层canvas方便处理辅助
-    this._genCanvasWarpper();
+    this._genCanvasWrapper();
 
     // 统一处理画布拖动事件
     this._dragType = null;
@@ -182,7 +182,7 @@ class BaseCanvas extends Canvas {
   }
 
   addGroup(group) {
-    const container = $(this.warpper);
+    const container = $(this.wrapper);
     const GroupClass = group.Class || Group;
     const _groupObj = new GroupClass(_.assign(_.cloneDeep(group), {
       _global: this.global,
@@ -206,7 +206,7 @@ class BaseCanvas extends Canvas {
 
   addNodes(nodes, isNotEventEmit) {
     const _canvasFragment = document.createDocumentFragment();
-    const container = $(this.warpper);
+    const container = $(this.wrapper);
     const result = nodes.map((node) => {
       let _nodeObj = null;
       if (node instanceof Node) {
@@ -416,7 +416,7 @@ class BaseCanvas extends Canvas {
 
     $(this.svg).append(_edgeFragment, _arrowFragment);
 
-    $(this.warpper).append(_labelFragment);
+    $(this.wrapper).append(_labelFragment);
 
     result.forEach((link) => {
       let _soucePoint = {};
@@ -640,9 +640,9 @@ class BaseCanvas extends Canvas {
         const platform = ['webkit', 'moz', 'ms', 'o'];
         const scale = `scale(${this._zoomData})`;
         for (let i = 0; i < platform.length; i++) {
-          this.warpper.style[`${platform[i]}Transform`] = scale;
+          this.wrapper.style[`${platform[i]}Transform`] = scale;
         }
-        this.warpper.style.transform = scale;
+        this.wrapper.style.transform = scale;
         this._coordinateService._changeCanvasInfo({
           scale: this._zoomData
         });
@@ -782,7 +782,7 @@ class BaseCanvas extends Canvas {
     offsetY = -offsetY;
 
     const time = 500;
-    $(this.warpper).animate({
+    $(this.wrapper).animate({
       top: offsetY,
       left: offsetX,
     }, time);
@@ -848,7 +848,7 @@ class BaseCanvas extends Canvas {
     const time = 500;
 
     // animate不支持scale，使用setInterval自己实现
-    $(this.warpper).animate({
+    $(this.wrapper).animate({
       top: targetY,
       left: targetX,
     }, time);
@@ -886,7 +886,7 @@ class BaseCanvas extends Canvas {
           scale: this._zoomData
         });
         this._guidelineService.zoom(this._zoomData);
-        $(this.warpper).css({
+        $(this.wrapper).css({
           transform: `scale(${this._zoomData})`
         });
         frame++;
@@ -895,7 +895,7 @@ class BaseCanvas extends Canvas {
   }
 
   move(position) {
-    $(this.warpper)
+    $(this.wrapper)
       .css('left', position[0])
       .css('top', position[1]);
     this._coordinateService._changeCanvasInfo({
@@ -927,14 +927,14 @@ class BaseCanvas extends Canvas {
       this.isSelectMode = true;
       this._rmSystemUnion();
       this.selecModel = type;
-      this.canvasWarpper.active();
+      this.canvasWrapper.active();
       this._remarkMove = this.moveable;
       this._remarkZoom = this.zoomable;
       this.setZoomable(false);
       this.setMoveable(false);
     } else {
       this.isSelectMode = false;
-      this.canvasWarpper.unActive();
+      this.canvasWrapper.unActive();
 
       if (this._remarkMove) {
         this.setMoveable(true);
@@ -1098,8 +1098,8 @@ class BaseCanvas extends Canvas {
     this._gridService.justifyAllCoordinate();
   }
 
-  _genSvgWarpper() {
-    // 生成svg的warpper
+  _genSvgWrapper() {
+    // 生成svg的wrapper
     const svg = $(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
       .attr('class', 'butterfly-svg')
       .attr('width', '100%')
@@ -1107,21 +1107,21 @@ class BaseCanvas extends Canvas {
       .attr('version', '1.1')
       // .css('position', 'absolute')
       .attr('xmlns', 'http://www.w3.org/2000/svg')
-      .appendTo(this.warpper);
+      .appendTo(this.wrapper);
     return this.svg = svg;
   }
 
-  _genWarpper() {
-    // 生成warpper
-    const warpper = $('<div class="butterfly-warpper"></div>')
+  _genWrapper() {
+    // 生成wrapper
+    const wrapper = $('<div class="butterfly-wrapper"></div>')
       .appendTo(this.root);
-    return this.warpper = warpper[0];
+    return this.wrapper = wrapper[0];
   }
 
-  _genCanvasWarpper() {
-    // 生成canvas warpper
-    this.canvasWarpper = new SelectCanvas();
-    this.canvasWarpper.init({
+  _genCanvasWrapper() {
+    // 生成canvas wrapper
+    this.canvasWrapper = new SelectCanvas();
+    this.canvasWrapper.init({
       root: this.root,
       _on: this.on.bind(this),
       _emit: this.emit.bind(this)
@@ -1257,7 +1257,7 @@ class BaseCanvas extends Canvas {
         const group = this.getGroup(endpoint._node.group);
         $(group.dom).append(endpointDom);
       } else {
-        $(this.warpper).prepend(endpointDom);
+        $(this.wrapper).prepend(endpointDom);
       }
       endpoint.updatePos();
       endpoint.mounted && endpoint.mounted();
@@ -1354,7 +1354,7 @@ class BaseCanvas extends Canvas {
               this._rmSystemUnion();
             }
             $(this.svg).css('visibility', 'hidden');
-            $(this.warpper).css('visibility', 'hidden');
+            $(this.wrapper).css('visibility', 'hidden');
             moveNodes.forEach((node) => {
               this._moveNode(node, node.left + (canvasX - nodeOriginPos.x), node.top + (canvasY - nodeOriginPos.y));
               if (this._guidelineService.isActive) {
@@ -1362,7 +1362,7 @@ class BaseCanvas extends Canvas {
               }
             });
             $(this.svg).css('visibility', 'visible');
-            $(this.warpper).css('visibility', 'visible');
+            $(this.wrapper).css('visibility', 'visible');
             nodeOriginPos = {
               x: canvasX,
               y: canvasY
@@ -1385,14 +1385,14 @@ class BaseCanvas extends Canvas {
           }
           if (this._dragNode) {
             $(this.svg).css('visibility', 'hidden');
-            $(this.warpper).css('visibility', 'hidden');
+            $(this.wrapper).css('visibility', 'hidden');
             const group = this._dragNode;
             this._moveGroup(group, group.left + (canvasX - nodeOriginPos.x),  group.top + (canvasY - nodeOriginPos.y));
             if (this._guidelineService.isActive) {
               this._guidelineService.draw(group, 'group');
             }
             $(this.svg).css('visibility', 'visible');
-            $(this.warpper).css('visibility', 'visible');
+            $(this.wrapper).css('visibility', 'visible');
             nodeOriginPos = {
               x: canvasX,
               y: canvasY
@@ -1443,7 +1443,7 @@ class BaseCanvas extends Canvas {
                 _newEdge._init();
                 $(this.svg).append(_newEdge.dom);
                 if (_newEdge.labelDom) {
-                  $(this.warpper).append(_newEdge.labelDom);
+                  $(this.wrapper).append(_newEdge.labelDom);
                 }
                 if (_newEdge.arrowDom) {
                   $(this.svg).append(_newEdge.arrowDom);
@@ -1456,7 +1456,7 @@ class BaseCanvas extends Canvas {
             }
 
             $(this.svg).css('visibility', 'hidden');
-            $(this.warpper).css('visibility', 'hidden');
+            $(this.wrapper).css('visibility', 'hidden');
             edges.forEach((edge) => {
               let beginX =  edge.sourceEndpoint._posLeft + edge.sourceEndpoint._width / 2;
               let beginY = edge.sourceEndpoint._posTop + edge.sourceEndpoint._height / 2;
@@ -1470,7 +1470,7 @@ class BaseCanvas extends Canvas {
               edge.redraw(_soucePoint, _targetPoint);
             });
             $(this.svg).css('visibility', 'visible');
-            $(this.warpper).css('visibility', 'visible');
+            $(this.wrapper).css('visibility', 'visible');
 
             this.emit('system.drag.move', {
               dragType: this._dragType,
@@ -1519,7 +1519,7 @@ class BaseCanvas extends Canvas {
               // _newEdge._init();
               // $(this.svg).append(_newEdge.dom);
               // if (_newEdge.labelDom) {
-              //   $(this.warpper).append(_newEdge.labelDom);
+              //   $(this.wrapper).append(_newEdge.labelDom);
               // }
               // if (_newEdge.arrowDom) {
               //   $(this.svg).append(_newEdge.arrowDom);
