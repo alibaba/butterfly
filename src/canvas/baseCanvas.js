@@ -116,7 +116,7 @@ class BaseCanvas extends Canvas {
       canvas: this
     });
 
-    this._addEventLinster();
+    this._addEventListener();
 
     this._unionData = {
       __system: {
@@ -1128,7 +1128,7 @@ class BaseCanvas extends Canvas {
     });
   }
 
-  _addEventLinster() {
+  _addEventListener() {
     if (this.zoomable) {
       this.setZoomable(true);
     }

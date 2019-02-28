@@ -120,7 +120,7 @@ class BaseNode extends Node {
         options: this.options
       }, obj));
   
-      this._addEventLinster();
+      this._addEventListener();
     }
   }
 
@@ -152,7 +152,7 @@ class BaseNode extends Node {
     }
   }
 
-  _addEventLinster() {
+  _addEventListener() {
     $(this.dom).on('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
