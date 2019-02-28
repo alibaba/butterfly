@@ -43,14 +43,17 @@ node.addEndpoint({
   * @return {dom} - 自定义节点的dom
   */
 draw = () => {}
+
 /**
   * 锚点挂载后的回调
   */
 mounted = () => {}
+
 /**
   * 锚点更新后的回调
   */
 updated = () => {}
+
 /**
   * @param {number} x - 移动位置的x坐标 
   * @param {number} y - 移动位置的y坐标 
