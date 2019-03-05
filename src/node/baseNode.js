@@ -73,7 +73,7 @@ class BaseNode extends Node {
     return endpoint;
   }
 
-  rmEndpoint(pointId) {
+  removeEndpoint(pointId) {
     const rmEndpointIndex = _.findIndex(this.endpoints, point => point.id === pointId);
     if (rmEndpointIndex !== -1) {
       const rmEndpoint = this.endpoints.splice(rmEndpointIndex, 1)[0];
