@@ -1925,8 +1925,8 @@ class BaseCanvas extends Canvas {
               nodes: data.nodes,
               // 加工线条数据，兼容endpoint为id的属性，d3没这个概念
               edges: data.edges.map(item => ({
-                source: item.type === 'endpoint' ? item.sourceNodeCode : item.source,
-                target: item.type === 'endpoint' ? item.targetNodeCode : item.target
+                source: item.type === 'endpoint' ? item.sourceNode : item.source,
+                target: item.type === 'endpoint' ? item.targetNode : item.target
               }))
             }
           });
