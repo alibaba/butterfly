@@ -307,8 +307,8 @@ class BaseCanvas extends Canvas {
           return;
         }
 
-        const sourceEndpoint = sourceNode.getEndpoint(link.source);
-        const targetEndpoint = targetNode.getEndpoint(link.target);
+        const sourceEndpoint = sourceNode.getEndpoint(link.source, 'source');
+        const targetEndpoint = targetNode.getEndpoint(link.target, 'target');
 
         if (!sourceEndpoint || !targetEndpoint) {
           console.log(`butterflies error: can not connect edge. link sourceId:${link.source};link targetId:${link.target}`);
