@@ -543,7 +543,7 @@ class BaseCanvas extends Canvas {
       if (edgeIndex !== -1) {
         result = result.concat(this.edges.splice(edgeIndex, 1));
       } else {
-        console.log(`删除线条错误，不存在值为${JSON.stringify(_edge)}的线`);
+        console.log(`删除线条错误，不存在值为${_edge.id}的线`);
       }
     });
 
@@ -1642,12 +1642,12 @@ class BaseCanvas extends Canvas {
               return false;
             }
             
-            edge.mounted && edge.mounted();
-            this.edges.push(edge);
-
             // 正在删除的线重新连接
             if (edge._isDeletingEdge) {
               delete edge._isDeletingEdge;
+            } else {
+              edge.mounted && edge.mounted();
+              this.edges.push(edge);
             }
 
             return edge;

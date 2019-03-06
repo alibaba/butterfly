@@ -196,7 +196,6 @@ class Edge {
     this._sourceType = _.get(opts, '_sourceType') || this._sourceType;
     this.sourceEndpoint = _.get(opts, 'sourceEndpoint') || this.sourceEndpoint;
     this.type = _.get(opts, 'type') || this.type;
-    this._isDeletingEdge = false;
     this.redraw();
   }
 }
