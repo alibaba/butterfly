@@ -24,7 +24,7 @@ class GuidelineService {
     this.canvasHeight = $(this.root).height();
     this.canvasWidth = $(this.root).width();
 
-    this.dom = $('<div class="butterfly-gird-canvas-warpper"></div>');
+    this.dom = $('<div class="butterfly-gird-canvas-wrapper"></div>');
 
     this.guideLineCanvas = $('<canvas class="butterfly-guideline-canvas"></canvas>')[0];
     $(this.guideLineCanvas).attr('width', this.canvasWidth);

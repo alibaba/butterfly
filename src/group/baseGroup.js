@@ -42,7 +42,7 @@ class BaseGroup extends Group {
       dom: this.dom,
       options: this.options
     });
-    this._addEventLinster();
+    this._addEventListener();
   }
   draw(obj) {
     let _dom = obj.dom;
@@ -205,7 +205,7 @@ class BaseGroup extends Group {
       this.nodes.push(item);
     });
   }
-  _addEventLinster() {
+  _addEventListener() {
     $(this.dom).on('click', (e) => {
       e.preventDefault();
       e.stopPropagation();

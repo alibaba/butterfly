@@ -44,51 +44,62 @@ canvas.draw({
   * @return {dom} - 返回渲染dom的根节点
   */
 draw = (obj) => {}
+
 /**
   * 节点组挂载后的回调
   */
 mounted = () => {}
+
 /**
   * group添加节点
   * @param {obj} node - 节点数据
   */
 addNode = (node) => {}
+
 /**
   * group批量添加节点
   * @param {array} nodes - 节点数组
   */
 addNodes = (nodes) => {}
+
 /**
   * group删除节点
   * @param {obj} node - 节点数据
   */
 removeNode = (node) => {}
+
 /**
   * @param {obj} data - 锚点基本信息(此方法必须在节点挂载后执行才有效)
   */
 addEndpoint = (obj) => {}
+
 /**
   * @param {string} pointId - 锚点的信息 
   * @return {Endpoint} - Endpoint的对象
   */
 getEndpoint = (id) => {}
+
 /**
   * group删除节点
   * @param {array} nodes - 节点数组
   */
 removeNodes = (nodes) => {}
+
 /**
   * @return {number} - 节点组宽度
   */
 getWidth = () => {}
+
 /**
   * @return {number} - 节点组高度
   */
 getHeight = () => {}
+
 /**
   * 发送事件
   */
 emit = (string, obj) => {}
+
 /**
   * 接受事件
   */

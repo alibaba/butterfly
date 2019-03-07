@@ -30,11 +30,11 @@ class SelectCanvas {
     this._emit = opts._emit;
     $(this.dom).attr('width', this.canvasWidth);
     $(this.dom).attr('height', this.canvasHeight);
-    this.addEventLinster();
+    this.addEventListener();
     $(this.dom).appendTo(root);
   }
 
-  addEventLinster() {
+  addEventListener() {
     this.dom.addEventListener('mousedown', this.mouseDown.bind(this));
     this.dom.addEventListener('mouseup', this.mouseUp.bind(this));
     this.dom.addEventListener('mousemove', this.mouseMove.bind(this));
@@ -110,11 +110,11 @@ class SelectCanvas {
   }
 
   active() {
-    $(this.dom).addClass('warpper-up');
+    $(this.dom).addClass('wrapper-up');
   }
 
   unActive() {
-    $(this.dom).removeClass('warpper-up');
+    $(this.dom).removeClass('wrapper-up');
   }
 }
 
