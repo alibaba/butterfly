@@ -41,7 +41,79 @@
     display: block;
   }
 }
-
+.endpoint-tips-menu{
+  position: fixed;
+  background: #fff;
+  z-index: 1000;
+  min-width: 220px;
+  border-radius: 3px;
+  .endpoint-tips-menu-title{
+    padding: 3px 10px;
+    border-bottom: 1px solid #dcdcdc
+  }
+  .endpoint-tips-menu-content{
+    padding: 3px 10px;
+   .yellow-point{
+      background: yellowgreen;
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+  }
+}
+.node-menu, .label-menu {
+  position: fixed;
+  min-width: 90px;
+  background-color: #fff;
+  background-clip: padding-box;
+  text-align: center;
+  color:#333333;
+  z-index: 200;
+  border-top:  1px solid #DCDCDC;
+  border-right:  1px solid #DCDCDC;
+  border-left:  1px solid #DCDCDC;
+  .link-menu-item:hover{
+    background: #7C93A0;
+    color: #fff;
+  }
+  .node-menu-item{
+    text-align: left;
+    padding: 6px 10px 6px 10px;
+    cursor: pointer; 
+    width: auto;
+    min-width: 90px;
+    height: 30px;
+  }
+  .node-menu-item-bottm{
+    border-bottom: none;
+    padding: 6px 10px 6px 10px;
+    height: 30px;
+  }
+  .node-menu-item:last-child{
+     border-bottom: 1px solid #DCDCDC;
+  }
+  .node-menu-item:hover{
+     background: #00C1DE;
+     color: #fff;
+  }
+  &.dag-node-menu{
+    padding: 3px 0;
+    border-bottom: 1px solid #DCDCDC;
+    .node-menu-item{
+      text-align: left;
+      padding: 3px 10px 3px 10px;
+      cursor: pointer; 
+      width: auto;
+      min-width: 90px;
+      height: 24px;
+    }
+    .node-menu-item:last-child{
+      border-bottom: none;
+   }
+  }
+}
 .butterfly-gird-canvas {
   position: absolute;
   top: 0;

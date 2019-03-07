@@ -129,6 +129,7 @@ class BaseCanvas extends Canvas {
   }
 
   draw(opts, callback) {
+    console.log("22222222222=-----")
     const groups = opts.groups || [];
     const nodes = opts.nodes || [];
     const edges = opts.edges || [];
