@@ -1,4 +1,4 @@
-
+'use strict';
 
 const $ = require('jquery');
 const _ = require('lodash');
@@ -1629,7 +1629,7 @@ class BaseCanvas extends Canvas {
               }
             }
             edge._create({
-              id: edge.id ? edge.id : `${edge.sourceEndpoint.id}-${_targetEndpoint.id}`,
+              id: edge.id && !edge._isDeletingEdge ? edge.id : `${edge.sourceEndpoint.id}-${_targetEndpoint.id}`,
               targetNode: _targetEndpoint.nodeType === 'node' ? this.getNode(_targetEndpoint.nodeId) : this.getGroup(_targetEndpoint.nodeId),
               _targetType: _targetEndpoint.nodeType,
               targetEndpoint: _targetEndpoint,

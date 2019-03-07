@@ -80,10 +80,11 @@ addEndpoint = (obj) => {}
 removeEndpoint = (obj) => {}
 
 /**
-  * @param {string} pointId - 锚点的信息 
+  * @param {string(Require)} pointId - 锚点的信息 
+  * @param {string(Option)} type - 锚点的类型
   * @return {Endpoint} - Endpoint的对象
   */
-getEndpoint = (id) => {}
+getEndpoint = (id, type) => {}
 
 /**
   * @param {number} x - 移动位置的x坐标 
