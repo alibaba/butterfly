@@ -24,13 +24,13 @@ class MenuService {
   */
   createMenu(param, callBack) {
     /** 
-     * 其他： param是个特定字段的数组，例如{list: [{code: '', title: ''}], pos: {left: '', top: ''}}
+     * 其他： param是个特定字段的对象，例如{list: [{code: '', title: ''}], pos: {left: '', top: ''}}
     */
     $('.butterfly-node-menu').remove();
       let nodeMenu = $('<ul class="butterfly-node-menu"></ul>').css('top', _.get(param, 'pos.top', 0)).css('left', _.get(param, 'pos.left', 0));
-      _.get(param, 'list', []).forEach((item) => {
+      _.get(param, 'list', []).forEach((item, index) => {
       $('<li class="node-menu-item"></li>')
-            .attr('key', item.code)
+            .attr('key', `${item.code}_${index}`)
             .text(item.title)
             .on('click', (e) => {
             e.stopPropagation();
