@@ -26,7 +26,6 @@ class BaseNode extends Node {
   }
 
   draw(obj) {
-    console.log("adfsdasd")
     let _dom = obj.dom;
     if (!_dom) {
       _dom = $('<div></div>')

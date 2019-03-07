@@ -52,4 +52,4 @@ function hideMenuList(type) {
 module.exports = {
     createMenuList,
     hideMenuList
-};
+}
