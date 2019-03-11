@@ -7,6 +7,7 @@ const Canvas = require('../interface/canvas');
 const Node = require('../node/baseNode');
 const Edge = require('../edge/baseEdge');
 const Group = require('../group/baseGroup');
+const Endpoint = require('../endpoint/baseEndpoint');
 const Layout = require('../utils/layout');
 const SelectCanvas = require('../utils/selectCanvas');
 // 画布和屏幕坐标地换算
@@ -277,28 +278,46 @@ class BaseCanvas extends Canvas {
         let targetNode = null;
         let _sourceType = link._sourceType;
         let _targetType = link._targetType;
-        if (link._sourceType) {
-          sourceNode = _sourceType === 'node' ? this.getNode(link.sourceNode) : this.getGroup(link.sourceNode);
+
+        if (link.sourceNode instanceof Node) {
+          _sourceType = 'node';
+          sourceNode = link.sourceNode;
+        } else if (link.sourceNode instanceof Group) {
+          _sourceType = 'group';
+          sourceNode = link.sourceNode;
         } else {
-          let _node = this.getNode(link.sourceNode);
-          if (_node) {
-            _sourceType = 'node';
-            sourceNode = _node;
+          if (link._sourceType) {
+            sourceNode = _sourceType === 'node' ? this.getNode(link.sourceNode) : this.getGroup(link.sourceNode);
           } else {
-            _sourceType = 'group';
-            sourceNode = this.getGroup(link.sourceNode);
+            let _node = this.getNode(link.sourceNode);
+            if (_node) {
+              _sourceType = 'node';
+              sourceNode = _node;
+            } else {
+              _sourceType = 'group';
+              sourceNode = this.getGroup(link.sourceNode);
+            }
           }
         }
-        if (link._targetType) {
-          targetNode = _targetType === 'node' ? this.getNode(link.targetNode) : this.getGroup(link.targetNode);
+
+        if (link.targetNode instanceof Node) {
+          _targetType = 'node';
+          targetNode = link.targetNode;
+        } else if (link.targetNode instanceof Group) {
+          _targetType = 'group';
+          targetNode = link.targetNode;
         } else {
-          let _node = this.getNode(link.targetNode);
-          if (_node) {
-            _targetType = 'node';
-            targetNode = _node;
+          if (link._targetType) {
+            targetNode = _targetType === 'node' ? this.getNode(link.targetNode) : this.getGroup(link.targetNode);
           } else {
-            _targetType = 'group';
-            targetNode = this.getGroup(link.targetNode);
+            let _node = this.getNode(link.targetNode);
+            if (_node) {
+              _targetType = 'node';
+              targetNode = _node;
+            } else {
+              _targetType = 'group';
+              targetNode = this.getGroup(link.targetNode);
+            }
           }
         }
 
@@ -307,8 +326,20 @@ class BaseCanvas extends Canvas {
           return;
         }
 
-        const sourceEndpoint = sourceNode.getEndpoint(link.source, 'source');
-        const targetEndpoint = targetNode.getEndpoint(link.target, 'target');
+        let sourceEndpoint = null;
+        let targetEndpoint = null;
+
+        if (link.sourceEndpoint && link.sourceEndpoint instanceof Endpoint) {
+          sourceEndpoint = link.sourceEndpoint;
+        } else {
+          sourceEndpoint = sourceNode.getEndpoint(link.source, 'source');
+        }
+
+        if (link.targetEndpoint && link.targetEndpoint instanceof Endpoint) {
+          targetEndpoint = link.targetEndpoint;
+        } else {
+          targetEndpoint = targetNode.getEndpoint(link.target, 'target');
+        }
 
         if (!sourceEndpoint || !targetEndpoint) {
           console.log(`butterflies error: can not connect edge. link sourceId:${link.source};link targetId:${link.target}`);
