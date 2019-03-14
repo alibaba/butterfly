@@ -820,6 +820,12 @@ class BaseCanvas extends Canvas {
     this._moveData = [offsetX, offsetY];
 
     this.zoom(scale, callback);
+
+    this._coordinateService._changeCanvasInfo({
+      canOffsetX: offsetX,
+      canOffsetY: offsetY,
+      scale: scale
+    });
   }
   focusCenterWithAnimate(callback) {
     let nodeIds = this.nodes.map((item) => {
@@ -1437,7 +1443,6 @@ class BaseCanvas extends Canvas {
             });
           }
         } else if (this._dragType === 'endpoint:drag') {
-
           const endX = this._coordinateService._terminal2canvas('x', event.clientX);
           const endY = this._coordinateService._terminal2canvas('y', event.clientY);
 
