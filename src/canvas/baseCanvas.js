@@ -1700,8 +1700,9 @@ class BaseCanvas extends Canvas {
         }
       }
       if (this._dragType === 'node:drag' && this._dragNode) {
-        let sourceGroup = null;
 
+        let sourceGroup = null;
+        let targetGroup = null;
         let _nodeLeft = this._dragNode.left;
         let _nodeRight = this._dragNode.left + this._dragNode.getWidth();
         let _nodeTop = this._dragNode.top;
@@ -1710,30 +1711,31 @@ class BaseCanvas extends Canvas {
         if (this._dragNode.group) {
           const _group = this.getGroup(this._dragNode.group);
           const _groupLeft = _group.left;
-          const _groupRight = _group.left + _group.getWidth();
           const _groupTop = _group.top;
-          const _groupBottom = _group.top + _group.getHeight();
-
           if (_nodeRight < 0 || _nodeLeft > _group.getWidth() || _nodeBottom < 0 || _nodeTop > _group.getHeight()) {
             _nodeLeft += _groupLeft;
             _nodeTop += _groupTop;
             _nodeRight += _groupLeft;
             _nodeBottom += _groupTop;
             sourceGroup = _group;
+          } else {
+            sourceGroup = _group;
+            targetGroup = _group;
           }
         }
 
-        let targetGroup = null;
-        for (let i = 0; i < this.groups.length; i++) {
-          const _group = this.groups[i];
-          const _groupLeft = _group.left;
-          const _groupRight = _group.left + _group.getWidth();
-          const _groupTop = _group.top;
-          const _groupBottom = _group.top + _group.getHeight();
-          if (_groupLeft <= _nodeLeft && _groupRight >= _nodeRight && _groupTop <= _nodeTop && _groupBottom >= _nodeBottom) {
-            if (_group.id !== this._dragNode.group) {
-              targetGroup = _group;
-              break;
+        if (!targetGroup) {
+          for (let i = 0; i < this.groups.length; i++) {
+            const _group = this.groups[i];
+            const _groupLeft = _group.left;
+            const _groupRight = _group.left + _group.getWidth();
+            const _groupTop = _group.top;
+            const _groupBottom = _group.top + _group.getHeight();
+            if (_groupLeft <= _nodeLeft && _groupRight >= _nodeRight && _groupTop <= _nodeTop && _groupBottom >= _nodeBottom) {
+              if (_group.id !== this._dragNode.group) {
+                targetGroup = _group;
+                break;
+              }
             }
           }
         }
@@ -1761,33 +1763,65 @@ class BaseCanvas extends Canvas {
         };
 
         if (sourceGroup) {
-          const rmItem = this.removeNode(this._dragNode.id, true, true);
-          const rmNode = rmItem.nodes[0];
-          neighborEdges = rmItem.edges;
-          const nodeData = {
-            id: rmNode.id,
-            top: _nodeTop,
-            left: _nodeLeft,
-            dom: rmNode.dom,
-            _isDeleteGroup: true
-          };
+          // 从源组拖动到目标组
+          if (sourceGroup !== targetGroup) {
+            const rmItem = this.removeNode(this._dragNode.id, true, true);
+            const rmNode = rmItem.nodes[0];
+            neighborEdges = rmItem.edges;
+            const nodeData = {
+              id: rmNode.id,
+              top: _nodeTop,
+              left: _nodeLeft,
+              dom: rmNode.dom,
+              _isDeleteGroup: true
+            };
 
-          this.emit('events', {
-            type: 'system.group.removeMembers',
-            group: sourceGroup,
-            nodes: [rmNode]
-          });
-          this.emit('system.group.removeMembers', {
-            group: sourceGroup,
-            nodes: [rmNode]
-          });
+            this.emit('events', {
+              type: 'system.group.removeMembers',
+              group: sourceGroup,
+              nodes: [rmNode]
+            });
+            this.emit('system.group.removeMembers', {
+              group: sourceGroup,
+              nodes: [rmNode]
+            });
 
+            if (targetGroup) {
+              if (ScopeCompare(this._dragNode.scope, targetGroup.scope, _.get(this, 'global.isScopeStrict'))) {
+                nodeData.top -= targetGroup.top;
+                nodeData.left -= targetGroup.left;
+                nodeData.group = targetGroup.id;
+                nodeData._isDeleteGroup = false;
+                this.emit('events', {
+                  type: 'system.group.addMembers',
+                  nodes: [rmNode],
+                  group: targetGroup
+                });
+                this.emit('system.group.addMembers', {
+                  nodes: [rmNode],
+                  group: targetGroup
+                });
+              } else {
+                console.log(`nodeId为${this._dragNode.id}的节点和groupId${targetGroup.id}的节点组scope值不符，无法加入`);
+              }
+            }
+            rmNode._init(nodeData);
+            this.addNode(rmNode, true);
+            _updateNeighborEdge(rmNode, neighborEdges);
+          }
+        } else {
           if (targetGroup) {
             if (ScopeCompare(this._dragNode.scope, targetGroup.scope, _.get(this, 'global.isScopeStrict'))) {
-              nodeData.top -= targetGroup.top;
-              nodeData.left -= targetGroup.left;
-              nodeData.group = targetGroup.id;
-              nodeData._isDeleteGroup = false;
+              const rmItem = this.removeNode(this._dragNode.id, true, true);
+              const rmNode = rmItem.nodes[0];
+              neighborEdges = rmItem.edges;
+              rmNode._init({
+                top: _nodeTop - targetGroup.top,
+                left: _nodeLeft - targetGroup.left,
+                dom: rmNode.dom,
+                group: targetGroup.id
+              });
+              this.addNode(rmNode, true);
               this.emit('events', {
                 type: 'system.group.addMembers',
                 nodes: [rmNode],
@@ -1797,37 +1831,10 @@ class BaseCanvas extends Canvas {
                 nodes: [rmNode],
                 group: targetGroup
               });
+              _updateNeighborEdge(rmNode, neighborEdges);
             } else {
               console.log(`nodeId为${this._dragNode.id}的节点和groupId${targetGroup.id}的节点组scope值不符，无法加入`);
             }
-          }
-          rmNode._init(nodeData);
-          this.addNode(rmNode, true);
-          _updateNeighborEdge(rmNode, neighborEdges);
-        } else if (targetGroup) {
-          if (ScopeCompare(this._dragNode.scope, targetGroup.scope, _.get(this, 'global.isScopeStrict'))) {
-            const rmItem = this.removeNode(this._dragNode.id, true, true);
-            const rmNode = rmItem.nodes[0];
-            neighborEdges = rmItem.edges;
-            rmNode._init({
-              top: _nodeTop - targetGroup.top,
-              left: _nodeLeft - targetGroup.left,
-              dom: rmNode.dom,
-              group: targetGroup.id
-            });
-            this.addNode(rmNode, true);
-            this.emit('events', {
-              type: 'system.group.addMembers',
-              nodes: [rmNode],
-              group: targetGroup
-            });
-            this.emit('system.group.addMembers', {
-              nodes: [rmNode],
-              group: targetGroup
-            });
-            _updateNeighborEdge(rmNode, neighborEdges);
-          } else {
-            console.log(`nodeId为${this._dragNode.id}的节点和groupId${targetGroup.id}的节点组scope值不符，无法加入`);
           }
         }
         neighborEdges.forEach((item) => {
