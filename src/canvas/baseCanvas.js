@@ -658,7 +658,7 @@ class BaseCanvas extends Canvas {
       this._zoomCb = (event) => {
         event.preventDefault();
         const deltaY = event.deltaY;
-        this._zoomData += deltaY * 0.01;
+        this._zoomData += deltaY * 0.005;
 
         if (this._zoomData < 0.25) {
           this._zoomData = 0.25;
