@@ -37,6 +37,7 @@ class BaseCanvas extends Canvas {
         type: _.get(options, 'theme.edge.type') || 'Bezier',
         Class: _.get(options, 'theme.edge.Class') || Edge,
         arrow: _.get(options, 'theme.edge.arrow'),
+        label: _.get(options, 'theme.edge.label'),
         isRepeat: _.get(options, 'theme.edge.isRepeat') || false,
         isLinkMyself: _.get(options, 'theme.edge.isLinkMyself') || false,
         isExpandWidth: _.get(options, 'theme.edge.isExpandWidth') || false
@@ -1469,6 +1470,7 @@ class BaseCanvas extends Canvas {
                   sourceNode: point.nodeType === 'node' ? this.getNode(point.nodeId) : this.getGroup(point.nodeId),
                   sourceEndpoint: point,
                   arrow: this.theme.edge.arrow,
+                  label: this.theme.edge.label,
                   isExpandWidth: this.theme.edge.isExpandWidth
                 };
                 let _newEdge = new EdgeClass(_.assign(pointObj, {
