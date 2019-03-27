@@ -34,7 +34,7 @@ canvas.draw({
 | arrow | 线条上加箭头 | boolean (Option) | 默认false
 | Class | 拓展类 | Class (Option) | `一般来说已经满足需要了，因为逻辑较为复杂，不建议拓展线的基类。`当传入拓展类的时候，该节点组则会按拓展类的draw方法进行渲染，拓展类的相关方法也会覆盖父类的方法
 | arrowPosition | 箭头在线条上的位置 | float (Option) | 0-1之间，默认0.5
-| arrowOffset | 箭头在线条上的偏移量 | float (Option) | 默认0
+| arrowOffset | 箭头相对于arrowPosition的偏移量 | float (Option) | 默认0，单位：像素
 
 `* 设置 isExpandWidth 为 true 时，获取 eventHandlerDom 用于挂载事件`
 
