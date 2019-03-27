@@ -111,6 +111,7 @@ class Edge {
     };
     if (label) {
       if (isDom(label)) {
+        $(label).addClass('butterflies-label');
         return label;
       } else {
         let dom = document.createElement('span');

@@ -11,7 +11,9 @@ let canvas = new Canvas({
   disLinkable: true,       //节点可取消连接(可传)
   theme: {                 //主题定制(可传) 
     edge: {
-      type: 'Bezier',      //线条类型：贝塞尔曲线，折线，直线。分别为Bezier/Flow/Straight
+      type: 'Bezier',      //线条默认类型：贝塞尔曲线，折线，直线。分别为Bezier/Flow/Straight
+      label: 'test',       //线条默认label
+      arrow: true,         //线条默认是否带箭头
       Class: XXClass,      //自己拓展的class,拖动连线的时候会采用该拓展类
       isExpandWidth: false //增加线条交互区域
     },
