@@ -21,6 +21,7 @@ class Edge {
     this.label = _.get(opts, 'label');
     this.arrow = _.get(opts, 'arrow');
     this.arrowPosition = _.get(opts, 'arrowPosition', 0.5);
+    this.arrowOffset = _.get(opts, 'arrowOffset', 0),
     this.isExpandWidth = _.get(opts, 'isExpandWidth', false);
     this.dom = null;
     this.labelDom = null;
@@ -34,11 +35,6 @@ class Edge {
     // 性能优化
     this._labelWidth = 0;
     this._labelHeight = 0;
-
-    // 贝塞尔曲线是反着画的，需要调整
-    if (this.shapeType === 'Bezier') {
-      this.arrowPosition = 1 - this.arrowPosition;
-    }
   }
   _init() {
     if (this._isInited) {
@@ -125,14 +121,24 @@ class Edge {
     }
   }
   redrawArrow(path) {
-    let point = this.dom.getPointAtLength(this.dom.getTotalLength() * this.arrowPosition);
+    const length = this.dom.getTotalLength();
+    this.arrowFinalPosition = (length * this.arrowPosition + this.arrowOffset) / length;
+    if (this.arrowFinalPosition > 1) {
+      this.arrowFinalPosition = 1;
+    }
+    // 贝塞尔曲线是反着画的，需要调整
+    if (this.shapeType === 'Bezier') {
+      this.arrowFinalPosition = 1 - this.arrowFinalPosition;
+    }
+
+    let point = this.dom.getPointAtLength(length * this.arrowFinalPosition);
     let x = point.x;
     let y = point.y;
 
     let vector = ArrowUtil.calcSlope({
       shapeType: this.shapeType,
       dom: this.dom,
-      arrowPosition: this.arrowPosition,
+      arrowPosition: this.arrowFinalPosition,
       path: path
     });
     let deg = Math.atan2(vector.y, vector.x) / Math.PI * 180;
