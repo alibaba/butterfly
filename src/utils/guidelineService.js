@@ -43,10 +43,10 @@ class GuidelineService {
 
     this.cxt.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 
-    let _left = item.left;
-    let _right = item.left + item.getWidth();
-    let _top = item.top;
-    let _bottom = item.top + item.getHeight();
+    let _left = parseInt(item.left);
+    let _right = parseInt(item.left + item.getWidth());
+    let _top = parseInt(item.top);
+    let _bottom = parseInt(item.top + item.getHeight());
     let _leftDis = Infinity;
     let _rightDis = Infinity;
     let _topDis = Infinity;
@@ -64,10 +64,10 @@ class GuidelineService {
         return;
       }
 
-      let _groupLeft = _group.left;
-      let _groupRight = _group.left + _group.getWidth();
-      let _groupTop = _group.top;
-      let _groupBottom = _group.top + _group.getHeight();
+      let _groupLeft = parseInt(_group.left);
+      let _groupRight = parseInt(_group.left + _group.getWidth());
+      let _groupTop = parseInt(_group.top);
+      let _groupBottom = parseInt(_group.top + _group.getHeight());
 
       // 向左对齐的元素
       if (_left === _groupLeft) {
@@ -107,10 +107,10 @@ class GuidelineService {
         return;
       }
 
-      let _nodeLeft = _node.left;
-      let _nodeRight = _node.left + _node.getWidth();
-      let _nodeTop = _node.top;
-      let _nodeBottom = _node.top + _node.getHeight();
+      let _nodeLeft = parseInt(_node.left);
+      let _nodeRight = parseInt(_node.left + _node.getWidth());
+      let _nodeTop = parseInt(_node.top);
+      let _nodeBottom = parseInt(_node.top + _node.getHeight());
 
       if (_node._group) {
         _nodeLeft += _node._group.left;
