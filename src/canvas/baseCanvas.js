@@ -96,16 +96,6 @@ class BaseCanvas extends Canvas {
     this._rootWidth = $(this.root).width();
     this._rootHeight = $(this.root).height();
 
-    this._coordinateService = new CoordinateService({
-      terOffsetX: $(this.root).offset().left,
-      terOffsetY: $(this.root).offset().top,
-      terWidth: $(this.root).width(),
-      terHeight: $(this.root).height(),
-      canOffsetX: this._moveData[0],
-      canOffsetY: this._moveData[1],
-      scale: this._zoomData
-    });
-
     // 网格布局
     this._gridService = new GridService({
       root: this.root,
@@ -116,6 +106,16 @@ class BaseCanvas extends Canvas {
     this._guidelineService = new GuidelineService({
       root: this.root,
       canvas: this
+    });
+    // 坐标转换服务
+    this._coordinateService = new CoordinateService({
+      terOffsetX: $(this.root).offset().left,
+      terOffsetY: $(this.root).offset().top,
+      terWidth: $(this.root).width(),
+      terHeight: $(this.root).height(),
+      canOffsetX: this._moveData[0],
+      canOffsetY: this._moveData[1],
+      scale: this._zoomData
     });
 
     this._addEventListener();
@@ -661,7 +661,7 @@ class BaseCanvas extends Canvas {
       this._zoomCb = (event) => {
         event.preventDefault();
         const deltaY = event.deltaY;
-        this._zoomData += deltaY * 0.005;
+        this._zoomData += deltaY * 0.001;
 
         if (this._zoomData < 0.25) {
           this._zoomData = 0.25;
@@ -678,6 +678,10 @@ class BaseCanvas extends Canvas {
         }
         this.wrapper.style.transform = scale;
         this._coordinateService._changeCanvasInfo({
+          wrapper: this.wrapper,
+          girdWrapper: this._guidelineService.dom,
+          mouseX: event.clientX,
+          mouseY: event.clientY,
           scale: this._zoomData
         });
         this._guidelineService.zoom(this._zoomData);
