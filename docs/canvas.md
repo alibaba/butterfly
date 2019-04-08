@@ -19,7 +19,8 @@ let canvas = new Canvas({
     },
     endpoint: {
       position: []         //限制锚点位置['Top', 'Bottom', 'Left', 'Right']
-    }
+    },
+    zoomGap: 0.001         //鼠标放大缩小间隙设置
   },
   global: {                //自定义配置，会贯穿所有canvas，group，node，edge，endpoint对象
     isScopeStrict: false   //scope是否为严格模式(默认为false)
@@ -277,6 +278,7 @@ canvas.on('type', (data) => {
 | key | 说明 | 返回 
 | :------ | :------ | :------
 | system.canvas.click | 点击画布空白处 | -
+| system.canvas.zoom | 画布缩放 | -
 | system.node.delete | 删除节点 | -
 | system.node.move | 移动节点 | -
 | system.link.delete | 删除连线 | -

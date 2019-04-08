@@ -44,7 +44,8 @@ class BaseCanvas extends Canvas {
       },
       endpoint: {
         position: _.get(options, 'theme.endpoint.position')
-      }
+      },
+      zoomGap: _.get(options, 'theme.zoomGap') || 0.001
     };
 
     // 贯穿所有对象的配置
@@ -661,7 +662,7 @@ class BaseCanvas extends Canvas {
       this._zoomCb = (event) => {
         event.preventDefault();
         const deltaY = event.deltaY;
-        this._zoomData += deltaY * 0.001;
+        this._zoomData += deltaY * this.theme.zoomGap;
 
         if (this._zoomData < 0.25) {
           this._zoomData = 0.25;
@@ -685,6 +686,13 @@ class BaseCanvas extends Canvas {
           scale: this._zoomData
         });
         this._guidelineService.zoom(this._zoomData);
+        this.emit('system.canvas.zoom', {
+          zoom: this._zoomData
+        });
+        this.emit('events', {
+          type: 'canvas.zoom',
+          zoom: this._zoomData
+        });
       };
     }
 
