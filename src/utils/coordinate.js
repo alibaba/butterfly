@@ -14,8 +14,8 @@ class CoordinateService {
     this.scale = opts.scale || 1;
 
     // 中心点
-    this.originX = 0;
-    this.originY = 0;
+    this.originX = undefined;
+    this.originY = undefined;
     // 当前鼠标在容器内的坐标
     this._currentTerX = 0;
     this._currentTerY = 0;
@@ -49,12 +49,12 @@ class CoordinateService {
     }
 
     let _isChangeOrigin = false;
-    if (data.originX) {
+    if (data.originX !== undefined) {
       this.originX = data.originX;
       _isChangeOrigin = true;
     }
 
-    if (data.originY) {
+    if (data.originY !== undefined) {
       this.originY = data.originY;
       _isChangeOrigin = true;
     }
@@ -78,6 +78,12 @@ class CoordinateService {
     }
 
     if (_isChangeMouse) {
+
+      if (this.originX === undefined || this.originY === undefined) {
+        this.originX = 0;
+        this.originY = 0;
+      }
+
       // i,j
       let i = this.originX / 100 * this.terWidth;
       let j = this.originY / 100 * this.terHeight;
