@@ -110,6 +110,7 @@ class BaseCanvas extends Canvas {
     });
     // 坐标转换服务
     this._coordinateService = new CoordinateService({
+      canvas: this,
       terOffsetX: $(this.root).offset().left,
       terOffsetY: $(this.root).offset().top,
       terWidth: $(this.root).width(),
