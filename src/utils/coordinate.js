@@ -47,22 +47,37 @@ class CoordinateService {
     if (data.canvas) {
       this.canvas = data.canvas;
     }
-    let isChange = false;
+
+    let _isChangeOrigin = false;
+    if (data.originX) {
+      this.originX = data.originX;
+      _isChangeOrigin = true;
+    }
+
+    if (data.originY) {
+      this.originY = data.originY;
+      _isChangeOrigin = true;
+    }
+
+    if (_isChangeOrigin) {
+      this.canvas.wrapper.style.transformOrigin = `${this.originX}% ${this.originY}%`;
+    }
+
+    let _isChangeMouse = false;
     if (data.mouseX) {
       if (this._currentTerX !== data.mouseX - this.terOffsetX) {
         this._currentTerX = (data.mouseX - this.terOffsetX);
-        isChange = true;
+        _isChangeMouse = true;
       }
     }
     if (data.mouseY) {
       if (this._currentTerY !== data.mouseY - this.terOffsetY) {
         this._currentTerY = (data.mouseY - this.terOffsetY);
-        isChange = true;
+        _isChangeMouse = true;
       }
     }
 
-    if (isChange) {
-      
+    if (_isChangeMouse) {
       // i,j
       let i = this.originX / 100 * this.terWidth;
       let j = this.originY / 100 * this.terHeight;
@@ -105,13 +120,15 @@ class CoordinateService {
     let canOffsetY = _.get(options, 'canOffsetY') !== undefined ? _.get(options, 'canOffsetY') : this.canOffsetY;
     let terOffsetX = _.get(options, 'terOffsetX') !== undefined ? _.get(options, 'terOffsetX') : this.terOffsetX;
     let terOffsetY = _.get(options, 'terOffsetY') !== undefined ? _.get(options, 'terOffsetY') : this.terOffsetY;
+    let originX = _.get(options, 'originX') !== undefined ? _.get(options, 'originX') : this.originX;
+    let originY = _.get(options, 'originY') !== undefined ? _.get(options, 'originY') : this.originX;
     if (pos === 'x') {
-      let transformOriginX  = this.originX / 100 * this.terWidth;
-      return coordinates * scale + (transformOriginX * (1 - scale) + canOffsetX) + terOffsetX;
+      let transformOriginX  = originX / 100 * this.terWidth;
+      return coordinate * scale + (transformOriginX * (1 - scale) + canOffsetX) + terOffsetX;
     }
     if (pos === 'y') {
-      let transformOriginY  = this.originY / 100 * this.terHeight;
-      return coordinates * scale + (transformOriginY * (1 - scale) + canOffsetY) + terOffsetY;
+      let transformOriginY  = originY / 100 * this.terHeight;
+      return coordinate * scale + (transformOriginY * (1 - scale) + canOffsetY) + terOffsetY;
     }
   }
 

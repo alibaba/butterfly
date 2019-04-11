@@ -798,28 +798,36 @@ class BaseCanvas extends Canvas {
       canOffsetX: 0,
       canOffsetY: 0,
       terOffsetX: 0,
-      terOffsetY: 0
+      terOffsetY: 0,
+      originX: 50,
+      originY: 50
     });
     let terRight = this._coordinateService._canvas2terminal('x', canRight, {
       scale: scale,
       canOffsetX: 0,
       canOffsetY: 0,
       terOffsetX: 0,
-      terOffsetY: 0
+      terOffsetY: 0,
+      originX: 50,
+      originY: 50
     });
     let terTop = this._coordinateService._canvas2terminal('y', canTop, {
       scale: scale,
       canOffsetX: 0,
       canOffsetY: 0,
       terOffsetX: 0,
-      terOffsetY: 0
+      terOffsetY: 0,
+      originX: 50,
+      originY: 50
     });
     let terBottom = this._coordinateService._canvas2terminal('y', canBottom, {
       scale: scale,
       canOffsetX: 0,
       canOffsetY: 0,
       terOffsetX: 0,
-      terOffsetY: 0
+      terOffsetY: 0,
+      originX: 50,
+      originY: 50
     });
 
     let offsetX = (terLeft + terRight - this._rootWidth) / 2;
@@ -835,13 +843,15 @@ class BaseCanvas extends Canvas {
     }, time);
     this._moveData = [offsetX, offsetY];
 
-    this.zoom(scale, callback);
-
     this._coordinateService._changeCanvasInfo({
       canOffsetX: offsetX,
       canOffsetY: offsetY,
-      scale: scale
+      scale: scale,
+      originX: 50,
+      originY: 50
     });
+
+    this.zoom(scale, callback);
   }
   focusCenterWithAnimate(callback) {
     let nodeIds = this.nodes.map((item) => {
@@ -907,13 +917,16 @@ class BaseCanvas extends Canvas {
     }, time);
     this._moveData = [targetX, targetY];
 
-    this.zoom(1, callback);
-
     this._coordinateService._changeCanvasInfo({
       canOffsetX: targetX,
       canOffsetY: targetY,
+      originX: 50,
+      originY: 50,
       scale: 1
     });
+
+    this.zoom(1, callback);
+
     this._guidelineService.isActive && this._guidelineService.clearCanvas();
   }
 
