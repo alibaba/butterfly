@@ -714,7 +714,7 @@ class BaseCanvas extends Canvas {
       this.moveable = false;
     }
   }
-  focusNodesWithAnimate(param, type = ['node'], callback) {
+  focusNodesWithAnimate(param, type = ['node'], options, callback) {
     // 画布里的可视区域
     let canLeft = Infinity;
     let canRight = -Infinity;
@@ -781,11 +781,11 @@ class BaseCanvas extends Canvas {
         }
       });
     }
-
+    let customOffset = _.get(options, 'offset') || [0, 0];
     let canDisX = canRight - canLeft;
-    let terDisX = this._rootWidth;
+    let terDisX = this._rootWidth - customOffset[0];
     let canDisY = canBottom - canTop;
-    let terDisY = this._rootHeight;
+    let terDisY = this._rootHeight - customOffset[1];
     let scaleX = terDisX / canDisX;
     let scaleY = terDisY / canDisY;
 
@@ -833,8 +833,8 @@ class BaseCanvas extends Canvas {
     let offsetX = (terLeft + terRight - this._rootWidth) / 2;
     let offsetY = (terTop + terBottom - this._rootHeight) / 2;
 
-    offsetX = -offsetX;
-    offsetY = -offsetY;
+    offsetX = -offsetX + customOffset[0];
+    offsetY = -offsetY + customOffset[1];
 
     const time = 500;
     $(this.wrapper).animate({
@@ -853,7 +853,7 @@ class BaseCanvas extends Canvas {
 
     this.zoom(scale, callback);
   }
-  focusCenterWithAnimate(callback) {
+  focusCenterWithAnimate(options, callback) {
     let nodeIds = this.nodes.map((item) => {
       return item.id;
     });
@@ -864,9 +864,9 @@ class BaseCanvas extends Canvas {
     this.focusNodesWithAnimate({
       nodes: nodeIds,
       groups: groupIds
-    }, ['node', 'group'], callback);
+    }, ['node', 'group'], options, callback);
   }
-  focusNodeWithAnimate(param, type = 'node', callback) {
+  focusNodeWithAnimate(param, type = 'node', options, callback) {
     let node = null;
 
     if (_.isFunction(param)) { // 假如传入的是filter，则按照用户自定义的规则来寻找
@@ -902,11 +902,13 @@ class BaseCanvas extends Canvas {
       }
     }
 
+    let customOffset = _.get(options, 'offset') || [0, 0];
+
     const containerW = this._rootWidth;
     const containerH = this._rootHeight;
 
-    const targetY = containerH / 2 - top;
-    const targetX = containerW / 2 - left;
+    const targetY = containerH / 2 - top + customOffset[1];
+    const targetX = containerW / 2 - left + customOffset[0];
 
     const time = 500;
 
