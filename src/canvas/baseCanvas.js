@@ -714,7 +714,7 @@ class BaseCanvas extends Canvas {
       this.moveable = false;
     }
   }
-  focusNodesWithAnimate(param, type = ['node'], options, callback) {
+  focusNodesWithAnimate(param, type = ['node'], callback) {
     // 画布里的可视区域
     let canLeft = Infinity;
     let canRight = -Infinity;
@@ -853,7 +853,7 @@ class BaseCanvas extends Canvas {
 
     this.zoom(scale, callback);
   }
-  focusCenterWithAnimate(options, callback) {
+  focusCenterWithAnimate(callback) {
     let nodeIds = this.nodes.map((item) => {
       return item.id;
     });
@@ -864,7 +864,7 @@ class BaseCanvas extends Canvas {
     this.focusNodesWithAnimate({
       nodes: nodeIds,
       groups: groupIds
-    }, ['node', 'group'], options, callback);
+    }, ['node', 'group'], callback);
   }
   focusNodeWithAnimate(param, type = 'node', callback) {
     let node = null;
@@ -952,8 +952,8 @@ class BaseCanvas extends Canvas {
           scale: this._zoomData
         };
         if (this._coordinateService.originX === undefined || this._coordinateService.originY === undefined) {
-          _canvasInfo['originX'] = 0;
-          _canvasInfo['originY'] = 0;
+          _canvasInfo['originX'] = 50;
+          _canvasInfo['originY'] = 50;
         }
         this._coordinateService._changeCanvasInfo(_canvasInfo);
         this._guidelineService.zoom(this._zoomData);

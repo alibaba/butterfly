@@ -126,8 +126,8 @@ class CoordinateService {
     let canOffsetY = _.get(options, 'canOffsetY') !== undefined ? _.get(options, 'canOffsetY') : this.canOffsetY;
     let terOffsetX = _.get(options, 'terOffsetX') !== undefined ? _.get(options, 'terOffsetX') : this.terOffsetX;
     let terOffsetY = _.get(options, 'terOffsetY') !== undefined ? _.get(options, 'terOffsetY') : this.terOffsetY;
-    let originX = _.get(options, 'originX') !== undefined ? _.get(options, 'originX') : this.originX;
-    let originY = _.get(options, 'originY') !== undefined ? _.get(options, 'originY') : this.originX;
+    let originX = _.get(options, 'originX') !== undefined ? _.get(options, 'originX') : this.originX || 0;
+    let originY = _.get(options, 'originY') !== undefined ? _.get(options, 'originY') : this.originY || 0;
     if (pos === 'x') {
       let transformOriginX  = originX / 100 * this.terWidth;
       return coordinate * scale + (transformOriginX * (1 - scale) + canOffsetX) + terOffsetX;
@@ -144,13 +144,14 @@ class CoordinateService {
     let canOffsetY = _.get(options, 'canOffsetY') !== undefined ? _.get(options, 'canOffsetY') : this.canOffsetY;
     let terOffsetX = _.get(options, 'terOffsetX') !== undefined ? _.get(options, 'terOffsetX') : this.terOffsetX;
     let terOffsetY = _.get(options, 'terOffsetY') !== undefined ? _.get(options, 'terOffsetY') : this.terOffsetY;
-
+    let originX = _.get(options, 'originX') !== undefined ? _.get(options, 'originX') : this.originX || 0;
+    let originY = _.get(options, 'originY') !== undefined ? _.get(options, 'originY') : this.originY || 0;
     if (pos === 'x') {
-      let transformOriginX  = this.originX / 100 * this.terWidth;
+      let transformOriginX  = originX / 100 * this.terWidth;
       return (coordinate - (transformOriginX * (1 - scale) + canOffsetX) - terOffsetX) / scale;
     }
     if (pos === 'y') {
-      let transformOriginY  = this.originY / 100 * this.terHeight;
+      let transformOriginY  = originY / 100 * this.terHeight;
       return (coordinate - (transformOriginY * (1 - scale) + canOffsetY) - terOffsetY) / scale;
     }
   }
