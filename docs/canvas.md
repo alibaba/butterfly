@@ -135,7 +135,7 @@ setMoveable = (boolean) => {}
   * 聚焦某个节点/节点组
   * @param {string/function} nodeId/groupId or filter  - 节点的id或者过滤器
   * @param {string} type  - 节点的类型(node or group)
-  * @param {object} {offset: [0,0]}  - 聚焦配置属性，如偏移值
+  * @param {object} options {offset: [0,0]}  - 聚焦配置属性，如偏移值
   * @param {function} callback  - 聚焦后的回调
   */
 focusNodeWithAnimate = (string, type, options, callback) => {}
@@ -144,17 +144,17 @@ focusNodeWithAnimate = (string, type, options, callback) => {}
   * 聚焦某多个节点/节点组
   * @param {object} {nodes: [], groups: []}  - 节点和节点组的id数组
   * @param {array} type  - 节点的类型(node or group)
-  * @param {object} {offset: [0,0]}  - 聚焦配置属性，如偏移值
+  * @param {object} options {offset: [0,0]}  - 聚焦配置属性，如偏移值
   * @param {function} callback  - 聚焦后的回调
   */
 focusNodesWithAnimate = (objs, type, options, callback) => {}
 
 /**
   * 聚焦整个画布，会自动调整画布位置和缩放
-  * @param {object} {offset: [0,0]}  - 聚焦配置属性，如偏移值
+  * @param {object} options {offset: [0,0]}  - 聚焦配置属性，如偏移值
   * @param {function} callback  - 聚焦后的回调
   */
-focusCenterWithAnimate = (options) => {}
+focusCenterWithAnimate = (options, callback) => {}
 
 /**
   * 设置框选模式
