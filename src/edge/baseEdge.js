@@ -127,6 +127,13 @@ class Edge {
     if (this.arrowFinalPosition > 1) {
       this.arrowFinalPosition = 1;
     }
+    if (this.arrowFinalPosition < 0) {
+      this.arrowFinalPosition = 0;
+    }
+    // 防止箭头窜出线条
+    if (1 - this.arrowFinalPosition < ArrowUtil.arrow.length / length) {
+      this.arrowFinalPosition = (length * this.arrowFinalPosition - ArrowUtil.arrow.length) / length;
+    }
     // 贝塞尔曲线是反着画的，需要调整
     if (this.shapeType === 'Bezier') {
       this.arrowFinalPosition = 1 - this.arrowFinalPosition;
