@@ -983,8 +983,12 @@ class BaseCanvas extends Canvas {
     return this._zoomData;
   }
 
-  getMovePosition() {
+  getOffset() {
     return this._moveData;
+  }
+
+  getOrigin() {
+    return [this._coordinateService.originX + '%', this._coordinateService.originY + '%']
   }
 
   getDataMap() {

@@ -164,10 +164,28 @@ focusCenterWithAnimate = (options, callback) => {}
 setSelectMode = (boolean, type) => {}
 
 /**
+  * 获取画布的缩放
+  * @return {float} - 画布的缩放(0-1)
+  */
+getZoom = () => {}
+
+/**
+  * 获取画布的偏移值
+  * @return {[x, y]} - 画布的偏移值
+  */
+getOffset = () => {}
+
+/**
+  * 获取画布的偏移值的中心点
+  * @return {[x, y]} - 画布的偏移值的中心点(百分比)
+  */
+getOrigin = () => {}
+
+/**
   * 获取画布的数据模型
   * @return {data} - 画布的数据
   */
-getDataMap = (string) => {}
+getDataMap = () => {}
 
 /**
   * 手动设置画布偏移
