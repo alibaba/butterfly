@@ -967,6 +967,15 @@ class BaseCanvas extends Canvas {
     }
   }
 
+  setOrigin(data) {
+    let originX = (data[0] || '').toString();
+    let originY = (data[1] || '').toString();
+    this._coordinateService._changeCanvasInfo({
+      originX: originX,
+      originY: originY
+    });
+  }
+
   move(position) {
     $(this.wrapper)
       .css('left', position[0])

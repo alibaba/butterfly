@@ -188,6 +188,12 @@ getOrigin = () => {}
 getDataMap = () => {}
 
 /**
+  * 手动设置画布缩放的中心点
+  * @param {[x, y]} array  - x,y的中心点坐标
+  */
+setOrigin = ([x ,y]) => {}
+
+/**
   * 手动设置画布偏移
   * @param {[x, y]} array  - x,y坐标
   */
