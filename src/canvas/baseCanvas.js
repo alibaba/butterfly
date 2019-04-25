@@ -1225,6 +1225,12 @@ class BaseCanvas extends Canvas {
     $(window).resize(() => {
       this._rootWidth = $(this.root).width();
       this._rootHeight = $(this.root).height();
+      this._coordinateService._changeCanvasInfo({
+        terOffsetX: $(this.root).offset().left,
+        terOffsetY: $(this.root).offset().top,
+        terWidth: $(this.root).width(),
+        terHeight: $(this.root).height()
+      });
     });
 
     // 绑定一大堆事件，group:addMember，groupDragStop，group:removeMember，beforeDetach，connection，
