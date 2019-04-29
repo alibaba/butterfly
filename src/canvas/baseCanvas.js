@@ -968,11 +968,11 @@ class BaseCanvas extends Canvas {
   }
 
   setOrigin(data) {
-    let originX = (data[0] || '').toString();
-    let originY = (data[1] || '').toString();
+    let originX = (data[0] || '0').toString().replace('%', '');
+    let originY = (data[1] || '0').toString().replace('%', '');
     this._coordinateService._changeCanvasInfo({
-      originX: originX,
-      originY: originY
+      originX: parseFloat(originX),
+      originY: parseFloat(originY)
     });
   }
 
