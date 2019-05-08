@@ -1954,7 +1954,7 @@ class BaseCanvas extends Canvas {
 
     this.root.addEventListener('mousedown', mouseDownEvent);
     this.root.addEventListener('mousemove', mouseMoveEvent);
-    // this.root.addEventListener('mouseout', mouseEndEvent);
+    this.root.addEventListener('mouseleave', mouseEndEvent);
     this.root.addEventListener('mouseup', mouseEndEvent);
   }
   _moveNode(node, x, y) {
