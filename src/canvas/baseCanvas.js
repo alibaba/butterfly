@@ -1954,14 +1954,16 @@ class BaseCanvas extends Canvas {
 
     this.root.addEventListener('mousedown', mouseDownEvent);
     this.root.addEventListener('mousemove', mouseMoveEvent);
-    this.root.addEventListener('mouseleave', mouseEndEvent);
+    // this.root.addEventListener('mouseleave', mouseEndEvent);
     this.root.addEventListener('mouseup', mouseEndEvent);
   }
   _moveNode(node, x, y) {
     node.moveTo(x, y);
     this.edges.forEach((edge) => {
       if (edge.type === 'endpoint') {
-        const isLink = _.find(node.endpoints, point => point.id === edge.sourceEndpoint.id || point.id === edge.targetEndpoint.id);
+        const isLink = _.find(node.endpoints, (point) => {
+          return (point.nodeId === edge.sourceNode.id && point.id === edge.sourceEndpoint.id) || (point.nodeId === edge.targetNode.id && point.id === edge.targetEndpoint.id);
+        });
         isLink && edge.redraw();
       } else if (edge.type === 'node') {
         const isLink = edge.sourceNode.id === node.id || edge.targetNode.id === node.id;
