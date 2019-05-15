@@ -125,9 +125,8 @@ class BaseNode extends Node {
       this._addEventListener();
     }
   }
-
   // drag的时候移动的api
-  moveTo(x, y) {
+  _moveTo(x, y) {
     // 自身移动
     $(this.dom).css('top', y).css('left', x);
     // 所在的点移动
@@ -136,6 +135,14 @@ class BaseNode extends Node {
     });
     this.top = y;
     this.left = x;
+  }
+  moveTo(x, y) {
+    this._emit('InnerEvents', {
+      type: 'node:move',
+      node: this,
+      x: x,
+      y: y
+    });
   }
 
   getWidth() {

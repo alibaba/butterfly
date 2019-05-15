@@ -92,8 +92,6 @@ class BaseCanvas extends Canvas {
     this._dragGroup = null;
 
     // 初始化一些参数
-    this._rootOffsetX = $(this.root).offset().left;
-    this._rootOffsetY = $(this.root).offset().top;
     this._rootWidth = $(this.root).width();
     this._rootHeight = $(this.root).height();
 
@@ -111,8 +109,8 @@ class BaseCanvas extends Canvas {
     // 坐标转换服务
     this._coordinateService = new CoordinateService({
       canvas: this,
-      terOffsetX: $(this.root).offset().left,
-      terOffsetY: $(this.root).offset().top,
+      terOffsetX: $(this.root).offset().left - $(this.root).scrollLeft(),
+      terOffsetY: $(this.root).offset().top - $(this.root).scrollTop(),
       terWidth: $(this.root).width(),
       terHeight: $(this.root).height(),
       canOffsetX: this._moveData[0],
@@ -130,6 +128,15 @@ class BaseCanvas extends Canvas {
         endpoints: []
       }
     };
+  }
+
+  updateRootResize() {
+    this._coordinateService._changeCanvasInfo({
+      terOffsetX: $(this.root).offset().left - $(this.root).scrollLeft(),
+      terOffsetY: $(this.root).offset().top - $(this.root).scrollTop(),
+      terWidth: $(this.root).width(),
+      terHeight: $(this.root).height()
+    });
   }
 
   draw(opts, callback) {
@@ -1226,8 +1233,8 @@ class BaseCanvas extends Canvas {
       this._rootWidth = $(this.root).width();
       this._rootHeight = $(this.root).height();
       this._coordinateService._changeCanvasInfo({
-        terOffsetX: $(this.root).offset().left,
-        terOffsetY: $(this.root).offset().top,
+        terOffsetX: $(this.root).offset().left - $(this.root).scrollLeft(),
+        terOffsetY: $(this.root).offset().top - $(this.root).scrollTop(),
         terWidth: $(this.root).width(),
         terHeight: $(this.root).height()
       });
@@ -1248,6 +1255,10 @@ class BaseCanvas extends Canvas {
       } else if (data.type === 'endpoint:drag') {
         this._dragType = 'endpoint:drag';
         this._dragEndpoint = data.data;
+      } else if (data.type === 'node:move') {
+        this._moveNode(data.node, data.x, data.y);
+      } else if (data.type === 'group:move') {
+        this._moveGroup(data.group, data.x, data.y);
       } else if (data.type === 'multiple:select') {
         const result = this._selectMytiplyItem(data.range);
         // 把框选的加到union的数组
@@ -1958,7 +1969,7 @@ class BaseCanvas extends Canvas {
     this.root.addEventListener('mouseup', mouseEndEvent);
   }
   _moveNode(node, x, y) {
-    node.moveTo(x, y);
+    node._moveTo(x, y);
     this.edges.forEach((edge) => {
       if (edge.type === 'endpoint') {
         const isLink = _.find(node.endpoints, (point) => {
@@ -1972,7 +1983,7 @@ class BaseCanvas extends Canvas {
     });
   }
   _moveGroup(group, x, y) {
-    group.moveTo(x, y);
+    group._moveTo(x, y);
     this.edges.forEach((edge) => {
       let hasUpdate = _.get(edge, 'sourceNode.group') === group.id ||
         _.get(edge, 'targetNode.group') === group.id ||

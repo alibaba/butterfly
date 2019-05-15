@@ -290,6 +290,11 @@ canvas2terminal = (coordinates) => {}
   */
 save2img = (options) => {}
 
+/**
+  * 当root移动或者大小发生变化时需要更新位置
+  */
+updateRootResize = () => {}
+
 ```
 
 
