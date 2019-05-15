@@ -109,8 +109,8 @@ class BaseCanvas extends Canvas {
     // 坐标转换服务
     this._coordinateService = new CoordinateService({
       canvas: this,
-      terOffsetX: $(this.root).offset().left - $(this.root).scrollLeft(),
-      terOffsetY: $(this.root).offset().top - $(this.root).scrollTop(),
+      terOffsetX: $(this.root).offset().left,
+      terOffsetY: $(this.root).offset().top,
       terWidth: $(this.root).width(),
       terHeight: $(this.root).height(),
       canOffsetX: this._moveData[0],
@@ -132,8 +132,8 @@ class BaseCanvas extends Canvas {
 
   updateRootResize() {
     this._coordinateService._changeCanvasInfo({
-      terOffsetX: $(this.root).offset().left - $(this.root).scrollLeft(),
-      terOffsetY: $(this.root).offset().top - $(this.root).scrollTop(),
+      terOffsetX: $(this.root).offset().left,
+      terOffsetY: $(this.root).offset().top,
       terWidth: $(this.root).width(),
       terHeight: $(this.root).height()
     });
@@ -1233,8 +1233,8 @@ class BaseCanvas extends Canvas {
       this._rootWidth = $(this.root).width();
       this._rootHeight = $(this.root).height();
       this._coordinateService._changeCanvasInfo({
-        terOffsetX: $(this.root).offset().left - $(this.root).scrollLeft(),
-        terOffsetY: $(this.root).offset().top - $(this.root).scrollTop(),
+        terOffsetX: $(this.root).offset().left,
+        terOffsetY: $(this.root).offset().top,
         terWidth: $(this.root).width(),
         terHeight: $(this.root).height()
       });
