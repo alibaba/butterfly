@@ -202,7 +202,7 @@ class BaseCanvas extends Canvas {
     }));
     if (this._isExistGroup(_groupObj)) {
       // 后续用新的group代码旧的group
-      console.log(`group:${_groupObj.id} has existed`);
+      console.warn(`group:${_groupObj.id} has existed`);
       return;
     }
     _groupObj.init();
@@ -218,7 +218,16 @@ class BaseCanvas extends Canvas {
   addNodes(nodes, isNotEventEmit) {
     const _canvasFragment = document.createDocumentFragment();
     const container = $(this.wrapper);
-    const result = nodes.map((node) => {
+    const result = nodes.filter((node) => {
+      if (node.group) {
+        let _existGroup = this.getGroup(node.group);
+        if (!_existGroup) {
+          console.warn(`nodeId为${node.id}的节点找不到groupId为${node.group}的节点组，因此无法渲染`);
+          return false;
+        }
+      }
+      return true;
+    }).map((node) => {
       let _nodeObj = null;
       if (node instanceof Node) {
         _nodeObj = node;
@@ -234,7 +243,7 @@ class BaseCanvas extends Canvas {
 
       if (this._isExistNode(_nodeObj)) {
         // 后续用新的node代码旧的node
-        console.log(`node:${_nodeObj.id} has existed`);
+        console.warn(`node:${_nodeObj.id} has existed`);
         return;
       }
 
@@ -249,7 +258,7 @@ class BaseCanvas extends Canvas {
         if (ScopeCompare(_nodeObj.scope, existGroup.scope, _.get(this, 'global.isScopeStrict'))) {
           existGroup._appendNodes([_nodeObj]);
         } else {
-          console.log(`nodeId为${_nodeObj.id}的节点和groupId${existGroup.id}的节点组scope值不符，无法加入`);
+          console.warn(`nodeId为${_nodeObj.id}的节点和groupId${existGroup.id}的节点组scope值不符，无法加入`);
         }
       } else {
         _canvasFragment.appendChild(_nodeObj.dom);
@@ -332,7 +341,7 @@ class BaseCanvas extends Canvas {
         }
 
         if (!sourceNode || !targetNode) {
-          console.log(`butterflies error: can not connect edge. link sourceNodeId:${link.sourceNode};link targetNodeId:${link.targetNode}`);
+          console.warn(`butterflies error: can not connect edge. link sourceNodeId:${link.sourceNode};link targetNodeId:${link.targetNode}`);
           return;
         }
 
@@ -352,7 +361,7 @@ class BaseCanvas extends Canvas {
         }
 
         if (!sourceEndpoint || !targetEndpoint) {
-          console.log(`butterflies error: can not connect edge. link sourceId:${link.source};link targetId:${link.target}`);
+          console.warn(`butterflies error: can not connect edge. link sourceId:${link.source};link targetId:${link.target}`);
           return;
         }
 
@@ -371,7 +380,7 @@ class BaseCanvas extends Canvas {
             return _result;
           });
           if (_isRepeat) {
-            console.log(`id为${sourceEndpoint.id}-${targetEndpoint.id}的线条连接重复，请检查`);
+            console.warn(`id为${sourceEndpoint.id}-${targetEndpoint.id}的线条连接重复，请检查`);
             return;
           }
         }
@@ -419,7 +428,7 @@ class BaseCanvas extends Canvas {
         const targetNode = this.getNode(link.target);
 
         if (!sourceNode || !targetNode) {
-          console.log(`butterflies error: can not connect edge. link sourceId:${link.source};link targetId:${link.target}`);
+          console.warn(`butterflies error: can not connect edge. link sourceId:${link.source};link targetId:${link.target}`);
           return;
         }
 
@@ -500,7 +509,7 @@ class BaseCanvas extends Canvas {
   removeNode(nodeId, isNotDelEdge, isNotEventEmit) {
     const index = _.findIndex(this.nodes, _node => _node.id === nodeId);
     if (index === -1) {
-      console.log(`找不到id为：${nodeId}的节点`);
+      console.warn(`找不到id为：${nodeId}的节点`);
       return;
     }
 
@@ -580,13 +589,13 @@ class BaseCanvas extends Canvas {
           return _edge === item.id;
         });
       } else {
-        console.log(`删除线条错误，传入参数有误，请检查`);
+        console.warn(`删除线条错误，传入参数有误，请检查`);
         return;
       }
       if (edgeIndex !== -1) {
         result = result.concat(this.edges.splice(edgeIndex, 1));
       } else {
-        console.log(`删除线条错误，不存在值为${_edge.id}的线`);
+        console.warn(`删除线条错误，不存在值为${_edge.id}的线`);
       }
     });
 
@@ -652,7 +661,7 @@ class BaseCanvas extends Canvas {
     const result = [];
     const node = _.find(this.nodes, item => nodeId === item.id);
     if (!node) {
-      console.log(`找不到id为${nodeId}的节点`);
+      console.warn(`找不到id为${nodeId}的节点`);
     }
     this.edges.forEach((item) => {
       if (item.sourceNode && item.sourceNode.id === nodeId) {
@@ -1726,7 +1735,7 @@ class BaseCanvas extends Canvas {
                 return _result;
               });
               if (_isRepeat) {
-                console.log(`id为${edge.sourceEndpoint.id}-${_targetEndpoint.id}的线条连接重复，请检查`);
+                console.warn(`id为${edge.sourceEndpoint.id}-${_targetEndpoint.id}的线条连接重复，请检查`);
                 edge.destroy();
                 return false;
               }
@@ -1740,7 +1749,7 @@ class BaseCanvas extends Canvas {
             });
             let _isConnect = edge.isConnect ? edge.isConnect() : true;
             if (!_isConnect) {
-              console.log(`id为${edge.sourceEndpoint.id}-${_targetEndpoint.id}的线条无法连接，请检查`);
+              console.warn(`id为${edge.sourceEndpoint.id}-${_targetEndpoint.id}的线条无法连接，请检查`);
               edge.destroy();
               return false;
             }
@@ -1869,7 +1878,7 @@ class BaseCanvas extends Canvas {
                   group: targetGroup
                 });
               } else {
-                console.log(`nodeId为${this._dragNode.id}的节点和groupId${targetGroup.id}的节点组scope值不符，无法加入`);
+                console.warn(`nodeId为${this._dragNode.id}的节点和groupId${targetGroup.id}的节点组scope值不符，无法加入`);
               }
             }
             rmNode._init(nodeData);
@@ -1900,7 +1909,7 @@ class BaseCanvas extends Canvas {
               });
               _updateNeighborEdge(rmNode, neighborEdges);
             } else {
-              console.log(`nodeId为${this._dragNode.id}的节点和groupId${targetGroup.id}的节点组scope值不符，无法加入`);
+              console.warn(`nodeId为${this._dragNode.id}的节点和groupId${targetGroup.id}的节点组scope值不符，无法加入`);
             }
           }
         }
