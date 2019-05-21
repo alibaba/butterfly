@@ -22,25 +22,25 @@ class CoordinateService {
   }
 
   _changeCanvasInfo(data) {
-    if (data.terOffsetX) {
+    if (data.terOffsetX !== undefined) {
       this.terOffsetX = data.terOffsetX;
     }
-    if (data.terOffsetY) {
+    if (data.terOffsetY !== undefined) {
       this.terOffsetY = data.terOffsetY;
     }
-    if (data.terWidth) {
+    if (data.terWidth !== undefined) {
       this.terWidth = data.terWidth;
     }
-    if (data.terHeight) {
+    if (data.terHeight !== undefined) {
       this.terHeight = data.terHeight;
     }
-    if (data.canOffsetX) {
+    if (data.canOffsetX !== undefined) {
       this.canOffsetX = data.canOffsetX;
     }
-    if (data.canOffsetY) {
+    if (data.canOffsetY !== undefined) {
       this.canOffsetY = data.canOffsetY;
     }
-    if (data.scale) {
+    if (data.scale !== undefined) {
       this._lastScale = this.scale;
       this.scale = data.scale;
     }
@@ -64,13 +64,13 @@ class CoordinateService {
     }
 
     let _isChangeMouse = false;
-    if (data.mouseX) {
+    if (data.mouseX !== undefined) {
       if (this._currentTerX !== data.mouseX - this.terOffsetX) {
         this._currentTerX = (data.mouseX - this.terOffsetX);
         _isChangeMouse = true;
       }
     }
-    if (data.mouseY) {
+    if (data.mouseY !== undefined) {
       if (this._currentTerY !== data.mouseY - this.terOffsetY) {
         this._currentTerY = (data.mouseY - this.terOffsetY);
         _isChangeMouse = true;

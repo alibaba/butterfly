@@ -1238,7 +1238,8 @@ class BaseCanvas extends Canvas {
       this.setMoveable(true);
     }
 
-    $(window).resize(() => {
+    //  监控画布的resize事件
+    const _resizeObserver = new ResizeObserver(entries => {
       this._rootWidth = $(this.root).width();
       this._rootHeight = $(this.root).height();
       this._coordinateService._changeCanvasInfo({
@@ -1248,6 +1249,8 @@ class BaseCanvas extends Canvas {
         terHeight: $(this.root).height()
       });
     });
+
+    _resizeObserver.observe(this.root);
 
     // 绑定一大堆事件，group:addMember，groupDragStop，group:removeMember，beforeDetach，connection，
     this.on('InnerEvents', (data) => {
