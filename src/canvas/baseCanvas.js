@@ -176,7 +176,11 @@ class BaseCanvas extends Canvas {
       }, 20);
     });
     Promise.all([groupPromise, nodePromise, edgePromise]).then(() => {
-      callback && callback();
+      callback && callback({
+        nodes: this.nodes,
+        edges: this.edges,
+        groups: this.groups
+      });
     });
   }
 
