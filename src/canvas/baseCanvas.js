@@ -277,13 +277,15 @@ class BaseCanvas extends Canvas {
       !isNotEventEmit && item.mounted && item.mounted();
     });
 
-    this._emit('system.nodes.add', {
-      nodes: this
-    });
-    this._emit('events', {
-      type: 'nodes:add',
-      nodes: result
-    });
+    if (result && result.length > 0) {
+      this.emit('system.nodes.add', {
+        nodes: result
+      });
+      this.emit('events', {
+        type: 'nodes:add',
+        nodes: result
+      });
+    }
 
     return result;
   }
