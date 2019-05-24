@@ -276,6 +276,15 @@ class BaseCanvas extends Canvas {
       // 节点挂载
       !isNotEventEmit && item.mounted && item.mounted();
     });
+
+    this._emit('system.nodes.add', {
+      nodes: this
+    });
+    this._emit('events', {
+      type: 'nodes:add',
+      nodes: result
+    });
+
     return result;
   }
 

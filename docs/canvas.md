@@ -313,6 +313,7 @@ canvas.on('type', (data) => {
 | system.canvas.zoom | 画布缩放 | -
 | system.node.delete | 删除节点 | -
 | system.node.move | 移动节点 | -
+| system.nodes.add | 批量节点添加 | -
 | system.link.delete | 删除连线 | -
 | system.link.connect | 连线成功 | -
 | system.group.delete | 删除节点组 | -
