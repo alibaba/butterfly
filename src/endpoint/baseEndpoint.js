@@ -76,11 +76,6 @@ class Endpoint {
       this._posLeft = this._left;
     }
 
-    // if (this.type === 'source') {
-    //   this.makeSource();
-    // } else {
-    //   this
-    // }
     this.attachEvent();
   }
 

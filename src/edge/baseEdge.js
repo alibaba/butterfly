@@ -48,6 +48,8 @@ class Edge {
     });
     this.labelDom = this.drawLabel(this.label);
     this.arrowDom = this.drawArrow(this.arrow);
+
+    this._addEventListener();
   }
   draw(obj) {
     let path = document.createElementNS('http://www.w3.org/2000/svg', 'path')
@@ -200,6 +202,24 @@ class Edge {
         link: this
       });
     }
+  }
+  _addEventListener() {
+    $(this.dom).on('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      this._emit('system.link.click', {
+        edge: this
+      });
+      this._emit('events', {
+        type: 'link:click',
+        edge: this
+      });
+
+      this._emit('InnerEvents', {
+        type: 'link:click',
+        data: this
+      });
+    });
   }
   _create(opts) {
     this.id = _.get(opts, 'id') || this.id;

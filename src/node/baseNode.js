@@ -198,13 +198,6 @@ class BaseNode extends Node {
   }
   destroy(isNotEvent) {
     if (!isNotEvent) {
-      this._emit('system.node.delete', {
-        node: this
-      });
-      this._emit('events', {
-        type: 'node:delete',
-        node: this
-      });
       this.endpoints.forEach((item) => {
         item.destroy();
       });

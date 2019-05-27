@@ -549,6 +549,13 @@ class BaseCanvas extends Canvas {
     }
 
     if (_rmNodes.length > 0) {
+      this.emit('system.node.delete', {
+        node: _rmNodes[0]
+      });
+      this.emit('events', {
+        type: 'node:delete',
+        node: _rmNodes[0]
+      });
       return {
         nodes: [_rmNodes[0]],
         edges: neighborEdges,
@@ -1282,6 +1289,8 @@ class BaseCanvas extends Canvas {
         this._moveNode(data.node, data.x, data.y);
       } else if (data.type === 'group:move') {
         this._moveGroup(data.group, data.x, data.y);
+      }  else if (data.type === 'link:click') {
+        this._dragType = 'link:click';
       } else if (data.type === 'multiple:select') {
         const result = this._selectMytiplyItem(data.range);
         // 把框选的加到union的数组
