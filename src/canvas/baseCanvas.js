@@ -1386,8 +1386,8 @@ class BaseCanvas extends Canvas {
         $(this.wrapper).prepend(endpointDom);
       }
       endpoint.updatePos();
-      endpoint.mounted && endpoint.mounted();
     }
+    endpoint.mounted && endpoint.mounted();
   }
 
   _attachMouseDownEvent() {
