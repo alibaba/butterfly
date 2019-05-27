@@ -230,6 +230,8 @@ class Edge {
     this._sourceType = _.get(opts, '_sourceType') || this._sourceType;
     this.sourceEndpoint = _.get(opts, 'sourceEndpoint') || this.sourceEndpoint;
     this.type = _.get(opts, 'type') || this.type;
+    _.set(this, 'options.targetNode', _.get(this, 'targetNode.id'));
+    _.set(this, 'options.targetEndpoint', _.get(this, 'targetEndpoint.id'));
     this.redraw();
   }
 }

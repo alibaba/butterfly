@@ -92,10 +92,16 @@ addNode = (object|Node) => {}
 addEdge = (object|Edge) => {}
 
 /**
-  * 设置放大缩小
-  * @param {true|false} boolean  - 是否支持放大缩小
+  * 删除节点
+  * @param nodeId string  - 节点id
   */
 removeNode = (string) => {}
+
+/**
+  * 批量删除节点
+  * @param nodeIds array  - 批量节点id
+  */
+removeNodes = (array) => {}
 
 /**
   * 根据id删除节点
