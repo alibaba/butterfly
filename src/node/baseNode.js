@@ -69,7 +69,6 @@ class BaseNode extends Node {
       type: 'node:addEndpoint',
       data: endpoint,
     });
-    endpoint.mounted && endpoint.mounted();
     this.endpoints.push(endpoint);
     return endpoint;
   }
