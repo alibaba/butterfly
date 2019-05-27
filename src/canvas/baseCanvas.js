@@ -176,7 +176,11 @@ class BaseCanvas extends Canvas {
       }, 20);
     });
     Promise.all([groupPromise, nodePromise, edgePromise]).then(() => {
-      callback && callback();
+      callback && callback({
+        nodes: this.nodes,
+        edges: this.edges,
+        groups: this.groups
+      });
     });
   }
 
@@ -526,15 +530,9 @@ class BaseCanvas extends Canvas {
 
     // 删除邻近的线条
     const neighborEdges = this.getNeighborEdges(nodeId);
-    if (!isNotDelEdge) {
-      this.edges = this.edges.filter((edge) => {
-        const _edge = _.find(neighborEdges, item => item.id === edge.id);
-        return !_edge;
-      });
 
-      neighborEdges.forEach((item) => {
-        item.destroy(isNotEventEmit);
-      });
+    if (!isNotDelEdge) {
+      this.removeEdges(neighborEdges, isNotEventEmit);
     }
 
     // 删除节点
@@ -647,6 +645,7 @@ class BaseCanvas extends Canvas {
   }
 
   getNeighborEdges(id, type) {
+
     let node = undefined;
     let group = undefined;
     if (type === 'node') {
@@ -659,6 +658,7 @@ class BaseCanvas extends Canvas {
       group = _.find(this.groups, item => id === item.id);
       group && !type && (type = 'group');
     }
+
     return this.edges.filter((item) => {
       if (type === 'node') {
         return _.get(item, 'sourceNode.id') === node.id || _.get(item, 'targetNode.id') === node.id;
