@@ -685,7 +685,7 @@ class BaseCanvas extends Canvas {
    * @param {Function} options.iteratee
    * @returns {Object} filteredGraph
    */
-  getNeighborNodesAndEdges({node, endpoint, type = 'out', level = Infinity, iteratee = () => true}) {
+  getNeighborNodesAndEdgesByLevel({node, endpoint, type = 'out', level = Infinity, iteratee = () => true}) {
     // 先求source-target level 层
     if (!node || !this.nodes.length) return [];
     if (level == 0 || !this.edges.length) return [node];
@@ -731,14 +731,11 @@ class BaseCanvas extends Canvas {
     // 目前只考虑点集内的全部边
     this.edges.forEach(edge => {
       const { sourceNode, sourceEndpoint, targetNode, targetEndpoint } = edge;
-      if (
-        visited.has(sourceNode.id) && 
-        visited.has(targetNode.id)
-      ) {
-          nodes.add(sourceNode);
-          nodes.add(targetNode);
-          edges.add(edge);
-        }
+      if (visited.has(sourceNode.id) &&  visited.has(targetNode.id)) {
+        nodes.add(sourceNode);
+        nodes.add(targetNode);
+        edges.add(edge);
+      }
     });
 
     return {
