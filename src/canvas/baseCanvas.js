@@ -685,7 +685,7 @@ class BaseCanvas extends Canvas {
    * @param {Function} options.iteratee
    * @returns {Object} filteredGraph
    */
-  getNeighborPathByLevel({node, endpoint, type = 'out', level = Infinity, iteratee = () => true}) {
+  getNeighborNodesAndEdges({node, endpoint, type = 'out', level = Infinity, iteratee = () => true}) {
     // 先求source-target level 层
     if (!node || !this.nodes.length) return [];
     if (level == 0 || !this.edges.length) return [node];
