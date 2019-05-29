@@ -31,7 +31,7 @@ node.addEndpoint({
 | orientation | 方向 | array (Option) | 下:[0,1]/上:[0,-1]/右:[1,0]/左:[-1,0]
 | pos | 连接目标锚点id | string (Option) | - 
 | scope | 作用域 | string (Option) | 锚点scope相同才可以连线
-| type | 目标锚点还是源锚点 | string (Require) | 'source' / 'target'
+| type | 目标锚点还是源锚点 | string (Option) | 'source' / 'target' / undefined，当undefined的时候锚点既是source又是target
 | disLinkable | 禁止锚点拖动断开线段 | boolean (Option) | 该属性仅限用于'target'的锚点
 | root | 可把锚点附属与某个子元素 | string (Option) | - 
 | Class | 拓展类 | Class (Option) | 当传入拓展类的时候，该节点组则会按拓展类的draw方法进行渲染，拓展类的相关方法也会覆盖父类的方法

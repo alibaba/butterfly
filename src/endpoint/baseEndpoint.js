@@ -175,7 +175,7 @@ class Endpoint {
         .css('top', this._top)
         .css('left', this._left);
 
-    this.updated && this.updated();
+      this.updated && this.updated();
     }
   }
 
@@ -194,12 +194,12 @@ class Endpoint {
   }
 
   attachEvent() {
+    if (this._disLinkable === true) {
+      return;
+    }
     $(this.dom).on('mousedown', (e) => {
       const LEFT_KEY = 0;
       if (e.button !== LEFT_KEY) {
-        return;
-      }
-      if (this.type === 'target' && this._disLinkable) {
         return;
       }
       e.preventDefault();

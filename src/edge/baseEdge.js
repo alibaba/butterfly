@@ -27,7 +27,7 @@ class Edge {
     this.labelDom = null;
     this.arrowDom = null;
     this.eventHandlerDom = null;
-    this.options = opts.options;
+    this.options = opts;
     this._isDeletingEdge = opts._isDeletingEdge;
     this._global = opts._global;
     this._on = opts._on;

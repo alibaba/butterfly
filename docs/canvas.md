@@ -301,6 +301,18 @@ save2img = (options) => {}
   */
 updateRootResize = () => {}
 
+/**
+  * 查找 N 层关联节点和边
+  * @param {Object} options - 参数
+  * @param {Node} options.node - 起始节点
+  * @param {Endpoint} options.endpoint - 起始锚点，可选
+  * @param {String} options.type - 查找方向，可选值为 all\in\out，默认all，可选
+  * @param {Number} options.level - 层数，起始节点为第 0 层，默认 Infinity
+  * @param {Function} options.iteratee - 是否继续遍历判定函数，返回 boolean 值
+  * @returns {Object<nodes: Node, edges: Edge>} filteredGraph - 查找结果
+  */
+getNeighborNodesAndEdgesByLevel = (options) => {}
+
 ```
 
 
