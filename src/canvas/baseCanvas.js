@@ -692,6 +692,107 @@ class BaseCanvas extends Canvas {
     return result.map(id => this.getNode(id));
   }
 
+  /**
+   * 查找 N 层节点
+   * 
+   * @param {Object} options 
+   * @param {Node} options.node
+   * @param {Endpoint} options.endpoint
+   * @param {String} options.type
+   * @param {Number} options.level
+   * @param {Function} options.iteratee
+   * @returns {Object} filteredGraph
+   */
+  getNeighborPathByLevel({node, endpoint, type = 'out', level = Infinity, iteratee = () => true}) {
+    // 先求source-target level 层
+    if (!node || !this.nodes.length) return [];
+    if (level == 0 || !this.edges.length) return [node];
+    let quene = [];
+    let neighbors = [];
+    const visited = new Set();
+    
+    // 1. 生成邻接表
+    // adjTable = {[nodeId]: {[endpointId]: [[targetNode, targetEndpoint]]}}
+    const adjTable = this.getAdjcentTable(type);
+
+    if (endpoint) {
+      quene = _.get(adjTable, [node.id, endpoint.id], []).map(d => [...d, 1]);
+    } else {
+      quene = (Object.values(_.get(adjTable, node.id, {})) || []).flatMap(d => d.map(n => n.concat(1)));
+    }
+
+    visited.add(node.id);
+
+    if (!quene.length) return [node];
+    // 2. BFS,得到 nodes 集合
+    while(quene.length) {
+      const [$node, $endpoint, $level] = quene.shift();
+      if (
+        visited.has($node.id) ||
+        $level > level ||
+        !iteratee($node, $endpoint, $level)
+      ) continue;
+
+      // TODO: 锚点向后传递？节点向后传递？
+      neighbors = (Object.values(_.get(adjTable, $node.id, {})) || []).forEach((neighborsWithEndpoint) => {
+        neighborsWithEndpoint.forEach(neighbor => {
+          const [$nNode, $nEndpoint] = neighbor;
+          if (visited.has($nNode.id)) return;
+          quene.push([...neighbor, $level + 1]);
+        });
+      });
+      visited.add($node.id);
+    }
+    const nodes = new Set();
+    const edges = new Set();
+    // 4. 获取 edges，1. 只考虑点集 2. 考虑边
+    // 目前只考虑点集内的全部边
+    this.edges.forEach(edge => {
+      const { sourceNode, sourceEndpoint, targetNode, targetEndpoint } = edge;
+      if (
+        visited.has(sourceNode.id) && 
+        visited.has(targetNode.id)
+      ) {
+          nodes.add(sourceNode);
+          nodes.add(targetNode);
+          edges.add(edge);
+        }
+    });
+
+    return {
+      nodes: [...nodes],
+      edges: [...edges]
+    }
+  }
+
+  getAdjcentTable(type) {
+    // 包含正逆的邻接表
+    const adjTable = {};
+    this.edges.forEach(edge => {
+      const { sourceNode, sourceEndpoint, targetNode, targetEndpoint } = edge;
+      const sourceNodeId = sourceNode.id;
+      const sourceEndpointId = sourceEndpoint.id;
+      const targetNodeId = targetNode.id;
+      const targetEndpointId = targetEndpoint.id;
+      // in and all
+      if (type !== 'out') {
+        if (!adjTable[targetNodeId]) adjTable[targetNodeId] = {};
+        if (!adjTable[targetNodeId][targetEndpointId]) adjTable[targetNodeId][targetEndpointId] = [];
+  
+        adjTable[targetNodeId][targetEndpointId].push([sourceNode, sourceEndpoint]);
+      }
+      // out and all
+      if (type !== 'in') {
+        if (!adjTable[sourceNodeId]) adjTable[sourceNodeId] = {};
+        if (!adjTable[sourceNodeId][sourceEndpointId]) adjTable[sourceNodeId][sourceEndpointId] = [];
+  
+        adjTable[sourceNodeId][sourceEndpointId].push([targetNode, targetEndpoint]);
+      }
+
+    });
+    return adjTable;
+  }
+
   setZoomable(flat) {
     if (!this._zoomCb) {
       this._zoomCb = (event) => {
