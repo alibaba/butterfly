@@ -93,6 +93,11 @@ getEndpoint = (id, type) => {}
 moveTo = (obj) => {}
 
 /**
+  * @param {boolean} draggable - 设置节点是否可移动
+  */
+setDraggable = (boolean) => {}
+
+/**
   * @return {number} - 节点宽度
   */
 getWidth = () => {}
