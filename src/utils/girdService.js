@@ -14,7 +14,7 @@ class GridService {
 
     this.dom = null;
     this.isActive = false;
-    this.theme = opts.theme || {
+    this.theme = _.get(opts, 'theme', {}) || {
       shapeType: 'circle',  // 展示的类型，支持line & circle
       gap: 5,            // 网格间隙
       adsorbGap: '5px',      // 吸附间距
@@ -25,7 +25,7 @@ class GridService {
       circleColor: '#000' // 断电颜色
     };
   }
-  create(options) {
+  create(options = {}) {
     this.theme = _.merge(this.theme, options.theme || {});
 
     this.canvasHeight = $(this.root).height();
