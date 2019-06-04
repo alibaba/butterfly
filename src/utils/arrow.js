@@ -2,8 +2,8 @@
 
 // todo:丰富箭头样式
 const arrow = {
-    default1: 'M0 0 L-3 3 L2 0 L-3 -3 Z0 0',
-    default: `M5 0 L0 -2 Q 1.0 0 0 2 Z5 0`,
+    default1: 'M0 0 L-3 3 L2 0 L-3 -3 Z',
+    default: `M5 0 L0 -2 Q 1.0 0 0 2 Z`,
     length: 5,
 };
 

@@ -18,7 +18,7 @@ class GuidelineService {
       lineWidth: 1
     };
   }
-  create(options) {
+  create(options = {}) {
     this.theme = _.merge(this.theme, options.theme || {});
 
     this.canvasHeight = $(this.root).height();
