@@ -482,9 +482,9 @@ function _calcOrientation(beginX, beginY, endX, endY, orientationLimit) {
   let k = Math.abs(posY / posX);
 
   if (posX === 0 || posY === 0) {
-    orientation = posX > 0 ? _calcWithLimit(['Right', 'Top', 'Bottom', 'Left']) : orientation;
+    orientation = posX >= 0 ? _calcWithLimit(['Right', 'Top', 'Bottom', 'Left']) : orientation;
     orientation = posX < 0 ? _calcWithLimit(['Left', 'Top', 'Bottom', 'Right']) : orientation;
-    orientation = posY > 0 ? _calcWithLimit(['Top', 'Left', 'Right', 'Bottom']) : orientation;
+    orientation = posY >= 0 ? _calcWithLimit(['Top', 'Left', 'Right', 'Bottom']) : orientation;
     orientation = posY < 0 ? _calcWithLimit(['Bottom', 'Left', 'Right', 'Top']) : orientation;
   } else if (posX > 0 && posY > 0) {
     if (k > 1) {

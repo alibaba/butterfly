@@ -84,7 +84,11 @@ class BaseNode extends Node {
 
   getEndpoint(pointId, type) {
     return _.find(this.endpoints, (point) => {
-      return pointId === point.id && ((type && type === point.type) || !type);
+      if (point.type) {
+        return pointId === point.id && ((type && type === point.type) || !type);
+      } else {
+        return pointId === point.id;
+      }
     });
   }
 
