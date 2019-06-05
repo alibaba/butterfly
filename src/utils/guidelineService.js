@@ -38,7 +38,19 @@ class GuidelineService {
     this.cxt.lineWidth = this.theme.lineWidth || 1;
     this.isActive = true;
   }
-
+  guidLine(
+    moveTo = [0, 0],
+    lineTo = [0, 0]
+  ) {
+    const process = (coord) => {
+      return Math.floor(coord) + 0.5;
+    };
+    this.cxt.beginPath();
+    this.cxt.moveTo(process(moveTo[0]), process(moveTo[1]));
+    this.cxt.lineTo(process(lineTo[0]), process(lineTo[1]));
+    this.cxt.stroke();
+    this.cxt.closePath();
+  } 
   draw(item, type) {
 
     this.cxt.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
@@ -101,7 +113,7 @@ class GuidelineService {
         }
       }
     });
-
+    
     nodes.forEach((_node) => {
       if (type === 'node' && item.id === _node.id) {
         return;
@@ -155,41 +167,25 @@ class GuidelineService {
     if (_leftItem) {
       let startY = _top > _leftItem.top ? _leftItem.top : _top;
       let endY = _top > _leftItem.top ? _bottom : _leftItem.top + _leftItem.getHeight();
-      this.cxt.beginPath();
-      this.cxt.moveTo(_left, startY);
-      this.cxt.lineTo(_left, endY);
-      this.cxt.stroke();
-      this.cxt.closePath();
+      this.guidLine([_left, startY], [_left, endY]);
     }
 
     if (_rightItem) {
       let startY = _top > _rightItem.top ? _rightItem.top : _top;
       let endY = _top > _rightItem.top ? _bottom : _rightItem.top + _rightItem.getHeight();
-      this.cxt.beginPath();
-      this.cxt.moveTo(_right, startY);
-      this.cxt.lineTo(_right, endY);
-      this.cxt.stroke();
-      this.cxt.closePath();
+      this.guidLine([_right, startY], [_right, endY]);
     }
 
     if (_topItem) {
       let startX = _left > _topItem.left ? _topItem.left : _left;
       let endX = _left > _topItem.left ? _right : _topItem.left + _topItem.getWidth();
-      this.cxt.beginPath();
-      this.cxt.moveTo(startX, _top);
-      this.cxt.lineTo(endX, _top);
-      this.cxt.stroke();
-      this.cxt.closePath();
+      this.guidLine([startX, _top], [endX, _top]);
     }
 
     if (_bottomItem) {
       let startX = _left > _bottomItem.left ? _bottomItem.left : _left;
       let endX = _left > _bottomItem.left ? _right : _bottomItem.left + _bottomItem.getWidth();
-      this.cxt.beginPath();
-      this.cxt.moveTo(startX, _bottom);
-      this.cxt.lineTo(endX, _bottom);
-      this.cxt.stroke();
-      this.cxt.closePath();
+      this.guidLine([startX, _bottom], [endX, _bottom]);
     }
   }
   zoom(scale) {
