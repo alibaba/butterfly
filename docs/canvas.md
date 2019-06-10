@@ -14,6 +14,8 @@ let canvas = new Canvas({
       type: 'Bezier',      //线条默认类型：贝塞尔曲线，折线，直线。分别为Bezier/Flow/Straight
       label: 'test',       //线条默认label
       arrow: true,         //线条默认是否带箭头
+      arrowPosition: 0.5,  //箭头位置(0 ~ 1)
+      arrowOffset: 0.0,    //箭头偏移
       Class: XXClass,      //自己拓展的class,拖动连线的时候会采用该拓展类
       isExpandWidth: false //增加线条交互区域
     },
