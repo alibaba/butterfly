@@ -1147,7 +1147,7 @@ class BaseCanvas extends Canvas {
       this.isSelectMode = true;
       this._rmSystemUnion();
       this.selecModel = type;
-      this.canvasWrapper.active();
+      // this.canvasWrapper.active();
       this._remarkMove = this.moveable;
       this._remarkZoom = this.zoomable;
       this.setZoomable(false);
@@ -1517,6 +1517,16 @@ class BaseCanvas extends Canvas {
 
       if (!this._dragType && this.moveable) {
         this._dragType = 'canvas:drag';
+      }
+
+      // 假如点击在空白地方且在框选模式下
+      if (event.target === this.svg[0] && this.isSelectMode) {
+        this.canvasWrapper.active();
+        this.canvasWrapper.dom.dispatchEvent(new MouseEvent('mousedown', {
+          clientX: event.clientX,
+          clientY: event.clientY
+        }));
+        return;
       }
 
       canvasOriginPos = {
@@ -2085,8 +2095,8 @@ class BaseCanvas extends Canvas {
         });
       }
 
-      // 触发click
-      if (this._dragType === 'canvas:drag' || !this._dragType) {
+      // 点击空白处触发canvas click，并且框选模式下不触发
+      if ((this._dragType === 'canvas:drag' || !this._dragType) && !this.isSelectMode) {
         this.emit('system.canvas.click');
         this.emit('events', {
           type: 'canvas:click'

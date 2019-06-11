@@ -17,6 +17,7 @@ class SelectCanvas {
     this._on = null;
     this._emit = null;
     this.isDraw = false;
+    this.isActive = false;
   }
 
   init(opts) {
@@ -65,6 +66,8 @@ class SelectCanvas {
       type: 'multiple:select',
       range: [startLeft, startTop, endLeft, endTop]
     });
+
+    this.unActive();
   }
 
   mouseMove(evt) {
@@ -110,11 +113,17 @@ class SelectCanvas {
   }
 
   active() {
-    $(this.dom).addClass('wrapper-up');
+    if (!this.isActive) {
+      $(this.dom).addClass('wrapper-up');
+      this.isActive = true;
+    }
   }
 
   unActive() {
-    $(this.dom).removeClass('wrapper-up');
+    if (this.isActive) {
+      $(this.dom).removeClass('wrapper-up');
+      this.isActive = false;
+    }
   }
 }
 
