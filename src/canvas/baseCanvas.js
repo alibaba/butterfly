@@ -305,7 +305,6 @@ class BaseCanvas extends Canvas {
 
     const _edgeFragment = document.createDocumentFragment();
     const _labelFragment = document.createDocumentFragment();
-    const _arrowFragment = document.createDocumentFragment();
 
     const result = links.map((link) => {
       const EdgeClass = this.theme.edge.Class;
