@@ -2095,8 +2095,8 @@ class BaseCanvas extends Canvas {
         });
       }
 
-      // 触发click
-      if (this._dragType === 'canvas:drag' || !this._dragType) {
+      // 点击空白处触发canvas click，并且框选模式下不触发
+      if ((this._dragType === 'canvas:drag' || !this._dragType) && !this.isSelectMode) {
         this.emit('system.canvas.click');
         this.emit('events', {
           type: 'canvas:click'
