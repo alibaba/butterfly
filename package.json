@@ -1,6 +1,6 @@
 {
   "name": "butterfly-dag",
-  "version": "2.4.7",
+  "version": "2.4.8",
   "description": "一个基于数据驱动的节点式编排组件库，让你有方便快捷定制可视化流程图表",
   "main": "dist/index.js",
   "scripts": {
@@ -27,7 +27,7 @@
     "less-loader": "~4.1.0",
     "style-loader": "~0.23.1",
     "url-loader": "~1.1.2",
-    "webpack": "~4.29.6",
+    "webpack": "~4.33.0",
     "webpack-cli": "~3.3.0"
   },
   "dependencies": {
