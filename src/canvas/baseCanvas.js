@@ -432,7 +432,7 @@ class BaseCanvas extends Canvas {
         }
 
         if (edge.arrowDom) {
-          _arrowFragment.appendChild(edge.arrowDom);
+          _edgeFragment.appendChild(edge.arrowDom);
         }
 
         this.edges.push(edge);
@@ -474,7 +474,7 @@ class BaseCanvas extends Canvas {
         }
 
         if (edge.arrowDom) {
-          _arrowFragment.appendChild(edge.arrowDom);
+          _edgeFragment.appendChild(edge.arrowDom);
         }
 
         this.edges.push(edge);
@@ -483,7 +483,7 @@ class BaseCanvas extends Canvas {
       }
     }).filter(item => item);
 
-    $(this.svg).append(_edgeFragment, _arrowFragment);
+    $(this.svg).append(_edgeFragment);
 
     $(this.wrapper).append(_labelFragment);
 
