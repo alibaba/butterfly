@@ -1097,6 +1097,15 @@ class BaseCanvas extends Canvas {
         });
         frame++;
       }, time / 20);
+      setTimeout(() => {
+        this.emit('system.canvas.zoom', {
+          zoom: this._zoomData
+        });
+        this.emit('events', {
+          type: 'canvas.zoom',
+          zoom: this._zoomData
+        });
+      }, time + 1);
     }
   }
 
@@ -1519,7 +1528,7 @@ class BaseCanvas extends Canvas {
       }
 
       // 假如点击在空白地方且在框选模式下
-      if (event.target === this.svg[0] && this.isSelectMode) {
+      if ((event.target === this.svg[0] || event.target === this.root) && this.isSelectMode) {
         this.canvasWrapper.active();
         this.canvasWrapper.dom.dispatchEvent(new MouseEvent('mousedown', {
           clientX: event.clientX,
