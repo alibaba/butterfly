@@ -1078,10 +1078,6 @@ class BaseCanvas extends Canvas {
     let timer = null;
     if (gap !== 0) {
       timer = setInterval(() => {
-        if (frame === 20) {
-          clearInterval(timer);
-          callback && callback();
-        }
         this._zoomData += interval;
         let _canvasInfo = {
           scale: this._zoomData
@@ -1095,17 +1091,19 @@ class BaseCanvas extends Canvas {
         $(this.wrapper).css({
           transform: `scale(${this._zoomData})`
         });
+        if (frame === 20) {
+          clearInterval(timer);
+          this.emit('system.canvas.zoom', {
+            zoom: this._zoomData
+          });
+          this.emit('events', {
+            type: 'canvas.zoom',
+            zoom: this._zoomData
+          });
+          callback && callback();
+        }
         frame++;
       }, time / 20);
-      setTimeout(() => {
-        this.emit('system.canvas.zoom', {
-          zoom: this._zoomData
-        });
-        this.emit('events', {
-          type: 'canvas.zoom',
-          zoom: this._zoomData
-        });
-      }, time + 1);
     }
   }
 
