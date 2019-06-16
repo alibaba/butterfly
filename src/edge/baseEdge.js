@@ -95,6 +95,9 @@ class Edge {
       path = DrawUtil.drawStraight(sourcePoint, targetPoint);
     } else if (this.shapeType === 'Flow') {
       path = DrawUtil.drawFlow(sourcePoint, targetPoint, this.orientationLimit);
+    } else if (this.shapeType === 'Manhattan') {
+      // TODO: 箭头计算有问题
+      path = DrawUtil.drawManhattan(sourcePoint, targetPoint);
     }
     return path;
   }

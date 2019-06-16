@@ -2,6 +2,20 @@
 
 const _ = require('lodash');
 
+const MINDIST = 20;
+const TOL = 0.1;
+const TOLxTOL = 0.01;
+const TOGGLE_DIST = 20;
+const LEFT = 'Left';
+const RIGHT = 'Right';
+const TOP = 'Top';
+const BOTTOM = 'Bottom';
+
+const Point = function(x, y) {
+  this.x = x;
+  this.y = y;
+}
+
 function drawBezier(sourcePoint, targetPoint) {
 
   if (!sourcePoint.orientation) {
@@ -315,6 +329,48 @@ function drawFlow(sourcePoint, targetPoint, orientationLimit) {
   });
 }
 
+function drawManhattan(sourcePoint, targetPoint) {
+  if (!sourcePoint.orientation) {
+    sourcePoint.orientation = _calcOrientation(targetPoint.pos[0], targetPoint.pos[1], sourcePoint.pos[0], sourcePoint.pos[1]);
+  }
+
+  if (!targetPoint.orientation) {
+    targetPoint.orientation = _calcOrientation(sourcePoint.pos[0], sourcePoint.pos[1], targetPoint.pos[0], targetPoint.pos[1]);
+  }
+
+  const pointArr = [];
+  const fromPt = {
+    x: sourcePoint.pos[0],
+    y: sourcePoint.pos[1],
+  };
+  const toPt = {
+    x: targetPoint.pos[0],
+    y: targetPoint.pos[1],
+  };
+  const orientation = {
+    '-10': LEFT,
+    '10': RIGHT,
+    '0-1': TOP,
+    '01': BOTTOM,
+  };
+  // link:connect 中 orientation = undefined
+  _route(pointArr, fromPt, orientation[sourcePoint.orientation.join('')], toPt, orientation[targetPoint.orientation.join('')]);
+  if (pointArr.length < 2) return '';
+  const path = pointArr.reduce((path, point) => {
+    path.push([
+      'L',
+      point.x,
+      point.y
+    ].join(' '));
+    return path;
+  }, [[
+    'M',
+    pointArr[0].x,
+    pointArr[0].y
+  ].join(' ')]).join(' ');
+  return path;
+}
+
 function _drawFlowSegment(segments, offset) {
   let current = null;
   let next = null;
@@ -582,8 +638,136 @@ function _findControlPoint(point, sourcePoint, targetPoint, _so, _to) {
   return result;
 }
 
+// 曼哈顿折线路由算法
+function _route(conn, fromPt, fromDir, toPt, toDir) {
+  const xDiff = fromPt.x - toPt.x;
+  const yDiff = fromPt.y - toPt.y;
+  let point;
+  let dir;
+  let pos;
+
+  conn.push(new Point(fromPt.x, fromPt.y));
+
+  if (((xDiff * xDiff) < (TOLxTOL)) && ((yDiff * yDiff) < (TOLxTOL))) {
+    conn.push(new Point(toPt.x, toPt.y));
+    return;
+  }
+
+  if (fromDir === LEFT) {
+    if ((xDiff > 0) && ((yDiff * yDiff) < TOL) && (toDir === RIGHT)) {
+      point = toPt
+      dir = toDir
+    }
+    else {
+      if (xDiff < 0) {
+        point = new Point(fromPt.x - MINDIST, fromPt.y);
+      }
+      else if (((yDiff > 0) && (toDir === BOTTOM)) || ((yDiff < 0) && (toDir === TOP))) {
+        point = new Point(toPt.x, fromPt.y);
+      }
+      else if (fromDir === toDir) {
+        pos = Math.min(fromPt.x, toPt.x) - MINDIST
+        point = new Point(pos, fromPt.y);
+      }
+      else {
+        point = new Point(fromPt.x - (xDiff / 2), fromPt.y);
+      }
+
+      if (yDiff > 0) {
+        dir = TOP
+      }
+      else {
+        dir = BOTTOM
+      }
+    }
+  } else if (fromDir === RIGHT) {
+    if ((xDiff < 0) && ((yDiff * yDiff) < TOL) && (toDir === LEFT)) {
+      point = toPt
+      dir = toDir
+    }
+    else {
+      if (xDiff > 0) {
+        point = new Point(fromPt.x + MINDIST, fromPt.y);
+      }
+      else if (((yDiff > 0) && (toDir === BOTTOM)) || ((yDiff < 0) && (toDir === TOP))) {
+        point = new Point(toPt.x, fromPt.y);
+      }
+      else if (fromDir === toDir) {
+        pos = Math.max(fromPt.x, toPt.x) + MINDIST
+        point = new Point(pos, fromPt.y);
+      }
+      else {
+        point = new Point(fromPt.x - (xDiff / 2), fromPt.y);
+      }
+
+      if (yDiff > 0) {
+        dir = TOP
+      }
+      else {
+        dir = BOTTOM
+      }
+    }
+  } else if (fromDir === BOTTOM) {
+    if (((xDiff * xDiff) < TOL) && (yDiff < 0) && (toDir === TOP)) {
+      point = toPt
+      dir = toDir
+    }
+    else {
+      if (yDiff > 0) {
+        point = new Point(fromPt.x, fromPt.y + MINDIST)
+      }
+      else if (((xDiff > 0) && (toDir === RIGHT)) || ((xDiff < 0) && (toDir === LEFT))) {
+        point = new Point(fromPt.x, toPt.y)
+      }
+      else if (fromDir === toDir) {
+        pos = Math.max(fromPt.y, toPt.y) + MINDIST
+        point = new Point(fromPt.x, pos)
+      }
+      else {
+        point = new Point(fromPt.x, fromPt.y - (yDiff / 2))
+      }
+
+      if (xDiff > 0) {
+        dir = LEFT
+      }
+      else {
+        dir = RIGHT
+      }
+    }
+  } else if (fromDir === TOP) {
+    if (((xDiff * xDiff) < TOL) && (yDiff > 0) && (toDir === BOTTOM)) {
+      point = toPt
+      dir = toDir
+    }
+    else {
+      if (yDiff < 0) {
+        point = new Point(fromPt.x, fromPt.y - MINDIST)
+      }
+      else if (((xDiff > 0) && (toDir === RIGHT)) || ((xDiff < 0) && (toDir === LEFT))) {
+        point = new Point(fromPt.x, toPt.y)
+      }
+      else if (fromDir === toDir) {
+        pos = Math.min(fromPt.y, toPt.y) - MINDIST
+        point = new Point(fromPt.x, pos)
+      }
+      else {
+        point = new Point(fromPt.x, fromPt.y - (yDiff / 2))
+      }
+
+      if (xDiff > 0) {
+        dir = LEFT
+      }
+      else {
+        dir = RIGHT
+      }
+    }
+  }
+  _route(conn, point, dir, toPt, toDir);
+}
+
 module.exports = {
   drawBezier,
   drawStraight,
-  drawFlow
+  drawFlow,
+  drawManhattan
 };

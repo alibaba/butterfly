@@ -705,8 +705,8 @@ class BaseCanvas extends Canvas {
    */
   getNeighborNodesAndEdgesByLevel({node, endpoint, type = 'out', level = Infinity, iteratee = () => true}) {
     // 先求source-target level 层
-    if (!node || !this.nodes.length) return [];
-    if (level == 0 || !this.edges.length) return [node];
+    if (!node || !this.nodes.length) return {nodes: [], edges: []};
+    if (level == 0 || !this.edges.length) return {nodes: [node], edges: []};
     let quene = [];
     let neighbors = [];
     const visited = new Set();
@@ -723,7 +723,7 @@ class BaseCanvas extends Canvas {
 
     visited.add(node.id);
 
-    if (!quene.length) return [node];
+    if (!quene.length) return {nodes: [node], edges: []};
     // 2. BFS,得到 nodes 集合
     while(quene.length) {
       const [$node, $endpoint, $level] = quene.shift();
@@ -764,6 +764,7 @@ class BaseCanvas extends Canvas {
 
   getAdjcentTable(type) {
     // 包含正逆的邻接表
+    // {[nodeId]: {[endpointId]: [[targetNode, targetEndpoint]]}}
     const adjTable = {};
     this.edges.forEach(edge => {
       const { sourceNode, sourceEndpoint, targetNode, targetEndpoint } = edge;
@@ -786,6 +787,9 @@ class BaseCanvas extends Canvas {
         adjTable[sourceNodeId][sourceEndpointId].push([targetNode, targetEndpoint]);
       }
 
+    });
+    this.nodes.forEach(node => {
+      if (!adjTable[node.id]) adjTable[node.id] = {};
     });
     return adjTable;
   }
