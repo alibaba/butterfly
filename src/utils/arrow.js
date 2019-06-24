@@ -37,7 +37,7 @@ function calcSlope(opts) {
 
     x = p1.x - p0.x;
     y = p1.y - p0.y;
-  } else if (shapeType === 'Flow') {
+  } else if (shapeType === 'Flow' || shapeType === 'Manhattan') {
     let p0 = 0;
     let p1 = 1;
 
