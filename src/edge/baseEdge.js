@@ -27,7 +27,8 @@ class Edge {
     this.labelDom = null;
     this.arrowDom = null;
     this.eventHandlerDom = null;
-    this.options = opts;
+    // 业务和库内addEdges写法上有区别，需要兼容
+    this.options = _.get(opts, 'options') || opts;
     this._isDeletingEdge = opts._isDeletingEdge;
     this._global = opts._global;
     this._on = opts._on;
