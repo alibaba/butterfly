@@ -3,185 +3,148 @@
 const EventEmit = require('event-emitter');
 
 class Canvas {
-  constructor() {}
+  constructor() {
+    // root             根节点
+    // layout           布局支持
+    // zoomable         是否可放大缩小
+    // moveable         是否可移动
+    // draggable        是否可拖动节点
+    // linkable         是否可连接线条
+    // disLinkable      是否可取消连线
+    // theme            主题配置
+    // global           公共配置
 
-  /**
-   * 渲染画布
-   * @param {array} data - 画布的数据(group,node,link)
-   */
-  draw(data) {}
+  }
 
-  /**
-   * 获取单个节点
-   * @param {string} id - 单个节点的Id
-   * @return {object} - 单个节点
-   */
-  getNode(id) {}
+  // 渲染节点
+  draw() {}
 
-  /**
-   * 获取单个连线
-   * @param {string} id - 单个连线的Id
-   * @return {object} - 单个连线
-   */
-  getEdge(id) {}
+  // 获取节点
+  getNode() {}
 
-  /**
-   * 获取单个节点组
-   * @param {string} id - 单个节点组的Id
-   * @return {object} - 单个节点组
-   */
-  getGroup(id) {}
+  // 获取线条
+  getEdge() {}
 
-  /**
-   * 添加单个节点组
-   * @param {object} group - 节点组的数据结构
-   */
-  addGroup(group) {}
+  // 获取节点组
+  getGroup() {}
 
-  /**
-   * 添加单个节点
-   * @param {object} node - 节点的数据结构
-   */
-  addNode(node) {}
+  // 添加节点
+  addNode() {}
 
-  /**
-   * 添加单个连线
-   * @param {object} link - 连线的数据结构
-   */
-  addLink(link) {}
+  // 批量添加节点
+  addNodes() {}
 
-  /**
-   * 添加多个节点组
-   * @param {array} groups - 节点组的数据结构
-   */
-  addGroups(groups) {}
+  // 添加线条
+  addEdge() {}
 
-  /**
-   * 添加多个节点
-   * @param {array} nodes - 节点的数据结构
-   */
-  addNodes(nodes) {}
+  // 批量添加线条
+  addEdges() {}
 
-  /**
-   * 添加多个连线
-   * @param {array} links - 连线的数据结构
-   */
-  addLinks(links) {}
+  // 批量添加节点组
+  addGroups() {}
 
-  /**
-   * 删除单个节点
-   * @param {string} id - 节点的id
-   */
-  removeNode(id) {}
+  // 删除节点
+  removeNode() {} 
 
-  /**
-   * 删除多个节点
-   * @param {array} ids - 节点的ids
-   */
-  removeNodes(ids) {}
+  // 批量删除节点
+  removeNodes() {}
 
-  /**
-   * 删除连线
-   * @param {string} id - 连线的id
-   */
-  removeEdge(id) {}
+  // 删除线条
+  removeEdge() {}
 
-  /**
-   * 删除节点组
-   * @param {string} id - 节点组的id
-   */
-  removeGroup(id) {}
+  // 批量删除线条
+  removeEdges() {}
 
-  /**
-   * 获取相邻连线
-   * @param {string} id - 节点的id
-   * @return {array} - 连线
-   */
-  getNeighborEdges(id) {}
+  // 删除节点组
+  removeGroup() {}
 
-  /**
-   * 获取相邻节点
-   * @param {string} id - 节点的id
-   * @return {array} - 节点
-   */
-  getNeighborNodes(id) {}
+  // 获取相邻的线条
+  getNeighborEdges() {}
 
-  /**
-   * 获取缩放倍数
-   * @return {float} - 缩放倍数
-   */
+  // 获取相邻的节点
+  getNeighborNodes() {}
+
+  // 获取无环血缘图
+  getNeighborNodesAndEdgesByLevel() {}
+  getAdjcentTable() {} // 需要改为内部方法
+
+  // 获取缩放值
   getZoom() {}
+  // 动态设置可缩放
+  setZoomable() {}
+  // 动态设置缩放值
+  zoom() {}
 
-  /**
-   * 设置是否能缩放
-   * @param {boolean} flat - 缩放标记
-   */
-  setZoomable(flat) {}
+  // 获取偏移值
+  getOffset() {}
+  // 动态设置可移动
+  setMoveable() {}
+  // 动态设置移动
+  move() {}
 
-  /**
-   * 设置缩放倍数
-   * @param {float} data - 缩放倍数(0-1之间)
-   */
-  zoom(data) {}
+  // 获取中心点
+  getOrigin() {}
+  // 动态设置中心点
+  setOrigin() {}
 
-  /**
-   * 获取移动位置
-   * @return {array} - 移动位置
-   */
-  getMovePosition() {}
-
-  /**
-   * 设置是否能移动
-   * @param {boolean} flat - 移动标记
-   */
-  setMoveable(flat) {}
-
-  /**
-   * 设置移动位置
-   * @param {array} data - 移动位置([x,y])
-   */
-  move(data) {}
-
-  /**
-   * 设置是否能框选
-   * @param {boolean} flat - 框选标记
-   */
-  setSelectMode(flat) {}
-
-  /**
-   * 聚焦到某个节点
-   * @param {id} id - 移动标记
-   */
-  focusNodeWithAnimate(id) {}
-
-  /**
-   * 获取整个画布上的数据结构
-   * @return {object} - 数据结构
-   */
+  // 获取数据结构
   getDataMap() {}
 
-  /**
-   * 绑定事件(已经集成进里面)
-   * @param {string} type - 事件类型
-   */
-  // on(type, callback) {}
+  // 设置网格模式
+  setGirdMode() {}
+  // 设置网格线条
+  setGuideLine() {}
+  // 设置辅助线
+  justifyCoordinate() {}
 
-  /**
-   * 发送事件(已经集成进里面)
-   * @param {string} type - 事件类型
-   */
-  // emit(type, callback) {}
+  // 设置框选模式
+  setSelectMode() {}
 
-  /**
-   * 解绑事件
-   */
-  off() {}
+  // 设置某些联合值，即框选的元素
+  getUnion() {}
+  // 设置所有联合值，即框选的元素
+  getAllUnion() {}
 
-  /**
-   * 连线接上的事件回调(可能需要废弃)
-   * @param {object} conn - 连线的对象
-   */
-  connection(conn) {}
+  // 添加联合值
+  add2Union() {}
+  // 删除某些联合值
+  removeUnion() {}
+  // 删除所有联合值
+  removeAllUnion() {}
+
+  // 聚焦单个节点（看看需要合并不）
+  focusNodeWithAnimate() {}
+  // 聚焦某些节点
+  focusNodesWithAnimate() {}
+
+  // 画布坐标转换为终端坐标
+  canvas2terminal() {}
+  // 终端坐标转换为画布坐标
+  terminal2canvas() {}
+
+  // 保存为图片
+  save2img() {}
+
+  // ********* 需要优化的api ********* 
+  
+  // 更新画布的大小 
+  updateRootResize() {}
+
+  // ********* 需要新增的api ********* 
+
+  // 单击的回调
+  click() {}
+
+  // 双击的回调
+  doubleClick() {}
+
+  // 右键的回调
+  onContextmenu() {}
+
+  // 集成menu
+
+  // 生成/关闭缩略图
+  
 }
 
 EventEmit(Canvas.prototype);
