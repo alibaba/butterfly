@@ -1668,7 +1668,7 @@ class BaseCanvas extends Canvas {
           let _isSourceEndpoint = (this._dragEndpoint.type === 'source' || (!this._dragEndpoint.type && (!this._dragEndpoint._tmpType || this._dragEndpoint._tmpType === 'source')));
           let _isTargetEndpoint = (this._dragEndpoint.type === 'target' || (!this._dragEndpoint.type && this._dragEndpoint._tmpType === 'target'));
           
-          if (_isSourceEndpoint) {
+          if (_isSourceEndpoint && this.linkable) {
             let unionKeys = this._findUnion('endpoints', this._dragEndpoint);
             
             let edges = [];
@@ -1748,7 +1748,7 @@ class BaseCanvas extends Canvas {
               dragEndpoint: this._dragEndpoint,
               dragEdges: edges
             });
-          } else if (_isTargetEndpoint) {
+          } else if (_isTargetEndpoint && this.disLinkable) {
             // 从后面搜索线
             let targetEdge = null;
             for (let i = this.edges.length - 1; i >= 0; i--) {
