@@ -59,5 +59,26 @@ updated = () => {}
   * @param {number} y - 移动位置的y坐标 
   */
 moveTo = (obj) => {}
+
+/**
+  * 设置连线时linkable的状态 (需要设置this.theme.endpoint.linkableHighlight属性)
+  */
+linkable = () => {}
+
+/**
+  * 取消连线时linkable的状态
+  */
+unLinkable = () => {}
+
+/**
+  * 设置连线时linkable并且hover状态 (需要设置this.theme.endpoint.linkableHighlight属性)
+  */
+hoverLinkable = () => {}
+
+/**
+  * 取消连线时linkable并且hover状态
+  */
+unHoverLinkable = () => {}
+
 ```
 
