@@ -45,7 +45,8 @@ class BaseCanvas extends Canvas {
         isExpandWidth: _.get(options, 'theme.edge.isExpandWidth') || false
       },
       endpoint: {
-        position: _.get(options, 'theme.endpoint.position')
+        position: _.get(options, 'theme.endpoint.position'),
+        linkableHighlight: _.get(options, 'theme.endpoint.linkableHighlight') || false
       },
       zoomGap: _.get(options, 'theme.zoomGap') || 0.001
     };
@@ -1519,6 +1520,46 @@ class BaseCanvas extends Canvas {
       y: 0
     };
 
+    let _isActiveEndpoint = false;
+    let _activeItems = [];
+    // 把其他可连接的point高亮
+    let _activeEndpoint = (target) => {
+      if (_isActiveEndpoint) {
+        return;
+      }
+      let _allPoints = this._getAllEndpoints();
+      _allPoints.forEach((_point) => {
+        if (target === _point || _point.type === 'source' || _point._tmpType === 'source') {
+          return;
+        }
+        if (_point.canLink && _point.canLink(target)) {
+          if (_point.linkable) {
+            _point.linkable();
+            _point._linkable = true;
+          }
+          return;
+        }
+        if (ScopeCompare(target.scope, _point.scope)) {
+          if (_point.linkable) {
+            _point.linkable();
+            _point._linkable = true;
+          }
+          _activeItems.push(_point);
+          return;
+        }
+      });
+      _isActiveEndpoint = true;
+    };
+    // 把其他可连接的point取消高亮
+    let _unActiveEndpoint = () => {
+      _isActiveEndpoint = false;
+      _activeItems.forEach((item) => {
+        item.unLinkable && item.unLinkable();
+        item._linkable = false;
+      });
+      _activeItems = [];
+    }
+
     const mouseDownEvent = (event) => {
       const LEFT_BUTTON = 0;
       if (event.button !== LEFT_BUTTON) {
@@ -1733,6 +1774,10 @@ class BaseCanvas extends Canvas {
             $(this.svg).css('visibility', 'visible');
             $(this.wrapper).css('visibility', 'visible');
 
+            if (this.theme.endpoint.linkableHighlight) {
+              _activeEndpoint(this._dragEndpoint);
+            }
+
             this.emit('system.drag.move', {
               dragType: this._dragType,
               pos: [event.clientX, event.clientY],
@@ -1819,6 +1864,8 @@ class BaseCanvas extends Canvas {
         return;
       }
 
+      _unActiveEndpoint();
+
       // 处理线条的问题
       if (this._dragType === 'endpoint:drag' && this._dragEdges && this._dragEdges.length !== 0) {
         // 释放对应画布上的x,y
@@ -1826,7 +1873,6 @@ class BaseCanvas extends Canvas {
         const y = this._coordinateService._terminal2canvas('y', event.clientY);
 
         let _targetEndpoint = null;
-
 
         let _nodes = _.concat(this.nodes, this.groups);
         _nodes.forEach((_node) => {
@@ -2287,6 +2333,19 @@ class BaseCanvas extends Canvas {
     // 框选节点组，准备支持
 
     return this.selectItem;
+  }
+  _getAllEndpoints() {
+    let points = [];
+    points = points.concat(this.nodes.map((_node) => {
+      return _node.endpoints;
+    }));
+    points = points.concat(this.groups.map((_node) => {
+      return _node.endpoints;
+    }));
+    points = points.filter((item) => {
+      return !!item;
+    });
+    return _.flatten(points);
   }
 }
 

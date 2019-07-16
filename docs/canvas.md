@@ -20,7 +20,8 @@ let canvas = new Canvas({
       isExpandWidth: false //增加线条交互区域
     },
     endpoint: {
-      position: []         //限制锚点位置['Top', 'Bottom', 'Left', 'Right']
+      position: []         //限制锚点位置['Top', 'Bottom', 'Left', 'Right'],
+      linkableHighlight: true //连线时会触发point.linkable的方法，可做高亮
     },
     zoomGap: 0.001         //鼠标放大缩小间隙设置
   },

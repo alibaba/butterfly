@@ -31,6 +31,8 @@ class Endpoint {
     this._posLeft = 0;
     this._width = 0;
     this._height = 0;
+    // 拉线时候可连接的标志
+    this._linkable = false;
 
     // 不能断开线条
     if (this.type === 'target') {
@@ -193,6 +195,22 @@ class Endpoint {
     }
   }
 
+  linkable() {
+    this.dom.addClass('linkable');
+  }
+
+  unLinkable() {
+    this.dom.removeClass('linkable');
+  }
+
+  hoverLinkable() {
+    this.dom.addClass('hover');
+  }
+
+  unHoverLinkable() {
+    this.dom.removeClass('hover');
+  }
+
   attachEvent() {
     if (this._disLinkable === true) {
       return;
@@ -208,6 +226,16 @@ class Endpoint {
         type: 'endpoint:drag',
         data: this
       });
+    });
+    $(this.dom).on('mouseover', (e) => {
+      if (this._linkable) {
+        this.hoverLinkable && this.hoverLinkable();
+      }
+    });
+    $(this.dom).on('mouseout', (e) => {
+      if (this._linkable) {
+        this.unHoverLinkable && this.unHoverLinkable();
+      }
     });
   }
 
