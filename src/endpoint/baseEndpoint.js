@@ -212,21 +212,20 @@ class Endpoint {
   }
 
   attachEvent() {
-    if (this._disLinkable === true) {
-      return;
-    }
-    $(this.dom).on('mousedown', (e) => {
-      const LEFT_KEY = 0;
-      if (e.button !== LEFT_KEY) {
-        return;
-      }
-      e.preventDefault();
-      e.stopPropagation();
-      this._emit('InnerEvents', {
-        type: 'endpoint:drag',
-        data: this
+    if (this._disLinkable !== true) {
+      $(this.dom).on('mousedown', (e) => {
+        const LEFT_KEY = 0;
+        if (e.button !== LEFT_KEY) {
+          return;
+        }
+        e.preventDefault();
+        e.stopPropagation();
+        this._emit('InnerEvents', {
+          type: 'endpoint:drag',
+          data: this
+        });
       });
-    });
+    }
     $(this.dom).on('mouseover', (e) => {
       if (this._linkable) {
         this.hoverLinkable && this.hoverLinkable();
