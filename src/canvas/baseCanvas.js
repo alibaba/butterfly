@@ -1555,6 +1555,7 @@ class BaseCanvas extends Canvas {
       _isActiveEndpoint = false;
       _activeItems.forEach((item) => {
         item.unLinkable && item.unLinkable();
+        item.unHoverLinkable && item.unHoverLinkable();
         item._linkable = false;
       });
       _activeItems = [];
@@ -1845,6 +1846,9 @@ class BaseCanvas extends Canvas {
                 pos: [endX, endY],
               };
               edge.redraw(_soucePoint, _targetPoint);
+            }
+            if (this.theme.endpoint.linkableHighlight) {
+              _activeEndpoint(this._dragEndpoint);
             }
           }
         } else if (this._dragType === 'group:resize') {
