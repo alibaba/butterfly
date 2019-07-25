@@ -226,16 +226,6 @@ class Endpoint {
         });
       });
     }
-    $(this.dom).on('mouseover', (e) => {
-      if (this._linkable) {
-        this.hoverLinkable && this.hoverLinkable();
-      }
-    });
-    $(this.dom).on('mouseout', (e) => {
-      if (this._linkable) {
-        this.unHoverLinkable && this.unHoverLinkable();
-      }
-    });
   }
 
   destroy() {
