@@ -18,6 +18,9 @@ const ScopeCompare = require('../utils/scopeCompare');
 const GridService = require('../utils/girdService');
 // 辅助线模式
 const GuidelineService = require('../utils/guidelineService');
+// 小地图模式
+const Minimap = require('../utils/minimap');
+
 
 require('./baseCanvas.less');
 
@@ -115,6 +118,7 @@ class BaseCanvas extends Canvas {
       root: this.root,
       canvas: this
     });
+
     // 坐标转换服务
     this._coordinateService = new CoordinateService({
       canvas: this,
@@ -125,6 +129,15 @@ class BaseCanvas extends Canvas {
       canOffsetX: this._moveData[0],
       canOffsetY: this._moveData[1],
       scale: this._zoomData
+    });
+
+    // 缩略图
+    this._minimap = new Minimap({
+      root: this.root,
+      canvas: this,
+      scale: this._zoomData,
+      canOffsetX: this._moveData[0],
+      canOffsetY: this._moveData[1],
     });
 
     this._addEventListener();
@@ -1137,6 +1150,7 @@ class BaseCanvas extends Canvas {
     });
     this._guidelineService.isActive && this._guidelineService.move(position[0], position[1]);
     this._moveData = position;
+    this.emit('system.canvas.move');
   }
 
   getZoom() {
@@ -1195,6 +1209,14 @@ class BaseCanvas extends Canvas {
       this._guidelineService.create(options);
     } else {
       this._guidelineService.destroy();
+    }
+  }
+
+  setMinimap(flat = true, options) {
+    if(flat) {
+      this._minimap.create(options);
+    } else {
+      this._minimap.destroy();
     }
   }
 
