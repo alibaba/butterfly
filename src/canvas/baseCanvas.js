@@ -46,7 +46,13 @@ class BaseCanvas extends Canvas {
       },
       endpoint: {
         position: _.get(options, 'theme.endpoint.position'),
-        linkableHighlight: _.get(options, 'theme.endpoint.linkableHighlight') || false
+        linkableHighlight: _.get(options, 'theme.endpoint.linkableHighlight') || false,
+        expandArea: {
+          left: _.get(options, 'theme.endpoint.expandArea.left') || 10,
+          right: _.get(options, 'theme.endpoint.expandArea.right') || 10,
+          top: _.get(options, 'theme.endpoint.expandArea.top') || 10,
+          bottom: _.get(options, 'theme.endpoint.expandArea.bottom') || 10,
+        },
       },
       zoomGap: _.get(options, 'theme.zoomGap') || 0.001
     };
@@ -1523,7 +1529,7 @@ class BaseCanvas extends Canvas {
     let _isActiveEndpoint = false;
     let _activeItems = [];
     // 把其他可连接的point高亮
-    let _activeEndpoint = (target) => {
+    let _activeLinkableEndpoint = (target) => {
       if (_isActiveEndpoint) {
         return;
       }
@@ -1551,7 +1557,7 @@ class BaseCanvas extends Canvas {
       _isActiveEndpoint = true;
     };
     // 把其他可连接的point取消高亮
-    let _unActiveEndpoint = () => {
+    let _unActiveLinkableEndpoint = () => {
       _isActiveEndpoint = false;
       _activeItems.forEach((item) => {
         item.unLinkable && item.unLinkable();
@@ -1559,7 +1565,48 @@ class BaseCanvas extends Canvas {
         item._linkable = false;
       });
       _activeItems = [];
-    }
+    };
+
+
+    let _oldFocusPoint = null;
+    let _isFocusing = false;
+    // 检查鼠标是否在可连的锚点上
+    let _focusLinkableEndpoint = (cx, cy) => {
+      if (!_isFocusing) {
+        // if (_focusPoint) {
+        //   _focusPoint.unHoverLinkable && _focusPoint.unHoverLinkable();
+        //   _focusPoint = null;
+        // }
+        _isFocusing = true;
+        setTimeout(() => {
+          let _points = this._getAllEndpoints();
+          let x = this._coordinateService._terminal2canvas('x', cx);
+          let y = this._coordinateService._terminal2canvas('y', cy);
+          let _focusPoint = null;
+          _points.forEach((_point) => {
+            const _maxX = _point._posLeft + _point._width + this.theme.endpoint.expandArea.right;
+            const _maxY = _point._posTop + _point._height + this.theme.endpoint.expandArea.bottom;
+            const _minX = _point._posLeft - this.theme.endpoint.expandArea.left;
+            const _minY = _point._posTop - this.theme.endpoint.expandArea.top;
+            if (x > _minX && x < _maxX && y > _minY && y < _maxY) {
+              _focusPoint = _point;
+            }
+          });
+          if (_focusPoint) {
+            if (_focusPoint !== _oldFocusPoint) {
+              _focusPoint.hoverLinkable && _focusPoint.hoverLinkable();
+              _oldFocusPoint = _focusPoint;
+            }
+          } else {
+            if (_oldFocusPoint) {
+              _oldFocusPoint.unHoverLinkable && _oldFocusPoint.unHoverLinkable();
+              _oldFocusPoint = null;
+            }
+          }
+          _isFocusing = false;
+        }, 100);
+      }
+    };
 
     const mouseDownEvent = (event) => {
       const LEFT_BUTTON = 0;
@@ -1776,7 +1823,8 @@ class BaseCanvas extends Canvas {
             $(this.wrapper).css('visibility', 'visible');
 
             if (this.theme.endpoint.linkableHighlight) {
-              _activeEndpoint(this._dragEndpoint);
+              _activeLinkableEndpoint(this._dragEndpoint);
+              _focusLinkableEndpoint(event.clientX, event.clientY);
             }
 
             this.emit('system.drag.move', {
@@ -1848,7 +1896,8 @@ class BaseCanvas extends Canvas {
               edge.redraw(_soucePoint, _targetPoint);
             }
             if (this.theme.endpoint.linkableHighlight) {
-              _activeEndpoint(this._dragEndpoint);
+              _activeLinkableEndpoint(this._dragEndpoint);
+              _focusLinkableEndpoint(event.clientX, event.clientY);
             }
           }
         } else if (this._dragType === 'group:resize') {
@@ -1868,7 +1917,7 @@ class BaseCanvas extends Canvas {
         return;
       }
 
-      _unActiveEndpoint();
+      _unActiveLinkableEndpoint();
 
       // 处理线条的问题
       if (this._dragType === 'endpoint:drag' && this._dragEdges && this._dragEdges.length !== 0) {
@@ -1882,10 +1931,10 @@ class BaseCanvas extends Canvas {
         _nodes.forEach((_node) => {
           if (_node.endpoints) {
             _node.endpoints.forEach((_point) => {
-              const _maxX = _point._posLeft + _point._width + 10;
-              const _maxY = _point._posTop + _point._height + 10;
-              const _minX = _point._posLeft - 10;
-              const _minY = _point._posTop - 10;
+              const _maxX = _point._posLeft + _point._width + this.theme.endpoint.expandArea.right;
+              const _maxY = _point._posTop + _point._height + this.theme.endpoint.expandArea.bottom;
+              const _minX = _point._posLeft - this.theme.endpoint.expandArea.left;
+              const _minY = _point._posTop - this.theme.endpoint.expandArea.top;
               if (x > _minX && x < _maxX && y > _minY && y < _maxY) {
                 _targetEndpoint = _point;
               }
