@@ -12,7 +12,6 @@
  *  nodeColor {String} 节点颜色
  *  groupColor {String} 节点组颜色
  */
-const $ = require('jquery');
 const _ = require('lodash');
 
 
@@ -140,7 +139,6 @@ class Minimap {
     const gSize = this.getCanvasSize();
 
     try {
-
       width = _.max([
         gSize.width, bbox.width
       ]);
