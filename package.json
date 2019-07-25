@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "release": "webpack && npm publish",
-    "compile": "./node_modules/webpack/bin/webpack.js"
+    "compile": "./node_modules/webpack/bin/webpack.js",
+    "start": "cd dev && npx honeypack start"
   },
   "repository": {
     "type": "git",
