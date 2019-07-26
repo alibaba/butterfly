@@ -1584,10 +1584,10 @@ class BaseCanvas extends Canvas {
           let y = this._coordinateService._terminal2canvas('y', cy);
           let _focusPoint = null;
           _points.forEach((_point) => {
-            const _maxX = _point._posLeft + _point._width + this.theme.endpoint.expandArea.right;
-            const _maxY = _point._posTop + _point._height + this.theme.endpoint.expandArea.bottom;
-            const _minX = _point._posLeft - this.theme.endpoint.expandArea.left;
-            const _minY = _point._posTop - this.theme.endpoint.expandArea.top;
+            const _maxX = _point._posLeft + _point._width + (_.get(_point, 'expandArea.right') || this.theme.endpoint.expandArea.right);
+            const _maxY = _point._posTop + _point._height + (_.get(_point, 'expandArea.bottom') || this.theme.endpoint.expandArea.bottom);
+            const _minX = _point._posLeft - (_.get(_point, 'expandArea.left') || this.theme.endpoint.expandArea.left);
+            const _minY = _point._posTop - (_.get(_point, 'expandArea.top') || this.theme.endpoint.expandArea.top);
             if (x > _minX && x < _maxX && y > _minY && y < _maxY) {
               _focusPoint = _point;
             }
@@ -1931,10 +1931,10 @@ class BaseCanvas extends Canvas {
         _nodes.forEach((_node) => {
           if (_node.endpoints) {
             _node.endpoints.forEach((_point) => {
-              const _maxX = _point._posLeft + _point._width + this.theme.endpoint.expandArea.right;
-              const _maxY = _point._posTop + _point._height + this.theme.endpoint.expandArea.bottom;
-              const _minX = _point._posLeft - this.theme.endpoint.expandArea.left;
-              const _minY = _point._posTop - this.theme.endpoint.expandArea.top;
+              const _maxX = _point._posLeft + _point._width + (_.get(_point, 'expandArea.right') || this.theme.endpoint.expandArea.right);
+              const _maxY = _point._posTop + _point._height + (_.get(_point, 'expandArea.bottom') || this.theme.endpoint.expandArea.bottom);
+              const _minX = _point._posLeft - (_.get(_point, 'expandArea.left') || this.theme.endpoint.expandArea.left);
+              const _minY = _point._posTop - (_.get(_point, 'expandArea.top') || this.theme.endpoint.expandArea.top);
               if (x > _minX && x < _maxX && y > _minY && y < _maxY) {
                 _targetEndpoint = _point;
               }
