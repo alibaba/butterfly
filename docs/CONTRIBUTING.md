@@ -1,8 +1,7 @@
 # 为ButterFly做贡献
 
 我们很乐意为您贡献源代码，让ButterFly变得越来越好。在您提交代码之前，请仔细阅读以下指南：
-
-* [行为守则](https://github.com/alibaba/butterfly/blob/master/CODE_OF_CONDUCT.md)
+* [行为守则](https://github.com/alibaba/butterfly/blob/master/docs/CODE_OF_CONDUCT.md)
 * [issue 规范](#issue-submit)
 * [pull request 规范](#pull-request-guidelines)
 
