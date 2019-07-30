@@ -82,5 +82,3 @@ class AGroup extend Group {
 * [节点(node)](https://github.com/alibaba/butterfly/blob/master/docs/node.md)
 * [线(edge)](https://github.com/alibaba/butterfly/blob/master/docs/edge.md)
 * [锚点(endpoint)](https://github.com/alibaba/butterfly/blob/master/docs/endpoint.md)
-
-
