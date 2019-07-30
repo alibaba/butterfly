@@ -1,18 +1,5 @@
-/**
- * 缩略图 service
- * @author cctv1005s@gmail.com
- * @date 2019-07-26 00:15:06
- * options:
- *  height {Number} 缩略图高度 default 200,
- *  width  {Number} 缩略图宽度 default 200,
- *  className {String} default: butterfly-minimap-container
- *  containerStyle {Object} 外层css
- *  viewportStyle {Object} 视口css
- *  backgroudStyle {Object} 底层css
- *  nodeColor {String} 节点颜色
- *  groupColor {String} 节点组颜色
- */
 const _ = require('lodash');
+const $ = require('jquery');
 
 
 // 每一个dot是一个圆形或者
@@ -43,26 +30,53 @@ const getPixelRatio = function (context) {
   return (window.devicePixelRatio || 1) / backingStore;
 };
 
-
-class Minimap {
-  /**
-   * 初始化一些数据
-   * @param {*} ctx 
-   * @param {Element} ctx.root 
-   * @param {BaseCanvas} ctx.canvas 
-   * @param {Number} ctx.scale
-   * @param {Number} ctx.canOffsetX
-   * @param {Number} ctx.canOffsetY
-   */
-  constructor(ctx) {
-    this.ctx = ctx;
-    this.root = this.ctx.root;
-    this.btfCvs = this.ctx.canvas;
-    this.ratio = 1;
+// check constructor 的 options
+const checkOpts = (options) => {
+  if(!options) {
+    throw new Error('options cant be empty');
   }
 
-  // 初始化入口函数
-  create(options) {
+  if(!options.root || options.root.constructor !== HTMLDivElement) {
+    throw new Error('options.root must be a html element');
+  }
+
+  if(!options.move || typeof options.move !== 'function') {
+    throw new Error('options.move must be a fuction');
+  }
+
+  if(!options.terminal2canvas || typeof options.terminal2canvas !== 'function') {
+    throw new Error('options.move must be a fuction');
+  }
+
+}
+
+/**
+ * options:
+ *  height {Number} 缩略图高度 default 200,
+ *  width  {Number} 缩略图宽度 default 200,
+ *  className {String} default: butterfly-minimap-container
+ *  containerStyle {Object} 外层css
+ *  viewportStyle {Object} 视口css
+ *  backgroudStyle {Object} 底层css
+ *  nodeColor {String} 节点颜色
+ *  groupColor {String} 节点组颜色
+ *  root {Element} 画布容器节点
+ *  containerWidth {Number} 画布的宽度, 可自定义
+ *  containerHeight {Number} 同上
+ *  nodes {Pointer[]} 节点信息
+ *    node.left, node.top 节点的坐标轴信息
+ *  groups {Object[]} 节点组信息
+ *    group.left, group.top, group.width, group.height 节点组的二维信息
+ *  offset {Pointer} 偏移信息
+ *  zoom {Nuber} 画布当前缩放比
+ *  move {Function} 缩略图互动函数, 用于移动画布, 参考小蝴蝶的move
+ *  terminal2canvas {Function} 互动函数, 屏幕坐标到画布坐标的转换
+ */
+class Minimap {
+  constructor(options) {
+    checkOpts(options);
+
+    this.root = options.root;
     this.options = {
       height: 200,
       width: 200,
@@ -72,8 +86,19 @@ class Minimap {
       backgroudStyle: {},
       nodeColor: DOT_COLOR,
       groupColor: GROUP_COLOR,
+      containerWidth: $(this.root).width(),
+      containerHeight: $(this.root).height(),
+      nodes: [],
+      groups: [],
+      offset: [0, 0],
+      zoom: 1,
+      move: () => null,
+      terminal2canvas: () => null,
       ...options
     };
+
+    // 画布到缩略图的缩放比
+    this.ratio = 1;    
 
     // 初始化容器
     this.initContainer();
@@ -81,13 +106,11 @@ class Minimap {
     this.renderViewPort();
     // 渲染背景
     this.renderBG();
-    // 初始化事件
-    this.initEvents();
   }
 
   // 获取画布的有内容的区域
   getBBox() {
-    const {nodes, groups} = this.btfCvs;
+    const {nodes, groups} = this.options;
     const check = (v) => {
       return _.isNumber(v) ? v : 0;
     }
@@ -117,8 +140,8 @@ class Minimap {
   // 画布size
   getCanvasSize = () => {
     return {
-      width: this.btfCvs._rootWidth,
-      height: this.btfCvs._rootHeight
+      width: this.options.containerWidth,
+      height: this.options.containerHeight
     }
   }
 
@@ -167,22 +190,19 @@ class Minimap {
     this.ratio = ratio;    
   }
 
-  // 初始化事件，把更新事件映射到 update 上
-  initEvents() {
-    const updateEvts = [
-      'system.canvas.zoom',
-      'system.node.delete',
-      'system.node.move',
-      'system.nodes.add',
-      'system.group.delete',
-      'system.group.move',
-      'system.drag.move',
-      'system.canvas.move'
-    ];
+  // 更新小地图数据
+  update({
+    nodes = [],
+    groups = [],
+    zoom = 1,
+    offset = [0, 0],
+  }) {
+    this.options.nodes = nodes;
+    this.options.groups = groups;
+    this.options.zoom = zoom;
+    this.options.offset = offset;
 
-    for(let ev of updateEvts) {
-      this.btfCvs.on(ev, this.debounceRender);
-    }
+    this.debounceRender();
   }
 
   // 初始化画布
@@ -312,9 +332,9 @@ class Minimap {
           top: top + 'px'
         });
 
-        const zoom = this.btfCvs.getZoom();
+        const zoom = this.options.zoom();
 
-        this.btfCvs.move(
+        this.options.move(
           [
             (-left / this.ratio) * zoom,
             (-top / this.ratio) * zoom
@@ -346,8 +366,8 @@ class Minimap {
     cvsCtx.clearRect(0, 0, width, height);
 
     // 根据所有点的信息画出所有的点
-    const nodes = this.btfCvs.nodes;
-    const groups = this.btfCvs.groups;
+    const nodes = this.options.nodes;
+    const groups = this.options.groups;
 
     cvsCtx.fillStyle = groupColor;
     groups.forEach(group => {
@@ -382,10 +402,11 @@ class Minimap {
     this.setRatio();
     const {width, height} = this.options;
     const graphSize = this.getGraphSize();
-    const topLeft = this.btfCvs.terminal2canvas([0, 0]);
-    const bottomRight = this.btfCvs.terminal2canvas([graphSize.width, graphSize.height]);
-    const offset = this.btfCvs.getOffset();
-    const zoom = this.btfCvs.getZoom();
+    const topLeft = this.options.terminal2canvas([0, 0]);
+    const bottomRight = this.options.terminal2canvas([graphSize.width, graphSize.height]);
+
+    const offset = this.options.offset;
+    const zoom = this.options.zoom;
 
     // 获取画布到minimap的缩放比
     const ratio = this.ratio;

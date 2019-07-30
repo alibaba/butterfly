@@ -131,15 +131,6 @@ class BaseCanvas extends Canvas {
       scale: this._zoomData
     });
 
-    // 缩略图
-    this._minimap = new Minimap({
-      root: this.root,
-      canvas: this,
-      scale: this._zoomData,
-      canOffsetX: this._moveData[0],
-      canOffsetY: this._moveData[1],
-    });
-
     this._addEventListener();
 
     this._unionData = {
@@ -1213,10 +1204,47 @@ class BaseCanvas extends Canvas {
   }
 
   setMinimap(flat = true, options) {
+    const updateEvts = [
+      'system.canvas.zoom',
+      'system.node.delete',
+      'system.node.move',
+      'system.nodes.add',
+      'system.group.delete',
+      'system.group.move',
+      'system.drag.move',
+      'system.canvas.move'
+    ];
+    let updateFn;
+    let minimap;
+
     if(flat) {
-      this._minimap.create(options);
+      minimap = new Minimap({
+        root: this.root,
+        move: this.move.bind(this),
+        terminal2canvas: this.terminal2canvas.bind(this)
+      });
+
+      updateFn = () => {
+        minimap.update({
+          nodes: this.nodes,
+          groups: this.groups,
+          zoom: this.getZoom(),
+          offset: this.getOffset()
+        });
+      };
+  
+      for(let ev of updateEvts) {
+        this.on(ev, updateFn);
+      }
     } else {
-      this._minimap.destroy();
+      if(!minimap) {
+        return;
+      }
+
+      minimap.destroy();
+      for(let ev of updateEvts) {
+        this.off(ev, updateFn);
+      }
     }
   }
 
