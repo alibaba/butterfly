@@ -97,8 +97,9 @@ class Edge {
     } else if (this.shapeType === 'Flow') {
       path = DrawUtil.drawFlow(sourcePoint, targetPoint, this.orientationLimit);
     } else if (this.shapeType === 'Manhattan') {
-      // TODO: 箭头计算有问题
       path = DrawUtil.drawManhattan(sourcePoint, targetPoint);
+    } else if (this.shapeType === 'AdvancedBezier') {
+      path = DrawUtil.drawAdvancedBezier(sourcePoint, targetPoint);
     }
     return path;
   }
