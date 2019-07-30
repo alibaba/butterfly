@@ -18,11 +18,11 @@
 
 * 请先fork一份到自己的项目下，不要直接在仓库下建分支。
 
-* Commit信息要以[组件名]：描述信息的形式填写，例如[canvas]:fix xxx bug。
+* Commit信息要以`[组件名]：描述信息`的形式填写，例如`[canvas]:fix xxx bug`。
 
 * 如果您已经修复了错误或者添加了应测试的代码，请添加测试！
 
-* 确保提交PR之前请先rebase，保持commit记录的整洁性。
+* 确保提交PR之前请先`rebase`，保持commit记录的整洁性。
 
 * 确保PR是提交到dev分支，而不是master分支。
 
