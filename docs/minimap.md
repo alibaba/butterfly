@@ -9,7 +9,7 @@
 canvas.setMinimap(true, {/* options */})
 
 // 停止使用
-canvas.setMinimap(false, {/* options */})
+canvas.setMinimap(false)
 
 ```
 
