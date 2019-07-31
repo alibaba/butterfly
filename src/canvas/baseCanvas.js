@@ -1142,6 +1142,11 @@ class BaseCanvas extends Canvas {
     this._guidelineService.isActive && this._guidelineService.move(position[0], position[1]);
     this._moveData = position;
     this.emit('system.canvas.move');
+    this.emit('events', {
+      type: 'system.canvas.move',
+      nodes: this.nodes,
+      groups: this.groups
+    })
   }
 
   getZoom() {
