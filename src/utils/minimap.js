@@ -36,7 +36,7 @@ const checkOpts = (options) => {
     throw new Error('options cant be empty');
   }
 
-  if(!options.root || options.root.constructor !== HTMLDivElement) {
+  if(!options.root || typeof options.root !== 'object' || !$(options.root)) {
     throw new Error('options.root must be a html element');
   }
 
@@ -332,7 +332,7 @@ class Minimap {
           top: top + 'px'
         });
 
-        const zoom = this.options.zoom();
+        const zoom = this.options.zoom;
 
         this.options.move(
           [

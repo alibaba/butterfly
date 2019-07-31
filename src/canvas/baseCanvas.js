@@ -1203,7 +1203,7 @@ class BaseCanvas extends Canvas {
     }
   }
 
-  setMinimap(flat = true, options) {
+  setMinimap(flat = true, options = {}) {
     const updateEvts = [
       'system.canvas.zoom',
       'system.node.delete',
@@ -1214,18 +1214,17 @@ class BaseCanvas extends Canvas {
       'system.drag.move',
       'system.canvas.move'
     ];
-    let updateFn;
-    let minimap;
 
-    if(flat) {
-      minimap = new Minimap({
+    if(flat && !this.minimap) {
+      this.minimap = new Minimap({
         root: this.root,
         move: this.move.bind(this),
-        terminal2canvas: this.terminal2canvas.bind(this)
+        terminal2canvas: this.terminal2canvas.bind(this),
+        ...options
       });
 
-      updateFn = () => {
-        minimap.update({
+      this.updateFn = () => {
+        this.minimap.update({
           nodes: this.nodes,
           groups: this.groups,
           zoom: this.getZoom(),
@@ -1234,18 +1233,23 @@ class BaseCanvas extends Canvas {
       };
   
       for(let ev of updateEvts) {
-        this.on(ev, updateFn);
-      }
-    } else {
-      if(!minimap) {
-        return;
+        this.on(ev, this.updateFn);
       }
 
-      minimap.destroy();
-      for(let ev of updateEvts) {
-        this.off(ev, updateFn);
-      }
+      return;
     }
+
+    if(!this.minimap) {
+      return;
+    }
+
+    this.minimap.destroy();
+    for(let ev of updateEvts) {
+      this.off(ev, this.updateFn);
+    }
+
+    delete this.minimap;
+    delete this.updateFn;
   }
 
   getUnion(name) {

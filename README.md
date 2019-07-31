@@ -82,6 +82,7 @@ class AGroup extend Group {
 * [节点(node)](https://github.com/alibaba/butterfly/blob/master/docs/node.md)
 * [线(edge)](https://github.com/alibaba/butterfly/blob/master/docs/edge.md)
 * [锚点(endpoint)](https://github.com/alibaba/butterfly/blob/master/docs/endpoint.md)
+* [缩略图(minimap)](https://github.com/alibaba/butterfly/blob/master/docs/minimap.md)
 
 ## 贡献
 小蝴蝶是一个完全开源的项目，我们欢迎大家为修复错误和改进做出贡献。有关如何开始的信息，请阅读我们的[贡献指南](https://github.com/alibaba/butterfly/blob/master/docs/CONTRIBUTING.md).
