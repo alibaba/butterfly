@@ -1225,7 +1225,16 @@ class BaseCanvas extends Canvas {
 
       this.updateFn = () => {
         this.minimap.update({
-          nodes: this.nodes,
+          nodes: this.nodes.map(node => {
+            return {
+              id: node.id,
+              left: node.left,
+              top: node.top,
+              width: node.getWidth(),
+              height: node.getHeight(),
+              group: node.group
+            }
+          }),
           groups: this.groups,
           zoom: this.getZoom(),
           offset: this.getOffset()

@@ -3,10 +3,8 @@ const $ = require('jquery');
 
 
 // 每一个dot是一个圆形或者
-const DOT_SIZE = 5;
-const DOT_COLOR = 'rgba(255, 103, 101, 1)';
-const GROUP_COLOR = 'rgba(0, 193, 222, 1)';
-
+const DOT_COLOR = 'rgba(76, 158, 164, 1)';
+const GROUP_COLOR = 'rgba(61, 86, 92, 1)';
 
 // 修改一个element的css的属性
 const modifyCSS = (ele, cssStyle) => {
@@ -244,8 +242,9 @@ class Minimap {
       ...initStyle,
       left: 0,
       top: 0,
-      border: '1px solid pink',
-      viewportStyle
+      // border: '1px solid pink',
+      'background-color': 'rgba(79, 111, 126, 0.4)',
+      viewportStyle,
     });
 
     modifyCSS(this.backgroundDOM , {
@@ -369,6 +368,26 @@ class Minimap {
     const nodes = this.options.nodes;
     const groups = this.options.groups;
 
+    // 计算所有 nodes 的真实坐标
+    for(let node of nodes) {
+      if(node.group) {
+        const group = _.find(groups, {id: node.group});
+
+        if(!group) {
+          continue;
+        }
+
+        node.rleft = group.left + node.left;
+        node.rtop = group.top + node.top;
+
+        continue;
+      }
+
+      node.rleft = node.left;
+      node.rtop = node.top;
+    }
+
+
     cvsCtx.fillStyle = groupColor;
     groups.forEach(group => {
       const left = group.left * this.ratio ;
@@ -382,17 +401,16 @@ class Minimap {
     cvsCtx.fillStyle = nodeColor;
 
     nodes.forEach(node => {
-      const left = node.left * this.ratio;
-      const top = node.top * this.ratio;
+      const left = node.rleft * this.ratio;
+      const top = node.rtop * this.ratio;
+      const width = node.width * this.ratio;
+      const height = node.height * this.ratio;
 
-      if(node.group) {
-        return;
-      }
-
-      cvsCtx.beginPath();
-      cvsCtx.arc(left / cvsRatio, top / cvsRatio, DOT_SIZE / cvsRatio, 0, 2*Math.PI);
-      cvsCtx.closePath();
-      cvsCtx.fill();
+      // cvsCtx.beginPath();
+      cvsCtx.fillRect(left / cvsRatio, top / cvsRatio, width / cvsRatio, height / cvsRatio);
+      // cvsCtx.arc(left / cvsRatio, top / cvsRatio, DOT_SIZE / cvsRatio, 0, 2*Math.PI);
+      // cvsCtx.closePath();
+      // cvsCtx.fill();
     });    
 
   }

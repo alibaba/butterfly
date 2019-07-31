@@ -66,18 +66,23 @@ minimap.destroy();
 **(1) nodes**
 ```ts
 interface Node {
-  left: number; // 横坐标
-  top: number;  // 纵坐标
+  id: number | string;    // 节点ID
+  group: number | string; // 节点组ID
+  left: number;           // 横坐标
+  top: number;            // 纵坐标
+  width: number;          // 宽度
+  height: number;         // 高度
 }
 ```
 
 **(2) groups**
 ```ts
 interface Group {
-  left: number;   // 横坐标
-  top: number;    // 纵坐标
-  width: number;  // 宽度  
-  height: number; // 高度
+  id: number | string;    // 节点组ID
+  left: number;           // 横坐标
+  top: number;            // 纵坐标
+  width: number;          // 宽度  
+  height: number;         // 高度
 }
 ```
 
