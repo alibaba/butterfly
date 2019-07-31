@@ -122,10 +122,10 @@ class Minimap {
     const allTop = allNTop.concat(allGBottom);
     const allLeft = allNLeft.concat(allGRight);
 
-    const minX = check(_.min(allTop));
-    const maxX = check(_.max(allTop));
-    const minY = check(_.min(allLeft));
-    const maxY = check(_.max(allLeft));
+    const minX = check(_.min(allLeft));
+    const maxX = check(_.max(allLeft));
+    const minY = check(_.min(allTop));
+    const maxY = check(_.max(allTop));
 
     return {
       minX: minX,
