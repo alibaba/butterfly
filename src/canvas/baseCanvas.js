@@ -18,6 +18,9 @@ const ScopeCompare = require('../utils/scopeCompare');
 const GridService = require('../utils/girdService');
 // 辅助线模式
 const GuidelineService = require('../utils/guidelineService');
+// 小地图模式
+const Minimap = require('../utils/minimap');
+
 
 require('./baseCanvas.less');
 
@@ -115,6 +118,7 @@ class BaseCanvas extends Canvas {
       root: this.root,
       canvas: this
     });
+
     // 坐标转换服务
     this._coordinateService = new CoordinateService({
       canvas: this,
@@ -1137,6 +1141,8 @@ class BaseCanvas extends Canvas {
     });
     this._guidelineService.isActive && this._guidelineService.move(position[0], position[1]);
     this._moveData = position;
+    this.emit('system.canvas.move');
+    this.emit('events', {type: 'system.canvas.move'});
   }
 
   getZoom() {
@@ -1196,6 +1202,64 @@ class BaseCanvas extends Canvas {
     } else {
       this._guidelineService.destroy();
     }
+  }
+
+  setMinimap(flat = true, options = {}) {
+    const updateEvts = [
+      'system.canvas.zoom',
+      'system.node.delete',
+      'system.node.move',
+      'system.nodes.add',
+      'system.group.delete',
+      'system.group.move',
+      'system.drag.move',
+      'system.canvas.move'
+    ];
+
+    if(flat && !this.minimap) {
+      this.minimap = new Minimap({
+        root: this.root,
+        move: this.move.bind(this),
+        terminal2canvas: this.terminal2canvas.bind(this),
+        ...options
+      });
+
+      this.updateFn = () => {
+        this.minimap.update({
+          nodes: this.nodes.map(node => {
+            return {
+              id: node.id,
+              left: node.left,
+              top: node.top,
+              width: node.getWidth(),
+              height: node.getHeight(),
+              group: node.group
+            }
+          }),
+          groups: this.groups,
+          zoom: this.getZoom(),
+          offset: this.getOffset()
+        });
+      };
+  
+      for(let ev of updateEvts) {
+        this.on(ev, this.updateFn);
+      }
+
+      return;
+    }
+
+    if(!this.minimap) {
+      return;
+    }
+
+    this.minimap.destroy();
+    for(let ev of updateEvts) {
+      this.off(ev, this.updateFn);
+    }
+
+    delete this.minimap;
+    delete this.updateFn;
   }
 
   getUnion(name) {

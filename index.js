@@ -6,11 +6,13 @@ const Edge = require('./src/edge/baseEdge');
 const Endpoint = require('./src/endpoint/baseEndpoint');
 const Group = require('./src/group/baseGroup');
 const Node = require('./src/node/baseNode');
+const Minimap = require('./src/utils/minimap');
 
 module.exports = {
   Canvas,
   Edge,
   Endpoint,
   Group,
-  Node
+  Node,
+  Minimap
 };

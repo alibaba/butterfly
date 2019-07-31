@@ -281,6 +281,13 @@ justifyCoordinate = () => {}
 setGuideLine = (show, options) => {}
 
 /**
+  * 设置缩略图
+  * @param {true|false} boolean  - 是否开启辅助线功能
+  * @param {Object} 具体请参考缩略图章节
+  /
+setMinimap = (show, options) => {}
+
+/**
   * 屏幕转换为画布的坐标
   * @param {array[number]} coordinates - 需要换算的坐标([x,y])
   * @return {number} - 转换后的坐标
