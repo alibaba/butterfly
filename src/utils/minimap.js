@@ -176,10 +176,6 @@ class Minimap {
 
   // 获取画布和缩略图的缩放比
   setRatio() {
-    if (this.ratio !== 1) {
-      return;
-    }
-
     const height = this.options.height;
     const width = this.options.width;
     const graphSize = this.getGraphSize();
@@ -419,7 +415,7 @@ class Minimap {
   renderViewPort() {
     this.setRatio();
     const {width, height} = this.options;
-    const graphSize = this.getGraphSize();
+    const graphSize = this.getCanvasSize();
     const topLeft = this.options.terminal2canvas([0, 0]);
     const bottomRight = this.options.terminal2canvas([graphSize.width, graphSize.height]);
 
