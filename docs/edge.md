@@ -1,7 +1,8 @@
 # 线(Edge)
 
 ## 用法
-```
+
+```js
 canvas.draw({
   edges: [{
     source: 'point_1',
@@ -40,7 +41,7 @@ canvas.draw({
 
 ## 方法
 
-```
+```js
 /**
   * @return {dom} - 自定义节点的dom
   */
