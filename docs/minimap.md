@@ -23,7 +23,12 @@ const Minimap = require('butterfly-dag').Minimap;
 minimap = new Minimap({
   root: HTMLElement,
   move: () => null,
-  terminal2canvas: () => null
+  terminal2canvas: () => null,
+  // 传入初始数据, 用于初始渲染
+  nodes: [],
+  groups: [],
+  zoom: 1,
+  offset: []
 });
 
 // 更新 Minimap 数据
