@@ -1445,19 +1445,39 @@ class BaseCanvas extends Canvas {
       this.setMoveable(true);
     }
 
-    //  监控画布的resize事件
-    const _resizeObserver = new ResizeObserver(entries => {
-      this._rootWidth = $(this.root).width();
-      this._rootHeight = $(this.root).height();
-      this._coordinateService._changeCanvasInfo({
-        terOffsetX: $(this.root).offset().left,
-        terOffsetY: $(this.root).offset().top,
-        terWidth: $(this.root).width(),
-        terHeight: $(this.root).height()
-      });
-    });
+    let _isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+    let _getChromeVersion = () => {     
+      var raw = window.navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
+      return raw ? parseInt(raw[2], 10) : false;
+    };
+    let _isHightVerChrome = _isChrome && _getChromeVersion() >= 64;
 
-    _resizeObserver.observe(this.root);
+    if (_isHightVerChrome) {
+      // 监听某个dom的resize事件
+      const _resizeObserver = new ResizeObserver(entries => {
+        this._rootWidth = $(this.root).width();
+        this._rootHeight = $(this.root).height();
+        this._coordinateService._changeCanvasInfo({
+          terOffsetX: $(this.root).offset().left,
+          terOffsetY: $(this.root).offset().top,
+          terWidth: $(this.root).width(),
+          terHeight: $(this.root).height()
+        });
+      });
+      _resizeObserver.observe(this.root);
+    } else {
+       //  降级处理，监控窗口的resize事件
+       window.onresize = () => {
+        this._rootWidth = $(this.root).width();
+        this._rootHeight = $(this.root).height();
+        this._coordinateService._changeCanvasInfo({
+          terOffsetX: $(this.root).offset().left,
+          terOffsetY: $(this.root).offset().top,
+          terWidth: $(this.root).width(),
+          terHeight: $(this.root).height()
+        });
+      }
+    }
 
     // 绑定一大堆事件，group:addMember，groupDragStop，group:removeMember，beforeDetach，connection，
     this.on('InnerEvents', (data) => {
