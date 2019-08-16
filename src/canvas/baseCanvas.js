@@ -1467,7 +1467,7 @@ class BaseCanvas extends Canvas {
       _resizeObserver.observe(this.root);
     } else {
        //  降级处理，监控窗口的resize事件
-       window.onresize = () => {
+       window.addEventListener('resize', () => {
         this._rootWidth = $(this.root).width();
         this._rootHeight = $(this.root).height();
         this._coordinateService._changeCanvasInfo({
@@ -1475,8 +1475,8 @@ class BaseCanvas extends Canvas {
           terOffsetY: $(this.root).offset().top,
           terWidth: $(this.root).width(),
           terHeight: $(this.root).height()
-        });
-      }
+       });
+      })
     }
 
     // 绑定一大堆事件，group:addMember，groupDragStop，group:removeMember，beforeDetach，connection，
@@ -1860,7 +1860,7 @@ class BaseCanvas extends Canvas {
                 unionKeys.forEach((key) => {
                   endpoints = endpoints.concat(this._unionData[key].endpoints);
                 });
-                endpoints = _.uniqBy(endpoints, 'id');
+                endpoints = _.uniqBy(endpoints, (_point) => { return _point.nodeId + '||' + _point.id });
               } else {
                 endpoints = [this._dragEndpoint];
               }
@@ -2071,8 +2071,8 @@ class BaseCanvas extends Canvas {
             }
           });
         } else {
+          let _delEdges = [];
           let _emitEdges = this._dragEdges.filter((edge) => {
-
             // 线条去重
             if (!this.theme.edge.isRepeat) {
               let _isRepeat = _.some(this.edges, (_edge) => {
@@ -2097,11 +2097,18 @@ class BaseCanvas extends Canvas {
                 return false;
               }
             }
+            let _preTargetNodeId = _.get(edge, 'targetNode.id');
+            let _preTargetPointId = _.get(edge, 'targetEndpoint.id');
+            let _currentTargetNode = _targetEndpoint.nodeType === 'node' ? this.getNode(_targetEndpoint.nodeId) : this.getGroup(_targetEndpoint.nodeId);
+            let _currentTargetEndpoint = _targetEndpoint;
+            if (_preTargetNodeId && _preTargetPointId && `${_preTargetNodeId}||${_preTargetPointId}` !== `${_currentTargetNode}||${_currentTargetEndpoint}`) {
+              _delEdges.push(_.cloneDeep(edge));
+            }
             edge._create({
               id: edge.id && !edge._isDeletingEdge ? edge.id : `${edge.sourceEndpoint.id}-${_targetEndpoint.id}`,
-              targetNode: _targetEndpoint.nodeType === 'node' ? this.getNode(_targetEndpoint.nodeId) : this.getGroup(_targetEndpoint.nodeId),
+              targetNode: _currentTargetNode,
               _targetType: _targetEndpoint.nodeType,
-              targetEndpoint: _targetEndpoint,
+              targetEndpoint: _currentTargetEndpoint,
               type: 'endpoint'
             });
             let _isConnect = edge.isConnect ? edge.isConnect() : true;
@@ -2129,6 +2136,17 @@ class BaseCanvas extends Canvas {
             
             return edge;
           });
+          if (_delEdges.length !== 0) {
+            _delEdges.forEach((_edge) => {
+              this.emit('system.link.delete', {
+                link: _edge
+              });
+              this.emit('events', {
+                type: 'link:delete',
+                link: _edge
+              });
+            });
+          }
           if (_emitEdges.length !== 0) {
             this.emit('system.link.connect', {
               links: this._dragEdges
