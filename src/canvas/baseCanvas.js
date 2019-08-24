@@ -1216,26 +1216,34 @@ class BaseCanvas extends Canvas {
       'system.canvas.move'
     ];
 
+    const getNodes = () => {
+      return this.nodes.map(node => {
+        return {
+          id: node.id,
+          left: node.left,
+          top: node.top,
+          width: node.getWidth(),
+          height: node.getHeight(),
+          group: node.group
+        }
+      });
+    }
+
     if(flat && !this.minimap) {
       this.minimap = new Minimap({
         root: this.root,
         move: this.move.bind(this),
         terminal2canvas: this.terminal2canvas.bind(this),
+        nodes: getNodes(),
+        groups: this.groups,
+        zoom: this.getZoom(),
+        offset: this.getOffset(),
         ...options
       });
 
       this.updateFn = () => {
         this.minimap.update({
-          nodes: this.nodes.map(node => {
-            return {
-              id: node.id,
-              left: node.left,
-              top: node.top,
-              width: node.getWidth(),
-              height: node.getHeight(),
-              group: node.group
-            }
-          }),
+          nodes: getNodes(),
           groups: this.groups,
           zoom: this.getZoom(),
           offset: this.getOffset()

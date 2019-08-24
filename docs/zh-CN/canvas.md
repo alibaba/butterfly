@@ -1,6 +1,6 @@
 # 画布(Canvas)
 
-```
+```js
 let canvas = new Canvas({
   root: dom,               //canvas的根节点(必传)
   layout: 'ForceLayout'    //布局设置(可传)，可使用集成的，也可自定义布局
@@ -53,7 +53,8 @@ let canvas = new Canvas({
 
 
 ### API：
-```
+
+```js
 /**
   * 渲染方法
   * @param {data} data  - 里面包含分组，节点，连线
@@ -333,7 +334,7 @@ getNeighborNodesAndEdgesByLevel = (options) => {}
 
 ## 事件
 
-```
+```js
 let canvas = new Canvas({...});
 canvas.on('type', (data) => {
   //data 数据
@@ -372,7 +373,7 @@ canvas.on('type', (data) => {
 * **重力布局**，传入`'ForceLayout'`即可，小蝴蝶内置布局
 * **自定义布局**，传入一个方法，里面可以按照用户需求进行布局。注:`除此之外，记得把Edge的calcPath的方法复写掉，不然会由小蝴蝶的内置计算线段的方法代替，无法实现所得的线段`
 
-```
+```js
 let canvas = new Canvas({
   layout: (opts) => {
     // 画布长宽
@@ -392,7 +393,7 @@ let canvas = new Canvas({
   * `show`，设置是否开启网格布局
   * `options`，设置网格布局的参数，如下注释所示
 
-```
+```js
 this.canvas.setGirdMode(true, {
   isAdsorb: false,         // 是否自动吸附,默认关闭
   theme: {
@@ -412,7 +413,7 @@ this.canvas.setGirdMode(true, {
   * `show`，设置是否开启辅助线
   * `options`，设置辅助线的参数，如下注释所示
 
-```
+```js
 this.canvas.setGuideLine(true, {
   limit: 1,             // 限制辅助线条数
   theme: {
@@ -426,7 +427,7 @@ this.canvas.setGuideLine(true, {
   * `name`，聚合组名称。假如不存在，则添加聚合组；假如已存在，则添加聚合组元素
   * `object`，聚合组的元素
 
-```
+```js
 this.canvas.add2Union('我的聚合组', {
   nodes: []     // Node对象或者nodeId
   groups: []    // Group对象或者groupId
@@ -449,7 +450,7 @@ this.canvas.add2Union('我的聚合组', {
   * `options.width`，图片宽度
   * `options.height`，图片高度
 
-```
+```js
 this.canvas.save2img({type: 'png', width: 1920, height: 1080, quality: 1})
   .then(dataUrl => {
     var link = document.createElement('a');
