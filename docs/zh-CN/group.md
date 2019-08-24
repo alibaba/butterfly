@@ -69,6 +69,12 @@ addNodes = (nodes) => {}
 removeNode = (node) => {}
 
 /**
+  * group删除节点
+  * @param {array} nodes - 节点数组
+  */
+removeNodes = (nodes) => {}
+
+/**
   * @param {obj} data - 锚点基本信息(此方法必须在节点挂载后执行才有效)
   */
 addEndpoint = (obj) => {}
@@ -78,12 +84,6 @@ addEndpoint = (obj) => {}
   * @return {Endpoint} - Endpoint的对象
   */
 getEndpoint = (id) => {}
-
-/**
-  * group删除节点
-  * @param {array} nodes - 节点数组
-  */
-removeNodes = (nodes) => {}
 
 /**
   * @return {number} - 节点组宽度

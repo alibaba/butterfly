@@ -114,9 +114,9 @@ removeNode = (string) => {}
 removeNodes = (array) => {}
 
 /**
-  * 根据id删除节点
+  * 根据id删除节点组
   * @param {string} id  - node id
-  * @return {Node} - 删除的对象
+  * @return {Group} - 删除的对象
   */
 removeGroup = (string) => {}
 
@@ -135,9 +135,8 @@ removeEdge = (param) => {}
 removeEdges = (param) => {}
 
 /**
-  * 根据id删除分组
-  * @param {string} id  - group id
-  * @return {Node} - 删除的对象
+  * 设置画布缩放
+  * @param {true|false} boolean  - 是否支持画布缩放
   */
 setZoomable = (boolean) => {}
 
@@ -405,7 +404,7 @@ this.canvas.setGirdMode(true, {
     lineColor: '#000',     // 网格线条颜色
     lineWidth: 1,          // 网格粗细
     circleRadiu: 1,        // 圆点半径
-    circleColor: '#000'    // 断电颜色
+    circleColor: '#000'    // 圆点颜色
   }
 });
 ```
