@@ -79,12 +79,12 @@ class AGroup extend Group {
 ```
 
 ## 🔗 API Document
-* [Canvas](https://github.com/alibaba/butterfly/blob/master/docs/en-US/canvas.md)
-* [Group](https://github.com/alibaba/butterfly/blob/master/docs/en-US/group.md)
-* [Node](https://github.com/alibaba/butterfly/blob/master/docs/en-US/node.md)
-* [Edge](https://github.com/alibaba/butterfly/blob/master/docs/en-US/edge.md)
-* [Endpoint](https://github.com/alibaba/butterfly/blob/master/docs/en-US/endpoint.md)
-* [Minimap](https://github.com/alibaba/butterfly/blob/master/docs/en-US/minimap.md)
+* [Canvas](./docs/en-US/canvas.md)
+* [Group](./docs/en-US/group.md)
+* [Node](./docs/en-US/node.md)
+* [Edge](./docs/en-US/edge.md)
+* [Endpoint](./docs/en-US/endpoint.md)
+* [Minimap](./docs/en-US/minimap.md)
 
 ## 🤝 Contribution
-Butterfly is a completely open source project and we welcome everyone to contribute to fixing bugs and improvements. For information on how to get started, read our [contribution guide](https://github.com/alibaba/butterfly/blob/master/docs/en-US/CONTRIBUTING.md).
+Butterfly is a completely open source project and we welcome everyone to contribute to fixing bugs and improvements. For information on how to get started, read our [contribution guide](./docs/en-US/CONTRIBUTING.md).

@@ -1,32 +1,33 @@
-# 缩略图(Minimap)
+# Minimap
 
 提供通用的Minimap服务和专属小蝴蝶的设置选项
+Provide public Minimap services and settings property for butterfly
 
-## 一，小蝴蝶中使用
+## 一，Usage for butterfly
 
 ```js
 // in butterfly
 canvas.setMinimap(true, {/* options */})
 
-// 停止使用
+// close minimap
 canvas.setMinimap(false)
 
 ```
 
-## 二，其他系统中使用
+## 二，Usage for other app
 
 ```js
 // in other system
 const Minimap = require('butterfly-dag').Minimap;
 
-// 新建一个 Minimap
+// create a new Minimap
 minimap = new Minimap({
   root: HTMLElement,
   move: () => null,
   terminal2canvas: () => null
 });
 
-// 更新 Minimap 数据
+// update Minimap data
 minimap.update({
   nodes: this.nodes,
   groups: this.groups,
@@ -34,55 +35,55 @@ minimap.update({
   offset: this.getOffset()
 });
 
-// 销毁
+// destroy minmap
 minimap.destroy();
 
 ```
 
-## 三，选项说明
+## 三，Property
 
 ### 1, options
 
-| 选项 | 说明 | 默认值 |
+| key | describe | default 
 | ---- | ---- | ---- |
-| root | 画布容器 | null(必填) | 
-| height | 缩略图高度 | 200 |
-| width  | 缩略图宽度 | 200 |
-| className | 缩略图容器 class name | `butterfly-minimap-container` |
-| containerStyle | 缩略图容器 css | |
-| viewportStyle | 视口 css | |
-| backgroudStyle  | 背景 css | |
-| nodeColor | 节点颜色 | `rgba(255, 103, 101, 1)` |
-| groupColor | 节点组颜色 | `rgba(0, 193, 222, 1)` |
-| nodes | 节点数据, 具体参考下方描述 | [] |
-| groups | 节点组数据, 具体参考下方描述 | [] |
-| offset | 画布偏移信息 | [0, 0] | 
-| zoom | 画布当前缩放比 | 1 |
-| move | 缩略图互动函数, 用于移动画布, 参考小蝴蝶的move | 必填 |
-| terminal2canvas | 互动函数, 屏幕坐标到画布坐标的转换 | 必填 |
+| root | root canvas dom | null(必填) | 
+| height | minimap height | 200 |
+| width  | minimap width | 200 |
+| className | minimap container class name | `butterfly-minimap-container` |
+| containerStyle | minimap container css | |
+| viewportStyle | minimap view css | |
+| backgroudStyle  | minimap backgroud css | |
+| nodeColor | node color | `rgba(255, 103, 101, 1)` |
+| groupColor | group color | `rgba(0, 193, 222, 1)` |
+| nodes | node data, refer specifically to the description below. | [] |
+| groups | group data, refer specifically to the description below.  | [] |
+| offset | canvas offset | [0, 0] | 
+| zoom | canvas zoom | 1 |
+| move | minimap interaction function for moving the canvas, referring to butterfly's move function | Require |
+| terminal2canvas | interaction function for butterfly's convert coordinate the canvas | Require |
 
 ### 2, 具体描述
 
 **(1) nodes**
 ```ts
 interface Node {
-  id: number | string;    // 节点ID
-  group: number | string; // 节点组ID
-  left: number;           // 横坐标
-  top: number;            // 纵坐标
-  width: number;          // 宽度
-  height: number;         // 高度
+  id: number | string;    // node ID
+  group: number | string; // group ID
+  left: number;           // x coordinate
+  top: number;            // y coordinate
+  width: number;          // width
+  height: number;         // height
 }
 ```
 
 **(2) groups**
 ```ts
 interface Group {
-  id: number | string;    // 节点组ID
-  left: number;           // 横坐标
-  top: number;            // 纵坐标
-  width: number;          // 宽度  
-  height: number;         // 高度
+  id: number | string;    // node ID
+  left: number;           // x coordinate
+  top: number;            // y coordinate
+  width: number;          // width  
+  height: number;         // height
 }
 ```
 

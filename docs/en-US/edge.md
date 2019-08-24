@@ -1,6 +1,6 @@
-# 线(Edge)
+# Edge
 
-## 用法
+## Usage
 ```
 canvas.draw({
   edges: [{
@@ -11,80 +11,80 @@ canvas.draw({
     type: 'endpoint',
     arrow: ture,
     arrowPosition: 0.5,
-    arrowOffset: 0,  // 箭头的最终位置：线条长度 * arrowPosition + arrowOffset
-    label: 'I am label'   //这里也可以传dom，当然也可以拓展父类的drawLabel来自定义label
+    arrowOffset: 0,  // final position of the arrow：lineLength * arrowPosition + arrowOffset
+    label: 'I am label'   //Here you can also pass dom, of course, you can also extend the parent class's drawLabel to customize the label.
   }],
   groups: ...
   nodes: ...
 })
 ```
 
-## 属性
-| key | 说明 | 类型 | 默认值 
+## Property
+| key | describe | type | default 
 | :------ | :------ | :------ | :------ 
-| id | 节点唯一标识 | string (Require) | - 
-| targetNode | 连接目标节点id | string (Require) | - 
-| target | 连接目标锚点id | string (Require) | - 
-| sourceNode | 连接源节点id | string (Require) | - 
-| source | 连接源锚点id | string (Require) | - 
-| type | 标志线条连接到节点还是连接到锚点 | string (Option) | endpoint/node
-| orientationLimit | 线条出口的位置 | array (Option) | - 
-| shapeType | 线条的类型 | string (Option) | Bezier/Flow/Straight
-| label | 线条上加注释 | string/dom (Option) | -
-| arrow | 线条上加箭头 | boolean (Option) | 默认false
-| Class | 拓展类 | Class (Option) | `一般来说已经满足需要了，因为逻辑较为复杂，不建议拓展线的基类。`当传入拓展类的时候，该节点组则会按拓展类的draw方法进行渲染，拓展类的相关方法也会覆盖父类的方法
-| arrowPosition | 箭头在线条上的位置 | float (Option) | 0-1之间，默认0.5
-| arrowOffset | 箭头相对于arrowPosition的偏移量 | float (Option) | 默认0，单位：像素
+| id | unique id | string (Require) | - 
+| targetNode | target node id | string (Require) | - 
+| target | target endpoint id | string (Require) | - 
+| sourceNode | source node id | string (Require) | - 
+| source | source endpoint id | string (Require) | - 
+| type | whether the marker line is connected to node or connected to endpoint | string (Optional) | endpoint/node
+| orientationLimit | edge leave position | array (Optional) | - 
+| shapeType | edge type | string (Optional) | Bezier/Flow/Straight
+| label | edge label| string/dom (Optional) | -
+| arrow | edge arrow | boolean (Optional) | 默认false
+| Class | extended Class | Class (Optional) | `Generally, the need has been met, because the logic is more complicated, it is not recommended to expand the base class of the line. `When the extension class is passed in, the node group will be rendered according to the draw method of the extension class. The related methods of the extension class will also override the method of the parent class.
+| arrowPosition | arrow position on the edge | float (Optional) | between 0-1, default 0.5
+| arrowOffset | the offset of the arrow relative to the arrowPosition | float (Optional) | default 0, unit: pixel
 
-`* 设置 isExpandWidth 为 true 时，获取 eventHandlerDom 用于挂载事件`
+`* Set isExpandWidth to true to get eventHandlerDom for mounting events.`
 
-## 方法
+## API
 
 ```
 /**
-  * @return {dom} - 自定义节点的dom
+  * @return {dom} - custom node dom
   */
 draw = () => {}
 
 /**
-  * 线条挂载后的回调
+  * callback after the edge is mounted
   */
 mounted = () => {}
 
 /**
-  * @return {boolean} - 可以自定义复杂的连接条件
+  * @return {boolean} - complicated connection conditions can be customized
   */
 isConnect = () => {}
 
 /**
-  * 线条重绘后的回调
+  * callback after line updated
   */
 updated = () => {}
 
 /**
-  * @return {dom} - 自定义label的dom
+  * @return {dom} - custom label dom
   */
 drawLabel = () => {}
 
 /**
-  * @return {dom} - 自定义箭头的dom
+  * @return {dom} - custom arrow dom
   */
 drawArrow = () => {}
 
 /**
-  * @param {obj} sourcePoint(可选参数) - 源节点的坐标和方向 
-  * @param {obj} targetPoint(可选参数) - 目标节点的坐标和方向 
-  * @return {string} - path的路径
+  * @param {obj} sourcePoint(Optional) - source node coordinates and direction
+  * @param {obj} targetPoint(Optional) - target node coordinates and direction
+  * @return {string} - path
   */
 calcPath = () => {}
 
 /**
-  * 发送事件
+  * emit events
   */
 emit = (string, obj) => {}
 
 /**
-  * 接受事件
+  * accept events
   */
 on = (string, callback) => {}
 ```

@@ -1,6 +1,6 @@
 # 行为守则
-作为ButterFly项目的贡献者和维护者，我们承诺尊重所有报告的问题，提交拉取请求，更新文档以及其他活动做出贡献的人员。
+As a contributor and maintainer of the ButterFly project, we are committed to respecting all reported issues, submitting pull requests, updating documentation, and contributing to other activities.
 
-无论年龄，性别，性别认同，性取向，经验水平，种族，民族或者宗教信仰如何，我们都承诺向参与该项目的每个人提供尊重和礼貌，为每个人提供无骚扰环境 。
+Regardless of age, gender, gender identity, sexual orientation, level of experience, ethnicity, ethnicity or religious beliefs, we are committed to providing respect and courtesy to everyone involved in the project, providing a harassment-free environment for everyone.
 
-参与者不可接受的行为举例包括使用性语言或图像，侮辱和贬损评论，政治攻击，公共或私人骚扰，人身攻击或其他非专业行为。
+Examples of unacceptable behaviors of participants include sexual language or images, insults and derogatory comments, political attacks, public or private harassment, personal attacks or other non-professional behavior.

@@ -1,10 +1,12 @@
-# 节点组(Group)
+# Group
+
+## Usage
 
 ```
 const Group = require('butterfly-dag').Group;
 class AGroup extends Group {
   draw(obj) {
-    // 这里可以根据业务需要，自己生成dom
+    // here you can custom dom according to your needs.
   }
 }
 
@@ -13,71 +15,60 @@ canvas.draw({
     id: 'xxxx',
     top: 100,
     left: 100,
-    Class: AGroup //设置基类之后，画布会根据自定义的类来渲染
+    Class: AGroup // after setting the base class, the canvas will render based on the custom class.
   }],
   nodes: ...
   edges: ...
 })
 ```
 
-## 属性
+## Property
 
-| key | 说明 | 类型 | 默认值 
+| key | describe | type | default 
 | :------ | :------ | :------ | :------ 
-| id | 节点唯一标识 | string (Require) | - 
-| top | y轴坐标 | number (Require) | - 
-| left | x轴坐标 | number (Require) | - 
-| width | 宽度 | number (Option) | - 
-| height | 高度 | number (Option) | - 
-| endpoints | 锚点信息 | array (Option) | - 
-| Class | 拓展类 | Class (Option) | 当传入拓展类的时候，该节点组则会按拓展类的draw方法进行渲染，拓展类的相关方法也会覆盖父类的方法
-| scope | 作用域 | boolean (Option) | 当node的scope和group的scope一致才能加入到节点组。默认不设置即可随意加入
+| id | unique id | string (Require) | - 
+| top | y coordinate | number (Require) | - 
+| left | x coordinate | number (Require) | - 
+| width | group width | number (Option) | - 
+| height | group height | number (Option) | - 
+| endpoints | endpoint data | array (Option) | - 
+| Class | extended class | Class (Option) | When the extended class is passed in, the node group will be rendered according to the draw method of the extended class, and the related methods of the extended class will also override the method of the parent class.
+| scope | scope | boolean (Option) | When the scope of the node is consistent with the scope of the group, it can be added to the group. You can join as you like without setting it by default.
 
-`* 节点的返回的dom必须设置position: absolute;`
+`* The returned dom of the node must be set to position: absolute;`
 
-## 方法
+## API
 
 ```
 /**
-  * group的渲染方法
-  * @param {obj} data - 节点基本信息 
-  * @return {dom} - 返回渲染dom的根节点
+  * group draw function
+  * @param {obj} data - group data
+  * @return {dom} - group dom
   */
 draw = (obj) => {}
 
 /**
-  * 节点组挂载后的回调
+  * callback after group mount
   */
 mounted = () => {}
 
 /**
-  * group添加节点
-  * @param {obj} node - 节点数据
+  * add node to group
+  * @param {obj} node - node data
   */
 addNode = (node) => {}
 
 /**
-  * group批量添加节点
-  * @param {array} nodes - 节点数组
+  * add multiple nodes to group
+  * @param {array} nodes - nodes array
   */
 addNodes = (nodes) => {}
 
 /**
-  * group删除节点
-  * @param {obj} node - 节点数据
+  * delete node from group
+  * @param {obj} node - node data
   */
 removeNode = (node) => {}
-
-/**
-  * @param {obj} data - 锚点基本信息(此方法必须在节点挂载后执行才有效)
-  */
-addEndpoint = (obj) => {}
-
-/**
-  * @param {string} pointId - 锚点的信息 
-  * @return {Endpoint} - Endpoint的对象
-  */
-getEndpoint = (id) => {}
 
 /**
   * group删除节点
@@ -86,22 +77,33 @@ getEndpoint = (id) => {}
 removeNodes = (nodes) => {}
 
 /**
-  * @return {number} - 节点组宽度
+  * @param {obj} data - endpoint data (this method must be executed after the node is mounted)
+  */
+addEndpoint = (obj) => {}
+
+/**
+  * @param {string} pointId - endpoint id
+  * @return {Endpoint} - Endpoint object
+  */
+getEndpoint = (id) => {}
+
+/**
+  * @return {number} - get group width
   */
 getWidth = () => {}
 
 /**
-  * @return {number} - 节点组高度
+  * @return {number} - get group height
   */
 getHeight = () => {}
 
 /**
-  * 发送事件
+  * emit events
   */
 emit = (string, obj) => {}
 
 /**
-  * 接受事件
+  * accept events
   */
 on = (string, callback) => {}
 ```

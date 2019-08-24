@@ -1,8 +1,8 @@
-# 锚点(Endpoint)
+# Endpoint
 
-## 用法
+## Usage
 ```
-// 用法一:
+// Usage One:
 canvas.draw({
   nodes: [{
     ...
@@ -15,69 +15,69 @@ canvas.draw({
   }]
 })
 
-// 用法二:
+// Usage Two:
 let node = this.canvas.getNode('xxx');
 node.addEndpoint({
   id: 'xxxx',
   type: 'target',
-  dom: dom           // 使用此属性用户可以使用任意的一个dom作为一个锚点
+  dom: dom           // with this property the user can use any dom as an endpoint
 });
 ```
 
-## 属性
-| key | 说明 | 类型 | 默认值 
+## Property
+| key | describe | type | default 
 | :------ | :------ | :------ | :------ 
-| id | 节点唯一标识 | string (Require) | - 
-| orientation | 方向 | array (Option) | 下:[0,1]/上:[0,-1]/右:[1,0]/左:[-1,0]
-| pos | 连接目标锚点id | string (Option) | - 
-| scope | 作用域 | string (Option) | 锚点scope相同才可以连线
-| type | 目标锚点还是源锚点 | string (Option) | 'source' / 'target' / undefined，当undefined的时候锚点既是source又是target
-| disLinkable | 禁止锚点拖动断开线段 | boolean (Option) | 该属性仅限用于'target'的锚点
-| root | 可把锚点附属与某个子元素 | string (Option) | - 
-| Class | 拓展类 | Class (Option) | 当传入拓展类的时候，该节点组则会按拓展类的draw方法进行渲染，拓展类的相关方法也会覆盖父类的方法
-| dom | 可以把此dom作为自定义锚点 | dom (Option) | - 
-| expendArea | 可以设置锚点连接的热区，可覆盖主题内的设置 | Object (Option) | {left:10, right:10, top:10, bottom:10}
+| id | unique id | string (Require) | - 
+| orientation | direction | array (Optional) | Bottom:[0,1]/Top:[0,-1]/Right:[1,0]/Left:[-1,0]
+| pos | position | array (Optional) | - 
+| scope | scope | string (Optional) | endpoint scope is the same to connect
+| type | source endpoint or target endpoint | string (Optional) | 'source' / 'target' / undefined，when undefined, the anchor is both source and target.
+| disLinkable | enable break edge from this endpoint | boolean (Optional) | This attribute is limited to target endpoint
+| root | endpoint can be attached to a child element | string (Optional) | - 
+| Class | extended class | Class (Optional) | When the extended class is passed in, the node group will be rendered according to the draw method of the extended class, and the related methods of the extended class will also override the method of the parent class.
+| dom | custom dom (any dom on root node) | dom (Optional) | - 
+| expendArea | set the hot zone of the endpoint connection to override the settings in the theme | Object (Optional) | {left:10, right:10, top:10, bottom:10}
 
 ## 方法
 ```
 /**
-  * @return {dom} - 自定义节点的dom
+  * @return {dom} - custom endpoint dom
   */
 draw = () => {}
 
 /**
-  * 锚点挂载后的回调
+  * callback after endpoint mount
   */
 mounted = () => {}
 
 /**
-  * 锚点更新后的回调
+  * callback after endpoint updated
   */
 updated = () => {}
 
 /**
-  * @param {number} x - 移动位置的x坐标 
-  * @param {number} y - 移动位置的y坐标 
+  * @param {number} x - the x coordinate of the moving position
+  * @param {number} y - the y coordinate of the moving position
   */
 moveTo = (obj) => {}
 
 /**
-  * 设置连线时linkable的状态 (需要设置this.theme.endpoint.linkableHighlight属性)
+  * set the state of linkable when connecting (need to set the this.theme.endpoint.linkableHighlight property)
   */
 linkable = () => {}
 
 /**
-  * 取消连线时linkable的状态
+  * set linkable state when disconnected
   */
 unLinkable = () => {}
 
 /**
-  * 设置连线时linkable并且hover状态 (需要设置this.theme.endpoint.linkableHighlight属性)
+  * set linkable and hover state when connecting (requires setting this.theme.endpoint.linkableHighlight property)
   */
 hoverLinkable = () => {}
 
 /**
-  * 取消连线时linkable并且hover状态
+  * set linkable and hover state when disconnected
   */
 unHoverLinkable = () => {}
 

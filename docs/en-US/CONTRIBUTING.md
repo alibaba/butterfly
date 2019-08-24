@@ -1,29 +1,29 @@
-# 为ButterFly做贡献
+# Contribute to ButterFly
 
-我们很乐意为您贡献源代码，让ButterFly变得越来越好。在您提交代码之前，请仔细阅读以下指南：
-* [行为守则](https://github.com/alibaba/butterfly/blob/master/docs/CODE_OF_CONDUCT.md)
-* [issue 规范](#issue-submit)
-* [pull request 规范](#pull-request-guidelines)
+We are happy to contribute source code to you and make ButterFly getting better and better. Please read the following guidelines carefully before you submit your code.：
+* [Code of Conduct](https://github.com/alibaba/butterfly/blob/master/docs/CODE_OF_CONDUCT.md)
+* [Issue rule](#issue-submit)
+* [Pull request rule](#pull-request-guidelines)
 
-## <a name='issue-submit'></a> issue 规范
-* 在您提交问题之前，请先搜索存档，检查是否已存在问题。
+## <a name='issue-submit'></a> Issue rule
+* Before you submit a question, search the archive to see if there is a problem.
 
-* 检查问题是否已经修复，请使用master存储库中的最新版本开发。
+* Check if the issue has been fixed, please use the latest version of the master repository to develop.
 
-* 尽可能在报告中详细的说明问题情况，例如，你的环境是什么？什么浏览器和操作系统遇到的问题？其他浏览器是否有不同的显示错误？您期望结果如何？最好能重现错误，提供明确的步骤或者一个demo。
+* As much as possible in the report to explain the problem, for example, what is your environment? What browser and operating system are experiencing problems? Do other browsers have different display errors? What do you expect from the results? It's best to reproduce the error, provide clear steps or a demo.
 
 
-## <a name="pull-request-guidelines"></a>pull  request 规范
+## <a name="pull-request-guidelines"></a>Pull request rule
 
-* 请先fork一份到自己的项目下，不要直接在仓库下建分支。
+* Please fork a copy to your own project, do not build branches directly under the warehouse.
 
-* commit信息要以`[组件名]：描述信息`的形式填写，例如`[canvas]:fix xxx bug`。
+* The commit information should be filled in as `[component name]: description information`, for example `[canvas]:fix xxx bug`.
 
-* 如果您已经修复了错误或者添加了应测试的代码，请添加测试！
+* If you have fixed the bug or added a code to test, add a test!
 
-* 确保提交PR之前请先rebase，保持commit记录的整洁性。
+* Be sure to rebase before submitting the PR to keep the commit records clean.
 
-* 确保PR是提交到`dev`分支，而不是`master`分支。
+* Make sure the PR is committed to the `dev` branch instead of the `master` branch.
 
-* 如果修复的是bug，请在PR中给出描述信息。
+* If the bug is fixed, please give a description in the PR.
 

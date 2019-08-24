@@ -79,12 +79,12 @@ class AGroup extend Group {
 ```
 
 ## 🔗 API文档
-* [画布(canvas)](https://github.com/alibaba/butterfly/blob/master/docs/zh-CN/canvas.md)
-* [节点组(group)](https://github.com/alibaba/butterfly/blob/master/docs/zh-CN/group.md)
-* [节点(node)](https://github.com/alibaba/butterfly/blob/master/docs/zh-CN/node.md)
-* [线(edge)](https://github.com/alibaba/butterfly/blob/master/docs/zh-CN/edge.md)
-* [锚点(endpoint)](https://github.com/alibaba/butterfly/blob/master/docs/zh-CN/endpoint.md)
-* [缩略图(minimap)](https://github.com/alibaba/butterfly/blob/master/docs/zh-CN/minimap.md)
+* [画布(canvas)](./docs/zh-CN/canvas.md)
+* [节点组(group)](./docs/zh-CN/group.md)
+* [节点(node)](./docs/zh-CN/node.md)
+* [线(edge)](./docs/zh-CN/edge.md)
+* [锚点(endpoint)](./docs/zh-CN/endpoint.md)
+* [缩略图(minimap)](./docs/zh-CN/minimap.md)
 
 ## 🤝贡献
-小蝴蝶是一个完全开源的项目，我们欢迎大家为修复错误和改进做出贡献。有关如何开始的信息，请阅读我们的[贡献指南](https://github.com/alibaba/butterfly/blob/master/docs/zh-CN/CONTRIBUTING.md).
+小蝴蝶是一个完全开源的项目，我们欢迎大家为修复错误和改进做出贡献。有关如何开始的信息，请阅读我们的[贡献指南](./docs/zh-CN/CONTRIBUTING.md).

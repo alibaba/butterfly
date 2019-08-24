@@ -1,11 +1,11 @@
-# 节点(Node)
+# Node
 
-## 用法
+## Usage
 ```
 const Node = require('butterfly-dag').Node;
 class ANode extends Node {
   draw(obj) {
-    // 这里可以根据业务需要，自己生成dom
+    // here you can custom dom according to your needs.
   }
 }
 
@@ -14,106 +14,106 @@ canvas.draw({
     id: 'xxxx',
     top: 100,
     left: 100,
-    Class: ANode //设置基类之后，画布会根据自定义的类来渲染
+    Class: ANode // after setting the base class, the canvas will render based on the custom class.
   }]
 })
 ```
 
-## 属性
+## Property
 
-| key | 说明 | 类型 | 默认值 
+| key | describe | type | default 
 | :------ | :------ | :------ | :------ 
-| id | 节点唯一标识 | string (Require) | - 
-| top | y轴坐标 | number (Require) | - 
-| left | x轴坐标 | number (Require) | - 
-| draggable | 可以设置该节点是否能拖动 | boolean (Option) | 可覆盖全局的draggable属性
-| group | group的唯一标识 | string (Option) | - 
-| endpoints | 锚点信息 | array (Option) | - 
-| Class | 拓展类 | Class (Option) | 当传入拓展类的时候，该节点组则会按拓展类的draw方法进行渲染，拓展类的相关方法也会覆盖父类的方法
-| scope | 作用域 | boolean (Option) | 当node的scope和group的scope一致才能加入到节点组。默认不设置即可随意加入
+| id | unique id| string (Require) | - 
+| top | y coordinate | number (Require) | - 
+| left | x coordinate | number (Require) | - 
+| draggable | set whether the node can be dragged | boolean (Option) | overwrite global draggable attributes
+| group | group unique id | string (Option) | - 
+| endpoints | endpoint data | array (Option) | - 
+| Class | extended class | Class (Option) | When the extended class is passed in, the node group will be rendered according to the draw method of the extended class, and the related methods of the extended class will also override the method of the parent class.
+| scope | scope | boolean (Option) | When the scope of the node is consistent with the scope of the group, it can be added to the group. You can join as you like without setting it by default.
 
-`* 节点的返回的dom必须设置position: absolute;`
+`* The returned dom of the node must be set to position: absolute;`
 
-## 方法
+## API
 ```
 /**
-  * 节点的渲染方法
-  * @param {obj} data - 节点基本信息 
-  * @return {dom} - 返回渲染dom的根节点
+  * node draw function
+  * @param {obj} data - node data
+  * @return {dom} - node dom
   */
 draw = (obj) => {}
 
 /**
-  * 节点挂载后的回调
+  * callback after node mount
   */
 mounted = () => {}
 
 /**
-  * 节点更新后的回调
+  * callback after node updated
   */
 updated = () => {}
 
 /**
-  * 删除节点
+  * remove node myself
   */
 remove = () => {}
 
 /**
-  * 聚焦回调
+  * focus callback
   */
 focus = () => {}
 
 /**
-  * 失去聚焦回调
+  * unfocus callback
   */
 unFocus = () => {}
 
 /**
-  * @param {obj} data - 锚点基本信息(此方法必须在节点挂载后执行才有效)
+  * @param {obj} data - endpoint data (this method must be executed after the node is mounted)
   */
 addEndpoint = (obj) => {}
 
 /**
-  * @param {string} pointId - 锚点的Id(此方法必须在节点挂载后执行才有效)
-  * @return {Endpoint} - Endpoint的对象
+  * @param {obj} data - endpoint data (this method must be executed after the node is mounted)
+  * @return {Endpoint} - Endpoint object
   */
 removeEndpoint = (obj) => {}
 
 /**
-  * @param {string(Require)} pointId - 锚点的信息 
-  * @param {string(Option)} type - 锚点的类型
-  * @return {Endpoint} - Endpoint的对象
+  * @param {string} pointId - endpoint id
+  * @param {string(Option)} type - endpoint type (Optional)
+  * @return {Endpoint} - Endpoint object
   */
 getEndpoint = (id, type) => {}
 
 /**
-  * @param {number} x - 移动位置的x坐标 
-  * @param {number} y - 移动位置的y坐标 
+  * @param {number} x - move to x coordinate
+  * @param {number} y - move to y coordinate
   */
 moveTo = (obj) => {}
 
 /**
-  * @param {boolean} draggable - 设置节点是否可移动
+  * @param {boolean} draggable - set whether the node is draggable
   */
 setDraggable = (boolean) => {}
 
 /**
-  * @return {number} - 节点宽度
+  * @return {number} - node width
   */
 getWidth = () => {}
 
 /**
-  * @return {number} - 节点高度
+  * @return {number} - node height
   */
 getHeight = () => {}
 
 /**
-  * 发送事件
+  * emit events
   */
 emit = (string, obj) => {}
 
 /**
-  * 接受事件
+   * accept events
   */
 on = (string, callback) => {}
 ```
