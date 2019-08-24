@@ -18,7 +18,7 @@
 
 </div>
 
-English | [简体中文](./README-zh_CN.md)
+English | [简体中文](./README.zh-CN.md)
 
 ## ✨ Features
 * Simple & Poweful. [Online DEMO](https://noonnightstorm.github.io/)
