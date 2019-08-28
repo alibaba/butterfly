@@ -108,4 +108,4 @@ emit = (string, obj) => {}
 on = (string, callback) => {}
 ```
 
-## 详细说明
+## Detail
