@@ -62,7 +62,7 @@ minimap.destroy();
 | move | minimap interaction function for moving the canvas, referring to butterfly's move function | Require |
 | terminal2canvas | interaction function for butterfly's convert coordinate the canvas | Require |
 
-### 2, 具体描述
+### 2, Detail
 
 **(1) nodes**
 ```ts
