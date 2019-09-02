@@ -4,7 +4,7 @@
   </a>
 </p>
 
-<h3 align="center">一个基于JS的数据驱动的节点式编排组件库</h3>
+<h3 align="center">JavaScript Diagramming library which concentrate on flow layout canvas</h3>
 
 <div align="center">
 
@@ -18,54 +18,54 @@
 
 </div>
 
-[English](./README.md) | 简体中文
+English | [简体中文](./README.md)
 
-## ✨ 特性
-* 开箱即用的参考[DEMO](https://noonnightstorm.github.io/)，可在线调试
-* 全方位管理画布，开发者只需要更专注定制化的需求
-* 利用dom来定制元素；灵活性，可塑性，拓展性优秀
+## ✨ Features
+* Simple & Poweful. [Online DEMO](https://noonnightstorm.github.io/)
+* Manage the canvas in all aspects, developers only need to focus more on customized needs
+* Use dom to customize elements: flexibility and excellent expandability
 
-## 📦 安装
+## 📦 Install
 ```
 npm install butterfly-dag
 ```
 
-## 🔨 快速上手
+## 🔨 Quick Start
 
-### 生成画布
+### Create Canvas
 ```
 const Canvas = require('butterfly-dag').Canvas;
 let canvas = new Canvas({
-  root: dom,              //canvas的根节点(必传)
-  zoomable: true,         //可缩放(可传)
-  moveable: true,         //可平移(可传)
-  draggable: true,        //节点可拖动(可传)
+  root: dom,              //canvas root dom (require)
+  zoomable: true,         //enable zoom canvas (option)
+  moveable: true,         //enable move canvas (option)
+  draggable: true,        //enbale drag nodes (options)
 });
 canvas.draw({
-  groups: [],  //分组信息
-  nodes: [],  //节点信息
-  edges: []  // 连线信息
+  groups: [],  // group  data
+  nodes: [],  // nodes data
+  edges: []  // edges data
 })
 ```
 
-### 定制元素(节点组，节点，线，锚点)
+### Custom Item(Group，Node，Edge，Endpoint)
 ```
-// 定制节点
+// Custom Node
 const Node = require('butterfly-dag').Node;
 class ANode extend Node {
   draw() {
-    // 这里定制您需要的节点并返回一个dom
+    // Here you can customize the node as you wish , but remember return it`s root dom
     let div = document.createElement("div"); 
     div.innerHTML('helloworld');
     return div
   }
 }
 
-// 定制节点组
+// Custom Group
 const Group = require('butterfly-dag').Group;
 class AGroup extend Group {
   draw() {
-    // 这里定制您需要的节点组并返回一个dom
+    // Here you can customize the node as you wish , but remember return it`s root dom
     let container = document.createElement("div"); 
     container.className = 'container';
     let title = document.createElement('p');
@@ -75,16 +75,16 @@ class AGroup extend Group {
   }
 }
 
-// 线，锚点如此类推，请看具体文档
+// Edge、Endpoint and so on . Please see the detail document
 ```
 
-## 🔗 API文档
-* [画布(canvas)](./docs/zh-CN/canvas.md)
-* [节点组(group)](./docs/zh-CN/group.md)
-* [节点(node)](./docs/zh-CN/node.md)
-* [线(edge)](./docs/zh-CN/edge.md)
-* [锚点(endpoint)](./docs/zh-CN/endpoint.md)
-* [缩略图(minimap)](./docs/zh-CN/minimap.md)
+## 🔗 API Document
+* [Canvas](./docs/en-US/canvas.md)
+* [Group](./docs/en-US/group.md)
+* [Node](./docs/en-US/node.md)
+* [Edge](./docs/en-US/edge.md)
+* [Endpoint](./docs/en-US/endpoint.md)
+* [Minimap](./docs/en-US/minimap.md)
 
-## 🤝贡献
-小蝴蝶是一个完全开源的项目，我们欢迎大家为修复错误和改进做出贡献。有关如何开始的信息，请阅读我们的[贡献指南](./docs/zh-CN/CONTRIBUTING.md).
+## 🤝 Contribution
+Butterfly is a completely open source project and we welcome everyone to contribute to fixing bugs and improvements. For information on how to get started, read our [contribution guide](./docs/en-US/CONTRIBUTING.md).
