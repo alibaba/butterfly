@@ -1,6 +1,5 @@
 # Minimap
 
-提供通用的Minimap服务和专属小蝴蝶的设置选项
 Provide public Minimap services and settings property for butterfly
 
 ## 一，Usage for butterfly
