@@ -25,6 +25,10 @@ English | [简体中文](./README.md)
 * Manage the canvas in all aspects, developers only need to focus more on customized needs
 * Use dom to customize elements: flexibility and excellent expandability
 
+<p align="center">
+  <img width="900" src="https://img.alicdn.com/tfs/TB1mwr0gbr1gK0jSZFDXXb9yVXa-1000-1000.png">
+</p>
+
 ## 📦 Install
 ```
 npm install butterfly-dag

@@ -281,6 +281,8 @@ class BaseCanvas extends Canvas {
         _canvasFragment.appendChild(_nodeObj.dom);
       }
       return _nodeObj;
+    }).filter((item) => {
+      return !!item;
     });
 
     // 批量插入dom，性能优化
