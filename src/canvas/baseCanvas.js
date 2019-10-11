@@ -296,7 +296,7 @@ class BaseCanvas extends Canvas {
       !isNotEventEmit && item.mounted && item.mounted();
     });
 
-    if (result && result.length > 0) {
+    if (result && result.length > 0 && !isNotEventEmit) {
       this.emit('system.nodes.add', {
         nodes: result
       });
@@ -563,13 +563,15 @@ class BaseCanvas extends Canvas {
     }
 
     if (_rmNodes.length > 0) {
-      this.emit('system.node.delete', {
-        node: _rmNodes[0]
-      });
-      this.emit('events', {
-        type: 'node:delete',
-        node: _rmNodes[0]
-      });
+      if(!isNotEventEmit) {
+        this.emit('system.node.delete', {
+          node: _rmNodes[0]
+        });
+        this.emit('events', {
+          type: 'node:delete',
+          node: _rmNodes[0]
+        });
+      }
       return {
         nodes: [_rmNodes[0]],
         edges: neighborEdges,
