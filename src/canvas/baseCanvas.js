@@ -1467,6 +1467,7 @@ class BaseCanvas extends Canvas {
           terWidth: $(this.root).width(),
           terHeight: $(this.root).height()
         });
+        this.canvasWrapper.resize({root: this.root});
       });
       _resizeObserver.observe(this.root);
     } else {
@@ -1480,6 +1481,7 @@ class BaseCanvas extends Canvas {
           terWidth: $(this.root).width(),
           terHeight: $(this.root).height()
        });
+       this.canvasWrapper.resize({root: this.root});
       })
     }
 
