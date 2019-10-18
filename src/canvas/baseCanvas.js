@@ -2142,25 +2142,37 @@ class BaseCanvas extends Canvas {
             
             return edge;
           });
-          if (_delEdges.length !== 0) {
-            _delEdges.forEach((_edge) => {
-              this.emit('system.link.delete', {
-                link: _edge
-              });
-              this.emit('events', {
-                type: 'link:delete',
-                link: _edge
-              });
-            });
-          }
-          if (_emitEdges.length !== 0) {
-            this.emit('system.link.connect', {
-              links: this._dragEdges
+          if (_delEdges.length !== 0 && _emitEdges.length !== 0) {
+            this.emit('system.link.reconnect', {
+              delLinks: _delEdges,
+              addLinks: _emitEdges
             });
             this.emit('events', {
-              type: 'link:connect',
-              links: this._dragEdges
+              type: 'link:reconnect',
+              delLinks: _delEdges,
+              addLinks: _emitEdges
             });
+          } else {
+            if (_delEdges.length !== 0) {
+              _delEdges.forEach((_edge) => {
+                this.emit('system.link.delete', {
+                  link: _edge
+                });
+                this.emit('events', {
+                  type: 'link:delete',
+                  link: _edge
+                });
+              });
+            }
+            if (_emitEdges.length !== 0) {
+              this.emit('system.link.connect', {
+                links: this._dragEdges
+              });
+              this.emit('events', {
+                type: 'link:connect',
+                links: this._dragEdges
+              });
+            }
           }
         }
       }

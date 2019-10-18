@@ -350,6 +350,7 @@ canvas.on('type', (data) => {
 | system.nodes.add | 批量节点添加 | -
 | system.link.delete | 删除连线 | -
 | system.link.connect | 连线成功 | -
+| system.link.reconnect | 线段重连 | -
 | system.link.click | 点击事件 | -
 | system.group.delete | 删除节点组 | -
 | system.group.move | 移动节点组 | -
