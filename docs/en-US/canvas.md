@@ -349,6 +349,7 @@ canvas.on('type', (data) => {
 | system.nodes.add | add multiple nodes event | -
 | system.link.delete | delete edge event | -
 | system.link.connect | connect edge event | -
+| system.link.reconnect | edge reconnect event | -
 | system.link.click | click edge event | -
 | system.group.delete | delete group event | -
 | system.group.move | move group event | -
