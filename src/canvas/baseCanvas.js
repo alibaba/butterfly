@@ -643,6 +643,10 @@ class BaseCanvas extends Canvas {
 
   removeGroup(groupId) {
     const group = this.getGroup(groupId);
+    if (!group) {
+      console.warn(`未找到id为${groupId}的节点组`);
+    }
+    group._isDeleting = true;
     group.nodes.forEach((_node) => {
       let rmItem = this.removeNode(_node.id, true, true);
       let rmNode = rmItem.nodes[0];
