@@ -1127,6 +1127,8 @@ class BaseCanvas extends Canvas {
         }
         frame++;
       }, time / 20);
+    } else {
+      callback && callback();
     }
   }
 
