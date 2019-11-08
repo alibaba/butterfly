@@ -60,7 +60,7 @@ class ANode extend Node {
   draw() {
     // Here you can customize the node as you wish , but remember return it`s root dom
     let div = document.createElement("div"); 
-    div.innerHTML('helloworld');
+    div.innerHTML = 'helloworld';
     return div
   }
 }

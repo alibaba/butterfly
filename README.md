@@ -60,7 +60,7 @@ class ANode extend Node {
   draw() {
     // 这里定制您需要的节点并返回一个dom
     let div = document.createElement("div"); 
-    div.innerHTML('helloworld');
+    div.innerHTML = 'helloworld';
     return div
   }
 }
