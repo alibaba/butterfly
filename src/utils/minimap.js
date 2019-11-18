@@ -126,6 +126,7 @@ class Minimap {
     const height = this.$root.height();
     const width = this.$root.width();
 
+    // 增加两个虚拟的点，防止只有一个node时宽度过大的问题
     nodes.push({left: 0, top: 0, height: 1, width: 1});
     nodes.push({left: width, top: height, height: 1, width: 1});
 
@@ -416,13 +417,13 @@ class Minimap {
         const offset = this.$root.offset();
         const boffset = this.options.offset;
 
-        const ddx = (((-left / this.ratio) + offset.left) - minX) * this.ratio * -1
-        const ddy = (((-top / this.ratio) + offset.top) - minY) * this.ratio * -1
+        const ddx = (((-left / this.ratio) + offset.left) - minX) * this.ratio;
+        const ddy = (((-top / this.ratio) + offset.top) - minY) * this.ratio;
         
         this.options.move(
           [
-            boffset[0] + -ddx / this.ratio,
-            boffset[1] + -ddy / this.ratio
+            boffset[0] + ddx / this.ratio,
+            boffset[1] + ddy / this.ratio
           ]
         );
 
