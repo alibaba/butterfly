@@ -1210,7 +1210,7 @@ class BaseCanvas extends Canvas {
 
   setMinimap(flat = true, options = {}) {
     if(!options.events) {
-      options.events = {};
+      options.events = [];
     }
 
     const updateEvts = [

@@ -69,7 +69,7 @@ minimap.destroy();
 | safeDistance | 安全距离，用于限制用户将视口拖出minimap | 20 |
 | activeNodeColor | 高亮的节点的颜色 | `rgba(255, 253, 76, 1)` |
 | activeGroupColor | 高亮的节点组的颜色 | `rgba(255, 253, 76, 1)` |
-| events | 画布重绘时间 | [] |
+| events | 触发minimap重绘的事件 | [] |
 
 ### 2, 具体描述
 

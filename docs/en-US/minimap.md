@@ -64,7 +64,7 @@ minimap.destroy();
 | safeDistance | safe distance to protect user from moving viewport window outside of minimap | 20 |
 | activeNodeColor | active node color | `rgba(255, 253, 76, 1)` |
 | activeGroupColor | active group color | `rgba(255, 253, 76, 1)` |
-| events | 画布重绘时间 | [] |
+| events | events to call minimap redraw | [] |
 
 ### 2, Detail
 
