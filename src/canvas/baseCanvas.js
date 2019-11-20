@@ -1215,6 +1215,10 @@ class BaseCanvas extends Canvas {
   }
 
   setMinimap(flat = true, options = {}) {
+    if(!options.events) {
+      options.events = [];
+    }
+
     const updateEvts = [
       'system.canvas.zoom',
       'system.node.delete',
@@ -1223,7 +1227,8 @@ class BaseCanvas extends Canvas {
       'system.group.delete',
       'system.group.move',
       'system.drag.move',
-      'system.canvas.move'
+      'system.canvas.move',
+      ...options.events
     ];
 
     const getNodes = () => {
@@ -1234,9 +1239,23 @@ class BaseCanvas extends Canvas {
           top: node.top,
           width: node.getWidth(),
           height: node.getHeight(),
-          group: node.group
+          group: node.group,
+          minimapActive: _.get(node, 'options.minimapActive')
         }
       });
+    }
+
+    const getGroups = () => {
+      return this.groups.map(group => {        
+        return {
+          id: group.id,
+          left: group.left,
+          top: group.top,
+          width: group.getWidth(),
+          height: group.getHeight(),
+          minimapActive: _.get(group, 'options.minimapActive')
+        }
+      });      
     }
 
     if(flat && !this.minimap) {
@@ -1244,8 +1263,9 @@ class BaseCanvas extends Canvas {
         root: this.root,
         move: this.move.bind(this),
         terminal2canvas: this.terminal2canvas.bind(this),
+        canvas2terminal: this.canvas2terminal.bind(this),
         nodes: getNodes(),
-        groups: this.groups,
+        groups: getGroups(),
         zoom: this.getZoom(),
         offset: this.getOffset(),
         ...options
@@ -1254,7 +1274,7 @@ class BaseCanvas extends Canvas {
       this.updateFn = () => {
         this.minimap.update({
           nodes: getNodes(),
-          groups: this.groups,
+          groups: getGroups(),
           zoom: this.getZoom(),
           offset: this.getOffset()
         });

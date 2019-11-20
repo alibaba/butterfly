@@ -65,6 +65,11 @@ minimap.destroy();
 | zoom | 画布当前缩放比 | 1 |
 | move | 缩略图互动函数, 用于移动画布, 参考小蝴蝶的move | 必填 |
 | terminal2canvas | 互动函数, 屏幕坐标到画布坐标的转换 | 必填 |
+| canvas2terminal | 互动函数, 画布坐标转换到屏幕坐标 | 必填 |
+| safeDistance | 安全距离，用于限制用户将视口拖出minimap | 20 |
+| activeNodeColor | 高亮的节点的颜色 | `rgba(255, 253, 76, 1)` |
+| activeGroupColor | 高亮的节点组的颜色 | `rgba(255, 253, 76, 1)` |
+| events | 触发minimap重绘的事件 | [] |
 
 ### 2, 具体描述
 
@@ -77,17 +82,21 @@ interface Node {
   top: number;            // 纵坐标
   width: number;          // 宽度
   height: number;         // 高度
+  minimapActive: boolean; // 当前是否处于激活态
 }
 ```
 
 **(2) groups**
 ```ts
 interface Group {
-  id: number | string;    // 节点组ID
-  left: number;           // 横坐标
-  top: number;            // 纵坐标
-  width: number;          // 宽度  
-  height: number;         // 高度
+  id: number | string;      // 节点组ID
+  left: number;             // 横坐标
+  top: number;              // 纵坐标
+  width: number;            // 宽度  
+  height: number;           // 高度
+  options: {
+    minimapActive: boolean; // 当前是否处于激活态
+  }
 }
 ```
 
@@ -102,6 +111,13 @@ interface MoveFn {
 **(4) terminal2canvas**
 ```ts
 interface Term2CvsFn {
+  ([x: number, y: number]): [x: number, y: number]
+}
+```
+
+**(5) canvas2terminal**
+```ts
+interface Cvs2TermFn {
   ([x: number, y: number]): [x: number, y: number]
 }
 ```

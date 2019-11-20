@@ -60,6 +60,11 @@ minimap.destroy();
 | zoom | canvas zoom | 1 |
 | move | minimap interaction function for moving the canvas, referring to butterfly's move function | Require |
 | terminal2canvas | interaction function for butterfly's convert coordinate the canvas | Require |
+| canvas2terminal | interaction function for canvas's convert to coordinate of screen   | Require |
+| safeDistance | safe distance to protect user from moving viewport window outside of minimap | 20 |
+| activeNodeColor | active node color | `rgba(255, 253, 76, 1)` |
+| activeGroupColor | active group color | `rgba(255, 253, 76, 1)` |
+| events | events to call minimap redraw | [] |
 
 ### 2, Detail
 
@@ -72,17 +77,21 @@ interface Node {
   top: number;            // y coordinate
   width: number;          // width
   height: number;         // height
+  minimapActive: boolean; // active status
 }
 ```
 
 **(2) groups**
 ```ts
 interface Group {
-  id: number | string;    // node ID
-  left: number;           // x coordinate
-  top: number;            // y coordinate
-  width: number;          // width  
-  height: number;         // height
+  id: number | string;      // node ID
+  left: number;             // x coordinate
+  top: number;              // y coordinate
+  width: number;            // width  
+  height: number;           // height
+  options: {
+    minimapActive: boolean; // active status
+  }  
 }
 ```
 
@@ -97,6 +106,13 @@ interface MoveFn {
 **(4) terminal2canvas**
 ```ts
 interface Term2CvsFn {
+  ([x: number, y: number]): [x: number, y: number]
+}
+```
+
+**(5) canvas2terminal**
+```ts
+interface Cvs2TermFn {
   ([x: number, y: number]): [x: number, y: number]
 }
 ```
