@@ -2343,7 +2343,9 @@ class BaseCanvas extends Canvas {
         neighborEdges.forEach((item) => {
           item.redraw();
         });
-
+        this._dragNode.endpoints.forEach((item) => {
+          item.updatePos && item.updatePos();
+        });
         this._dragNode._isMoving = false;
       }
 
