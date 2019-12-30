@@ -2110,11 +2110,19 @@ class BaseCanvas extends Canvas {
               let _isRepeat = _.some(this.edges, (_edge) => {
                 let _result = false;
                 if (edge.sourceNode) {
-                  _result = edge.sourceNode.id === _edge.sourceNode.id && edge.sourceEndpoint.id === _edge.sourceEndpoint.id;
+                  if (edge.type === 'node') {
+                    _result = edge.sourceNode.id === _edge.sourceNode.id;
+                  } else {
+                    _result = edge.sourceNode.id === _edge.sourceNode.id && edge.sourceEndpoint.id === _edge.sourceEndpoint.id;
+                  }
                 }
 
                 if (_targetEndpoint.nodeId) {
-                  _result = _result && (_targetEndpoint.nodeId === _edge.targetNode.id && _targetEndpoint.id === _edge.targetEndpoint.id);
+                  if (edge.type === 'node') {
+                    _result = _result && (edge.targetNode.id === _edge.targetNode.id);
+                  } else {
+                    _result = _result && (_targetEndpoint.nodeId === _edge.targetNode.id && _targetEndpoint.id === _edge.targetEndpoint.id); 
+                  }
                 }
 
                 if (_result && edge._isDeletingEdge) {
