@@ -1898,6 +1898,7 @@ class BaseCanvas extends Canvas {
               }
               endpoints.forEach((point) => {
                 let pointObj = {
+                  type: 'endpoint',
                   shapeType: this.theme.edge.type,
                   orientationLimit: this.theme.endpoint.position,
                   _sourceType: point.nodeType,
