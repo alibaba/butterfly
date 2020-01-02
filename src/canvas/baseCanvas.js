@@ -491,6 +491,8 @@ class BaseCanvas extends Canvas {
 
         this.edges.push(edge);
 
+        edge.mounted && edge.mounted();
+
         return edge;
       }
     }).filter(item => item);
@@ -2111,18 +2113,18 @@ class BaseCanvas extends Canvas {
               let _isRepeat = _.some(this.edges, (_edge) => {
                 let _result = false;
                 if (edge.sourceNode) {
-                  if (edge.type === 'node') {
+                  if (_edge.type === 'node') {
                     _result = edge.sourceNode.id === _edge.sourceNode.id;
                   } else {
                     _result = edge.sourceNode.id === _edge.sourceNode.id && edge.sourceEndpoint.id === _edge.sourceEndpoint.id;
                   }
                 }
-
+                
                 if (_targetEndpoint.nodeId) {
-                  if (edge.type === 'node') {
-                    _result = _result && (edge.targetNode.id === _edge.targetNode.id);
+                  if (_edge.type === 'node') {
+                    _result = _result && (_.get(edge, 'targetNode.id') === _.get(_edge, 'targetNode.id'));
                   } else {
-                    _result = _result && (_targetEndpoint.nodeId === _edge.targetNode.id && _targetEndpoint.id === _edge.targetEndpoint.id); 
+                    _result = _result && (_targetEndpoint.nodeId === _.get(_edge, 'targetNode.id') && _targetEndpoint.id === _.get(_edge, 'targetEndpoint.id')); 
                   }
                 }
 
