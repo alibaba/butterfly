@@ -12,7 +12,7 @@ class Endpoint {
     this.options = opts;
     this.orientation = opts.orientation;
     this.pos = opts.pos;
-    this.type = opts.type || 'endpoint';
+    this.type = opts.type;
     this.nodeType = _.get(opts, 'nodeType', 'node');
     this.nodeId = _.get(opts, '_node.id');
     this.root = opts.root;
