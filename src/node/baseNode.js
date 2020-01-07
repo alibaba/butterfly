@@ -33,10 +33,10 @@ class BaseNode extends Node {
         .attr('id', obj.id);
     }
     const node = $(_dom);
-    if (obj.top) {
+    if (obj.top !== undefined) {
       node.css('top', `${obj.top}px`);
     }
-    if (obj.left) {
+    if (obj.left !== undefined) {
       node.css('left', `${obj.left}px`);
     }
     this.updated && this.updated();

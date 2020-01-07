@@ -72,16 +72,16 @@ class BaseGroup extends Group {
       this.setResize(true);
     }
 
-    if (obj.top) {
+    if (obj.top !== undefined) {
       group.css('top', obj.top + 'px');
     }
-    if (obj.left) {
+    if (obj.left !== undefined) {
       group.css('left', obj.left + 'px');
     }
-    if (obj.width) {
+    if (obj.width !== undefined) {
       group.css('width', obj.width + 'px');
     }
-    if (obj.height) {
+    if (obj.height !== undefined) {
       group.css('height', obj.height + 'px');
     }
 
