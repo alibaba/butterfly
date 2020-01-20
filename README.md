@@ -37,7 +37,7 @@ npm install butterfly-dag
 ## 🔨 快速上手
 
 ### 生成画布
-```
+```js
 const Canvas = require('butterfly-dag').Canvas;
 let canvas = new Canvas({
   root: dom,              //canvas的根节点(必传)
@@ -53,7 +53,7 @@ canvas.draw({
 ```
 
 ### 定制元素(节点组，节点，线，锚点)
-```
+```js
 // 定制节点
 const Node = require('butterfly-dag').Node;
 class ANode extend Node {
