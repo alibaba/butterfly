@@ -531,4 +531,4 @@ class Minimap {
   }
 }
 
-module.exports = Minimap;
+export default Minimap;

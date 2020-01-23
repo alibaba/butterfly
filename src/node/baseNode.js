@@ -1,8 +1,8 @@
 const $ = require('jquery');
 const _ = require('lodash');
 
-const Node = require('../interface/node');
-const Endpoint = require('../endpoint/baseEndpoint');
+import Node from '../interface/node';
+import Endpoint from '../endpoint/baseEndpoint';
 
 class BaseNode extends Node {
   constructor(opts) {
@@ -221,4 +221,4 @@ class BaseNode extends Node {
   }
 }
 
-module.exports = BaseNode;
+export default BaseNode;

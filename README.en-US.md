@@ -36,6 +36,13 @@ npm install butterfly-dag
 
 ## 🔨 Quick Start
 
+### Import Css
+```
+require('butterfly-dag/dist/index.css');
+// or
+import 'butterfly-dag/dist/index.css';
+```
+
 ### Create Canvas
 ```
 const Canvas = require('butterfly-dag').Canvas;

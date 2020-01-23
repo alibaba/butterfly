@@ -817,7 +817,7 @@ function _route(conn, fromPt, fromDir, toPt, toDir) {
   _route(conn, point, dir, toPt, toDir);
 }
 
-module.exports = {
+export default {
   drawBezier,
   drawAdvancedBezier,
   drawStraight,

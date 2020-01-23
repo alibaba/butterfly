@@ -2,9 +2,8 @@
 
 const $ = require('jquery');
 const _ = require('lodash');
-const coordinateService = require('../utils/coordinate');
 
-require('./baseEndpoint.less');
+import './baseEndpoint.less';
 
 class Endpoint {
   constructor(opts) {
@@ -235,4 +234,4 @@ class Endpoint {
   }
 }
 
-module.exports = Endpoint;
+export default Endpoint;

@@ -2,9 +2,10 @@
 
 const _ = require('lodash');
 const $ = require('jquery');
-const DrawUtil = require('../utils/link');
-const ArrowUtil = require('../utils/arrow');
-require('./baseEdge.less');
+import DrawUtil from '../utils/link';
+import ArrowUtil from '../utils/arrow';
+
+import './baseEdge.less';
 
 class Edge {
   constructor(opts) {
@@ -241,4 +242,4 @@ class Edge {
   }
 }
 
-module.exports = Edge;
+export default Edge;

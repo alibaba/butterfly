@@ -36,6 +36,13 @@ npm install butterfly-dag
 
 ## 🔨 快速上手
 
+### 引入样式
+```
+require('butterfly-dag/dist/index.css');
+// or
+import 'butterfly-dag/dist/index.css';
+```
+
 ### 生成画布
 ```
 const Canvas = require('butterfly-dag').Canvas;

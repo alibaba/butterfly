@@ -110,7 +110,7 @@ function treeLayout(param) {
 }
 
 
-module.exports = {
+export default {
   forceLayout,
   forceTreeLayout,
   treeLayout

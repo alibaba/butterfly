@@ -3,26 +3,27 @@
 const $ = require('jquery');
 const _ = require('lodash');
 const domtoimage = require('dom-to-image');
-const Canvas = require('../interface/canvas');
-const Node = require('../node/baseNode');
-const Edge = require('../edge/baseEdge');
-const Group = require('../group/baseGroup');
-const Endpoint = require('../endpoint/baseEndpoint');
-const Layout = require('../utils/layout');
-const SelectCanvas = require('../utils/selectCanvas');
+
+import Canvas from "../interface/canvas";
+import Node from '../node/baseNode';
+import Edge from '../edge/baseEdge';
+import Group from '../group/baseGroup';
+import Endpoint from '../endpoint/baseEndpoint';
+import Layout from '../utils/layout';
+import SelectCanvas from '../utils/selectCanvas';
 // 画布和屏幕坐标地换算
-const CoordinateService = require('../utils/coordinate');
+import CoordinateService from '../utils/coordinate';
 // scope的比较
-const ScopeCompare = require('../utils/scopeCompare');
+import ScopeCompare from '../utils/scopeCompare';
 // 网格模式
-const GridService = require('../utils/girdService');
+import GridService from '../utils/girdService';
 // 辅助线模式
-const GuidelineService = require('../utils/guidelineService');
+import GuidelineService from '../utils/guidelineService';
 // 小地图模式
-const Minimap = require('../utils/minimap');
+import Minimap from '../utils/minimap';
 
 
-require('./baseCanvas.less');
+import './baseCanvas.less';
 
 class BaseCanvas extends Canvas {
   constructor(options) {
@@ -2569,4 +2570,4 @@ class BaseCanvas extends Canvas {
   }
 }
 
-module.exports = BaseCanvas;
+export default BaseCanvas;

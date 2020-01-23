@@ -57,7 +57,7 @@ function calcSlope(opts) {
   return {x, y};
 }
 
-module.exports = {
+export default {
   calcSlope,
   arrow
 };

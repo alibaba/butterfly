@@ -138,4 +138,4 @@ class SelectCanvas {
   }
 }
 
-module.exports = SelectCanvas;
+export default SelectCanvas;

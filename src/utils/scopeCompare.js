@@ -3,7 +3,7 @@
 const _ = require('lodash');
 
 // 检验scope是否匹配
-module.exports = (scope1, scope2, isScopeStrict) => {
+export default (scope1, scope2, isScopeStrict) => {
   let _scope1 = (scope1 || '').split(' ').filter(item => !!item);
   let _scope2 = (scope2 || '').split(' ').filter(item => !!item);
   if (!isScopeStrict && (!scope1 || !scope2)) {

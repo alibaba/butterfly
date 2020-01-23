@@ -157,4 +157,4 @@ class CoordinateService {
   }
 }
 
-module.exports = CoordinateService;
+export default CoordinateService;
