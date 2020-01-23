@@ -96,4 +96,4 @@ class Group {
   unFocus() {}
 }
 
-module.exports = Group;
+export default Group;

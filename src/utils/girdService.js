@@ -172,4 +172,4 @@ class GridService {
   }
 }
 
-module.exports = GridService;
+export default GridService;

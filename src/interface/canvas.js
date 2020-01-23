@@ -149,4 +149,4 @@ class Canvas {
 
 EventEmit(Canvas.prototype);
 
-module.exports = Canvas;
+export default Canvas;

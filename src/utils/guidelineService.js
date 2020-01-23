@@ -209,4 +209,4 @@ class GuidelineService {
   }
 }
 
-module.exports = GuidelineService;
+export default GuidelineService;
