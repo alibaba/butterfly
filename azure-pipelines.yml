@@ -17,5 +17,5 @@ steps:
 
 - script: |
     npm install
-    webpack
+    rollup -c
   displayName: 'npm install and build'
