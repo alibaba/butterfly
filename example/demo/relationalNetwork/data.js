@@ -13,7 +13,6 @@ module.exports = {
     left: 0,
     top: 200,
     Class: User,
-    scope: 'leftg',
     color: '#19A97B'
   }, {
     id: '2',
@@ -22,7 +21,6 @@ module.exports = {
     left: 150,
     top: 50,
     Class: Train,
-    scope: 'leftg',
     color: '#436EEE'
   }, {
     id: '3',
@@ -31,7 +29,6 @@ module.exports = {
     left: 300,
     top: 110,
     Class: Email,
-    scope: 'leftg',
     color: '#7A67EE'
   }, {
     id: '4',
