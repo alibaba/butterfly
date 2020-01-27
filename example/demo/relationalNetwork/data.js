@@ -26,7 +26,7 @@ module.exports = {
     color: '#436EEE'
   }, {
     id: '3',
-    name: '514493435@qq.com',
+    name: '5144xxxxxx@qq.com',
     type: 'email',
     left: 300,
     top: 110,
@@ -44,7 +44,7 @@ module.exports = {
     color: '#436EEE'
   }, {
     id: '5',
-    name: '51449777@qq.com',
+    name: '51449xxxx@qq.com',
     type: 'email',
     left: 400,
     top: 220,
