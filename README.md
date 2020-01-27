@@ -97,5 +97,13 @@ class AGroup extend Group {
 * [锚点(endpoint)](./docs/zh-CN/endpoint.md)
 * [缩略图(minimap)](./docs/zh-CN/minimap.md)
 
+
+## 快速本地DEMO
+```
+cd example
+npm install
+npm start
+```
+
 ## 🤝贡献
 小蝴蝶是一个完全开源的项目，我们欢迎大家为修复错误和改进做出贡献。有关如何开始的信息，请阅读我们的[贡献指南](./docs/zh-CN/CONTRIBUTING.md).

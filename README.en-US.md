@@ -97,5 +97,12 @@ class AGroup extend Group {
 * [Endpoint](./docs/en-US/endpoint.md)
 * [Minimap](./docs/en-US/minimap.md)
 
+## QUCIK DEMO LOCAL
+```
+cd example
+npm install
+npm start
+```
+
 ## 🤝 Contribution
 Butterfly is a completely open source project and we welcome everyone to contribute to fixing bugs and improvements. For information on how to get started, read our [contribution guide](./docs/en-US/CONTRIBUTING.md).
