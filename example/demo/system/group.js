@@ -2,6 +2,7 @@
 
 const Group = require('butterfly-dag').Group;
 const $ = require('jquery');
+const _ = require('lodash');
 
 class BaseGroup extends Group {
   draw(obj) {
@@ -21,7 +22,7 @@ class BaseGroup extends Group {
     group.append(this._container);
 
     // 添加文字
-    if (obj.options.text) {
+    if (_.get(obj, 'options.text')) {
       group.append(`<span class="text">${obj.options.text}</span>`);
     }
 
