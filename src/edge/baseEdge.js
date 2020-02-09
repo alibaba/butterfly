@@ -4,6 +4,7 @@ const _ = require('lodash');
 const $ = require('jquery');
 import DrawUtil from '../utils/link';
 import ArrowUtil from '../utils/arrow';
+import {addAnimate} from '../utils/link_animate'
 
 import './baseEdge.less';
 
@@ -24,10 +25,12 @@ class Edge {
     this.arrowPosition = _.get(opts, 'arrowPosition', 0.5);
     this.arrowOffset = _.get(opts, 'arrowOffset', 0),
     this.isExpandWidth = _.get(opts, 'isExpandWidth', false);
+    this.defaultAnimate = _.get(opts, 'defaultAnimate', false);
     this.dom = null;
     this.labelDom = null;
     this.arrowDom = null;
     this.eventHandlerDom = null;
+    this._path = null;
     // 业务和库内addEdges写法上有区别，需要兼容
     this.options = _.get(opts, 'options') || opts;
     this._isDeletingEdge = opts._isDeletingEdge;
@@ -50,6 +53,9 @@ class Edge {
     });
     this.labelDom = this.drawLabel(this.label);
     this.arrowDom = this.drawArrow(this.arrow);
+    if(this.defaultAnimate) {
+      this.addAnimate();
+    }
 
     this._addEventListener();
   }
@@ -102,6 +108,7 @@ class Edge {
     } else if (this.shapeType === 'AdvancedBezier') {
       path = DrawUtil.drawAdvancedBezier(sourcePoint, targetPoint);
     }
+    this._path = path;
     return path;
   }
   redrawLabel() {
@@ -185,8 +192,21 @@ class Edge {
     if (this.arrowDom) {
       this.redrawArrow(path);
     }
-
+    // 重新计算动画path
+    if (this.animateDom) {
+      this.redrawAnimate(path);
+    }
     this.updated && this.updated();
+  }
+  addAnimate(options) {
+    this.animateDom = addAnimate(this.dom, this._path, _.assign({},{
+      num: 1, // 现在只支持1个点点
+      r: 3,
+      color: '#776ef3'
+    }, options), this.animateDom);
+  }
+  redrawAnimate(path) {
+    addAnimate(this.dom, this._path, {}, this.animateDom);
   }
   destroy(isNotEventEmit) {
     if (this.labelDom) {

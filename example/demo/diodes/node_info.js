@@ -1,6 +1,6 @@
 'use strict';
 
-const Node = require('butterfly-dag').Node;
+const Node = require('../../../index.js').Node;
 const $ = require('jquery');
 
 class Input extends Node {

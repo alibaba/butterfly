@@ -1,6 +1,6 @@
 'use strict';
 
-let Edge = require('butterfly-dag').Edge;
+let Edge = require('../../../index.js').Edge;
 let $ = require('jquery');
 
 class RelationEdge extends Edge {

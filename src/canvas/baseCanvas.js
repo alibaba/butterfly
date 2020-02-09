@@ -21,6 +21,8 @@ import GridService from '../utils/girdService';
 import GuidelineService from '../utils/guidelineService';
 // 小地图模式
 import Minimap from '../utils/minimap';
+// 线段动画
+import * as Link_Animate from '../utils/link_animate';
 
 
 import './baseCanvas.less';
@@ -46,7 +48,8 @@ class BaseCanvas extends Canvas {
         label: _.get(options, 'theme.edge.label'),
         isRepeat: _.get(options, 'theme.edge.isRepeat') || false,
         isLinkMyself: _.get(options, 'theme.edge.isLinkMyself') || false,
-        isExpandWidth: _.get(options, 'theme.edge.isExpandWidth') || false
+        isExpandWidth: _.get(options, 'theme.edge.isExpandWidth') || false,
+        defaultAnimate: _.get(options, 'theme.edge.defaultAnimate') || false,
       },
       endpoint: {
         position: _.get(options, 'theme.endpoint.position'),
@@ -96,6 +99,8 @@ class BaseCanvas extends Canvas {
     this._genSvgWrapper();
     // 加一层canvas方便处理辅助
     this._genCanvasWrapper();
+    // 动画初始化
+    Link_Animate.init(this.svg);
 
     // 统一处理画布拖动事件
     this._dragType = null;
@@ -422,6 +427,7 @@ class BaseCanvas extends Canvas {
           shapeType: link.shapeType || this.theme.edge.type,
           orientationLimit: this.theme.endpoint.position,
           isExpandWidth: this.theme.edge.isExpandWidth,
+          defaultAnimate: this.theme.edge.defaultAnimate,
           sourceNode,
           targetNode,
           sourceEndpoint,
@@ -474,6 +480,7 @@ class BaseCanvas extends Canvas {
           arrowPosition: link.arrowPosition,
           arrowOffset: link.arrowOffset,
           isExpandWidth: this.theme.edge.isExpandWidth,
+          defaultAnimate: this.theme.edge.defaultAnimate,
           _global: this.global,
           _on: this.on.bind(this),
           _emit: this.emit.bind(this),
@@ -1982,32 +1989,6 @@ class BaseCanvas extends Canvas {
             if (targetEdge && this._dragEdges.length === 0) {
               targetEdge._isDeletingEdge = true;
               this._dragEdges = [targetEdge];
-              // this.removeEdge(targetEdge, true);
-              // let pointObj = {
-              //   id: targetEdge.id,
-              //   shapeType: this.theme.edge.type,
-              //   orientationLimit: this.theme.endpoint.position,
-              //   _sourceType: targetEdge._sourceType,
-              //   sourceNode: targetEdge.sourceNode,
-              //   sourceEndpoint: targetEdge.sourceEndpoint,
-              //   arrow: this.theme.edge.arrow,
-              //   _isDeletingEdge: true
-              // };
-              // let EdgeClass = this.theme.edge.Class;
-              // let _newEdge = new EdgeClass(_.assign(pointObj, {
-              //   _global: this.global,
-              //   _on: this.on.bind(this),
-              //   _emit: this.emit.bind(this),
-              // }));
-              // _newEdge._init();
-              // $(this.svg).append(_newEdge.dom);
-              // if (_newEdge.labelDom) {
-              //   $(this.wrapper).append(_newEdge.labelDom);
-              // }
-              // if (_newEdge.arrowDom) {
-              //   $(this.svg).append(_newEdge.arrowDom);
-              // }
-              // this._dragEdges = [_newEdge];
             }
 
             if (this._dragEdges.length !== 0) {

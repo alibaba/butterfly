@@ -1,6 +1,6 @@
 'use strict';
 import React, {Component} from 'react';
-const Canvas = require('butterfly-dag').Canvas;
+const Canvas = require('../../../index.js').Canvas;
 const mockData = require('./data.js');
 const RelationEdge = require('./edge_relation.jsx');
 

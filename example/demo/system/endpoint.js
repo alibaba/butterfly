@@ -1,6 +1,6 @@
 'use strict';
 
-const Endpoint = require('butterfly-dag').Endpoint;
+const Endpoint = require('../../../index.js').Endpoint;
 const $ = require('jquery');
 
 class BaseEndpoint extends Endpoint {

@@ -18,6 +18,7 @@ let canvas = new Canvas({
       arrowOffset: 0.0,    //箭头偏移
       Class: XXClass,      //自己拓展的class,拖动连线的时候会采用该拓展类
       isExpandWidth: false //增加线条交互区域
+      defaultAnimate: false//默认开启线条动画
     },
     endpoint: {
       position: []         //限制锚点位置['Top', 'Bottom', 'Left', 'Right'],

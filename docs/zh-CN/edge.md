@@ -88,4 +88,13 @@ emit = (string, obj) => {}
   * 接受事件
   */
 on = (string, callback) => {}
+
+/**
+  * 开启动画
+  * @param {obj} options(可选参数) - 配置动画效果
+  * @param {number} options.r (可选参数) - 动画节点半径
+  * @param {string} options.color (可选参数) - 动画节点颜色
+  */
+addAnimate = (options) => {}
+
 ```

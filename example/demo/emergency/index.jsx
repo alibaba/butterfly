@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 require('./index.less');
 require('butterfly-dag/dist/index.css');
 
-const Canvas = require('butterfly-dag').Canvas;
+const Canvas = require('../../../index.js').Canvas;
 const mockData = require('./data.js');
 
 class Emergency extends Component {
