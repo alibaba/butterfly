@@ -17,7 +17,8 @@ let canvas = new Canvas({
       arrowPosition: 0.5,  // arrow position (0 ~ 1)
       arrowOffset: 0.0,    // arrow offset
       Class: XXClass,      // custom Class
-      isExpandWidth: false //  expand line interaction area
+      isExpandWidth: false,// expand line interaction area
+      defaultAnimate: false// turn on line animation by default
     },
     endpoint: {
       position: []         // limit endpoint position ['Top', 'Bottom', 'Left', 'Right'],

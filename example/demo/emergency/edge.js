@@ -1,6 +1,6 @@
 'use strict';
 
-const Edge = require('butterfly-dag').Edge;
+const Edge = require('../../../index.js').Edge;
 const $ = require('jquery');
 
 class BaseEdge extends Edge {

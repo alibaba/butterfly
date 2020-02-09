@@ -1,6 +1,6 @@
 'use strict';
 
-const Node = require('butterfly-dag').Node;
+const Node = require('../../../index.js').Node;
 // const Node = require('../../../services/butterflies/src/node/baseNode');
 const $ = require('jquery');
 require('./node.less');

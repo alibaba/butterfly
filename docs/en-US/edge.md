@@ -87,4 +87,17 @@ emit = (string, obj) => {}
   * accept events
   */
 on = (string, callback) => {}
+
+/**
+  * add edge animation
+  * @param {obj} options(Optional) - animation configure
+  * @param {number} options.r (Optional) - animation node radius
+  * @param {string} options.color (Optional) - animation node color
+  */
+addAnimate = (options) => {}
 ```
+
+## Detail
+
+### animation
+<img width="400" src="https://img.alicdn.com/tfs/TB1anoGvkL0gK0jSZFAXXcA9pXa-921-532.gif">

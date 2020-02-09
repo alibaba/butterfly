@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 require('./index.less');
 
-const Canvas = require('butterfly-dag').Canvas;
+const Canvas = require('../../../index.js').Canvas;
 const mockData = require('./data');
 
 class Diodes extends Component {
@@ -20,7 +20,8 @@ class Diodes extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'Manhattan'
+          type: 'Manhattan',
+          defaultAnimate: true
         }
       }
     });

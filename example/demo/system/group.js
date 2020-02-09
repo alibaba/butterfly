@@ -1,6 +1,6 @@
 'use strict';
 
-const Group = require('butterfly-dag').Group;
+const Group = require('../../../index.js').Group;
 const $ = require('jquery');
 const _ = require('lodash');
 
