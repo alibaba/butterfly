@@ -32,7 +32,7 @@ let addAnimate = (targetDom, path, options, animateDom) => {
   return _animateDom;
 }
 
-module.exports = {
+export default {
   init,
   addAnimate
 }

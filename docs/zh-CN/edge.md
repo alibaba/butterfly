@@ -102,4 +102,4 @@ addAnimate = (options) => {}
 ## 详细说明
 
 ### 动画
-<img width="400" src="https://img.alicdn.com/tfs/TB1anoGvkL0gK0jSZFAXXcA9pXa-921-532.gif">
+<img width="600" src="https://img.alicdn.com/tfs/TB1anoGvkL0gK0jSZFAXXcA9pXa-921-532.gif">
