@@ -4,7 +4,7 @@ const _ = require('lodash');
 const $ = require('jquery');
 import DrawUtil from '../utils/link';
 import ArrowUtil from '../utils/arrow';
-import {addAnimate} from '../utils/link_animate'
+import LinkAnimateUtil from '../utils/link_animate'
 
 import './baseEdge.less';
 
@@ -199,14 +199,14 @@ class Edge {
     this.updated && this.updated();
   }
   addAnimate(options) {
-    this.animateDom = addAnimate(this.dom, this._path, _.assign({},{
+    this.animateDom = LinkAnimateUtil.addAnimate(this.dom, this._path, _.assign({},{
       num: 1, // 现在只支持1个点点
       r: 3,
       color: '#776ef3'
     }, options), this.animateDom);
   }
   redrawAnimate(path) {
-    addAnimate(this.dom, this._path, {}, this.animateDom);
+    LinkAnimateUtil.addAnimate(this.dom, this._path, {}, this.animateDom);
   }
   destroy(isNotEventEmit) {
     if (this.labelDom) {

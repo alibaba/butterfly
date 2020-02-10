@@ -22,7 +22,7 @@ import GuidelineService from '../utils/guidelineService';
 // 小地图模式
 import Minimap from '../utils/minimap';
 // 线段动画
-import * as Link_Animate from '../utils/link_animate';
+import LinkAnimateUtil from '../utils/link_animate';
 
 
 import './baseCanvas.less';
@@ -100,7 +100,7 @@ class BaseCanvas extends Canvas {
     // 加一层canvas方便处理辅助
     this._genCanvasWrapper();
     // 动画初始化
-    Link_Animate.init(this.svg);
+    LinkAnimateUtil.init(this.svg);
 
     // 统一处理画布拖动事件
     this._dragType = null;
