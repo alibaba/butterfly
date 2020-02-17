@@ -2,6 +2,7 @@
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require('path');
 
 module.exports = {
   entry: {
@@ -11,6 +12,13 @@ module.exports = {
     filename: '[name].js',
     chunkFilename: '[name].js'
   },
+  resolve: {
+    modules: [
+      path.resolve(process.cwd(), 'node_modules'),
+      path.resolve(process.cwd(), '../node_modules'),
+      'node_modules'
+    ]
+  },
   module: {
     rules: [
       {
@@ -19,8 +27,29 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['env', 'react'],
-            plugins: ['transform-decorators-legacy', 'transform-class-properties', 'transform-object-rest-spread']
+            cacheDirectory: true,
+            presets: ['es2015-node5', 'react'],
+
+            plugins: [
+              // require('babel-plugin-add-module-exports'),
+              // require('babel-plugin-transform-decorators-legacy'),
+              // require('babel-plugin-transform-class-properties'),
+              // require('babel-plugin-transform-object-rest-spread'),
+              // [require('babel-plugin-transform-runtime'), {
+              //   helpers: false, // defaults to true
+              //   polyfill: false, // defaults to true
+              //   regenerator: true, // defaults to true
+              // }],
+              'add-module-exports',
+              'transform-decorators-legacy',
+              'transform-class-properties',
+              'transform-object-rest-spread',
+              ['transform-runtime', {
+                helpers: false, // defaults to true
+                polyfill: false, // defaults to true
+                regenerator: true, // defaults to true
+              }]
+            ]
           }
         }
       },
