@@ -21,6 +21,7 @@ class BaseNode extends Node {
     // endpoint 这部分需要考虑
     this.endpoints = [];
     this._endpointsData = opts.endpoints;
+    this._endpointLimitNum = opts._endpointLimitNum;
     // 标识是否在移动做，兼容冒泡
     this._isMoving = false;
   }
@@ -62,6 +63,7 @@ class BaseNode extends Node {
       _on: this._on,
       _emit: this._emit,
       _node: this,
+      _limitNum: obj.limitNum || this._endpointLimitNum,
       _global: this.global
     }, obj));
 

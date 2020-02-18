@@ -20,8 +20,9 @@ let canvas = new Canvas({
       isExpandWidth: false //增加线条交互区域
     },
     endpoint: {
-      position: []         //限制锚点位置['Top', 'Bottom', 'Left', 'Right'],
-      linkableHighlight: true //连线时会触发point.linkable的方法，可做高亮
+      position: [],        //限制锚点位置['Top', 'Bottom', 'Left', 'Right'],
+      linkableHighlight: true,//连线时会触发point.linkable的方法，可做高亮
+      limitNum: 10,        //限制锚点的连接数目
       expendArea: {        //锚点过小时，可扩大连线热区
         left: 10,
         right: 10,

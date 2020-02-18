@@ -18,6 +18,7 @@ class Endpoint {
     this.root = opts.root;
     this.scope = opts.scope;
     this.expandArea = opts.expandArea;
+    this.limitNum = opts.limitNum;
     this.options = opts;
     // 假如锚点在节点上则有值
     this._node = opts._node;

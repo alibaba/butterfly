@@ -31,6 +31,7 @@ node.addEndpoint({
 | orientation | 方向 | array (Option) | 下:[0,1]/上:[0,-1]/右:[1,0]/左:[-1,0]
 | pos | 位置 | array (Option) | - 
 | scope | 作用域 | string (Option) | 锚点scope相同才可以连线
+| limitNum | 连线数目限制 | Number (Option) | 限制锚点的连接数目
 | type | 目标锚点还是源锚点 | string (Option) | 'source' / 'target' / undefined，当undefined的时候锚点既是source又是target
 | disLinkable | 禁止锚点拖动断开线段 | boolean (Option) | 该属性仅限用于'target'的锚点
 | root | 可把锚点附属与某个子元素 | string (Option) | - 
