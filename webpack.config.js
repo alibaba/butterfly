@@ -22,8 +22,9 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['env', 'react'], //'env'--babel7中的es7语法编译插件
-            plugins: ['transform-decorators-legacy', 'transform-class-properties', 'add-module-exports', 'transform-object-rest-spread'],
+            presets: ['@babel/preset-env'], //'env'--babel7中的es7语法编译插件
+            // plugins: ['transform-decorators-legacy', 'transform-class-properties', 'add-module-exports', 'transform-object-rest-spread'],
+            plugins: ['@babel/plugin-proposal-object-rest-spread', '@babel/plugin-proposal-class-properties']
           }
         }
       }, {

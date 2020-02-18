@@ -29,17 +29,7 @@ module.exports = {
           options: {
             cacheDirectory: true,
             presets: ['es2015-node5', 'react'],
-
             plugins: [
-              // require('babel-plugin-add-module-exports'),
-              // require('babel-plugin-transform-decorators-legacy'),
-              // require('babel-plugin-transform-class-properties'),
-              // require('babel-plugin-transform-object-rest-spread'),
-              // [require('babel-plugin-transform-runtime'), {
-              //   helpers: false, // defaults to true
-              //   polyfill: false, // defaults to true
-              //   regenerator: true, // defaults to true
-              // }],
               'add-module-exports',
               'transform-decorators-legacy',
               'transform-class-properties',

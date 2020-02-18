@@ -17,5 +17,7 @@ steps:
 
 - script: |
     npm install
-    ./node_modules/rollup/dist/bin/rollup -c
+    # ./node_modules/rollup/dist/bin/rollup -c
+    npm install jquery lodash
+    webpack
   displayName: 'npm install and build'
