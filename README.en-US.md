@@ -36,7 +36,7 @@ npm install butterfly-dag
 
 ## 🔨 Quick Start
 
-### Import Css
+### Import Method
 ```
 // Full version, including jQuery and lodash internally
 import {Canvas, Group, Node, Edge} from 'butterfly-dag';
