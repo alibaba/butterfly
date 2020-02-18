@@ -21,8 +21,9 @@ let canvas = new Canvas({
       defaultAnimate: false// turn on line animation by default
     },
     endpoint: {
-      position: []         // limit endpoint position ['Top', 'Bottom', 'Left', 'Right'],
-      linkableHighlight: true // point.linkable method is triggered when connecting, can be highlighted
+      position: [],        // limit endpoint position ['Top', 'Bottom', 'Left', 'Right'],
+      linkableHighlight: true,// point.linkable method is triggered when connecting, can be highlighted
+      limitNum: 10,        // limit the number of anchor connections
       expendArea: {        // when the anchor point is too small, the connection hot zone can be expanded.
         left: 10,
         right: 10,
