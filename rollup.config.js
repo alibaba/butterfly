@@ -59,7 +59,7 @@ rollupCfg.push({
   input: path.join(__dirname, 'index.js'),
   output: [
     {
-      file: pkg.main,
+      file: pkg.pack,
       format: 'cjs',
       exports: 'named',
       sourcemap: true

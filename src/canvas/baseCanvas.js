@@ -679,6 +679,7 @@ class BaseCanvas extends Canvas {
     const index = _.findIndex(this.groups, _group => _group.id === groupId);
     this.groups.splice(index, 1)[0];
     group.destroy();
+    return group;
   }
 
   getNeighborEdges(id, type) {
