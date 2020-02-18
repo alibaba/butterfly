@@ -27,19 +27,8 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            cacheDirectory: true,
-            presets: ['es2015-node5', 'react'],
-            plugins: [
-              'add-module-exports',
-              'transform-decorators-legacy',
-              'transform-class-properties',
-              'transform-object-rest-spread',
-              ['transform-runtime', {
-                helpers: false, // defaults to true
-                polyfill: false, // defaults to true
-                regenerator: true, // defaults to true
-              }]
-            ]
+            presets: ['@babel/preset-env', '@babel/preset-react'],
+            plugins: ['transform-es2015-modules-commonjs', '@babel/plugin-proposal-object-rest-spread', '@babel/plugin-proposal-class-properties']
           }
         }
       },
