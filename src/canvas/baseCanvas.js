@@ -2076,7 +2076,7 @@ class BaseCanvas extends Canvas {
         }
 
         // 检查endpoint限制连接数目
-        if (_targetEndpoint.limitNum !== undefined) {
+        if (_targetEndpoint && _targetEndpoint.limitNum !== undefined) {
           let _linkNum = this.edges.filter((_edge) => {
             return _edge.targetEndpoint.id === _targetEndpoint.id;
           }).length + this._dragEdges.length;

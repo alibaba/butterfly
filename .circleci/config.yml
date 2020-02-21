@@ -28,7 +28,7 @@ jobs:
 
       - run:
           name: install-npm-pkg
-          command: npm install
+          command: npm install && npm install jquery lodash
 
       - save_cache:
           paths:
