@@ -24,7 +24,7 @@ module.exports = {
           options: {
             presets: ['@babel/preset-env'], //'env'--babel7中的es7语法编译插件
             // plugins: ['transform-decorators-legacy', 'transform-class-properties', 'add-module-exports', 'transform-object-rest-spread'],
-            plugins: ['@babel/plugin-proposal-object-rest-spread', '@babel/plugin-proposal-class-properties']
+            plugins: ['transform-es2015-modules-commonjs', '@babel/plugin-proposal-object-rest-spread', '@babel/plugin-proposal-class-properties']
           }
         }
       }, {
