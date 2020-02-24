@@ -40,6 +40,7 @@ npm install butterfly-dag
 ```
 // Full version, including jQuery and lodash internally
 import {Canvas, Group, Node, Edge} from 'butterfly-dag';
+import 'butterfly-dag/dist/index.css';
 
 // If your project uses jQuery and lodash, in order to reduce the size of the project, we suggest:
 import {Canvas, Group, Node, Edge} from 'butterfly-dag/pack/index.js';

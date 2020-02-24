@@ -101,3 +101,5 @@ addAnimate = (options) => {}
 
 ### animation
 <img width="600" src="https://img.alicdn.com/tfs/TB1anoGvkL0gK0jSZFAXXcA9pXa-921-532.gif">
+Besides, 1000 nodes + 1000 edges, the animation runs perfectly
+<img width="600" src="https://img.alicdn.com/tfs/TB1rMy3whD1gK0jSZFsXXbldVXa-1051-799.gif">

@@ -40,6 +40,7 @@ npm install butterfly-dag
 ```
 // 完全版，内部包含jquery和lodash
 import {Canvas, Group, Node, Edge} from 'butterfly-dag';
+import 'butterfly-dag/dist/index.css';
 
 // 如果您引用的项目使用了jquery和lodash，为了缩小项目的体积，我们建议：
 import {Canvas, Group, Node, Edge} from 'butterfly-dag/pack/index.js';
