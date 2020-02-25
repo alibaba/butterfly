@@ -104,4 +104,4 @@ addAnimate = (options) => {}
 ### 动画
 <img width="600" src="https://img.alicdn.com/tfs/TB1anoGvkL0gK0jSZFAXXcA9pXa-921-532.gif">
 ps: 1000节点+1000条线段，动画完美运行
-<img width="600" src="https://img.alicdn.com/tfs/TB1rMy3whD1gK0jSZFsXXbldVXa-1051-799.gif">
+<img width="600" src="https://img.alicdn.com/tfs/TB1N4a_wi_1gK0jSZFqXXcpaXXa-662-466.gif">

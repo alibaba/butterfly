@@ -895,7 +895,7 @@ class BaseCanvas extends Canvas {
       this.nodes.filter((_node) => {
         return _.find(nodeIds, (id) => {
           return _node.id === id;
-        });
+        }) !== undefined;
       }).forEach((_node) => {
         let _nodeLeft = _node.left;
         let _nodeRight = _node.left + _node.getWidth();
