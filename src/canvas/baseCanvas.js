@@ -893,7 +893,7 @@ class BaseCanvas extends Canvas {
     if (_.includes(type, 'node')) {
       let nodeIds = param.nodes;
       this.nodes.filter((_node) => {
-        return _.find(nodeIds, (id) => {
+        return !!_.find(nodeIds, (id) => {
           return _node.id === id;
         });
       }).forEach((_node) => {
