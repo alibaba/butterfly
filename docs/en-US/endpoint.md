@@ -31,6 +31,7 @@ node.addEndpoint({
 | orientation | direction | array (Optional) | Bottom:[0,1]/Top:[0,-1]/Right:[1,0]/Left:[-1,0]
 | pos | position | array (Optional) | - 
 | scope | scope | string (Optional) | endpoint scope is the same to connect
+| limitNum | connection limit | Number (Option) | limit the number of anchor connections
 | type | source endpoint or target endpoint | string (Optional) | 'source' / 'target' / undefined，when undefined, the anchor is both source and target.
 | disLinkable | enable break edge from this endpoint | boolean (Optional) | This attribute is limited to target endpoint
 | root | endpoint can be attached to a child element | string (Optional) | - 

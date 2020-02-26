@@ -21,8 +21,9 @@ let canvas = new Canvas({
       defaultAnimate: false// turn on line animation by default
     },
     endpoint: {
-      position: []         // limit endpoint position ['Top', 'Bottom', 'Left', 'Right'],
-      linkableHighlight: true // point.linkable method is triggered when connecting, can be highlighted
+      position: [],        // limit endpoint position ['Top', 'Bottom', 'Left', 'Right'],
+      linkableHighlight: true,// point.linkable method is triggered when connecting, can be highlighted
+      limitNum: 10,        // limit the number of anchor connections
       expendArea: {        // when the anchor point is too small, the connection hot zone can be expanded.
         left: 10,
         right: 10,
@@ -145,6 +146,24 @@ setZoomable = (boolean) => {}
   * @param {true|false} boolean
   */
 setMoveable = (boolean) => {}
+
+/**
+  * Set whether all nodes of the canvas can linkable
+  * @param {true|false} boolean  - whether to support all nodes can link
+  */
+setLinkable = (boolean) => {}
+
+/**
+  * Set whether all nodes of the canvas can dislinkable
+  * @param {true|false} boolean  - whether to support all nodes can dislink
+  */
+setDisLinkable = (boolean) => {}
+
+/**
+  * Set whether all nodes of the canvas are draggable
+  * @param {true|false} boolean  - whether to support all nodes can drag
+  */
+setDraggable = (boolean) => {}
 
 /**
   * focus on some node/ group
