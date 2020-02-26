@@ -20,8 +20,9 @@ let canvas = new Canvas({
       isExpandWidth: false //增加线条交互区域
     },
     endpoint: {
-      position: []         //限制锚点位置['Top', 'Bottom', 'Left', 'Right'],
-      linkableHighlight: true //连线时会触发point.linkable的方法，可做高亮
+      position: [],        //限制锚点位置['Top', 'Bottom', 'Left', 'Right'],
+      linkableHighlight: true,//连线时会触发point.linkable的方法，可做高亮
+      limitNum: 10,        //限制锚点的连接数目
       expendArea: {        //锚点过小时，可扩大连线热区
         left: 10,
         right: 10,
@@ -145,6 +146,24 @@ setZoomable = (boolean) => {}
   * @param {true|false} boolean  - 是否支持画布平移
   */
 setMoveable = (boolean) => {}
+
+/**
+  * 设置画布所有节点是否可拉线
+  * @param {true|false} boolean  - 是否支持所有节点可拉线
+  */
+setLinkable = (boolean) => {}
+
+/**
+  * 设置画布所有节点是否可断线
+  * @param {true|false} boolean  - 是否支持所有节点可断线
+  */
+setDisLinkable = (boolean) => {}
+
+/**
+  * 设置画布所有节点是否可拖动
+  * @param {true|false} boolean  - 是否支持所有节点可拖动
+  */
+setDraggable = (boolean) => {}
 
 /**
   * 聚焦某个节点/节点组

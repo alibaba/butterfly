@@ -50,6 +50,7 @@ class BaseCanvas extends Canvas {
       endpoint: {
         position: _.get(options, 'theme.endpoint.position'),
         linkableHighlight: _.get(options, 'theme.endpoint.linkableHighlight') || false,
+        limitNum: undefined,
         expandArea: {
           left: _.get(options, 'theme.endpoint.expandArea.left') || 10,
           right: _.get(options, 'theme.endpoint.expandArea.right') || 10,
@@ -254,6 +255,7 @@ class BaseCanvas extends Canvas {
           _global: this.global,
           _on: this.on.bind(this),
           _emit: this.emit.bind(this),
+          _endpointLimitNum: this.theme.endpoint.limitNum,
           draggable: node.draggable !== undefined ? node.draggable :  this.draggable
         }));
       }
@@ -872,6 +874,27 @@ class BaseCanvas extends Canvas {
       this.moveable = false;
     }
   }
+
+  setLinkable(flat) {
+    this.linkable = !!flat;
+  }
+
+  setDisLinkable(flat) {
+    this.nodes.forEach((node) => {
+      node.endpoints.forEach((_point) => {
+        _point.setDisLinkable(flat);
+      });
+    });
+    this.disLinkable = flat;
+  }
+
+  setDraggable(flat) {
+    this.nodes.forEach((node) => {
+      node.setDraggable(flat);
+    });
+    this.draggable = flat;
+  }
+
   focusNodesWithAnimate(param, type = ['node'], options, callback) {
     // 画布里的可视区域
     let canLeft = Infinity;
@@ -1912,6 +1935,14 @@ class BaseCanvas extends Canvas {
                   label: this.theme.edge.label,
                   isExpandWidth: this.theme.edge.isExpandWidth
                 };
+                // 检查endpoint限制连接数目
+                let _linkNums = this.edges.filter((_edge) => {
+                  return _edge.sourceEndpoint.id === point.id;
+                }).length + 1;
+                if (_linkNums > point.limitNum) {
+                  console.warn(`id为${point.id}的锚点限制了${point.limitNum}条连线`);
+                  return ;
+                }
                 let _newEdge = new EdgeClass(_.assign(pointObj, {
                   _global: this.global,
                   _on: this.on.bind(this),
@@ -1981,32 +2012,6 @@ class BaseCanvas extends Canvas {
             if (targetEdge && this._dragEdges.length === 0) {
               targetEdge._isDeletingEdge = true;
               this._dragEdges = [targetEdge];
-              // this.removeEdge(targetEdge, true);
-              // let pointObj = {
-              //   id: targetEdge.id,
-              //   shapeType: this.theme.edge.type,
-              //   orientationLimit: this.theme.endpoint.position,
-              //   _sourceType: targetEdge._sourceType,
-              //   sourceNode: targetEdge.sourceNode,
-              //   sourceEndpoint: targetEdge.sourceEndpoint,
-              //   arrow: this.theme.edge.arrow,
-              //   _isDeletingEdge: true
-              // };
-              // let EdgeClass = this.theme.edge.Class;
-              // let _newEdge = new EdgeClass(_.assign(pointObj, {
-              //   _global: this.global,
-              //   _on: this.on.bind(this),
-              //   _emit: this.emit.bind(this),
-              // }));
-              // _newEdge._init();
-              // $(this.svg).append(_newEdge.dom);
-              // if (_newEdge.labelDom) {
-              //   $(this.wrapper).append(_newEdge.labelDom);
-              // }
-              // if (_newEdge.arrowDom) {
-              //   $(this.svg).append(_newEdge.arrowDom);
-              // }
-              // this._dragEdges = [_newEdge];
             }
 
             if (this._dragEdges.length !== 0) {
@@ -2080,6 +2085,17 @@ class BaseCanvas extends Canvas {
           isDestoryEdges = _.some(this._dragEdges, (edge) => {
             return !ScopeCompare(edge.sourceEndpoint.scope, _targetEndpoint.scope, _.get(this, 'global.isScopeStrict'));
           });
+        }
+
+        // 检查endpoint限制连接数目
+        if (_targetEndpoint && _targetEndpoint.limitNum !== undefined) {
+          let _linkNum = this.edges.filter((_edge) => {
+            return _edge.targetEndpoint.id === _targetEndpoint.id;
+          }).length + this._dragEdges.length;
+          if (_linkNum > _targetEndpoint.limitNum) {
+            console.warn(`id为${_targetEndpoint.id}的锚点限制了${_targetEndpoint.limitNum}条连线`);
+            isDestoryEdges = true;
+          }
         }
 
         if (isDestoryEdges) {
