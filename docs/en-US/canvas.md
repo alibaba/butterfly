@@ -148,6 +148,24 @@ setZoomable = (boolean) => {}
 setMoveable = (boolean) => {}
 
 /**
+  * Set whether all nodes of the canvas can linkable
+  * @param {true|false} boolean  - whether to support all nodes can link
+  */
+setLinkable = (boolean) => {}
+
+/**
+  * Set whether all nodes of the canvas can dislinkable
+  * @param {true|false} boolean  - whether to support all nodes can dislink
+  */
+setDisLinkable = (boolean) => {}
+
+/**
+  * Set whether all nodes of the canvas are draggable
+  * @param {true|false} boolean  - whether to support all nodes can drag
+  */
+setDraggable = (boolean) => {}
+
+/**
   * focus on some node/ group
   * @param {string/function} nodeId/groupId or filter  - node/group id or filter
   * @param {string} type  - type (node or group)

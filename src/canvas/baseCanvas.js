@@ -883,6 +883,27 @@ class BaseCanvas extends Canvas {
       this.moveable = false;
     }
   }
+
+  setLinkable(flat) {
+    this.linkable = !!flat;
+  }
+
+  setDisLinkable(flat) {
+    this.nodes.forEach((node) => {
+      node.endpoints.forEach((_point) => {
+        _point.setDisLinkable(flat);
+      });
+    });
+    this.disLinkable = flat;
+  }
+
+  setDraggable(flat) {
+    this.nodes.forEach((node) => {
+      node.setDraggable(flat);
+    });
+    this.draggable = flat;
+  }
+
   focusNodesWithAnimate(param, type = ['node'], options, callback) {
     // 画布里的可视区域
     let canLeft = Infinity;
@@ -2076,7 +2097,7 @@ class BaseCanvas extends Canvas {
         }
 
         // 检查endpoint限制连接数目
-        if (_targetEndpoint.limitNum !== undefined) {
+        if (_targetEndpoint && _targetEndpoint.limitNum !== undefined) {
           let _linkNum = this.edges.filter((_edge) => {
             return _edge.targetEndpoint.id === _targetEndpoint.id;
           }).length + this._dragEdges.length;
