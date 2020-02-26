@@ -79,7 +79,7 @@ class Endpoint {
       this._posLeft = this._left;
     }
 
-    this.attachEvent();
+    this.setDisLinkable(this._disLinkable);
   }
 
   draw(obj) {
@@ -212,8 +212,8 @@ class Endpoint {
     this.dom.removeClass('hover');
   }
 
-  attachEvent() {
-    if (this._disLinkable !== true) {
+  setDisLinkable(flat) {
+    if (flat !== true) {
       $(this.dom).on('mousedown', (e) => {
         const LEFT_KEY = 0;
         if (e.button !== LEFT_KEY) {
@@ -226,9 +226,11 @@ class Endpoint {
           data: this
         });
       });
+    } else {
+      $(this.dom).off('mousedown');
     }
+    this._disLinkable = flat;
   }
-
   destroy() {
     $(this.dom).off();
     $(this.dom).remove();

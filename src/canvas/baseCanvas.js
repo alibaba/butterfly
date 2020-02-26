@@ -883,6 +883,27 @@ class BaseCanvas extends Canvas {
       this.moveable = false;
     }
   }
+
+  setLinkable(flat) {
+    this.linkable = !!flat;
+  }
+
+  setDisLinkable(flat) {
+    this.nodes.forEach((node) => {
+      node.endpoints.forEach((_point) => {
+        _point.setDisLinkable(flat);
+      });
+    });
+    this.disLinkable = flat;
+  }
+
+  setDraggable(flat) {
+    this.nodes.forEach((node) => {
+      node.setDraggable(flat);
+    });
+    this.draggable = flat;
+  }
+
   focusNodesWithAnimate(param, type = ['node'], options, callback) {
     // 画布里的可视区域
     let canLeft = Infinity;
