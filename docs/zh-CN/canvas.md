@@ -148,6 +148,24 @@ setZoomable = (boolean) => {}
 setMoveable = (boolean) => {}
 
 /**
+  * 设置画布所有节点是否可拉线
+  * @param {true|false} boolean  - 是否支持所有节点可拉线
+  */
+setLinkable = (boolean) => {}
+
+/**
+  * 设置画布所有节点是否可断线
+  * @param {true|false} boolean  - 是否支持所有节点可断线
+  */
+setDisLinkable = (boolean) => {}
+
+/**
+  * 设置画布所有节点是否可拖动
+  * @param {true|false} boolean  - 是否支持所有节点可拖动
+  */
+setDraggable = (boolean) => {}
+
+/**
   * 聚焦某个节点/节点组
   * @param {string/function} nodeId/groupId or filter  - 节点的id或者过滤器
   * @param {string} type  - 节点的类型(node or group)
