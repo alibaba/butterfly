@@ -1,6 +1,6 @@
 <p align="center">
   <a href="http://noonnightstorm.github.io">
-    <img width="900" src="http://img.alicdn.com/tfs/TB1TlngGFYqK1RjSZLeXXbXppXa-844-474.png">
+    <!-- <img width="900" src="http://img.alicdn.com/tfs/TB1TlngGFYqK1RjSZLeXXbXppXa-844-474.png"> -->
   </a>
 </p>
 
