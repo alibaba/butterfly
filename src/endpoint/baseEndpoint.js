@@ -214,6 +214,8 @@ class Endpoint {
 
   setDisLinkable(flat) {
     if (flat !== true) {
+      $(this.dom).off('mousedown');
+    } else {
       $(this.dom).on('mousedown', (e) => {
         const LEFT_KEY = 0;
         if (e.button !== LEFT_KEY) {
@@ -226,8 +228,6 @@ class Endpoint {
           data: this
         });
       });
-    } else {
-      $(this.dom).off('mousedown');
     }
     this._disLinkable = flat;
   }
