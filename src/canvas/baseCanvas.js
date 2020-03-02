@@ -453,6 +453,14 @@ class BaseCanvas extends Canvas {
 
         edge.mounted && edge.mounted();
 
+        // 假如sourceEndpoint和targetEndpoint没属性，则自动添加上
+        if (sourceEndpoint.type === undefined) {
+          sourceEndpoint._tmpType = 'source';
+        }
+        if (targetEndpoint.type === undefined) {
+          targetEndpoint._tmpType = 'target';
+        }
+
         return edge;
       } else {
         const sourceNode = this.getNode(link.source);
@@ -880,12 +888,7 @@ class BaseCanvas extends Canvas {
   }
 
   setDisLinkable(flat) {
-    this.nodes.forEach((node) => {
-      node.endpoints.forEach((_point) => {
-        _point.setDisLinkable(flat);
-      });
-    });
-    this.disLinkable = flat;
+    this.disLinkable = !!flat;
   }
 
   setDraggable(flat) {
@@ -1646,9 +1649,6 @@ class BaseCanvas extends Canvas {
       nodeType: type,
       _coordinateService: this._coordinateService
     };
-    if (endpoint.type === 'target') {
-      initOtps._disLinkable = endpoint._disLinkable !== undefined ? endpoint._disLinkable : this.disLinkable;
-    }
     endpoint._init(initOtps);
 
     // 非自定义dom，自定义dom不需要定位
