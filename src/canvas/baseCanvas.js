@@ -216,7 +216,7 @@ class BaseCanvas extends Canvas {
     return _.find(this.groups, item => item.id === id);
   }
 
-  addGroup(group) {
+  addGroup(group, nodes, options) {
     const container = $(this.wrapper);
     const GroupClass = group.Class || Group;
     const _groupObj = new GroupClass(_.assign(_.cloneDeep(group), {
@@ -236,6 +236,85 @@ class BaseCanvas extends Canvas {
     _groupObj._createEndpoint();
 
     _groupObj.mounted && _groupObj.mounted();
+
+    if (nodes && nodes.length > 0) {
+      // 过滤掉scope不匹配的节点 和 已存在其他组的node
+      nodes = nodes.filter((_node) => {
+        return ScopeCompare(_node.scope, _groupObj.scope, _.get(this, 'global.isScopeStrict')) && (_node.group === _groupObj.id || _node.group == undefined);
+      });
+
+      let _isAbsolutePos = _.get(options, 'posType', 'absolute') === 'absolute';
+      // 重新计算group的位置
+      let _groupLeft = Infinity;
+      let _groupTop = Infinity;
+      nodes.forEach((_node) => {
+        if (_isAbsolutePos) {
+          if (_node.left < _groupLeft) {
+            _groupLeft = _node.left;
+          }
+          if (_node.top < _groupTop) {
+            _groupTop = _node.top;
+          }
+        }
+      });
+      _groupObj._moveTo(_groupLeft - 5, _groupTop - 5);
+
+      // 添加节点
+      let _newNodes = nodes.map((_node) => {
+        let newNode = null;
+        // 已存在节点
+        let _existNode = _.find(this.nodes, (__node) => {
+          return __node.id === _node.id;
+        });
+        if (_existNode) {
+          this.removeNode(_existNode.id, true, true);
+          let _tmpNodeData = {
+            id: _existNode.id,
+            top: _existNode.top - _groupObj.top,
+            left: _existNode.left - _groupObj.left,
+            group: _groupObj.id,
+            dom: _existNode.dom
+          };
+          newNode = this.addNode(_tmpNodeData, true);
+        } else {
+          let _nodeObj = null;
+          if (_node instanceof Node) {
+            _nodeObj = _node;
+          } else {
+            const _Node = _node.Class || Node;
+            _nodeObj = new _Node(_.assign(_.cloneDeep(_node), {
+              _global: this.global,
+              _on: this.on.bind(this),
+              _emit: this.emit.bind(this),
+              _endpointLimitNum: this.theme.endpoint.limitNum,
+              draggable: _node.draggable !== undefined ? _node.draggable :  this.draggable
+            }));
+          }
+          if (_isAbsolutePos) {
+            _nodeObj.top = _nodeObj.top - _groupObj.top;
+            _nodeObj.left = _nodeObj.left - _groupObj.left;
+          }
+          _nodeObj.group = _groupObj.id;
+          newNode = this.addNode(_nodeObj);
+        }
+        return newNode;     
+      });
+
+       // 重新计算group的大小
+      let _groupWidth = -Infinity;
+      let _groupHeight = -Infinity;
+      _newNodes.forEach((_node) => {
+        let _w = $(_node.dom).width();
+        let _h = $(_node.dom).height();
+        if (_groupWidth < _node.left + _w) {
+          _groupWidth = _node.left + _w;
+        }
+        if (_groupHeight < _node.top + _h) {
+          _groupHeight = _node.top + _h;
+        }
+      });
+      _groupObj.setSize(_groupWidth + 10, _groupHeight + 10);
+    }
     return _groupObj;
   }
 

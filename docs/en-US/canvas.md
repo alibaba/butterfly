@@ -66,8 +66,11 @@ draw = (data, calllback) => {}
 /**
   * add group function
   * @param {object|Group} object  - group data or Group instance
+  * @param {array[object|Node]} object  - (Optional) Node information. If there is a value, the node is automatically added to the node group. Allow adding existing nodes in the canvas.
+  * @param {object} options - 参数
+  * @param {string} options.posType - 'absolute or relative' , Identifies whether the coordinates of the node are absolute relative to the canvas or relative to the node group
   */
-addGroup = (object|Group) => {}
+addGroup = (object|Group, nodes, options) => {}
 
 /**
   * get node by id
