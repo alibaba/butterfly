@@ -67,8 +67,11 @@ draw = (data, calllback) => {}
 /**
   * 添加分组
   * @param {object|Group} object  - 分组的信息；Group － 分组的基类
+  * @param {array[object|Node]} object  - (选填)节点信息，如果有值，则会自动将节点加进去节点组内部
+  * @param {object} options - 参数
+  * @param {string} options.posType - 'absolute or relative' , 标识节点的坐标是相对画布的绝对定位还是相对于节点组的位置
   */
-addGroup = (object|Group) => {}
+addGroup = (object|Group, nodes, options) => {}
 
 /**
   * 根据id获取node
