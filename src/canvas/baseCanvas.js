@@ -257,7 +257,7 @@ class BaseCanvas extends Canvas {
           }
         }
       });
-      _groupObj._moveTo(_groupLeft - 5, _groupTop - 5);
+      _groupObj._moveTo(_groupLeft - _.get(options, 'padding', 5), _groupTop - _.get(options, 'padding', 5));
 
       // 添加节点
       let _newNodes = nodes.map((_node) => {
@@ -268,14 +268,12 @@ class BaseCanvas extends Canvas {
         });
         if (_existNode) {
           this.removeNode(_existNode.id, true, true);
-          let _tmpNodeData = {
-            id: _existNode.id,
+          _existNode._init({
             top: _existNode.top - _groupObj.top,
             left: _existNode.left - _groupObj.left,
-            group: _groupObj.id,
-            dom: _existNode.dom
-          };
-          newNode = this.addNode(_tmpNodeData, true);
+            group: _groupObj.id
+          })
+          newNode = this.addNode(_existNode, true);
         } else {
           let _nodeObj = null;
           if (_node instanceof Node) {
@@ -313,7 +311,7 @@ class BaseCanvas extends Canvas {
           _groupHeight = _node.top + _h;
         }
       });
-      _groupObj.setSize(_groupWidth + 10, _groupHeight + 10);
+      _groupObj.setSize(_groupWidth + _.get(options, 'padding', 5) * 2, _groupHeight + _.get(options, 'padding', 5) * 2);
     }
     return _groupObj;
   }
