@@ -148,7 +148,8 @@ module.exports = {
       title: '测试'
     },
     top: 100,
-    left: 100
+    left: 100,
+    resize: true
   }],
   edges: [
   //   {

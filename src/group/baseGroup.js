@@ -69,7 +69,7 @@ class BaseGroup extends Group {
 
     // 默认resize打开
     if (this.resize !== false) {
-      this.setResize(true);
+      this.setResize(true, group);
     }
 
     if (obj.top !== undefined) {
@@ -136,7 +136,7 @@ class BaseGroup extends Group {
   removeNode(node) {
     return this.removeNodes([node]);
   }
-  setResize(flat, container = this.dom) {
+  setResize(flat, container = this.dom, resizeDom) {
     let mouseDown = (event) => {
       const LEFT_KEY = 0;
       if (event.button !== LEFT_KEY) {
@@ -150,8 +150,14 @@ class BaseGroup extends Group {
       });
     };
     if (flat) {
-      let icon = $('<span class="group-icon-resize butterfly-icon icon-drag"></span>')
-        .appendTo(container);
+      let icon = null;
+      if (resizeDom) {
+        icon = $(resizeDom);
+        icon.addClass('butterfly-group-icon-resize');
+      } else {
+        icon = $('<span class="butterfly-group-icon-resize group-icon-resize butterfly-icon icon-drag"></span>')
+      }
+      icon.appendTo(container);
       icon.on('mousedown', mouseDown);
     }
   }
@@ -226,12 +232,15 @@ class BaseGroup extends Group {
       });
     });
     $(this.dom).on('mousedown', (e) => {
-
       // 兼容节点冒泡上来的事件
       let isChildNodeMoving = _.some(this.nodes, (item) => {
         return item._isMoving;
       });
       if (isChildNodeMoving) {
+        return;
+      }
+      // 兼容resize按钮冒泡上来的事件
+      if(_.get(e, 'target.className', '').indexOf('butterfly-group-icon-resize') !== -1) {
         return;
       }
 

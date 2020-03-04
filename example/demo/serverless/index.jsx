@@ -80,6 +80,17 @@ class Serverless extends Component {
       console.log(data);
     });
 
+
+    // setTimeout(() => {
+    //   let node1 = this.canvas.nodes[3];
+    //   let node2 = this.canvas.nodes[5];
+    //   this.canvas.addGroup({
+    //     id: 'group_2'
+    //   }, [node1, node2], {
+    //     posType: 'absolute',
+    //     padding: 30
+    //   });
+    // }, 1000);
   }
   render() {
     return (
