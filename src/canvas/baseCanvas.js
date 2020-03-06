@@ -269,6 +269,7 @@ class BaseCanvas extends Canvas {
         if (_existNode) {
           this.removeNode(_existNode.id, true, true);
           _existNode._init({
+            dom: _existNode.dom,
             top: _existNode.top - _groupObj.top,
             left: _existNode.left - _groupObj.left,
             group: _groupObj.id
@@ -2554,7 +2555,7 @@ class BaseCanvas extends Canvas {
     this.edges.forEach((edge) => {
       if (edge.type === 'endpoint') {
         const isLink = _.find(node.endpoints, (point) => {
-          return (point.nodeId === edge.sourceNode.id && point.id === edge.sourceEndpoint.id) || (point.nodeId === edge.targetNode.id && point.id === edge.targetEndpoint.id);
+          return (point.nodeId === edge.sourceNode.id && !!edge.sourceNode.getEndpoint(point.id, 'source')) || (point.nodeId === edge.targetNode.id && !!edge.targetNode.getEndpoint(point.id, 'target'));
         });
         isLink && edge.redraw();
       } else if (edge.type === 'node') {
