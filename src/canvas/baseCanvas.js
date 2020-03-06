@@ -646,6 +646,22 @@ class BaseCanvas extends Canvas {
     result.forEach((item) => {
       item.destroy(isNotEventEmit);
     });
+
+    // 把endpoint重新赋值
+    result.forEach((_rmEdge) => {
+      if (_.get(_rmEdge, 'sourceEndpoint._tmpType') === 'source') {
+        let isExistEdge = _.some(this.edges, (edge) => {
+          return _rmEdge.sourceNode.id === edge.sourceNode.id && _rmEdge.sourceEndpoint.id === edge.sourceEndpoint.id;
+        });
+        !isExistEdge && (_rmEdge.sourceEndpoint._tmpType = undefined);
+      }
+      if (_.get(_rmEdge, 'targetEndpoint._tmpType') === 'target') {
+        let isExistEdge = _.some(this.edges, (edge) => {
+          return _rmEdge.targetNode.id === edge.targetNode.id && _rmEdge.targetEndpoint.id === edge.targetEndpoint.id;
+        });
+        !isExistEdge && (_rmEdge.targetEndpoint._tmpType = undefined);
+      }
+    });
     return result;
   }
 
