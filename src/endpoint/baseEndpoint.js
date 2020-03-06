@@ -36,11 +36,6 @@ class Endpoint {
     // 拉线时候可连接的标志
     this._linkable = false;
 
-    // 不能断开线条
-    if (this.type === 'target') {
-      this._disLinkable = opts.disLinkable;
-    }
-
     this._coordinateService = null;
 
     this.dom = null;
@@ -80,7 +75,7 @@ class Endpoint {
       this._posLeft = this._left;
     }
 
-    this.setDisLinkable(this._disLinkable);
+    this.attachEvent();
   }
 
   draw(obj) {
@@ -213,24 +208,19 @@ class Endpoint {
     this.dom.removeClass('hover');
   }
 
-  setDisLinkable(flat) {
-    if (flat !== true) {
-      $(this.dom).on('mousedown', (e) => {
-        const LEFT_KEY = 0;
-        if (e.button !== LEFT_KEY) {
-          return;
-        }
-        e.preventDefault();
-        e.stopPropagation();
-        this._emit('InnerEvents', {
-          type: 'endpoint:drag',
-          data: this
-        });
+  attachEvent() {
+    $(this.dom).on('mousedown', (e) => {
+      const LEFT_KEY = 0;
+      if (e.button !== LEFT_KEY) {
+        return;
+      }
+      e.preventDefault();
+      e.stopPropagation();
+      this._emit('InnerEvents', {
+        type: 'endpoint:drag',
+        data: this
       });
-    } else {
-      $(this.dom).off('mousedown');
-    }
-    this._disLinkable = flat;
+    });
   }
   destroy() {
     $(this.dom).off();
