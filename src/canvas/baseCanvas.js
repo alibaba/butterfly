@@ -1572,8 +1572,10 @@ class BaseCanvas extends Canvas {
     // 生成svg的wrapper
     const svg = $(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
       .attr('class', 'butterfly-svg')
-      .attr('width', '100%')
-      .attr('height', '100%')
+      // .attr('width', '100%')
+      // .attr('height', '100%')
+      .attr('width', '1px')
+      .attr('height', '15px')
       .attr('version', '1.1')
       // .css('position', 'absolute')
       .attr('xmlns', 'http://www.w3.org/2000/svg')
