@@ -51,7 +51,6 @@ class Endpoint {
     if (obj.nodeType) {
       this.nodeType = obj.nodeType;
     }
-
     // 计算锚点起始值
     if (!this._isInitedDom) {
       this.dom = this.draw({

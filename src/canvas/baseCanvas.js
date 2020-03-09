@@ -269,6 +269,7 @@ class BaseCanvas extends Canvas {
         if (_existNode) {
           this.removeNode(_existNode.id, true, true);
           _existNode._init({
+            dom: _existNode.dom,
             top: _existNode.top - _groupObj.top,
             left: _existNode.left - _groupObj.left,
             group: _groupObj.id
@@ -730,6 +731,22 @@ class BaseCanvas extends Canvas {
 
     result.forEach((item) => {
       item.destroy(isNotEventEmit);
+    });
+
+    // 把endpoint重新赋值
+    result.forEach((_rmEdge) => {
+      if (_.get(_rmEdge, 'sourceEndpoint._tmpType') === 'source') {
+        let isExistEdge = _.some(this.edges, (edge) => {
+          return _rmEdge.sourceNode.id === edge.sourceNode.id && _rmEdge.sourceEndpoint.id === edge.sourceEndpoint.id;
+        });
+        !isExistEdge && (_rmEdge.sourceEndpoint._tmpType = undefined);
+      }
+      if (_.get(_rmEdge, 'targetEndpoint._tmpType') === 'target') {
+        let isExistEdge = _.some(this.edges, (edge) => {
+          return _rmEdge.targetNode.id === edge.targetNode.id && _rmEdge.targetEndpoint.id === edge.targetEndpoint.id;
+        });
+        !isExistEdge && (_rmEdge.targetEndpoint._tmpType = undefined);
+      }
     });
     return result;
   }
@@ -1555,8 +1572,10 @@ class BaseCanvas extends Canvas {
     // 生成svg的wrapper
     const svg = $(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
       .attr('class', 'butterfly-svg')
-      .attr('width', '100%')
-      .attr('height', '100%')
+      // .attr('width', '100%')
+      // .attr('height', '100%')
+      .attr('width', '1px')
+      .attr('height', '15px')
       .attr('version', '1.1')
       // .css('position', 'absolute')
       .attr('xmlns', 'http://www.w3.org/2000/svg')
@@ -2538,7 +2557,7 @@ class BaseCanvas extends Canvas {
     this.edges.forEach((edge) => {
       if (edge.type === 'endpoint') {
         const isLink = _.find(node.endpoints, (point) => {
-          return (point.nodeId === edge.sourceNode.id && point.id === edge.sourceEndpoint.id) || (point.nodeId === edge.targetNode.id && point.id === edge.targetEndpoint.id);
+          return (point.nodeId === edge.sourceNode.id && !!edge.sourceNode.getEndpoint(point.id, 'source')) || (point.nodeId === edge.targetNode.id && !!edge.targetNode.getEndpoint(point.id, 'target'));
         });
         isLink && edge.redraw();
       } else if (edge.type === 'node') {

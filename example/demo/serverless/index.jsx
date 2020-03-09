@@ -76,21 +76,23 @@ class Serverless extends Component {
 
     });
 
-    this.canvas.on('events', (data) => {
-      console.log(data);
-    });
-
+    // test
+    // this.canvas.on('events', (data) => {
+    //   let node1 = this.canvas.nodes[0];
+    //   node1.addNewSourceEndpoint();
+    //   console.log(data);
+    // });
 
     // setTimeout(() => {
-    //   let node1 = this.canvas.nodes[3];
-    //   let node2 = this.canvas.nodes[5];
+    //   let node1 = this.canvas.nodes[0];
+    //   let node2 = this.canvas.nodes[1];
     //   this.canvas.addGroup({
     //     id: 'group_2'
     //   }, [node1, node2], {
     //     posType: 'absolute',
     //     padding: 30
     //   });
-    // }, 1000);
+    // }, 3000);
   }
   render() {
     return (
