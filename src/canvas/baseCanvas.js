@@ -1572,14 +1572,17 @@ class BaseCanvas extends Canvas {
     // 生成svg的wrapper
     const svg = $(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
       .attr('class', 'butterfly-svg')
-      // .attr('width', '100%')
-      // .attr('height', '100%')
       .attr('width', '1px')
-      .attr('height', '15px')
+      .attr('height', '1px')
       .attr('version', '1.1')
-      // .css('position', 'absolute')
       .attr('xmlns', 'http://www.w3.org/2000/svg')
       .appendTo(this.wrapper);
+
+      // hack 因为width和height为1的时候会有偏移
+      let wrapperOffset = $(this.wrapper).offset();
+      let svgOffset = svg.offset();
+      svg.css('top', (wrapperOffset.top - svgOffset.top) + 'px').css('left', (wrapperOffset.left - svgOffset.left) + 'px')
+
     return this.svg = svg;
   }
 

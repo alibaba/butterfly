@@ -1,6 +1,6 @@
 {
   "name": "butterfly-dag",
-  "version": "2.6.16",
+  "version": "2.6.17",
   "description": "一个基于数据驱动的节点式编排组件库，让你有方便快捷定制可视化流程图表",
   "main": "dist/index.js",
   "module": "es/index.js",
