@@ -2,23 +2,6 @@
 
 const BaseNode = require('./node');
 const BaseEdge = require('./edge');
-const endpoints = [{
-  id: 'top',
-  orientation: [0, -1],
-  pos: [0.5, 0]
-}, {
-  id: 'right',
-  orientation: [1, 0],
-  pos: [0, 0.5]
-}, {
-  id: 'bottom',
-  orientation: [0, 1],
-  pos: [0.5, 0]
-}, {
-  id: 'left',
-  orientation: [-1, 0],
-  pos: [0, 0.5]
-}];
 
 module.exports = {
   nodes: [{
@@ -42,7 +25,6 @@ module.exports = {
       color: 'green',
       shape: 'rect',
       Class: BaseNode,
-      endpoints,
     }, {
       id: '3',
       text: 'Number',
@@ -51,7 +33,6 @@ module.exports = {
       color: 'yellow',
       shape: 'ellipse',
       Class: BaseNode,
-      endpoints
     }, {
       id: '4',
       text: 'Name',
@@ -60,7 +41,6 @@ module.exports = {
       color: 'Orange',
       shape: 'ellipse',
       Class: BaseNode,
-      endpoints
     }, {
       id: '5',
       text: 'Skills',
@@ -71,7 +51,6 @@ module.exports = {
       color: 'yellow',
       shape: 'ellipse',
       Class: BaseNode,
-      endpoints,
       fill: '#feb662',
       ellipseBorderWidth: 2,
       ellipseDasharray: 'none'
@@ -87,15 +66,6 @@ module.exports = {
       height: 50,
       fill: '#fe8550',
       Class: BaseNode,
-      endpoints: [{
-        id: 'top',
-        orientation: [0, -1],
-        pos: [0.5, 0]
-      }, {
-        id: 'bottom',
-        orientation: [0, 1],
-        pos: [0.5, 0]
-      }]
     }, {
       id: '7',
       text: 'Salesman',
@@ -104,7 +74,6 @@ module.exports = {
       color: 'green',
       shape: 'rect',
       Class: BaseNode,
-      endpoints,
     }, {
       id: '8',
       text: 'Uses',
@@ -124,7 +93,6 @@ module.exports = {
       color: 'green',
       shape: 'rect',
       Class: BaseNode,
-      endpoints,
     } , {
       id: '10',
       text: 'Plate',
@@ -133,7 +101,6 @@ module.exports = {
       color: 'yellow',
       shape: 'ellipse',
       Class: BaseNode,
-      endpoints
     },
     {
       id: '11',
@@ -143,7 +110,6 @@ module.exports = {
       color: 'green',
       shape: 'rect',
       Class: BaseNode,
-      endpoints,
       width: 135,
       height: 55,
       fill: '#31d0c6',
@@ -159,7 +125,6 @@ module.exports = {
       color: 'pink',
       shape: 'ellipse',
       Class: BaseNode,
-      endpoints,
       fill: '#fca079',
       ellipseBorderWidth: 2,
       ellipseDasharray: '3 1'
@@ -171,118 +136,94 @@ module.exports = {
       color: 'Orange',
       shape: 'ellipse',
       Class: BaseNode,
-      endpoints
     }
   ],
   edges: [{
-      source: 'left',
-      target: 'right',
-      sourceNode: '1',
-      targetNode: '2',
-      type: 'endpoint',
+      source: '1',
+      target: '2',
+      type: 'node',
       color: 'black',
       arrowPosition: 1,
       label: '1',
       Class: BaseEdge
-  }, {
-      source: 'top',
-      target: 'bottom',
-      sourceNode: '2',
-      targetNode: '3',
-      type: 'endpoint',
+  },
+   {
+      source: '2',
+      target: '3',
+      type: 'node',
       color: 'black',
       arrowPosition: 1,
       Class: BaseEdge
     }, {
-      source: 'top',
-      target: 'bottom',
-      sourceNode: '2',
-      targetNode: '4',
-      type: 'endpoint',
+      source: '2',
+      target: '4',
+      type: 'node',
       color: 'black',
       arrowPosition: 1,
       Class: BaseEdge
     }, {
-      source: 'top',
-      target: 'bottom',
-      sourceNode: '2',
-      targetNode: '5',
-      type: 'endpoint',
+      source: '2',
+      target: '5',
+      type: 'node',
       color: 'black',
       arrowPosition: 1,
       Class: BaseEdge
     }, {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '2',
-      targetNode: '6',
-      type: 'endpoint',
+      source: '2',
+      target: '6',
+      type: 'node',
       color: 'black',
       arrowPosition: 1,
       Class: BaseEdge
     }, {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '6',
-      targetNode: '7',
-      type: 'endpoint',
+      source: '6',
+      target: '7',
+      type: 'node',
       color: 'black',
       arrowPosition: 1,
       Class: BaseEdge
     },{
-      source: 'right',
-      target: 'left',
-      sourceNode: '7',
-      targetNode: '8',
-      type: 'endpoint',
+      source: '7',
+      target: '8',
+      type: 'node',
       color: 'black',
       arrowPosition: 1,
       label: '0..1',
       Class: BaseEdge
     }, {
-      source: 'right',
-      target: 'left',
-      sourceNode: '8',
-      targetNode: '9',
-      type: 'endpoint',
+      source: '8',
+      target: '9',
+      type: 'node',
       color: 'black',
       arrowPosition: 1,
       label: '1..1',
       Class: BaseEdge
     }, {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '9',
-      targetNode: '10',
-      type: 'endpoint',
+      source: '9',
+      target: '10',
+      type: 'node',
       color: 'black',
       arrowPosition: 1,
       Class: BaseEdge
     }, {
-      source: 'right',
-      target: 'left',
-      sourceNode: '1',
-      targetNode: '11',
-      type: 'endpoint',
+      source: '1',
+      target: '11',
+      type: 'node',
       color: 'black',
       arrowPosition: 1,
       label: 'N',
       Class: BaseEdge
     } , {
-      source: 'top',
-      target: 'bottom',
-      sourceNode: '11',
-      targetNode: '12',
-      type: 'endpoint',
+      source: '11',
+      target: '12',
+      type: 'node',
       color: 'black',
       arrowPosition: 1,
       Class: BaseEdge
     }, {
-      source: 'top',
-      target: 'bottom',
-      sourceNode: '11',
-      targetNode: '13',
-      type: 'endpoint',
+      source: '11',
+      target: '13',
+      type: 'node',
       color: 'black',
       arrowPosition: 1,
       Class: BaseEdge
