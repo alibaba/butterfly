@@ -78,4 +78,4 @@ class Edge {
 
 }
 
-module.exports = Edge;
+export default Edge;

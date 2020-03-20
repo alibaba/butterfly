@@ -2,9 +2,8 @@
 
 const $ = require('jquery');
 const _ = require('lodash');
-const coordinateService = require('../utils/coordinate');
 
-require('./baseEndpoint.less');
+import './baseEndpoint.less';
 
 class Endpoint {
   constructor(opts) {
@@ -18,6 +17,7 @@ class Endpoint {
     this.root = opts.root;
     this.scope = opts.scope;
     this.expandArea = opts.expandArea;
+    this.limitNum = opts.limitNum;
     this.options = opts;
     // 假如锚点在节点上则有值
     this._node = opts._node;
@@ -35,11 +35,6 @@ class Endpoint {
     // 拉线时候可连接的标志
     this._linkable = false;
 
-    // 不能断开线条
-    if (this.type === 'target') {
-      this._disLinkable = opts.disLinkable;
-    }
-
     this._coordinateService = null;
 
     this.dom = null;
@@ -56,7 +51,6 @@ class Endpoint {
     if (obj.nodeType) {
       this.nodeType = obj.nodeType;
     }
-
     // 计算锚点起始值
     if (!this._isInitedDom) {
       this.dom = this.draw({
@@ -213,26 +207,23 @@ class Endpoint {
   }
 
   attachEvent() {
-    if (this._disLinkable !== true) {
-      $(this.dom).on('mousedown', (e) => {
-        const LEFT_KEY = 0;
-        if (e.button !== LEFT_KEY) {
-          return;
-        }
-        e.preventDefault();
-        e.stopPropagation();
-        this._emit('InnerEvents', {
-          type: 'endpoint:drag',
-          data: this
-        });
+    $(this.dom).on('mousedown', (e) => {
+      const LEFT_KEY = 0;
+      if (e.button !== LEFT_KEY) {
+        return;
+      }
+      e.preventDefault();
+      e.stopPropagation();
+      this._emit('InnerEvents', {
+        type: 'endpoint:drag',
+        data: this
       });
-    }
+    });
   }
-
   destroy() {
     $(this.dom).off();
     $(this.dom).remove();
   }
 }
 
-module.exports = Endpoint;
+export default Endpoint;

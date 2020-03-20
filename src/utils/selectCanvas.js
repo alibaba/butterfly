@@ -35,6 +35,17 @@ class SelectCanvas {
     $(this.dom).appendTo(root);
   }
 
+  resize(opts) {
+    const root = opts.root;
+    const offset = $(root).offset();
+    this.canvasTop = offset.top;
+    this.canvasLeft = offset.left;
+    this.canvasHeight = $(root).height();
+    this.canvasWidth = $(root).width();
+    $(this.dom).attr('width', this.canvasWidth);
+    $(this.dom).attr('height', this.canvasHeight);
+  }
+
   addEventListener() {
     this.dom.addEventListener('mousedown', this.mouseDown.bind(this));
     this.dom.addEventListener('mouseup', this.mouseUp.bind(this));
@@ -127,4 +138,4 @@ class SelectCanvas {
   }
 }
 
-module.exports = SelectCanvas;
+export default SelectCanvas;

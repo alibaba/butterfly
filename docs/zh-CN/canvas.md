@@ -1,6 +1,6 @@
 # 画布(Canvas)
 
-```
+```js
 let canvas = new Canvas({
   root: dom,               //canvas的根节点(必传)
   layout: 'ForceLayout'    //布局设置(可传)，可使用集成的，也可自定义布局
@@ -17,11 +17,13 @@ let canvas = new Canvas({
       arrowPosition: 0.5,  //箭头位置(0 ~ 1)
       arrowOffset: 0.0,    //箭头偏移
       Class: XXClass,      //自己拓展的class,拖动连线的时候会采用该拓展类
-      isExpandWidth: false //增加线条交互区域
+      isExpandWidth: false,//增加线条交互区域
+      defaultAnimate: false//默认开启线条动画
     },
     endpoint: {
-      position: []         //限制锚点位置['Top', 'Bottom', 'Left', 'Right'],
-      linkableHighlight: true //连线时会触发point.linkable的方法，可做高亮
+      position: [],        //限制锚点位置['Top', 'Bottom', 'Left', 'Right'],
+      linkableHighlight: true,//连线时会触发point.linkable的方法，可做高亮
+      limitNum: 10,        //限制锚点的连接数目
       expendArea: {        //锚点过小时，可扩大连线热区
         left: 10,
         right: 10,
@@ -53,7 +55,8 @@ let canvas = new Canvas({
 
 
 ### API：
-```
+
+```js
 /**
   * 渲染方法
   * @param {data} data  - 里面包含分组，节点，连线
@@ -64,8 +67,12 @@ draw = (data, calllback) => {}
 /**
   * 添加分组
   * @param {object|Group} object  - 分组的信息；Group － 分组的基类
+  * @param {array[object|Node]} object  - (选填)节点信息，如果有值，则会自动将节点加进去节点组内部。允许假如已存在画布的节点
+  * @param {object} options - 参数
+  * @param {string} options.posType - 'absolute or relative' , 标识节点的坐标是相对画布的绝对定位还是相对于节点组
+  * @param {number} options.padding - 添加节点组padding
   */
-addGroup = (object|Group) => {}
+addGroup = (object|Group, nodes, options) => {}
 
 /**
   * 根据id获取node
@@ -113,9 +120,9 @@ removeNode = (string) => {}
 removeNodes = (array) => {}
 
 /**
-  * 根据id删除节点
+  * 根据id删除节点组
   * @param {string} id  - node id
-  * @return {Node} - 删除的对象
+  * @return {Group} - 删除的对象
   */
 removeGroup = (string) => {}
 
@@ -134,9 +141,8 @@ removeEdge = (param) => {}
 removeEdges = (param) => {}
 
 /**
-  * 根据id删除分组
-  * @param {string} id  - group id
-  * @return {Node} - 删除的对象
+  * 设置画布缩放
+  * @param {true|false} boolean  - 是否支持画布缩放
   */
 setZoomable = (boolean) => {}
 
@@ -145,6 +151,24 @@ setZoomable = (boolean) => {}
   * @param {true|false} boolean  - 是否支持画布平移
   */
 setMoveable = (boolean) => {}
+
+/**
+  * 设置画布所有节点是否可拉线
+  * @param {true|false} boolean  - 是否支持所有节点可拉线
+  */
+setLinkable = (boolean) => {}
+
+/**
+  * 设置画布所有节点是否可断线
+  * @param {true|false} boolean  - 是否支持所有节点可断线
+  */
+setDisLinkable = (boolean) => {}
+
+/**
+  * 设置画布所有节点是否可拖动
+  * @param {true|false} boolean  - 是否支持所有节点可拖动
+  */
+setDraggable = (boolean) => {}
 
 /**
   * 聚焦某个节点/节点组
@@ -281,6 +305,13 @@ justifyCoordinate = () => {}
 setGuideLine = (show, options) => {}
 
 /**
+  * 设置缩略图
+  * @param {true|false} boolean  - 是否开启辅助线功能
+  * @param {Object} 具体请参考缩略图章节
+  /
+setMinimap = (show, options) => {}
+
+/**
   * 屏幕转换为画布的坐标
   * @param {array[number]} coordinates - 需要换算的坐标([x,y])
   * @return {number} - 转换后的坐标
@@ -327,7 +358,7 @@ getNeighborNodesAndEdgesByLevel = (options) => {}
 
 ## 事件
 
-```
+```js
 let canvas = new Canvas({...});
 canvas.on('type', (data) => {
   //data 数据
@@ -343,6 +374,7 @@ canvas.on('type', (data) => {
 | system.nodes.add | 批量节点添加 | -
 | system.link.delete | 删除连线 | -
 | system.link.connect | 连线成功 | -
+| system.link.reconnect | 线段重连 | -
 | system.link.click | 点击事件 | -
 | system.group.delete | 删除节点组 | -
 | system.group.move | 移动节点组 | -
@@ -366,7 +398,7 @@ canvas.on('type', (data) => {
 * **重力布局**，传入`'ForceLayout'`即可，小蝴蝶内置布局
 * **自定义布局**，传入一个方法，里面可以按照用户需求进行布局。注:`除此之外，记得把Edge的calcPath的方法复写掉，不然会由小蝴蝶的内置计算线段的方法代替，无法实现所得的线段`
 
-```
+```js
 let canvas = new Canvas({
   layout: (opts) => {
     // 画布长宽
@@ -386,7 +418,7 @@ let canvas = new Canvas({
   * `show`，设置是否开启网格布局
   * `options`，设置网格布局的参数，如下注释所示
 
-```
+```js
 this.canvas.setGirdMode(true, {
   isAdsorb: false,         // 是否自动吸附,默认关闭
   theme: {
@@ -397,7 +429,7 @@ this.canvas.setGirdMode(true, {
     lineColor: '#000',     // 网格线条颜色
     lineWidth: 1,          // 网格粗细
     circleRadiu: 1,        // 圆点半径
-    circleColor: '#000'    // 断电颜色
+    circleColor: '#000'    // 圆点颜色
   }
 });
 ```
@@ -406,7 +438,7 @@ this.canvas.setGirdMode(true, {
   * `show`，设置是否开启辅助线
   * `options`，设置辅助线的参数，如下注释所示
 
-```
+```js
 this.canvas.setGuideLine(true, {
   limit: 1,             // 限制辅助线条数
   theme: {
@@ -420,7 +452,7 @@ this.canvas.setGuideLine(true, {
   * `name`，聚合组名称。假如不存在，则添加聚合组；假如已存在，则添加聚合组元素
   * `object`，聚合组的元素
 
-```
+```js
 this.canvas.add2Union('我的聚合组', {
   nodes: []     // Node对象或者nodeId
   groups: []    // Group对象或者groupId
@@ -443,7 +475,7 @@ this.canvas.add2Union('我的聚合组', {
   * `options.width`，图片宽度
   * `options.height`，图片高度
 
-```
+```js
 this.canvas.save2img({type: 'png', width: 1920, height: 1080, quality: 1})
   .then(dataUrl => {
     var link = document.createElement('a');

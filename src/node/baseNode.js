@@ -1,8 +1,8 @@
 const $ = require('jquery');
 const _ = require('lodash');
 
-const Node = require('../interface/node');
-const Endpoint = require('../endpoint/baseEndpoint');
+import Node from '../interface/node';
+import Endpoint from '../endpoint/baseEndpoint';
 
 class BaseNode extends Node {
   constructor(opts) {
@@ -21,6 +21,7 @@ class BaseNode extends Node {
     // endpoint 这部分需要考虑
     this.endpoints = [];
     this._endpointsData = opts.endpoints;
+    this._endpointLimitNum = opts._endpointLimitNum;
     // 标识是否在移动做，兼容冒泡
     this._isMoving = false;
   }
@@ -33,10 +34,10 @@ class BaseNode extends Node {
         .attr('id', obj.id);
     }
     const node = $(_dom);
-    if (obj.top) {
+    if (obj.top !== undefined) {
       node.css('top', `${obj.top}px`);
     }
-    if (obj.left) {
+    if (obj.left !== undefined) {
       node.css('left', `${obj.left}px`);
     }
     this.updated && this.updated();
@@ -62,6 +63,7 @@ class BaseNode extends Node {
       _on: this._on,
       _emit: this._emit,
       _node: this,
+      _limitNum: obj.limitNum || this._endpointLimitNum,
       _global: this.global
     }, obj));
 
@@ -221,4 +223,4 @@ class BaseNode extends Node {
   }
 }
 
-module.exports = BaseNode;
+export default BaseNode;

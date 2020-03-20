@@ -1,7 +1,8 @@
 # 线(Edge)
 
 ## 用法
-```
+
+```js
 canvas.draw({
   edges: [{
     source: 'point_1',
@@ -40,7 +41,7 @@ canvas.draw({
 
 ## 方法
 
-```
+```js
 /**
   * @return {dom} - 自定义节点的dom
   */
@@ -87,4 +88,20 @@ emit = (string, obj) => {}
   * 接受事件
   */
 on = (string, callback) => {}
+
+/**
+  * 开启动画
+  * @param {obj} options(可选参数) - 配置动画效果
+  * @param {number} options.r (可选参数) - 动画节点半径
+  * @param {string} options.color (可选参数) - 动画节点颜色
+  */
+addAnimate = (options) => {}
+
 ```
+
+## 详细说明
+
+### 动画
+<img width="600" src="https://img.alicdn.com/tfs/TB1anoGvkL0gK0jSZFAXXcA9pXa-921-532.gif">
+ps: 1000节点+1000条线段，动画完美运行
+<img width="600" src="https://img.alicdn.com/tfs/TB1N4a_wi_1gK0jSZFqXXcpaXXa-662-466.gif">

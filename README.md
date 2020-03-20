@@ -1,6 +1,6 @@
 <p align="center">
   <a href="http://noonnightstorm.github.io">
-    <img width="900" src="http://img.alicdn.com/tfs/TB1TlngGFYqK1RjSZLeXXbXppXa-844-474.png">
+    <!-- <img width="900" src="http://img.alicdn.com/tfs/TB1TlngGFYqK1RjSZLeXXbXppXa-844-474.png"> -->
   </a>
 </p>
 
@@ -18,17 +18,34 @@
 
 </div>
 
-## 特性
+[English](./README.en-US.md) | 简体中文
+
+## ✨ 特性
 * 开箱即用的参考[DEMO](https://noonnightstorm.github.io/)，可在线调试
 * 全方位管理画布，开发者只需要更专注定制化的需求
 * 利用dom来定制元素；灵活性，可塑性，拓展性优秀
 
-## 安装
+<p align="center">
+  <img width="900" src="https://img.alicdn.com/tfs/TB1mwr0gbr1gK0jSZFDXXb9yVXa-1000-1000.png">
+</p>
+
+## 📦 安装
 ```
 npm install butterfly-dag
 ```
 
-## 快速上手
+## 🔨 快速上手
+
+### 引入方式
+```
+// 完全版，内部包含jquery和lodash
+import {Canvas, Group, Node, Edge} from 'butterfly-dag';
+import 'butterfly-dag/dist/index.css';
+
+// 如果您引用的项目使用了jquery和lodash，为了缩小项目的体积，我们建议：
+import {Canvas, Group, Node, Edge} from 'butterfly-dag/pack/index.js';
+import 'butterfly-dag/pack/index.css';
+```
 
 ### 生成画布
 ```
@@ -54,7 +71,7 @@ class ANode extend Node {
   draw() {
     // 这里定制您需要的节点并返回一个dom
     let div = document.createElement("div"); 
-    div.innerHTML('helloworld');
+    div.innerHTML = 'helloworld';
     return div
   }
 }
@@ -76,12 +93,21 @@ class AGroup extend Group {
 // 线，锚点如此类推，请看具体文档
 ```
 
-## API文档
-* [画布(canvas)](https://github.com/alibaba/butterfly/blob/master/docs/canvas.md)
-* [节点组(group)](https://github.com/alibaba/butterfly/blob/master/docs/group.md)
-* [节点(node)](https://github.com/alibaba/butterfly/blob/master/docs/node.md)
-* [线(edge)](https://github.com/alibaba/butterfly/blob/master/docs/edge.md)
-* [锚点(endpoint)](https://github.com/alibaba/butterfly/blob/master/docs/endpoint.md)
+## 🔗 API文档
+* [画布(canvas)](./docs/zh-CN/canvas.md)
+* [节点组(group)](./docs/zh-CN/group.md)
+* [节点(node)](./docs/zh-CN/node.md)
+* [线(edge)](./docs/zh-CN/edge.md)
+* [锚点(endpoint)](./docs/zh-CN/endpoint.md)
+* [缩略图(minimap)](./docs/zh-CN/minimap.md)
 
-## 贡献
-小蝴蝶是一个完全开源的项目，我们欢迎大家为修复错误和改进做出贡献。有关如何开始的信息，请阅读我们的[贡献指南](https://github.com/alibaba/butterfly/blob/master/docs/CONTRIBUTING.md).
+
+## 快速本地DEMO
+```
+cd example
+npm install
+npm start
+```
+
+## 🤝贡献
+小蝴蝶是一个完全开源的项目，我们欢迎大家为修复错误和改进做出贡献。有关如何开始的信息，请阅读我们的[贡献指南](./docs/zh-CN/CONTRIBUTING.md).
