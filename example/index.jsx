@@ -12,6 +12,7 @@ import Force from './demo/force/index.jsx';
 import ServerLess from './demo/serverless/index.jsx';
 import RelationalNetwork from './demo/relationalNetwork/index.jsx';
 import System from './demo/system/index.jsx';
+import liteGraph from './demo/liteGraph/index.jsx';
 
 import 'antd/dist/antd.css';
 import './index.less';
@@ -45,6 +46,9 @@ ReactDOM.render((
               <Menu.Item key="system">
                 <Link to="/system">System</Link>
               </Menu.Item>
+              <Menu.Item key="liteGraph">
+                <Link to="/lite_graph">LiteGraph</Link>
+              </Menu.Item>
             </Menu>
           </Sider>
           <Content>
@@ -55,6 +59,8 @@ ReactDOM.render((
             <Route path="/serverless" component={ServerLess} />
             <Route path="/relational_network" component={RelationalNetwork} />
             <Route path="/system" component={System} />
+            <Route path="/lite_graph" component={liteGraph} />
+
           </Content>
         </Layout>
       </Layout>

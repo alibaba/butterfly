@@ -1,0 +1,127 @@
+.litegraph-page{
+  width: 100%;
+  height: 100%;
+  background: #090a0a;
+  .litegraph-canvas{
+    width: 100%;
+    height: 100%;
+    .test_group{
+      width: 550px;
+      height: 240px;
+      position: absolute;
+      .test_container{
+        width: 100%;
+        height: 100%;
+        border-radius: 5px;
+        border: 2px solid #57bdb4;
+        background: #4c5f82;
+        opacity: 0.3;
+      }
+    }
+    .test_group {
+      > .text {
+        position: absolute;
+        top: 3px;
+        left: 18px;
+        font-size: 20px;
+        color: #16c7da;
+      }
+    }
+    .test-base-link{
+      stroke: #4b4f6b;
+      stroke-width: 3px;
+    }
+    .test-base-node{
+      height: 32px;
+      width: 102px;
+      line-height: 28px;
+      text-align: center;
+      background: #fff;
+      vertical-align: middle;
+      border-radius: 5px;
+      position: absolute;
+      background: #3c3a3a;
+      text-align: center;
+      color: #bfbfbf;
+      .text{
+        display: inline-block;
+        width: 100%;
+        height: 30px;
+        vertical-align: middle;
+        border-bottom:1px solid #000000;
+      }
+      .re_grayPoint{
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        border: 1px solid #000000;
+        background: #828f9c;
+        &.re_input_point_3 {
+          right: 4px;
+          top: calc(~ "50% - 6px");
+        }
+        &.re_input_point_2{
+          right: 4px;
+          top: calc(~ "68% - 10px");
+        }
+
+      }
+      .re_greenPoint{
+        position: absolute;
+        width: 15px;
+        height: 10px;
+        background: #55ea55;
+        &.re_input_point_1{
+          right: 4px;
+          top: calc(~ "87% - 15px");
+        }
+        &.re_log_event{
+          top: calc(~ "87% - 10px");
+          left: 4px;
+        }
+      }
+      .wid_point {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #55ea55;
+        &.left-point{
+          right: 6px;
+          top: calc(~ "35% - 5px");
+        }
+      }
+      .endpointInfo{
+        position: absolute;
+        width: 100%;
+        top: 30px;
+        height: 28px;
+        .label_span{
+          position: absolute;
+          right: 28px;
+        }
+        &.endpoint1{
+          top: calc(~ "50% - 25px");
+        }
+        &.endpoint2{
+          top: calc(~ "60% - 10px");
+        }
+        &.endpoint3{
+          top: calc(~ "83% - 10px");
+        }
+      }
+    }
+    .system-green-point{
+      background: #55ea55;
+      width: 10px;
+      height: 10px;
+    }
+    .system-gray-point{
+      width: 12px;
+      height: 12px;
+      background: #828f9c;
+      border: 1px solid #000000;
+    }
+  }
+}

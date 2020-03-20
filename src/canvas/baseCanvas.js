@@ -404,7 +404,8 @@ class BaseCanvas extends Canvas {
 
     const _edgeFragment = document.createDocumentFragment();
     const _labelFragment = document.createDocumentFragment();
-
+    console.log('links', links);
+    console.log('this.theme', this.theme);
     const result = links.map((link) => {
       const EdgeClass = link.Class || this.theme.edge.Class;
       if (link.type === 'endpoint') {
