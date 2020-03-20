@@ -9,7 +9,6 @@ class LiteGraph extends Component{
   }
   componentDidMount() {
     let root = document.getElementById('dag-canvas');
-    console.log('root', root);
     this.canvas = new Canvas({
       root: root,
         disLinkable: true, // 可删除连线

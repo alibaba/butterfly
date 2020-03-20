@@ -18,6 +18,7 @@ export default {
       id: 'right',
       orientation: [1, 0],
       pos: [0, 0.5],
+      color: 'system-green',
       Class: BaseEndpoint
     }]
   }, {
@@ -32,16 +33,19 @@ export default {
       id: 'left_2',
       orientation: [-1, 0],
       pos: [0, 0.55],
+      color: 'system-green',
       Class: BaseEndpoint
     }, {
       id: 'left_3',
       orientation: [-1, 0],
       pos: [0, 0.8],
+      color: 'system-green',
       Class: BaseEndpoint
     }, {
       id: 'right_1',
       orientation: [1, 0],
       pos: [0, 0.7],
+      color: 'system-green',
       Class: BaseEndpoint
     }]
   }, {
@@ -56,6 +60,7 @@ export default {
       id: 'knbo_1',
       orientation: [1, 0],
       pos: [0, 0.5],
+      color: 'system-green',
       Class: BaseEndpoint
     }]
   }, {
@@ -84,22 +89,24 @@ export default {
     width: 100,
     text: 'Flat Slots1',
     group: 'testGroup',
-    // type: 'first',
     Class: Node,
     endpoints: [{
       id: 'testGroup1_01',
       orientation: [0, -1],
       pos: [0.5, 0],
+      color: 'system-green',
       Class: BaseEndpoint // 绿色系统锚点
     }, {
       id: 'testGroup1_02',
       orientation: [0, 1],
       pos: [0.33, 0],
+      color: 'system-green',
       Class: BaseEndpoint // 绿色系统锚点
     }, {
       id: 'testGroup1_03',
       orientation: [0, 1],
       pos: [0.66, 0],
+      color: 'system-green',
       Class: BaseEndpoint // 绿色系统锚点
     }]
   }, {
@@ -108,7 +115,6 @@ export default {
     left: 237,
     height: 70,
     width: 100,
-    // type: 'second',
     text: 'Flat Slots2',
     group: 'testGroup',
     Class: Node,
@@ -116,16 +122,19 @@ export default {
       id: 'testGroup2_01',
       orientation: [0, -1],
       pos: [0.5, 0],
+      color: 'system-green',
       Class: BaseEndpoint // 绿色系统锚点
     }, {
       id: 'testGroup2_02',
       orientation: [0, 1],
       pos: [0.33, 0],
+      color: 'system-gray',
       Class: BaseEndpoint // 灰色系统锚点
     }, {
       id: 'testGroup2_03',
       orientation: [0, 1],
       pos: [0.66, 0],
+      color: 'system-gray',
       Class: BaseEndpoint // 灰色系统锚点
     }]
   }, {
@@ -134,7 +143,6 @@ export default {
     left: 420,
     height: 70,
     width: 100,
-    // type: 'third',
     text: 'Flat Slots3',
     group: 'testGroup',
     Class: Node,
@@ -142,16 +150,19 @@ export default {
       id: 'testGroup3_01',
       orientation: [0, -1],
       pos: [0.5, 0],
+      color: 'system-green',
       Class: BaseEndpoint // 绿色系统锚点
     }, {
       id: 'testGroup3_02',
       orientation: [0, 1],
       pos: [0.33, 0],
+      color: 'system-gray',
       Class: BaseEndpoint // 灰色系统锚点
     }, {
       id: 'testGroup3_03',
       orientation: [0, 1],
       pos: [0.66, 0],
+      color: 'system-gray',
       Class: BaseEndpoint // 灰色系统锚点
     }]
   }, {
@@ -183,6 +194,7 @@ export default {
       id: 'custom_01',
       orientation: [-1, 0],
       pos: [0, 0.8],
+      color: 'system-green',
       Class: BaseEndpoint
     }]
   }],

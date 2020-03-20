@@ -27,10 +27,10 @@ class BaseNode extends Node {
         dom: this.grayDom_2
       })
     }
-    if (this.log_eventDom) {
+    if (this.logEventDom) {
       this.addEndpoint({
         id: 'log_event_01',
-        dom: this.log_eventDom,
+        dom: this.logEventDom,
       })
     }
     if (this.widEndpointDom) {
@@ -50,15 +50,15 @@ class BaseNode extends Node {
       .attr('id', data.id)
     switch (this.options.id) {
       case 'gamepad' :
-         this.greenDom_1 = ($('<div class="re_greenPoint re_input_point_1"></div>'));
-         this.grayDom_2 = ($('<div class="re_grayPoint re_input_point_2"></div>'));
-         this.grayDom_3 = $('<div class="re_grayPoint re_input_point_3"></div>');
+         this.greenDom_1 = ($('<div class="custom-green-rectangle-point game-point_1"></div>'));
+         this.grayDom_2 = ($('<div class="custom-gray-point game-point_2"></div>'));
+         this.grayDom_3 = $('<div class="custom-gray-point game-point_3"></div>');
         break;
       case 'logEvent':
-        this.log_eventDom = $('<div class="re_greenPoint re_log_event"></div>')
+        this.logEventDom = $('<div class="custom-green-rectangle-point log-event-point_1"></div>')
         break;
       case 'widgest':
-        this.widEndpointDom = $(`<div class="wid_point left-point"></div>`);
+        this.widEndpointDom = $(`<div class="custom-green-circle-point widgest-point_1"></div>`);
         break;
       default:
     }
@@ -84,8 +84,8 @@ class BaseNode extends Node {
       container.append(endpoint3);
     }
 
-    if (this.log_eventDom) {
-      container.append(this.log_eventDom);
+    if (this.logEventDom) {
+      container.append(this.logEventDom);
     }
 
     if (this.widEndpointDom) {
