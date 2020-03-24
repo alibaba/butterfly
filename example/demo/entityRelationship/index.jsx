@@ -21,7 +21,7 @@ class Entity extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'Manhattan',
+          type: 'Straight',
           arrow: true
         }
       }
