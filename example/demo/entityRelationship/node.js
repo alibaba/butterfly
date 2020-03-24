@@ -18,11 +18,6 @@ class BaseNode extends Node {
       container.addClass(data.options.color);
     }
 
-    // 添加外边框
-    if (data.options.border) {
-      container.addClass(data.options.border);
-    }
-
     // 渲染外形
     container.addClass(data.options.shape);
 

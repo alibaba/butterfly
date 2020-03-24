@@ -142,8 +142,6 @@ module.exports = {
       source: '1',
       target: '2',
       type: 'node',
-      color: 'black',
-      arrowPosition: 1,
       label: '1',
       Class: BaseEdge
   },
@@ -151,81 +149,59 @@ module.exports = {
       source: '2',
       target: '3',
       type: 'node',
-      color: 'black',
-      arrowPosition: 1,
       Class: BaseEdge
     }, {
       source: '2',
       target: '4',
       type: 'node',
-      color: 'black',
-      arrowPosition: 1,
       Class: BaseEdge
     }, {
       source: '2',
       target: '5',
       type: 'node',
-      color: 'black',
-      arrowPosition: 1,
       Class: BaseEdge
     }, {
       source: '2',
       target: '6',
       type: 'node',
-      color: 'black',
-      arrowPosition: 1,
       Class: BaseEdge
     }, {
       source: '6',
       target: '7',
       type: 'node',
-      color: 'black',
-      arrowPosition: 1,
       Class: BaseEdge
     },{
       source: '7',
       target: '8',
       type: 'node',
-      color: 'black',
-      arrowPosition: 1,
       label: '0..1',
       Class: BaseEdge
     }, {
       source: '8',
       target: '9',
       type: 'node',
-      color: 'black',
-      arrowPosition: 1,
       label: '1..1',
       Class: BaseEdge
     }, {
       source: '9',
       target: '10',
       type: 'node',
-      color: 'black',
-      arrowPosition: 1,
       Class: BaseEdge
     }, {
       source: '1',
       target: '11',
       type: 'node',
-      color: 'black',
-      arrowPosition: 1,
       label: 'N',
       Class: BaseEdge
     } , {
       source: '11',
       target: '12',
       type: 'node',
-      color: 'black',
-      arrowPosition: 1,
       Class: BaseEdge
     }, {
       source: '11',
       target: '13',
       type: 'node',
-      color: 'black',
-      arrowPosition: 1,
       Class: BaseEdge
     },
 ],
