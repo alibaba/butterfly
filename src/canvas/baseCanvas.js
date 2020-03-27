@@ -148,6 +148,8 @@ class BaseCanvas extends Canvas {
         endpoints: []
       }
     };
+
+    this._NodeClass = Node;
   }
 
   updateRootResize() {
@@ -185,8 +187,10 @@ class BaseCanvas extends Canvas {
       setTimeout(() => {
         // 生成nodes
         this.addNodes(nodes);
+        // console.log(JSON.stringify(this.nodes[0].children));
         resolve();
       }, 10);
+      // console.log(this.nodes);
     });
     let edgePromise = new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -280,8 +284,8 @@ class BaseCanvas extends Canvas {
           if (_node instanceof Node) {
             _nodeObj = _node;
           } else {
-            const _Node = _node.Class || Node;
-            _nodeObj = new _Node(_.assign(_.cloneDeep(_node), {
+            const _NodeClass = _node.Class || this._NodeClass;
+            _nodeObj = new _NodeClass(_.assign(_.cloneDeep(_node), {
               _global: this.global,
               _on: this.on.bind(this),
               _emit: this.emit.bind(this),
@@ -334,8 +338,8 @@ class BaseCanvas extends Canvas {
       if (node instanceof Node) {
         _nodeObj = node;
       } else {
-        const _Node = node.Class || Node;
-        _nodeObj = new _Node(_.assign(_.cloneDeep(node), {
+        const _NodeClass = node.Class || this._NodeClass;
+        _nodeObj = new _NodeClass(_.assign(_.cloneDeep(node), {
           _global: this.global,
           _on: this.on.bind(this),
           _emit: this.emit.bind(this),
@@ -405,6 +409,28 @@ class BaseCanvas extends Canvas {
     const _edgeFragment = document.createDocumentFragment();
     const _labelFragment = document.createDocumentFragment();
     const result = links.map((link) => {
+
+      // link已经存在
+      if (link instanceof Edge) {
+        link._init();
+
+        _edgeFragment.appendChild(link.dom);
+
+        if (link.labelDom) {
+          _labelFragment.appendChild(link.labelDom);
+        }
+
+        if (link.arrowDom) {
+          _edgeFragment.appendChild(link.arrowDom);
+        }
+
+        this.edges.push(link);
+
+        link.mounted && link.mounted();
+        return link;
+      }
+
+      // link不存在的话
       const EdgeClass = link.Class || this.theme.edge.Class;
       if (link.type === 'endpoint') {
         let sourceNode = null;
@@ -499,7 +525,7 @@ class BaseCanvas extends Canvas {
           }
         }
 
-        const edge = new EdgeClass({
+        let edge = new EdgeClass({
           type: 'endpoint',
           id: link.id,
           label: link.label,
@@ -521,6 +547,7 @@ class BaseCanvas extends Canvas {
           _on: this.on.bind(this),
           _emit: this.emit.bind(this),
         });
+
         edge._init();
 
         _edgeFragment.appendChild(edge.dom);
@@ -555,7 +582,7 @@ class BaseCanvas extends Canvas {
           return;
         }
 
-        const edge = new EdgeClass({
+        let edge = new EdgeClass({
           type: 'node',
           id: link.id,
           label: link.label,
@@ -572,6 +599,7 @@ class BaseCanvas extends Canvas {
           _on: this.on.bind(this),
           _emit: this.emit.bind(this),
         });
+
         edge._init();
 
         _edgeFragment.appendChild(edge.dom);

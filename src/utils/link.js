@@ -692,6 +692,13 @@ function _findControlPoint(point, sourcePoint, targetPoint, _so, _to) {
 
 // 曼哈顿折线路由算法
 function _route(conn, fromPt, fromDir, toPt, toDir) {
+
+  // 防止图上节点隐藏NaN的死循环问题
+  fromPt.x = fromPt.x || 0;
+  fromPt.y = fromPt.y || 0;
+  toPt.x = toPt.x || 0;
+  toPt.y = toPt.y || 0;
+
   const xDiff = fromPt.x - toPt.x;
   const yDiff = fromPt.y - toPt.y;
   let point;
