@@ -22,7 +22,7 @@ function tranlateData(data) {
   return nodeList[0];
 }
 
-module.exports = {
+export default {
   compactBox: (data, options) => {
     return tranlateData(Hierarchy.compactBox(data, options));
   },
