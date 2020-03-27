@@ -1,0 +1,111 @@
+.relational-books-page{
+  width: 100%;
+  height: 100%;
+  position: relative;
+  .butterfly-minimap-container {
+    top: 30px;
+    right: 30px !important;
+  }
+  .flow-canvas {
+    .butterfly-wrapper {
+      .base-node {
+        width: 200px;
+        position: absolute;
+        .title {
+          line-height: 32px;
+          height: 32px;
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          background: #255c82;
+          padding: 0 8px;
+          color: #fff;
+        }
+        .content {
+          height: 32px;
+          width: 200px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0 8px;
+          background: #c7dbd2;
+          border-bottom: 1px solid #000;
+          .text {
+            .input-text {
+              height: 28px;
+              border: 1px solid #000;
+              width: 130px;
+              padding: 0 4px;
+            }
+          }
+        }
+      }
+      .group {
+        margin-bottom: 20px;
+        .container {
+          display: flex;
+          padding: 0 8px;
+          justify-content: space-between;
+          p {
+            padding-top: 8px;
+            .input-text-group {
+              width: 100%;
+              height: 100px;
+            }
+          }
+          span {
+            cursor: pointer;
+          }
+        }
+        .title {
+          display: flex ;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0 8px;
+          #close {
+            cursor: pointer;
+          }
+          #title-text {
+            .input-text {
+              color: #000;
+              height: 20px;
+              border: 1px solid #000;
+            }
+          }
+          #title-edit {
+            cursor: pointer;
+            .iconfont.datac-icon {
+              line-height: 26px;
+              font-size: 24px;
+            }
+          }
+        }
+      }
+    }
+  }
+  .label-name-title {
+    position: absolute;
+    top: 10px;
+    .label-name-box {
+      position: relative;
+      span:nth-of-type(1) {
+        position: absolute;
+        top: -150px;
+        left: -13px;
+        font-size: 20px;
+      }
+      span:nth-of-type(2) {
+        position: absolute;
+        top: -10px;
+        left: -5px;
+        font-size: 20px;
+      }
+      span:nth-of-type(3) {
+        position: absolute;
+        top: 140px;
+        left: 5px;
+        font-size: 20px;
+      }
+    }
+  }
+}
