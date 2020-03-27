@@ -167,6 +167,28 @@ class BaseNode extends Node {
   }
 
   _addEventListener() {
+
+    $(this.dom).on('mousedown', (e) => {
+      const LEFT_KEY = 0;
+      if (e.button !== LEFT_KEY) {
+        return;
+      }
+      e.preventDefault();
+      if (this.draggable) {
+        this._isMoving = true;
+        this._emit('InnerEvents', {
+          type: 'node:dragBegin',
+          data: this
+        });
+      } else {
+        // 单纯为了抛错事件给canvas，为了让canvas的dragtype不为空，不会触发canvas:click事件
+        this._emit('InnerEvents', {
+          type: 'node:mouseDown',
+          data: this
+        });
+      }
+    });
+
     $(this.dom).on('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
@@ -182,22 +204,6 @@ class BaseNode extends Node {
     this.setDraggable(this.draggable);
   }
   setDraggable(draggable) {
-    if (draggable === false) {
-      $(this.dom).off('mousedown');
-    } else {
-      $(this.dom).on('mousedown', (e) => {
-        const LEFT_KEY = 0;
-        if (e.button !== LEFT_KEY) {
-          return;
-        }
-        e.preventDefault();
-        this._isMoving = true;
-        this._emit('InnerEvents', {
-          type: 'node:dragBegin',
-          data: this
-        });
-      });
-    }
     this.draggable = draggable;
   }
   remove() {
