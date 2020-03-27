@@ -26,7 +26,7 @@
 * 利用dom来定制元素；灵活性，可塑性，拓展性优秀
 
 <p align="center">
-  <img width="900" src="https://img.alicdn.com/tfs/TB1mwr0gbr1gK0jSZFDXXb9yVXa-1000-1000.png">
+  <img width="900" src="https://img.alicdn.com/tfs/TB1VsgjzQP2gK0jSZPxXXacQpXa-1200-1600.jpg">
 </p>
 
 ## 📦 安装

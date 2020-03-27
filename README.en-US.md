@@ -26,7 +26,7 @@ English | [简体中文](./README.md)
 * Use dom to customize elements: flexibility and excellent expandability
 
 <p align="center">
-  <img width="900" src="https://img.alicdn.com/tfs/TB1mwr0gbr1gK0jSZFDXXb9yVXa-1000-1000.png">
+  <img width="900" src="https://img.alicdn.com/tfs/TB1VsgjzQP2gK0jSZPxXXacQpXa-1200-1600.jpg">
 </p>
 
 ## 📦 Install
