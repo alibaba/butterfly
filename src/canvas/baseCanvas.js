@@ -1687,7 +1687,9 @@ class BaseCanvas extends Canvas {
       } else if (data.type === 'node:dragBegin') {
         this._dragType = 'node:drag';
         this._dragNode = data.data;
-      } else if (data.type === 'group:dragBegin') {
+      } else if(data.type === 'node:mouseDown') {
+        this._dragType = 'node:mouseDown';
+      }  else if (data.type === 'group:dragBegin') {
         this._dragType = 'group:drag';
         this._dragNode = data.data;
       } else if (data.type === 'endpoint:drag') {
