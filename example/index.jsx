@@ -13,6 +13,7 @@ import ServerLess from './demo/serverless/index.jsx';
 import RelationalNetwork from './demo/relationalNetwork/index.jsx';
 import System from './demo/system/index.jsx';
 import EntityRelationship from './demo/entityRelationship/index.jsx';
+import CompactBoxTree from './demo/compactBoxTree/index.jsx';
 
 import 'antd/dist/antd.css';
 import './index.less';
@@ -49,6 +50,9 @@ ReactDOM.render((
             <Menu.Item key="entity">
               <Link to="/entity">Entity Relationship</Link>
             </Menu.Item>
+            <Menu.Item key="compactBoxTree">
+              <Link to="/compactBoxTree">CompactBoxTree</Link>
+            </Menu.Item>
             </Menu>
           </Sider>
           <Content>
@@ -60,6 +64,7 @@ ReactDOM.render((
             <Route path="/relational_network" component={RelationalNetwork} />
             <Route path="/system" component={System} />
             <Route path="/entity" component={EntityRelationship} />
+            <Route path="/compactBoxTree" component={CompactBoxTree} />
           </Content>
         </Layout>
       </Layout>

@@ -66,7 +66,6 @@ class BaseNode extends Node {
       _limitNum: obj.limitNum || this._endpointLimitNum,
       _global: this.global
     }, obj));
-
     this._emit('InnerEvents', {
       type: 'node:addEndpoint',
       data: endpoint,
