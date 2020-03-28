@@ -201,7 +201,7 @@ class Edge {
   addAnimate(options) {
     this.animateDom = LinkAnimateUtil.addAnimate(this.dom, this._path, _.assign({},{
       num: 1, // 现在只支持1个点点
-      r: 3,
+      radius: 3,
       color: '#776ef3'
     }, options), this.animateDom);
   }
