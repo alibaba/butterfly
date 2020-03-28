@@ -956,12 +956,19 @@ class BaseCanvas extends Canvas {
     return adjTable;
   }
 
-  setZoomable(flat) {
+  setZoomable(flat, zoomDirection = this._zoomDirection) {
+    if (zoomDirection !== undefined) {
+      this._zoomDirection = zoomDirection;
+    }
     if (!this._zoomCb) {
       this._zoomCb = (event) => {
         event.preventDefault();
         const deltaY = event.deltaY;
-        this._zoomData += deltaY * this.theme.zoomGap;
+        if (this._zoomDirection) {
+          this._zoomData -= deltaY * this.theme.zoomGap;
+        } else {
+          this._zoomData += deltaY * this.theme.zoomGap;
+        }
 
         if (this._zoomData < 0.25) {
           this._zoomData = 0.25;
@@ -996,6 +1003,7 @@ class BaseCanvas extends Canvas {
     }
 
     if (flat) {
+      // 双指mac下缩放正常，window鼠标滑轮方向相反
       this.root.addEventListener('wheel', this._zoomCb);
     } else {
       this.root.removeEventListener('wheel', this._zoomCb);
@@ -1346,7 +1354,6 @@ class BaseCanvas extends Canvas {
     } else {
       this.isSelectMode = false;
       this.canvasWrapper.unActive();
-
       if (this._remarkMove) {
         this.setMoveable(true);
       }

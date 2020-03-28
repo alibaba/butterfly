@@ -142,6 +142,7 @@ removeEdges = (param) => {}
 /**
   * set canvas zoomable
   * @param {true|false} boolean 
+  * @param {true|false} boolean  - the direction of zoom。Now it defaults to the two finger direction of MAC, but it is opposite to the mouse wheel direction of window. Default value: false. If true, the direction is opposite
   */
 setZoomable = (boolean) => {}
 

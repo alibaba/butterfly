@@ -92,8 +92,10 @@ on = (string, callback) => {}
 /**
   * 开启动画
   * @param {obj} options(可选参数) - 配置动画效果
-  * @param {number} options.r (可选参数) - 动画节点半径
+  * @param {number} options.radius (可选参数) - 动画节点半径
   * @param {string} options.color (可选参数) - 动画节点颜色
+  * @param {string} options.dur (可选参数) - 动画运行时间，如：1s
+  * @param {number|string} options.repeatCount (可选参数) - 动画重复次数，如：1 或者 'indefinite'
   */
 addAnimate = (options) => {}
 
