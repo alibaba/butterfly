@@ -67,7 +67,8 @@ class BaseCanvas extends Canvas {
 
     // 贯穿所有对象的配置
     this.global = _.get(options, 'global', {
-      isScopeStrict: _.get(options, 'global.isScopeStrict') // 是否为scope的严格模式
+      isScopeStrict: _.get(options, 'global.isScopeStrict'), // 是否为scope的严格模式
+      limitQueueLen: 5 // 默认操作队列只有5步
     });
 
     // 放大缩小和平移的数值
@@ -148,6 +149,10 @@ class BaseCanvas extends Canvas {
         endpoints: []
       }
     };
+
+    // undo & redo队列
+    this.actionQueue = [];
+    this.actionQueueIndex = -1;
   }
 
   updateRootResize() {
@@ -391,7 +396,10 @@ class BaseCanvas extends Canvas {
         nodes: result
       });
     }
-
+    this.pushActionQueue({
+      type: 'system:addNodes',
+      data: result
+    });
     return result;
   }
 
@@ -621,6 +629,12 @@ class BaseCanvas extends Canvas {
     });
 
     $(this.svg).css('visibility', 'visible');
+
+    this.pushActionQueue({
+      type: 'system:addEdges',
+      data: result
+    });
+
     return result;
   }
 
@@ -2744,6 +2758,34 @@ class BaseCanvas extends Canvas {
       return !!item;
     });
     return _.flatten(points);
+  }
+  undo () {
+
+  }
+  redo () {
+
+  }
+  pushActionQueue(option) {
+    // 堆栈满了，清理
+    if (this.actionQueueIndex >= this.global.limitQueueLen) {
+      this.actionQueue.shift();
+    }
+    // 把index前的步骤覆盖掉
+    this.actionQueue.splice(this.actionQueueIndex + 1, this.actionQueue.length);
+    this.actionQueue.push(option);
+    this.actionQueueIndex++;
+  }
+  popActionQueue() {
+    if (this.actionQueue.length > 0) {
+      let action = this.actionQueue.pop();
+      return action;
+    } else {
+      console.warn('操作队列已为空，请确认');
+    }
+  }
+  clearActionQueue() {
+    this.actionQueue = [];
+    this.actionQueueIndex = -1;
   }
 }
 
