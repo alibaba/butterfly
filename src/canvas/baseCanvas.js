@@ -1003,7 +1003,7 @@ class BaseCanvas extends Canvas {
     }
 
     if (flat) {
-      // 双指mac下缩放正常，window鼠标滑轮方向相反
+      // 双指Mac下缩放正常，Window鼠标滑轮方向相反
       this.root.addEventListener('wheel', this._zoomCb);
     } else {
       this.root.removeEventListener('wheel', this._zoomCb);

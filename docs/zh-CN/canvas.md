@@ -143,7 +143,7 @@ removeEdges = (param) => {}
 /**
   * 设置画布缩放
   * @param {true|false} boolean  - 是否支持画布缩放
-  * @param {true|false} boolean  - 放大缩小方向。现在默认为mac的双指方向，却于window的鼠标滑轮方向相反。默认值：false。若true，则方向相反
+  * @param {true|false} boolean  - 放大缩小方向。现在默认为MAC的双指方向，却于Window的鼠标滑轮方向相反。默认值：false。若true，则方向相反
   */
 setZoomable = (boolean, boolean) => {}
 
