@@ -683,6 +683,13 @@ class BaseCanvas extends Canvas {
           node: _rmNodes[0]
         });
       }
+      this.pushActionQueue({
+        type: 'remove:node',
+        data: {
+          nodes: [_rmNodes[0]],
+          edges: neighborEdges
+        }
+      });
       return {
         nodes: [_rmNodes[0]],
         edges: neighborEdges,
@@ -760,6 +767,10 @@ class BaseCanvas extends Canvas {
         });
         !isExistEdge && (_rmEdge.targetEndpoint._tmpType = undefined);
       }
+    });
+    this.pushActionQueue({
+      type: 'system:removeEdge',
+      data: result
     });
     return result;
   }
