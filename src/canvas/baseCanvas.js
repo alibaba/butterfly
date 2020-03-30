@@ -357,8 +357,12 @@ class BaseCanvas extends Canvas {
         return;
       }
 
-      // 节点初始化
-      _nodeObj._init();
+      // 节点初始化，假如已经存在过的节点就不需要重绘了
+      let initObj = {};
+      if (_nodeObj.dom) {
+        initObj['dom'] = _nodeObj.dom
+      }
+      _nodeObj._init(initObj);
       // 一定要比group的addNode执行的之前，不然会重复把node加到this.nodes里面
       this.nodes.push(_nodeObj);
 
@@ -433,7 +437,6 @@ class BaseCanvas extends Canvas {
         this.edges.push(link);
 
         link.mounted && link.mounted();
-        console.log(link);
         return link;
       }
 
@@ -1769,9 +1772,9 @@ class BaseCanvas extends Canvas {
         this._dragType = 'endpoint:drag';
         this._dragEndpoint = data.data;
       } else if (data.type === 'node:move') {
-        this._moveNode(data.node, data.x, data.y);
+        this._moveNode(data.node, data.x, data.y, data.isNotEventEmit);
       } else if (data.type === 'group:move') {
-        this._moveGroup(data.group, data.x, data.y);
+        this._moveGroup(data.group, data.x, data.y, data.isNotEventEmit);
       }  else if (data.type === 'link:click') {
         this._dragType = 'link:click';
       } else if (data.type === 'multiple:select') {
@@ -2623,6 +2626,12 @@ class BaseCanvas extends Canvas {
         });
       }
 
+      if (this._dragType === 'node:drag' || this._dragType === 'group:drag') {
+        this.pushActionQueue({
+          type: '_system:dragNodeEnd'
+        });
+      }
+
       this.emit('system.drag.end', {
         dragType: this._dragType,
         dragNode: this._dragNode,
@@ -2661,7 +2670,17 @@ class BaseCanvas extends Canvas {
     // this.root.addEventListener('mouseleave', mouseEndEvent);
     this.root.addEventListener('mouseup', mouseEndEvent);
   }
-  _moveNode(node, x, y) {
+  _moveNode(node, x, y, isNotEventEmit) {
+    if (!isNotEventEmit) {
+      this.pushActionQueue({
+        type: 'system:moveNodes',
+        data: {
+          node: node,
+          top: y,
+          left: x
+        }
+      });
+    }
     node._moveTo(x, y);
     this.edges.forEach((edge) => {
       if (edge.type === 'endpoint') {
@@ -2676,6 +2695,16 @@ class BaseCanvas extends Canvas {
     });
   }
   _moveGroup(group, x, y) {
+    if (!isNotEventEmit) {
+      this.pushActionQueue({
+        type: 'system:moveGroup',
+        data: {
+          group: group,
+          top: y,
+          left: x
+        }
+      });
+    }
     group._moveTo(x, y);
     this.edges.forEach((edge) => {
       let hasUpdate = _.get(edge, 'sourceNode.group') === group.id ||
@@ -2812,80 +2841,112 @@ class BaseCanvas extends Canvas {
     return _.flatten(points);
   }
   undo () {
-    // console.log(this.actionQueueIndex);
     if (this.actionQueueIndex <= -1) {
       console.warn('回退堆栈已空，无法再undo');
       return ;
     }
     let step = this.actionQueue[this.actionQueueIndex--];
+    if (step.type === '_system:dragNodeEnd') {
+      step = this.actionQueue[this.actionQueueIndex--]
+    }
     if (step.type === 'system:addNodes') {
-      console.log('system:addNodes');
-      console.log(step);
       this.removeNodes(step.data, true, true);
     } else if (step.type === 'system:removeNode') {
-      console.log('system:removeNode');
-      console.log(step);
+      this.addNodes(step.data.nodes, true);
+      this.addEdges(step.data.edges, true);
     } else if (step.type === 'system:addEdges') {
-      console.log('system:addEdges');
-      console.log(step);
       this.removeEdges(step.data, true);
     } else if (step.type === 'system:removeEdges') {
-      console.log('system:removeEdges');
-      console.log(step);
+      this.addEdges(step.data, true);
+    } else if (step.type === 'system:moveNodes') {
+      for (let key in step.data.nodes) {
+        let _nodeInfo = step.data.nodes[key];
+        let _node = this.getNode(key);
+        _node.moveTo(_nodeInfo.fromLeft, _nodeInfo.fromTop, true);
+      }
+    } else if (step.type === 'system:moveGroups') {
+      for (let key in step.data.groups) {
+        let _groupInfo = step.data.groups[key];
+        let _group = this.getNode(key);
+        _group.moveTo(_groupInfo.fromLeft, _groupInfo.fromTop, true);
+      }
     }
-    console.log(this.actionQueueIndex);
   }
   redo () {
-    // console.log(this.actionQueueIndex);
-    // console.log(this.actionQueue);
     if (this.actionQueueIndex + 1 > this.actionQueue.length - 1) {
       console.warn('重做堆栈已到顶，无法再redo');
       return ;
     }
     let step = this.actionQueue[++this.actionQueueIndex];
     if (step.type === 'system:addNodes') {
-      console.log('system:addNodes');
-      console.log(step);
       this.addNodes(step.data, true);
     } else if (step.type === 'system:removeNode') {
-      console.log('system:removeNode');
-      console.log(step);
+      this.removeNodes(step.data.nodes, true);
+      this.removeEdges(step.data.edges, true);
     } else if (step.type === 'system:addEdges') {
-      console.log('system:addEdges');
-      console.log(step);
       this.addEdges(step.data, true);
     } else if (step.type === 'system:removeEdges') {
-      console.log('system:removeEdges');
-      console.log(step);
+      this.removeEdges(step.data, true);
     }
-    console.log(this.actionQueueIndex);
   }
-  // _doStep(step) {
-  //   if (step.type === 'system:addNodes') {
-  //     console.log('system:addNodes');
-  //     console.log(step);
-  //     this.removeNodes(step.data, true, true);
-  //   } else if (step.type === 'system:removeNode') {
-  //     console.log('system:removeNode');
-  //     console.log(step);
-  //   } else if (step.type === 'system:addEdges') {
-  //     console.log('system:addEdges');
-  //     console.log(step);
-  //     this.removeEdges(step.data, true);
-  //   } else if (step.type === 'system:removeEdges') {
-  //     console.log('system:removeEdges');
-  //     console.log(step);
-  //   }
-  // }
   pushActionQueue(option) {
+
+    let step = option;
+
+    //移动节点需要合并堆栈 // todo 和group抽象
+    if (option.type === 'system:moveNodes') {
+      // 堆栈前一个不是moveNode
+      let currentStep = this.actionQueue[this.actionQueueIndex] || {};
+      if (currentStep.type === 'system:moveNodes' && currentStep.data.nodes[option.data.node.id]) {
+        currentStep.data.nodes[option.data.node.id]['toTop'] = option.data.top;
+        currentStep.data.nodes[option.data.node.id]['toLeft'] = option.data.left;
+        return;
+      } else {
+        let moveNodes = [option.data.node];
+        const unionKeys = this._findUnion('nodes', option.data.node);
+        if (unionKeys && unionKeys.length > 0) {
+          unionKeys.forEach((key) => {
+            moveNodes = moveNodes.concat(this._unionData[key].nodes);
+          });
+          moveNodes = _.uniqBy(moveNodes, 'id');
+        }
+
+        step = {
+          type: 'system:moveNodes',
+          data: {
+            nodes: {}
+          }
+        };
+
+        moveNodes.forEach((item) => {
+          step.data.nodes[item.id] = {
+            fromTop: item.top,
+            fromLeft: item.left,
+            toTop: item.top,
+            toLeft: item.left
+          }
+        });
+
+        step.data.nodes[option.data.node.id]['toTop'] = option.data.top;
+        step.data.nodes[option.data.node.id]['toLeft'] = option.data.left;
+        
+      }
+    }
+
     // 堆栈满了，清理
     if (this.actionQueueIndex >= this.global.limitQueueLen) {
       this.actionQueue.shift();
+      this.actionQueueIndex--;
     }
     // 把index前的步骤覆盖掉
-    this.actionQueue.splice(this.actionQueueIndex + 1, this.actionQueue.length);
-    this.actionQueue.push(option);
+    this.actionQueue.splice(this.actionQueueIndex + 1, this.actionQueue.length); // todo可能有问题
+    this.actionQueue.push(step);
     this.actionQueueIndex++;
+
+    if (_.get(this.actionQueue, [this.actionQueueIndex - 1, 'type']) === '_system:dragNodeEnd') {
+      this.actionQueue.splice(this.actionQueueIndex - 1, 1);
+      this.actionQueueIndex--;
+    }
   }
   popActionQueue() {
     if (this.actionQueue.length > 0) {

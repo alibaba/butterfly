@@ -26,9 +26,6 @@ class Diodes extends Component {
       }
     });
     this.canvas.draw(mockData, () => {
-      console.log(this.canvas.actionQueue);
-      console.log(this.canvas.actionQueueIndex);
-      console.log('-------------------');
     });
     this.canvas.on('events', (data) => {
       // console.log(data);
