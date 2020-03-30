@@ -201,6 +201,8 @@ class BaseCanvas extends Canvas {
       }, 20);
     });
     Promise.all([groupPromise, nodePromise, edgePromise]).then(() => {
+      // this.actionQueue = [];
+      // this.actionQueueIndex = -1;
       callback && callback({
         nodes: this.nodes,
         edges: this.edges,
@@ -395,11 +397,11 @@ class BaseCanvas extends Canvas {
         type: 'nodes:add',
         nodes: result
       });
+      this.pushActionQueue({
+        type: 'system:addNodes',
+        data: result
+      });
     }
-    this.pushActionQueue({
-      type: 'system:addNodes',
-      data: result
-    });
     return result;
   }
 
@@ -407,12 +409,35 @@ class BaseCanvas extends Canvas {
     return this.addNodes([node], isNotEventEmit)[0];
   }
 
-  addEdges(links) {
+  addEdges(links, isNotEventEmit) {
     $(this.svg).css('visibility', 'hidden');
 
     const _edgeFragment = document.createDocumentFragment();
     const _labelFragment = document.createDocumentFragment();
     const result = links.map((link) => {
+
+      // link已经存在
+      if (link instanceof Edge) {
+        link._init();
+
+        _edgeFragment.appendChild(link.dom);
+
+        if (link.labelDom) {
+          _labelFragment.appendChild(link.labelDom);
+        }
+
+        if (link.arrowDom) {
+          _edgeFragment.appendChild(link.arrowDom);
+        }
+
+        this.edges.push(link);
+
+        link.mounted && link.mounted();
+        console.log(link);
+        return link;
+      }
+
+      // link不存在的话
       const EdgeClass = link.Class || this.theme.edge.Class;
       if (link.type === 'endpoint') {
         let sourceNode = null;
@@ -507,7 +532,7 @@ class BaseCanvas extends Canvas {
           }
         }
 
-        const edge = new EdgeClass({
+        let edge = new EdgeClass({
           type: 'endpoint',
           id: link.id,
           label: link.label,
@@ -529,6 +554,7 @@ class BaseCanvas extends Canvas {
           _on: this.on.bind(this),
           _emit: this.emit.bind(this),
         });
+
         edge._init();
 
         _edgeFragment.appendChild(edge.dom);
@@ -563,7 +589,7 @@ class BaseCanvas extends Canvas {
           return;
         }
 
-        const edge = new EdgeClass({
+        let edge = new EdgeClass({
           type: 'node',
           id: link.id,
           label: link.label,
@@ -580,6 +606,7 @@ class BaseCanvas extends Canvas {
           _on: this.on.bind(this),
           _emit: this.emit.bind(this),
         });
+
         edge._init();
 
         _edgeFragment.appendChild(edge.dom);
@@ -628,18 +655,20 @@ class BaseCanvas extends Canvas {
       link.redraw(_soucePoint, _targetPoint);
     });
 
-    $(this.svg).css('visibility', 'visible');
+    if (!isNotEventEmit) {
+      this.pushActionQueue({
+        type: 'system:addEdges',
+        data: result
+      });
+    }
 
-    this.pushActionQueue({
-      type: 'system:addEdges',
-      data: result
-    });
+    $(this.svg).css('visibility', 'visible');
 
     return result;
   }
 
-  addEdge(link) {
-    return this.addEdges([link])[0];
+  addEdge(link, isNotEventEmit) {
+    return this.addEdges([link], isNotEventEmit)[0];
   }
 
   addGroups(datas) {
@@ -682,14 +711,14 @@ class BaseCanvas extends Canvas {
           type: 'node:delete',
           node: _rmNodes[0]
         });
+        this.pushActionQueue({
+          type: 'system:removeNode',
+          data: {
+            nodes: [_rmNodes[0]],
+            edges: neighborEdges
+          }
+        });
       }
-      this.pushActionQueue({
-        type: 'remove:node',
-        data: {
-          nodes: [_rmNodes[0]],
-          edges: neighborEdges
-        }
-      });
       return {
         nodes: [_rmNodes[0]],
         edges: neighborEdges,
@@ -701,7 +730,17 @@ class BaseCanvas extends Canvas {
     };
   }
 
-  removeNodes(nodeIds, isNotDelEdge, isNotEventEmit) {
+  removeNodes(nodes, isNotDelEdge, isNotEventEmit) {
+
+    let nodeIds = [];
+    nodeIds = nodes.map((item) => {
+      if (item instanceof Node) {
+        return item.id
+      } else {
+        return item;
+      }
+    });
+
     let rmNodes = [];
     let rmEdges = [];
     nodeIds.map(id => this.removeNode(id, isNotDelEdge, isNotEventEmit)).forEach((result) => {
@@ -768,10 +807,12 @@ class BaseCanvas extends Canvas {
         !isExistEdge && (_rmEdge.targetEndpoint._tmpType = undefined);
       }
     });
-    this.pushActionQueue({
-      type: 'system:removeEdge',
-      data: result
-    });
+    if (!isNotEventEmit) {
+      this.pushActionQueue({
+        type: 'system:removeEdges',
+        data: result
+      });
+    }
     return result;
   }
 
@@ -2771,11 +2812,71 @@ class BaseCanvas extends Canvas {
     return _.flatten(points);
   }
   undo () {
-
+    // console.log(this.actionQueueIndex);
+    if (this.actionQueueIndex <= -1) {
+      console.warn('回退堆栈已空，无法再undo');
+      return ;
+    }
+    let step = this.actionQueue[this.actionQueueIndex--];
+    if (step.type === 'system:addNodes') {
+      console.log('system:addNodes');
+      console.log(step);
+      this.removeNodes(step.data, true, true);
+    } else if (step.type === 'system:removeNode') {
+      console.log('system:removeNode');
+      console.log(step);
+    } else if (step.type === 'system:addEdges') {
+      console.log('system:addEdges');
+      console.log(step);
+      this.removeEdges(step.data, true);
+    } else if (step.type === 'system:removeEdges') {
+      console.log('system:removeEdges');
+      console.log(step);
+    }
+    console.log(this.actionQueueIndex);
   }
   redo () {
-
+    // console.log(this.actionQueueIndex);
+    // console.log(this.actionQueue);
+    if (this.actionQueueIndex + 1 > this.actionQueue.length - 1) {
+      console.warn('重做堆栈已到顶，无法再redo');
+      return ;
+    }
+    let step = this.actionQueue[++this.actionQueueIndex];
+    if (step.type === 'system:addNodes') {
+      console.log('system:addNodes');
+      console.log(step);
+      this.addNodes(step.data, true);
+    } else if (step.type === 'system:removeNode') {
+      console.log('system:removeNode');
+      console.log(step);
+    } else if (step.type === 'system:addEdges') {
+      console.log('system:addEdges');
+      console.log(step);
+      this.addEdges(step.data, true);
+    } else if (step.type === 'system:removeEdges') {
+      console.log('system:removeEdges');
+      console.log(step);
+    }
+    console.log(this.actionQueueIndex);
   }
+  // _doStep(step) {
+  //   if (step.type === 'system:addNodes') {
+  //     console.log('system:addNodes');
+  //     console.log(step);
+  //     this.removeNodes(step.data, true, true);
+  //   } else if (step.type === 'system:removeNode') {
+  //     console.log('system:removeNode');
+  //     console.log(step);
+  //   } else if (step.type === 'system:addEdges') {
+  //     console.log('system:addEdges');
+  //     console.log(step);
+  //     this.removeEdges(step.data, true);
+  //   } else if (step.type === 'system:removeEdges') {
+  //     console.log('system:removeEdges');
+  //     console.log(step);
+  //   }
+  // }
   pushActionQueue(option) {
     // 堆栈满了，清理
     if (this.actionQueueIndex >= this.global.limitQueueLen) {
