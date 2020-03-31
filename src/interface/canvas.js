@@ -1,6 +1,5 @@
 'use strict';
 
-const EventEmit = require('event-emitter');
 const EventEmit3 = require('eventemitter3');
 
 class Canvas extends EventEmit3 {
@@ -14,7 +13,7 @@ class Canvas extends EventEmit3 {
     // disLinkable      是否可取消连线
     // theme            主题配置
     // global           公共配置
-
+    super();
   }
 
   // 渲染节点
