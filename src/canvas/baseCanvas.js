@@ -226,6 +226,7 @@ class BaseCanvas extends Canvas {
   addGroup(group, nodes, options, isNotEventEmit) {
     const container = $(this.wrapper);
     const GroupClass = group.Class || Group;
+    let _newNodes = [];
     const _groupObj = new GroupClass(_.assign(_.cloneDeep(group), {
       _global: this.global,
       _emit: this.emit.bind(this),
@@ -267,7 +268,7 @@ class BaseCanvas extends Canvas {
       _groupObj._moveTo(_groupLeft - _.get(options, 'padding', 5), _groupTop - _.get(options, 'padding', 5));
 
       // 添加节点
-      let _newNodes = nodes.map((_node) => {
+      _newNodes = nodes.map((_node) => {
         let newNode = null;
         // 已存在节点
         let _existNode = _.find(this.nodes, (__node) => {
@@ -325,7 +326,10 @@ class BaseCanvas extends Canvas {
     if (!isNotEventEmit) {
       this.pushActionQueue({
         type: 'system:addGroups',
-        data: [_groupObj]
+        data: [{
+          group: _groupObj,
+          nodes: _newNodes
+        }]
       });
     }
 
@@ -837,7 +841,7 @@ class BaseCanvas extends Canvas {
       console.warn(`未找到id为${groupId}的节点组`);
     }
     group._isDeleting = true;
-    group.nodes.forEach((_node) => {
+    let insideNodes = group.nodes.map((_node) => {
       let rmItem = this.removeNode(_node.id, true, true);
       let rmNode = rmItem.nodes[0];
       let neighborEdges = rmItem.edges;
@@ -851,6 +855,7 @@ class BaseCanvas extends Canvas {
       neighborEdges.forEach((item) => {
         item.redraw();
       });
+      return rmNode;
     });
     // 删除邻近的线条
     const neighborEdges = this.getNeighborEdges(group.id, 'group');
@@ -859,6 +864,17 @@ class BaseCanvas extends Canvas {
     const index = _.findIndex(this.groups, _group => _group.id === groupId);
     this.groups.splice(index, 1)[0];
     group.destroy(isNotEventEmit);
+
+    if (isNotEventEmit) {
+      this.pushActionQueue({
+        type: 'system:removeGroup',
+        data: {
+          group: group,
+          nodes: insideNodes
+        }
+      });
+    }
+
     return group;
   }
 
@@ -2879,8 +2895,14 @@ class BaseCanvas extends Canvas {
         _group.moveTo(_groupInfo.fromLeft, _groupInfo.fromTop, true);
       }
     } else if (step.type === 'system:addGroups') {
-      console.log('system:addGroups');
-      console.log(step);
+      step.data.forEach((item) => {
+        if (item.nodes.length > 0) {
+          this.removeNodes(item.nodes);
+        }
+        this.removeGroup(item.group.id, true);
+      });
+    } else if (step.type === 'system:removeGroup') {
+      this.addGroup(step.data.group, step.data.nodes || [], undefined, true);
     }
   }
   redo () {
@@ -2910,6 +2932,12 @@ class BaseCanvas extends Canvas {
         let _group = this.getGroup(key);
         _group.moveTo(_groupInfo.toLeft, _groupInfo.toTop, true);
       }
+    } else if (step.type === 'system:addGroups') {
+      step.data.forEach((item) => {
+        this.addGroup(item.group, item.nodes || [], undefined, true);
+      })
+    } else if (step.type === 'system:removeGroup') {
+      this.removeGroup(step.data.group, true);
     }
   }
   pushActionQueue(option) {
