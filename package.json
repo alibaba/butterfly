@@ -48,7 +48,7 @@
   "dependencies": {
     "d3-force": "~2.0.1",
     "dom-to-image": "~2.6.0",
-    "event-emitter": "~0.3.5"
+    "eventemitter3": "4.0.0"
   },
   "keywords": [
     "节点式编程，数据图，流程图，连通图"
