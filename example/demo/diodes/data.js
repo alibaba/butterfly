@@ -163,5 +163,14 @@ module.exports = {
     color: 'purple',
     type: 'endpoint',
     Class: Edge
+  }],
+  groups: [{
+    id: 'group_1',
+    options: {
+      title: '测试'
+    },
+    top: 100,
+    left: 100,
+    resize: true
   }]
 }

@@ -188,12 +188,13 @@ class BaseGroup extends Group {
     this.top = y;
     this.left = x;
   }
-  moveTo(x, y) {
+  moveTo(x, y, isNotEventEmit) {
     this._emit('InnerEvents', {
       type: 'group:move',
       group: this,
-      x: x,
-      y: y
+      x,
+      y,
+      isNotEventEmit
     });
   }
   focus() {
@@ -288,19 +289,21 @@ class BaseGroup extends Group {
     this.endpoints.push(endpoint);
     return endpoint;
   }
-  destroy() {
+  destroy(isNotEventEmit) {
     this.endpoints.forEach((item) => {
-      item.destroy();
+      !item._isInitedDom && item.destroy();
     });
     $(this.dom).off();
     $(this.dom).remove();
-    this._emit('system.group.delete', {
-      group: this
-    });
-    this._emit('events', {
-      type: 'group:delete',
-      group: this
-    });
+    if (!isNotEventEmit) {
+      this._emit('system.group.delete', {
+        group: this
+      });
+      this._emit('events', {
+        type: 'group:delete',
+        group: this
+      });
+    }
   }
 }
 

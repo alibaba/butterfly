@@ -223,7 +223,7 @@ class BaseCanvas extends Canvas {
     return _.find(this.groups, item => item.id === id);
   }
 
-  addGroup(group, nodes, options) {
+  addGroup(group, nodes, options, isNotEventEmit) {
     const container = $(this.wrapper);
     const GroupClass = group.Class || Group;
     const _groupObj = new GroupClass(_.assign(_.cloneDeep(group), {
@@ -321,6 +321,14 @@ class BaseCanvas extends Canvas {
       });
       _groupObj.setSize(_groupWidth + _.get(options, 'padding', 5) * 2, _groupHeight + _.get(options, 'padding', 5) * 2);
     }
+
+    if (!isNotEventEmit) {
+      this.pushActionQueue({
+        type: 'system:addGroups',
+        data: [_groupObj]
+      });
+    }
+
     return _groupObj;
   }
 
@@ -823,7 +831,7 @@ class BaseCanvas extends Canvas {
     return this.removeEdges([edge], isNotEventEmit)[0];
   }
 
-  removeGroup(groupId) {
+  removeGroup(groupId, isNotEventEmit) {
     const group = this.getGroup(groupId);
     if (!group) {
       console.warn(`未找到id为${groupId}的节点组`);
@@ -846,11 +854,11 @@ class BaseCanvas extends Canvas {
     });
     // 删除邻近的线条
     const neighborEdges = this.getNeighborEdges(group.id, 'group');
-    this.removeEdges(neighborEdges);
+    this.removeEdges(neighborEdges, isNotEventEmit);
     // 删除group
     const index = _.findIndex(this.groups, _group => _group.id === groupId);
     this.groups.splice(index, 1)[0];
-    group.destroy();
+    group.destroy(isNotEventEmit);
     return group;
   }
 
@@ -2694,10 +2702,10 @@ class BaseCanvas extends Canvas {
       }
     });
   }
-  _moveGroup(group, x, y) {
+  _moveGroup(group, x, y, isNotEventEmit) {
     if (!isNotEventEmit) {
       this.pushActionQueue({
-        type: 'system:moveGroup',
+        type: 'system:moveGroups',
         data: {
           group: group,
           top: y,
@@ -2867,9 +2875,12 @@ class BaseCanvas extends Canvas {
     } else if (step.type === 'system:moveGroups') {
       for (let key in step.data.groups) {
         let _groupInfo = step.data.groups[key];
-        let _group = this.getNode(key);
+        let _group = this.getGroup(key);
         _group.moveTo(_groupInfo.fromLeft, _groupInfo.fromTop, true);
       }
+    } else if (step.type === 'system:addGroups') {
+      console.log('system:addGroups');
+      console.log(step);
     }
   }
   redo () {
@@ -2887,49 +2898,65 @@ class BaseCanvas extends Canvas {
       this.addEdges(step.data, true);
     } else if (step.type === 'system:removeEdges') {
       this.removeEdges(step.data, true);
+    } else if (step.type === 'system:moveNodes') {
+      for (let key in step.data.nodes) {
+        let _nodeInfo = step.data.nodes[key];
+        let _node = this.getNode(key);
+        _node.moveTo(_nodeInfo.toLeft, _nodeInfo.toTop, true);
+      }
+    } else if (step.type === 'system:moveGroups') {
+      for (let key in step.data.groups) {
+        let _groupInfo = step.data.groups[key];
+        let _group = this.getGroup(key);
+        _group.moveTo(_groupInfo.toLeft, _groupInfo.toTop, true);
+      }
     }
   }
   pushActionQueue(option) {
 
     let step = option;
+    //移动节点需要合并堆栈
+    if (option.type === 'system:moveNodes' || option.type === 'system:moveGroups') {
 
-    //移动节点需要合并堆栈 // todo 和group抽象
-    if (option.type === 'system:moveNodes') {
+      let _type = {
+        'system:moveNodes': 'node',
+        'system:moveGroups': 'group'
+      }[option.type];
+      let _types = _type + 's';
+
       // 堆栈前一个不是moveNode
       let currentStep = this.actionQueue[this.actionQueueIndex] || {};
-      if (currentStep.type === 'system:moveNodes' && currentStep.data.nodes[option.data.node.id]) {
-        currentStep.data.nodes[option.data.node.id]['toTop'] = option.data.top;
-        currentStep.data.nodes[option.data.node.id]['toLeft'] = option.data.left;
+      if (currentStep.type === option.type && currentStep.data[_types][option.data[_type].id]) {
+        currentStep.data[_types][option.data[_type].id]['toTop'] = option.data.top;
+        currentStep.data[_types][option.data[_type].id]['toLeft'] = option.data.left;
         return;
       } else {
-        let moveNodes = [option.data.node];
-        const unionKeys = this._findUnion('nodes', option.data.node);
+        let moveItems = [option.data[_type]];
+        const unionKeys = this._findUnion(_types, option.data[_type]);
         if (unionKeys && unionKeys.length > 0) {
           unionKeys.forEach((key) => {
-            moveNodes = moveNodes.concat(this._unionData[key].nodes);
+            moveItems = moveItems.concat(this._unionData[key][_types]);
           });
-          moveNodes = _.uniqBy(moveNodes, 'id');
+          moveItems = _.uniqBy(moveItems, 'id');
         }
 
         step = {
-          type: 'system:moveNodes',
+          type: option.type,
           data: {
-            nodes: {}
+            [_types]: {}
           }
         };
 
-        moveNodes.forEach((item) => {
-          step.data.nodes[item.id] = {
+        moveItems.forEach((item) => {
+          step.data[_types][item.id] = {
             fromTop: item.top,
             fromLeft: item.left,
             toTop: item.top,
             toLeft: item.left
           }
         });
-
-        step.data.nodes[option.data.node.id]['toTop'] = option.data.top;
-        step.data.nodes[option.data.node.id]['toLeft'] = option.data.left;
-        
+        step.data[_types][option.data[_type].id]['toTop'] = option.data.top;
+        step.data[_types][option.data[_type].id]['toLeft'] = option.data.left;
       }
     }
 
