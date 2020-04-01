@@ -353,6 +353,34 @@ updateRootResize = () => {}
   */
 getNeighborNodesAndEdgesByLevel = (options) => {}
 
+/**
+  * add the topmost element to the action queue
+  * @param {Object} options - params
+  * @param {String} options.type - element type
+  * @param {Object} options.data - element data
+  */
+pushActionQueue = (options) => {}
+
+/**
+  * remove topmost element from action queue
+  */
+popActionQueue = (options) => {}
+
+/**
+  * clear action queue
+  */
+clearActionQueue = (options) => {}
+
+/**
+  * redo action
+  */
+redo = (options) => {}
+
+/**
+  * rollback action
+  */
+undo = (options) => {}
+
 ```
 
 
