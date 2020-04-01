@@ -25,23 +25,14 @@ class Diodes extends Component {
         }
       }
     });
-    this.canvas.draw(mockData, () => {
-    });
+    this.canvas.draw(mockData);
     this.canvas.on('events', (data) => {
-      // console.log(data);
+      console.log(data);
     });
-  }
-  unDo() {
-    this.canvas.undo();
-  }
-  reDo() {
-    this.canvas.redo();
   }
   render() {
     return (
       <div className='diodes-page'>
-        <button className='undo-btn' onClick={this.unDo.bind(this)}>undo</button>
-        <button className='redo-btn' onClick={this.reDo.bind(this)}>redo</button>
         <div className="diodes-canvas" id="dag-canvas">
         </div>
       </div>
