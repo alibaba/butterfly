@@ -88,7 +88,7 @@ class BaseGroup extends Group {
     this.updated && this.updated();
     return group[0];
   }
-  addNodes(nodes = []) {
+  addNodes(nodes = [], isNotEventEmit) {
     let _nodes = [];
     nodes.forEach((item) => {
       if (ScopeCompare(item.scope, this.scope, _.get(this, '_global.isScopeStrict'))) {
@@ -100,14 +100,14 @@ class BaseGroup extends Group {
     this._emit('InnerEvents', {
       type: 'group:addNodes',
       nodes: nodes,
-      group: this
+      group: this,
+      isNotEventEmit
     });
   }
   addNode(node) {
     this.addNodes([node]);
   }
-  removeNodes(nodes = []) {
-    // 这里需要斟酌下
+  removeNodes(nodes = [], isNotEventEmit) {
     let rmNodes = [];
     this.nodes.forEach((item) => {
       let _node = _.find(nodes, (_node) => {
@@ -115,22 +115,35 @@ class BaseGroup extends Group {
       });
       if (_node) {
         rmNodes.push(_node);
-        _node.dom.remove();
       }
-    });
+    })
+    // this.nodes.forEach((item) => {
+    //   let _node = _.find(nodes, (_node) => {
+    //     return _node.id === item.id;
+    //   });
+    //   if (_node) {
+    //     rmNodes.push(_node);
+    //   }
+    // });
     this._emit('InnerEvents', {
       type: 'group:removeNodes',
-      nodes: rmNodes
+      group: this,
+      nodes: rmNodes,
+      isNotEventEmit
     });
-    this.emit('events', {
-      type: 'system.group.addMembers',
-      nodes: [rmNode],
-      group: targetGroup
-    });
-    this.emit('system.group.addMembers', {
-      nodes: [rmNode],
-      group: targetGroup
-    });
+    if (!isNotEventEmit) {
+      this.emit('events', {
+        type: 'system.group.removeNodes',
+        group: this,
+        nodes: rmNodes,
+        group: targetGroup
+      });
+      this.emit('system.group.removeNodes', {
+        group: this,
+        nodes: rmNodes,
+        group: targetGroup
+      });
+    }
     return rmNodes;
   }
   removeNode(node) {
@@ -188,12 +201,13 @@ class BaseGroup extends Group {
     this.top = y;
     this.left = x;
   }
-  moveTo(x, y) {
+  moveTo(x, y, isNotEventEmit) {
     this._emit('InnerEvents', {
       type: 'group:move',
       group: this,
-      x: x,
-      y: y
+      x,
+      y,
+      isNotEventEmit
     });
   }
   focus() {
@@ -288,19 +302,21 @@ class BaseGroup extends Group {
     this.endpoints.push(endpoint);
     return endpoint;
   }
-  destroy() {
+  destroy(isNotEventEmit) {
     this.endpoints.forEach((item) => {
-      item.destroy();
+      !item._isInitedDom && item.destroy();
     });
     $(this.dom).off();
     $(this.dom).remove();
-    this._emit('system.group.delete', {
-      group: this
-    });
-    this._emit('events', {
-      type: 'group:delete',
-      group: this
-    });
+    if (!isNotEventEmit) {
+      this._emit('system.group.delete', {
+        group: this
+      });
+      this._emit('events', {
+        type: 'group:delete',
+        group: this
+      });
+    }
   }
 }
 

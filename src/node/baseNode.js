@@ -126,7 +126,6 @@ class BaseNode extends Node {
         dom: this.dom,
         options: this.options
       }, obj));
-  
       this._addEventListener();
     }
   }
@@ -141,12 +140,13 @@ class BaseNode extends Node {
     this.top = y;
     this.left = x;
   }
-  moveTo(x, y) {
+  moveTo(x, y, isNotEventEmit) {
     this._emit('InnerEvents', {
       type: 'node:move',
       node: this,
-      x: x,
-      y: y
+      x,
+      y,
+      isNotEventEmit
     });
   }
 
@@ -215,7 +215,7 @@ class BaseNode extends Node {
   destroy(isNotEvent) {
     if (!isNotEvent) {
       this.endpoints.forEach((item) => {
-        item.destroy();
+        !item._isInitedDom && item.destroy();
       });
       $(this.dom).remove();
     } else {
