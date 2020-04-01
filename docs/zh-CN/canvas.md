@@ -143,8 +143,9 @@ removeEdges = (param) => {}
 /**
   * 设置画布缩放
   * @param {true|false} boolean  - 是否支持画布缩放
+  * @param {true|false} boolean  - 放大缩小方向。现在默认为mac的双指方向，却于window的鼠标滑轮方向相反。默认值：false。若true，则方向相反
   */
-setZoomable = (boolean) => {}
+setZoomable = (boolean, boolean) => {}
 
 /**
   * 设置画布平移
@@ -352,6 +353,34 @@ updateRootResize = () => {}
   * @returns {Object<nodes: Node, edges: Edge>} filteredGraph - 查找结果
   */
 getNeighborNodesAndEdgesByLevel = (options) => {}
+
+/**
+  * 给操作队列新增最顶部元素
+  * @param {Object} options - 参数
+  * @param {String} options.type - 队列类型
+  * @param {Object} options.data - 队列数据
+  */
+pushActionQueue = (options) => {}
+
+/**
+  * 给操作队列删除最顶部元素
+  */
+popActionQueue = (options) => {}
+
+/**
+  * 清除操作队列
+  */
+clearActionQueue = (options) => {}
+
+/**
+  * 重做操作
+  */
+redo = (options) => {}
+
+/**
+  * 回退操作
+  */
+undo = (options) => {}
 
 ```
 

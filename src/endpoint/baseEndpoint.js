@@ -66,6 +66,7 @@ class Endpoint {
       // 计算width,height,left,top
       this._width = $(this.dom).width();
       this._height = $(this.dom).height();
+
       this._left = this._coordinateService._terminal2canvas('x', $(this.dom).offset().left);
       this._top = this._coordinateService._terminal2canvas('y', $(this.dom).offset().top);
 
@@ -146,7 +147,6 @@ class Endpoint {
       } else if (_oy === 1) {
         result[1] = !this.root ? nodeH - eOffsetY : targetDomH - eOffsetY;
       }
-
       // 计算绝对定位
       if (_currentNode && !this.root) {
         _offsetTop += _currentNode.top;
@@ -167,7 +167,6 @@ class Endpoint {
         this._posTop += _currentNode._group.top;
         this._posLeft += _currentNode._group.left;
       }
-
       $(dom)
         .css('top', this._top)
         .css('left', this._left);

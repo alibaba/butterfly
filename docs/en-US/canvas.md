@@ -142,6 +142,7 @@ removeEdges = (param) => {}
 /**
   * set canvas zoomable
   * @param {true|false} boolean 
+  * @param {true|false} boolean  - the direction of zoom。Now it defaults to the two finger direction of MAC, but it is opposite to the mouse wheel direction of window. Default value: false. If true, the direction is opposite
   */
 setZoomable = (boolean) => {}
 
@@ -351,6 +352,34 @@ updateRootResize = () => {}
   * @returns {Object<nodes: Node, edges: Edge>} filteredGraph - lookup result
   */
 getNeighborNodesAndEdgesByLevel = (options) => {}
+
+/**
+  * add the topmost element to the action queue
+  * @param {Object} options - params
+  * @param {String} options.type - element type
+  * @param {Object} options.data - element data
+  */
+pushActionQueue = (options) => {}
+
+/**
+  * remove topmost element from action queue
+  */
+popActionQueue = (options) => {}
+
+/**
+  * clear action queue
+  */
+clearActionQueue = (options) => {}
+
+/**
+  * redo action
+  */
+redo = (options) => {}
+
+/**
+  * rollback action
+  */
+undo = (options) => {}
 
 ```
 

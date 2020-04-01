@@ -91,8 +91,10 @@ on = (string, callback) => {}
 /**
   * add edge animation
   * @param {obj} options(Optional) - animation configure
-  * @param {number} options.r (Optional) - animation node radius
+  * @param {number} options.radius (Optional) - animation node radius
   * @param {string} options.color (Optional) - animation node color
+  * @param {string} options.dur (Optional) - animation run time，for example：1s
+  * @param {number|string} options.repeatCount (Optional) - number of animation repetitions，for example：1 or 'indefinite'
   */
 addAnimate = (options) => {}
 ```

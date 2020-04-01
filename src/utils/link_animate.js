@@ -16,13 +16,13 @@ let addAnimate = (targetDom, path, options, animateDom) => {
     let circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     circle.setAttribute('cx', 0);
     circle.setAttribute('cy', 0);
-    circle.setAttribute('r', options.r || 2);
+    circle.setAttribute('r', options.radius || 2);
     circle.setAttribute('fill', options.color || '#999');
     let motion = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion');
     motion.setAttribute('path', path);
     motion.setAttribute('begin', '0s');
-    motion.setAttribute('dur', '8s');
-    motion.setAttribute('repeatCount', 'indefinite');
+    motion.setAttribute('dur', options.dur || '8s');
+    motion.setAttribute('repeatCount', options.repeatCount || 'indefinite');
     circle.append(motion);
     _animateDom = circle;
   }
