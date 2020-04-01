@@ -19,9 +19,7 @@ class BaseNode extends Node {
 
     this._createTitle(container);
     this._createChildNode(container);
-    this._addNode(container);
-    this._editNode(container);
-    
+
     return container[0];
   }
 
@@ -32,59 +30,67 @@ class BaseNode extends Node {
       <span>${this.options.name}</span>
       <span class="add-node"><i class="iconfont">&#xe639;</i></span>
     </div>`);
-    
+
     dom.append(title);
+    this._addNode(title);
+    this.removeChildNode(title);
   }
   
   _createChildNode(dom = this.dom) {
     $.each(this.options.data.content, (i, item) => {
-      dom.append(`<div class="content"><span class=remove><i class="iconfont">&#xe63a;</i></span><span class="text">${item}</span><span class="edit"><i class="iconfont">&#xe683;</i></span></div>`);
+      dom.append(`
+      <div class="content">
+        <span class="remove"><i class="iconfont">&#xe63a;</i></span>
+        <span class="text">${item}</span>
+        <span class="edit"><i class="iconfont">&#xe683;</i></span>
+      </div>`);
     });
+
+    let childNode = dom.find('.content');
+
+    this.removeChildNode(childNode);
+    this._editNode(childNode);
   }
 
-  removeChildNode() {
-    $(function () {
-      $(`.content > .remove, .title > .remove`).each(function (index) {
-        $(this).on('click', function () {
-          this.parentNode.remove();
-        });
-      });
-    });
+  removeChildNode(dom = this.dom) {
+    dom.find('.remove').on('click', function () {
+      this.parentNode.remove();
+    })
   }
 
   _editNode(dom = this.dom) {
-    $(dom).find('.edit').each(function() {
-      $(this).on('click', function (e) {
-        const oldNode = $(this).prev('.text').html();
-        $(this).prev('.text').html(`<input type=text name=editname class=input-text value=${oldNode} />`);
-        $(this).prev('.text').children().keyup(function (event) {
+    dom.find('.edit').click(function () {
+      const oldNode = $(this).prev('.text');
+
+      if ($(oldNode.html()).attr("type") !== 'text') {
+        oldNode.html(`<input type=text name=editname class=input-text value=${oldNode.html()} />`);
+        oldNode.children().keyup(function (event) {
           if (event.keyCode === 13 || event.keyCode === 27) {
             const oldInputText = $(this).val();
-            $(this).parent('.text').text(oldInputText);
+
+            oldNode.text(oldInputText);
           }
         });
-      });
+      }
     })
   }
 
   _addNode(dom = this.dom) {
-      $(dom).find('.add-node').each(function () {
-        $(this).on('click', function(e) {
-          let code = '';
-          const codeLength = 4;
-          const random = new Array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
-          for (let i = 0; i < codeLength; i++) {
-            const index = Math.floor(Math.random() * 36);
-            code += random[index];
-          }
-          dom.append(`
-            <div class="content">
-              <span class=remove><i class="iconfont">&#xe63a;</i></span>
-              <span>${code}</span>
-              <span class="edit"><i class="iconfont">&#xe683;</i></span>
-            </div>`);
-        });
-      })
+    dom.find('.add-node').click(function() {
+    let code = '';
+    const codeLength = 4;
+    const random = new Array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
+    for (let i = 0; i < codeLength; i++) {
+      const index = Math.floor(Math.random() * 36);
+      code += random[index];
+    }
+    dom.parent('.base-node').append(`
+    <div class="content">
+      <span class=remove><i class="iconfont">&#xe63a;</i></span>
+      <span>${code}</span>
+      <span class="edit"><i class="iconfont">&#xe683;</i></span>
+    </div>`);
+    });
   }
 }
 module.exports = BaseNode;

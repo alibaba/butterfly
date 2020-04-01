@@ -2,6 +2,7 @@
   width: 100%;
   height: 100%;
   position: relative;
+  padding-bottom: 30px;
   .butterfly-minimap-container {
     top: 30px;
     right: 30px !important;
@@ -20,6 +21,12 @@
           background: #255c82;
           padding: 0 8px;
           color: #fff;
+          .remove {
+            cursor: pointer;
+          }
+          .add-node {
+            cursor: pointer;
+          }
         }
         .content {
           height: 32px;
@@ -30,6 +37,9 @@
           padding: 0 8px;
           background: #c7dbd2;
           border-bottom: 1px solid #000;
+          .remove {
+            cursor: pointer;
+          }
           .text {
             .input-text {
               height: 28px;
@@ -38,73 +48,54 @@
               padding: 0 4px;
             }
           }
-        }
-      }
-      .group {
-        margin-bottom: 20px;
-        .container {
-          display: flex;
-          padding: 0 8px;
-          justify-content: space-between;
-          p {
-            padding-top: 8px;
-            .input-text-group {
-              width: 100%;
-              height: 100px;
-            }
-          }
-          span {
+          .edit {
             cursor: pointer;
           }
         }
+      }
+      .group-node {
+        width: 200px;
+        position: absolute;
+        margin-bottom: 50px;
         .title {
-          display: flex ;
+          line-height: 32px;
+          height: 32px;
+          width: 100%;
+          display: flex;
           justify-content: space-between;
-          align-items: center;
+          background: #146297;;
           padding: 0 8px;
+          color: #fff;
+          .title-text {
+            input {
+              width: 140px;
+              color: #333;
+              height: 28px;
+              border: 1px solid #ccc;
+            }
+          }
           #close {
             cursor: pointer;
           }
-          #title-text {
-            .input-text {
-              color: #000;
-              height: 20px;
-              border: 1px solid #000;
-            }
-          }
-          #title-edit {
+          .alis-node-edit {
             cursor: pointer;
-            .iconfont.datac-icon {
-              line-height: 26px;
-              font-size: 24px;
-            }
           }
         }
-      }
-    }
-  }
-  .label-name-title {
-    position: absolute;
-    top: 10px;
-    .label-name-box {
-      position: relative;
-      span:nth-of-type(1) {
-        position: absolute;
-        top: -150px;
-        left: -13px;
-        font-size: 20px;
-      }
-      span:nth-of-type(2) {
-        position: absolute;
-        top: -10px;
-        left: -5px;
-        font-size: 20px;
-      }
-      span:nth-of-type(3) {
-        position: absolute;
-        top: 140px;
-        left: 5px;
-        font-size: 20px;
+        .container {
+          display: flex;
+          padding: 8px;
+          justify-content: space-between;
+          border: 1px solid #ccc;
+          p {
+            textarea {
+              min-height: 80px;
+              width: 164px;
+            }
+          }
+          .alis-node-edit {
+            cursor: pointer;
+          }
+        }
       }
     }
   }

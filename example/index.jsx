@@ -11,6 +11,7 @@ import Diodes from './demo/diodes/index.jsx';
 import Force from './demo/force/index.jsx';
 import ServerLess from './demo/serverless/index.jsx';
 import RelationalNetwork from './demo/relationalNetwork/index.jsx';
+import RelationalBooks from './demo/relationalBooks/index.jsx';
 import System from './demo/system/index.jsx';
 import liteGraph from './demo/liteGraph/index.jsx';
 import EntityRelationship from './demo/entityRelationship/index.jsx';
@@ -57,6 +58,9 @@ ReactDOM.render((
             <Menu.Item key="compactBoxTree">
               <Link to="/compactBoxTree">CompactBoxTree</Link>
             </Menu.Item>
+            <Menu.Item key="relationarBooks">
+              <Link to="/relationalbooks">RelationalBooks</Link>
+            </Menu.Item>
             </Menu>
           </Sider>
           <Content>
@@ -70,6 +74,7 @@ ReactDOM.render((
             <Route path="/lite_graph" component={liteGraph} />
             <Route path="/entity" component={EntityRelationship} />
             <Route path="/compactBoxTree" component={CompactBoxTree} />
+            <Route path="/relationalbooks" component={RelationalBooks} />
           </Content>
         </Layout>
       </Layout>
