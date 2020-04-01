@@ -1837,36 +1837,40 @@ class BaseCanvas extends Canvas {
             let neighborEdges = [];
             let rmItem = this.removeNode(item.id, true, true);
             let rmNode = rmItem.nodes[0];
+            let _group = data.group;
             neighborEdges = rmItem.edges;
             rmNode._init({
-              top: item.top,
-              left: item.left,
+              top: item.top - _group.top,
+              left: item.left - _group.left,
               dom: rmNode.dom,
-              group: data.group.id
+              group: _group.id
             });
             this.addNode(rmNode, true);
-            neighborEdges.forEach((item) => {
-              item.redraw();
-            });
           }
         });
-        this.emit('events', {
-          type: 'system.group.addMembers',
-          nodes: data.nodes,
-          group: data.group
-        });
-        this.emit('system.group.addMembers', {
-          nodes: data.nodes,
-          group: data.group
-        });
-      } else if (data.type === 'group:removeNodes') {
-        _.get(data, 'nodes', []).forEach((item) => {
-          let _nodeIndex = _.findIndex(this.nodes, (_node) => {
-            return item.id === _node.id;
+        if (!data.isNotEventEmit) {
+          this.emit('events', {
+            type: 'system.group.addMembers',
+            nodes: data.nodes,
+            group: data.group
           });
-          if (_nodeIndex !== -1) {
-            this.nodes.splice(_nodeIndex, 1);
-          }
+          this.emit('system.group.addMembers', {
+            nodes: data.nodes,
+            group: data.group
+          });
+        }
+      } else if (data.type === 'group:removeNodes') {
+        let _group = data.group;
+        _.get(data, 'nodes', []).forEach((item) => {
+          this.removeNode(item.id, true, true);
+          item._init({
+            group: undefined,
+            left: item.left + _group.left,
+            top: item.top + _group.top,
+            dom: item.dom,
+            _isDeleteGroup: true
+          });
+          this.addNode(item, true);
         });
       }
     });
@@ -2547,7 +2551,10 @@ class BaseCanvas extends Canvas {
                 dom: rmNode.dom,
                 _isDeleteGroup: true
               };
-
+              let step = this.actionQueue[this.actionQueueIndex];
+              if (step.type === 'system:moveNodes') {
+                step.data._isDraging = true;
+              }
               this.emit('events', {
                 type: 'system.group.removeMembers',
                 group: sourceGroup,
@@ -2557,6 +2564,15 @@ class BaseCanvas extends Canvas {
                 group: sourceGroup,
                 nodes: [rmNode]
               });
+
+              this.pushActionQueue({
+                type: 'system:groupRemoveMembers',
+                data: {
+                  group: sourceGroup,
+                  nodes: [rmNode],
+                  _isDraging: true
+                }
+              })
 
               if (targetGroup) {
                 if (ScopeCompare(dragNode.scope, targetGroup.scope, _.get(this, 'global.isScopeStrict'))) {
@@ -2573,6 +2589,17 @@ class BaseCanvas extends Canvas {
                     nodes: [rmNode],
                     group: targetGroup
                   });
+                  this.popActionQueue();
+                  this.pushActionQueue({
+                    type: 'system:groupAddMembers',
+                    data: {
+                      sourceGroup: sourceGroup,
+                      targetGroup: targetGroup,
+                      nodes: [rmNode],
+                      _isDraging: true
+                    }
+                  });
+
                 } else {
                   console.warn(`nodeId为${dragNode.id}的节点和groupId${targetGroup.id}的节点组scope值不符，无法加入`);
                 }
@@ -2602,6 +2629,19 @@ class BaseCanvas extends Canvas {
                 this.emit('system.group.addMembers', {
                   nodes: [rmNode],
                   group: targetGroup
+                });
+                let step = this.actionQueue[this.actionQueueIndex];
+                if (step.type === 'system:moveNodes') {
+                  step.data._isDraging = true;
+                }
+                this.pushActionQueue({
+                  type: 'system:groupAddMembers',
+                  data: {
+                    sourceGroup: undefined,
+                    targetGroup: targetGroup,
+                    nodes: [rmNode],
+                    _isDraging: true
+                  }
                 });
                 _updateNeighborEdge(rmNode, neighborEdges);
               } else {
@@ -2871,7 +2911,7 @@ class BaseCanvas extends Canvas {
     }
     let step = this.actionQueue[this.actionQueueIndex--];
     if (step.type === '_system:dragNodeEnd') {
-      step = this.actionQueue[this.actionQueueIndex--]
+      step = this.actionQueue[this.actionQueueIndex--];
     }
     if (step.type === 'system:addNodes') {
       this.removeNodes(step.data, true, true);
@@ -2903,6 +2943,54 @@ class BaseCanvas extends Canvas {
       });
     } else if (step.type === 'system:removeGroup') {
       this.addGroup(step.data.group, step.data.nodes || [], undefined, true);
+    } else if (step.type === 'system:groupAddMembers') {
+      let sourceGroup = step.data.sourceGroup;
+      let targetGroup = step.data.targetGroup;
+
+      if (targetGroup) {
+        targetGroup.removeNodes(step.data.nodes, true);
+      }
+      
+      if (sourceGroup) {
+        sourceGroup.addNodes(step.data.nodes, true);
+      }
+
+      let _preStep = {};
+      if (step.data._isDraging) {
+        _preStep = this.actionQueue[this.actionQueueIndex];
+        if (_preStep.type === 'system:moveNodes') {
+          for (let key in _preStep.data.nodes) {
+            let _nodeInfo = _preStep.data.nodes[key];
+            let _node = this.getNode(key);
+            _node.moveTo(_nodeInfo.fromLeft, _nodeInfo.fromTop, true);
+          }
+        }
+      }
+
+      this.actionQueueIndex--;
+
+    } else if (step.type === 'system:groupRemoveMembers') {
+
+      let group = step.data.group;
+      
+      if (group) {
+        group.addNodes(step.data.nodes, true);
+      }
+
+      let _preStep = {};
+      if (step.data._isDraging) {
+        _preStep = this.actionQueue[this.actionQueueIndex];
+        if (_preStep.type === 'system:moveNodes') {
+          for (let key in _preStep.data.nodes) {
+            let _nodeInfo = _preStep.data.nodes[key];
+            let _node = this.getNode(key);
+            _node.moveTo(_nodeInfo.fromLeft, _nodeInfo.fromTop, true);
+          }
+          this.actionQueueIndex--;
+        }
+      }
+      
+      this.actionQueueIndex--;
     }
   }
   redo () {
@@ -2911,6 +2999,9 @@ class BaseCanvas extends Canvas {
       return ;
     }
     let step = this.actionQueue[++this.actionQueueIndex];
+    if (step.type === 'system:moveNodes' && step.data._isDraging) {
+      step = this.actionQueue[++this.actionQueueIndex];
+    }
     if (step.type === 'system:addNodes') {
       this.addNodes(step.data, true);
     } else if (step.type === 'system:removeNode') {
@@ -2938,6 +3029,47 @@ class BaseCanvas extends Canvas {
       })
     } else if (step.type === 'system:removeGroup') {
       this.removeGroup(step.data.group, true);
+    } else if (step.type === 'system:groupAddMembers') {
+      let sourceGroup = step.data.sourceGroup;
+      let targetGroup = step.data.targetGroup;
+
+      let _preStep = this.actionQueue[this.actionQueueIndex - 1];
+
+      if (_preStep.type === 'system:moveNodes' && _preStep.data._isDraging) {
+        for (let key in _preStep.data.nodes) {
+          let _nodeInfo = _preStep.data.nodes[key];
+          let _node = this.getNode(key);
+          _node.moveTo(_nodeInfo.toLeft, _nodeInfo.toTop, true);
+        }
+      }
+
+      if (targetGroup) {
+        targetGroup.addNodes(step.data.nodes, true);
+      }
+
+      if (sourceGroup) {
+        sourceGroup.removeNodes(step.data.nodes, true);
+      }
+
+    } else if (step.type === 'system:groupRemoveMembers') {
+      let group = step.data.group;
+      
+      if (group) {
+        group.removeNodes(step.data.nodes, true);
+      }
+
+      let _preStep = {};
+      if (step.data._isDraging) {
+        _preStep = this.actionQueue[this.actionQueueIndex];
+        if (_preStep.type === 'system:moveNodes') {
+          for (let key in _preStep.data.nodes) {
+            let _nodeInfo = _preStep.data.nodes[key];
+            let _node = this.getNode(key);
+            _node.moveTo(_nodeInfo.fromLeft, _nodeInfo.fromTop, true);
+          }
+          this.actionQueueIndex--;
+        }
+      }
     }
   }
   pushActionQueue(option) {
