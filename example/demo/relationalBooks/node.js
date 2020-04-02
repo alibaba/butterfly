@@ -2,7 +2,6 @@
 
 const Node = require('../../../index.js').Node;
 const $ = require('jquery');
-require('./node.less');
 
 class BaseNode extends Node {
   constructor(opts) {
@@ -23,7 +22,7 @@ class BaseNode extends Node {
     return container[0];
   }
 
-  _createTitle(dom = this.dom) {
+  _createTitle(dom) {
     let title = $(`
     <div class='title'>
       <span class="remove"><i class="iconfont">&#xe63a;</i></span>
@@ -32,11 +31,11 @@ class BaseNode extends Node {
     </div>`);
 
     dom.append(title);
-    this._addNode(title);
-    this.removeChildNode(title);
+    this._onAddNode(title);
+    this._onRemovedNode(title);
   }
   
-  _createChildNode(dom = this.dom) {
+  _createChildNode(dom) {
     $.each(this.options.data.content, (i, item) => {
       dom.append(`
       <div class="content">
@@ -48,17 +47,17 @@ class BaseNode extends Node {
 
     let childNode = dom.find('.content');
 
-    this.removeChildNode(childNode);
-    this._editNode(childNode);
+    this._onRemovedNode(childNode);
+    this._onEditNode(childNode);
   }
 
-  removeChildNode(dom = this.dom) {
+  _onRemovedNode(dom) {
     dom.find('.remove').on('click', function () {
       this.parentNode.remove();
     })
   }
 
-  _editNode(dom = this.dom) {
+  _onEditNode(dom) {
     dom.find('.edit').click(function () {
       const oldNode = $(this).prev('.text');
 
@@ -75,21 +74,23 @@ class BaseNode extends Node {
     })
   }
 
-  _addNode(dom = this.dom) {
+  _onAddNode(dom) {
     dom.find('.add-node').click(function() {
     let code = '';
     const codeLength = 4;
     const random = new Array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
+
     for (let i = 0; i < codeLength; i++) {
       const index = Math.floor(Math.random() * 36);
       code += random[index];
     }
+
     dom.parent('.base-node').append(`
-    <div class="content">
-      <span class=remove><i class="iconfont">&#xe63a;</i></span>
-      <span>${code}</span>
-      <span class="edit"><i class="iconfont">&#xe683;</i></span>
-    </div>`);
+      <div class="content">
+        <span class=remove><i class="iconfont">&#xe63a;</i></span>
+        <span>${code}</span>
+        <span class="edit"><i class="iconfont">&#xe683;</i></span>
+      </div>`);
     });
   }
 }

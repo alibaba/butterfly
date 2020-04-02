@@ -59,7 +59,7 @@ ReactDOM.render((
               <Link to="/compactBoxTree">CompactBoxTree</Link>
             </Menu.Item>
             <Menu.Item key="relationarBooks">
-              <Link to="/relationalbooks">RelationalBooks</Link>
+              <Link to="/relational_books">RelationalBooks</Link>
             </Menu.Item>
             </Menu>
           </Sider>
@@ -74,7 +74,7 @@ ReactDOM.render((
             <Route path="/lite_graph" component={liteGraph} />
             <Route path="/entity" component={EntityRelationship} />
             <Route path="/compactBoxTree" component={CompactBoxTree} />
-            <Route path="/relationalbooks" component={RelationalBooks} />
+            <Route path="/relational_books" component={RelationalBooks} />
           </Content>
         </Layout>
       </Layout>
