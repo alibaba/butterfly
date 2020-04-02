@@ -546,7 +546,7 @@ class BaseCanvas extends Canvas {
             return;
           }
         }
-
+        console.log(link.arrow === undefined ? _.get(this, 'theme.edge.arrow') : link.arrow);
         let edge = new EdgeClass({
           type: 'endpoint',
           id: link.id,
@@ -559,9 +559,9 @@ class BaseCanvas extends Canvas {
           targetNode,
           sourceEndpoint,
           targetEndpoint,
-          arrow: link.arrow,
-          arrowPosition: link.arrowPosition,
-          arrowOffset: link.arrowOffset,
+          arrow: link.arrow === undefined ? _.get(this, 'theme.edge.arrow') : link.arrow,
+          arrowPosition: link.arrowPosition === undefined ? _.get(this, 'theme.edge.arrowPosition') : link.arrowPosition,
+          arrowOffset: link.arrowOffset === undefined ? _.get(this, 'theme.edge.arrowOffset') : link.arrowOffset,
           options: link,
           _sourceType,
           _targetType,
@@ -612,9 +612,9 @@ class BaseCanvas extends Canvas {
           targetNode,
           shapeType: link.shapeType || this.theme.edge.type,
           orientationLimit: this.theme.endpoint.position,
-          arrow: link.arrow,
-          arrowPosition: link.arrowPosition,
-          arrowOffset: link.arrowOffset,
+          arrow: link.arrow === undefined ? _.get(this, 'theme.edge.arrow') : link.arrow,
+          arrowPosition: link.arrowPosition === undefined ? _.get(this, 'theme.edge.arrowPosition') : link.arrowPosition,
+          arrowOffset: link.arrowOffset === undefined ? _.get(this, 'theme.edge.arrowOffset') : link.arrowOffset,
           isExpandWidth: this.theme.edge.isExpandWidth,
           defaultAnimate: this.theme.edge.defaultAnimate,
           _global: this.global,
