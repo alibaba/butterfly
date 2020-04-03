@@ -208,6 +208,12 @@ class Edge {
   redrawAnimate(path) {
     LinkAnimateUtil.addAnimate(this.dom, this._path, {}, this.animateDom);
   }
+  emit(type, data) {
+    this._emit(type, data);
+  }
+  on(type, callback) {
+    this._on(type, callback);
+  }
   destroy(isNotEventEmit) {
     if (this.labelDom) {
       $(this.labelDom).remove();

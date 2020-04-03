@@ -302,6 +302,12 @@ class BaseGroup extends Group {
     this.endpoints.push(endpoint);
     return endpoint;
   }
+  emit(type, data) {
+    this._emit(type, data);
+  }
+  on(type, callback) {
+    this._on(type, callback);
+  }
   destroy(isNotEventEmit) {
     this.endpoints.forEach((item) => {
       !item._isInitedDom && item.destroy();

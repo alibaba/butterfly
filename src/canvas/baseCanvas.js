@@ -74,6 +74,7 @@ class BaseCanvas extends Canvas {
     // 放大缩小和平移的数值
     this._zoomData = 1;
     this._moveData = [0, 0];
+    this._zoomTimer = null;
 
     this.groups = [];
     this.nodes = [];
@@ -1329,9 +1330,10 @@ class BaseCanvas extends Canvas {
     let frame = 1;
     const gap = param - this._zoomData;
     const interval = gap / 20;
-    let timer = null;
+    clearInterval(this._zoomTimer);
+    this._zoomTimer = null;
     if (gap !== 0) {
-      timer = setInterval(() => {
+      this._zoomTimer = setInterval(() => {
         this._zoomData += interval;
         let _canvasInfo = {
           scale: this._zoomData
@@ -1346,7 +1348,7 @@ class BaseCanvas extends Canvas {
           transform: `scale(${this._zoomData})`
         });
         if (frame === 20) {
-          clearInterval(timer);
+          clearInterval(this._zoomTimer);
           this.emit('system.canvas.zoom', {
             zoom: this._zoomData
           });
