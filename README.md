@@ -63,43 +63,42 @@ canvas.draw({
 })
 ```
 
-### 定制元素(节点组，节点，线，锚点)
-```
-// 定制节点
-const Node = require('butterfly-dag').Node;
-class ANode extend Node {
-  draw() {
-    // 这里定制您需要的节点并返回一个dom
-    let div = document.createElement("div"); 
-    div.innerHTML = 'helloworld';
-    return div
-  }
-}
-
-// 定制节点组
-const Group = require('butterfly-dag').Group;
-class AGroup extend Group {
-  draw() {
-    // 这里定制您需要的节点组并返回一个dom
-    let container = document.createElement("div"); 
-    container.className = 'container';
-    let title = document.createElement('p');
-    title.innerHTML = 'group name'
-    container.appendChild(title);
-    return container;
-  }
-}
-
-// 线，锚点如此类推，请看具体文档
-```
-
 ## 🔗 API文档
-* [画布(canvas)](./docs/zh-CN/canvas.md)
-* [节点组(group)](./docs/zh-CN/group.md)
-* [节点(node)](./docs/zh-CN/node.md)
-* [线(edge)](./docs/zh-CN/edge.md)
-* [锚点(endpoint)](./docs/zh-CN/endpoint.md)
-* [缩略图(minimap)](./docs/zh-CN/minimap.md)
+* [画布(Canvas)](./docs/zh-CN/canvas.md)
+ * [属性配置](./docs/zh-CN/canvas.md#canvas-attr)
+ * [节点，线段，节点组的新增和删除](./docs/zh-CN/canvas.md#canvas-api-crud)
+ * [缩放，平移](./docs/zh-CN/canvas.md#canvas-api-zoom-move)
+ * [适配画布和聚焦局部节点](./docs/zh-CN/canvas.md#canvas-api-focus)
+ * [重做和撤销](./docs/zh-CN/canvas.md#canvas-api-redo-undo)
+ * [坐标转换和坐标偏移](./docs/zh-CN/canvas.md#canvas-api-coordinate)
+ * [框选](./docs/zh-CN/canvas.md#canvas-api-selected)
+ * [事件](./docs/zh-CN/canvas.md#canvas-api-events)
+ * [其他辅助方法](./docs/zh-CN/canvas.md#canvas-api-other)
+* [节点组(Group)](./docs/zh-CN/group.md)
+ * [属性配置](./docs/zh-CN/group.md#group-attr)
+ * [自定义节点组](./docs/zh-CN/group.md#group-custom)
+ * [新增，删除成员节点](./docs/zh-CN/group.md#group-member)
+ * [自定义锚点](./docs/zh-CN/group.md#group-endpoint)
+ * [移动](./docs/zh-CN/group.md#group-move)
+ * [事件](./docs/zh-CN/group.md#group-event)
+* [节点(Node)](./docs/zh-CN/node.md)
+ * [属性配置]()
+ * [自定义节点]()
+ * [自定义锚点]()
+ * [移动]()
+ * [事件]()
+ * [[树状布局] 节点收缩 & 展开]()
+* [线(Edge)](./docs/zh-CN/edge.md)
+ * [属性配置]()
+ * [自定义线段]()
+ * [自定义箭头]()
+ * [自定义label]()
+ * [事件]()
+ * [线段动画]()
+* [锚点(Endpoint)](./docs/zh-CN/endpoint.md)
+ * [属性配置]()
+* [缩略图(Minimap)](./docs/zh-CN/minimap.md)
+* [布局]()
 
 
 ## 快速本地DEMO

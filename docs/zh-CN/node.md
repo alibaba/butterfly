@@ -19,7 +19,7 @@ canvas.draw({
 })
 ```
 
-## 属性
+## 属性<a name='node-attr'></a>：
 
 | key | 说明 | 类型 | 默认值 
 | :------ | :------ | :------ | :------ 
@@ -34,8 +34,11 @@ canvas.draw({
 
 `* 节点的返回的dom必须设置position: absolute;`
 
-## 方法
-```
+## API：
+
+### <a name='node-custom'>自定义节点组</a>：
+
+```js
 /**
   * 节点的渲染方法
   * @param {obj} data - 节点基本信息 
@@ -59,6 +62,21 @@ updated = () => {}
 remove = () => {}
 
 /**
+  * @return {number} - 节点宽度
+  */
+getWidth = () => {}
+
+/**
+  * @return {number} - 节点高度
+  */
+getHeight = () => {}
+
+/**
+  * @param {boolean} draggable - 设置节点是否可移动
+  */
+setDraggable = (boolean) => {}
+
+/**
   * 聚焦回调
   */
 focus = () => {}
@@ -67,9 +85,19 @@ focus = () => {}
   * 失去聚焦回调
   */
 unFocus = () => {}
+```
+
+### <a name='node-endpoint'>自定义锚点</a>：
+
+```js
 
 /**
-  * @param {obj} data - 锚点基本信息(此方法必须在节点挂载后执行才有效)
+  * @param {obj} param - 锚点基本信息(此方法必须在节点挂载后执行才有效)
+  * @param {string} param.id - 锚点id
+  * @param {string} param.orientation - 锚点方向(可控制线段的进行和外出方向)
+  * @param {string} param.scope - 作用域
+  * @param {string} param.type - 'source' / 'target' / undefined，当undefined的时候锚点既是source又是target
+  * @param {string} param.dom - 可以把节点内的任意一个子dom作为自定义锚点
   */
 addEndpoint = (obj) => {}
 
@@ -85,28 +113,21 @@ removeEndpoint = (obj) => {}
   * @return {Endpoint} - Endpoint的对象
   */
 getEndpoint = (id, type) => {}
+```
 
+### <a name='node-move'>移动</a>：
+
+```js
 /**
   * @param {number} x - 移动位置的x坐标 
   * @param {number} y - 移动位置的y坐标 
   */
 moveTo = (obj) => {}
+```
 
-/**
-  * @param {boolean} draggable - 设置节点是否可移动
-  */
-setDraggable = (boolean) => {}
+### <a name='node-event'>事件</a>：
 
-/**
-  * @return {number} - 节点宽度
-  */
-getWidth = () => {}
-
-/**
-  * @return {number} - 节点高度
-  */
-getHeight = () => {}
-
+```js
 /**
   * 发送事件
   */
@@ -117,4 +138,3 @@ emit = (string, obj) => {}
   */
 on = (string, callback) => {}
 ```
-
