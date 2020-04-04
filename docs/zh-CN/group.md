@@ -20,7 +20,7 @@ canvas.draw({
 })
 ```
 
-## 属性
+## 属性<a name='group-attr'></a>：
 
 | key | 说明 | 类型 | 默认值 
 | :------ | :------ | :------ | :------ 
@@ -35,9 +35,11 @@ canvas.draw({
 
 `* 节点的返回的dom必须设置position: absolute;`
 
-## 方法
+## API：
 
-```
+### <a name='group-custom'>自定义节点组</a>：
+
+```js
 /**
   * group的渲染方法
   * @param {obj} data - 节点基本信息 
@@ -49,7 +51,20 @@ draw = (obj) => {}
   * 节点组挂载后的回调
   */
 mounted = () => {}
+/**
+  * @return {number} - 节点组宽度
+  */
+getWidth = () => {}
 
+/**
+  * @return {number} - 节点组高度
+  */
+getHeight = () => {}
+```
+
+### <a name='group-member'>新增，删除成员节点</a>：
+
+```js
 /**
   * group添加节点
   * @param {obj} node - 节点数据
@@ -73,9 +88,18 @@ removeNode = (node) => {}
   * @param {array} nodes - 节点数组
   */
 removeNodes = (nodes) => {}
+```
 
+### <a name='group-endpoint'>自定义锚点</a>：
+
+```js
 /**
-  * @param {obj} data - 锚点基本信息(此方法必须在节点挂载后执行才有效)
+  * @param {obj} param - 锚点基本信息(此方法必须在节点挂载后执行才有效)
+  * @param {string} param.id - 锚点id
+  * @param {string} param.orientation - 锚点方向(可控制线段的进行和外出方向)
+  * @param {string} param.scope - 作用域
+  * @param {string} param.type - 'source' / 'target' / undefined，当undefined的时候锚点既是source又是target
+  * @param {string} param.dom - 可以把分组内的任意一个子dom作为自定义锚点
   */
 addEndpoint = (obj) => {}
 
@@ -84,17 +108,19 @@ addEndpoint = (obj) => {}
   * @return {Endpoint} - Endpoint的对象
   */
 getEndpoint = (id) => {}
+```
 
+### <a name='group-move'>移动</a>：
+```js
 /**
-  * @return {number} - 节点组宽度
+  * @param {number} x - 移动位置的x坐标 
+  * @param {number} y - 移动位置的y坐标 
   */
-getWidth = () => {}
+moveTo = (obj) => {}
+```
 
-/**
-  * @return {number} - 节点组高度
-  */
-getHeight = () => {}
-
+### <a name='group-event'>事件</a>：
+```js
 /**
   * 发送事件
   */
@@ -105,5 +131,3 @@ emit = (string, obj) => {}
   */
 on = (string, callback) => {}
 ```
-
-## 详细说明
