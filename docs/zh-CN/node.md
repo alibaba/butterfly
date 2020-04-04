@@ -90,7 +90,6 @@ unFocus = () => {}
 ### <a name='node-endpoint'>自定义锚点</a>：
 
 ```js
-
 /**
   * @param {obj} param - 锚点基本信息(此方法必须在节点挂载后执行才有效)
   * @param {string} param.id - 锚点id

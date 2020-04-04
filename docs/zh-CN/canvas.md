@@ -108,7 +108,7 @@ setDisLinkable = (boolean) => {}
 setDraggable = (boolean) => {}
 ```
 
-### <a name='canvas-api-crud'>节点，线段，节点组的新增和删除</a>：
+### <a name='canvas-api-crud'>节点，线段，节点组的查询，新增和删除</a>：
 
 ```js
 /**
@@ -280,6 +280,16 @@ focusCenterWithAnimate = (options, callback) => {}
 
 ```js
 /**
+  * 重做操作
+  */
+redo = (options) => {}
+
+/**
+  * 回退操作
+  */
+undo = (options) => {}
+
+/**
   * 给操作队列新增最顶部元素
   * @param {Object} options - 参数
   * @param {String} options.type - 队列类型
@@ -296,16 +306,6 @@ popActionQueue = (options) => {}
   * 清除操作队列
   */
 clearActionQueue = (options) => {}
-
-/**
-  * 重做操作
-  */
-redo = (options) => {}
-
-/**
-  * 回退操作
-  */
-undo = (options) => {}
 ```
 
 ### <a name='canvas-api-coordinate'>坐标转换和坐标偏移</a>：
