@@ -24,7 +24,8 @@ node.addEndpoint({
 });
 ```
 
-## 属性
+## 属性<a name='endpoint-attr'></a>：
+
 | key | 说明 | 类型 | 默认值 
 | :------ | :------ | :------ | :------ 
 | id | 节点唯一标识 | string (Require) | - 
@@ -39,8 +40,9 @@ node.addEndpoint({
 | dom | 可以把此dom作为自定义锚点 | dom (Option) | - 
 | expendArea | 可以设置锚点连接的热区，可覆盖主题内的设置 | Object (Option) | {left:10, right:10, top:10, bottom:10}
 
-## 方法
-```
+## <a name='endpoint-api'></a> API：
+
+```js
 /**
   * @return {dom} - 自定义节点的dom
   */

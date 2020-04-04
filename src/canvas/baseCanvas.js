@@ -74,6 +74,7 @@ class BaseCanvas extends Canvas {
     // 放大缩小和平移的数值
     this._zoomData = 1;
     this._moveData = [0, 0];
+    this._zoomTimer = null;
 
     this.groups = [];
     this.nodes = [];
@@ -550,7 +551,7 @@ class BaseCanvas extends Canvas {
             return;
           }
         }
-
+        console.log(link.arrow === undefined ? _.get(this, 'theme.edge.arrow') : link.arrow);
         let edge = new EdgeClass({
           type: 'endpoint',
           id: link.id,
@@ -563,9 +564,9 @@ class BaseCanvas extends Canvas {
           targetNode,
           sourceEndpoint,
           targetEndpoint,
-          arrow: link.arrow,
-          arrowPosition: link.arrowPosition,
-          arrowOffset: link.arrowOffset,
+          arrow: link.arrow === undefined ? _.get(this, 'theme.edge.arrow') : link.arrow,
+          arrowPosition: link.arrowPosition === undefined ? _.get(this, 'theme.edge.arrowPosition') : link.arrowPosition,
+          arrowOffset: link.arrowOffset === undefined ? _.get(this, 'theme.edge.arrowOffset') : link.arrowOffset,
           options: link,
           _sourceType,
           _targetType,
@@ -616,9 +617,9 @@ class BaseCanvas extends Canvas {
           targetNode,
           shapeType: link.shapeType || this.theme.edge.type,
           orientationLimit: this.theme.endpoint.position,
-          arrow: link.arrow,
-          arrowPosition: link.arrowPosition,
-          arrowOffset: link.arrowOffset,
+          arrow: link.arrow === undefined ? _.get(this, 'theme.edge.arrow') : link.arrow,
+          arrowPosition: link.arrowPosition === undefined ? _.get(this, 'theme.edge.arrowPosition') : link.arrowPosition,
+          arrowOffset: link.arrowOffset === undefined ? _.get(this, 'theme.edge.arrowOffset') : link.arrowOffset,
           isExpandWidth: this.theme.edge.isExpandWidth,
           defaultAnimate: this.theme.edge.defaultAnimate,
           _global: this.global,
@@ -1333,9 +1334,10 @@ class BaseCanvas extends Canvas {
     let frame = 1;
     const gap = param - this._zoomData;
     const interval = gap / 20;
-    let timer = null;
+    clearInterval(this._zoomTimer);
+    this._zoomTimer = null;
     if (gap !== 0) {
-      timer = setInterval(() => {
+      this._zoomTimer = setInterval(() => {
         this._zoomData += interval;
         let _canvasInfo = {
           scale: this._zoomData
@@ -1350,7 +1352,7 @@ class BaseCanvas extends Canvas {
           transform: `scale(${this._zoomData})`
         });
         if (frame === 20) {
-          clearInterval(timer);
+          clearInterval(this._zoomTimer);
           this.emit('system.canvas.zoom', {
             zoom: this._zoomData
           });

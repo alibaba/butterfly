@@ -63,43 +63,45 @@ canvas.draw({
 })
 ```
 
-### Custom Item(Group，Node，Edge，Endpoint)
-```
-// Custom Node
-const Node = require('butterfly-dag').Node;
-class ANode extend Node {
-  draw() {
-    // Here you can customize the node as you wish , but remember return it`s root dom
-    let div = document.createElement("div"); 
-    div.innerHTML = 'helloworld';
-    return div
-  }
-}
-
-// Custom Group
-const Group = require('butterfly-dag').Group;
-class AGroup extend Group {
-  draw() {
-    // Here you can customize the node as you wish , but remember return it`s root dom
-    let container = document.createElement("div"); 
-    container.className = 'container';
-    let title = document.createElement('p');
-    title.innerHTML = 'group name'
-    container.appendChild(title);
-    return container;
-  }
-}
-
-// Edge、Endpoint and so on . Please see the detail document
-```
-
 ## 🔗 API Document
+
 * [Canvas](./docs/en-US/canvas.md)
+ * [attribute](./docs/en-US/canvas.md#canvas-attr)
+ * [add and delete node，edge，group](./docs/en-US/canvas.md#canvas-api-crud)
+ * [zoom and move canvas](./docs/en-US/canvas.md#canvas-api-zoom-move)
+ * [fit canvas and focus part nodes](./docs/en-US/canvas.md#canvas-api-focus)
+ * [redo, undo](./docs/en-US/canvas.md#canvas-api-redo-undo)
+ * [coordinate conversion and offset](./docs/en-US/canvas.md#canvas-api-coordinate)
+ * [mutiply selection](./docs/en-US/canvas.md#canvas-api-selected)
+ * [events](./docs/en-US/canvas.md#canvas-api-events)
+ * [other api](./docs/en-US/canvas.md#canvas-api-other)
 * [Group](./docs/en-US/group.md)
+ * [attribute](./docs/en-US/group.md#group-attr)
+ * [custom group](./docs/en-US/group.md#group-custom)
+ * [add and delete members](./docs/en-US/group.md#group-member)
+ * [custom endpoint](./docs/en-US/group.md#group-endpoint)
+ * [move group](./docs/en-US/group.md#group-move)
+ * [events](./docs/en-US/group.md#group-event)
 * [Node](./docs/en-US/node.md)
+ * [attribute](./docs/en-US/node.md#node-attr)
+ * [custom node](./docs/en-US/node.md#node-custom)
+ * [custom endpoint](./docs/en-US/node.md#node-endpoint)
+ * [move node](./docs/en-US/node.md#node-move)
+ * [events](./docs/en-US/node.md#node-event)
+ * [[tree layout] collapse and expand sub node]()
 * [Edge](./docs/en-US/edge.md)
+ * [attribute](./docs/en-US/edge.md#edge-attr)
+ * [custom edge](./docs/en-US/edge.md#edge-custom-dom)
+ * [custom arrow](./docs/en-US/edge.md#edge-custom-arrow)
+ * [custom label](./docs/en-US/edge.md#edge-custom-label)
+ * [edge connectivity](./docs/en-US/edge.md#edge-isConnect)
+ * [events](./docs/en-US/edge.md#edge-event)
+ * [animation](./docs/en-US/edge.md#edge-animation)
 * [Endpoint](./docs/en-US/endpoint.md)
-* [Minimap](./docs/en-US/minimap.md)
+ * [attribute](./docs/en-US/endpoint.md#endpoint-attr)
+ * [API](./docs/en-US/endpoint.md#endpoint-api)
+* [Minimap](./docs/en-US/minimap.md#endpoint-api)
+* [Layout(doing)]()
 
 ## QUCIK DEMO LOCAL
 ```
