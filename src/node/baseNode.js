@@ -213,6 +213,12 @@ class BaseNode extends Node {
       data: this
     });
   }
+  emit(type, data) {
+    this._emit(type, data);
+  }
+  on(type, callback) {
+    this._on(type, callback);
+  }
   destroy(isNotEvent) {
     if (!isNotEvent) {
       this.endpoints.forEach((item) => {

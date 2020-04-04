@@ -19,7 +19,8 @@ canvas.draw({
 })
 ```
 
-## Property
+## attribute<a name='edge-attr'></a>：
+
 | key | describe | type | default 
 | :------ | :------ | :------ | :------ 
 | id | unique id | string (Require) | - 
@@ -38,38 +39,14 @@ canvas.draw({
 
 `* Set isExpandWidth to true to get eventHandlerDom for mounting events.`
 
-## API
+## API：
 
-```
+### <a name='edge-custom-dom'>custom edge</a>：
+```js
 /**
   * @return {dom} - custom node dom
   */
 draw = () => {}
-
-/**
-  * callback after the edge is mounted
-  */
-mounted = () => {}
-
-/**
-  * @return {boolean} - complicated connection conditions can be customized
-  */
-isConnect = () => {}
-
-/**
-  * callback after line updated
-  */
-updated = () => {}
-
-/**
-  * @return {dom} - custom label dom
-  */
-drawLabel = () => {}
-
-/**
-  * @return {dom} - custom arrow dom
-  */
-drawArrow = () => {}
 
 /**
   * @param {obj} sourcePoint(Optional) - source node coordinates and direction
@@ -79,6 +56,47 @@ drawArrow = () => {}
 calcPath = () => {}
 
 /**
+  * callback after the edge is mounted
+  */
+mounted = () => {}
+
+/**
+  * callback after line updated
+  */
+updated = () => {}
+```
+
+### <a name='edge-custom-arrow'>custom arrow</a>：
+
+```js
+/**
+  * @return {dom} - custom arrow dom
+  */
+drawArrow = () => {}
+```
+
+### <a name='edge-custom-label'>custom label</a>：
+```js
+/**
+  * @return {dom} - 自定义label的dom
+  */
+drawLabel = () => {}
+```
+
+### <a name='edge-isConnect'>edge connectivity</a>：
+
+```js
+/**
+  * @return {boolean} - complicated connection conditions can be customized
+  */
+isConnect = () => {}
+
+```
+
+### <a name='edge-event'>event</a>：
+
+```js
+/**
   * emit events
   */
 emit = (string, obj) => {}
@@ -87,7 +105,11 @@ emit = (string, obj) => {}
   * accept events
   */
 on = (string, callback) => {}
+```
 
+### <a name='edge-animation'>animatio</a>：
+
+```js
 /**
   * add edge animation
   * @param {obj} options(Optional) - animation configure
@@ -99,9 +121,6 @@ on = (string, callback) => {}
 addAnimate = (options) => {}
 ```
 
-## Detail
-
-### animation
 <img width="600" src="https://img.alicdn.com/tfs/TB1anoGvkL0gK0jSZFAXXcA9pXa-921-532.gif">
 Besides, 1000 nodes + 1000 edges, the animation runs perfectly
 <img width="600" src="https://img.alicdn.com/tfs/TB1N4a_wi_1gK0jSZFqXXcpaXXa-662-466.gif">

@@ -24,7 +24,8 @@ node.addEndpoint({
 });
 ```
 
-## Property
+## attribute<a name='endpoint-attr'></a>：
+
 | key | describe | type | default 
 | :------ | :------ | :------ | :------ 
 | id | unique id | string (Require) | - 
@@ -39,7 +40,8 @@ node.addEndpoint({
 | dom | custom dom (any dom on root node) | dom (Optional) | - 
 | expendArea | set the hot zone of the endpoint connection to override the settings in the theme | Object (Optional) | {left:10, right:10, top:10, bottom:10}
 
-## 方法
+## <a name='endpoint-api'> API：
+
 ```
 /**
   * @return {dom} - custom endpoint dom

@@ -219,6 +219,12 @@ class Endpoint {
       });
     });
   }
+  emit(type, data) {
+    this._emit(type, data);
+  }
+  on(type, callback) {
+    this._on(type, callback);
+  }
   destroy() {
     $(this.dom).off();
     $(this.dom).remove();
