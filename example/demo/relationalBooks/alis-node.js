@@ -27,9 +27,9 @@ class AlisBaseNode extends Node {
   _createTitle = (dom) => {
     let title = $(
       `<div class="title">
-        <span id="close"><i class="iconfont">&#xe63a;</i></span>
+        <span id="close"><i class="iconfont">&#xe654;</i></span>
         <span class="title-text">${this.options.name}</span>
-        <span class="alis-node-edit"><i class="iconfont">&#xe683;</i></span>
+        <span class="alis-node-edit"><i class="iconfont">&#xe66d;</i></span>
       </div>`);
 
     dom.append(title);
@@ -40,7 +40,7 @@ class AlisBaseNode extends Node {
     let con = $(`
       <div class="container" >
         <p class="title-text">${this.options.data.content}</p>
-        <span class="alis-node-edit"><i class="iconfont">&#xe683;</i></span>
+        <span class="alis-node-edit"><i class="iconfont">&#xe66d;</i></span>
       </div>`);
 
     dom.append(con);

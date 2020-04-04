@@ -2,6 +2,7 @@
 
 const Node = require('../../../index.js').Node;
 const $ = require('jquery');
+import '../static/iconfont.css';
 
 class BaseNode extends Node {
   constructor(opts) {
@@ -25,9 +26,9 @@ class BaseNode extends Node {
   _createTitle(dom) {
     let title = $(`
     <div class='title'>
-      <span class="remove"><i class="iconfont">&#xe63a;</i></span>
+      <span class="remove"><i class="iconfont">&#xe654;</i></span>
       <span>${this.options.name}</span>
-      <span class="add-node"><i class="iconfont">&#xe639;</i></span>
+      <span class="add-node"><i class="iconfont">&#xe6a1;</i></span>
     </div>`);
 
     dom.append(title);
@@ -39,9 +40,9 @@ class BaseNode extends Node {
     $.each(this.options.data.content, (i, item) => {
       dom.append(`
       <div class="content">
-        <span class="remove"><i class="iconfont">&#xe63a;</i></span>
+        <span class="remove"><i class="iconfont">&#xe654;</i></span>
         <span class="text">${item}</span>
-        <span class="edit"><i class="iconfont">&#xe683;</i></span>
+        <span class="edit"><i class="iconfont">&#xe66d;</i></span>
       </div>`);
     });
 
@@ -87,9 +88,9 @@ class BaseNode extends Node {
 
     dom.parent('.base-node').append(`
       <div class="content">
-        <span class=remove><i class="iconfont">&#xe63a;</i></span>
+        <span class=remove><i class="iconfont">&#xe654;</i></span>
         <span>${code}</span>
-        <span class="edit"><i class="iconfont">&#xe683;</i></span>
+        <span class="edit"><i class="iconfont">&#xe66d;</i></span>
       </div>`);
     });
   }
