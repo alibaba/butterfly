@@ -23,6 +23,10 @@ class Emergency extends Component {
         edge: {
           type: 'Manhattan',
           arrow: true
+        },
+        // 拖动边缘处自动适应画布
+        autoFixCanvas: {
+          enable: true
         }
       }
     });
