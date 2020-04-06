@@ -4,30 +4,43 @@ const $ = require('jquery');
 
 let svg = null;
 
+let _initTime = new Date().getTime();
+
 let init = (_svg) => {
   svg = _svg;
 }
 
-let addAnimate = (targetDom, path, options, animateDom) => {
+let addAnimate = (targetDom, path, options = {}, animateDom) => {
   let _animateDom = animateDom;
-  if (_animateDom) {
+  let circle = null;
+  let motion = null;
+  if (!_animateDom) {
+    circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    motion = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion');
+    circle.append(motion);
+  }
+
+  if (options._isContinue) {
     $(_animateDom).find('animateMotion').attr('path', path);
   } else {
-    let circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    let _startTime = (new Date().getTime() - _initTime) / 1000;
+
     circle.setAttribute('cx', 0);
     circle.setAttribute('cy', 0);
     circle.setAttribute('r', options.radius || 2);
     circle.setAttribute('fill', options.color || '#999');
-    let motion = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion');
+
     motion.setAttribute('path', path);
-    motion.setAttribute('begin', '0s');
+    motion.setAttribute('begin', `${_startTime}s`);
     motion.setAttribute('dur', options.dur || '8s');
+    motion.setAttribute('fill', 'remove');
     motion.setAttribute('repeatCount', options.repeatCount || 'indefinite');
-    circle.append(motion);
-    _animateDom = circle;
   }
 
-  $(_animateDom).insertAfter(targetDom);
+  if (!_animateDom) {
+    _animateDom = circle;
+    $(_animateDom).insertAfter(targetDom);
+  }
 
   return _animateDom;
 }
