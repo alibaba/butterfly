@@ -62,7 +62,12 @@ class BaseCanvas extends Canvas {
           bottom: _.get(options, 'theme.endpoint.expandArea.bottom') || 10,
         },
       },
-      zoomGap: _.get(options, 'theme.zoomGap') || 0.001
+      zoomGap: _.get(options, 'theme.zoomGap') || 0.001,
+      // 鼠标到达边缘画布自动移动
+      autoFixCanvas: {
+        enable: _.get(options, 'theme.autoFixCanvas.enable', false),
+        autoMovePadding: _.get(options, 'theme.autoFixCanvas.autoMovePadding') ||[20, 20, 20, 20] // 上，右，下，左
+      }
     };
 
     // 贯穿所有对象的配置
@@ -156,6 +161,10 @@ class BaseCanvas extends Canvas {
     // undo & redo队列
     this.actionQueue = [];
     this.actionQueueIndex = -1;
+
+    // 画布边缘
+    this._autoMoveDir = [];
+    this._autoMoveTimer = null;
   }
 
   updateRootResize() {
@@ -551,7 +560,7 @@ class BaseCanvas extends Canvas {
             return;
           }
         }
-        console.log(link.arrow === undefined ? _.get(this, 'theme.edge.arrow') : link.arrow);
+
         let edge = new EdgeClass({
           type: 'endpoint',
           id: link.id,
@@ -2060,6 +2069,7 @@ class BaseCanvas extends Canvas {
           canvasY: this._coordinateService._terminal2canvas('y', event.clientY)
         }
       });
+      this._autoMoveDir = [];
     };
 
     const mouseMoveEvent = (event) => {
@@ -2118,6 +2128,13 @@ class BaseCanvas extends Canvas {
               type: 'node:move',
               nodes: moveNodes
             });
+            this._autoMoveCanvas(event.clientX, event.clientY, {
+              type: 'node:drag',
+              nodes: moveNodes
+            }, (gap) => {
+              nodeOriginPos.x += gap[0];
+              nodeOriginPos.y += gap[1];
+            });
           }
         } else if (this._dragType === 'group:drag') {
           if (nodeOriginPos.x === 0 && nodeOriginPos.y === 0) {
@@ -2147,6 +2164,13 @@ class BaseCanvas extends Canvas {
             this.emit('events', {
               type: 'group:move',
               group: group
+            });
+            this._autoMoveCanvas(event.clientX, event.clientY, {
+              type: 'group:drag',
+              group: group
+            }, (gap) => {
+              nodeOriginPos.x += gap[0];
+              nodeOriginPos.y += gap[1];
             });
           }
         } else if (this._dragType === 'endpoint:drag') {
@@ -2216,15 +2240,15 @@ class BaseCanvas extends Canvas {
 
             $(this.svg).css('visibility', 'hidden');
             $(this.wrapper).css('visibility', 'hidden');
+            let _targetPoint = {
+              pos: [endX, endY],
+            };
             edges.forEach((edge) => {
               let beginX =  edge.sourceEndpoint._posLeft + edge.sourceEndpoint._width / 2;
               let beginY = edge.sourceEndpoint._posTop + edge.sourceEndpoint._height / 2;
               const _soucePoint = {
                 pos: [beginX, beginY],
                 orientation: edge.sourceEndpoint.orientation
-              };
-              const _targetPoint = {
-                pos: [endX, endY],
               };
               edge.redraw(_soucePoint, _targetPoint);
             });
@@ -2235,6 +2259,23 @@ class BaseCanvas extends Canvas {
               _activeLinkableEndpoint(this._dragEndpoint);
               _focusLinkableEndpoint(event.clientX, event.clientY);
             }
+
+            this._autoMoveCanvas(event.clientX, event.clientY, {
+              type: 'endpoint:drag',
+              edges: edges
+            }, (gap) => {
+              edges.forEach((edge) => {
+                let beginX =  edge.sourceEndpoint._posLeft + edge.sourceEndpoint._width / 2;
+                let beginY = edge.sourceEndpoint._posTop + edge.sourceEndpoint._height / 2;
+                const _soucePoint = {
+                  pos: [beginX, beginY],
+                  orientation: edge.sourceEndpoint.orientation
+                };
+                _targetPoint.pos[0] += gap[0];
+                _targetPoint.pos[1] += gap[1];
+                edge.redraw(_soucePoint, _targetPoint);
+              });
+            });
 
             this.emit('system.drag.move', {
               dragType: this._dragType,
@@ -2731,6 +2772,7 @@ class BaseCanvas extends Canvas {
         x: 0,
         y: 0
       };
+      this._autoMoveDir = [];
       this._guidelineService.isActive && this._guidelineService.clearCanvas();
     };
 
@@ -2739,6 +2781,76 @@ class BaseCanvas extends Canvas {
     this.root.addEventListener('mousemove', mouseMoveEvent);
     // this.root.addEventListener('mouseleave', mouseEndEvent);
     this.root.addEventListener('mouseup', mouseEndEvent);
+  }
+  _autoMoveCanvas(x, y, data, cb) {
+
+    if (!this.theme.autoFixCanvas.enable) {
+      return;
+    }
+
+    this._autoMoveDir = [];
+    let _terOffsetX = this._coordinateService.terOffsetX;
+    let _terOffsetY = this._coordinateService.terOffsetY;
+
+    clearInterval(this._autoMoveTimer);
+    this._autoMoveTimer = null;
+
+    if (this._autoMoveTimer && this._autoMoveDir.length > 0) {
+      return;
+    }
+    let _autoMovePadding = this.theme.autoFixCanvas.autoMovePadding;
+    if (x - _terOffsetX <= _autoMovePadding[3]) {
+      this._autoMoveDir.push('left');
+    }
+    if (this._rootWidth - (x - _terOffsetX) <= _autoMovePadding[1]) {
+      this._autoMoveDir.push('right');
+    }
+    if (y - _terOffsetY <= _autoMovePadding[0]) {
+      this._autoMoveDir.push('top');
+    }
+    if (this._rootHeight - (y - _terOffsetY) <= _autoMovePadding[2]) {
+      this._autoMoveDir.push('bottom');
+    }
+
+    if (this._autoMoveDir.length === 0) {
+      clearInterval(this._autoMoveTimer);
+      return;
+    }
+
+    if (!this._autoMoveTimer) {
+      let MOVE_GAP = 5;
+      this._autoMoveTimer = setInterval(() => {
+        if (this._autoMoveDir.includes('left')) {
+          this.move([this._moveData[0] + MOVE_GAP, this._moveData[1]]);
+          _moveTarget([-MOVE_GAP, 0]);
+        }
+        if (this._autoMoveDir.includes('right')) {
+          this.move([this._moveData[0] - MOVE_GAP, this._moveData[1]]);
+          _moveTarget([+MOVE_GAP, 0]);
+        }
+        if (this._autoMoveDir.includes('top')) {
+          this.move([this._moveData[0], this._moveData[1] + MOVE_GAP]);
+          _moveTarget([0, -MOVE_GAP]);
+        }
+        if (this._autoMoveDir.includes('bottom')) {
+          this.move([this._moveData[0], this._moveData[1] - MOVE_GAP]);
+          _moveTarget([0, +MOVE_GAP]);
+        }
+      }, 70);
+    }
+
+    // 同时需要移动target
+    let _moveTarget = (gap) => {
+      if (data.type === 'node:drag') {
+        data.nodes.forEach((item) => {
+          item.moveTo(item.left + gap[0], item.top + gap[1]);
+        })
+      } else if (data.type === 'group:drag') {
+        let group = data.group;
+        group.moveTo(group.left + gap[0], group.top + gap[1]);
+      }
+      cb && cb(gap);
+    }
   }
   _moveNode(node, x, y, isNotEventEmit) {
     if (!isNotEventEmit) {
