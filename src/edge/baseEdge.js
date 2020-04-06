@@ -206,7 +206,9 @@ class Edge {
     }, options), this.animateDom);
   }
   redrawAnimate(path) {
-    LinkAnimateUtil.addAnimate(this.dom, this._path, {}, this.animateDom);
+    LinkAnimateUtil.addAnimate(this.dom, this._path, {
+      _isContinue: true
+    }, this.animateDom);
   }
   emit(type, data) {
     this._emit(type, data);
