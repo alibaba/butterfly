@@ -211,10 +211,8 @@ class Edge {
     }, this.animateDom);
   }
   emit(type, data) {
+    super.emit(type, data);
     this._emit(type, data);
-  }
-  on(type, callback) {
-    this._on(type, callback);
   }
   destroy(isNotEventEmit) {
     if (this.labelDom) {
@@ -228,28 +226,29 @@ class Edge {
     }
     $(this.dom).remove();
     if (this.id && !isNotEventEmit) {
-      this._emit('system.link.delete', {
+      this.emit('system.link.delete', {
         link: this
       });
-      this._emit('events', {
+      this.emit('events', {
         type: 'link:delete',
         link: this
       });
+      this.removeAllListeners();
     }
   }
   _addEventListener() {
     $(this.dom).on('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      this._emit('system.link.click', {
+      this.emit('system.link.click', {
         edge: this
       });
-      this._emit('events', {
+      this.emit('events', {
         type: 'link:click',
         edge: this
       });
 
-      this._emit('InnerEvents', {
+      this.emit('InnerEvents', {
         type: 'link:click',
         data: this
       });

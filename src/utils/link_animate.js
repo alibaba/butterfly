@@ -6,6 +6,10 @@ let svg = null;
 
 let _initTime = new Date().getTime();
 
+$(document).ready(() => {
+  _initTime = new Date().getTime()
+});
+
 let init = (_svg) => {
   svg = _svg;
 }
