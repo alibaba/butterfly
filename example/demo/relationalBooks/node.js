@@ -2,7 +2,7 @@
 
 const Node = require('../../../index.js').Node;
 const $ = require('jquery');
-import '../static/iconfont.css';
+import '../../static/iconfont.css';
 
 class BaseNode extends Node {
   constructor(opts) {
@@ -55,7 +55,7 @@ class BaseNode extends Node {
   _onRemovedNode(dom) {
     dom.find('.remove').on('click', function () {
       this.parentNode.remove();
-    })
+    });
   }
 
   _onEditNode(dom) {
@@ -76,22 +76,24 @@ class BaseNode extends Node {
   }
 
   _onAddNode(dom) {
-    dom.find('.add-node').click(function() {
-    let code = '';
-    const codeLength = 4;
-    const random = new Array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
+    dom.find('.add-node').click(() => {
+      let code = '';
+      const codeLength = 4;
+      const random = new Array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
 
-    for (let i = 0; i < codeLength; i++) {
-      const index = Math.floor(Math.random() * 36);
-      code += random[index];
-    }
+      for (let i = 0; i < codeLength; i++) {
+        const index = Math.floor(Math.random() * 36);
+        code += random[index];
+      }
+      dom.parent('.base-node').append(`
+        <div class="content">
+          <span class='remove'><i class="iconfont">&#xe654;</i></span>
+          <span class="text">${code}</span>
+          <span class="edit"><i class="iconfont">&#xe66d;</i></span>
+        </div>`);
 
-    dom.parent('.base-node').append(`
-      <div class="content">
-        <span class=remove><i class="iconfont">&#xe654;</i></span>
-        <span>${code}</span>
-        <span class="edit"><i class="iconfont">&#xe66d;</i></span>
-      </div>`);
+      this._onRemovedNode($('.content'));
+      this._onEditNode($('.content'));
     });
   }
 }

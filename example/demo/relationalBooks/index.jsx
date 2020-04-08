@@ -27,7 +27,9 @@ class RelationalNetwork extends Component {
       }
     });
     this.canvas.setMinimap(true);
-    this.canvas.draw(mockData);
+    this.canvas.draw(mockData, () => {
+      this.canvas.focusCenterWithAnimate();
+    });
   }
   render() {
     return (
