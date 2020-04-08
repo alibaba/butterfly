@@ -50,7 +50,7 @@ module.exports = {
     id: '2',
     name: 'Author',
     top: 488,
-    left: 908,
+    left: 750,
     data: {
       content: ['id', 'name']
     },
@@ -64,7 +64,7 @@ module.exports = {
   }, {
     id: '3',
     name: 'BookAuthor',
-    top: 724,
+    top: 754,
     left: -36,
     data: {
       content: ['book_id', 'author_id']
@@ -87,8 +87,8 @@ module.exports = {
     data: {
       content: ['id', 'name']
     },
-    top: 724,
-    left: 574,
+    top: 754,
+    left: 374,
     endpoints: [{
       id: 'point_1',
       type: 'target',
@@ -112,47 +112,23 @@ module.exports = {
     sourceNode: '0',
     targetNode: '1',
     type: 'endpoint',
-    label: $(`
-    <div class="relation-books-label_0">
-      <div>x</div>
-      <div>1</div>
-      <div>n</div>
-    </div>`)[0],
   }, {
     source: 'point_2',
     target: 'point_1',
     sourceNode: '1',
     targetNode: '4',
     type: 'endpoint',
-    label: $(`
-    <div class="relation-books-label_1">
-      <span>x</span>
-      <span>1</span>
-      <span>n</span>
-    </div>`)[0],
   }, {
     source: 'point_1',
     target: 'point_2',
     sourceNode: '3',
     targetNode: '0',
     type: 'endpoint',
-    label: $(`
-    <div class="relation-books-label_2">
-      <span>x</span>
-      <span>1</span>
-      <span>n</span>
-    </div>`)[0],
   }, {
     source: 'point_2',
     target: 'point_1',
     sourceNode: '3',
     targetNode: '2',
     type: 'endpoint',
-    label: $(`
-    <div class="relation-books-label_3">
-      <span>x</span>
-      <span>1</span>
-      <span>n</span>
-    </div>`)[0],
   }],
 };
