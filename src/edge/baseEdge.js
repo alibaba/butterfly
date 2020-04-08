@@ -8,8 +8,10 @@ import LinkAnimateUtil from '../utils/link_animate'
 
 import './baseEdge.less';
 
-class Edge {
+import Edge from '../interface/edge';
+class BaseEdge extends Edge {
   constructor(opts) {
+    super(opts);
     this.id = _.get(opts, 'id');
     this.targetNode = _.get(opts, 'targetNode');
     this._targetType = _.get(opts, '_targetType');
@@ -269,4 +271,4 @@ class Edge {
   }
 }
 
-export default Edge;
+export default BaseEdge;

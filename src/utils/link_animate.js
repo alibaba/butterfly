@@ -6,12 +6,9 @@ let svg = null;
 
 let _initTime = new Date().getTime();
 
-$(document).ready(() => {
-  _initTime = new Date().getTime()
-});
-
 let init = (_svg) => {
   svg = _svg;
+  _initTime = new Date().getTime();
 }
 
 let addAnimate = (targetDom, path, options = {}, animateDom) => {
