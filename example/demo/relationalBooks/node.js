@@ -61,9 +61,11 @@ class BaseNode extends Node {
   _onEditNode(dom) {
     dom.find('.edit').click(function () {
       const oldNode = $(this).prev('.text');
+      const oldNodeText = $(this).prev('.text').text();
 
       if ($(oldNode.html()).attr("type") !== 'text') {
-        oldNode.html(`<input type=text name=editname class=input-text value=${oldNode.html()} />`);
+        oldNode.html(`<input type=text class=input-text />`);
+        $(oldNode).find('input').focus().val(oldNodeText);
         oldNode.children().keyup(function (event) {
           if (event.keyCode === 13 || event.keyCode === 27) {
             const oldInputText = $(this).val();
