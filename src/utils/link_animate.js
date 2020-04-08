@@ -19,6 +19,9 @@ let addAnimate = (targetDom, path, options = {}, animateDom) => {
     circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     motion = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion');
     circle.append(motion);
+  } else {
+    circle = _animateDom;
+    motion = $(_animateDom).find('animateMotion')[0];
   }
 
   if (options._isContinue) {
