@@ -2,13 +2,14 @@
 
 const BaseNode = require('./node.js');
 const AlisBaseNode = require('./alis-node.js');
+const $ = require('jquery');
 
 module.exports = {
   nodes: [{
     id: '0',
     name: 'Book',
-    top: 130,
-    left: 176,
+    top: 264,
+    left: 172,
     data: {
       content: ['id', 'isbn', 'title']
     },
@@ -28,8 +29,8 @@ module.exports = {
   }, {
     id: '1',
     name: 'BookPublisher',
-    top: 620,
-    left: 400,
+    top: 488,
+    left: 374,
     data: {
       content: ['book_id', 'publisher_id']
     },
@@ -48,8 +49,8 @@ module.exports = {
   }, {
     id: '2',
     name: 'Author',
-    top: 620,
-    left: 800,
+    top: 488,
+    left: 750,
     data: {
       content: ['id', 'name']
     },
@@ -63,8 +64,8 @@ module.exports = {
   }, {
     id: '3',
     name: 'BookAuthor',
-    top: 1160,
-    left: 20,
+    top: 754,
+    left: -36,
     data: {
       content: ['book_id', 'author_id']
     },
@@ -86,8 +87,8 @@ module.exports = {
     data: {
       content: ['id', 'name']
     },
-    top: 1160,
-    left: 470,
+    top: 754,
+    left: 374,
     endpoints: [{
       id: 'point_1',
       type: 'target',
@@ -101,8 +102,8 @@ module.exports = {
     data: {
       content: 'SELECT * FROM b INNER JOIN book_author ba ON b.id = ba.book_id GROUP BY ba.author_id'
     },
-    top: 1220,
-    left: 950,
+    top: 744,
+    left: 900,
     Class: AlisBaseNode
   }],
   edges: [{
