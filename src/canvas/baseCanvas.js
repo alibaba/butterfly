@@ -3186,6 +3186,12 @@ class BaseCanvas extends Canvas {
       }
     }
   }
+  isActionQueueTop() {
+    return this.actionQueueIndex + 1 >= this.actionQueue.length - 1;
+  }
+  isActionQueueBottom() {
+    return this.actionQueueIndex <= 0;
+  }
   pushActionQueue(option) {
 
     let step = option;

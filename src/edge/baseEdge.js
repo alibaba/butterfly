@@ -226,6 +226,9 @@ class BaseEdge extends Edge {
     if (this.eventHandlerDom) {
       $(this.eventHandlerDom).remove();
     }
+    if (this.animateDom) {
+      $(this.animateDom).remove();
+    }
     $(this.dom).remove();
     if (this.id && !isNotEventEmit) {
       this.emit('system.link.delete', {
