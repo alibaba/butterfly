@@ -9,9 +9,6 @@ class BaseEdge extends Edge {
     if (this.options.color) {
       $(path).addClass(this.options.color);
     }
-    $(this.eventHandlerDom).on('mouseenter', () => {
-      console.log('mouseenter');
-    });
     return path;
   }
   drawArrow(isShow) {

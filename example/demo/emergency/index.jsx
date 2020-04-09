@@ -22,8 +22,7 @@ class Emergency extends Component {
       theme: {
         edge: {
           type: 'Manhattan',
-          arrow: true,
-          isExpandWidth: true
+          arrow: true
         },
         // 拖动边缘处自动适应画布
         autoFixCanvas: {
