@@ -144,6 +144,11 @@ getNode = (string) => {}
   */
 addNode = (object|Node) => {}
 /**
+  * 批量添加节点
+  * @param {array<object|Node>}  - 节点的信息；Node － 节点的基类
+  */
+addNodes = (array<object|Node>) => {}
+/**
   * 删除节点
   * @param nodeId string  - 节点id
   */
@@ -159,6 +164,11 @@ removeNodes = (array) => {}
   * @param {object|Edge} object  - 连线的信息；Edge － 连线的基类
   */
 addEdge = (object|Edge) => {}
+/**
+  * 批量添加连线
+  * @param {array<object|Edge>}   - 连线的信息；Edge － 连线的基类
+  */
+addEdges = (array<object|Edge>) => {}
 
 /**
   * 根据id或者Edge对象来删除线

@@ -149,6 +149,12 @@ getNode = (string) => {}
 addNode = (object|Node) => {}
 
 /**
+  * add multiple nodes
+  * @param {array<object|Node>}  - node data or Node instance
+  */
+addNodes = (array<object|Node>) => {}
+
+/**
   * delete node by id
   * @param nodeId string  - node id
   */
@@ -165,6 +171,12 @@ removeNodes = (array) => {}
   * @param {object|Edge} object  - edge data or Edge instance
   */
 addEdge = (object|Edge) => {}
+
+/**
+  * add multiple edges
+  * @param {array<object|Edge>}   - edge data or Edge instance
+  */
+addEdges = (array<object|Edge>) => {}
 
 /**
   * delete Edge by id or Edge Object
