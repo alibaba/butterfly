@@ -50,7 +50,7 @@ class BaseNode extends Node {
 
   addEndpoint(obj, isInited) {
     if (isInited) {
-      this._emit('InnerEvents', {
+      this.emit('InnerEvents', {
         type: 'node:addEndpoint',
         data: obj,
         isInited
@@ -66,10 +66,12 @@ class BaseNode extends Node {
       _limitNum: obj.limitNum || this._endpointLimitNum,
       _global: this.global
     }, obj));
-    this._emit('InnerEvents', {
+    
+    this.emit('InnerEvents', {
       type: 'node:addEndpoint',
-      data: endpoint,
+      data: endpoint
     });
+
     this.endpoints.push(endpoint);
     return endpoint;
   }
@@ -141,7 +143,7 @@ class BaseNode extends Node {
     this.left = x;
   }
   moveTo(x, y, isNotEventEmit) {
-    this._emit('InnerEvents', {
+    this.emit('InnerEvents', {
       type: 'node:move',
       node: this,
       x,
@@ -176,13 +178,13 @@ class BaseNode extends Node {
       e.preventDefault();
       if (this.draggable) {
         this._isMoving = true;
-        this._emit('InnerEvents', {
+        this.emit('InnerEvents', {
           type: 'node:dragBegin',
           data: this
         });
       } else {
         // 单纯为了抛错事件给canvas，为了让canvas的dragtype不为空，不会触发canvas:click事件
-        this._emit('InnerEvents', {
+        this.emit('InnerEvents', {
           type: 'node:mouseDown',
           data: this
         });
@@ -192,10 +194,10 @@ class BaseNode extends Node {
     $(this.dom).on('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      this._emit('system.node.click', {
+      this.emit('system.node.click', {
         node: this
       });
-      this._emit('events', {
+      this.emit('events', {
         type: 'node:click',
         node: this
       });
@@ -207,16 +209,14 @@ class BaseNode extends Node {
     this.draggable = draggable;
   }
   remove() {
-    this._emit('InnerEvents', {
+    this.emit('InnerEvents', {
       type: 'node:delete',
       data: this
     });
   }
   emit(type, data) {
+    super.emit(type, data);
     this._emit(type, data);
-  }
-  on(type, callback) {
-    this._on(type, callback);
   }
   destroy(isNotEvent) {
     if (!isNotEvent) {
@@ -224,6 +224,7 @@ class BaseNode extends Node {
         !item._isInitedDom && item.destroy();
       });
       $(this.dom).remove();
+      this.removeAllListeners();
     } else {
       this.endpoints.forEach((item) => {
         !item._isInitedDom && item.destroy();

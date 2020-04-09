@@ -8,8 +8,10 @@ import LinkAnimateUtil from '../utils/link_animate'
 
 import './baseEdge.less';
 
-class Edge {
+import Edge from '../interface/edge';
+class BaseEdge extends Edge {
   constructor(opts) {
+    super(opts);
     this.id = _.get(opts, 'id');
     this.targetNode = _.get(opts, 'targetNode');
     this._targetType = _.get(opts, '_targetType');
@@ -211,10 +213,8 @@ class Edge {
     }, this.animateDom);
   }
   emit(type, data) {
+    super.emit(type, data);
     this._emit(type, data);
-  }
-  on(type, callback) {
-    this._on(type, callback);
   }
   destroy(isNotEventEmit) {
     if (this.labelDom) {
@@ -226,30 +226,34 @@ class Edge {
     if (this.eventHandlerDom) {
       $(this.eventHandlerDom).remove();
     }
+    if (this.animateDom) {
+      $(this.animateDom).remove();
+    }
     $(this.dom).remove();
     if (this.id && !isNotEventEmit) {
-      this._emit('system.link.delete', {
+      this.emit('system.link.delete', {
         link: this
       });
-      this._emit('events', {
+      this.emit('events', {
         type: 'link:delete',
         link: this
       });
+      this.removeAllListeners();
     }
   }
   _addEventListener() {
     $(this.dom).on('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      this._emit('system.link.click', {
+      this.emit('system.link.click', {
         edge: this
       });
-      this._emit('events', {
+      this.emit('events', {
         type: 'link:click',
         edge: this
       });
 
-      this._emit('InnerEvents', {
+      this.emit('InnerEvents', {
         type: 'link:click',
         data: this
       });
@@ -270,4 +274,4 @@ class Edge {
   }
 }
 
-export default Edge;
+export default BaseEdge;

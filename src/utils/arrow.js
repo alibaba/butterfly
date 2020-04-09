@@ -17,7 +17,7 @@ function calcSlope(opts) {
   let x = 0;
   let y = 0;
   
-  if (shapeType === 'Bezier' || shapeType === 'AdvancedBezier') {
+  if (shapeType === 'BezierTest' || shapeType === 'AdvancedBezierTest') {
     let p0 = {x: coordinates[8], y: coordinates[9]};
     let p1 = {x: coordinates[1], y: coordinates[2]};
 
