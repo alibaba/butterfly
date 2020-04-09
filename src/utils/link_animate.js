@@ -22,6 +22,7 @@ let addAnimate = (targetDom, path, options = {}, animateDom) => {
   } else {
     circle = _animateDom;
     motion = $(_animateDom).find('animateMotion')[0];
+    $(circle).css('display', 'block');
   }
 
   if (options._isContinue) {
@@ -37,8 +38,14 @@ let addAnimate = (targetDom, path, options = {}, animateDom) => {
     motion.setAttribute('path', path);
     motion.setAttribute('begin', `${_startTime}s`);
     motion.setAttribute('dur', options.dur || '8s');
-    motion.setAttribute('fill', 'remove');
+    motion.setAttribute('fill', 'freeze');
     motion.setAttribute('repeatCount', options.repeatCount || 'indefinite');
+
+    if (options.repeatCount && options.repeatCount !== 'indefinite') {
+      setTimeout(() => {
+        $(circle).css('display', 'none');
+      }, parseFloat(options.dur) * parseInt(options.repeatCount) * 1000);
+    }
   }
 
   if (!_animateDom) {

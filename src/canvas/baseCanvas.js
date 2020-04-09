@@ -211,8 +211,8 @@ class BaseCanvas extends Canvas {
       }, 20);
     });
     Promise.all([groupPromise, nodePromise, edgePromise]).then(() => {
-      // this.actionQueue = [];
-      // this.actionQueueIndex = -1;
+      this.actionQueue = [];
+      this.actionQueueIndex = -1;
       callback && callback({
         nodes: this.nodes,
         edges: this.edges,
@@ -711,7 +711,7 @@ class BaseCanvas extends Canvas {
     const neighborEdges = this.getNeighborEdges(nodeId);
 
     if (!isNotDelEdge) {
-      this.removeEdges(neighborEdges, isNotEventEmit);
+      this.removeEdges(neighborEdges, isNotEventEmit, true);
     }
 
     // 删除节点
@@ -778,7 +778,7 @@ class BaseCanvas extends Canvas {
     };
   }
 
-  removeEdges(edges, isNotEventEmit) {
+  removeEdges(edges, isNotEventEmit, isNotPushActionQueue) {
     let result = [];
     edges.forEach((_edge) => {
       let edgeIndex = -1;
@@ -832,7 +832,7 @@ class BaseCanvas extends Canvas {
         !isExistEdge && (_rmEdge.targetEndpoint._tmpType = undefined);
       }
     });
-    if (!isNotEventEmit) {
+    if (!isNotPushActionQueue) {
       this.pushActionQueue({
         type: 'system:removeEdges',
         data: result
@@ -841,8 +841,8 @@ class BaseCanvas extends Canvas {
     return result;
   }
 
-  removeEdge(edge, isNotEventEmit) {
-    return this.removeEdges([edge], isNotEventEmit)[0];
+  removeEdge(edge, isNotEventEmit, isNotPushActionQueue) {
+    return this.removeEdges([edge], isNotEventEmit, isNotPushActionQueue)[0];
   }
 
   removeGroup(groupId, isNotEventEmit) {
@@ -3028,7 +3028,7 @@ class BaseCanvas extends Canvas {
     if (step.type === '_system:dragNodeEnd') {
       step = this.actionQueue[this.actionQueueIndex--];
     }
-    result.push(result);
+    result.push(step);
     if (step.type === 'system:addNodes') {
       this.removeNodes(step.data, true, true);
     } else if (step.type === 'system:removeNode') {
@@ -3111,11 +3111,11 @@ class BaseCanvas extends Canvas {
       this.actionQueueIndex--;
     }
 
-    this.emit('system.undo', {
+    this.emit('system.canvas.undo', {
       steps: result
     });
     this.emit('events', {
-      type: 'undo',
+      type: 'canvas.undo',
       steps: result
     });
   }
@@ -3201,11 +3201,11 @@ class BaseCanvas extends Canvas {
       }
     }
 
-    this.emit('system.redo', {
+    this.emit('system.canvas.redo', {
       steps: result
     });
     this.emit('events', {
-      type: 'redo',
+      type: 'canvas.redo',
       steps: result
     });
   }
@@ -3213,7 +3213,7 @@ class BaseCanvas extends Canvas {
     return this.actionQueueIndex + 1 >= this.actionQueue.length - 1;
   }
   isActionQueueBottom() {
-    return this.actionQueueIndex <= 0;
+    return this.actionQueueIndex <= -1;
   }
   pushActionQueue(option) {
 
