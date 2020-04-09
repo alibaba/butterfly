@@ -49,11 +49,11 @@ function drawBezier(sourcePoint, targetPoint) {
   targetCtrlPoint = [targetCtrlPoint[0] + offsetX, targetCtrlPoint[1] + offsetY];
 
   // 起始点
-  let result = ['M', targetPoint.pos[0], targetPoint.pos[1]];
+  let result = ['M', sourcePoint.pos[0], sourcePoint.pos[1]];
   // 两个控制点
-  result = result.concat(['C', sourceCtrlPoint[0], sourceCtrlPoint[1], targetCtrlPoint[0], targetCtrlPoint[1]]);
+  result = result.concat(['C', targetCtrlPoint[0], targetCtrlPoint[1], sourceCtrlPoint[0], sourceCtrlPoint[1]]);
   // 结束点
-  result = result.concat([sourcePoint.pos[0], sourcePoint.pos[1]]);
+  result = result.concat([targetPoint.pos[0], targetPoint.pos[1]]);
 
   return result.join(' ');
 }
@@ -104,7 +104,8 @@ function drawAdvancedBezier(sourcePoint, targetPoint) {
   let result = ['M', sourcePoint.pos[0], sourcePoint.pos[1]];
   // let result = ['M', targetPoint.pos[0], targetPoint.pos[1]];
   // 两个控制点
-  result = result.concat(['C', targetCtrlPoint[0], targetCtrlPoint[1], sourceCtrlPoint[0], sourceCtrlPoint[1]]);
+  result = result.concat(['C', sourceCtrlPoint[0], sourceCtrlPoint[1]], targetCtrlPoint[0], targetCtrlPoint[1]);
+  // result = result.concat(['C', targetCtrlPoint[0], targetCtrlPoint[1], sourceCtrlPoint[0], sourceCtrlPoint[1]]);
   // 结束点
   result = result.concat([targetPoint.pos[0], targetPoint.pos[1]]);
   // result = result.concat([sourcePoint.pos[0], sourcePoint.pos[1]]);
