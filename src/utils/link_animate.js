@@ -8,6 +8,7 @@ let _initTime = new Date().getTime();
 
 let init = (_svg) => {
   svg = _svg;
+  _initTime = new Date().getTime();
 }
 
 let addAnimate = (targetDom, path, options = {}, animateDom) => {
@@ -18,6 +19,10 @@ let addAnimate = (targetDom, path, options = {}, animateDom) => {
     circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     motion = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion');
     circle.append(motion);
+  } else {
+    circle = _animateDom;
+    motion = $(_animateDom).find('animateMotion')[0];
+    $(circle).css('display', 'block');
   }
 
   if (options._isContinue) {
@@ -33,8 +38,14 @@ let addAnimate = (targetDom, path, options = {}, animateDom) => {
     motion.setAttribute('path', path);
     motion.setAttribute('begin', `${_startTime}s`);
     motion.setAttribute('dur', options.dur || '8s');
-    motion.setAttribute('fill', 'remove');
+    motion.setAttribute('fill', 'freeze');
     motion.setAttribute('repeatCount', options.repeatCount || 'indefinite');
+
+    if (options.repeatCount && options.repeatCount !== 'indefinite') {
+      setTimeout(() => {
+        $(circle).css('display', 'none');
+      }, parseFloat(options.dur) * parseInt(options.repeatCount) * 1000);
+    }
   }
 
   if (!_animateDom) {

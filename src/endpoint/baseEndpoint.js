@@ -5,8 +5,11 @@ const _ = require('lodash');
 
 import './baseEndpoint.less';
 
-class Endpoint {
+import Endpoint from '../interface/endpoint';
+
+class BaseEndpoint extends Endpoint {
   constructor(opts) {
+    super(opts);
     this.id = opts.id;
     this.options = opts;
     this.orientation = opts.orientation;
@@ -213,22 +216,21 @@ class Endpoint {
       }
       e.preventDefault();
       e.stopPropagation();
-      this._emit('InnerEvents', {
+      this.emit('InnerEvents', {
         type: 'endpoint:drag',
         data: this
       });
     });
   }
   emit(type, data) {
+    super.emit(type, data);
     this._emit(type, data);
-  }
-  on(type, callback) {
-    this._on(type, callback);
   }
   destroy() {
     $(this.dom).off();
     $(this.dom).remove();
+    this.removeAllListeners();
   }
 }
 
-export default Endpoint;
+export default BaseEndpoint;
