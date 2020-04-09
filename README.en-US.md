@@ -67,7 +67,7 @@ canvas.draw({
 
 * [Canvas](./docs/en-US/canvas.md)
  * [attribute](./docs/en-US/canvas.md#canvas-attr)
- * [add and delete node，edge，group](./docs/en-US/canvas.md#canvas-api-crud)
+ * [get, add and delete node，edge，group](./docs/en-US/canvas.md#canvas-api-crud)
  * [zoom and move canvas](./docs/en-US/canvas.md#canvas-api-zoom-move)
  * [fit canvas and focus part nodes](./docs/en-US/canvas.md#canvas-api-focus)
  * [redo, undo](./docs/en-US/canvas.md#canvas-api-redo-undo)

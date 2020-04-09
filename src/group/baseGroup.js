@@ -97,7 +97,7 @@ class BaseGroup extends Group {
         console.log(`nodeId为${item.id}的节点和groupId${this.id}的节点组scope值不符，无法加入`);
       }
     });
-    this._emit('InnerEvents', {
+    this.emit('InnerEvents', {
       type: 'group:addNodes',
       nodes: nodes,
       group: this,
@@ -125,7 +125,7 @@ class BaseGroup extends Group {
     //     rmNodes.push(_node);
     //   }
     // });
-    this._emit('InnerEvents', {
+    this.emit('InnerEvents', {
       type: 'group:removeNodes',
       group: this,
       nodes: rmNodes,
@@ -157,7 +157,7 @@ class BaseGroup extends Group {
       }
       event.preventDefault();
       // event.stopPropagation();
-      this._emit('InnerEvents', {
+      this.emit('InnerEvents', {
         type: 'group:resize',
         group: this
       });
@@ -180,7 +180,7 @@ class BaseGroup extends Group {
     $(this.dom).css('width', this.width).css('height', this.height);
   }
   remove() {
-    this._emit('InnerEvents', {
+    this.emit('InnerEvents', {
       type: 'group:delete',
       data: this
     });
@@ -202,7 +202,7 @@ class BaseGroup extends Group {
     this.left = x;
   }
   moveTo(x, y, isNotEventEmit) {
-    this._emit('InnerEvents', {
+    this.emit('InnerEvents', {
       type: 'group:move',
       group: this,
       x,
@@ -237,10 +237,10 @@ class BaseGroup extends Group {
     $(this.dom).on('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      this._emit('system.group.click', {
+      this.emit('system.group.click', {
         group: this
       });
-      this._emit('events', {
+      this.emit('events', {
         type: 'group:click',
         group: this
       });
@@ -264,7 +264,7 @@ class BaseGroup extends Group {
       }
       e.preventDefault();
       // e.stopPropagation();
-      this._emit('InnerEvents', {
+      this.emit('InnerEvents', {
         type: 'group:dragBegin',
         data: this
       });
@@ -279,7 +279,7 @@ class BaseGroup extends Group {
   }
   addEndpoint(obj, isInited) {
     if (isInited) {
-      this._emit('InnerEvents', {
+      this.emit('InnerEvents', {
         type: 'group:addEndpoint',
         data: obj,
         isInited
@@ -295,7 +295,7 @@ class BaseGroup extends Group {
       _global: this._global,
     }, obj));
 
-    this._emit('InnerEvents', {
+    this.emit('InnerEvents', {
       type: 'group:addEndpoint',
       data: endpoint,
     });
@@ -303,10 +303,8 @@ class BaseGroup extends Group {
     return endpoint;
   }
   emit(type, data) {
+    super.emit(type, data);
     this._emit(type, data);
-  }
-  on(type, callback) {
-    this._on(type, callback);
   }
   destroy(isNotEventEmit) {
     this.endpoints.forEach((item) => {
@@ -322,6 +320,7 @@ class BaseGroup extends Group {
         type: 'group:delete',
         group: this
       });
+      this.removeAllListeners();
     }
   }
 }
