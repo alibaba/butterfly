@@ -101,11 +101,13 @@ function drawAdvancedBezier(sourcePoint, targetPoint) {
   const targetCtrlPoint = [targetPoint.pos[0] + to_offsetX, targetPoint.pos[1] + to_offsetY];
 
   // 起始点
-  let result = ['M', targetPoint.pos[0], targetPoint.pos[1]];
+  let result = ['M', sourcePoint.pos[0], sourcePoint.pos[1]];
+  // let result = ['M', targetPoint.pos[0], targetPoint.pos[1]];
   // 两个控制点
   result = result.concat(['C', targetCtrlPoint[0], targetCtrlPoint[1], sourceCtrlPoint[0], sourceCtrlPoint[1]]);
   // 结束点
-  result = result.concat([sourcePoint.pos[0], sourcePoint.pos[1]]);
+  result = ['M', targetPoint.pos[0], targetPoint.pos[1]];
+  // result = result.concat([sourcePoint.pos[0], sourcePoint.pos[1]]);
 
   return result.join(' ');
 }
