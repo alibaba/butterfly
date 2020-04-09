@@ -3019,6 +3019,7 @@ class BaseCanvas extends Canvas {
     return _.flatten(points);
   }
   undo () {
+    let result = [];
     if (this.actionQueueIndex <= -1) {
       console.warn('回退堆栈已空，无法再undo');
       return ;
@@ -3027,6 +3028,7 @@ class BaseCanvas extends Canvas {
     if (step.type === '_system:dragNodeEnd') {
       step = this.actionQueue[this.actionQueueIndex--];
     }
+    result.push(result);
     if (step.type === 'system:addNodes') {
       this.removeNodes(step.data, true, true);
     } else if (step.type === 'system:removeNode') {
@@ -3078,6 +3080,7 @@ class BaseCanvas extends Canvas {
             let _node = this.getNode(key);
             _node.moveTo(_nodeInfo.fromLeft, _nodeInfo.fromTop, true);
           }
+          result.unshift(_preStep);
         }
       }
 
@@ -3100,21 +3103,33 @@ class BaseCanvas extends Canvas {
             let _node = this.getNode(key);
             _node.moveTo(_nodeInfo.fromLeft, _nodeInfo.fromTop, true);
           }
+          result.unshift(_preStep);
           this.actionQueueIndex--;
         }
       }
       
       this.actionQueueIndex--;
     }
+
+    this.emit('system.undo', {
+      steps: result
+    });
+    this.emit('events', {
+      type: 'undo',
+      steps: result
+    });
   }
   redo () {
+    let result = [];
     if (this.actionQueueIndex + 1 > this.actionQueue.length - 1) {
       console.warn('重做堆栈已到顶，无法再redo');
       return ;
     }
     let step = this.actionQueue[++this.actionQueueIndex];
+    result.push(step);
     if (step.type === 'system:moveNodes' && step.data._isDraging) {
       step = this.actionQueue[++this.actionQueueIndex];
+      result.push(step);
     }
     if (step.type === 'system:addNodes') {
       this.addNodes(step.data, true);
@@ -3185,6 +3200,14 @@ class BaseCanvas extends Canvas {
         }
       }
     }
+
+    this.emit('system.redo', {
+      steps: result
+    });
+    this.emit('events', {
+      type: 'redo',
+      steps: result
+    });
   }
   isActionQueueTop() {
     return this.actionQueueIndex + 1 >= this.actionQueue.length - 1;

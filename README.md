@@ -66,7 +66,7 @@ canvas.draw({
 ## 🔗 API文档
 * [画布(Canvas)](./docs/zh-CN/canvas.md)
  * [属性配置](./docs/zh-CN/canvas.md#canvas-attr)
- * [节点，线段，节点组的新增和删除](./docs/zh-CN/canvas.md#canvas-api-crud)
+ * [节点，线段，节点组的查看,新增,删除](./docs/zh-CN/canvas.md#canvas-api-crud)
  * [缩放，平移](./docs/zh-CN/canvas.md#canvas-api-zoom-move)
  * [适配画布和聚焦局部节点](./docs/zh-CN/canvas.md#canvas-api-focus)
  * [重做和撤销](./docs/zh-CN/canvas.md#canvas-api-redo-undo)
