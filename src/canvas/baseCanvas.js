@@ -729,19 +729,19 @@ class BaseCanvas extends Canvas {
 
     if (_rmNodes.length > 0) {
       if(!isNotEventEmit) {
-        this.emit('system.node.delete', {
-          node: _rmNodes[0]
-        });
-        this.emit('events', {
-          type: 'node:delete',
-          node: _rmNodes[0]
-        });
         this.pushActionQueue({
           type: 'system:removeNode',
           data: {
             nodes: [_rmNodes[0]],
             edges: neighborEdges
           }
+        });
+        this.emit('system.node.delete', {
+          node: _rmNodes[0]
+        });
+        this.emit('events', {
+          type: 'node:delete',
+          node: _rmNodes[0]
         });
       }
       return {
@@ -813,6 +813,13 @@ class BaseCanvas extends Canvas {
       }
     });
 
+    if (!isNotPushActionQueue) {
+      this.pushActionQueue({
+        type: 'system:removeEdges',
+        data: result
+      });
+    }
+
     result.forEach((item) => {
       item.destroy(isNotEventEmit);
     });
@@ -832,12 +839,6 @@ class BaseCanvas extends Canvas {
         !isExistEdge && (_rmEdge.targetEndpoint._tmpType = undefined);
       }
     });
-    if (!isNotPushActionQueue) {
-      this.pushActionQueue({
-        type: 'system:removeEdges',
-        data: result
-      });
-    }
     return result;
   }
 
@@ -3121,7 +3122,7 @@ class BaseCanvas extends Canvas {
   }
   redo () {
     let result = [];
-    if (this.actionQueueIndex + 1 > this.actionQueue.length - 1) {
+    if (this.actionQueueIndex >= this.actionQueue.length - 1) {
       console.warn('重做堆栈已到顶，无法再redo');
       return ;
     }
@@ -3210,7 +3211,7 @@ class BaseCanvas extends Canvas {
     });
   }
   isActionQueueTop() {
-    return this.actionQueueIndex + 1 >= this.actionQueue.length - 1;
+    return this.actionQueueIndex >= this.actionQueue.length - 1;
   }
   isActionQueueBottom() {
     return this.actionQueueIndex <= -1;
