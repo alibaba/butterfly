@@ -709,7 +709,6 @@ class BaseCanvas extends Canvas {
 
     // 删除邻近的线条
     const neighborEdges = this.getNeighborEdges(nodeId);
-
     if (!isNotDelEdge) {
       this.removeEdges(neighborEdges, isNotEventEmit, true);
     }
@@ -3031,12 +3030,12 @@ class BaseCanvas extends Canvas {
     }
     result.push(step);
     if (step.type === 'system:addNodes') {
-      this.removeNodes(step.data, true, true);
+      this.removeNodes(step.data, false, true);
     } else if (step.type === 'system:removeNode') {
       this.addNodes(step.data.nodes, true);
       this.addEdges(step.data.edges, true);
     } else if (step.type === 'system:addEdges') {
-      this.removeEdges(step.data, true);
+      this.removeEdges(step.data, true, true);
     } else if (step.type === 'system:removeEdges') {
       this.addEdges(step.data, true);
     } else if (step.type === 'system:moveNodes') {
@@ -3135,8 +3134,7 @@ class BaseCanvas extends Canvas {
     if (step.type === 'system:addNodes') {
       this.addNodes(step.data, true);
     } else if (step.type === 'system:removeNode') {
-      this.removeNodes(step.data.nodes, true);
-      this.removeEdges(step.data.edges, true);
+      this.removeNodes(step.data.nodes, false, true);
     } else if (step.type === 'system:addEdges') {
       this.addEdges(step.data, true);
     } else if (step.type === 'system:removeEdges') {
@@ -3209,6 +3207,10 @@ class BaseCanvas extends Canvas {
       type: 'canvas.redo',
       steps: result
     });
+
+    if (_.get(this.actionQueue, [this.actionQueueIndex+1, 'type']) === '_system:dragNodeEnd') {
+      this.actionQueueIndex++;
+    }
   }
   isActionQueueTop() {
     return this.actionQueueIndex >= this.actionQueue.length - 1;
