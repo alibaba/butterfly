@@ -31,7 +31,11 @@ let canvas = new Canvas({
         botton: 10
       }
     },
-    zoomGap: 0.001         //鼠标放大缩小间隙设置
+    zoomGap: 0.001,         //鼠标放大缩小间隙设置
+    autoFixCanvas: {     //节点拖动或连线拖动到画布边缘时，画布自动延展
+      enable: false,
+      autoMovePadding: [20, 20, 20, 20] //触发自动延展的画布内边距
+    }
   },
   global: {                //自定义配置，会贯穿所有canvas，group，node，edge，endpoint对象
     isScopeStrict: false   //scope是否为严格模式(默认为false)
@@ -57,6 +61,7 @@ let canvas = new Canvas({
   * 默认为false。假如该值设置为true，当scope必须完全一致才能匹配；假如该值为false，当scope为undefined时，都能匹配所有值。
 * **重力布局**，传入`'ForceLayout'`即可，小蝴蝶内置布局
 * **自定义布局**，传入一个方法，里面可以按照用户需求进行布局。注:`除此之外，记得把Edge的calcPath的方法复写掉，不然会由小蝴蝶的内置计算线段的方法代替，无法实现所得的线段`
+* **autoFixCanvas**，自动延展画布，适用于画布内节点与画布外节点有互动的场景。效果如下：![自动延展画布](https://img.alicdn.com/tfs/TB16lUNBG61gK0jSZFlXXXDKFXa-1665-801.gif)
 
 ```js
 let canvas = new Canvas({

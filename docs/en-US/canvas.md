@@ -1,6 +1,6 @@
 # Canvas
 
-```
+```js
 let canvas = new Canvas({
   root: dom,               // canvas root dom (require)
   layout: 'ForceLayout'    // layout setting , integrated or custom , (optional)
@@ -31,7 +31,11 @@ let canvas = new Canvas({
         botton: 10
       }
     },
-    zoomGap: 0.001         // mouse zoom in and out gap settings
+    zoomGap: 0.001,       // mouse zoom in and out gap settings
+    autoFixCanvas: {     // auto expand canvas when drag nodes or edges near the edge of canvas.
+      enable: false,
+      autoMovePadding: [20, 20, 20, 20]
+    }
   },
   global: {                // custom configuration, will run through all canvas, group, node, edge, endpoint objects
     isScopeStrict: false   // whether scope is strict mode (default is false)
@@ -57,6 +61,7 @@ let canvas = new Canvas({
   * The default is false. If the value is set to true, the scope must match when the scope must be identical; if the value is false, all values are matched when the scope is undefined.
 * **重力布局**，pass `'ForceLayout'`，butterfly built-in layout
 * **自定义布局**，pass in a method, which can be layout according to user needs. Note:`In addition, remember to overwrite the Edge calcPath method, otherwise it will be replaced by butterfly's built-in calculation edge  method, and the resulting edge cannot be realized.`
+* **autoFixCanvas**, auto expand canvas when drag nodes or edges near the margin of canvas, set autoMovePadding to adjust the area of hotspots. See: ![autoFixCanvas](https://img.alicdn.com/tfs/TB16lUNBG61gK0jSZFlXXXDKFXa-1665-801.gif)
 
 ```
 let canvas = new Canvas({
