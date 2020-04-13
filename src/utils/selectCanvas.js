@@ -66,6 +66,7 @@ class SelectCanvas {
     const startY = this.startY;
     const endX = this.endX = evt.clientX;
     const endY = this.endY = evt.clientY;
+    const toDirection = endX - startX > 0 ? 'right' : 'left'
 
     const startLeft = startX > endX ? endX : startX;
     const startTop = startY > endY ? endY : startY;
@@ -75,7 +76,8 @@ class SelectCanvas {
 
     this._emit('InnerEvents', {
       type: 'multiple:select',
-      range: [startLeft, startTop, endLeft, endTop]
+      range: [startLeft, startTop, endLeft, endTop],
+      toDirection
     });
 
     this.unActive();

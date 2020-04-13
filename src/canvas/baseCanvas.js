@@ -87,7 +87,8 @@ class BaseCanvas extends Canvas {
 
     // 框选模式，需要重新考虑(默认单选)
     this.isSelectMode = false;
-    this.selecModel = [];
+    this.selecContents = [];
+    this.selecMode = 'include';
     this.selectItem = {
       nodes: [],
       edges: [],
@@ -1418,11 +1419,12 @@ class BaseCanvas extends Canvas {
     };
   }
 
-  setSelectMode(flat = true, type = ['node']) {
+  setSelectMode(flat = true, contents = ['node'], selecMode = 'include') {
     if (flat) {
       this.isSelectMode = true;
       this._rmSystemUnion();
-      this.selecModel = type;
+      this.selecContents = contents;
+      this.selecMode = selecMode;
       this.canvasWrapper.active();
       this._remarkMove = this.moveable;
       this._remarkZoom = this.zoomable;
@@ -1814,7 +1816,7 @@ class BaseCanvas extends Canvas {
       }  else if (data.type === 'link:click') {
         this._dragType = 'link:click';
       } else if (data.type === 'multiple:select') {
-        const result = this._selectMytiplyItem(data.range);
+        const result = this._selectMultiplyItem(data.range, data.toDirection);
         // 把框选的加到union的数组
         _.assign(this._unionData['__system'], this.selectItem);
 
@@ -2947,16 +2949,47 @@ class BaseCanvas extends Canvas {
       }
     }
   }
-  _selectMytiplyItem(range) {
+  _selectMultiplyItem(range, toDirection) {
     // 确认一下终端的偏移值
     const startX = this._coordinateService._terminal2canvas('x', range[0]);
     const startY = this._coordinateService._terminal2canvas('y', range[1]);
     const endX = this._coordinateService._terminal2canvas('x', range[2]);
     const endY = this._coordinateService._terminal2canvas('y', range[3]);
 
-    const includeNode = _.includes(this.selecModel, 'node');
-    const includeEdge = _.includes(this.selecModel, 'edge');
-    const includeEndpoint = _.includes(this.selecModel, 'endpoint');
+    const includeNode = _.includes(this.selecContents, 'node');
+    const includeEdge = _.includes(this.selecContents, 'edge');
+    const includeEndpoint = _.includes(this.selecContents, 'endpoint');
+
+    let _isSelected = (option) => {
+      let _itemLeft = option.left;
+      let _itemRight = option.right;
+      let _itemTop = option.top;
+      let _itemBottom = option.bottom;
+      if (this.selecMode === 'include' || (this.selecMode === 'senior' && toDirection === 'right')) {
+        return startX < _itemLeft && endX > _itemRight && startY < _itemTop && endY > _itemBottom;
+      }
+      if (this.selecMode === 'touch' || (this.selecMode === 'senior' && toDirection === 'left')) {
+        // 左上角包含
+        if (startX < _itemLeft && startY < _itemTop && endX > _itemLeft && endY > _itemTop) {
+          return true;
+        }
+        // 右上角包含
+        if (startX < _itemRight && startY < _itemTop && endX > _itemRight && endY > _itemTop) {
+          return true;
+        }
+        // 左下角包含
+        if (startX < _itemLeft && startY < _itemBottom && endX > _itemLeft && endY > _itemBottom) {
+          return true;
+        }
+        // 右下角包含
+        if (startX < _itemRight && startY < _itemBottom && endX > _itemRight && endY > _itemBottom) {
+          return true;
+        }
+
+        return false;
+      }
+    }
+
     // 框选节点
     if (includeNode) {
       this.nodes.forEach((item) => {
@@ -2964,7 +2997,13 @@ class BaseCanvas extends Canvas {
         const nodeRight = item.left + $(item.dom).width();
         const nodeTop = item.top;
         const nodeBottom = item.top + $(item.dom).height();
-        if (startX < nodeLeft && endX > nodeRight && startY < nodeTop && endY > nodeBottom) {
+        let isSelected = _isSelected({
+          left: nodeLeft,
+          right: nodeRight,
+          top: nodeTop,
+          bottom: nodeBottom
+        });
+        if (isSelected) {
           this.selectItem.nodes.push(item);
         }
       });
@@ -2978,7 +3017,13 @@ class BaseCanvas extends Canvas {
           const pointRight = item._posLeft + $(item.dom).width();
           const pointTop = item._posTop;
           const pointBottom = item._posTop + $(item.dom).height();
-          if (startX < pointLeft && endX > pointRight && startY < pointTop && endY > pointBottom) {
+          let isSelected = _isSelected({
+            left: pointLeft,
+            right: pointRight,
+            top: pointTop,
+            bottom: pointBottom
+          });
+          if (isSelected) {
             this.selectItem.endpoints.push(item);
           }
         });
@@ -2993,7 +3038,13 @@ class BaseCanvas extends Canvas {
           const right = (item.sourceEndpoint._posLeft + item.sourceEndpoint._width) > (item.targetEndpoint._posLeft + item.targetEndpoint._width) ? (item.sourceEndpoint._posLeft + item.sourceEndpoint._width) : (item.targetEndpoint._posLeft + item.targetEndpoint._width);
           const top = item.sourceEndpoint._posTop < item.targetEndpoint._posTop ? item.sourceEndpoint._posTop : item.targetEndpoint._posTop;
           const bottom = (item.sourceEndpoint._posTop + item.sourceEndpoint._height) > (item.targetEndpoint._posTop + item.targetEndpoint._height) ? (item.sourceEndpoint._posTop + item.sourceEndpoint._height) : (item.targetEndpoint._posTop + item.targetEndpoint._height);
-          if (startX < left && endX > right && startY < top && endY > bottom) {
+          let isSelected = _isSelected({
+            left: left,
+            right: right,
+            top: top,
+            bottom: bottom
+          });
+          if (isSelected) {
             this.selectItem.edges.push(item);
           }
         } else if (item.type === 'node') {
