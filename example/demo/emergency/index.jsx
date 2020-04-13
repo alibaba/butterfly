@@ -30,7 +30,13 @@ class Emergency extends Component {
         }
       }
     });
-    this.canvas.draw(mockData);
+    this.canvas.draw(mockData, () => {
+      // 第三个参数 include ， touch ， senior
+      // include: 全部包含则能框选中
+      // touch: 触碰到则能选中
+      // senior: 从左到右需要全部包含；从右到左只需要触碰即可
+      this.canvas.setSelectMode(true, ['node', 'endpoint', 'edge'], 'senior');
+    });
     this.canvas.on('events', (data) => {
       console.log(data);
     });
