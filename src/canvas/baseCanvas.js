@@ -709,7 +709,6 @@ class BaseCanvas extends Canvas {
 
     // 删除邻近的线条
     const neighborEdges = this.getNeighborEdges(nodeId);
-
     if (!isNotDelEdge) {
       this.removeEdges(neighborEdges, isNotEventEmit, true);
     }
@@ -2412,6 +2411,8 @@ class BaseCanvas extends Canvas {
           });
         } else {
           let _delEdges = [];
+          let _reconnectInfo = [];
+
           let _emitEdges = this._dragEdges.filter((edge) => {
             // 线条去重
             if (!this.theme.edge.isRepeat) {
@@ -2449,8 +2450,15 @@ class BaseCanvas extends Canvas {
             let _preTargetPointId = _.get(edge, 'targetEndpoint.id');
             let _currentTargetNode = _targetEndpoint.nodeType === 'node' ? this.getNode(_targetEndpoint.nodeId) : this.getGroup(_targetEndpoint.nodeId);
             let _currentTargetEndpoint = _targetEndpoint;
-            if (_preTargetNodeId && _preTargetPointId && `${_preTargetNodeId}||${_preTargetPointId}` !== `${_currentTargetNode}||${_currentTargetEndpoint}`) {
+            if (_preTargetNodeId && _preTargetPointId && `${_preTargetNodeId}||${_preTargetPointId}` !== `${_currentTargetNode.id}||${_currentTargetEndpoint.id}`) {
               _delEdges.push(_.cloneDeep(edge));
+              _reconnectInfo.push({
+                edge,
+                preTargetNodeId: _preTargetNodeId,
+                preTargetPointId: _preTargetPointId,
+                currentTargetNodeId: _currentTargetNode.id,
+                currentTargetPointId: _currentTargetEndpoint.id
+              });
             }
             edge._create({
               id: edge.id && !edge._isDeletingEdge ? edge.id : `${edge.sourceEndpoint.id}-${_targetEndpoint.id}`,
@@ -2487,12 +2495,22 @@ class BaseCanvas extends Canvas {
           if (_delEdges.length !== 0 && _emitEdges.length !== 0) {
             this.emit('system.link.reconnect', {
               delLinks: _delEdges,
-              addLinks: _emitEdges
+              addLinks: _emitEdges,
+              info: _reconnectInfo
             });
             this.emit('events', {
               type: 'link:reconnect',
               delLinks: _delEdges,
-              addLinks: _emitEdges
+              addLinks: _emitEdges,
+              info: _reconnectInfo
+            });
+            this.pushActionQueue({
+              type: 'system:reconnectEdges',
+              data: {
+                delLinks: _delEdges,
+                addLinks: _emitEdges,
+                info: _reconnectInfo
+              }
             });
           } else {
             if (_delEdges.length !== 0) {
@@ -2504,6 +2522,10 @@ class BaseCanvas extends Canvas {
                   type: 'link:delete',
                   link: _edge
                 });
+                this.pushActionQueue({
+                  type: 'system:removeEdges',
+                  data: _delEdges
+                });
               });
             }
             if (_emitEdges.length !== 0) {
@@ -2513,6 +2535,10 @@ class BaseCanvas extends Canvas {
               this.emit('events', {
                 type: 'link:connect',
                 links: this._dragEdges
+              });
+              this.pushActionQueue({
+                type: 'system:addEdges',
+                data: this._dragEdges
               });
             }
           }
@@ -3031,12 +3057,12 @@ class BaseCanvas extends Canvas {
     }
     result.push(step);
     if (step.type === 'system:addNodes') {
-      this.removeNodes(step.data, true, true);
+      this.removeNodes(step.data, false, true);
     } else if (step.type === 'system:removeNode') {
       this.addNodes(step.data.nodes, true);
       this.addEdges(step.data.edges, true);
     } else if (step.type === 'system:addEdges') {
-      this.removeEdges(step.data, true);
+      this.removeEdges(step.data, true, true);
     } else if (step.type === 'system:removeEdges') {
       this.addEdges(step.data, true);
     } else if (step.type === 'system:moveNodes') {
@@ -3110,6 +3136,19 @@ class BaseCanvas extends Canvas {
       }
       
       this.actionQueueIndex--;
+    } else if (step.type === 'system:reconnectEdges') {
+      
+      _.get(step, 'data.info', []).forEach((info) => {
+        let targetNode = this.getNode(info.preTargetNodeId);
+        let targetEndpoint = targetNode.getEndpoint(info.preTargetPointId);
+        info.edge._create({
+          id: `${info.edge.sourceEndpoint.id}-${targetEndpoint.id}`,
+          targetNode: targetNode,
+          _targetType: targetEndpoint.nodeType,
+          targetEndpoint: targetEndpoint,
+          type: 'endpoint'
+        })
+      });
     }
 
     this.emit('system.canvas.undo', {
@@ -3135,8 +3174,7 @@ class BaseCanvas extends Canvas {
     if (step.type === 'system:addNodes') {
       this.addNodes(step.data, true);
     } else if (step.type === 'system:removeNode') {
-      this.removeNodes(step.data.nodes, true);
-      this.removeEdges(step.data.edges, true);
+      this.removeNodes(step.data.nodes, false, true);
     } else if (step.type === 'system:addEdges') {
       this.addEdges(step.data, true);
     } else if (step.type === 'system:removeEdges') {
@@ -3200,6 +3238,18 @@ class BaseCanvas extends Canvas {
           this.actionQueueIndex--;
         }
       }
+    } else if (step.type === 'system:reconnectEdges') {
+      _.get(step, 'data.info', []).forEach((info) => {
+        let targetNode = this.getNode(info.currentTargetNodeId);
+        let targetEndpoint = targetNode.getEndpoint(info.currentTargetPointId);
+        info.edge._create({
+          id: `${info.edge.sourceEndpoint.id}-${targetEndpoint.id}`,
+          targetNode: targetNode,
+          _targetType: targetEndpoint.nodeType,
+          targetEndpoint: targetEndpoint,
+          type: 'endpoint'
+        })
+      });
     }
 
     this.emit('system.canvas.redo', {
@@ -3209,6 +3259,10 @@ class BaseCanvas extends Canvas {
       type: 'canvas.redo',
       steps: result
     });
+
+    if (_.get(this.actionQueue, [this.actionQueueIndex+1, 'type']) === '_system:dragNodeEnd') {
+      this.actionQueueIndex++;
+    }
   }
   isActionQueueTop() {
     return this.actionQueueIndex >= this.actionQueue.length - 1;
