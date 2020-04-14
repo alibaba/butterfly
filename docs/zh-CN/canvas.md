@@ -338,9 +338,10 @@ canvas2terminal = (coordinates) => {}
 /**
   * 设置框选模式
   * @param {true|false} boolean  - 是否开启框选功能
-  * @param {array} type - 可接受框选的内容(node/endpoint/edge,默认node)
+  * @param {array} contents - 可接受框选的内容(node|endpoint|edge),默认'node')
+  * @param {string} selecMode - 可接受框选的内容(include|touch|senior),默认'include',include:全部包含才可选中，touch:触碰就选中，senior:从左到右需要全部包含，从右到左只需触碰就能选中)
   */
-setSelectMode = (boolean, type) => {}
+setSelectMode = (boolean, contents , selecMode) => {}
 /**
   * 获取聚合组
   * @param {name} string  - 聚合组的名称
