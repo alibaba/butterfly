@@ -200,6 +200,9 @@ class BaseEdge extends Edge {
     }
     this.updated && this.updated();
   }
+  isConnect() {
+    return true;
+  }
   addAnimate(options) {
     this.animateDom = LinkAnimateUtil.addAnimate(this.dom, this._path, _.assign({},{
       num: 1, // 现在只支持1个点点
