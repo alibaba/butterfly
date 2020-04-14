@@ -90,8 +90,8 @@ class BaseEdge extends Edge {
         pos: [
           // this.type === 'endpoint' ? this.targetEndpoint._posLeft + this.targetEndpoint._width / 2 : this.targetNode.left + this.targetNode.dom.offsetWidth / 2,
           // this.type === 'endpoint' ? this.targetEndpoint._posTop + this.targetEndpoint._height / 2 : this.targetNode.top + this.targetNode.dom.offsetHeight / 2
-          this.type === 'endpoint' ? this.targetEndpoint._posLeft + this.targetEndpoint._width / 2 : this.targetNode.left + $(this.sourceNode.dom).width() / 2,
-          this.type === 'endpoint' ? this.targetEndpoint._posTop + this.targetEndpoint._height / 2 : this.targetNode.top + $(this.sourceNode.dom).height() / 2
+          this.type === 'endpoint' ? this.targetEndpoint._posLeft + this.targetEndpoint._width / 2 : this.targetNode.left + $(this.targetNode.dom).width() / 2,
+          this.type === 'endpoint' ? this.targetEndpoint._posTop + this.targetEndpoint._height / 2 : this.targetNode.top + $(this.targetNode.dom).height() / 2
         ],
         orientation: (this.type === 'endpoint' && this.targetEndpoint.orientation) ? this.targetEndpoint.orientation : undefined
       };

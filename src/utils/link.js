@@ -593,10 +593,14 @@ function _calcOrientation(beginX, beginY, endX, endY, orientationLimit) {
   let k = Math.abs(posY / posX);
 
   if (posX === 0 || posY === 0) {
-    orientation = posX >= 0 ? _calcWithLimit(['Right', 'Top', 'Bottom', 'Left']) : orientation;
-    orientation = posX < 0 ? _calcWithLimit(['Left', 'Top', 'Bottom', 'Right']) : orientation;
-    orientation = posY >= 0 ? _calcWithLimit(['Top', 'Left', 'Right', 'Bottom']) : orientation;
-    orientation = posY < 0 ? _calcWithLimit(['Bottom', 'Left', 'Right', 'Top']) : orientation;
+    if (posX === 0) {
+      orientation = posY >= 0 ? _calcWithLimit(['Top', 'Left', 'Right', 'Bottom']) : orientation;
+      orientation = posY < 0 ? _calcWithLimit(['Bottom', 'Left', 'Right', 'Top']) : orientation;
+    }
+    if (posY === 0) {
+      orientation = posX >= 0 ? _calcWithLimit(['Right', 'Top', 'Bottom', 'Left']) : orientation;
+      orientation = posX < 0 ? _calcWithLimit(['Left', 'Top', 'Bottom', 'Right']) : orientation;
+    }
   } else if (posX > 0 && posY > 0) {
     if (k > 1) {
       orientation = _calcWithLimit(['Top', 'Left', 'Right', 'Bottom']);
@@ -607,10 +611,10 @@ function _calcOrientation(beginX, beginY, endX, endY, orientationLimit) {
     }
   } else if (posX < 0 && posY > 0) {
     if (k > 1) {
-      orientation = _calcWithLimit(['Top', 'Left', 'Right', 'Bottom']);
+      orientation = _calcWithLimit(['Top', 'Right', 'Left', 'Bottom']);
       // orientation = [0, -1];
     } else {
-      orientation = _calcWithLimit(['Left', 'Top', 'Bottom', 'Right']);
+      orientation = _calcWithLimit(['Right', 'Top', 'Bottom', 'Left']);
       // orientation = [1, 0];
     }
   } else if (posX < 0 && posY < 0) {
