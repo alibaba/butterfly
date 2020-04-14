@@ -69,7 +69,6 @@ class BaseEndpoint extends Endpoint {
       // 计算width,height,left,top
       this._width = $(this.dom).width();
       this._height = $(this.dom).height();
-
       this._left = this._coordinateService._terminal2canvas('x', $(this.dom).offset().left);
       this._top = this._coordinateService._terminal2canvas('y', $(this.dom).offset().top);
 
@@ -85,7 +84,7 @@ class BaseEndpoint extends Endpoint {
     if (!_dom) {
       _dom = $('<div class="butterflie-circle-endpoint"></div>').attr('id', this.id);
     }
-    return _dom;
+    return _dom[0];
   }
 
   updatePos(dom = this.dom, orientation = this.orientation, pos = this.pos) {
@@ -193,19 +192,19 @@ class BaseEndpoint extends Endpoint {
   }
 
   linkable() {
-    this.dom.addClass('linkable');
+    $(this.dom).addClass('linkable');
   }
 
   unLinkable() {
-    this.dom.removeClass('linkable');
+    $(this.dom).removeClass('linkable');
   }
 
   hoverLinkable() {
-    this.dom.addClass('hover');
+    $(this.dom).addClass('hover');
   }
 
   unHoverLinkable() {
-    this.dom.removeClass('hover');
+    $(this.dom).removeClass('hover');
   }
 
   attachEvent() {
