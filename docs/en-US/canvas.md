@@ -344,10 +344,11 @@ canvas2terminal = (coordinates) => {}
 ```js
 /**
   * set select mode
-  * @param {true|false} boolean
-  * @param {array} type - accept select type(node/endpoint/edge, default node)
+  * @param {true|false} boolean enable multiple select
+  * @param {array} contents - accept select contents(node/endpoint/edge, default node)
+  * @param {string} selecMode - accept selec mode(include|touch|senior),default 'include',include:You can select only if the element all included; touch: You can select only if you touch the element; senior: needs to include all from left to right,select only touch from right to left)
   */
-setSelectMode = (boolean, type) => {}
+setSelectMode = (boolean, contents, selecMode) => {}
 
 /**
   * get union by name
