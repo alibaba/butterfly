@@ -4,7 +4,7 @@ import mockData from './data.js';
 const Canvas = require('../../../index.js').TreeCanvas;
 require('./index.less');
 
-class MindMapFirst extends Component {
+class MindMap extends Component {
   constructor() {
     super();
   }
@@ -19,7 +19,7 @@ class MindMapFirst extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'Bezier',
+          type: 'AdvancedBezier',
         }
       },
       layout: {
@@ -62,4 +62,4 @@ class MindMapFirst extends Component {
   }
 }
 
-module.exports = MindMapFirst;
+module.exports = MindMap;
