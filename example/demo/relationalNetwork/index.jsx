@@ -37,7 +37,7 @@ class RelationalNetwork extends Component {
   }
   render() {
     return (
-      <div className='flow-page'>
+      <div className='relationalNetwork-page'>
         <div className="flow-canvas" id="dag-canvas">
         </div>
       </div>
