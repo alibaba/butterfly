@@ -54,7 +54,7 @@ class MindMap extends Component {
   }
   render() {
     return (
-      <div className='mind-map-first'>
+      <div className='mind-map'>
         <div className="compactBoxTree-canvas" id="dag-canvas">
         </div>
       </div>

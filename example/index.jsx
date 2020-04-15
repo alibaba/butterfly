@@ -59,7 +59,7 @@ ReactDOM.render((
             <Menu.Item key="compactBoxTree">
               <Link to="/compactBoxTree">CompactBoxTree</Link>
             </Menu.Item>
-            <Menu.Item key="mindMapFirst">
+            <Menu.Item key="mindMap">
               <Link to="/mind_map">MindMap</Link>
             </Menu.Item>
             <Menu.Item key="relationarBooks">
