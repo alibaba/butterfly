@@ -733,7 +733,7 @@ class BaseCanvas extends Canvas {
       // 删除邻近的线条
       const neighborEdges = this.getNeighborEdges(nodeId);
       if (!isNotDelEdge) {
-        this.removeEdges(neighborEdges, isNotEventEmit, true);
+        this.removeEdges(neighborEdges, true, true);
       }
 
       // 删除节点
