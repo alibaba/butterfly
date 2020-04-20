@@ -706,57 +706,7 @@ class BaseCanvas extends Canvas {
   }
 
   removeNode(nodeId, isNotDelEdge, isNotEventEmit) {
-    const index = _.findIndex(this.nodes, _node => _node.id === nodeId);
-    if (index === -1) {
-      console.warn(`找不到id为：${nodeId}的节点`);
-      return;
-    }
-
-    // 删除邻近的线条
-    const neighborEdges = this.getNeighborEdges(nodeId);
-    if (!isNotDelEdge) {
-      this.removeEdges(neighborEdges, isNotEventEmit, true);
-    }
-
-    // 删除节点
-    const node = this.nodes[index];
-    node.destroy(isNotEventEmit);
-
-    const _rmNodes = this.nodes.splice(index, 1);
-    // 假如在group里面
-    if (node.group) {
-      const group = this.getGroup(node.group);
-      if (group) {
-        group.nodes = group.nodes.filter(item => item.id !== node.id);
-      }
-    }
-
-    if (_rmNodes.length > 0) {
-      if(!isNotEventEmit) {
-        this.pushActionQueue({
-          type: 'system:removeNode',
-          data: {
-            nodes: [_rmNodes[0]],
-            edges: neighborEdges
-          }
-        });
-        this.emit('system.node.delete', {
-          node: _rmNodes[0]
-        });
-        this.emit('events', {
-          type: 'node:delete',
-          node: _rmNodes[0]
-        });
-      }
-      return {
-        nodes: [_rmNodes[0]],
-        edges: neighborEdges,
-      };
-    }
-    return {
-      nodes: [],
-      edges: []
-    };
+    return this.removeNodes([nodeId], isNotDelEdge, isNotEventEmit);
   }
 
   removeNodes(nodes, isNotDelEdge, isNotEventEmit) {
@@ -770,12 +720,63 @@ class BaseCanvas extends Canvas {
       }
     });
 
+
     let rmNodes = [];
     let rmEdges = [];
-    nodeIds.map(id => this.removeNode(id, isNotDelEdge, isNotEventEmit)).forEach((result) => {
-      rmNodes = rmNodes.concat(result.nodes);
-      rmEdges = rmEdges.concat(result.edges);
+    nodeIds.forEach((nodeId) => {
+      const index = _.findIndex(this.nodes, _node => _node.id === nodeId);
+      if (index === -1) {
+        console.warn(`找不到id为：${nodeId}的节点`);
+        return;
+      }
+
+      // 删除邻近的线条
+      const neighborEdges = this.getNeighborEdges(nodeId);
+      if (!isNotDelEdge) {
+        this.removeEdges(neighborEdges, isNotEventEmit, true);
+      }
+
+      // 删除节点
+      const node = this.nodes[index];
+      node.destroy(isNotEventEmit);
+
+      const _rmNodes = this.nodes.splice(index, 1);
+      // 假如在group里面
+      if (node.group) {
+        const group = this.getGroup(node.group);
+        if (group) {
+          group.nodes = group.nodes.filter(item => item.id !== node.id);
+        }
+      }
+
+      if (_rmNodes.length > 0) {
+        rmNodes = rmNodes.concat(_rmNodes);
+        rmEdges = rmEdges.concat(neighborEdges);
+      }
+
     });
+
+    if (rmNodes.length > 0) {
+      if(!isNotEventEmit) {
+        this.pushActionQueue({
+          type: 'system:removeNodes',
+          data: {
+            nodes: rmNodes,
+            edges: rmEdges
+          }
+        });
+        this.emit('system.nodes.delete', {
+          nodes: rmNodes,
+          edges: rmEdges
+        });
+        this.emit('events', {
+          type: 'nodes:delete',
+          node: rmNodes,
+          edges: rmEdges
+        });
+      }
+    }
+
     return {
       nodes: rmNodes,
       edges: rmEdges
@@ -817,13 +818,23 @@ class BaseCanvas extends Canvas {
       }
     });
 
+    
+
     if (!isNotPushActionQueue) {
       this.pushActionQueue({
         type: 'system:removeEdges',
         data: result
       });
     }
-
+    if (!isNotEventEmit) {
+      this.emit('system.links.delete', {
+        links: result
+      });
+      this.emit('events', {
+        type: 'links:delete',
+        links: result
+      });
+    }
     result.forEach((item) => {
       item.destroy(isNotEventEmit);
     });
@@ -3113,7 +3124,7 @@ class BaseCanvas extends Canvas {
     result.push(step);
     if (step.type === 'system:addNodes') {
       this.removeNodes(step.data, false, true);
-    } else if (step.type === 'system:removeNode') {
+    } else if (step.type === 'system:removeNodes') {
       this.addNodes(step.data.nodes, true);
       this.addEdges(step.data.edges, true);
     } else if (step.type === 'system:addEdges') {
@@ -3228,7 +3239,7 @@ class BaseCanvas extends Canvas {
     }
     if (step.type === 'system:addNodes') {
       this.addNodes(step.data, true);
-    } else if (step.type === 'system:removeNode') {
+    } else if (step.type === 'system:removeNodes') {
       this.removeNodes(step.data.nodes, false, true);
     } else if (step.type === 'system:addEdges') {
       this.addEdges(step.data, true);

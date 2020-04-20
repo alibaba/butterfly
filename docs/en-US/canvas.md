@@ -423,10 +423,10 @@ canvas.on('type', (data) => {
 | :------ | :------ | :------
 | system.canvas.click | click on the blank space of the canvas event | -
 | system.canvas.zoom | canvas zoom event | -
-| system.node.delete | delete node event | -
+| system.nodes.delete | delete node event | -
 | system.node.move | move node event | -
 | system.nodes.add | add multiple nodes event | -
-| system.link.delete | delete edge event | -
+| system.links.delete | delete edge event | -
 | system.link.connect | connect edge event | -
 | system.link.reconnect | edge reconnect event | -
 | system.link.click | click edge event | -
