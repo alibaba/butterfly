@@ -168,12 +168,16 @@ class BaseCanvas extends Canvas {
     this._autoMoveTimer = null;
   }
 
-  updateRootResize() {
+  updateRootResize(opts = {}) {
     this._coordinateService._changeCanvasInfo({
-      terOffsetX: $(this.root).offset().left,
-      terOffsetY: $(this.root).offset().top,
-      terWidth: $(this.root).width(),
-      terHeight: $(this.root).height()
+      terOffsetX: opts.terOffsetX || $(this.root).offset().left,
+      terOffsetY: opts.terOffsetY || $(this.root).offset().top,
+      terWidth: opts.terWidth || $(this.root).width(),
+      terHeight: opts.terHeight || $(this.root).height()
+    });
+    this.canvasWrapper._changeCanvasInfo({
+      terScrollX: opts.terScrollX || 0,
+      terScrollY: opts.terScrollY || 0
     });
   }
 
@@ -2354,6 +2358,8 @@ class BaseCanvas extends Canvas {
         return;
       }
 
+      let _unionNodes = [];
+
       _unActiveLinkableEndpoint();
 
       // 处理线条的问题
@@ -2755,6 +2761,7 @@ class BaseCanvas extends Canvas {
         moveNodes.forEach((dragNode) => {
           _handleDragNode(dragNode);
         });
+        _unionNodes = moveNodes;
         this._rmSystemUnion();
       }
 
@@ -2789,6 +2796,7 @@ class BaseCanvas extends Canvas {
         dragEndpoint: this._dragEndpoint,
         dragEdges: this._dragEdges,
         dragGroup: this._dragGroup,
+        unionNodes: _unionNodes
       });
       this.emit('events', {
         type: 'drag:end',
@@ -2797,6 +2805,7 @@ class BaseCanvas extends Canvas {
         dragEndpoint: this._dragEndpoint,
         dragEdges: this._dragEdges,
         dragGroup: this._dragGroup,
+        unionNodes: _unionNodes
       });
 
       this._dragType = null;
@@ -2991,6 +3000,7 @@ class BaseCanvas extends Canvas {
     }
   }
   _selectMultiplyItem(range, toDirection) {
+
     // 确认一下终端的偏移值
     const startX = this._coordinateService._terminal2canvas('x', range[0]);
     const startY = this._coordinateService._terminal2canvas('y', range[1]);
@@ -3010,24 +3020,20 @@ class BaseCanvas extends Canvas {
         return startX < _itemLeft && endX > _itemRight && startY < _itemTop && endY > _itemBottom;
       }
       if (this.selecMode === 'touch' || (this.selecMode === 'senior' && toDirection === 'left')) {
-        // 左上角包含
-        if (startX < _itemLeft && startY < _itemTop && endX > _itemLeft && endY > _itemTop) {
-          return true;
+        let result = true;
+        if (endX < _itemLeft) {
+          result = false;
         }
-        // 右上角包含
-        if (startX < _itemRight && startY < _itemTop && endX > _itemRight && endY > _itemTop) {
-          return true;
+        if (startX > _itemRight) {
+          result = false;
         }
-        // 左下角包含
-        if (startX < _itemLeft && startY < _itemBottom && endX > _itemLeft && endY > _itemBottom) {
-          return true;
+        if (endY < _itemTop) {
+          result = false;
         }
-        // 右下角包含
-        if (startX < _itemRight && startY < _itemBottom && endX > _itemRight && endY > _itemBottom) {
-          return true;
+        if (startY > _itemBottom) {
+          result = false;
         }
-
-        return false;
+        return result;
       }
     }
 
