@@ -352,6 +352,17 @@ class BaseCanvas extends Canvas {
       });
     }
 
+    if (!isNotEventEmit) {
+      this.emit('events', {
+        type: 'group:add',
+        group: _groupObj
+      });
+      this.pushActionQueue({
+        type: 'system:addGroup',
+        group: _groupObj
+      });
+    }
+
     return _groupObj;
   }
 
@@ -775,7 +786,7 @@ class BaseCanvas extends Canvas {
         });
         this.emit('events', {
           type: 'nodes:delete',
-          node: rmNodes,
+          nodes: rmNodes,
           edges: rmEdges
         });
       }
@@ -822,14 +833,6 @@ class BaseCanvas extends Canvas {
       }
     });
 
-    
-
-    if (!isNotPushActionQueue) {
-      this.pushActionQueue({
-        type: 'system:removeEdges',
-        data: result
-      });
-    }
     if (!isNotEventEmit) {
       this.emit('system.links.delete', {
         links: result
@@ -839,6 +842,14 @@ class BaseCanvas extends Canvas {
         links: result
       });
     }
+
+    if (!isNotPushActionQueue) {
+      this.pushActionQueue({
+        type: 'system:removeEdges',
+        data: result
+      });
+    }
+    
     result.forEach((item) => {
       item.destroy(isNotEventEmit);
     });
