@@ -10,6 +10,8 @@ class SelectCanvas {
     this.canvasLeft = 0;
     this.canvasHeight = 0;
     this.canvasWidth = 0;
+    this.canScrollX = 0;
+    this.canScrollY = 0;
     this.startX = 0;
     this.startY = 0;
     this.endX = 0;
@@ -103,8 +105,8 @@ class SelectCanvas {
       return;
     }
     this.clearCanvas();
-    const startX = Math.min(this.startX, this.endX) - this.canvasLeft;
-    const startY = Math.min(this.startY, this.endY) - this.canvasTop;
+    const startX = Math.min(this.startX, this.endX) - this.canvasLeft + this.canScrollX;
+    const startY = Math.min(this.startY, this.endY) - this.canvasTop + this.canScrollY;
     const width = Math.abs(this.startX - this.endX);
     const height = Math.abs(this.startY - this.endY);
 
@@ -136,6 +138,15 @@ class SelectCanvas {
     if (this.isActive) {
       $(this.dom).removeClass('wrapper-up');
       this.isActive = false;
+    }
+  }
+
+  _changeCanvasInfo(data) {
+    if (data.terScrollX !== undefined) {
+      this.canScrollX = data.terScrollX;
+    }
+    if (data.terScrollY !== undefined) {
+      this.canScrollY = data.terScrollY;
     }
   }
 }

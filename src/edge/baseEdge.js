@@ -234,13 +234,6 @@ class BaseEdge extends Edge {
     }
     $(this.dom).remove();
     if (this.id && !isNotEventEmit) {
-      this.emit('system.link.delete', {
-        link: this
-      });
-      this.emit('events', {
-        type: 'link:delete',
-        link: this
-      });
       this.removeAllListeners();
     }
   }
