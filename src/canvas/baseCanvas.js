@@ -462,13 +462,13 @@ class BaseCanvas extends Canvas {
         let sourceEndpoint = null;
         let targetEndpoint = null;
 
-        if (link.sourceEndpoint && link.sourceEndpoint instanceof Endpoint || link.sourceEndpoint.__type === 'endpoint') {
+        if (link.sourceEndpoint && (link.sourceEndpoint instanceof Endpoint || link.sourceEndpoint.__type === 'endpoint')) {
           sourceEndpoint = link.sourceEndpoint;
         } else {
           sourceEndpoint = sourceNode.getEndpoint(link.source, 'source');
         }
 
-        if (link.targetEndpoint && link.targetEndpoint instanceof Endpoint || link.targetEndpoint.__type === 'endpoint') {
+        if (link.targetEndpoint && (link.targetEndpoint instanceof Endpoint || link.targetEndpoint.__type === 'endpoint')) {
           targetEndpoint = link.targetEndpoint;
         } else {
           targetEndpoint = targetNode.getEndpoint(link.target, 'target');
