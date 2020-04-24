@@ -277,7 +277,7 @@ class BaseCanvas extends Canvas {
           newNode = this.addNode(_existNode, true);
         } else {
           let _nodeObj = null;
-          if (_node instanceof Node) {
+          if (_node instanceof Node || _node._type === 'node') {
             _nodeObj = _node;
           } else {
             const _Node = _node.Class || Node;
@@ -331,7 +331,7 @@ class BaseCanvas extends Canvas {
       return true;
     }).map((node) => {
       let _nodeObj = null;
-      if (node instanceof Node) {
+      if (node instanceof Node || node._type === 'node') {
         _nodeObj = node;
       } else {
         const _Node = node.Class || Node;
@@ -412,10 +412,10 @@ class BaseCanvas extends Canvas {
         let _sourceType = link._sourceType;
         let _targetType = link._targetType;
 
-        if (link.sourceNode instanceof Node) {
+        if (link.sourceNode instanceof Node || link.sourceNode._type === 'node') {
           _sourceType = 'node';
           sourceNode = link.sourceNode;
-        } else if (link.sourceNode instanceof Group) {
+        } else if (link.sourceNode instanceof Group || link.sourceNode._type === 'group') {
           _sourceType = 'group';
           sourceNode = link.sourceNode;
         } else {
@@ -433,10 +433,10 @@ class BaseCanvas extends Canvas {
           }
         }
 
-        if (link.targetNode instanceof Node) {
+        if (link.targetNode instanceof Node || link.targetNode._type === 'node') {
           _targetType = 'node';
           targetNode = link.targetNode;
-        } else if (link.targetNode instanceof Group) {
+        } else if (link.targetNode instanceof Group || link.targetNode._type === 'group') {
           _targetType = 'group';
           targetNode = link.targetNode;
         } else {
@@ -462,13 +462,13 @@ class BaseCanvas extends Canvas {
         let sourceEndpoint = null;
         let targetEndpoint = null;
 
-        if (link.sourceEndpoint && link.sourceEndpoint instanceof Endpoint) {
+        if (link.sourceEndpoint && link.sourceEndpoint instanceof Endpoint || link.sourceEndpoint._type === 'endpoint') {
           sourceEndpoint = link.sourceEndpoint;
         } else {
           sourceEndpoint = sourceNode.getEndpoint(link.source, 'source');
         }
 
-        if (link.targetEndpoint && link.targetEndpoint instanceof Endpoint) {
+        if (link.targetEndpoint && link.targetEndpoint instanceof Endpoint || link.targetEndpoint._type === 'endpoint') {
           targetEndpoint = link.targetEndpoint;
         } else {
           targetEndpoint = targetNode.getEndpoint(link.target, 'target');
@@ -697,7 +697,7 @@ class BaseCanvas extends Canvas {
     let result = [];
     edges.forEach((_edge) => {
       let edgeIndex = -1;
-      if (_edge instanceof Edge) {
+      if (_edge instanceof Edge || _edge._type === 'edge') {
         edgeIndex = _.findIndex(this.edges, (item) => {
           if (item.type === 'node') {
             return _edge.sourceNode.id === item.sourceNode.id && _edge.targetNode.id === item.targetNode.id;

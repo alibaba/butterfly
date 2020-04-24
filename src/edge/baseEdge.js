@@ -30,6 +30,7 @@ class Edge {
     this.labelDom = null;
     this.arrowDom = null;
     this.eventHandlerDom = null;
+    this._type = 'edge';
     this._path = null;
     // 业务和库内addEdges写法上有区别，需要兼容
     this.options = _.get(opts, 'options') || opts;

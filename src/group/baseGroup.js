@@ -24,6 +24,7 @@ class BaseGroup extends Group {
     this.dom = null;
     this.nodes = [];
     this.options = opts.options;
+    this._type = 'group'
     this._global = opts._global;
     this._on = opts._on;
     this._emit = opts._emit;
