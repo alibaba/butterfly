@@ -3051,10 +3051,17 @@ class BaseCanvas extends Canvas {
     // 框选节点
     if (includeNode) {
       this.nodes.forEach((item) => {
-        const nodeLeft = item.left;
-        const nodeRight = item.left + $(item.dom).width();
-        const nodeTop = item.top;
-        const nodeBottom = item.top + $(item.dom).height();
+        let nodeLeft = item.left;
+        let nodeRight = item.left + $(item.dom).width();
+        let nodeTop = item.top;
+        let nodeBottom = item.top + $(item.dom).height();
+        if (item.group) {
+          let _group = this.getGroup(item.group);
+          nodeLeft += _group.left;
+          nodeRight += _group.left;
+          nodeTop += _group.top;
+          nodeBottom += _group.top;
+        }
         let isSelected = _isSelected({
           left: nodeLeft,
           right: nodeRight,
