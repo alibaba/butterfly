@@ -24,6 +24,8 @@ class BaseGroup extends Group {
     this.dom = null;
     this.nodes = [];
     this.options = opts.options;
+    // 鸭子辨识手动判断类型
+    this.__type = 'group';
     this._global = opts._global;
     this._on = opts._on;
     this._emit = opts._emit;
