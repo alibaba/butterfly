@@ -15,6 +15,8 @@ class BaseNode extends Node {
     this.dom = opts.dom || null;
     this.draggable = opts.draggable;
     this.options = opts;
+    // 鸭子辨识手动判断类型
+    this.__type = 'node';
     this._on = opts._on;
     this._emit = opts._emit;
     this._global = opts._global;
