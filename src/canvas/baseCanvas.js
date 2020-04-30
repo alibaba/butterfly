@@ -304,7 +304,7 @@ class BaseCanvas extends Canvas {
           newNode = this.addNode(_existNode, true);
         } else {
           let _nodeObj = null;
-          if (_node instanceof Node) {
+          if (_node instanceof Node || _node.__type === 'node') {
             _nodeObj = _node;
           } else {
             const _NodeClass = _node.Class || this._NodeClass;
@@ -350,15 +350,8 @@ class BaseCanvas extends Canvas {
           nodes: _newNodes
         }]
       });
-    }
-
-    if (!isNotEventEmit) {
       this.emit('events', {
         type: 'group:add',
-        group: _groupObj
-      });
-      this.pushActionQueue({
-        type: 'system:addGroup',
         group: _groupObj
       });
     }
@@ -380,7 +373,7 @@ class BaseCanvas extends Canvas {
       return true;
     }).map((node) => {
       let _nodeObj = null;
-      if (node instanceof Node) {
+      if (node instanceof Node || node.__type === 'node') {
         _nodeObj = node;
       } else {
         const _NodeClass = node.Class || this._NodeClass;
@@ -436,16 +429,16 @@ class BaseCanvas extends Canvas {
     });
 
     if (result && result.length > 0 && !isNotEventEmit) {
+      this.pushActionQueue({
+        type: 'system:addNodes',
+        data: result
+      });
       this.emit('system.nodes.add', {
         nodes: result
       });
       this.emit('events', {
         type: 'nodes:add',
         nodes: result
-      });
-      this.pushActionQueue({
-        type: 'system:addNodes',
-        data: result
       });
     }
     return result;
@@ -490,10 +483,10 @@ class BaseCanvas extends Canvas {
         let _sourceType = link._sourceType;
         let _targetType = link._targetType;
 
-        if (link.sourceNode instanceof Node) {
+        if (link.sourceNode instanceof Node || link.sourceNode.__type === 'node') {
           _sourceType = 'node';
           sourceNode = link.sourceNode;
-        } else if (link.sourceNode instanceof Group) {
+        } else if (link.sourceNode instanceof Group || link.sourceNode.__type === 'group') {
           _sourceType = 'group';
           sourceNode = link.sourceNode;
         } else {
@@ -511,10 +504,10 @@ class BaseCanvas extends Canvas {
           }
         }
 
-        if (link.targetNode instanceof Node) {
+        if (link.targetNode instanceof Node || link.targetNode.__type === 'node') {
           _targetType = 'node';
           targetNode = link.targetNode;
-        } else if (link.targetNode instanceof Group) {
+        } else if (link.targetNode instanceof Group || link.targetNode.__type === 'group') {
           _targetType = 'group';
           targetNode = link.targetNode;
         } else {
@@ -540,13 +533,13 @@ class BaseCanvas extends Canvas {
         let sourceEndpoint = null;
         let targetEndpoint = null;
 
-        if (link.sourceEndpoint && link.sourceEndpoint instanceof Endpoint) {
+        if (link.sourceEndpoint && (link.sourceEndpoint instanceof Endpoint || link.sourceEndpoint.__type === 'endpoint')) {
           sourceEndpoint = link.sourceEndpoint;
         } else {
           sourceEndpoint = sourceNode.getEndpoint(link.source, 'source');
         }
 
-        if (link.targetEndpoint && link.targetEndpoint instanceof Endpoint) {
+        if (link.targetEndpoint && (link.targetEndpoint instanceof Endpoint || link.targetEndpoint.__type === 'endpoint')) {
           targetEndpoint = link.targetEndpoint;
         } else {
           targetEndpoint = targetNode.getEndpoint(link.target, 'target');
@@ -802,7 +795,7 @@ class BaseCanvas extends Canvas {
     let result = [];
     edges.forEach((_edge) => {
       let edgeIndex = -1;
-      if (_edge instanceof Edge) {
+      if (_edge instanceof Edge || _edge.__type === 'edge') {
         edgeIndex = _.findIndex(this.edges, (item) => {
           if (item.type === 'node') {
             return _edge.sourceNode.id === item.sourceNode.id && _edge.targetNode.id === item.targetNode.id;
@@ -833,6 +826,13 @@ class BaseCanvas extends Canvas {
       }
     });
 
+    if (!isNotPushActionQueue) {
+      this.pushActionQueue({
+        type: 'system:removeEdges',
+        data: result
+      });
+    }
+
     if (!isNotEventEmit) {
       this.emit('system.links.delete', {
         links: result
@@ -843,12 +843,6 @@ class BaseCanvas extends Canvas {
       });
     }
 
-    if (!isNotPushActionQueue) {
-      this.pushActionQueue({
-        type: 'system:removeEdges',
-        data: result
-      });
-    }
     
     result.forEach((item) => {
       item.destroy(isNotEventEmit);
@@ -2527,6 +2521,14 @@ class BaseCanvas extends Canvas {
             return edge;
           });
           if (_delEdges.length !== 0 && _emitEdges.length !== 0) {
+            this.pushActionQueue({
+              type: 'system:reconnectEdges',
+              data: {
+                delLinks: _delEdges,
+                addLinks: _emitEdges,
+                info: _reconnectInfo
+              }
+            });
             this.emit('system.link.reconnect', {
               delLinks: _delEdges,
               addLinks: _emitEdges,
@@ -2538,17 +2540,13 @@ class BaseCanvas extends Canvas {
               addLinks: _emitEdges,
               info: _reconnectInfo
             });
-            this.pushActionQueue({
-              type: 'system:reconnectEdges',
-              data: {
-                delLinks: _delEdges,
-                addLinks: _emitEdges,
-                info: _reconnectInfo
-              }
-            });
           } else {
             if (_delEdges.length !== 0) {
               _delEdges.forEach((_edge) => {
+                this.pushActionQueue({
+                  type: 'system:removeEdges',
+                  data: _delEdges
+                });
                 this.emit('system.link.delete', {
                   link: _edge
                 });
@@ -2556,23 +2554,19 @@ class BaseCanvas extends Canvas {
                   type: 'link:delete',
                   link: _edge
                 });
-                this.pushActionQueue({
-                  type: 'system:removeEdges',
-                  data: _delEdges
-                });
               });
             }
             if (_emitEdges.length !== 0) {
+              this.pushActionQueue({
+                type: 'system:addEdges',
+                data: this._dragEdges
+              });
               this.emit('system.link.connect', {
                 links: this._dragEdges
               });
               this.emit('events', {
                 type: 'link:connect',
                 links: this._dragEdges
-              });
-              this.pushActionQueue({
-                type: 'system:addEdges',
-                data: this._dragEdges
               });
             }
           }
@@ -2659,6 +2653,14 @@ class BaseCanvas extends Canvas {
               if (step.type === 'system:moveNodes') {
                 step.data._isDraging = true;
               }
+              this.pushActionQueue({
+                type: 'system:groupRemoveMembers',
+                data: {
+                  group: sourceGroup,
+                  nodes: [rmNode],
+                  _isDraging: true
+                }
+              })
               this.emit('events', {
                 type: 'system.group.removeMembers',
                 group: sourceGroup,
@@ -2669,30 +2671,12 @@ class BaseCanvas extends Canvas {
                 nodes: [rmNode]
               });
 
-              this.pushActionQueue({
-                type: 'system:groupRemoveMembers',
-                data: {
-                  group: sourceGroup,
-                  nodes: [rmNode],
-                  _isDraging: true
-                }
-              })
-
               if (targetGroup) {
                 if (ScopeCompare(dragNode.scope, targetGroup.scope, _.get(this, 'global.isScopeStrict'))) {
                   nodeData.top -= targetGroup.top;
                   nodeData.left -= targetGroup.left;
                   nodeData.group = targetGroup.id;
                   nodeData._isDeleteGroup = false;
-                  this.emit('events', {
-                    type: 'system.group.addMembers',
-                    nodes: [rmNode],
-                    group: targetGroup
-                  });
-                  this.emit('system.group.addMembers', {
-                    nodes: [rmNode],
-                    group: targetGroup
-                  });
                   this.popActionQueue();
                   this.pushActionQueue({
                     type: 'system:groupAddMembers',
@@ -2702,6 +2686,15 @@ class BaseCanvas extends Canvas {
                       nodes: [rmNode],
                       _isDraging: true
                     }
+                  });
+                  this.emit('events', {
+                    type: 'system.group.addMembers',
+                    nodes: [rmNode],
+                    group: targetGroup
+                  });
+                  this.emit('system.group.addMembers', {
+                    nodes: [rmNode],
+                    group: targetGroup
                   });
 
                 } else {
@@ -2725,19 +2718,11 @@ class BaseCanvas extends Canvas {
                   group: targetGroup.id
                 });
                 this.addNode(rmNode, true);
-                this.emit('events', {
-                  type: 'system.group.addMembers',
-                  nodes: [rmNode],
-                  group: targetGroup
-                });
-                this.emit('system.group.addMembers', {
-                  nodes: [rmNode],
-                  group: targetGroup
-                });
                 let step = this.actionQueue[this.actionQueueIndex];
                 if (step.type === 'system:moveNodes') {
                   step.data._isDraging = true;
                 }
+                _updateNeighborEdge(rmNode, neighborEdges);
                 this.pushActionQueue({
                   type: 'system:groupAddMembers',
                   data: {
@@ -2747,7 +2732,15 @@ class BaseCanvas extends Canvas {
                     _isDraging: true
                   }
                 });
-                _updateNeighborEdge(rmNode, neighborEdges);
+                this.emit('events', {
+                  type: 'system.group.addMembers',
+                  nodes: [rmNode],
+                  group: targetGroup
+                });
+                this.emit('system.group.addMembers', {
+                  nodes: [rmNode],
+                  group: targetGroup
+                });
               } else {
                 console.warn(`nodeId为${dragNode.id}的节点和groupId${targetGroup.id}的节点组scope值不符，无法加入`);
               }

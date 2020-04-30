@@ -22,6 +22,8 @@ class BaseEndpoint extends Endpoint {
     this.expandArea = opts.expandArea;
     this.limitNum = opts.limitNum;
     this.options = opts;
+    // 鸭子辨识手动判断类型
+    this.__type = 'endpoint';
     // 假如锚点在节点上则有值
     this._node = opts._node;
     this._global = opts._global;
