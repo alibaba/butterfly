@@ -101,16 +101,18 @@ function creatTips(option, dom, callBackFunc) {
   let toolTipDom = $(opts.TEMPLATE);
   toolTipDom.find(opts.$inner).html(opts.content);
 
+  let _timeoutMouseover = null;
+
   opts.evntList.includes('hover') &&
     dom
       .on('mouseover', (e) => {
-        let _timeout = null;
-        clearTimeout(_timeout);
-        _timeout = setTimeout(() => {
+        clearTimeout(_timeoutMouseover);
+        _timeoutMouseover = setTimeout(() => {
           show(opts, dom, toolTipDom, callBackFunc, e);
         }, opts.delay);
       })
       .on('mouseout', (e) => {
+        clearTimeout(_timeoutMouseover);
         !$(opts.$viewCon).hasClass('butterfly-active-tip') && hide(toolTipDom);
       });
   opts.evntList.includes('click') &&

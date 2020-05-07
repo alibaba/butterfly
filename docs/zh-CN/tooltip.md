@@ -10,17 +10,14 @@
 
 ## API
 
-| 参数                     | 说明                                           | 类型     | 默认值                                                                                                                                                   |
-| ------------------------ | ---------------------------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| dom                      | 需要提示框的 dom                               | Element  | 无                                                                                                                                                       |
-| callBack                 | 回调函数 callBack(value,e) value 是内内容值    | function | 无                                                                                                                                                       |
-| option.placement         | 气泡框位置，可选 `top` `left` `right` `bottom` | string   | top                                                                                                                                                      |
-| option.content           | 提示文字                                       | string   |                                                                                                                                                          | Element | 无 |
-| option.TEMPLATE          | 模板 html                                      | Element  | `'<div class="butterfly-toolTip" role="butterfly-tooltip"><div class="butterfly-tooltip-arrow"></div><div class="butterfly-tooltip-inner"></div></div>'` |
-| option.\$viewAppend      | 模板挂载节点                                   | string   | '.butterfly-wrapper'                                                                                                                                     |
-| option.callbackWhitelist | 事件白名单标签                                 | []       | ['LI']                                                                                                                                                   |
-| option.evntList          | 支持的事件，目前支持 'hover', 'click'          | []       | ['hover']                                                                                                                                                |
-| option.callBackOpen      | 是否开启回调事件                               | Boolean  | true                                                                                                                                                     |
+| 参数                | 说明                                           | 类型     | 默认值                                                                                                                                                   |
+| ------------------- | ---------------------------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| dom                 | 需要提示框的 dom                               | Element  | 无                                                                                                                                                       |
+| callBack            | 回调函数 callBack(value,e) value 是内内容值    | function | 无                                                                                                                                                       |
+| option.placement    | 气泡框位置，可选 `top` `left` `right` `bottom` | string   | top                                                                                                                                                      |
+| option.content      | 提示文字                                       | string   |                                                                                                                                                          | Element | 无 |
+| option.TEMPLATE     | 模板 html                                      | Element  | `'<div class="butterfly-toolTip" role="butterfly-tooltip"><div class="butterfly-tooltip-arrow"></div><div class="butterfly-tooltip-inner"></div></div>'` |
+| option.\$viewAppend | 模板挂载节点                                   | string   | '.butterfly-wrapper'                                                                                                                                     |
 
 提供一个`操作`的气泡。
 
