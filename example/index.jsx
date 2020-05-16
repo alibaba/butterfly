@@ -17,6 +17,7 @@ import liteGraph from './demo/liteGraph/index.jsx';
 import EntityRelationship from './demo/entityRelationship/index.jsx';
 import CompactBoxTree from './demo/compactBoxTree/index.jsx';
 import MindMap from './demo/mindMap/index.jsx';
+import ToolTip from './demo/tooltip/index.jsx';
 
 import 'antd/dist/antd.css';
 import './index.less';
@@ -65,6 +66,9 @@ ReactDOM.render((
             <Menu.Item key="relationarBooks">
               <Link to="/relational_books">RelationalBooks</Link>
             </Menu.Item>
+            <Menu.Item key="tooltip">
+              <Link to="/tool_tip">tooltip</Link>
+            </Menu.Item>
             </Menu>
           </Sider>
           <Content>
@@ -80,6 +84,7 @@ ReactDOM.render((
             <Route path="/compactBoxTree" component={CompactBoxTree} />
             <Route path="/relational_books" component={RelationalBooks} />
             <Route path="/mind_map" component={MindMap} />
+            <Route path="/tool_tip" component={ToolTip} />
           </Content>
         </Layout>
       </Layout>
