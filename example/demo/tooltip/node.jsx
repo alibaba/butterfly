@@ -24,24 +24,27 @@ class BaseNode extends Node {
 
     container.text(opts.options.index);
 
-    opts.content = `<div>${opts.id}</div>`;
     const callBack = (d, e) => {
       console.log(['回调', d, e]);
     };
 
-    const container_ = tip.creatTips(opts, container, callBack);
-    const container__ = tip.creatMenus(
+    // 开始使用
+
+    opts.content = `<div>${opts.id}</div>`;
+
+    tip.creatTips(opts, container, callBack);
+
+    tip.creatMenus(
       opts,
-      container_,
+      container,
       callBack,
       [
         {key: 1, value: '新增'},
         {key: 2, value: '删除'},
       ],
-      false,
     );
 
-    return container__[0];
+    return container[0];
   };
 }
 

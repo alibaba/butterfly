@@ -4,7 +4,9 @@ const Default = {
   TEMPLATE:
     '<div class="butterfly-toolTip" role="butterfly-tooltip"><div class="butterfly-tooltip-arrow"></div><div class="butterfly-tooltip-inner"></div></div>',
 
-  $viewAppend: '.butterfly-wrapper',
+  $viewAppend: 'body',
+  $viewScale: '.butterfly-wrapper', // 有缩放的图层
+
   $viewCon: '.butterfly-toolTip',
   $inner: '.butterfly-tooltip-inner',
   callbackWhitelist: ['LI'],
@@ -17,6 +19,9 @@ const Default = {
 };
 
 const _toFixed_3 = (num) => {
+  if(!num){
+    return 0;
+  }
   if (Number(num)) {
     return Number(parseFloat(num).toFixed(3));
   }
@@ -69,19 +74,24 @@ const show = (opts, dom, toolTipDom, callBackFunc, e) => {
   toolTipDom.appendTo($(opts.$viewAppend));
   let placement = opts.placement || 'top';
   toolTipDom.addClass(placement);
-  const posArr = dom.attr('style' || '').split(';');
+  const posArr = (dom.attr('style') || ' ').split(';');
   const [postTop = 0] = posArr
     .filter((j) => j.indexOf('top') > -1)
     .map((i) => i.replace(/[^\d.]/g, ''));
   const [posLeft = 0] = posArr
     .filter((j) => j.indexOf('left') > -1)
     .map((i) => i.replace(/[^\d.]/g, ''));
+  const scaleArr =  ($(opts.$viewScale).css("transform") || 'none').replace('matrix(','').replace(')','').split(',');
+  const scale = scaleArr[0] === 'none' ?  1 : scaleArr[0];
 
+  
   const pos = {
-    top: postTop || dom.position().top,
-    left: posLeft || dom.position().left,
-    width: dom.outerWidth(),
-    height: dom.outerHeight(),
+    // top: postTop || dom.position().top,
+    // left: posLeft || dom.position().left,
+    top:  dom.offset().top,
+    left:  dom.offset().left,
+    width: dom.outerWidth() * scale,
+    height: dom.outerHeight() * scale,
     actualWidth: toolTipDom.outerWidth(),
     actualHeight: toolTipDom.outerHeight(),
   };
