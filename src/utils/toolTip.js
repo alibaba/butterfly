@@ -19,7 +19,7 @@ const Default = {
 };
 
 const _toFixed_3 = (num) => {
-  if(!num){
+  if (!num) {
     return 0;
   }
   if (Number(num)) {
@@ -28,7 +28,7 @@ const _toFixed_3 = (num) => {
 };
 const _getTipOffset = (placement, pos) => {
   const _pos = {};
-  let {left, top, width, height, actualWidth, actualHeight} = pos;
+  let { left, top, width, height, actualWidth, actualHeight } = pos;
   left = _toFixed_3(left);
   top = _toFixed_3(top);
   width = _toFixed_3(width);
@@ -65,8 +65,11 @@ const show = (opts, dom, toolTipDom, callBackFunc, e) => {
   opts.callBackOpen &&
     toolTipDom.on('click', (e) => {
       if (callBackFunc) {
-        const res = {value: e.target.textContent};
-        if (opts.callbackWhitelist.includes(e.target.nodeName)) callBackFunc(res, e);
+        const res = { value: e.target.textContent };
+        if (opts.callbackWhitelist.includes(e.target.nodeName)) {
+          $(opts.$viewCon).remove();
+          callBackFunc(res, e)
+        };
       }
       e.stopPropagation();
     });
@@ -74,29 +77,28 @@ const show = (opts, dom, toolTipDom, callBackFunc, e) => {
   toolTipDom.appendTo($(opts.$viewAppend));
   let placement = opts.placement || 'top';
   toolTipDom.addClass(placement);
-  const posArr = (dom.attr('style') || ' ').split(';');
-  const [postTop = 0] = posArr
-    .filter((j) => j.indexOf('top') > -1)
-    .map((i) => i.replace(/[^\d.]/g, ''));
-  const [posLeft = 0] = posArr
-    .filter((j) => j.indexOf('left') > -1)
-    .map((i) => i.replace(/[^\d.]/g, ''));
-  const scaleArr =  ($(opts.$viewScale).css("transform") || 'none').replace('matrix(','').replace(')','').split(',');
-  const scale = scaleArr[0] === 'none' ?  1 : scaleArr[0];
 
-  
+  const scaleArr = ($(opts.$viewScale).css("transform") || 'none').replace('matrix(', '').replace(')', '').split(',');
+  const scale = scaleArr[0] === 'none' ? 1 : scaleArr[0];
+
   const pos = {
-    // top: postTop || dom.position().top,
-    // left: posLeft || dom.position().left,
-    top:  dom.offset().top,
-    left:  dom.offset().left,
+    top: dom.offset().top,
+    left: dom.offset().left,
     width: dom.outerWidth() * scale,
     height: dom.outerHeight() * scale,
     actualWidth: toolTipDom.outerWidth(),
     actualHeight: toolTipDom.outerHeight(),
   };
 
-  const posInit = _getTipOffset(placement, pos);
+  let posInit = {}
+  if (opts.x || opts.x === 0) {
+    posInit = {
+      left: opts.x,
+      top: opts.y
+    }
+  } else {
+    posInit = _getTipOffset(placement, pos);
+  }
   const position = `top: ${posInit.top}px; left: ${posInit.left}px;`;
   toolTipDom.attr('style', position).addClass('in');
 };
@@ -106,7 +108,7 @@ const hide = (toolTipDom) => {
 };
 
 function creatTips(option, dom, callBackFunc) {
-  const opts = {...Default, ...option};
+  const opts = { ...Default, ...option };
 
   let toolTipDom = $(opts.TEMPLATE);
   toolTipDom.find(opts.$inner).html(opts.content);
@@ -125,16 +127,29 @@ function creatTips(option, dom, callBackFunc) {
         clearTimeout(_timeoutMouseover);
         !$(opts.$viewCon).hasClass('butterfly-active-tip') && hide(toolTipDom);
       });
+  const clickOrSame = (e) => {
+    if ($(opts.$viewCon).hasClass('butterfly-active-tip')) {
+      $(opts.$viewCon).removeClass('butterfly-active-tip');
+      hide(toolTipDom);
+    } else {
+      toolTipDom.addClass('butterfly-active-tip');
+      show(opts, dom, toolTipDom, callBackFunc, e);
+    }
+  }
   opts.evntList.includes('click') &&
     dom.on('click', (e) => {
-      if ($(opts.$viewCon).hasClass('butterfly-active-tip')) {
-        $(opts.$viewCon).removeClass('butterfly-active-tip');
-        hide(toolTipDom);
-      } else {
-        toolTipDom.addClass('butterfly-active-tip');
-        show(opts, dom, toolTipDom, callBackFunc, e);
-      }
+      clickOrSame(e);
     });
+
+  opts.evntList.includes('mousedown') && dom.mousedown((e) => {
+    $(dom).bind("contextmenu", function (e) {
+      return false;
+    });
+    if (3 == e.which) {
+      clickOrSame(e);
+    }
+  });
+
   return dom;
 }
 
