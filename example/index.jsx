@@ -17,7 +17,6 @@ import liteGraph from './demo/liteGraph/index.jsx';
 import EntityRelationship from './demo/entityRelationship/index.jsx';
 import CompactBoxTree from './demo/compactBoxTree/index.jsx';
 import MindMap from './demo/mindMap/index.jsx';
-import ToolTip from './demo/tooltip/index.jsx';
 
 import 'antd/dist/antd.css';
 import './index.less';
