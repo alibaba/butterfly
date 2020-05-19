@@ -221,6 +221,12 @@ class BaseEdge extends Edge {
     super.emit(type, data);
     this._emit(type, data);
   }
+  remove() {
+    this.emit('InnerEvents', {
+      type: 'edge:delete',
+      data: this
+    });
+  }
   destroy(isNotEventEmit) {
     if (this.labelDom) {
       $(this.labelDom).remove();
