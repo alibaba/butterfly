@@ -149,6 +149,7 @@ function creatTips(option, dom, callBackFunc) {
       clickOrSame(e);
     }
   });
+  opts.nowShow && show(opts, dom, toolTipDom, callBackFunc, '');
 
   return dom;
 }
@@ -170,7 +171,10 @@ function creatMenus(opts, dom, callBackFunc, menu = [], showTip = false) {
 
   opts.placement = opts.placement || 'right';
   opts.content = menuDom;
-  opts.evntList = opts.evntList || ['click'];
+  opts.evntList = opts.evntList || [];
+
+  opts.nowShow = opts.nowShow || true;
+
   return creatTips(opts, dom, callBackFunc);
 }
 
