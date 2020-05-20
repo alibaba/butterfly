@@ -65,7 +65,7 @@ const show = (opts, dom, toolTipDom, callBackFunc, e) => {
   opts.callBackOpen &&
     toolTipDom.on('click', (e) => {
       if (callBackFunc) {
-        const res = { value: e.target.textContent };
+        const res = { key:$(e.target).attr("key"),value: e.target.textContent };
         if (opts.callbackWhitelist.includes(e.target.nodeName)) {
           $(opts.$viewCon).remove();
           callBackFunc(res, e)
