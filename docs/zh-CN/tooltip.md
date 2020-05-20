@@ -59,7 +59,9 @@
   | opts.x | 偏移letf量 | 无
   | opts.y |  偏移top量 | 无
   | option.placement | 气泡框位置，可选 `top` `left` `right` `bottom`(若配置x,y则自动定位失效) | string | right
-  | option.evntList | 支持的事件，目前支持 'mousedown', 'click' | [] | ['click']
+  | option.evntList | 支持的事件，目前支持 'mousedown', 'click' | [] | []
+  | option.nowShow | 调用后立刻出现气泡 | true | boolean
   | dom | 需要提示框的 dom | jq对象 | 无 |
   | callBack | 回调函数 callBack(value,e) value 是内内容值 | function | 无
   | menu | 菜单 | [{ key: '', value: '' }] | []
+  
