@@ -10,7 +10,7 @@ import Group from './src/group/baseGroup';
 import Node from './src/node/baseNode';
 import TreeNode from './src/node/treeNode';
 import Minimap from './src/utils/minimap';
-
+import Tips from './src/utils/toolTip';
 import './src/index.less'
 
 module.exports = {
@@ -21,5 +21,6 @@ module.exports = {
   Group,
   Node,
   TreeNode,
-  Minimap
+  Minimap,
+  Tips
 };

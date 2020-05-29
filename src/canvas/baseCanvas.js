@@ -1861,6 +1861,8 @@ class BaseCanvas extends Canvas {
         this._dragGroup = data.group;
       } else if (data.type === 'node:delete') {
         this.removeNode(data.data.id);
+      } else if (data.type === 'edge:delete') {
+        this.removeEdge(data.data);
       } else if (data.type === 'group:delete') {
         this.removeGroup(data.data.id);
       } else if (data.type === 'group:addNodes') {
