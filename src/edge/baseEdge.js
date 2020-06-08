@@ -44,6 +44,9 @@ class BaseEdge extends Edge {
     // 性能优化
     this._labelWidth = 0;
     this._labelHeight = 0;
+    // 函数节流
+    this._updateTimer = null;
+    this._UPDATE_INTERVAL = 20;
   }
   _init() {
     if (this._isInited) {
@@ -142,6 +145,9 @@ class BaseEdge extends Edge {
   }
   redrawArrow(path) {
     const length = this.dom.getTotalLength();
+    if(!length) {
+      return;
+    }
     this.arrowFinalPosition = (length * this.arrowPosition + this.arrowOffset) / length;
     if (this.arrowFinalPosition > 1) {
       this.arrowFinalPosition = 1;
@@ -188,18 +194,25 @@ class BaseEdge extends Edge {
       this.eventHandlerDom.setAttribute('d', path);
       $(this.eventHandlerDom).insertAfter(this.dom);
     }
-    // 重新计算label
-    if (this.labelDom) {
-      this.redrawLabel();
+    // 函数节流
+    if (!this._updateTimer) {
+      this._updateTimer = setTimeout(() => {
+        // 重新计算label
+        if (this.labelDom) {
+          this.redrawLabel();
+        }
+        // 重新计算arrow
+        if (this.arrowDom) {
+          this.redrawArrow(path);
+        }
+        // 重新计算动画path
+        if (this.animateDom) {
+          this.redrawAnimate(path);
+        }
+        this._updateTimer = null;
+      }, this._UPDATE_INTERVAL);
     }
-    // 重新计算arrow
-    if (this.arrowDom) {
-      this.redrawArrow(path);
-    }
-    // 重新计算动画path
-    if (this.animateDom) {
-      this.redrawAnimate(path);
-    }
+
     this.updated && this.updated();
   }
   isConnect() {

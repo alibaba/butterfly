@@ -544,7 +544,7 @@ class BaseCanvas extends Canvas {
         } else {
           targetEndpoint = targetNode.getEndpoint(link.target, 'target');
         }
-
+        
         if (!sourceEndpoint || !targetEndpoint) {
           console.warn(`butterflies error: can not connect edge. link sourceId:${link.source};link targetId:${link.target}`);
           return;
@@ -2202,8 +2202,8 @@ class BaseCanvas extends Canvas {
           const endY = this._coordinateService._terminal2canvas('y', event.clientY);
 
           // 明确标记source或者是没有type且没有线连上
-          let _isSourceEndpoint = (this._dragEndpoint.type === 'source' || (!this._dragEndpoint.type && (!this._dragEndpoint._tmpType || this._dragEndpoint._tmpType === 'source')));
-          let _isTargetEndpoint = (this._dragEndpoint.type === 'target' || (!this._dragEndpoint.type && this._dragEndpoint._tmpType === 'target'));
+          let _isSourceEndpoint = (this._dragEndpoint.type === 'source' || this._dragEndpoint.type === 'onlyConnect' || (!this._dragEndpoint.type && (!this._dragEndpoint._tmpType || this._dragEndpoint._tmpType === 'source')));
+          let _isTargetEndpoint = (this._dragEndpoint.type === 'target' || (!this._dragEndpoint.type && this._dragEndpoint._tmpType === 'target')) && !this._dragEndpoint.type === 'onlyConnect';
           
           if (_isSourceEndpoint && this.linkable) {
             let unionKeys = this._findUnion('endpoints', this._dragEndpoint);
