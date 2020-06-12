@@ -141,7 +141,6 @@ class TreeCanvas extends Canvas {
       return _isCollapsed;
     });
     this.nodes = _.differenceBy(this.nodes, subNodes, 'id');
-    console.log(subNodes);
     this.addNodes(subNodes, true);
     this.edges = _.filter(this.edges, (a) => {
       if (a.type === 'endpoint') {
