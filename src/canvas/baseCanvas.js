@@ -3003,30 +3003,30 @@ class BaseCanvas extends Canvas {
           });
         }
       }else if(_.get(this.layout, 'type') === 'drageLayout') {
-        //  /** layout 方向, 可选 TB, BT, LR, RL */
-        // public rankdir: 'TB' | 'BT' | 'LR' | 'RL' = 'TB';
-        // /** 节点对齐方式，可选 UL, UR, DL, DR */
-        // public align: undefined | 'UL' | 'UR' | 'DL' | 'DR';
-        // /** 节点大小 */
-        // public nodeSize: number | number[] | undefined;
-        // /** 节点水平间距(px) */
-        // public nodesepFunc: ((d?: any) => number) | undefined;
-        // /** 每一层节点之间间距 */
-        // public ranksepFunc: ((d?: any) => number) | undefined;
-        // /** 节点水平间距(px) */
-        // public nodesep: number = 50;
-        // /** 每一层节点之间间距 */
-        // public ranksep: number = 50;
-        // /** 是否保留布局连线的控制点 */
-        // public controlPoints: boolean = false;
         Layout.drageLayout({
+          //  /** layout 方向, 可选 TB, BT, LR, RL */
+          // public rankdir: 'TB' | 'BT' | 'LR' | 'RL' = 'TB';
           rankdir: _.get(this.layout, 'options.rankdir') || 'TB',
+          // /** 节点对齐方式，可选 UL, UR, DL, DR */
+          // public align: undefined | 'UL' | 'UR' | 'DL' | 'DR';
           align: _.get(this.layout, 'options.align'),
+          // /** 节点大小 */
+          // public nodeSize: number | number[] | undefined;
           nodeSize: _.get(this.layout, 'options.nodeSize'),
+          // /** 节点水平间距(px) */
+          // public nodesepFunc: ((d?: any) => number) | undefined;
           nodesepFunc: _.get(this.layout, 'options.nodesepFunc'),
+          // /** 每一层节点之间间距 */
+          // public ranksepFunc: ((d?: any) => number) | undefined;
           ranksepFunc: _.get(this.layout, 'options.ranksepFunc'),
+          // /** 节点水平间距(px) */
+          // public nodesep: number = 50;
           nodesep: _.get(this.layout, 'options.nodesep') || 50,
+          // /** 每一层节点之间间距 */
+          // public ranksep: number = 50;
           ranksep: _.get(this.layout, 'options.ranksep') || 50,
+          // /** 是否保留布局连线的控制点 */
+          // public controlPoints: boolean = false;
           controlPoints: _.get(this.layout, 'options.controlPoints') || false,
           data: {
             // groups: data.groups,

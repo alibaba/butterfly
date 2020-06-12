@@ -113,7 +113,16 @@ function treeLayout(param) {
 //drage布局
 function drageLayout(param){
   const { nodeSize, rankdir, nodesepFunc, ranksepFunc, nodesep, ranksep, controlPoints } = param;
-  const {nodes, edges=[]} = param.data;
+  const {edges=[]} = param.data;
+  const curnode =  param.data.nodes;
+  const nodes = curnode.map((item) => {
+    return {
+      id: item.id,
+      top: item.top,
+      left: item.left
+    }
+  });
+// 形成新数组后布局失效
   if (!nodes) return;
   const g = new dagre.graphlib.Graph();
   let nodeSizeFunc; 
@@ -153,28 +162,37 @@ function drageLayout(param){
     });
   });
   g.setDefaultEdgeLabel(() => ({}));
+  param.nodes = nodes;
   g.setGraph(param);
   dagre.layout(g);
   let coord;
+  // 重新布局时g.nodes()可能为undefined
   g.nodes().forEach((node) => {
     coord = g.node(node);
-    const i = nodes.findIndex(it => it.id === node);
-    nodes[i].left = coord.x;
-    nodes[i].top = coord.y;
-    nodes[i].posInfo = {
-      _out: g._out[node],
-      _in: g._in[node],
-      _preds: g._preds[node],
-      _sucs: g._sucs[node]
+    if(coord){
+      const i = nodes.findIndex(it => it.id === node);
+      nodes[i].left = coord.x;
+      nodes[i].top = coord.y;
+      nodes[i].posInfo = {
+        _out: g._out[node],
+        _in: g._in[node],
+        _preds: g._preds[node],
+        _sucs: g._sucs[node]
+      }
     }
   });
-  
   g.edges().forEach((edge) => {
     coord = g.edge(edge);
     const i = edges.findIndex(it => it.source === edge.v && it.target === edge.w);
     if (controlPoints && edges[i].type !== 'loop' && edges[i].shape !== 'loop') {
       edges[i].controlPoints = coord.points.slice(1, coord.points.length - 1);
     }
+  });
+  // 将数据挂载到原有数据上，以触发布局
+  nodes.forEach((item, index) => {
+    curnode[index].left = item.left;
+    curnode[index].top = item.top;
+    curnode[index].posInfo = item.posInfo;
   });
 }
 

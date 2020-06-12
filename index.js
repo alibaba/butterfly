@@ -4,6 +4,7 @@ const _ = require('lodash');
 
 import Canvas from './src/canvas/baseCanvas';
 import TreeCanvas from './src/canvas/treeCanvas';
+import DrageCanvas from './src/canvas/drageCanvas';
 import Edge from './src/edge/baseEdge';
 import Endpoint from './src/endpoint/baseEndpoint';
 import Group from './src/group/baseGroup';
@@ -16,6 +17,7 @@ import './src/index.less'
 module.exports = {
   Canvas,
   TreeCanvas,
+  DrageCanvas,
   Edge,
   Endpoint,
   Group,

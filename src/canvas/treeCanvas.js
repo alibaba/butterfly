@@ -167,7 +167,6 @@ class TreeCanvas extends Canvas {
 
   redraw() {
     let rootNode = this.getRootNode();
-
     let tree = [];
     let tmpTreeObj = {};
     let queue = [rootNode];
