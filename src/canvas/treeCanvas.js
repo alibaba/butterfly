@@ -95,7 +95,6 @@ class TreeCanvas extends Canvas {
         item.destroy(true);
       }
     });
-
     collapseEdges.forEach((item) => {
       item.destroy(true);
     });
@@ -142,6 +141,7 @@ class TreeCanvas extends Canvas {
       return _isCollapsed;
     });
     this.nodes = _.differenceBy(this.nodes, subNodes, 'id');
+    console.log(subNodes);
     this.addNodes(subNodes, true);
     this.edges = _.filter(this.edges, (a) => {
       if (a.type === 'endpoint') {
@@ -167,7 +167,6 @@ class TreeCanvas extends Canvas {
 
   redraw() {
     let rootNode = this.getRootNode();
-
     let tree = [];
     let tmpTreeObj = {};
     let queue = [rootNode];
@@ -218,6 +217,7 @@ class TreeCanvas extends Canvas {
       edges: [],
       groups: []
     });
+
     this.nodes.forEach((item) => {
       if (item.subCollapsed) {
         return;
@@ -259,7 +259,7 @@ class TreeCanvas extends Canvas {
           return;
         }
         !parentNode.children && (parentNode.children = []);
-        parentNode.children.push(item);
+        parentNode.children.unshift(item);
       });
       callback && callback({
         nodes: this.nodes,
