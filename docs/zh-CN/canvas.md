@@ -31,7 +31,11 @@ let canvas = new Canvas({
         botton: 10
       }
     },
-    zoomGap: 0.001         //鼠标放大缩小间隙设置
+    zoomGap: 0.001,         //鼠标放大缩小间隙设置
+    autoFixCanvas: {     //节点拖动或连线拖动到画布边缘时，画布自动延展
+      enable: false,
+      autoMovePadding: [20, 20, 20, 20] //触发自动延展的画布内边距
+    }
   },
   global: {                //自定义配置，会贯穿所有canvas，group，node，edge，endpoint对象
     isScopeStrict: false   //scope是否为严格模式(默认为false)
@@ -57,6 +61,7 @@ let canvas = new Canvas({
   * 默认为false。假如该值设置为true，当scope必须完全一致才能匹配；假如该值为false，当scope为undefined时，都能匹配所有值。
 * **重力布局**，传入`'ForceLayout'`即可，小蝴蝶内置布局
 * **自定义布局**，传入一个方法，里面可以按照用户需求进行布局。注:`除此之外，记得把Edge的calcPath的方法复写掉，不然会由小蝴蝶的内置计算线段的方法代替，无法实现所得的线段`
+* **autoFixCanvas**，自动延展画布，适用于画布内节点与画布外节点有互动的场景。效果如下：![自动延展画布](https://img.alicdn.com/tfs/TB16lUNBG61gK0jSZFlXXXDKFXa-1665-801.gif)
 
 ```js
 let canvas = new Canvas({
@@ -144,6 +149,11 @@ getNode = (string) => {}
   */
 addNode = (object|Node) => {}
 /**
+  * 批量添加节点
+  * @param {array<object|Node>}  - 节点的信息；Node － 节点的基类
+  */
+addNodes = (array<object|Node>) => {}
+/**
   * 删除节点
   * @param nodeId string  - 节点id
   */
@@ -159,6 +169,11 @@ removeNodes = (array) => {}
   * @param {object|Edge} object  - 连线的信息；Edge － 连线的基类
   */
 addEdge = (object|Edge) => {}
+/**
+  * 批量添加连线
+  * @param {array<object|Edge>}   - 连线的信息；Edge － 连线的基类
+  */
+addEdges = (array<object|Edge>) => {}
 
 /**
   * 根据id或者Edge对象来删除线
@@ -338,9 +353,10 @@ canvas2terminal = (coordinates) => {}
 /**
   * 设置框选模式
   * @param {true|false} boolean  - 是否开启框选功能
-  * @param {array} type - 可接受框选的内容(node/endpoint/edge,默认node)
+  * @param {array} contents - 可接受框选的内容(node|endpoint|edge),默认'node')
+  * @param {string} selecMode - 可接受框选的内容(include|touch|senior),默认'include',include:全部包含才可选中，touch:触碰就选中，senior:从左到右需要全部包含，从右到左只需触碰就能选中)
   */
-setSelectMode = (boolean, type) => {}
+setSelectMode = (boolean, contents , selecMode) => {}
 /**
   * 获取聚合组
   * @param {name} string  - 聚合组的名称
@@ -397,10 +413,10 @@ canvas.on('type', (data) => {
 | :------ | :------ | :------
 | system.canvas.click | 点击画布空白处 | -
 | system.canvas.zoom | 画布缩放 | -
-| system.node.delete | 删除节点 | -
+| system.nodes.delete | 删除节点 | -
 | system.node.move | 移动节点 | -
 | system.nodes.add | 批量节点添加 | -
-| system.link.delete | 删除连线 | -
+| system.links.delete | 删除连线 | -
 | system.link.connect | 连线成功 | -
 | system.link.reconnect | 线段重连 | -
 | system.link.click | 点击事件 | -

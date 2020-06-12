@@ -5,8 +5,11 @@ const _ = require('lodash');
 
 import './baseEndpoint.less';
 
-class Endpoint {
+import Endpoint from '../interface/endpoint';
+
+class BaseEndpoint extends Endpoint {
   constructor(opts) {
+    super(opts);
     this.id = opts.id;
     this.options = opts;
     this.orientation = opts.orientation;
@@ -19,6 +22,8 @@ class Endpoint {
     this.expandArea = opts.expandArea;
     this.limitNum = opts.limitNum;
     this.options = opts;
+    // 鸭子辨识手动判断类型
+    this.__type = 'endpoint';
     // 假如锚点在节点上则有值
     this._node = opts._node;
     this._global = opts._global;
@@ -38,6 +43,7 @@ class Endpoint {
     this._coordinateService = null;
 
     this.dom = null;
+    // 判断自定义锚点
     this._isInitedDom = false;
     if (opts.dom) {
       this.dom = opts.dom;
@@ -66,7 +72,6 @@ class Endpoint {
       // 计算width,height,left,top
       this._width = $(this.dom).width();
       this._height = $(this.dom).height();
-
       this._left = this._coordinateService._terminal2canvas('x', $(this.dom).offset().left);
       this._top = this._coordinateService._terminal2canvas('y', $(this.dom).offset().top);
 
@@ -81,8 +86,10 @@ class Endpoint {
     let _dom = obj.dom;
     if (!_dom) {
       _dom = $('<div class="butterflie-circle-endpoint"></div>').attr('id', this.id);
+    } else {
+      _dom = $(_dom);
     }
-    return _dom;
+    return _dom[0];
   }
 
   updatePos(dom = this.dom, orientation = this.orientation, pos = this.pos) {
@@ -190,19 +197,19 @@ class Endpoint {
   }
 
   linkable() {
-    this.dom.addClass('linkable');
+    $(this.dom).addClass('linkable');
   }
 
   unLinkable() {
-    this.dom.removeClass('linkable');
+    $(this.dom).removeClass('linkable');
   }
 
   hoverLinkable() {
-    this.dom.addClass('hover');
+    $(this.dom).addClass('hover');
   }
 
   unHoverLinkable() {
-    this.dom.removeClass('hover');
+    $(this.dom).removeClass('hover');
   }
 
   attachEvent() {
@@ -213,22 +220,25 @@ class Endpoint {
       }
       e.preventDefault();
       e.stopPropagation();
-      this._emit('InnerEvents', {
+      this.emit('InnerEvents', {
         type: 'endpoint:drag',
         data: this
       });
     });
   }
   emit(type, data) {
+    super.emit(type, data);
     this._emit(type, data);
   }
-  on(type, callback) {
-    this._on(type, callback);
-  }
-  destroy() {
-    $(this.dom).off();
-    $(this.dom).remove();
+  destroy(isNotEvent) {
+    if (!isNotEvent) {
+      $(this.dom).off();
+      $(this.dom).remove();
+      this.removeAllListeners();
+    } else {
+      $(this.dom).detach();
+    }
   }
 }
 
-export default Endpoint;
+export default BaseEndpoint;

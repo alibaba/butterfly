@@ -21,13 +21,22 @@
 [English](./README.en-US.md) | 简体中文
 
 ## ✨ 特性
-* 开箱即用的参考[DEMO](https://noonnightstorm.github.io/)，可在线调试
+* 丰富DEMO，开箱即用
 * 全方位管理画布，开发者只需要更专注定制化的需求
 * 利用dom来定制元素；灵活性，可塑性，拓展性优秀
 
 <p align="center">
-  <img width="900" src="https://img.alicdn.com/tfs/TB1VsgjzQP2gK0jSZPxXXacQpXa-1200-1600.jpg">
+  <img width="900" src="https://img.alicdn.com/tfs/TB1nq6hCeT2gK0jSZFvXXXnFXXa-1200-2660.png">
 </p>
+
+## 快速本地DEMO
+```
+git clone git@github.com:alibaba/butterfly.git
+npm install
+cd example
+npm install
+npm start
+```
 
 ## 📦 安装
 ```
@@ -66,7 +75,7 @@ canvas.draw({
 ## 🔗 API文档
 * [画布(Canvas)](./docs/zh-CN/canvas.md)
   * [属性配置](./docs/zh-CN/canvas.md#canvas-attr)
-  * [节点，线段，节点组的新增和删除](./docs/zh-CN/canvas.md#canvas-api-crud)
+  * [节点，线段，节点组的查看,新增,删除](./docs/zh-CN/canvas.md#canvas-api-crud)
   * [缩放，平移](./docs/zh-CN/canvas.md#canvas-api-zoom-move)
   * [适配画布和聚焦局部节点](./docs/zh-CN/canvas.md#canvas-api-focus)
   * [重做和撤销](./docs/zh-CN/canvas.md#canvas-api-redo-undo)
@@ -102,13 +111,6 @@ canvas.draw({
 * [缩略图(Minimap)](./docs/zh-CN/minimap.md#endpoint-api)
 * [布局(正在整理中)]()
 
-
-## 快速本地DEMO
-```
-cd example
-npm install
-npm start
-```
 
 ## 🤝贡献
 小蝴蝶是一个完全开源的项目，我们欢迎大家为修复错误和改进做出贡献。有关如何开始的信息，请阅读我们的[贡献指南](./docs/zh-CN/CONTRIBUTING.md).

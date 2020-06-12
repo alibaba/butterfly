@@ -21,13 +21,22 @@
 English | [简体中文](./README.md)
 
 ## ✨ Features
-* Simple & Poweful. [Online DEMO](https://noonnightstorm.github.io/)
+* Simple & Poweful & Rich DEMO
 * Manage the canvas in all aspects, developers only need to focus more on customized needs
 * Use dom to customize elements: flexibility and excellent expandability
 
 <p align="center">
-  <img width="900" src="https://img.alicdn.com/tfs/TB1VsgjzQP2gK0jSZPxXXacQpXa-1200-1600.jpg">
+  <img width="900" src="https://img.alicdn.com/tfs/TB1nq6hCeT2gK0jSZFvXXXnFXXa-1200-2660.png">
 </p>
+
+## QUCIK DEMO LOCAL
+```
+git clone git@github.com:alibaba/butterfly.git
+npm install
+cd example
+npm install
+npm start
+```
 
 ## 📦 Install
 ```
@@ -67,7 +76,7 @@ canvas.draw({
 
 * [Canvas](./docs/en-US/canvas.md)
   * [attribute](./docs/en-US/canvas.md#canvas-attr)
-  * [add and delete node，edge，group](./docs/en-US/canvas.md#canvas-api-crud)
+  * [get, add and delete node，edge，group](./docs/en-US/canvas.md#canvas-api-crud)
   * [zoom and move canvas](./docs/en-US/canvas.md#canvas-api-zoom-move)
   * [fit canvas and focus part nodes](./docs/en-US/canvas.md#canvas-api-focus)
   * [redo, undo](./docs/en-US/canvas.md#canvas-api-redo-undo)
@@ -102,13 +111,6 @@ canvas.draw({
   * [API](./docs/en-US/endpoint.md#endpoint-api)
 * [Minimap](./docs/en-US/minimap.md#endpoint-api)
 * [Layout(doing)]()
-
-## QUCIK DEMO LOCAL
-```
-cd example
-npm install
-npm start
-```
 
 ## 🤝 Contribution
 Butterfly is a completely open source project and we welcome everyone to contribute to fixing bugs and improvements. For information on how to get started, read our [contribution guide](./docs/en-US/CONTRIBUTING.md).

@@ -2,6 +2,7 @@
 import React, {Component} from 'react';
 import mockData from './data.js'
 import './index.less';
+const $ = require('jquery');
 const Canvas = require('../../../index.js').Canvas;
 class LiteGraph extends Component{
   constructor(){
@@ -22,8 +23,9 @@ class LiteGraph extends Component{
           }
         }
     })
-    this.canvas.draw(mockData)
+    this.canvas.draw(mockData);
     this.canvas.on('events', (data) => {
+      console.log(data);
     })
   }
   render() {

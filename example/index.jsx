@@ -16,6 +16,7 @@ import System from './demo/system/index.jsx';
 import liteGraph from './demo/liteGraph/index.jsx';
 import EntityRelationship from './demo/entityRelationship/index.jsx';
 import CompactBoxTree from './demo/compactBoxTree/index.jsx';
+import MindMap from './demo/mindMap/index.jsx';
 import CompactBoxTreeNew from './demo/compactBoxTree-new/index.jsx';
 import EntityRelationshipNew from './demo/entityRelationship-new/index.jsx';
 import EmergencyNew from './demo/emergency-new/index.jsx';
@@ -26,6 +27,8 @@ import Scene4New from './demo/scene-4-new/index.jsx';
 import Scene5New from './demo/scene-5-new/index.jsx';
 import Scene6New from './demo/scene-6-new/index.jsx';
 
+
+
 import 'antd/dist/antd.css';
 import './static/iconfont.css';
 import './index.less';
@@ -33,6 +36,7 @@ import './index.less';
 ReactDOM.render((
   <Router>
     <Layout>
+
         <Header className='header'>小蝴蝶DEMO</Header>
         <Layout>
           <Sider>
@@ -70,6 +74,9 @@ ReactDOM.render((
               </Menu.Item>
               <Menu.Item key="relationarBooks">
                 <Link to="/relational_books">RelationalBooks</Link>
+              </Menu.Item>
+              <Menu.Item key="mindMap">
+                <Link to="/mind_map">MindMap</Link>
               </Menu.Item>
               <Menu.Item key="compactBoxTree-new">
                 <Link to="/compactBoxTree-new">compactBoxTree-new</Link>
@@ -112,6 +119,7 @@ ReactDOM.render((
             <Route path="/entity" component={EntityRelationship} />
             <Route path="/compactBoxTree" component={CompactBoxTree} />
             <Route path="/relational_books" component={RelationalBooks} />
+            <Route path="/mind_map" component={MindMap} />
             <Route path="/compactBoxTree-new" component={CompactBoxTreeNew} />
             <Route path="/entityRelationship-new" component={EntityRelationshipNew} />
             <Route path="/emergency-new" component={EmergencyNew} />
@@ -124,5 +132,6 @@ ReactDOM.render((
           </Content>
         </Layout>
       </Layout>
+    </Layout>
   </Router>
 ), document.getElementById('main'));

@@ -56,11 +56,14 @@ class AlisBaseNode extends Node {
   _editNode = (dom) => {
     dom.find('.alis-node-edit').click(function (e) {
       const oldNode = $(this).prev('.title-text');
+      const oldNodeText = $(this).prev('.title-text').text();
 
       if (dom[0] === $('.group-node > .title')[0]) {
-        oldNode.html(`<input type=text name=editname class=input-text value='${oldNode.text()}' />`);
+        oldNode.html(`<input type=text class=input-text />`);
+        $(oldNode).find('input').focus().val(oldNodeText);
       } else {
-        oldNode.html(`<textarea>${oldNode.text()}</textarea>`);
+        oldNode.html(`<textarea></textarea>`);
+        $(oldNode).find('textarea').focus().val(oldNodeText);
       }
       oldNode.children().keyup(function (event) {
         if (event.keyCode === 13 || event.keyCode === 27) {
