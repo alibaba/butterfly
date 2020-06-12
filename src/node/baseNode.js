@@ -229,7 +229,7 @@ class BaseNode extends Node {
       this.removeAllListeners();
     } else {
       this.endpoints.forEach((item) => {
-        !item._isInitedDom && item.destroy();
+        !item._isInitedDom && item.destroy(isNotEvent);
       });
       $(this.dom).detach();
     }

@@ -43,6 +43,7 @@ class BaseEndpoint extends Endpoint {
     this._coordinateService = null;
 
     this.dom = null;
+    // 判断自定义锚点
     this._isInitedDom = false;
     if (opts.dom) {
       this.dom = opts.dom;
@@ -85,6 +86,8 @@ class BaseEndpoint extends Endpoint {
     let _dom = obj.dom;
     if (!_dom) {
       _dom = $('<div class="butterflie-circle-endpoint"></div>').attr('id', this.id);
+    } else {
+      _dom = $(_dom);
     }
     return _dom[0];
   }
@@ -227,10 +230,14 @@ class BaseEndpoint extends Endpoint {
     super.emit(type, data);
     this._emit(type, data);
   }
-  destroy() {
-    $(this.dom).off();
-    $(this.dom).remove();
-    this.removeAllListeners();
+  destroy(isNotEvent) {
+    if (!isNotEvent) {
+      $(this.dom).off();
+      $(this.dom).remove();
+      this.removeAllListeners();
+    } else {
+      $(this.dom).detach();
+    }
   }
 }
 
