@@ -9,7 +9,7 @@ import Node from '../node/baseNode';
 import Edge from '../edge/baseEdge';
 import Group from '../group/baseGroup';
 import Endpoint from '../endpoint/baseEndpoint';
-import Layout from '../utils/layout';
+import Layout from '../utils/layout/layout';
 import SelectCanvas from '../utils/selectCanvas';
 // 画布和屏幕坐标地换算
 import CoordinateService from '../utils/coordinate';
@@ -3002,6 +3002,41 @@ class BaseCanvas extends Canvas {
             }
           });
         }
+      }else if(_.get(this.layout, 'type') === 'drageLayout') {
+        //  /** layout 方向, 可选 TB, BT, LR, RL */
+        // public rankdir: 'TB' | 'BT' | 'LR' | 'RL' = 'TB';
+        // /** 节点对齐方式，可选 UL, UR, DL, DR */
+        // public align: undefined | 'UL' | 'UR' | 'DL' | 'DR';
+        // /** 节点大小 */
+        // public nodeSize: number | number[] | undefined;
+        // /** 节点水平间距(px) */
+        // public nodesepFunc: ((d?: any) => number) | undefined;
+        // /** 每一层节点之间间距 */
+        // public ranksepFunc: ((d?: any) => number) | undefined;
+        // /** 节点水平间距(px) */
+        // public nodesep: number = 50;
+        // /** 每一层节点之间间距 */
+        // public ranksep: number = 50;
+        // /** 是否保留布局连线的控制点 */
+        // public controlPoints: boolean = false;
+        Layout.drageLayout({
+          rankdir: _.get(this.layout, 'options.rankdir') || 'TB',
+          align: _.get(this.layout, 'options.align'),
+          nodeSize: _.get(this.layout, 'options.nodeSize'),
+          nodesepFunc: _.get(this.layout, 'options.nodesepFunc'),
+          ranksepFunc: _.get(this.layout, 'options.ranksepFunc'),
+          nodesep: _.get(this.layout, 'options.nodesep') || 50,
+          ranksep: _.get(this.layout, 'options.ranksep') || 50,
+          controlPoints: _.get(this.layout, 'options.controlPoints') || false,
+          data: {
+            // groups: data.groups,
+            nodes: data.nodes,
+            edges: data.edges.map(item => ({
+              source: item.type === 'endpoint' ? item.sourceNode : item.source,
+              target: item.type === 'endpoint' ? item.targetNode : item.target
+            }))
+          }
+        })
       }
     }
   }
