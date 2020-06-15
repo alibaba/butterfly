@@ -17,9 +17,21 @@ import liteGraph from './demo/liteGraph/index.jsx';
 import EntityRelationship from './demo/entityRelationship/index.jsx';
 import CompactBoxTree from './demo/compactBoxTree/index.jsx';
 import MindMap from './demo/mindMap/index.jsx';
+import CompactBoxTreeNew from './demo/compactBoxTree-new/index.jsx';
+import EntityRelationshipNew from './demo/entityRelationship-new/index.jsx';
+import EmergencyNew from './demo/emergency-new/index.jsx';
+import IndustryNew from './demo/industry-new/index.jsx';
+import PolicyNew from './demo/policy-new/index.jsx';
+import FlowNew from './demo/flow-new/index.jsx';
+import AnalysisNew from './demo/analysis-new/index.jsx';
+import ScheduleNew from './demo/schedule-new/index.jsx';
+import DecisionNew from './demo/decision-new/index.jsx';
+
+
 import DrageLayout from './demo/DrageLayout/index.jsx';
 
 import 'antd/dist/antd.css';
+import './static/iconfont.css';
 import './index.less';
 
 ReactDOM.render((
@@ -60,19 +72,46 @@ ReactDOM.render((
             <Menu.Item key="compactBoxTree">
               <Link to="/compactBoxTree">CompactBoxTree</Link>
             </Menu.Item>
-            <Menu.Item key="mindMap">
-              <Link to="/mind_map">MindMap</Link>
-            </Menu.Item>
             <Menu.Item key="relationarBooks">
               <Link to="/relational_books">RelationalBooks</Link>
             </Menu.Item>
-            <Menu.Item key="drageLayout">
-              <Link to="/drageLayout">drageLayout</Link>
+            <Menu.Item key="mindMap">
+              <Link to="/mind_map">MindMap</Link>
+            </Menu.Item>
+            <Menu.Item key="drage">
+              <Link to="/drageLayout">Drage</Link>
+            </Menu.Item>
+            <Menu.Item key="compactBoxTree-new">
+              <Link to="/compactBoxTree-new">compactBoxTree-new</Link>
+            </Menu.Item>
+            <Menu.Item key="entityRelationship-new">
+              <Link to="/entityRelationship-new">entityRelationship-new</Link>
+            </Menu.Item>
+            <Menu.Item key="emergency-new">
+              <Link to="/emergency-new">emergency-new</Link>
+            </Menu.Item>
+            <Menu.Item key="industry-new">
+              <Link to="/industry-new">industry-new</Link>
+            </Menu.Item>
+            <Menu.Item key="policy-new">
+              <Link to="/policy-new">policy-new</Link>
+            </Menu.Item>
+            <Menu.Item key="flow-new">
+              <Link to="/flow-new">flow-new</Link>
+            </Menu.Item>
+            <Menu.Item key="analysis-new">
+              <Link to="/analysis-new">analysis-new</Link>
+            </Menu.Item>
+            <Menu.Item key="schedule-new">
+              <Link to="/schedule-new">schedule-new</Link>
+            </Menu.Item>
+            <Menu.Item key="decision-new">
+              <Link to="/decision-new">decision-new</Link>
             </Menu.Item>
           </Menu>
         </Sider>
         <Content>
-          <Redirect from="/" to="/emergency" />
+          <Redirect from="/" to="/decision-new" />
           <Route path="/emergency" component={Emergency} />
           <Route path="/diodes" component={Diodes} />
           <Route path="/force" component={Force} />
@@ -85,6 +124,15 @@ ReactDOM.render((
           <Route path="/relational_books" component={RelationalBooks} />
           <Route path="/mind_map" component={MindMap} />
           <Route path="/drageLayout" component={DrageLayout} />
+          <Route path="/compactBoxTree-new" component={CompactBoxTreeNew} />
+          <Route path="/entityRelationship-new" component={EntityRelationshipNew} />
+          <Route path="/emergency-new" component={EmergencyNew} />
+          <Route path="/industry-new" component={IndustryNew} />
+          <Route path="/policy-new" component={PolicyNew} />
+          <Route path="/flow-new" component={FlowNew} />
+          <Route path="/analysis-new" component={AnalysisNew} />
+          <Route path="/schedule-new" component={ScheduleNew} />
+          <Route path="/decision-new" component={DecisionNew} />
         </Content>
       </Layout>
     </Layout>
