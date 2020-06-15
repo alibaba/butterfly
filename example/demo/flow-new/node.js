@@ -10,7 +10,7 @@ class BaseNode extends Node {
     this.options = opts;
   }
   draw = (opts) => {
-    const container = $('<div class="flow-base-node"></div>')
+    const container = $('<div class="flow-base-node-new"></div>')
                     .css('top', opts.top)
                     .css('left', opts.left)
                     .attr('id', opts.id);

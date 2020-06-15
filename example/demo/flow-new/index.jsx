@@ -32,7 +32,7 @@ class FlowNew extends React.Component {
   render() {
     return (
       <div className='flow-page-new'>
-        <div className="flow-canvas" id="dag-canvas">
+        <div className="flow-canvas-new" id="dag-canvas">
         </div>
       </div>
     );
