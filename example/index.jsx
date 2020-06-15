@@ -21,11 +21,11 @@ import CompactBoxTreeNew from './demo/compactBoxTree-new/index.jsx';
 import EntityRelationshipNew from './demo/entityRelationship-new/index.jsx';
 import EmergencyNew from './demo/emergency-new/index.jsx';
 import IndustryNew from './demo/industry-new/index.jsx';
-import DecisionNew from './demo/decision-new/index.jsx';
+import PolicyNew from './demo/policy-new/index.jsx';
 import FlowNew from './demo/flow-new/index.jsx';
-import Scene4New from './demo/scene-4-new/index.jsx';
-import Scene5New from './demo/scene-5-new/index.jsx';
-import Scene6New from './demo/scene-6-new/index.jsx';
+import AnalysisNew from './demo/analysis-new/index.jsx';
+import ScheduleNew from './demo/schedule-new/index.jsx';
+import DecisionNew from './demo/decision-new/index.jsx';
 
 
 
@@ -90,25 +90,25 @@ ReactDOM.render((
               <Menu.Item key="industry-new">
                 <Link to="/industry-new">industry-new</Link>
               </Menu.Item>
-              <Menu.Item key="decision-new">
-                <Link to="/decision-new">decision-new</Link>
+              <Menu.Item key="policy-new">
+                <Link to="/policy-new">policy-new</Link>
               </Menu.Item>
               <Menu.Item key="flow-new">
                 <Link to="/flow-new">flow-new</Link>
               </Menu.Item>
-              <Menu.Item key="scene-4-new">
-                <Link to="/scene-4-new">scene-4-new</Link>
+              <Menu.Item key="analysis-new">
+                <Link to="/analysis-new">analysis-new</Link>
               </Menu.Item>
-              <Menu.Item key="scene-5-new">
-                <Link to="/scene-5-new">scene-5-new</Link>
+              <Menu.Item key="schedule-new">
+                <Link to="/schedule-new">schedule-new</Link>
               </Menu.Item>
-              <Menu.Item key="scene-6-new">
-                <Link to="/scene-6-new">scene-6-new</Link>
+              <Menu.Item key="decision-new">
+                <Link to="/decision-new">decision-new</Link>
               </Menu.Item>
             </Menu>
           </Sider>
           <Content>
-            <Redirect from="/" to="/scene-6-new" />
+            <Redirect from="/" to="/decision-new" />
             <Route path="/emergency" component={Emergency} />
             <Route path="/diodes" component={Diodes} />
             <Route path="/force" component={Force} />
@@ -124,14 +124,13 @@ ReactDOM.render((
             <Route path="/entityRelationship-new" component={EntityRelationshipNew} />
             <Route path="/emergency-new" component={EmergencyNew} />
             <Route path="/industry-new" component={IndustryNew} />
-            <Route path="/decision-new" component={DecisionNew} />
+            <Route path="/policy-new" component={PolicyNew} />
             <Route path="/flow-new" component={FlowNew} />
-            <Route path="/scene-4-new" component={Scene4New} />
-            <Route path="/scene-5-new" component={Scene5New} />
-            <Route path="/scene-6-new" component={Scene6New} />
+            <Route path="/analysis-new" component={AnalysisNew} />
+            <Route path="/schedule-new" component={ScheduleNew} />
+            <Route path="/decision-new" component={DecisionNew} />
           </Content>
         </Layout>
       </Layout>
-    </Layout>
   </Router>
 ), document.getElementById('main'));

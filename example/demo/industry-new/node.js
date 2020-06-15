@@ -61,67 +61,7 @@ class BaseNode extends Node {
     $(dom).append(logoContainer);
   }
   _addEndpoint() {}
-  // _addEndpoint(dom = this.dom) {
-  //   // 抽象
-  //   let position = ['Left', 'Right', 'Top', 'Bottom'];
-  //   position.forEach((pos) => {
-  //     let pointJsplumb = this._jsplumb.addEndpoint(dom, {
-  //       maxConnections: -1,
-  //       isSource: true,
-  //       isTarget: true,
-  //       parameters: {
-  //         [this.id + '-' + pos]: {
-  //           nodeId: this.id,
-  //           id: this.id + '-' + pos,
-  //           pos: pos
-  //         }
-  //       },
-  //       cssClass: 'hide-endpoint',
-  //       connector: [ this._theme.edge.type, this._theme.edge.config],
-  //       dropOptions: { 
-  //         hoverClass: 'endpoint-hover',
-  //         activeClass: 'endpoint-active'
-  //       },
-  //       connectorOverlays: [
-  //         ['Arrow', {width: 5, length: 5, location: 1}],
-  //         ['Custom', {
-  //           create: (conn) => {
-  //             let label = $('<div class="label-container"></div>');
-  //             label.on('click', (e) => {
-  //               e.preventDefault();
-  //               e.stopPropagation();
-  //               // this.emit('events', {
-  //               //   type: 'label:click',
-  //               //   data: conn
-  //               // });
-  //             });
-  //             label.append('删除');
-  //             return label;
-  //           },
-  //           location: 0.5,
-  //           // label: '+',
-  //           visible: true
-  //         }]
-  //       ]
-  //     }, {
-  //       anchor: [pos],
-  //       uuid: this.id + '-' + pos
-  //     });
-  //     $(pointJsplumb.canvas).on('mouseover', () => {
-  //       this._isInEndpoint = true;
-  //     });
-  //     $(pointJsplumb.canvas).on('mouseout', () => {
-  //       this._isInEndpoint = false;
-  //       this._hideEndpoints();
-  //     });
-  //     this._endpoint.push({
-  //       id: this.id + '-' + pos,
-  //       nodeId: this.id,
-  //       pos: pos,
-  //       jsplumbObj: pointJsplumb
-  //     });
-  //   });
-  // }
+
   _showEndpoints() {
     this._endpoint.forEach((point) => {
       $(point.jsplumbObj.canvas).removeClass('hide-endpoint');

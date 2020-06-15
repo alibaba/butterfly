@@ -11,7 +11,7 @@ class BaseNode extends Node {
   }
   draw = (opts) => {
     console.log(opts)
-    let container = $('<div class="decision-base-node"></div>')
+    let container = $('<div class="decision-new-node"></div>')
                     .attr('id', opts.id)
                     .css('top', opts.top + 'px')
                     .css('left', opts.left + 'px')

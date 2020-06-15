@@ -11,7 +11,7 @@ class BaseNode extends Node {
   }
   draw = (opts) => {
     if (opts.options.type === 'circle') {
-      const container = $('<div class="scene-4-circle-base-node"></div>')
+      const container = $('<div class="analysis-circle-base-node"></div>')
                       .attr('id', opts.id)
                       .css('top', opts.top + 'px')
                       .css('left', opts.left + 'px');
@@ -21,7 +21,7 @@ class BaseNode extends Node {
       
       return container[0];            
     }
-    const container = $('<div class="scene-4-base-node"></div>')
+    const container = $('<div class="analysis-base-node"></div>')
                     .attr('id', opts.id)
                     .css('top', opts.top + 'px')
                     .css('left', opts.left + 'px')

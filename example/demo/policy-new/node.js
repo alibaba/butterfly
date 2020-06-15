@@ -11,7 +11,7 @@ class BaseNode extends Node {
   }
   draw = (opts) => {
     console.log(opts)
-    let container = $('<div class="scene6-new-node"></div>')
+    let container = $('<div class="policy-base-node"></div>')
                     .attr('id', opts.id)
                     .css('top', opts.top + 'px')
                     .css('left', opts.left + 'px')

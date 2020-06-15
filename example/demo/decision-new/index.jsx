@@ -6,7 +6,7 @@ require('butterfly-dag/dist/index.css');
 const Canvas = require('../../../index.js').Canvas;
 const mockData = require('./data.js');
 
-class DecisionNew extends Component {
+class Scene6New extends Component {
   constructor() {
     super();
   }
@@ -33,12 +33,12 @@ class DecisionNew extends Component {
   }
   render() {
     return (
-      <div className='decision-page-new'>
-        <div className="decision-canvas" id="dag-canvas">
+      <div className='decision-new'>
+        <div className="decision-new-canvas" id="dag-canvas">
         </div>
       </div>
     );
   }
 }
 
-module.exports = DecisionNew;
+module.exports = Scene6New;

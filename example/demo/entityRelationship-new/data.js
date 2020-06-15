@@ -37,7 +37,7 @@ module.exports = {
       text: 'Name',
       top: 30,
       left: 325,
-      color: 'Orange',
+      color: 'orange',
       shape: 'ellipse',
       Class: BaseNode,
     }, {
@@ -129,7 +129,7 @@ module.exports = {
       text: 'Date',
       top: 90,
       left: 810,
-      color: 'Orange',
+      color: 'orange',
       shape: 'ellipse',
       Class: BaseNode,
     }
