@@ -9,13 +9,11 @@ const { Header, Content, Sider } = Layout;
 import Emergency from './demo/emergency/index.jsx';
 import Diodes from './demo/diodes/index.jsx';
 import Force from './demo/force/index.jsx';
-import ServerLess from './demo/serverless/index.jsx';
 import RelationalNetwork from './demo/relationalNetwork/index.jsx';
 import RelationalBooks from './demo/relationalBooks/index.jsx';
 import System from './demo/system/index.jsx';
 import liteGraph from './demo/liteGraph/index.jsx';
 import EntityRelationship from './demo/entityRelationship/index.jsx';
-import CompactBoxTree from './demo/compactBoxTree/index.jsx';
 import MindMap from './demo/mindMap/index.jsx';
 import CompactBoxTreeNew from './demo/compactBoxTree-new/index.jsx';
 import EntityRelationshipNew from './demo/entityRelationship-new/index.jsx';
@@ -24,7 +22,7 @@ import IndustryNew from './demo/industry-new/index.jsx';
 import PolicyNew from './demo/policy-new/index.jsx';
 import FlowNew from './demo/flow-new/index.jsx';
 import AnalysisNew from './demo/analysis-new/index.jsx';
-import ScheduleNew from './demo/schedule-new/index.jsx';
+import Schedule from './demo/schedule/index.jsx';
 import DecisionNew from './demo/decision-new/index.jsx';
 
 
@@ -54,9 +52,6 @@ ReactDOM.render((
             <Menu.Item key="force">
               <Link to="/force">Force</Link>
             </Menu.Item>
-            <Menu.Item key="serverLess">
-              <Link to="/serverless">ServerLess</Link>
-            </Menu.Item>
             <Menu.Item key="relationalNetwork">
               <Link to="/relational_network">Relational Network</Link>
             </Menu.Item>
@@ -68,9 +63,6 @@ ReactDOM.render((
             </Menu.Item>
             <Menu.Item key="entity">
               <Link to="/entity">Entity Relationship</Link>
-            </Menu.Item>
-            <Menu.Item key="compactBoxTree">
-              <Link to="/compactBoxTree">CompactBoxTree</Link>
             </Menu.Item>
             <Menu.Item key="relationarBooks">
               <Link to="/relational_books">RelationalBooks</Link>
@@ -102,8 +94,8 @@ ReactDOM.render((
             <Menu.Item key="analysis-new">
               <Link to="/analysis-new">analysis-new</Link>
             </Menu.Item>
-            <Menu.Item key="schedule-new">
-              <Link to="/schedule-new">schedule-new</Link>
+            <Menu.Item key="schedule">
+              <Link to="/schedule">schedule</Link>
             </Menu.Item>
             <Menu.Item key="decision-new">
               <Link to="/decision-new">decision-new</Link>
@@ -111,16 +103,14 @@ ReactDOM.render((
           </Menu>
         </Sider>
         <Content>
-          <Redirect from="/" to="/decision-new" />
+          <Redirect from="/" to="/schedule" />
           <Route path="/emergency" component={Emergency} />
           <Route path="/diodes" component={Diodes} />
           <Route path="/force" component={Force} />
-          <Route path="/serverless" component={ServerLess} />
           <Route path="/relational_network" component={RelationalNetwork} />
           <Route path="/system" component={System} />
           <Route path="/lite_graph" component={liteGraph} />
           <Route path="/entity" component={EntityRelationship} />
-          <Route path="/compactBoxTree" component={CompactBoxTree} />
           <Route path="/relational_books" component={RelationalBooks} />
           <Route path="/mind_map" component={MindMap} />
           <Route path="/drageLayout" component={DrageLayout} />
@@ -131,7 +121,7 @@ ReactDOM.render((
           <Route path="/policy-new" component={PolicyNew} />
           <Route path="/flow-new" component={FlowNew} />
           <Route path="/analysis-new" component={AnalysisNew} />
-          <Route path="/schedule-new" component={ScheduleNew} />
+          <Route path="/schedule" component={Schedule} />
           <Route path="/decision-new" component={DecisionNew} />
         </Content>
       </Layout>

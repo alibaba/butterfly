@@ -32,8 +32,8 @@ class Scene4New extends Component {
   }
   render() {
     return (
-      <div className='schedule-new'>
-        <div className="schedule-new-canvas" id="dag-canvas">
+      <div className='schedule'>
+        <div className="schedule-canvas" id="dag-canvas">
         </div>
       </div>
     );

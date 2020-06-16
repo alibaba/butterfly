@@ -154,8 +154,9 @@ module.exports = {
       label: '某某算法',
       className: 'deep-blue',
       iconType: 'icon-kaifa',
-      top: 450,
-      left: 200,
+      top: 55,
+      left: 50,
+      group: 'group',
       Class: Node,
       endpoints: [{
         id: 'bottom',
@@ -168,8 +169,9 @@ module.exports = {
       label: '某某算法',
       className: 'deep-blue',
       iconType: 'icon-kaifa',
-      top: 450,
-      left: 350,
+      top: 55,
+      left: 300,
+      group: 'group',
       Class: Node,
       endpoints: [{
         id: 'bottom',
@@ -210,8 +212,9 @@ module.exports = {
       label: '交运算',
       className: 'deep-blue',
       iconType: 'icon-guanlian',
-      top: 600,
-      left: 350,
+      top: 205,
+      left: 300,
+      group: 'group',
       Class: Node,
       endpoints: [{
         id: 'top',
@@ -343,5 +346,16 @@ module.exports = {
       arrowPosition: 0.5,
       Class: Edge
     },
-  ]
+  ],
+  groups: [{
+    id: 'group',
+    options: {
+      title: '测试'
+    },
+    top: 410,
+    left: 185,
+    width: 500,
+    height: 300,
+    resize: true
+  }],
 };
