@@ -23,9 +23,9 @@ import PolicyNew from './demo/policy-new/index.jsx';
 import FlowNew from './demo/flow-new/index.jsx';
 import AnalysisNew from './demo/analysis-new/index.jsx';
 import Schedule from './demo/schedule/index.jsx';
+import Schedule2 from './demo/schedule2/index.jsx';
+import LoginNew from './demo/login-new/index.jsx';
 import DecisionNew from './demo/decision-new/index.jsx';
-
-
 import DrageLayout from './demo/DrageLayout/index.jsx';
 
 import 'antd/dist/antd.css';
@@ -74,36 +74,42 @@ ReactDOM.render((
               <Link to="/drageLayout">Drage</Link>
             </Menu.Item>
             <Menu.Item key="compactBoxTree-new">
-              <Link to="/compactBoxTree-new">compactBoxTree-new</Link>
+              <Link to="/compactBoxTree-new">CompactBoxTree-new</Link>
             </Menu.Item>
             <Menu.Item key="entityRelationship-new">
-              <Link to="/entityRelationship-new">entityRelationship-new</Link>
+              <Link to="/entityRelationship-new">EntityRelationship-new</Link>
             </Menu.Item>
             <Menu.Item key="emergency-new">
-              <Link to="/emergency-new">emergency-new</Link>
+              <Link to="/emergency-new">Emergency-new</Link>
             </Menu.Item>
             <Menu.Item key="industry-new">
-              <Link to="/industry-new">industry-new</Link>
+              <Link to="/industry-new">Industry-new</Link>
             </Menu.Item>
             <Menu.Item key="policy-new">
-              <Link to="/policy-new">policy-new</Link>
+              <Link to="/policy-new">Policy-new</Link>
             </Menu.Item>
             <Menu.Item key="flow-new">
-              <Link to="/flow-new">flow-new</Link>
+              <Link to="/flow-new">Flow-new</Link>
             </Menu.Item>
             <Menu.Item key="analysis-new">
-              <Link to="/analysis-new">analysis-new</Link>
+              <Link to="/analysis-new">Analysis-new</Link>
             </Menu.Item>
             <Menu.Item key="schedule">
-              <Link to="/schedule">schedule</Link>
+              <Link to="/schedule">Schedule</Link>
+            </Menu.Item>
+            <Menu.Item key="schedule2">
+              <Link to="/schedule2">Schedule2</Link>
             </Menu.Item>
             <Menu.Item key="decision-new">
-              <Link to="/decision-new">decision-new</Link>
+              <Link to="/decision-new">Decision-new</Link>
+            </Menu.Item>
+            <Menu.Item key="login-new">
+              <Link to="/login-new">Login-new</Link>
             </Menu.Item>
           </Menu>
         </Sider>
         <Content>
-          <Redirect from="/" to="/schedule" />
+          <Redirect from="/" to="/login-new" />
           <Route path="/emergency" component={Emergency} />
           <Route path="/diodes" component={Diodes} />
           <Route path="/force" component={Force} />
@@ -122,7 +128,9 @@ ReactDOM.render((
           <Route path="/flow-new" component={FlowNew} />
           <Route path="/analysis-new" component={AnalysisNew} />
           <Route path="/schedule" component={Schedule} />
+          <Route path="/schedule2" component={Schedule2} />
           <Route path="/decision-new" component={DecisionNew} />
+          <Route path="/login-new" component={LoginNew} />
         </Content>
       </Layout>
     </Layout>
