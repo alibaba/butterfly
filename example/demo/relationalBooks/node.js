@@ -11,7 +11,7 @@ class BaseNode extends Node {
   }
   draw = (opts) => {
     let className = this.options.type;
-    let container = $('<div class="base-node"></div>')
+    let container = $('<div class="relational-book-base-node"></div>')
       .css('top', opts.top + 'px')
       .css('left', opts.left + 'px')
       .addClass(className)
