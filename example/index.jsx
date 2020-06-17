@@ -24,6 +24,8 @@ import FlowNew from './demo/flow-new/index.jsx';
 import AnalysisNew from './demo/analysis-new/index.jsx';
 import Schedule from './demo/schedule/index.jsx';
 import DecisionNew from './demo/decision-new/index.jsx';
+import RuleTree from './demo/rule-tree/index.jsx';
+import IndentedTree from './demo/indented-tree/index.jsx';
 
 
 import DrageLayout from './demo/DrageLayout/index.jsx';
@@ -100,6 +102,12 @@ ReactDOM.render((
             <Menu.Item key="decision-new">
               <Link to="/decision-new">decision-new</Link>
             </Menu.Item>
+            <Menu.Item key="rule-tree">
+              <Link to="/rule-tree">RuleTree</Link>
+            </Menu.Item>
+            <Menu.Item key="indented-tree">
+              <Link to="/indented-tree">IndentedTree</Link>
+            </Menu.Item>
           </Menu>
         </Sider>
         <Content>
@@ -123,6 +131,8 @@ ReactDOM.render((
           <Route path="/analysis-new" component={AnalysisNew} />
           <Route path="/schedule" component={Schedule} />
           <Route path="/decision-new" component={DecisionNew} />
+          <Route path="/rule-tree" component={RuleTree} />
+          <Route path="/indented-tree" component={IndentedTree} />
         </Content>
       </Layout>
     </Layout>
