@@ -214,7 +214,7 @@ module.exports = {
       sourceNode: '1',
       targetNode: '2',
       arrow: true,
-      arrowPosition: 0.25,
+      arrowPosition: 0.5,
       Class: Edge
     },
     {
@@ -223,7 +223,7 @@ module.exports = {
       sourceNode: '2',
       targetNode: '3',
       arrow: true,
-      arrowPosition: 0.25,
+      arrowPosition: 0.5,
       Class: Edge
     },
     {
@@ -233,7 +233,7 @@ module.exports = {
       targetNode: '4',
       type: 'endpoint',
       arrow: true,
-      arrowPosition: 0.1,
+      arrowPosition: 0.5,
       Class: Edge
     },
     {
@@ -243,7 +243,7 @@ module.exports = {
       targetNode: '5',
       type: 'endpoint',
       arrow: true,
-      arrowPosition: 0.1,
+      arrowPosition: 0.5,
       Class: Edge
     },
     {
@@ -253,7 +253,7 @@ module.exports = {
       targetNode: '6',
       type: 'endpoint',
       arrow: true,
-      arrowPosition: 0.1,
+      arrowPosition: 0.5,
       Class: Edge
     },
     {
@@ -263,7 +263,7 @@ module.exports = {
       targetNode: '7',
       type: 'endpoint',
       arrow: true,
-      arrowPosition: 0.1,
+      arrowPosition: 0.5,
       Class: Edge
     },
     {
@@ -273,7 +273,7 @@ module.exports = {
       targetNode: '8',
       type: 'endpoint',
       arrow: true,
-      arrowPosition: 0.03,
+      arrowPosition: 0.5,
       Class: Edge
     },
     {
@@ -282,7 +282,7 @@ module.exports = {
       sourceNode: '8',
       targetNode: '9',
       arrow: true,
-      arrowPosition: 0.25,
+      arrowPosition: 0.5,
       Class: Edge
     },
     {
@@ -291,7 +291,7 @@ module.exports = {
       sourceNode: '9',
       targetNode: '10',
       arrow: true,
-      arrowPosition: 0.25,
+      arrowPosition: 0.5,
       Class: Edge
     },
     {
@@ -300,7 +300,7 @@ module.exports = {
       sourceNode: '10',
       targetNode: '11',
       arrow: true,
-      arrowPosition: 0.2,
+      arrowPosition: 0.5,
       Class: Edge
     },
     {
@@ -309,7 +309,7 @@ module.exports = {
       sourceNode: '11',
       targetNode: '12',
       arrow: true,
-      arrowPosition: 0.3,
+      arrowPosition: 0.5,
       Class: Edge
     },
     {
@@ -318,7 +318,7 @@ module.exports = {
       sourceNode: '10',
       targetNode: '13',
       arrow: true,
-      arrowPosition: 0.18,
+      arrowPosition: 0.5,
       Class: Edge
     },
     {
@@ -327,7 +327,7 @@ module.exports = {
       sourceNode: '13',
       targetNode: '14',
       arrow: true,
-      arrowPosition: 0.3,
+      arrowPosition: 0.5,
       Class: Edge
     },
     {
@@ -336,7 +336,7 @@ module.exports = {
       sourceNode: '14',
       targetNode: '15',
       arrow: true,
-      arrowPosition: 0.3,
+      arrowPosition: 0.5,
       Class: Edge
     },
     {
@@ -345,7 +345,7 @@ module.exports = {
       sourceNode: '15',
       targetNode: '16',
       arrow: true,
-      arrowPosition: 0.3,
+      arrowPosition: 0.5,
       Class: Edge
     },
   ]

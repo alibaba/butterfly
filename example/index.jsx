@@ -103,7 +103,7 @@ ReactDOM.render((
           </Menu>
         </Sider>
         <Content>
-          <Redirect from="/" to="/schedule" />
+          <Redirect from="/" to="/emergency" />
           <Route path="/emergency" component={Emergency} />
           <Route path="/diodes" component={Diodes} />
           <Route path="/force" component={Force} />
