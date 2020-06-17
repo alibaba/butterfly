@@ -17,7 +17,7 @@ class Input extends Node {
     });
   }
   draw = (data) => {
-    let container = $(`<div class="base-node info-node ${data.options.type}-node"></div>`)
+    let container = $(`<div class="diodes-base-node info-node ${data.options.type}-node"></div>`)
       .css('top', data.top)
       .css('left', data.left)
       .attr('id', data.id);

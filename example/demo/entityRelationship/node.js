@@ -8,7 +8,7 @@ class BaseNode extends Node {
     super(opts);
   }
   draw = (data) => {
-    let container = $('<div class="base-node"></div>')
+    let container = $('<div class="entity-base-node"></div>')
       .css('top', data.top)
       .css('left', data.left)
       .attr('id', data.id);
