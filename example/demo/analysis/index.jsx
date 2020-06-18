@@ -6,7 +6,7 @@ require('butterfly-dag/dist/index.css');
 const Canvas = require('../../../index.js').Canvas;
 const mockData = require('./data.js');
 
-class DecisionNew extends Component {
+class Scene4New extends Component {
   constructor() {
     super();
   }
@@ -21,8 +21,7 @@ class DecisionNew extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'AdvancedBezier',
-          arrow: true
+          type: 'Straight',
         }
       }
     });
@@ -33,12 +32,12 @@ class DecisionNew extends Component {
   }
   render() {
     return (
-      <div className='policy-page-new'>
-        <div className="policy-canvas" id="dag-canvas">
+      <div className='analysis'>
+        <div className="analysis-canvas" id="dag-canvas">
         </div>
       </div>
     );
   }
 }
 
-module.exports = DecisionNew;
+module.exports = Scene4New;

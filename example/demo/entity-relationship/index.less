@@ -10,6 +10,7 @@
   .entity-base-node {
     position: absolute;
     text-align: center;
+    background: #fff;
     vertical-align: middle;
     border-radius: 5px;
   }
@@ -23,21 +24,12 @@
     border: 0;
   }
 
-  .black {
-    background-color: #797d9a;
-  }
-
   .yellow {
-    background-color: #feb662;
-
-    .text {
-      text-decoration: underline;
-
-    }
+    background-color: #FFA940;
   }
 
-  .Orange {
-    background-color: #fe8550;
+  .orange {
+    background-color: #FFA940;
   }
 
   .pink {
@@ -51,6 +43,11 @@
   }
 
   .diamond {
+    .text {
+      font-size: 14px;
+      color: #333333;
+      text-align: center;
+    }
     width: 70px;
     height: 70px;
     transform: rotate(45deg);
@@ -62,9 +59,9 @@
   }
 
   .rect {
-    width: 135px;
-    height: 55px;
-    border-radius: 0px;
+    width: 137px;
+    height: 42px;
+    border-radius: 6px;
   }
 
   .transparent {
@@ -72,6 +69,12 @@
   }
 
   .ellipse {
+    border-radius: 50%;
+    height: 42px;
+    width: 82px;
+  }
+
+  .ellipse-border {
     border-radius: 50%;
     height: 45px;
     width: 95px;
@@ -106,15 +109,20 @@
     top: 50%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
-    font-weight: 500;
   }
 
   .triangle-text {
-    font-size: 20px;
+    font-size: 14px;
     top: 40%;
+    color: #333333;
   }
 
   .label {
     position: absolute;
+    width: 38px;
+    height: 22px;
+    background: #EBEBEB;
+    text-align: center;
+    border-radius: 100px;
   }
 }

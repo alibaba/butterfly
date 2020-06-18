@@ -6,7 +6,7 @@ require('butterfly-dag/dist/index.css');
 const Canvas = require('../../../index.js').Canvas;
 const mockData = require('./data.js');
 
-class Emergency extends Component {
+class Scene6New extends Component {
   constructor() {
     super();
   }
@@ -21,12 +21,8 @@ class Emergency extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'Manhattan',
+          type: 'AdvancedBezier',
           arrow: true
-        },
-        // 拖动边缘处自动适应画布
-        autoFixCanvas: {
-          enable: true
         }
       }
     });
@@ -37,12 +33,12 @@ class Emergency extends Component {
   }
   render() {
     return (
-      <div className='emergency-page-new'>
-        <div className="emergency-canvas" id="dag-canvas">
+      <div className='decision'>
+        <div className="decision-canvas" id="dag-canvas">
         </div>
       </div>
     );
   }
 }
 
-module.exports = Emergency;
+module.exports = Scene6New;
