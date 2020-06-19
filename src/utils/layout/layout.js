@@ -1,7 +1,5 @@
 'use strict';
 
-import math from '../math';
-
 const d3 = require('d3-force');
 const _ = require('lodash');
 const dagre = require('dagre');
