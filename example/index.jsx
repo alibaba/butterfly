@@ -26,6 +26,8 @@ import Schedule from './demo/schedule/index.jsx';
 import Schedule2 from './demo/schedule2/index.jsx';
 import LoginNew from './demo/login-new/index.jsx';
 import DecisionNew from './demo/decision-new/index.jsx';
+import RuleTree from './demo/rule-tree/index.jsx';
+import IndentedTree from './demo/indented-tree/index.jsx';
 import DrageLayout from './demo/DrageLayout/index.jsx';
 
 import 'antd/dist/antd.css';
@@ -106,6 +108,12 @@ ReactDOM.render((
             <Menu.Item key="login-new">
               <Link to="/login-new">Login-new</Link>
             </Menu.Item>
+            <Menu.Item key="rule-tree">
+              <Link to="/rule-tree">RuleTree</Link>
+            </Menu.Item>
+            <Menu.Item key="indented-tree">
+              <Link to="/indented-tree">IndentedTree</Link>
+            </Menu.Item>
           </Menu>
         </Sider>
         <Content>
@@ -131,6 +139,8 @@ ReactDOM.render((
           <Route path="/schedule2" component={Schedule2} />
           <Route path="/decision-new" component={DecisionNew} />
           <Route path="/login-new" component={LoginNew} />
+          <Route path="/rule-tree" component={RuleTree} />
+          <Route path="/indented-tree" component={IndentedTree} />
         </Content>
       </Layout>
     </Layout>
