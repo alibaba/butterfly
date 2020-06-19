@@ -3038,6 +3038,51 @@ class BaseCanvas extends Canvas {
             }))
           }
         })
+      }else if (_.get(this.layout, 'type') === 'concentricLayout'){
+        Layout.concentLayout({
+          /** 布局中心 默认值：图的中心 */
+          // public center: [number, number];
+          center: _.get(this.layout, 'options.center') || [width/2,height/2],
+          // /** 节点大小（直径）。用于防止节点重叠时的碰撞检测 */
+          // public nodeSize: number | [number, number] = 30;
+          nodeSize: _.get(this.layout, 'options.nodeSize') || 30,
+          // /** 环与环之间最小间距，用于调整半径 */
+          // public minNodeSpacing: number = 10;
+          minNodeSpacing: _.get(this.layout, 'options.minNodeSpacing') || 10,
+          // /** 是否防止重叠，必须配合上面属性 nodeSize，只有设置了与当前图节点大小相同的 nodeSize 值，才能够进行节点重叠的碰撞检测 */
+          // public preventOverlap: boolean = false;
+          preventOverlap: _.get(this.layout, 'options.preventOverlap') || false,
+          // /** 第一个节点与最后一个节点之间的弧度差。若为 undefined ，则将会被设置为  2 _ Math.PI _ (1 - 1 / |level.nodes|) ，其中 level.nodes 为该算法计算出的每一层的节点，|level.nodes| 代表该层节点数量 */
+          // public sweep: number | undefined;
+          sweep: _.get(this.layout, 'options.sweep'),
+          // /** 环与环之间的距离是否相等 */
+          // public equidistant: boolean = false;
+          equidistant: _.get(this.layout, 'options.equidistant') || false,
+          // /** 开始方式节点的弧度 */
+          // public startAngle: number = (3 / 2) * Math.PI;
+          startAngle: (3 / 2) * Math.PI,
+          // /** 是否按照顺时针排列 */
+          // public clockwise: boolean = true;
+          clockwise: _.get(this.layout, 'options.clockwise') || true,
+          // /** 每一层同心值的求和。若为 undefined，则将会被设置为 maxValue / 4 ，其中 maxValue 为最大的排序依据的属性值。例如，若 sortBy 为 'degree'，则 maxValue 为所有节点中度数最大的节点的度数 */
+          //public maxLevelDiff: undefined | number;
+          maxLevelDiff: _.get(this.layout, 'options.maxLevelDiff'),
+          // /** 指定排序的依据（节点属性名），数值越高则该节点被放置得越中心。若为 undefined，则会计算节点的度数，度数越高，节点将被放置得越中心 */
+          // public sortBy: string = 'degree';
+          sortBy: _.get(this.layout, 'options.sortBy') || 'degree',
+          // 布局画布总宽度
+          width: width,
+          // 布局画布总长度
+          height: height,
+          data: {
+            groups: data.groups,
+            nodes: data.nodes,
+            edges: data.edges.map(item => ({
+              source: item.type === 'endpoint' ? item.sourceNode : item.source,
+              target: item.type === 'endpoint' ? item.targetNode : item.target
+            }))
+          }
+        })
       }
     }
   }

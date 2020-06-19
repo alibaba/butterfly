@@ -1,5 +1,7 @@
 'use strict';
 
+import math from '../math';
+
 const d3 = require('d3-force');
 const _ = require('lodash');
 const dagre = require('dagre');
@@ -22,7 +24,7 @@ function forceLayout(param) {
   // 在group内先random布局一下
   groupNodes.forEach((item) => {
     let group = _.find(data.groups, (_group) => {
-      return  _group.id === item.group;
+      return _group.id === item.group;
     });
     item.x = Math.random() * (group.width || 150);
     item.y = Math.random() * (group.height || 120);
@@ -47,7 +49,7 @@ function forceLayout(param) {
 
   let simulation = d3.forceSimulation(nodes)
     .force('charge', (() => {
-      if(opts.chargeStrength) {
+      if (opts.chargeStrength) {
         return d3.forceManyBody().strength(opts.chargeStrength);
       } else {
         return d3.forceManyBody();
@@ -84,7 +86,7 @@ function forceTreeLayout(param) {
   let data = _.cloneDeep(param.data);
 
   var simulation = d3.forceSimulation(data.nodes)
-  // d3.forceLink(links).distance(20).strength(1)
+    // d3.forceLink(links).distance(20).strength(1)
     .force('charge', d3.forceManyBody().strength(opts.chargeStrength))
     .force('center', d3.forceCenter(opts.width / 2, opts.height / 2))
     .force('link', d3.forceLink(data.edges).distance(opts.link.distance).strength(opts.link.strength))
@@ -111,10 +113,10 @@ function treeLayout(param) {
 }
 
 //drage布局
-function drageLayout(param){
-  const { nodeSize, rankdir, nodesepFunc, ranksepFunc, nodesep, ranksep, controlPoints } = param;
-  const {edges=[]} = param.data;
-  const curnode =  param.data.nodes;
+function drageLayout(param) {
+  const {nodeSize, rankdir, nodesepFunc, ranksepFunc, nodesep, ranksep, controlPoints} = param;
+  const {edges = []} = param.data;
+  const curnode = param.data.nodes;
   const nodes = curnode.map((item) => {
     return {
       id: item.id,
@@ -122,10 +124,10 @@ function drageLayout(param){
       left: item.left
     }
   });
-// 形成新数组后布局失效
+  // 形成新数组后布局失效
   if (!nodes) return;
   const g = new dagre.graphlib.Graph();
-  let nodeSizeFunc; 
+  let nodeSizeFunc;
   if (!nodeSize) {
     nodeSizeFunc = (d) => {
       if (d.size) {
@@ -153,7 +155,7 @@ function drageLayout(param){
     const hori = horisep(node);
     const width = size[0] + 2 * hori;
     const height = size[1] + 2 * verti;
-    g.setNode(node.id, { width, height});
+    g.setNode(node.id, {width, height});
   });
   edges.forEach(edge => {
     // dagrejs Wiki https://github.com/dagrejs/dagre/wiki#configuring-the-layout
@@ -169,7 +171,7 @@ function drageLayout(param){
   // 重新布局时g.nodes()可能为undefined
   g.nodes().forEach((node) => {
     coord = g.node(node);
-    if(coord){
+    if (coord) {
       const i = nodes.findIndex(it => it.id === node);
       nodes[i].left = coord.x;
       nodes[i].top = coord.y;
@@ -208,11 +210,191 @@ function getFunc(func, value, defaultValue) {
   return resultFunc;
 }
 
+// 同心圆布局
+function concentLayout(param) {
+  let {
+    center,
+    nodeSize,
+    minNodeSpacing,
+    preventOverlap,
+    sweep,
+    equidistant,
+    startAngle = (3 / 2) * Math.PI,
+    clockwise,
+    maxLevelDiff,
+    sortBy,
+    width,
+    height,
+    data,
+  } = param;
+  const {edges = [],nodes = []} = data;
+  const n = nodes.length;
+  let maxValueNode;
+  let counterclockwise;
+  if (n === 0) {
+    return;
+  }
+  if (n === 1) {
+    nodes[0].x = center[0];
+    nodes[0].y = center[1];
+    return;
+  }
+  const layoutNodes = [];
+  let maxNodeSize;
+  if (_.isArray(nodeSize)) {
+    maxNodeSize = Math.max(nodeSize[0], nodeSize[1]);
+  } else {
+    maxNodeSize = nodeSize;
+  }
+  nodes.forEach(node => {
+    layoutNodes.push(node);
+    let nodeSize = maxNodeSize;
+    if (_.isArray(node.size)) {
+      nodeSize = Math.max(node.size[0], node.size[1]);
+    } else if (_.isNumber(node.size)) {
+      nodeSize = node.size;
+    }
+    maxNodeSize = Math.max(maxNodeSize, nodeSize);
+  });
+  if (!width && typeof window !== 'undefined') {
+    width = window.innerWidth;
+  }
+  if (!height && typeof window !== 'undefined') {
+    height = window.innerHeight;
+  }
+  clockwise = counterclockwise !== undefined ? !counterclockwise : clockwise;
+
+  // layout
+  const nodeMap = {};
+  const nodeIdxMap = {};
+  layoutNodes.forEach((node, i) => {
+    nodeMap[node.id] = node;
+    nodeIdxMap[node.id] = i;
+  });
+
+  // get the node degrees
+  if (
+    sortBy === 'degree' ||
+    !_.isString(sortBy) ||
+    layoutNodes[0][sortBy] === undefined
+  ) {
+    sortBy = 'degree';
+    if (!_.isNumber(nodes[0].degree)) {
+      let values = [];
+      const len = nodes.length
+      for (let i = 0; i < len; i++) {
+        values[i] = 0;
+      }
+      edges.forEach(e => {
+        if (e.source) {
+          values[nodeIdxMap[e.source]] += 1;
+        }
+        if (e.target) {
+          values[nodeIdxMap[e.target]] += 1;
+        }
+      });
+      layoutNodes.forEach((node, i) => {
+        node.degree = values[i];
+      });
+    }
+  }
+  // sort nodes by value
+  layoutNodes.sort((n1, n2) => n2[sortBy] - n1[sortBy]);
+  maxValueNode = layoutNodes[0];
+  maxLevelDiff = maxLevelDiff || maxValueNode[sortBy] / 4;
+
+  // put the values into levels
+  const levels = [[]];
+  let currentLevel = levels[0];
+  layoutNodes.forEach(node => {
+    if (currentLevel.length > 0) {
+      const diff = Math.abs(currentLevel[0][sortBy] - node[sortBy]);
+      if (maxLevelDiff && diff >= maxLevelDiff) {
+        currentLevel = [];
+        levels.push(currentLevel);
+      }
+    }
+    currentLevel.push(node);
+  });
+
+  // create positions for levels
+  let minDist = maxNodeSize + minNodeSpacing; // min dist between nodes
+  if (!preventOverlap) {
+    // then strictly constrain to bb
+    const firstLvlHasMulti = levels.length > 0 && levels[0].length > 1;
+    const maxR = Math.min(width, height) / 2 - minDist;
+    const rStep = maxR / (levels.length + (firstLvlHasMulti ? 1 : 0));
+
+    minDist = Math.min(minDist, rStep);
+  }
+
+  // find the metrics for each level
+  let r = 0;
+  levels.forEach(level => {
+    let sweep = sweep;
+    if (sweep === undefined) {
+      sweep = 2 * Math.PI - (2 * Math.PI) / level.length;
+    }
+    const dTheta = (level.dTheta = sweep / Math.max(1, level.length - 1));
+
+    // calculate the radius
+    if (level.length > 1 && preventOverlap) {
+      // but only if more than one node (can't overlap)
+      const dcos = Math.cos(dTheta) - Math.cos(0);
+      const dsin = Math.sin(dTheta) - Math.sin(0);
+      const rMin = Math.sqrt((minDist * minDist) / (dcos * dcos + dsin * dsin)); // s.t. no nodes overlapping
+
+      r = Math.max(rMin, r);
+    }
+    level.r = r;
+    r += minDist;
+  });
+
+  if (equidistant) {
+    let rDeltaMax = 0;
+    let rr = 0;
+    for (let i = 0; i < levels.length; i++) {
+      const level = levels[i];
+      const rDelta = level.r - rr;
+      rDeltaMax = Math.max(rDeltaMax, rDelta);
+    }
+    rr = 0;
+    levels.forEach((level, i) => {
+      if (i === 0) {
+        rr = level.r;
+      }
+      level.r = rr;
+      rr += rDeltaMax;
+    });
+  }
+
+  // calculate the node positions
+  levels.forEach(level => {
+    const dTheta = level.dTheta;
+    const rr = level.r;
+    level.forEach((node, j) => {
+      const theta = startAngle + (clockwise ? 1 : -1) * dTheta * j;
+      node.x = center[0] + rr * Math.cos(theta);
+      node.y = center[1] + rr * Math.sin(theta);
+    });
+  });
+
+  param.data.nodes.forEach((node, index) => {
+    node.top = data.nodes[index].y;
+    node.left = data.nodes[index].x;
+  });
+
+  param.data.groups.forEach((group, index) => {
+    group.top = data.groups[index].y;
+    group.left = data.groups[index].x;
+  });
+}
 
 
 export default {
   forceLayout,
   forceTreeLayout,
   treeLayout,
-  drageLayout
+  drageLayout,
+  concentLayout
 }

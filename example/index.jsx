@@ -27,6 +27,7 @@ import DecisionNew from './demo/decision-new/index.jsx';
 
 
 import DrageLayout from './demo/DrageLayout/index.jsx';
+import ConcentLayout from './demo/concent-layout/index.jsx';
 
 import 'antd/dist/antd.css';
 import './static/iconfont.css';
@@ -100,6 +101,9 @@ ReactDOM.render((
             <Menu.Item key="decision-new">
               <Link to="/decision-new">decision-new</Link>
             </Menu.Item>
+            <Menu.Item key="concent-layout">
+              <Link to="/concent-layout">concent-layout</Link>
+            </Menu.Item>
           </Menu>
         </Sider>
         <Content>
@@ -123,6 +127,7 @@ ReactDOM.render((
           <Route path="/analysis-new" component={AnalysisNew} />
           <Route path="/schedule" component={Schedule} />
           <Route path="/decision-new" component={DecisionNew} />
+          <Route path="/concent-layout" component={ConcentLayout} />
         </Content>
       </Layout>
     </Layout>
