@@ -42,7 +42,7 @@ class BaseNode extends Node {
     }
   }
   draw = (data) => {
-    let container = $('<div class="emergency-new-base-node"></div>')
+    let container = $('<div class="emergency2-base-node"></div>')
       .css('top', data.top)
       .css('left', data.left)
       .css('width', data.options.width)
