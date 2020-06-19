@@ -4,7 +4,8 @@ require('./index.less');
 
 const Canvas = require('../../../index.js').TreeCanvas;
 const {mockData} = require('./data');
-class compactBoxTree extends Component {
+
+class CompactBoxTree extends Component {
   constructor() {
     super();
   }
@@ -52,12 +53,12 @@ class compactBoxTree extends Component {
   }
   render() {
     return (
-      <div className='compactBoxTree-page'>
-        <div className="compactBoxTree-canvas" id="dag-canvas">
+      <div className='compact-box-tree-page'>
+        <div className="compact-box-tree-canvas" id="dag-canvas">
         </div>
       </div>
     );
   }
 }
 
-module.exports = compactBoxTree;
+module.exports = CompactBoxTree;
