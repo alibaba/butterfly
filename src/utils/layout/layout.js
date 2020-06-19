@@ -225,7 +225,23 @@ function concentLayout(param) {
     height,
     data,
   } = param;
-  const {edges = [],nodes = []} = data;
+  const curnode = data.nodes;
+  const curedges = data.edges;
+  let nodes = curnode.map((item) => {
+    return {
+      id: item.id,
+      top: item.top,
+      left: item.left,
+      degree: item.degree,
+      size: item.size,
+    }
+  });
+  let edges = curedges.map((item) => {
+    return {
+      source: item.source,
+      target: item.target,
+    }
+  });
   const n = nodes.length;
   let maxValueNode;
   let counterclockwise;
@@ -378,13 +394,8 @@ function concentLayout(param) {
   });
 
   param.data.nodes.forEach((node, index) => {
-    node.top = data.nodes[index].y;
-    node.left = data.nodes[index].x;
-  });
-
-  param.data.groups.forEach((group, index) => {
-    group.top = data.groups[index].y;
-    group.left = data.groups[index].x;
+    node.top = nodes[index].y;
+    node.left = nodes[index].x;
   });
 }
 

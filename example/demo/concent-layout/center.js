@@ -11,7 +11,7 @@ class CenterNode extends Node {
   }
   draw = (opts) => {
     console.log(opts)
-    let container = $('<div class="center-new-node simple-blue"></div>')
+    let container = $('<div class="center-new-node"></div>')
                     .attr('id', opts.id)
                     .css('top', opts.top + 'px')
                     .css('left', opts.left + 'px')
@@ -21,7 +21,7 @@ class CenterNode extends Node {
     return container[0];
   }
   _createTypeIcon(dom = this.dom) {
-    const textContainer = $(`<span class="name-box">${this.options.name}</span>`)[0];
+    const textContainer = $(`<span class="name-box simple-blue">${this.options.name}</span>`)[0];
     $(dom).append(textContainer);
   }
 }

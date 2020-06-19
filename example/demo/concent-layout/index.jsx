@@ -32,35 +32,6 @@ class ConcentLayout extends Component {
     });
     this.canvas.draw(mockData);
   }
-  addNode = () => {
-    this.canvas.addNodes([
-      {
-        id: 'test6',
-        name: '王七萌',
-        type: 'people',
-        // Class: Train,
-        color: '#19A97B'
-      },
-      {
-        id: 'test7',
-        name: '王吧萌',
-        type: 'people',
-        // Class: Train,
-        color: '#19A97B'
-      }
-    ]);
-    this.canvas.addEdges([
-      {
-        source: 'test2',
-        target: 'test6',
-      },
-      {
-        source: 'test2',
-        target: 'test7',
-      },
-    ])
-    this.canvas.drageReDraw({rankdir: ''});
-  }
   render() {
     return (
       <div className='concentLayout-page'>

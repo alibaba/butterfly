@@ -168,7 +168,6 @@ module.exports = {
     source: 'test1',
     target: 'test1',
     Class: Edge,
-    arrow: true,
   }, {
     id: 'edge2',
     source: 'test1',
