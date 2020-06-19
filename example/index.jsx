@@ -24,8 +24,9 @@ import FlowNew from './demo/flow-new/index.jsx';
 import AnalysisNew from './demo/analysis-new/index.jsx';
 import Schedule from './demo/schedule/index.jsx';
 import Schedule2 from './demo/schedule2/index.jsx';
-import LoginNew from './demo/login-new/index.jsx';
-import DecisionNew from './demo/decision-new/index.jsx';
+import Login from './demo/login/index.jsx';
+import Decision from './demo/decision/index.jsx';
+import Information from './demo/information/index.jsx';
 import RuleTree from './demo/rule-tree/index.jsx';
 import IndentedTree from './demo/indented-tree/index.jsx';
 import DrageLayout from './demo/DrageLayout/index.jsx';
@@ -102,11 +103,11 @@ ReactDOM.render((
             <Menu.Item key="schedule2">
               <Link to="/schedule2">Schedule2</Link>
             </Menu.Item>
-            <Menu.Item key="decision-new">
-              <Link to="/decision-new">Decision-new</Link>
+            <Menu.Item key="decision">
+              <Link to="/decision">Decision</Link>
             </Menu.Item>
-            <Menu.Item key="login-new">
-              <Link to="/login-new">Login-new</Link>
+            <Menu.Item key="login">
+              <Link to="/login">Login</Link>
             </Menu.Item>
             <Menu.Item key="rule-tree">
               <Link to="/rule-tree">RuleTree</Link>
@@ -114,10 +115,13 @@ ReactDOM.render((
             <Menu.Item key="indented-tree">
               <Link to="/indented-tree">IndentedTree</Link>
             </Menu.Item>
+            <Menu.Item key="information">
+              <Link to="/information">Information</Link>
+            </Menu.Item>
           </Menu>
         </Sider>
         <Content>
-          <Redirect from="/" to="/login-new" />
+          <Redirect from="/" to="/information" />
           <Route path="/emergency" component={Emergency} />
           <Route path="/diodes" component={Diodes} />
           <Route path="/force" component={Force} />
@@ -137,10 +141,11 @@ ReactDOM.render((
           <Route path="/analysis-new" component={AnalysisNew} />
           <Route path="/schedule" component={Schedule} />
           <Route path="/schedule2" component={Schedule2} />
-          <Route path="/decision-new" component={DecisionNew} />
-          <Route path="/login-new" component={LoginNew} />
+          <Route path="/decision" component={Decision} />
+          <Route path="/login" component={Login} />
           <Route path="/rule-tree" component={RuleTree} />
           <Route path="/indented-tree" component={IndentedTree} />
+          <Route path="/information" component={Information} />
         </Content>
       </Layout>
     </Layout>

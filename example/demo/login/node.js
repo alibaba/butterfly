@@ -10,7 +10,7 @@ class BaseNode extends Node {
     this.options = opts;
   }
   draw = (opts) => {
-    const container = $('<div class="login-new-base-node"></div>')
+    const container = $('<div class="login-base-node"></div>')
                     .attr('id', opts.id)
                     .css('top', opts.top + 'px')
                     .css('left', opts.left + 'px')

@@ -6,7 +6,7 @@ require('butterfly-dag/dist/index.css');
 const Canvas = require('../../../index.js').Canvas;
 const mockData = require('./data.js');
 
-class LoginNew extends Component {
+class Scene6New extends Component {
   constructor() {
     super();
   }
@@ -22,6 +22,7 @@ class LoginNew extends Component {
       theme: {
         edge: {
           type: 'AdvancedBezier',
+          arrow: true
         }
       }
     });
@@ -32,12 +33,12 @@ class LoginNew extends Component {
   }
   render() {
     return (
-      <div className='login-new'>
-        <div className="login-new-canvas" id="dag-canvas">
+      <div className='decision'>
+        <div className="decision-canvas" id="dag-canvas">
         </div>
       </div>
     );
   }
 }
 
-module.exports = LoginNew;
+module.exports = Scene6New;
