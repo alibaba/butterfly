@@ -1,6 +1,6 @@
 'use strict';
 import React, {Component} from 'react';
-const DrageCanvas = require('../../../index.js').DrageCanvas;
+import DrageCanvas from './drageCanvas';
 const mockData = require('./data.js');
 const RelationEdge = require('./edge_relation.jsx');
 const Train = require('./node_train.jsx');
@@ -70,8 +70,9 @@ class DrageLayout extends Component {
         source: 'test2',
         target: 'test7',
       },
-    ])
-    this.canvas.drageReDraw({rankdir: ''});
+    ]);
+    // 重新布局需要自己在业务中实现
+    this.canvas.drageReDraw();
   }
   render() {
     return (
