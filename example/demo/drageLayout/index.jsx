@@ -1,6 +1,7 @@
 'use strict';
 import React, {Component} from 'react';
 const Canvas = require('../../../index.js').Canvas;
+import DrageCanvas from './drageCanvas';
 const Layout = require('../../../index.js').Layout;
 const mockData = require('./data.js');
 const RelationEdge = require('./edge_relation.jsx');
@@ -16,7 +17,7 @@ class DrageLayout extends Component {
   }
   componentDidMount() {
     let root = document.getElementById('dag-canvas');
-    this.canvas = new Canvas({
+    this.canvas = new DrageCanvas({
       root: root,
       disLinkable: true, // 可删除连线
       linkable: false,    // 可连线
@@ -73,7 +74,7 @@ class DrageLayout extends Component {
       },
     ]);
     // 重新布局需要自己在业务中实现
-    this.drageReDraw();
+    this.canvas.drageReDraw();
   }
   drageReDraw(newParam) {
     let {nodes, layout, edges} = this.canvas;
