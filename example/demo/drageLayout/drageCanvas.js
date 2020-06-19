@@ -5,10 +5,10 @@ const Layout = require('../../../index.js').Layout;
 class DrageCanvas extends Canvas {
   constructor(options) {
     super(options);
-    this._NodeClass = TreeNode;
+    // this._NodeClass = TreeNode;
   }
   drageReDraw(newParam) {
-    let {nodes, layout, edges} = this.canvas;
+    let {nodes, layout, edges} = this;
     let addResultNodes = nodes.map((item) => {
       return item.options
     });
