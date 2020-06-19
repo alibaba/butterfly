@@ -14,7 +14,7 @@ class BaseNode extends Node {
                     .css('left', opts.left+ 'px')
                     .attr('id', opts.id);
     
-    let titleDom = $(`<div class="title ${opts.options.color}">${opts.options.title}<div>`);
+    let titleDom = $(`<div class="title ${opts.options.color}"><i class="iconfont ${opts.options.iconType} ${opts.options.iconClass}"></i>${opts.options.title}<div>`);
     let contentDom = $(`<div class="content">${opts.options.content}<div>`);
 
     container.append(titleDom);

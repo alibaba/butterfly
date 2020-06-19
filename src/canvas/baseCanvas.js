@@ -1786,7 +1786,8 @@ class BaseCanvas extends Canvas {
     };
     let _isHightVerChrome = _isChrome && _getChromeVersion() >= 64;
 
-    if (_isHightVerChrome) {
+    // todo：chrome64版本ResizeObserver对象不存在，但官方文档说64支持，所以加强判断下
+    if (_isHightVerChrome && window.ResizeObserver) {
       // 监听某个dom的resize事件
       const _resizeObserver = new ResizeObserver(entries => {
         this._rootWidth = $(this.root).width();
