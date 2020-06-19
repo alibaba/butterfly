@@ -39,7 +39,7 @@ class Semiconductor extends Node {
     });
   }
   draw = (data) => {
-    let container = $('<div class="base-node"></div>')
+    let container = $('<div class="diodes-base-node"></div>')
       .css('top', data.top)
       .css('left', data.left)
       .attr('id', data.id);

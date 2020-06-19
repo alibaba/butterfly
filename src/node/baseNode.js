@@ -171,13 +171,15 @@ class BaseNode extends Node {
   }
 
   _addEventListener() {
-
+    // todo 做事件代理的形式
     $(this.dom).on('mousedown', (e) => {
       const LEFT_KEY = 0;
       if (e.button !== LEFT_KEY) {
         return;
       }
-      e.preventDefault();
+      if (!['SELECT', 'INPUT', 'RADIO', 'CHECKBOX', 'TEXTAREA'].includes(e.target.nodeName)) {
+        e.preventDefault();
+      }
       if (this.draggable) {
         this._isMoving = true;
         this.emit('InnerEvents', {
@@ -229,7 +231,7 @@ class BaseNode extends Node {
       this.removeAllListeners();
     } else {
       this.endpoints.forEach((item) => {
-        !item._isInitedDom && item.destroy();
+        !item._isInitedDom && item.destroy(isNotEvent);
       });
       $(this.dom).detach();
     }
