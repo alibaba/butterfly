@@ -25,7 +25,7 @@ import Schedule from './demo/schedule/index.jsx';
 import Schedule2 from './demo/schedule2/index.jsx';
 import Login from './demo/login/index.jsx';
 import Decision from './demo/decision/index.jsx';
-// import Information from './demo/information/index.jsx';
+import Information from './demo/information/index.jsx';
 import RuleTree from './demo/rule-tree/index.jsx';
 import IndentedTree from './demo/indented-tree/index.jsx';
 import DrageLayout from './demo/DrageLayout/index.jsx';
@@ -81,6 +81,9 @@ ReactDOM.render((
             <Menu.Item key="indented-tree">
               <Link to="/indented-tree">IndentedTree</Link>
             </Menu.Item>
+            <Menu.Item key="information">
+              <Link to="/information">Information</Link>
+            </Menu.Item>
             <Menu.Item key="liteGraph">
               <Link to="/lite_graph">LiteGraph</Link>
             </Menu.Item>
@@ -108,9 +111,6 @@ ReactDOM.render((
             <Menu.Item key="system">
               <Link to="/system">System</Link>
             </Menu.Item>
-            {/* <Menu.Item key="information">
-              <Link to="/information">Information</Link>
-            </Menu.Item> */}
           </Menu>
         </Sider>
         <Content>
@@ -137,7 +137,7 @@ ReactDOM.render((
           <Route path="/login" component={Login} />
           <Route path="/rule-tree" component={RuleTree} />
           <Route path="/indented-tree" component={IndentedTree} />
-          {/* <Route path="/information" component={Information} /> */}
+          <Route path="/information" component={Information} />
         </Content>
       </Layout>
     </Layout>
