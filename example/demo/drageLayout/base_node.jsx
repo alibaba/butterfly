@@ -16,20 +16,12 @@ class BaseNode extends Node {
       .attr('id', opts.id)
       .css('background-color', opts.options.color);
 
-    let logoContainer = $('<div class="logo-container"></div>');
+    let logoContainer = $(`<div class="logo-container">${opts.options.name}</div>`);
     logoContainer.css('background-color', opts.options.color);
-    let logo = this.genLogo();
-    logo.css('color', '#FFF');
-    logoContainer.append(logo);
 
-    let content = $('<p class="long-text"></p>').text(opts.options.name);
-
-    container.append(logoContainer).append(content);
+    container.append(logoContainer);
 
     return container[0];
-  }
-  genLogo = () => {
-    console.log('请重载此方法');
   }
 }
 

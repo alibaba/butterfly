@@ -5,13 +5,18 @@ const Layout = require('../../../index.js').Layout;
 class DrageCanvas extends Canvas {
   constructor(options) {
     super(options);
-    // this._NodeClass = TreeNode;
   }
   drageReDraw(newParam) {
     let {nodes, layout, edges} = this;
     let addResultNodes = nodes.map((item) => {
       return item.options
     });
+    if(newParam) {
+      layout.options = {
+        ...layout.options,
+        ...newParam
+      }
+    }
     Layout.drageLayout({
       rankdir: (newParam && newParam.rankdir) || _.get(layout, 'options.rankdir') || 'TB',
       align: (newParam && newParam.align) || _.get(layout, 'options.align'),

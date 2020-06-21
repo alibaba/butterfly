@@ -4,24 +4,26 @@ let Edge = require('../../../index.js').Edge;
 let $ = require('jquery');
 
 class RelationEdge extends Edge {
-  draw = (obj) => {
-    let path = document.createElementNS('http://www.w3.org/2000/svg', 'path')
-    path.setAttribute('class', 'butterflies-link');
-    path.addEventListener('mouseover', () => {
-      $(this.labelDom).addClass('xxxx')
-    });
+  draw(obj) {
+    let path = super.draw(obj);
+    if (this.options.color) {
+      $(path).addClass(this.options.color);
+    }
     return path;
   }
-  redraw = (sourcePoint, targetPoint, options) => {
-    // 重新计算线条path
-    let path = this._calcPath();
-    this.dom.setAttribute('d', path);
-    if (this.labelDom) {
-      this.redrawLabel();
+  drawArrow(isShow) {
+    let dom = super.drawArrow(isShow);
+    if (this.options.color) {
+      $(dom).addClass(this.options.color);
     }
+    return dom;
   }
-  drawLabel() {
-    return $('<span class="butterflies-label">乘火车</span>')[0];
+  drawLabel(text) {
+    let dom = null;
+    if (!!text) {
+      dom = $(`<span class="butterflies-label">${text}</span>`)[0];
+    }
+    return dom;
   }
 };
 module.exports = RelationEdge;
