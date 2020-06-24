@@ -11,10 +11,12 @@ import Diodes from './demo/diodes/index.jsx';
 import Force from './demo/force/index.jsx';
 import RelationalNetwork from './demo/relationalNetwork/index.jsx';
 import RelationalBooks from './demo/relationalBooks/index.jsx';
+import RelationalBooksNew from './demo/relationalBooks-new/index.jsx';
 import System from './demo/system/index.jsx';
 import liteGraph from './demo/liteGraph/index.jsx';
 import EntityRelationship from './demo/entityRelationship/index.jsx';
 import MindMap from './demo/mindMap/index.jsx';
+import MindMapNew from './demo/mindMap-new/index.jsx';
 import CompactBoxTreeNew from './demo/compactBoxTree-new/index.jsx';
 import EntityRelationshipNew from './demo/entityRelationship-new/index.jsx';
 import EmergencyNew from './demo/emergency-new/index.jsx';
@@ -100,6 +102,12 @@ ReactDOM.render((
             <Menu.Item key="decision-new">
               <Link to="/decision-new">decision-new</Link>
             </Menu.Item>
+            <Menu.Item key="relationarBooks-new">
+              <Link to="/relational_books_new">RelationalBooks-new</Link>
+            </Menu.Item>
+            <Menu.Item key="midMap-new">
+              <Link to="/mind_map_new">MindMapNew</Link>
+            </Menu.Item>
           </Menu>
         </Sider>
         <Content>
@@ -123,6 +131,8 @@ ReactDOM.render((
           <Route path="/analysis-new" component={AnalysisNew} />
           <Route path="/schedule" component={Schedule} />
           <Route path="/decision-new" component={DecisionNew} />
+          <Route path="/relational_books_new" component={RelationalBooksNew} />
+          <Route path="/mind_map_new" component={MindMapNew} />
         </Content>
       </Layout>
     </Layout>
