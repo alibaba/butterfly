@@ -34,7 +34,7 @@ module.exports = {
                 side: "right",
               }
             ]
-          }, 
+          },
           {
             id: 'subNode1-3',
             Class: Node,
@@ -42,7 +42,7 @@ module.exports = {
             side: "right",
           }
         ]
-      }, 
+      },
       {
         id: 'subNode2',
         Class: Node,
@@ -68,7 +68,7 @@ module.exports = {
             Class: Node,
             title: '子节点 2-2',
             side: "right",
-          }, 
+          },
           {
             id: 'subNode2-3',
             Class: Node,
@@ -102,7 +102,7 @@ module.exports = {
                 side: "left",
                 Class: Node,
                 title: '子节点 3-1-1',
-              }, 
+              },
               {
                 id: 'subNode3-1-2',
                 side: "left",
@@ -118,7 +118,7 @@ module.exports = {
             ]
           }
         ]
-      }, 
+      },
       {
         id: 'subNode4',
         Class: Node,
@@ -132,43 +132,43 @@ module.exports = {
             title: '子节点 4-1',
             children: [
               {
-              id: 'subNode4-1-1',
-              side: "right",
-              Class: Node,
-              title: '子节点 4-1-1',
-              }, 
+                id: 'subNode4-1-1',
+                side: "right",
+                Class: Node,
+                title: '子节点 4-1-1',
+              },
               {
                 id: 'subNode4-1-2',
                 side: "right",
                 Class: Node,
                 title: '子节点 4-1-2',
-              }, 
+              },
               {
                 id: 'subNode4-1-3',
                 side: "right",
                 Class: Node,
                 title: '子节点 4-1-3',
               },
-               {
+              {
                 id: 'subNode4-1-4',
                 Class: Node,
                 side: "right",
                 title: '子节点 4-1-4',
               }
             ]
-         }, 
-         {
+          },
+          {
             id: 'subNode4-2',
             Class: Node,
             side: "right",
             title: '子节点 4-2',
-          }, 
+          },
           {
             id: 'subNode4-3',
             side: "right",
             Class: Node,
             title: '子节点 4-3',
-          }, 
+          },
           {
             id: 'subNode4-4',
             Class: Node,
@@ -176,7 +176,7 @@ module.exports = {
             title: '子节点 4-4',
           }
         ]
-      }, 
+      },
       {
         id: 'subNode5',
         Class: Node,
@@ -200,7 +200,7 @@ module.exports = {
                 Class: Node,
                 title: '子节点 5-2-1',
                 side: "right",
-              }, 
+              },
               {
                 id: 'subNode5-2-2',
                 Class: Node,
@@ -214,27 +214,27 @@ module.exports = {
                 side: "right",
               }
             ]
-            }, 
-            {
-              id: 'subNode5-3',
-              Class: Node,
-              title: '子节点 5-3',
-              side: "right",
-              children: [
-                {
-                  id: 'subNode5-3-1',
-                  Class: Node,
-                  title: '子节点 5-3-1',
-                  side: "right",
-                }, 
-                {
-                  id: 'subNode5-3-2',
-                  Class: Node,
-                  title: '子节点 5-3-2',
-                  side: "right",
-                }
-              ]
-            }
+          },
+          {
+            id: 'subNode5-3',
+            Class: Node,
+            title: '子节点 5-3',
+            side: "right",
+            children: [
+              {
+                id: 'subNode5-3-1',
+                Class: Node,
+                title: '子节点 5-3-1',
+                side: "right",
+              },
+              {
+                id: 'subNode5-3-2',
+                Class: Node,
+                title: '子节点 5-3-2',
+                side: "right",
+              }
+            ]
+          }
         ]
       }
     ]
