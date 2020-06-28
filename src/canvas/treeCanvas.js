@@ -230,7 +230,31 @@ class TreeCanvas extends Canvas {
       }
     });
   }
-
+  addNodes(data, isNotEventEmit) {
+    let nodes = super.addNodes(data, isNotEventEmit);
+    nodes.forEach((item) => {
+      if(item.parent) {
+        let parentNode = this.getNode(item.parent);
+        if (!_.some(parentNode.children, ['id', item.id])) {
+          !parentNode.children && (parentNode.children = []);
+          parentNode.children.push(item);
+        }
+      }
+    });
+    return nodes;
+  }
+  removeNodes(nodes, isNotDelEdge, isNotEventEmit) {
+    // let nodes = super.addNodes(data, isNotEventEmit);
+    // nodes.forEach((item) => {
+    //   if(item.parent) {
+    //     let parentNode = this.getNode(item.parent);
+    //     if (!_.some(parentNode.children, ['id', item.id])) {
+    //       parentNode.children.push(item);
+    //     }
+    //   }
+    // });
+    // return nodes;
+  }
   getRootNode() {
     return this.nodes.filter((item) => {
       return item.isRoot;

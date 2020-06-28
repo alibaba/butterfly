@@ -208,8 +208,6 @@ function getFunc(func, value, defaultValue) {
   return resultFunc;
 }
 
-
-
 export default {
   forceLayout,
   forceTreeLayout,
