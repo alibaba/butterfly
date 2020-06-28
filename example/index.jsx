@@ -22,11 +22,11 @@ import Policy from './demo/policy/index.jsx';
 import Flow from './demo/flow/index.jsx';
 import Analysis from './demo/analysis/index.jsx';
 import Schedule from './demo/schedule/index.jsx';
+import Schedule2 from './demo/schedule2/index.jsx';
+import Login from './demo/login/index.jsx';
 import Decision from './demo/decision/index.jsx';
 import RuleTree from './demo/rule-tree/index.jsx';
 import IndentedTree from './demo/indented-tree/index.jsx';
-
-
 import DrageLayout from './demo/DrageLayout/index.jsx';
 
 import 'antd/dist/antd.css';
@@ -83,6 +83,9 @@ ReactDOM.render((
             <Menu.Item key="liteGraph">
               <Link to="/lite_graph">LiteGraph</Link>
             </Menu.Item>
+            <Menu.Item key="login">
+              <Link to="/login">Login</Link>
+            </Menu.Item>
             <Menu.Item key="mindMap">
               <Link to="/mind_map">MindMap</Link>
             </Menu.Item>
@@ -107,7 +110,7 @@ ReactDOM.render((
           </Menu>
         </Sider>
         <Content>
-          <Redirect from="/" to="/emergency" />
+          <Redirect from="/" to="/analysis" />
           <Route path="/emergency" component={Emergency} />
           <Route path="/diodes" component={Diodes} />
           <Route path="/force" component={Force} />
@@ -125,7 +128,9 @@ ReactDOM.render((
           <Route path="/flow" component={Flow} />
           <Route path="/analysis" component={Analysis} />
           <Route path="/schedule" component={Schedule} />
+          <Route path="/schedule2" component={Schedule2} />
           <Route path="/decision" component={Decision} />
+          <Route path="/login" component={Login} />
           <Route path="/rule-tree" component={RuleTree} />
           <Route path="/indented-tree" component={IndentedTree} />
         </Content>
