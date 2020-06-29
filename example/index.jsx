@@ -2,9 +2,9 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom';
-import { Layout, Menu } from 'antd';
-const { Header, Content, Sider } = Layout;
+import {BrowserRouter as Router, Route, Link, Redirect} from 'react-router-dom';
+import {Layout, Menu} from 'antd';
+const {Header, Content, Sider} = Layout;
 
 import Emergency from './demo/emergency/index.jsx';
 import Diodes from './demo/diodes/index.jsx';
@@ -28,6 +28,7 @@ import Decision from './demo/decision/index.jsx';
 import RuleTree from './demo/rule-tree/index.jsx';
 import IndentedTree from './demo/indented-tree/index.jsx';
 import DrageLayout from './demo/DrageLayout/index.jsx';
+import ConcentLayout from './demo/concent-layout/index.jsx';
 
 import 'antd/dist/antd.css';
 import './static/iconfont.css';
@@ -107,6 +108,9 @@ ReactDOM.render((
             <Menu.Item key="system">
               <Link to="/system">System</Link>
             </Menu.Item>
+            <Menu.Item key="concent-layout">
+              <Link to="/concent-layout">concent-layout</Link>
+            </Menu.Item>
           </Menu>
         </Sider>
         <Content>
@@ -133,6 +137,7 @@ ReactDOM.render((
           <Route path="/login" component={Login} />
           <Route path="/rule-tree" component={RuleTree} />
           <Route path="/indented-tree" component={IndentedTree} />
+          <Route path="/concent-layout" component={ConcentLayout} />
         </Content>
       </Layout>
     </Layout>

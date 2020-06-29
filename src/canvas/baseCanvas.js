@@ -66,7 +66,7 @@ class BaseCanvas extends Canvas {
       // 鼠标到达边缘画布自动移动
       autoFixCanvas: {
         enable: _.get(options, 'theme.autoFixCanvas.enable', false),
-        autoMovePadding: _.get(options, 'theme.autoFixCanvas.autoMovePadding') ||[20, 20, 20, 20] // 上，右，下，左
+        autoMovePadding: _.get(options, 'theme.autoFixCanvas.autoMovePadding') || [20, 20, 20, 20] // 上，右，下，左
       }
     };
 
@@ -158,7 +158,7 @@ class BaseCanvas extends Canvas {
     };
 
     this._NodeClass = Node;
-    
+
     // undo & redo队列
     this.actionQueue = [];
     this.actionQueueIndex = -1;
@@ -313,7 +313,7 @@ class BaseCanvas extends Canvas {
               _on: this.on.bind(this),
               _emit: this.emit.bind(this),
               _endpointLimitNum: this.theme.endpoint.limitNum,
-              draggable: _node.draggable !== undefined ? _node.draggable :  this.draggable
+              draggable: _node.draggable !== undefined ? _node.draggable : this.draggable
             }));
           }
           if (_isAbsolutePos) {
@@ -323,10 +323,10 @@ class BaseCanvas extends Canvas {
           _nodeObj.group = _groupObj.id;
           newNode = this.addNode(_nodeObj);
         }
-        return newNode;     
+        return newNode;
       });
 
-       // 重新计算group的大小
+      // 重新计算group的大小
       let _groupWidth = -Infinity;
       let _groupHeight = -Infinity;
       _newNodes.forEach((_node) => {
@@ -382,7 +382,7 @@ class BaseCanvas extends Canvas {
           _on: this.on.bind(this),
           _emit: this.emit.bind(this),
           _endpointLimitNum: this.theme.endpoint.limitNum,
-          draggable: node.draggable !== undefined ? node.draggable :  this.draggable
+          draggable: node.draggable !== undefined ? node.draggable : this.draggable
         }));
       }
 
@@ -544,7 +544,7 @@ class BaseCanvas extends Canvas {
         } else {
           targetEndpoint = targetNode.getEndpoint(link.target, 'target');
         }
-        
+
         if (!sourceEndpoint || !targetEndpoint) {
           console.warn(`butterflies error: can not connect edge. link sourceId:${link.source};link targetId:${link.target}`);
           return;
@@ -765,7 +765,7 @@ class BaseCanvas extends Canvas {
     });
 
     if (rmNodes.length > 0) {
-      if(!isNotEventEmit) {
+      if (!isNotEventEmit) {
         this.pushActionQueue({
           type: 'system:removeNodes',
           data: {
@@ -843,7 +843,7 @@ class BaseCanvas extends Canvas {
       });
     }
 
-    
+
     result.forEach((item) => {
       item.destroy(isNotEventEmit);
     });
@@ -972,7 +972,7 @@ class BaseCanvas extends Canvas {
     let quene = [];
     let neighbors = [];
     const visited = new Set();
-    
+
     // 1. 生成邻接表
     // adjTable = {[nodeId]: {[endpointId]: [[targetNode, targetEndpoint]]}}
     const adjTable = this.getAdjcentTable(type);
@@ -987,7 +987,7 @@ class BaseCanvas extends Canvas {
 
     if (!quene.length) return {nodes: [node], edges: []};
     // 2. BFS,得到 nodes 集合
-    while(quene.length) {
+    while (quene.length) {
       const [$node, $endpoint, $level] = quene.shift();
       if (
         visited.has($node.id) ||
@@ -1010,8 +1010,8 @@ class BaseCanvas extends Canvas {
     // 4. 获取 edges，1. 只考虑点集 2. 考虑边
     // 目前只考虑点集内的全部边
     this.edges.forEach(edge => {
-      const { sourceNode, sourceEndpoint, targetNode, targetEndpoint } = edge;
-      if (visited.has(sourceNode.id) &&  visited.has(targetNode.id)) {
+      const {sourceNode, sourceEndpoint, targetNode, targetEndpoint} = edge;
+      if (visited.has(sourceNode.id) && visited.has(targetNode.id)) {
         nodes.add(sourceNode);
         nodes.add(targetNode);
         edges.add(edge);
@@ -1029,7 +1029,7 @@ class BaseCanvas extends Canvas {
     // {[nodeId]: {[endpointId]: [[targetNode, targetEndpoint]]}}
     const adjTable = {};
     this.edges.forEach(edge => {
-      const { sourceNode, sourceEndpoint, targetNode, targetEndpoint } = edge;
+      const {sourceNode, sourceEndpoint, targetNode, targetEndpoint} = edge;
       const sourceNodeId = sourceNode.id;
       const sourceEndpointId = sourceEndpoint.id;
       const targetNodeId = targetNode.id;
@@ -1038,14 +1038,14 @@ class BaseCanvas extends Canvas {
       if (type !== 'out') {
         if (!adjTable[targetNodeId]) adjTable[targetNodeId] = {};
         if (!adjTable[targetNodeId][targetEndpointId]) adjTable[targetNodeId][targetEndpointId] = [];
-  
+
         adjTable[targetNodeId][targetEndpointId].push([sourceNode, sourceEndpoint]);
       }
       // out and all
       if (type !== 'in') {
         if (!adjTable[sourceNodeId]) adjTable[sourceNodeId] = {};
         if (!adjTable[sourceNodeId][sourceEndpointId]) adjTable[sourceNodeId][sourceEndpointId] = [];
-  
+
         adjTable[sourceNodeId][sourceEndpointId].push([targetNode, targetEndpoint]);
       }
 
@@ -1482,7 +1482,7 @@ class BaseCanvas extends Canvas {
   }
 
   setMinimap(flat = true, options = {}) {
-    if(!options.events) {
+    if (!options.events) {
       options.events = [];
     }
 
@@ -1513,7 +1513,7 @@ class BaseCanvas extends Canvas {
     }
 
     const getGroups = () => {
-      return this.groups.map(group => {        
+      return this.groups.map(group => {
         return {
           id: group.id,
           left: group.left,
@@ -1522,10 +1522,10 @@ class BaseCanvas extends Canvas {
           height: group.getHeight(),
           minimapActive: _.get(group, 'options.minimapActive')
         }
-      });      
+      });
     }
 
-    if(flat && !this.minimap) {
+    if (flat && !this.minimap) {
       this.minimap = new Minimap({
         root: this.root,
         move: this.move.bind(this),
@@ -1546,20 +1546,20 @@ class BaseCanvas extends Canvas {
           offset: this.getOffset()
         });
       };
-  
-      for(let ev of updateEvts) {
+
+      for (let ev of updateEvts) {
         this.on(ev, this.updateFn);
       }
 
       return;
     }
 
-    if(!this.minimap) {
+    if (!this.minimap) {
       return;
     }
 
     this.minimap.destroy();
-    for(let ev of updateEvts) {
+    for (let ev of updateEvts) {
       this.off(ev, this.updateFn);
     }
 
@@ -1587,7 +1587,7 @@ class BaseCanvas extends Canvas {
     if (!this._unionData[name]) {
       this._unionData[name] = {
         nodes: [],
-        groups : [],
+        groups: [],
         edges: [],
         endpoints: []
       }
@@ -1657,7 +1657,7 @@ class BaseCanvas extends Canvas {
     let result = [];
     for (let key in this._unionData) {
       let isExist = _.find(_.get(this._unionData, [key, type], []), (_item) => {
-        return _.toString(_item.id)  === _.toString(item.id);
+        return _.toString(_item.id) === _.toString(item.id);
       });
       if (isExist) {
         result.push(key);
@@ -1692,12 +1692,12 @@ class BaseCanvas extends Canvas {
     }
 
     return domtoimage[method](this.root, options)
-          .then(function (dataUrl) {
-            return dataUrl;
-          })
-          .catch(function (error) {
-            console.error('oops, something went wrong!', error);
-          });
+      .then(function (dataUrl) {
+        return dataUrl;
+      })
+      .catch(function (error) {
+        console.error('oops, something went wrong!', error);
+      });
   }
 
   justifyCoordinate() {
@@ -1707,15 +1707,15 @@ class BaseCanvas extends Canvas {
   _genSvgWrapper() {
 
     // hack 适配浏览器的缩放比例
-    let _detectZoom = () => { 
+    let _detectZoom = () => {
       let ratio = 0;
       let screen = window.screen;
       let ua = navigator.userAgent.toLowerCase();
-     
-       if (window.devicePixelRatio !== undefined) {
-          ratio = window.devicePixelRatio;
+
+      if (window.devicePixelRatio !== undefined) {
+        ratio = window.devicePixelRatio;
       }
-      else if (~ua.indexOf('msie')) {  
+      else if (~ua.indexOf('msie')) {
         if (screen.deviceXDPI && screen.logicalXDPI) {
           ratio = screen.deviceXDPI / screen.logicalXDPI;
         }
@@ -1723,8 +1723,8 @@ class BaseCanvas extends Canvas {
       else if (window.outerWidth !== undefined && window.innerWidth !== undefined) {
         ratio = window.outerWidth / window.innerWidth;
       }
-       
-      if (ratio){
+
+      if (ratio) {
         ratio = Math.round(ratio * 100);
       }
       return ratio;
@@ -1780,7 +1780,7 @@ class BaseCanvas extends Canvas {
     }
 
     let _isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
-    let _getChromeVersion = () => {     
+    let _getChromeVersion = () => {
       var raw = window.navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
       return raw ? parseInt(raw[2], 10) : false;
     };
@@ -1802,8 +1802,8 @@ class BaseCanvas extends Canvas {
       });
       _resizeObserver.observe(this.root);
     } else {
-       //  降级处理，监控窗口的resize事件
-       window.addEventListener('resize', () => {
+      //  降级处理，监控窗口的resize事件
+      window.addEventListener('resize', () => {
         this._rootWidth = $(this.root).width();
         this._rootHeight = $(this.root).height();
         this._coordinateService._changeCanvasInfo({
@@ -1811,8 +1811,8 @@ class BaseCanvas extends Canvas {
           terOffsetY: $(this.root).offset().top,
           terWidth: $(this.root).width(),
           terHeight: $(this.root).height()
-       });
-       this.canvasWrapper.resize({root: this.root});
+        });
+        this.canvasWrapper.resize({root: this.root});
       })
     }
 
@@ -1825,9 +1825,9 @@ class BaseCanvas extends Canvas {
       } else if (data.type === 'node:dragBegin') {
         this._dragType = 'node:drag';
         this._dragNode = data.data;
-      } else if(data.type === 'node:mouseDown') {
+      } else if (data.type === 'node:mouseDown') {
         this._dragType = 'node:mouseDown';
-      }  else if (data.type === 'group:dragBegin') {
+      } else if (data.type === 'group:dragBegin') {
         this._dragType = 'group:drag';
         this._dragNode = data.data;
       } else if (data.type === 'endpoint:drag') {
@@ -1837,7 +1837,7 @@ class BaseCanvas extends Canvas {
         this._moveNode(data.node, data.x, data.y, data.isNotEventEmit);
       } else if (data.type === 'group:move') {
         this._moveGroup(data.group, data.x, data.y, data.isNotEventEmit);
-      }  else if (data.type === 'link:click') {
+      } else if (data.type === 'link:click') {
         this._dragType = 'link:click';
       } else if (data.type === 'multiple:select') {
         const result = this._selectMultiplyItem(data.range, data.toDirection);
@@ -2173,7 +2173,7 @@ class BaseCanvas extends Canvas {
             $(this.svg).css('visibility', 'hidden');
             $(this.wrapper).css('visibility', 'hidden');
             const group = this._dragNode;
-            this._moveGroup(group, group.left + (canvasX - nodeOriginPos.x),  group.top + (canvasY - nodeOriginPos.y));
+            this._moveGroup(group, group.left + (canvasX - nodeOriginPos.x), group.top + (canvasY - nodeOriginPos.y));
             if (this._guidelineService.isActive) {
               this._guidelineService.draw(group, 'group');
             }
@@ -2205,10 +2205,10 @@ class BaseCanvas extends Canvas {
           // 明确标记source或者是没有type且没有线连上
           let _isSourceEndpoint = (this._dragEndpoint.type === 'source' || this._dragEndpoint.type === 'onlyConnect' || (!this._dragEndpoint.type && (!this._dragEndpoint._tmpType || this._dragEndpoint._tmpType === 'source')));
           let _isTargetEndpoint = (this._dragEndpoint.type === 'target' || (!this._dragEndpoint.type && this._dragEndpoint._tmpType === 'target')) && !this._dragEndpoint.type === 'onlyConnect';
-          
+
           if (_isSourceEndpoint && this.linkable) {
             let unionKeys = this._findUnion('endpoints', this._dragEndpoint);
-            
+
             let edges = [];
             if (!this._dragEdges || this._dragEdges.length === 0) {
               const EdgeClass = this.theme.edge.Class;
@@ -2217,7 +2217,7 @@ class BaseCanvas extends Canvas {
                 unionKeys.forEach((key) => {
                   endpoints = endpoints.concat(this._unionData[key].endpoints);
                 });
-                endpoints = _.uniqBy(endpoints, (_point) => { return _point.nodeId + '||' + _point.id });
+                endpoints = _.uniqBy(endpoints, (_point) => {return _point.nodeId + '||' + _point.id});
               } else {
                 endpoints = [this._dragEndpoint];
               }
@@ -2230,8 +2230,8 @@ class BaseCanvas extends Canvas {
                   sourceNode: point.nodeType === 'node' ? this.getNode(point.nodeId) : this.getGroup(point.nodeId),
                   sourceEndpoint: point,
                   arrow: this.theme.edge.arrow,
-                  arrowPosition:  this.theme.edge.arrowPosition,
-                  arrowOffset:  this.theme.edge.arrowOffset,
+                  arrowPosition: this.theme.edge.arrowPosition,
+                  arrowOffset: this.theme.edge.arrowOffset,
                   label: this.theme.edge.label,
                   isExpandWidth: this.theme.edge.isExpandWidth
                 };
@@ -2241,7 +2241,7 @@ class BaseCanvas extends Canvas {
                 }).length + 1;
                 if (_linkNums > point.limitNum) {
                   console.warn(`id为${point.id}的锚点限制了${point.limitNum}条连线`);
-                  return ;
+                  return;
                 }
                 let _newEdge = new EdgeClass(_.assign(pointObj, {
                   _global: this.global,
@@ -2269,7 +2269,7 @@ class BaseCanvas extends Canvas {
               pos: [endX, endY],
             };
             edges.forEach((edge) => {
-              let beginX =  edge.sourceEndpoint._posLeft + edge.sourceEndpoint._width / 2;
+              let beginX = edge.sourceEndpoint._posLeft + edge.sourceEndpoint._width / 2;
               let beginY = edge.sourceEndpoint._posTop + edge.sourceEndpoint._height / 2;
               const _soucePoint = {
                 pos: [beginX, beginY],
@@ -2290,7 +2290,7 @@ class BaseCanvas extends Canvas {
               edges: edges
             }, (gap) => {
               edges.forEach((edge) => {
-                let beginX =  edge.sourceEndpoint._posLeft + edge.sourceEndpoint._width / 2;
+                let beginX = edge.sourceEndpoint._posLeft + edge.sourceEndpoint._width / 2;
                 let beginY = edge.sourceEndpoint._posTop + edge.sourceEndpoint._height / 2;
                 const _soucePoint = {
                   pos: [beginX, beginY],
@@ -2333,7 +2333,7 @@ class BaseCanvas extends Canvas {
 
             if (this._dragEdges.length !== 0) {
               let edge = this._dragEdges[0];
-              let beginX =  edge.sourceEndpoint._posLeft + edge.sourceEndpoint._width / 2;
+              let beginX = edge.sourceEndpoint._posLeft + edge.sourceEndpoint._width / 2;
               let beginY = edge.sourceEndpoint._posTop + edge.sourceEndpoint._height / 2;
               const _soucePoint = {
                 pos: [beginX, beginY],
@@ -2456,12 +2456,12 @@ class BaseCanvas extends Canvas {
                     _result = edge.sourceNode.id === _edge.sourceNode.id && edge.sourceEndpoint.id === _edge.sourceEndpoint.id;
                   }
                 }
-                
+
                 if (_targetEndpoint.nodeId) {
                   if (_edge.type === 'node') {
                     _result = _result && (_.get(edge, 'targetNode.id') === _.get(_edge, 'targetNode.id'));
                   } else {
-                    _result = _result && (_targetEndpoint.nodeId === _.get(_edge, 'targetNode.id') && _targetEndpoint.id === _.get(_edge, 'targetEndpoint.id')); 
+                    _result = _result && (_targetEndpoint.nodeId === _.get(_edge, 'targetNode.id') && _targetEndpoint.id === _.get(_edge, 'targetEndpoint.id'));
                   }
                 }
 
@@ -2504,7 +2504,7 @@ class BaseCanvas extends Canvas {
               edge.destroy();
               return false;
             }
-            
+
             // 正在删除的线重新连接
             if (edge._isDeletingEdge) {
               delete edge._isDeletingEdge;
@@ -2517,10 +2517,10 @@ class BaseCanvas extends Canvas {
             if (edge.type === 'endpoint' && !_.get(edge, 'sourceEndpoint.type') && !_.get(edge, 'sourceEndpoint._tmpType')) {
               edge.sourceEndpoint._tmpType = 'source';
             }
-            if (edge.type === 'endpoint' && !_.get(edge, 'targetEndpoint.type') && !_.get(edge, 'targetEndpoint._tmpType')) { 
+            if (edge.type === 'endpoint' && !_.get(edge, 'targetEndpoint.type') && !_.get(edge, 'targetEndpoint._tmpType')) {
               edge.targetEndpoint._tmpType = 'target';
             }
-            
+
             return edge;
           });
           if (_delEdges.length !== 0 && _emitEdges.length !== 0) {
@@ -3003,7 +3003,7 @@ class BaseCanvas extends Canvas {
             }
           });
         }
-      }else if(_.get(this.layout, 'type') === 'drageLayout') {
+      } else if (_.get(this.layout, 'type') === 'drageLayout') {
         Layout.drageLayout({
           //  /** layout 方向, 可选 TB, BT, LR, RL */
           // public rankdir: 'TB' | 'BT' | 'LR' | 'RL' = 'TB';
@@ -3031,6 +3031,51 @@ class BaseCanvas extends Canvas {
           controlPoints: _.get(this.layout, 'options.controlPoints') || false,
           data: {
             // groups: data.groups,
+            nodes: data.nodes,
+            edges: data.edges.map(item => ({
+              source: item.type === 'endpoint' ? item.sourceNode : item.source,
+              target: item.type === 'endpoint' ? item.targetNode : item.target
+            }))
+          }
+        })
+      } else if (_.get(this.layout, 'type') === 'concentricLayout') {
+        Layout.concentLayout({
+          /** 布局中心 默认值：图的中心 */
+          // public center: [number, number];
+          center: _.get(this.layout, 'options.center') || [width / 2, height / 2],
+          // /** 节点大小（直径）。用于防止节点重叠时的碰撞检测 */
+          // public nodeSize: number | [number, number] = 30;
+          nodeSize: _.get(this.layout, 'options.nodeSize') || 30,
+          // /** 环与环之间最小间距，用于调整半径 */
+          // public minNodeSpacing: number = 10;
+          minNodeSpacing: _.get(this.layout, 'options.minNodeSpacing') || 10,
+          // /** 是否防止重叠，必须配合上面属性 nodeSize，只有设置了与当前图节点大小相同的 nodeSize 值，才能够进行节点重叠的碰撞检测 */
+          // public preventOverlap: boolean = false;
+          preventOverlap: _.get(this.layout, 'options.preventOverlap') || false,
+          // /** 第一个节点与最后一个节点之间的弧度差。若为 undefined ，则将会被设置为  2 _ Math.PI _ (1 - 1 / |level.nodes|) ，其中 level.nodes 为该算法计算出的每一层的节点，|level.nodes| 代表该层节点数量 */
+          // public sweep: number | undefined;
+          sweep: _.get(this.layout, 'options.sweep'),
+          // /** 环与环之间的距离是否相等 */
+          // public equidistant: boolean = false;
+          equidistant: _.get(this.layout, 'options.equidistant') || false,
+          // /** 开始方式节点的弧度 */
+          // public startAngle: number = (3 / 2) * Math.PI;
+          startAngle: (3 / 2) * Math.PI,
+          // /** 是否按照顺时针排列 */
+          // public clockwise: boolean = true;
+          clockwise: _.get(this.layout, 'options.clockwise') || true,
+          // /** 每一层同心值的求和。若为 undefined，则将会被设置为 maxValue / 4 ，其中 maxValue 为最大的排序依据的属性值。例如，若 sortBy 为 'degree'，则 maxValue 为所有节点中度数最大的节点的度数 */
+          //public maxLevelDiff: undefined | number;
+          maxLevelDiff: _.get(this.layout, 'options.maxLevelDiff'),
+          // /** 指定排序的依据（节点属性名），数值越高则该节点被放置得越中心。若为 undefined，则会计算节点的度数，度数越高，节点将被放置得越中心 */
+          // public sortBy: string = 'degree';
+          sortBy: _.get(this.layout, 'options.sortBy') || 'degree',
+          // 布局画布总宽度
+          width: width,
+          // 布局画布总长度
+          height: height,
+          data: {
+            groups: data.groups,
             nodes: data.nodes,
             edges: data.edges.map(item => ({
               source: item.type === 'endpoint' ? item.sourceNode : item.source,
@@ -3166,11 +3211,11 @@ class BaseCanvas extends Canvas {
     });
     return _.flatten(points);
   }
-  undo () {
+  undo() {
     let result = [];
     if (this.actionQueueIndex <= -1) {
       console.warn('回退堆栈已空，无法再undo');
-      return ;
+      return;
     }
     let step = this.actionQueue[this.actionQueueIndex--];
     if (step.type === '_system:dragNodeEnd') {
@@ -3214,7 +3259,7 @@ class BaseCanvas extends Canvas {
       if (targetGroup) {
         targetGroup.removeNodes(step.data.nodes, true);
       }
-      
+
       if (sourceGroup) {
         sourceGroup.addNodes(step.data.nodes, true);
       }
@@ -3237,7 +3282,7 @@ class BaseCanvas extends Canvas {
     } else if (step.type === 'system:groupRemoveMembers') {
 
       let group = step.data.group;
-      
+
       if (group) {
         group.addNodes(step.data.nodes, true);
       }
@@ -3255,10 +3300,10 @@ class BaseCanvas extends Canvas {
           this.actionQueueIndex--;
         }
       }
-      
+
       this.actionQueueIndex--;
     } else if (step.type === 'system:reconnectEdges') {
-      
+
       _.get(step, 'data.info', []).forEach((info) => {
         let targetNode = this.getNode(info.preTargetNodeId);
         let targetEndpoint = targetNode.getEndpoint(info.preTargetPointId);
@@ -3280,11 +3325,11 @@ class BaseCanvas extends Canvas {
       steps: result
     });
   }
-  redo () {
+  redo() {
     let result = [];
     if (this.actionQueueIndex >= this.actionQueue.length - 1) {
       console.warn('重做堆栈已到顶，无法再redo');
-      return ;
+      return;
     }
     let step = this.actionQueue[++this.actionQueueIndex];
     result.push(step);
@@ -3342,7 +3387,7 @@ class BaseCanvas extends Canvas {
 
     } else if (step.type === 'system:groupRemoveMembers') {
       let group = step.data.group;
-      
+
       if (group) {
         group.removeNodes(step.data.nodes, true);
       }
@@ -3381,7 +3426,7 @@ class BaseCanvas extends Canvas {
       steps: result
     });
 
-    if (_.get(this.actionQueue, [this.actionQueueIndex+1, 'type']) === '_system:dragNodeEnd') {
+    if (_.get(this.actionQueue, [this.actionQueueIndex + 1, 'type']) === '_system:dragNodeEnd') {
       this.actionQueueIndex++;
     }
   }
