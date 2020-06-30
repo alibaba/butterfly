@@ -102,6 +102,7 @@ class BaseEdge extends Edge {
       };
     }
     let path = '';
+    console.log(this.shapeType);
     if (this.calcPath) {
       path = this.calcPath(sourcePoint, targetPoint);
     } else if (this.shapeType === 'Bezier') {
@@ -189,6 +190,7 @@ class BaseEdge extends Edge {
   redraw(sourcePoint, targetPoint, options) {
     // 重新计算线条path
     let path = this._calcPath(sourcePoint, targetPoint);
+
     this.dom.setAttribute('d', path);
     if (this.isExpandWidth) {
       this.eventHandlerDom.setAttribute('d', path);
