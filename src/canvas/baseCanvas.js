@@ -3082,7 +3082,20 @@ class BaseCanvas extends Canvas {
               target: item.type === 'endpoint' ? item.targetNode : item.target
             }))
           }
-        })
+        });
+      } else if (_.get(this.layout, 'type') === 'circleLayout') {
+        Layout.circleLayout({
+          radius: _.get(this.layout, 'options.radius'),
+          getWidth: _.get(this.layout, 'options.getWidth'),
+          getHeight: _.get(this.layout, 'options.getHeight'),
+          data: {
+            nodes: data.nodes,
+            edges: data.edges.map(item => ({
+              source: item.type === 'endpoint' ? item.sourceNode : item.source,
+              target: item.type === 'endpoint' ? item.targetNode : item.target
+            }))
+          }
+        });
       }
     }
   }
