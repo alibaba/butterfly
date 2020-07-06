@@ -31,6 +31,9 @@ class BaseNode extends Node {
 
     return container[0];
   }
+  active() {
+    // this.dom
+  }
   // _createTypeIcon(dom = this.dom) {
   //   const iconContainer = $(`<span class="icon-box ${this.options.className}"></span>`)[0];
   //   const icon = $(`<i class="iconfont ${this.options.iconType}"></i>`)[0];

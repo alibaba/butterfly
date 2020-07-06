@@ -698,6 +698,13 @@ class BaseCanvas extends Canvas {
         type: 'system:addEdges',
         data: result
       });
+      this.emit('system.link.connect', {
+        links: result
+      });
+      this.emit('events', {
+        type: 'link:connect',
+        links: result
+      });
     }
 
     $(this.svg).css('visibility', 'visible');
