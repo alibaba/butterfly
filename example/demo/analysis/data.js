@@ -11,7 +11,7 @@ module.exports = {
       className: 'simple-blue',
       iconType: 'icon-rds',
       top: 25,
-      left: 50,
+      left: 0,
       Class: Node,
       endpoints: [{
         id: 'bottom',
@@ -25,7 +25,7 @@ module.exports = {
       className: 'simple-blue',
       iconType: 'icon-rds',
       top: 25,
-      left: 350,
+      left: 300,
       Class: Node,
       endpoints: [{
         id: 'bottom',
@@ -39,7 +39,7 @@ module.exports = {
       className: 'simple-blue',
       iconType: 'icon-rds',
       top: 25,
-      left: 650,
+      left: 600,
       Class: Node,
       endpoints: [{
         id: 'bottom',
@@ -53,7 +53,7 @@ module.exports = {
       className: 'purple',
       iconType: 'icon-guize-kai',
       top: 200,
-      left: 50,
+      left: 0,
       Class: Node,
       endpoints: [{
         id: 'top',
@@ -71,7 +71,7 @@ module.exports = {
       className: 'purple',
       iconType: 'icon-guize-kai',
       top: 200,
-      left: 250,
+      left: 200,
       Class: Node,
       endpoints: [{
         id: 'top',
@@ -89,7 +89,7 @@ module.exports = {
       className: 'purple',
       iconType: 'icon-guize-kai',
       top: 200,
-      left: 450,
+      left: 400,
       Class: Node,
       endpoints: [{
         id: 'top',
@@ -107,7 +107,7 @@ module.exports = {
       className: 'purple',
       iconType: 'icon-guize-kai',
       top: 200,
-      left: 650,
+      left: 600,
       Class: Node,
       endpoints: [{
         id: 'top',
@@ -125,7 +125,7 @@ module.exports = {
       className: 'purple',
       iconType: 'icon-guize-kai',
       top: 200,
-      left: 850,
+      left: 800,
       Class: Node,
       endpoints: [{
         id: 'top',
@@ -143,7 +143,7 @@ module.exports = {
       className: 'purple',
       iconType: 'icon-guize-kai',
       top: 200,
-      left: 1050,
+      left: 1000,
       Class: Node,
       endpoints: [{
         id: 'top',
@@ -161,7 +161,7 @@ module.exports = {
       className: 'purple',
       iconType: 'icon-guize-kai',
       top: 200,
-      left: 1250,
+      left: 1200,
       Class: Node,
       endpoints: [{
         id: 'top',
@@ -177,7 +177,7 @@ module.exports = {
       id: '11',
       type: 'circle',
       top: 375,
-      left: 88,
+      left: 38,
       Class: Node,
       endpoints: [{
         id: 'top',
@@ -193,7 +193,7 @@ module.exports = {
       id: '12',
       type: 'circle',
       top: 375,
-      left: 288,
+      left: 238,
       Class: Node,
       endpoints: [{
         id: 'top',
@@ -209,7 +209,7 @@ module.exports = {
       id: '13',
       type: 'circle',
       top: 375,
-      left: 488,
+      left: 438,
       Class: Node,
       endpoints: [{
         id: 'top',
@@ -225,7 +225,7 @@ module.exports = {
       id: '14',
       type: 'circle',
       top: 375,
-      left: 688,
+      left: 638,
       Class: Node,
       endpoints: [{
         id: 'top',
@@ -241,7 +241,7 @@ module.exports = {
       id: '15',
       type: 'circle',
       top: 375,
-      left: 888,
+      left: 838,
       Class: Node,
       endpoints: [{
         id: 'top',
@@ -257,7 +257,7 @@ module.exports = {
       id: '16',
       type: 'circle',
       top: 375,
-      left: 1088,
+      left: 1038,
       Class: Node,
       endpoints: [{
         id: 'top',
@@ -273,7 +273,7 @@ module.exports = {
       id: '17',
       type: 'circle',
       top: 375,
-      left: 1288,
+      left: 1238,
       Class: Node,
       endpoints: [{
         id: 'top',
@@ -291,7 +291,7 @@ module.exports = {
       className: 'deep-blue',
       iconType: 'icon-juxing',
       top: 550,
-      left: 50,
+      left: 0,
       Class: Node,
       endpoints: [{
         id: 'top',
@@ -305,7 +305,7 @@ module.exports = {
       className: 'deep-blue',
       iconType: 'icon-juxing',
       top: 550,
-      left: 250,
+      left: 200,
       Class: Node,
       endpoints: [{
         id: 'top',
@@ -319,7 +319,7 @@ module.exports = {
       className: 'deep-blue',
       iconType: 'icon-juxing',
       top: 550,
-      left: 450,
+      left: 400,
       Class: Node,
       endpoints: [{
         id: 'top',
@@ -333,7 +333,7 @@ module.exports = {
       className: 'deep-blue',
       iconType: 'icon-juxing',
       top: 550,
-      left: 650,
+      left: 600,
       Class: Node,
       endpoints: [{
         id: 'top',
@@ -347,7 +347,7 @@ module.exports = {
       className: 'deep-blue',
       iconType: 'icon-juxing',
       top: 550,
-      left: 850,
+      left: 800,
       Class: Node,
       endpoints: [{
         id: 'top',
@@ -361,7 +361,7 @@ module.exports = {
       className: 'deep-blue',
       iconType: 'icon-juxing',
       top: 550,
-      left: 1050,
+      left: 1000,
       Class: Node,
       endpoints: [{
         id: 'top',
@@ -375,7 +375,7 @@ module.exports = {
       className: 'deep-blue',
       iconType: 'icon-juxing',
       top: 550,
-      left: 1250,
+      left: 1200,
       Class: Node,
       endpoints: [{
         id: 'top',

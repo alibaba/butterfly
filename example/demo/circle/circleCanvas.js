@@ -45,7 +45,7 @@ class CircleCanvas extends Canvas {
       obj.posInfo = {
         innerRadius: 200,
         outterRadius: 350,
-        outter2Radius: 345,
+        outter2Radius: 360,
         minAngle: minAngle,
         maxAngle: maxAngle
       };
