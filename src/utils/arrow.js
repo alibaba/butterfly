@@ -17,7 +17,7 @@ function calcSlope(opts) {
   let x = 0;
   let y = 0;
   
-  if (shapeType === 'Bezier') {
+  if (shapeType === 'BezierTest' || shapeType === 'AdvancedBezierTest') {
     let p0 = {x: coordinates[8], y: coordinates[9]};
     let p1 = {x: coordinates[1], y: coordinates[2]};
 
@@ -37,7 +37,7 @@ function calcSlope(opts) {
 
     x = p1.x - p0.x;
     y = p1.y - p0.y;
-  } else if (shapeType === 'Flow' || shapeType === 'Manhattan') {
+  } else {
     let p0 = 0;
     let p1 = 1;
 

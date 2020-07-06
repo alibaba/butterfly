@@ -24,7 +24,8 @@ node.addEndpoint({
 });
 ```
 
-## 属性
+## 属性<a name='endpoint-attr'></a>：
+
 | key | 说明 | 类型 | 默认值 
 | :------ | :------ | :------ | :------ 
 | id | 节点唯一标识 | string (Require) | - 
@@ -32,15 +33,16 @@ node.addEndpoint({
 | pos | 位置 | array (Option) | - 
 | scope | 作用域 | string (Option) | 锚点scope相同才可以连线
 | limitNum | 连线数目限制 | Number (Option) | 限制锚点的连接数目
-| type | 目标锚点还是源锚点 | string (Option) | 'source' / 'target' / undefined，当undefined的时候锚点既是source又是target
+| type | 目标锚点还是源锚点 | string (Option) | 'source' / 'target' / undefined / 'onlyConnect'，当undefined的时候锚点既是source又是target；当onlyConnect的时候锚点既是source又是target，但锚点不能拖动删除线段
 | disLinkable | 禁止锚点拖动断开线段 | boolean (Option) | 该属性仅限用于'target'的锚点
 | root | 可把锚点附属与某个子元素 | string (Option) | - 
 | Class | 拓展类 | Class (Option) | 当传入拓展类的时候，该节点组则会按拓展类的draw方法进行渲染，拓展类的相关方法也会覆盖父类的方法
 | dom | 可以把此dom作为自定义锚点 | dom (Option) | - 
 | expendArea | 可以设置锚点连接的热区，可覆盖主题内的设置 | Object (Option) | {left:10, right:10, top:10, bottom:10}
 
-## 方法
-```
+## <a name='endpoint-api'></a> API：
+
+```js
 /**
   * @return {dom} - 自定义节点的dom
   */

@@ -22,7 +22,7 @@ canvas.draw({
 })
 ```
 
-## Property
+## attribute<a name='group-attr'></a>：
 
 | key | describe | type | default 
 | :------ | :------ | :------ | :------ 
@@ -37,9 +37,11 @@ canvas.draw({
 
 `* The returned dom of the node must be set to position: absolute;`
 
-## API
+## API：
 
-```
+### <a name='group-custom'>custom group</a>：
+
+```js
 /**
   * group draw function
   * @param {obj} data - group data
@@ -52,6 +54,20 @@ draw = (obj) => {}
   */
 mounted = () => {}
 
+/**
+  * @return {number} - get group width
+  */
+getWidth = () => {}
+
+/**
+  * @return {number} - get group height
+  */
+getHeight = () => {}
+```
+
+### <a name='group-member'>add and delete members</a>：
+
+```js
 /**
   * add node to group
   * @param {obj} node - node data
@@ -75,28 +91,41 @@ removeNode = (node) => {}
   * @param {array} nodes - 节点数组
   */
 removeNodes = (nodes) => {}
+```
 
+### <a name='node-endpoint'>custom endpoint</a>：
+
+```js
 /**
   * @param {obj} data - endpoint data (this method must be executed after the node is mounted)
+  * @param {string} param.id - endpoint id
+  * @param {string} param.orientation - endpoint direction (it can control the direction of the edge linkin or linkout)
+  * @param {string} param.scope - scope
+  * @param {string} param.type - 'source' / 'target' / undefined，ednpoint is both source and target when undefined
+  * @param {string} param.dom - any sub DOM in the node can be used as a custom endpoint
   */
 addEndpoint = (obj) => {}
 
 /**
   * @param {string} pointId - endpoint id
+  * @param {string(Option)} type - endpoint type (Optional)
   * @return {Endpoint} - Endpoint object
   */
-getEndpoint = (id) => {}
+getEndpoint = (id, type) => {}
+```
 
+### <a name='group-move'>move</a>：
+```js
 /**
-  * @return {number} - get group width
+  * @param {number} x - move to x 
+  * @param {number} y - move to y 
   */
-getWidth = () => {}
+moveTo = (obj) => {}
+```
 
-/**
-  * @return {number} - get group height
-  */
-getHeight = () => {}
+### <a name='group-event'>event</a>：
 
+```js
 /**
   * emit events
   */
@@ -107,5 +136,3 @@ emit = (string, obj) => {}
   */
 on = (string, callback) => {}
 ```
-
-## Detail

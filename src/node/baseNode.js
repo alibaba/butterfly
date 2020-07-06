@@ -15,6 +15,8 @@ class BaseNode extends Node {
     this.dom = opts.dom || null;
     this.draggable = opts.draggable;
     this.options = opts;
+    // 鸭子辨识手动判断类型
+    this.__type = 'node';
     this._on = opts._on;
     this._emit = opts._emit;
     this._global = opts._global;
@@ -50,7 +52,7 @@ class BaseNode extends Node {
 
   addEndpoint(obj, isInited) {
     if (isInited) {
-      this._emit('InnerEvents', {
+      this.emit('InnerEvents', {
         type: 'node:addEndpoint',
         data: obj,
         isInited
@@ -66,11 +68,12 @@ class BaseNode extends Node {
       _limitNum: obj.limitNum || this._endpointLimitNum,
       _global: this.global
     }, obj));
-
-    this._emit('InnerEvents', {
+    
+    this.emit('InnerEvents', {
       type: 'node:addEndpoint',
-      data: endpoint,
+      data: endpoint
     });
+
     this.endpoints.push(endpoint);
     return endpoint;
   }
@@ -86,10 +89,10 @@ class BaseNode extends Node {
 
   getEndpoint(pointId, type) {
     return _.find(this.endpoints, (point) => {
-      if (point.type) {
-        return pointId === point.id && ((type && type === point.type) || !type);
-      } else {
+      if (!point.type || point.type === 'onlyConnect') {
         return pointId === point.id;
+      } else {
+        return pointId === point.id && ((type && type === point.type) || !type);
       }
     });
   }
@@ -127,7 +130,6 @@ class BaseNode extends Node {
         dom: this.dom,
         options: this.options
       }, obj));
-  
       this._addEventListener();
     }
   }
@@ -142,12 +144,13 @@ class BaseNode extends Node {
     this.top = y;
     this.left = x;
   }
-  moveTo(x, y) {
-    this._emit('InnerEvents', {
+  moveTo(x, y, isNotEventEmit) {
+    this.emit('InnerEvents', {
       type: 'node:move',
       node: this,
-      x: x,
-      y: y
+      x,
+      y,
+      isNotEventEmit
     });
   }
 
@@ -168,13 +171,37 @@ class BaseNode extends Node {
   }
 
   _addEventListener() {
+    // todo 做事件代理的形式
+    $(this.dom).on('mousedown', (e) => {
+      const LEFT_KEY = 0;
+      if (e.button !== LEFT_KEY) {
+        return;
+      }
+      if (!['SELECT', 'INPUT', 'RADIO', 'CHECKBOX', 'TEXTAREA'].includes(e.target.nodeName)) {
+        e.preventDefault();
+      }
+      if (this.draggable) {
+        this._isMoving = true;
+        this.emit('InnerEvents', {
+          type: 'node:dragBegin',
+          data: this
+        });
+      } else {
+        // 单纯为了抛错事件给canvas，为了让canvas的dragtype不为空，不会触发canvas:click事件
+        this.emit('InnerEvents', {
+          type: 'node:mouseDown',
+          data: this
+        });
+      }
+    });
+
     $(this.dom).on('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      this._emit('system.node.click', {
+      this.emit('system.node.click', {
         node: this
       });
-      this._emit('events', {
+      this.emit('events', {
         type: 'node:click',
         node: this
       });
@@ -183,39 +210,28 @@ class BaseNode extends Node {
     this.setDraggable(this.draggable);
   }
   setDraggable(draggable) {
-    if (draggable === false) {
-      $(this.dom).off('mousedown');
-    } else {
-      $(this.dom).on('mousedown', (e) => {
-        const LEFT_KEY = 0;
-        if (e.button !== LEFT_KEY) {
-          return;
-        }
-        e.preventDefault();
-        this._isMoving = true;
-        this._emit('InnerEvents', {
-          type: 'node:dragBegin',
-          data: this
-        });
-      });
-    }
     this.draggable = draggable;
   }
   remove() {
-    this._emit('InnerEvents', {
+    this.emit('InnerEvents', {
       type: 'node:delete',
       data: this
     });
   }
+  emit(type, data) {
+    super.emit(type, data);
+    this._emit(type, data);
+  }
   destroy(isNotEvent) {
     if (!isNotEvent) {
       this.endpoints.forEach((item) => {
-        item.destroy();
+        !item._isInitedDom && item.destroy();
       });
       $(this.dom).remove();
+      this.removeAllListeners();
     } else {
       this.endpoints.forEach((item) => {
-        !item._isInitedDom && item.destroy();
+        !item._isInitedDom && item.destroy(isNotEvent);
       });
       $(this.dom).detach();
     }

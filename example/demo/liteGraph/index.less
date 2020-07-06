@@ -1,4 +1,5 @@
 .litegraph-page{
+  position: relative;
   width: 100%;
   height: 100%;
   background: #090a0a;
@@ -30,6 +31,10 @@
     .test-base-link{
       stroke: #4b4f6b;
       stroke-width: 3px;
+      &.active {
+        stroke-width: 3px;
+        stroke: #ff8637;
+      }
     }
     .test-base-node{
       height: 32px;
@@ -43,6 +48,10 @@
       background: #3c3a3a;
       text-align: center;
       color: #bfbfbf;
+      &.active {
+        border: 2px solid #ff8637;
+        box-shadow: 0 2px 12px 0 rgba(0,0,0,.8);
+      }
       .text{
         display: inline-block;
         width: 100%;
@@ -115,6 +124,10 @@
       background: #55ea55;
       width: 10px;
       height: 10px;
+      &.active {
+        background: #ff8637;
+        border: 1px solid #ff8637;
+      }
     }
     .system-gray-point{
       width: 12px;

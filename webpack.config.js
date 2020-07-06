@@ -1,4 +1,5 @@
 let webpack = require('webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   mode: 'production',
@@ -14,6 +15,12 @@ module.exports = {
   resolve: { 
     alias: {},
   },
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: 'dist/index.css',
+      chunkFilename: '[id].css'
+    })
+  ],
   module: {
     rules: [
       {
@@ -29,9 +36,8 @@ module.exports = {
         }
       }, {
         test: /\.less$/,
-        use: [{
-            loader: "style-loader" // creates style nodes from JS strings
-        }, {
+        use: [
+          MiniCssExtractPlugin.loader, {
             loader: "css-loader" // translates CSS into CommonJS
         }, {
             loader: "less-loader" // compiles Less to CSS
@@ -41,6 +47,7 @@ module.exports = {
         use: {
           loader: 'url-loader',
           options: {
+            limit: 1024 * 200,
             name: '[name].[ext]',
             outputPath: '/dist/fonts/'
           }

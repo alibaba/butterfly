@@ -24,6 +24,8 @@ class BaseGroup extends Group {
     this.dom = null;
     this.nodes = [];
     this.options = opts.options;
+    // 鸭子辨识手动判断类型
+    this.__type = 'group';
     this._global = opts._global;
     this._on = opts._on;
     this._emit = opts._emit;
@@ -88,7 +90,7 @@ class BaseGroup extends Group {
     this.updated && this.updated();
     return group[0];
   }
-  addNodes(nodes = []) {
+  addNodes(nodes = [], isNotEventEmit) {
     let _nodes = [];
     nodes.forEach((item) => {
       if (ScopeCompare(item.scope, this.scope, _.get(this, '_global.isScopeStrict'))) {
@@ -97,17 +99,17 @@ class BaseGroup extends Group {
         console.log(`nodeId为${item.id}的节点和groupId${this.id}的节点组scope值不符，无法加入`);
       }
     });
-    this._emit('InnerEvents', {
+    this.emit('InnerEvents', {
       type: 'group:addNodes',
       nodes: nodes,
-      group: this
+      group: this,
+      isNotEventEmit
     });
   }
   addNode(node) {
     this.addNodes([node]);
   }
-  removeNodes(nodes = []) {
-    // 这里需要斟酌下
+  removeNodes(nodes = [], isNotEventEmit) {
     let rmNodes = [];
     this.nodes.forEach((item) => {
       let _node = _.find(nodes, (_node) => {
@@ -115,22 +117,35 @@ class BaseGroup extends Group {
       });
       if (_node) {
         rmNodes.push(_node);
-        _node.dom.remove();
       }
-    });
-    this._emit('InnerEvents', {
+    })
+    // this.nodes.forEach((item) => {
+    //   let _node = _.find(nodes, (_node) => {
+    //     return _node.id === item.id;
+    //   });
+    //   if (_node) {
+    //     rmNodes.push(_node);
+    //   }
+    // });
+    this.emit('InnerEvents', {
       type: 'group:removeNodes',
-      nodes: rmNodes
+      group: this,
+      nodes: rmNodes,
+      isNotEventEmit
     });
-    this.emit('events', {
-      type: 'system.group.addMembers',
-      nodes: [rmNode],
-      group: targetGroup
-    });
-    this.emit('system.group.addMembers', {
-      nodes: [rmNode],
-      group: targetGroup
-    });
+    if (!isNotEventEmit) {
+      this.emit('events', {
+        type: 'system.group.removeNodes',
+        group: this,
+        nodes: rmNodes,
+        group: targetGroup
+      });
+      this.emit('system.group.removeNodes', {
+        group: this,
+        nodes: rmNodes,
+        group: targetGroup
+      });
+    }
     return rmNodes;
   }
   removeNode(node) {
@@ -144,7 +159,7 @@ class BaseGroup extends Group {
       }
       event.preventDefault();
       // event.stopPropagation();
-      this._emit('InnerEvents', {
+      this.emit('InnerEvents', {
         type: 'group:resize',
         group: this
       });
@@ -167,7 +182,7 @@ class BaseGroup extends Group {
     $(this.dom).css('width', this.width).css('height', this.height);
   }
   remove() {
-    this._emit('InnerEvents', {
+    this.emit('InnerEvents', {
       type: 'group:delete',
       data: this
     });
@@ -188,12 +203,13 @@ class BaseGroup extends Group {
     this.top = y;
     this.left = x;
   }
-  moveTo(x, y) {
-    this._emit('InnerEvents', {
+  moveTo(x, y, isNotEventEmit) {
+    this.emit('InnerEvents', {
       type: 'group:move',
       group: this,
-      x: x,
-      y: y
+      x,
+      y,
+      isNotEventEmit
     });
   }
   focus() {
@@ -223,10 +239,10 @@ class BaseGroup extends Group {
     $(this.dom).on('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      this._emit('system.group.click', {
+      this.emit('system.group.click', {
         group: this
       });
-      this._emit('events', {
+      this.emit('events', {
         type: 'group:click',
         group: this
       });
@@ -250,7 +266,7 @@ class BaseGroup extends Group {
       }
       e.preventDefault();
       // e.stopPropagation();
-      this._emit('InnerEvents', {
+      this.emit('InnerEvents', {
         type: 'group:dragBegin',
         data: this
       });
@@ -265,7 +281,7 @@ class BaseGroup extends Group {
   }
   addEndpoint(obj, isInited) {
     if (isInited) {
-      this._emit('InnerEvents', {
+      this.emit('InnerEvents', {
         type: 'group:addEndpoint',
         data: obj,
         isInited
@@ -281,26 +297,33 @@ class BaseGroup extends Group {
       _global: this._global,
     }, obj));
 
-    this._emit('InnerEvents', {
+    this.emit('InnerEvents', {
       type: 'group:addEndpoint',
       data: endpoint,
     });
     this.endpoints.push(endpoint);
     return endpoint;
   }
-  destroy() {
+  emit(type, data) {
+    super.emit(type, data);
+    this._emit(type, data);
+  }
+  destroy(isNotEventEmit) {
     this.endpoints.forEach((item) => {
-      item.destroy();
+      !item._isInitedDom && item.destroy();
     });
     $(this.dom).off();
     $(this.dom).remove();
-    this._emit('system.group.delete', {
-      group: this
-    });
-    this._emit('events', {
-      type: 'group:delete',
-      group: this
-    });
+    if (!isNotEventEmit) {
+      this._emit('system.group.delete', {
+        group: this
+      });
+      this._emit('events', {
+        type: 'group:delete',
+        group: this
+      });
+      this.removeAllListeners();
+    }
   }
 }
 

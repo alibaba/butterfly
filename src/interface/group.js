@@ -1,6 +1,8 @@
 'use strict';
 
-class Group {
+const EventEmit3 = require('eventemitter3');
+
+class Group extends EventEmit3 {
   constructor() {
     // id        节点唯一标志
     // top       坐标y
@@ -21,7 +23,7 @@ class Group {
     // scope           scope相同可拉进group里面
     // endpoints       endpoint对象
     // _endpointsData  真实的endpoint数据
-
+    super();
   }
 
   // 渲染节点
