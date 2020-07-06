@@ -27,9 +27,10 @@ class BaseGroup extends Group {
 
     let titlePath = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'))
                     .attr('d', titlePathData.join(' '))
+                    .css('fill', opts.options.color)
                     .addClass('group-title-path');
 
-
+                    
     let containerPathData = [
       "M", opts.options.posInfo.outter2Pos[0], opts.options.posInfo.outter2Pos[1],
       "A", opts.options.posInfo.outter2Radius, opts.options.posInfo.outter2Radius, 0, 0, 1, opts.options.posInfo.outter2Pos[2], opts.options.posInfo.outter2Pos[3],

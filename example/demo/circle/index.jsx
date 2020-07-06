@@ -43,6 +43,18 @@ class Circle extends Component {
       console.log(data);
       // this.canvas.focusCenterWithAnimate();
     });
+    // 节点点击事件
+    this.canvas.on('clickCircleNode', (event) => {
+      console.log(event)
+    })
+    // 左箭头点击事件
+    this.canvas.on('clickArrowLeft', (event) => {
+      console.log(event, 'left')
+    })
+    // 右箭头点击事件
+    this.canvas.on('clickArrowRight', (event) => {
+      console.log(event, 'right')
+    })
   }
   render() {
     return (

@@ -28,7 +28,9 @@ class BaseNode extends Node {
                   });
 
     container.append(textDom);
-
+    container.on('click', (event) => {
+      this.emit('clickCircleNode', event.currentTarget)
+    })
     return container[0];
   }
   active() {
