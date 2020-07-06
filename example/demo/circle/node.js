@@ -28,9 +28,12 @@ class BaseNode extends Node {
                   });
 
     container.append(textDom);
-
+    container.on('click', (event) => {
+      this.emit('clickCircleNode', event.currentTarget)
+    })
     return container[0];
   }
+ 
   // _createTypeIcon(dom = this.dom) {
   //   const iconContainer = $(`<span class="icon-box ${this.options.className}"></span>`)[0];
   //   const icon = $(`<i class="iconfont ${this.options.iconType}"></i>`)[0];
