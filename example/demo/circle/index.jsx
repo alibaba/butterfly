@@ -41,7 +41,7 @@ class Circle extends Component {
     this.canvas.draw(mockData);
     this.canvas.on('system.link.connect', (data) => {
       console.log(data);
-      // this.canvas.focusCenterWithAnimate();
+      this.canvas.focusCenterWithAnimate();
     });
   }
   render() {
