@@ -2,6 +2,7 @@
 
 const Node = require('./node.js');
 const CenterNode = require('./centerNode.js');
+const Edge = require('./edge.js');
 // const Group = require('./group.js');
 
 module.exports = {
@@ -184,10 +185,12 @@ module.exports = {
   edges: [{
     id: 1,
     source: 'centerNode',
-    target: 11
+    target: 11,
+    Class: Edge
   }, {
     id: 2,
     source: 'centerNode',
-    target: 1
+    target: 1,
+    Class: Edge
   }]
 }

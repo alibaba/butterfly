@@ -37,10 +37,10 @@ class Circle extends Component {
         }
       }
     });
-    console.log(mockData.edges);
+    
     this.canvas.draw(mockData);
-    this.canvas.on('events', (data) => {
-      // console.log(data);
+    this.canvas.on('system.link.connect', (data) => {
+      console.log(data);
       // this.canvas.focusCenterWithAnimate();
     });
     // 节点点击事件
