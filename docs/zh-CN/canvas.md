@@ -235,7 +235,7 @@ move = (postion) => {}
   * @param {float} scale - 0-1之间的缩放值
   * @param {function} callback  - 缩放后的回调
   */
-zoom = (float) => {}
+zoom = (scale) => {}
 
 /**
   * 获取画布的缩放
