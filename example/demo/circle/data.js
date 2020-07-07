@@ -192,5 +192,30 @@ module.exports = {
     source: 'centerNode',
     target: 1,
     Class: Edge
+  }],
+  notes: [{
+    id: 0,
+    _group: 'group_0',
+    text: '这是group0的注释'
+  }, {
+    id: 1,
+    _group: 'group_1',
+    text: '这是group1的注释'
+  }, {
+    id: 2,
+    _group: 'group_2',
+    text: '这是group2的注释'
+  }, {
+    id: 3,
+    _group: 'group_3',
+    text: '这是group3的注释'
+  }, {
+    id: 4,
+    _group: 'group_4',
+    text: '这是group4的注释'
+  }, {
+    id: 5,
+    _group: 'group_5',
+    text: '这是group5的注释'
   }]
 }
