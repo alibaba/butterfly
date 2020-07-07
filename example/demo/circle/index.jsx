@@ -39,13 +39,14 @@ class Circle extends Component {
     });
     
     this.canvas.draw(mockData);
-    this.canvas.on('system.link.connect', (data) => {
-      console.log(data);
+    this.canvas.on('system.link.connect', ({links}) => {
+      links.forEach(link => {
+        link.targetNode.active(link.targetNode.dom)
+      })
       // this.canvas.focusCenterWithAnimate();
     });
     // 节点点击事件
     this.canvas.on('clickCircleNode', (event) => {
-      console.log(event)
     })
     // 左箭头点击事件
     this.canvas.on('clickArrowLeft', (event) => {

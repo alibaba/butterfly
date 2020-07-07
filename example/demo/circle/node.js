@@ -33,8 +33,9 @@ class BaseNode extends Node {
     })
     return container[0];
   }
-  active() {
-    // this.dom
+  active(nodeDom) {
+    $(nodeDom).addClass('circle-node-bg')
+    $(nodeDom).children('.circle-node-text').addClass('circle-node-text-color')
   }
   // _createTypeIcon(dom = this.dom) {
   //   const iconContainer = $(`<span class="icon-box ${this.options.className}"></span>`)[0];

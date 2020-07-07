@@ -1,10 +1,23 @@
 .circle-page {
   .circle-node {
     position: absolute;
-    width: 15px;
-    height: 15px;
-    background: #fff;
+    width: 12px;
+    height: 12px;
+    background: #BFBFBF;
     border-radius: 50%;
+    &.circle-node-bg {
+      background: #FA6400;
+      &::before {
+        position: absolute;
+        left: -10px;
+        top: -10px;
+        content: '';
+        width: 32px;
+        height: 32px;
+        background: rgba(247, 180, 0, 0.5);
+        border-radius: 50%;
+      }
+    }
     .circle-node-text {
       position: absolute;
       // transform-origin: 7.5px 7.5px;
@@ -18,6 +31,9 @@
       -moz-transform-origin: 7.5px 7.5px;
       -o-transform-origin: 7.5px 7.5px;
       color: #333;
+    }
+    .circle-node-text-color {
+      color: #FA6400;
     }
   }
 }
