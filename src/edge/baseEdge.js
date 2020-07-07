@@ -102,7 +102,6 @@ class BaseEdge extends Edge {
       };
     }
     let path = '';
-    console.log(this.shapeType);
     if (this.calcPath) {
       path = this.calcPath(sourcePoint, targetPoint);
     } else if (this.shapeType === 'Bezier') {
