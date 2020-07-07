@@ -8,6 +8,7 @@ class BaseGroup extends Group {
   constructor(opts) {
     super(opts);
     this.options = opts;
+    this.titlePath = undefined;
   }
   draw = (opts) => {
     // 坐标需要计算
@@ -40,8 +41,9 @@ class BaseGroup extends Group {
 
     let containerPath = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'))
                     .attr('d', containerPathData.join(' '))
-                    .addClass('group-container-path')
+                    .addClass('group-container-path');
 
+    this.titlePath = titlePath[0];
 
     svg.append(containerPath[0]);
 
