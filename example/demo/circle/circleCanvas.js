@@ -4,6 +4,7 @@ const Canvas = require('../../../index.js').Canvas;
 const Group = require('./group');
 const NoteSourceNode = require('./noteSourceNode.js');
 const NoteTargetNode = require('./noteTargetNode.js');
+const $ = require('jquery');
 
 class CircleCanvas extends Canvas {
   draw(opts, callback) {
@@ -17,7 +18,17 @@ class CircleCanvas extends Canvas {
       this.addNotes(opts.notes);
       callback && callback();
       opts.groups = _groups;
+      // 环绕节点组的一圈环
+      this._drawCirlce();
     });
+  }
+  _drawCirlce() {
+    let circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+    circle.setAttribute('class', 'orange-circle');
+    circle.setAttribute('cx', '0');
+    circle.setAttribute('cy', '7');
+    circle.setAttribute('r', '200');
+    $(this.svg).append(circle);
   }
   addCircleGroups(groups) {
     let circleNodesNum = this.nodes.filter((item) => {

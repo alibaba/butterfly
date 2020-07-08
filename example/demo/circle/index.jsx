@@ -4,6 +4,7 @@ require('./index.less');
 require('butterfly-dag/dist/index.css');
 
 const Canvas = require('./CircleCanvas.js');
+const Edge = require('./edge.js');
 const mockData = require('./data.js');
 
 class Circle extends Component {
@@ -46,6 +47,12 @@ class Circle extends Component {
     });
     // 节点点击事件
     this.canvas.on('clickCircleNode', (event) => {
+      this.canvas.addEdge({
+        id: 3,
+        source: 'centerNode',
+        target: 13,
+        Class: Edge
+      });
     })
     // 左箭头点击事件
     this.canvas.on('clickArrowLeft', (event) => {
