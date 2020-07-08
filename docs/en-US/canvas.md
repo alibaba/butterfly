@@ -90,6 +90,13 @@ let canvas = new Canvas({
 draw = (data, calllback) => {}
 
 /**
+  * Re-rendering method, it will delete all previous elements and re-render
+  * @param {data} data  - include groups, nodes, edges
+  * @param {function} callback  - `*the rendering process is an asynchronous process, please pay attention to the callback.`
+  */
+redraw = (data, calllback) => {}
+
+/**
   * get all data from canvas
   * @return {data} - canvas data
   */
