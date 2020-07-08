@@ -84,6 +84,13 @@ let canvas = new Canvas({
 draw = (data, calllback) => {}
 
 /**
+  * 重新渲染方法，会将之前的所有元素删除重新渲染
+  * @param {data} data  - 里面包含分组，节点，连线
+  * @param {function} callback  - `*渲染过程是异步的过程，需要的用户请留意回调`
+  */
+redraw = (data, calllback) => {}
+
+/**
   * 获取画布的数据模型
   * @return {data} - 画布的数据
   */

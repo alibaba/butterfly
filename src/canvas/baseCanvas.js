@@ -226,6 +226,13 @@ class BaseCanvas extends Canvas {
     });
   }
 
+  redraw (opts, callback) {
+    this.removeNodes(this.nodes);
+    this.removeGroups(this.groups);
+    this.clearActionQueue();
+    this.draw(opts, callback);
+  }
+
   getNode(id) {
     return _.find(this.nodes, item => item.id === id);
   }
@@ -850,7 +857,14 @@ class BaseCanvas extends Canvas {
     return this.removeEdges([edge], isNotEventEmit, isNotPushActionQueue)[0];
   }
 
-  removeGroup(groupId, isNotEventEmit) {
+  removeGroup(data, isNotEventEmit) {
+    let groupId = undefined;
+    if (data instanceof Group) {
+      groupId = data.id;
+    } else {
+      groupId = data;
+    }
+
     const group = this.getGroup(groupId);
     if (!group) {
       console.warn(`未找到id为${groupId}的节点组`);
@@ -891,6 +905,21 @@ class BaseCanvas extends Canvas {
     }
 
     return group;
+  }
+
+  removeGroups(groups, isNotEventEmit) {
+    let groupIds = [];
+    groupIds = groups.map((item) => {
+      if (item instanceof Group) {
+        return item.id
+      } else {
+        return item;
+      }
+    });
+
+    groupIds.forEach((item) => {
+      this.removeGroup(item, isNotEventEmit);
+    })
   }
 
   getNeighborEdges(id, type) {
