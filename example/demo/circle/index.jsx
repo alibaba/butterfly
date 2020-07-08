@@ -1,5 +1,5 @@
 'use strict';
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 require('./index.less');
 require('butterfly-dag/dist/index.css');
 
@@ -37,13 +37,12 @@ class Circle extends Component {
         }
       }
     });
-    
+
     this.canvas.draw(mockData);
-    this.canvas.on('system.link.connect', ({links}) => {
+    this.canvas.on('system.link.connect', ({ links }) => {
       links.forEach(link => {
-        link.targetNode.active(link.targetNode.dom)
+        link.targetNode.active && link.targetNode.active(link.targetNode.dom)
       })
-      // this.canvas.focusCenterWithAnimate();
     });
     // 节点点击事件
     this.canvas.on('clickCircleNode', (event) => {
