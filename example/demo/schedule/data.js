@@ -10,7 +10,7 @@ module.exports = {
       label: '某某算法',
       className: 'deep-blue',
       iconType: 'icon-kaifa',
-      top: 150,
+      top: 50,
       left: 200,
       Class: Node,
       endpoints: [{
@@ -24,7 +24,7 @@ module.exports = {
       label: '某某算法',
       className: 'deep-blue',
       iconType: 'icon-kaifa',
-      top: 150,
+      top: 50,
       left: 350,
       Class: Node,
       endpoints: [{
@@ -38,7 +38,7 @@ module.exports = {
       label: '某某算法',
       className: 'deep-blue',
       iconType: 'icon-kaifa',
-      top: 150,
+      top: 50,
       left: 500,
       Class: Node,
       endpoints: [{
@@ -52,7 +52,7 @@ module.exports = {
       label: '某某算法',
       className: 'deep-blue',
       iconType: 'icon-kaifa',
-      top: 150,
+      top: 50,
       left: 650,
       Class: Node,
       endpoints: [{
@@ -66,7 +66,7 @@ module.exports = {
       label: '时间处理',
       className: 'deep-blue',
       iconType: 'icon-shijian',
-      top: 150,
+      top: 50,
       left: 800,
       Class: Node,
       endpoints: [{
@@ -80,7 +80,7 @@ module.exports = {
       label: '算数运算',
       className: 'deep-blue',
       iconType: 'icon-webicon310',
-      top: 150,
+      top: 50,
       left: 950,
       Class: Node,
       endpoints: [{
@@ -94,7 +94,7 @@ module.exports = {
       label: '交运算',
       className: 'deep-blue',
       iconType: 'icon-guanlian',
-      top: 300,
+      top: 200,
       left: 350,
       Class: Node,
       endpoints: [{
@@ -108,7 +108,7 @@ module.exports = {
       label: '字符串处理',
       className: 'deep-blue',
       iconType: 'icon-shujuji',
-      top: 300,
+      top: 200,
       left: 500,
       Class: Node,
       endpoints: [{
@@ -122,7 +122,7 @@ module.exports = {
       label: '字符串处理',
       className: 'deep-blue',
       iconType: 'icon-shujuji',
-      top: 300,
+      top: 200,
       left: 650,
       Class: Node,
       endpoints: [{
@@ -136,7 +136,7 @@ module.exports = {
       label: '交运算',
       className: 'deep-blue',
       iconType: 'icon-guanlian',
-      top: 300,
+      top: 200,
       left: 950,
       Class: Node,
       endpoints: [{
@@ -184,7 +184,7 @@ module.exports = {
       label: '字符串处理',
       className: 'deep-blue',
       iconType: 'icon-shujuji',
-      top: 450,
+      top: 350,
       left: 800,
       Class: Node,
       endpoints: [{
@@ -198,7 +198,7 @@ module.exports = {
       label: '字符串处理',
       className: 'deep-blue',
       iconType: 'icon-shujuji',
-      top: 450,
+      top: 350,
       left: 950,
       Class: Node,
       endpoints: [{
@@ -352,7 +352,7 @@ module.exports = {
     options: {
       title: '测试'
     },
-    top: 410,
+    top: 310,
     left: 185,
     width: 500,
     height: 300,

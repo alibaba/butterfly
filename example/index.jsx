@@ -27,6 +27,9 @@ import Login from './demo/login/index.jsx';
 import Decision from './demo/decision/index.jsx';
 import RuleTree from './demo/rule-tree/index.jsx';
 import IndentedTree from './demo/indented-tree/index.jsx';
+import Circle from './demo/circle/index.jsx';
+
+
 import DrageLayout from './demo/DrageLayout/index.jsx';
 import ConcentLayout from './demo/concent-layout/index.jsx';
 
@@ -47,6 +50,9 @@ ReactDOM.render((
           >
             <Menu.Item key="analysis">
               <Link to="/analysis">Analysis</Link>
+            </Menu.Item>
+            <Menu.Item key="circle">
+              <Link to="/circle">Circle</Link>
             </Menu.Item>
             <Menu.Item key="compactBoxTree">
               <Link to="/compactBoxTree">Compact Box Tree</Link>
@@ -138,6 +144,7 @@ ReactDOM.render((
           <Route path="/rule-tree" component={RuleTree} />
           <Route path="/indented-tree" component={IndentedTree} />
           <Route path="/concent-layout" component={ConcentLayout} />
+          <Route path="/circle" component={Circle} />
         </Content>
       </Layout>
     </Layout>

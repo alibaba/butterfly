@@ -705,6 +705,13 @@ class BaseCanvas extends Canvas {
         type: 'system:addEdges',
         data: result
       });
+      this.emit('system.link.connect', {
+        links: result
+      });
+      this.emit('events', {
+        type: 'link:connect',
+        links: result
+      });
     }
 
     $(this.svg).css('visibility', 'visible');
@@ -3111,7 +3118,20 @@ class BaseCanvas extends Canvas {
               target: item.type === 'endpoint' ? item.targetNode : item.target
             }))
           }
-        })
+        });
+      } else if (_.get(this.layout, 'type') === 'circleLayout') {
+        Layout.circleLayout({
+          radius: _.get(this.layout, 'options.radius'),
+          getWidth: _.get(this.layout, 'options.getWidth'),
+          getHeight: _.get(this.layout, 'options.getHeight'),
+          data: {
+            nodes: data.nodes,
+            edges: data.edges.map(item => ({
+              source: item.type === 'endpoint' ? item.sourceNode : item.source,
+              target: item.type === 'endpoint' ? item.targetNode : item.target
+            }))
+          }
+        });
       }
     }
   }

@@ -189,6 +189,7 @@ class BaseEdge extends Edge {
   redraw(sourcePoint, targetPoint, options) {
     // 重新计算线条path
     let path = this._calcPath(sourcePoint, targetPoint);
+
     this.dom.setAttribute('d', path);
     if (this.isExpandWidth) {
       this.eventHandlerDom.setAttribute('d', path);
