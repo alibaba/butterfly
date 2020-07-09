@@ -35,7 +35,8 @@ let canvas = new Canvas({
     autoFixCanvas: {     // auto expand canvas when drag nodes or edges near the edge of canvas.
       enable: false,
       autoMovePadding: [20, 20, 20, 20]
-    }
+    },
+    autoResizeRootSize: true // automatically adapt to the root size, the default is true
   },
   global: {                // custom configuration, will run through all canvas, group, node, edge, endpoint objects
     isScopeStrict: false   // whether scope is strict mode (default is false)
