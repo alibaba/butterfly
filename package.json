@@ -47,7 +47,7 @@
     "lodash": ">=4.0.0"
   },
   "dependencies": {
-    "@antv/hierarchy": "~0.6.2",
+    "@antv/hierarchy": "~0.6.4",
     "d3-force": "~2.0.1",
     "dagre": "~0.8.5",
     "dom-to-image": "~2.6.0",

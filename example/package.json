@@ -10,10 +10,8 @@
   "author": "jambin",
   "license": "MIT",
   "dependencies": {
-    "@antv/hierarchy": "^0.6.4",
     "antd": "~3.26.7",
     "butterfly-dag": "~2.5.5",
-    "dagre": "^0.8.5",
     "jquery": "^3.4.1",
     "react": "~16.12.0",
     "react-dom": "~16.12.0",
