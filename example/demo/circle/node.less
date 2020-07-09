@@ -1,0 +1,117 @@
+.circle-page {
+  .circle-node {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: #BFBFBF;
+    border-radius: 50%;
+    cursor: pointer;
+    &.circle-node-bg {
+      background: #FA6400;
+      &::before {
+        position: absolute;
+        left: -10px;
+        top: -10px;
+        content: '';
+        width: 32px;
+        height: 32px;
+        background: rgba(247, 180, 0, 0.5);
+        border-radius: 50%;
+      }
+    }
+    .circle-node-text {
+      position: absolute;
+      // transform-origin: 7.5px 7.5px;
+      // -ms-transform-origin: 7.5px 7.5px;
+      // -webkit-transform-origin: 7.5px 7.5px;
+      // -moz-transform-origin: 7.5px 7.5px;
+      // -o-transform-origin: 7.5px 7.5px;
+      transform-origin: 7.5px 7.5px;
+      -ms-transform-origin: 7.5px 7.5px;
+      -webkit-transform-origin: 7.5px 7.5px;
+      -moz-transform-origin: 7.5px 7.5px;
+      -o-transform-origin: 7.5px 7.5px;
+      color: #333;
+      padding: 10px 8px;
+      box-sizing: border-box;
+    }
+    .circle-node-text-border {
+      border: 1px solid #FF6A00;
+      border-radius: 20px;
+      background: rgba(255, 106, 0, 0.15);
+    }
+    .popup-node {
+      position: absolute;
+      width: 339px;
+      height: auto;
+      padding: 14px;
+      background: #FFF;
+      border-left: 6px solid #A4A4A4;
+      z-index: 1;
+      .popup-node-title {
+        font-size: 16px;
+        margin-bottom: 16px;
+        margin-left: 11px;
+        font-style: normal;
+      }
+    }
+    .circle-node-text-color {
+      color: #FA6400;
+    }
+  }
+  .decision-node {
+    padding: 0 10px;
+    background: #FA541C;
+    color: #FFF;
+    min-width: 116px;
+    .text-box {
+      width: 100%;
+    }
+    .arrow-left {
+      position: absolute;
+      left: -36px;
+      top: 10px;
+      width: 0; 
+      height: 0;
+      border-width: 8px;
+      border-style: solid;
+      border-color:  transparent #666666 transparent transparent ;
+    }
+    .arrow-right {
+      position: absolute;
+      right: -36px;
+      top: 10px;
+      width: 0; 
+      height: 0;
+      border-width: 8px;
+      border-style: solid;
+      border-color:  transparent transparent transparent #666666 ;
+    }
+  }
+  .note-target-node {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 1px solid #cecece;
+    background: #f9f9f9;
+    .note-text {
+      position: absolute;
+      display: inline-block;
+      width: 150px;
+      top: -10px;
+      color: #333;
+      &.left-side {
+        right: -6px;
+      }
+      &.right-side {
+        left: 27px;
+      }
+    }
+  }
+  .note-source-node {
+    position: absolute;
+    width: 0px;
+    height: 0px;
+  }
+}

@@ -35,7 +35,8 @@ let canvas = new Canvas({
     autoFixCanvas: {     //节点拖动或连线拖动到画布边缘时，画布自动延展
       enable: false,
       autoMovePadding: [20, 20, 20, 20] //触发自动延展的画布内边距
-    }
+    },
+    autoResizeRootSize: true // 自动适配root大小，默认为true
   },
   global: {                //自定义配置，会贯穿所有canvas，group，node，edge，endpoint对象
     isScopeStrict: false   //scope是否为严格模式(默认为false)

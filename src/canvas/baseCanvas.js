@@ -67,7 +67,9 @@ class BaseCanvas extends Canvas {
       autoFixCanvas: {
         enable: _.get(options, 'theme.autoFixCanvas.enable', false),
         autoMovePadding: _.get(options, 'theme.autoFixCanvas.autoMovePadding') || [20, 20, 20, 20] // 上，右，下，左
-      }
+      },
+      // 自动适配父级div大小
+      autoResizeRootSize: _.get(options, 'theme.autoResizeRootSize', true)
     };
 
     // 贯穿所有对象的配置
@@ -704,6 +706,13 @@ class BaseCanvas extends Canvas {
       this.pushActionQueue({
         type: 'system:addEdges',
         data: result
+      });
+      this.emit('system.link.connect', {
+        links: result
+      });
+      this.emit('events', {
+        type: 'link:connect',
+        links: result
       });
     }
 
@@ -1816,7 +1825,7 @@ class BaseCanvas extends Canvas {
     let _isHightVerChrome = _isChrome && _getChromeVersion() >= 64;
 
     // todo：chrome64版本ResizeObserver对象不存在，但官方文档说64支持，所以加强判断下
-    if (_isHightVerChrome && window.ResizeObserver) {
+    if (_isHightVerChrome && window.ResizeObserver && this.theme.autoResizeRootSize) {
       // 监听某个dom的resize事件
       const _resizeObserver = new ResizeObserver(entries => {
         this._rootWidth = $(this.root).width();
@@ -3111,7 +3120,20 @@ class BaseCanvas extends Canvas {
               target: item.type === 'endpoint' ? item.targetNode : item.target
             }))
           }
-        })
+        });
+      } else if (_.get(this.layout, 'type') === 'circleLayout') {
+        Layout.circleLayout({
+          radius: _.get(this.layout, 'options.radius'),
+          getWidth: _.get(this.layout, 'options.getWidth'),
+          getHeight: _.get(this.layout, 'options.getHeight'),
+          data: {
+            nodes: data.nodes,
+            edges: data.edges.map(item => ({
+              source: item.type === 'endpoint' ? item.sourceNode : item.source,
+              target: item.type === 'endpoint' ? item.targetNode : item.target
+            }))
+          }
+        });
       }
     }
   }

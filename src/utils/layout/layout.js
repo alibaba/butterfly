@@ -3,6 +3,7 @@
 const d3 = require('d3-force');
 const _ = require('lodash');
 const dagre = require('dagre');
+const circleLayout = require('./circleLayout');
 
 // 离散布局
 function forceLayout(param) {
@@ -405,5 +406,6 @@ export default {
   forceTreeLayout,
   treeLayout,
   drageLayout,
-  concentLayout
+  concentLayout,
+  circleLayout
 }

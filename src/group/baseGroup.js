@@ -256,7 +256,7 @@ class BaseGroup extends Group {
         return;
       }
       // 兼容resize按钮冒泡上来的事件
-      if(_.get(e, 'target.className', '').indexOf('butterfly-group-icon-resize') !== -1) {
+      if($(e.target).attr('class').indexOf('butterfly-group-icon-resize') !== -1) {
         return;
       }
 
