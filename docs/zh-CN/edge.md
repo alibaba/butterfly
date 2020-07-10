@@ -10,7 +10,7 @@ canvas.draw({
     sourceNode: 'node_1',
     targetNode: 'node_2',
     type: 'endpoint',
-    arrow: ture,
+    arrow: true,
     arrowPosition: 0.5,
     arrowOffset: 0,  // 箭头的最终位置：线条长度 * arrowPosition + arrowOffset
     label: 'I am label'   //这里也可以传dom，当然也可以拓展父类的drawLabel来自定义label
