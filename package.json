@@ -3,7 +3,7 @@
   "version": "2.8.25",
   "description": "一个基于数据驱动的节点式编排组件库，让你有方便快捷定制可视化流程图表",
   "main": "dist/index.js",
-  "es": "es/index.js",
+  "module": "es/index.js",
   "pack": "pack/index.js",
   "scripts": {
     "test": "webpack && echo \"Error: no test specified\" && exit 1",

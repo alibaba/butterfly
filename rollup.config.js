@@ -65,7 +65,7 @@ rollupCfg.push({
       sourcemap: true
     },
     {
-      file: pkg.es,
+      file: pkg.module,
       format: 'es',
       sourcemap: true
     }
