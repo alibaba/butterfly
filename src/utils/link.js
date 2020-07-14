@@ -49,11 +49,11 @@ function drawBezier(sourcePoint, targetPoint) {
   targetCtrlPoint = [targetCtrlPoint[0] + offsetX, targetCtrlPoint[1] + offsetY];
 
   // 起始点
-  let result = ['M', targetPoint.pos[0], targetPoint.pos[1]];
+  let result = ['M', sourcePoint.pos[0], sourcePoint.pos[1]];
   // 两个控制点
-  result = result.concat(['C', sourceCtrlPoint[0], sourceCtrlPoint[1], targetCtrlPoint[0], targetCtrlPoint[1]]);
+  result = result.concat(['C', targetCtrlPoint[0], targetCtrlPoint[1], sourceCtrlPoint[0], sourceCtrlPoint[1]]);
   // 结束点
-  result = result.concat([sourcePoint.pos[0], sourcePoint.pos[1]]);
+  result = result.concat([targetPoint.pos[0], targetPoint.pos[1]]);
 
   return result.join(' ');
 }
@@ -101,11 +101,14 @@ function drawAdvancedBezier(sourcePoint, targetPoint) {
   const targetCtrlPoint = [targetPoint.pos[0] + to_offsetX, targetPoint.pos[1] + to_offsetY];
 
   // 起始点
-  let result = ['M', targetPoint.pos[0], targetPoint.pos[1]];
+  let result = ['M', sourcePoint.pos[0], sourcePoint.pos[1]];
+  // let result = ['M', targetPoint.pos[0], targetPoint.pos[1]];
   // 两个控制点
-  result = result.concat(['C', targetCtrlPoint[0], targetCtrlPoint[1], sourceCtrlPoint[0], sourceCtrlPoint[1]]);
+  result = result.concat(['C', sourceCtrlPoint[0], sourceCtrlPoint[1]], targetCtrlPoint[0], targetCtrlPoint[1]);
+  // result = result.concat(['C', targetCtrlPoint[0], targetCtrlPoint[1], sourceCtrlPoint[0], sourceCtrlPoint[1]]);
   // 结束点
-  result = result.concat([sourcePoint.pos[0], sourcePoint.pos[1]]);
+  result = result.concat([targetPoint.pos[0], targetPoint.pos[1]]);
+  // result = result.concat([sourcePoint.pos[0], sourcePoint.pos[1]]);
 
   return result.join(' ');
 }
@@ -590,10 +593,14 @@ function _calcOrientation(beginX, beginY, endX, endY, orientationLimit) {
   let k = Math.abs(posY / posX);
 
   if (posX === 0 || posY === 0) {
-    orientation = posX >= 0 ? _calcWithLimit(['Right', 'Top', 'Bottom', 'Left']) : orientation;
-    orientation = posX < 0 ? _calcWithLimit(['Left', 'Top', 'Bottom', 'Right']) : orientation;
-    orientation = posY >= 0 ? _calcWithLimit(['Top', 'Left', 'Right', 'Bottom']) : orientation;
-    orientation = posY < 0 ? _calcWithLimit(['Bottom', 'Left', 'Right', 'Top']) : orientation;
+    if (posX === 0) {
+      orientation = posY >= 0 ? _calcWithLimit(['Top', 'Left', 'Right', 'Bottom']) : orientation;
+      orientation = posY < 0 ? _calcWithLimit(['Bottom', 'Left', 'Right', 'Top']) : orientation;
+    }
+    if (posY === 0) {
+      orientation = posX >= 0 ? _calcWithLimit(['Right', 'Top', 'Bottom', 'Left']) : orientation;
+      orientation = posX < 0 ? _calcWithLimit(['Left', 'Top', 'Bottom', 'Right']) : orientation;
+    }
   } else if (posX > 0 && posY > 0) {
     if (k > 1) {
       orientation = _calcWithLimit(['Top', 'Left', 'Right', 'Bottom']);
@@ -604,10 +611,10 @@ function _calcOrientation(beginX, beginY, endX, endY, orientationLimit) {
     }
   } else if (posX < 0 && posY > 0) {
     if (k > 1) {
-      orientation = _calcWithLimit(['Top', 'Left', 'Right', 'Bottom']);
+      orientation = _calcWithLimit(['Top', 'Right', 'Left', 'Bottom']);
       // orientation = [0, -1];
     } else {
-      orientation = _calcWithLimit(['Left', 'Top', 'Bottom', 'Right']);
+      orientation = _calcWithLimit(['Right', 'Top', 'Bottom', 'Left']);
       // orientation = [1, 0];
     }
   } else if (posX < 0 && posY < 0) {
@@ -692,6 +699,13 @@ function _findControlPoint(point, sourcePoint, targetPoint, _so, _to) {
 
 // 曼哈顿折线路由算法
 function _route(conn, fromPt, fromDir, toPt, toDir) {
+
+  // 防止图上节点隐藏NaN的死循环问题
+  fromPt.x = fromPt.x || 0;
+  fromPt.y = fromPt.y || 0;
+  toPt.x = toPt.x || 0;
+  toPt.y = toPt.y || 0;
+
   const xDiff = fromPt.x - toPt.x;
   const yDiff = fromPt.y - toPt.y;
   let point;
@@ -817,7 +831,7 @@ function _route(conn, fromPt, fromDir, toPt, toDir) {
   _route(conn, point, dir, toPt, toDir);
 }
 
-module.exports = {
+export default {
   drawBezier,
   drawAdvancedBezier,
   drawStraight,

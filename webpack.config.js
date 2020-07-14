@@ -1,4 +1,5 @@
 let webpack = require('webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   mode: 'production',
@@ -14,6 +15,12 @@ module.exports = {
   resolve: { 
     alias: {},
   },
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: 'dist/index.css',
+      chunkFilename: '[id].css'
+    })
+  ],
   module: {
     rules: [
       {
@@ -22,15 +29,15 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['env', 'react'], //'env'--babel7中的es7语法编译插件
-            plugins: ['transform-decorators-legacy', 'transform-class-properties', 'add-module-exports', 'transform-object-rest-spread'],
+            presets: ['@babel/preset-env'], //'env'--babel7中的es7语法编译插件
+            // plugins: ['transform-decorators-legacy', 'transform-class-properties', 'add-module-exports', 'transform-object-rest-spread'],
+            plugins: ['transform-es2015-modules-commonjs', '@babel/plugin-proposal-object-rest-spread', '@babel/plugin-proposal-class-properties']
           }
         }
       }, {
         test: /\.less$/,
-        use: [{
-            loader: "style-loader" // creates style nodes from JS strings
-        }, {
+        use: [
+          MiniCssExtractPlugin.loader, {
             loader: "css-loader" // translates CSS into CommonJS
         }, {
             loader: "less-loader" // compiles Less to CSS
@@ -40,6 +47,7 @@ module.exports = {
         use: {
           loader: 'url-loader',
           options: {
+            limit: 1024 * 200,
             name: '[name].[ext]',
             outputPath: '/dist/fonts/'
           }

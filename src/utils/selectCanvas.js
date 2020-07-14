@@ -10,6 +10,8 @@ class SelectCanvas {
     this.canvasLeft = 0;
     this.canvasHeight = 0;
     this.canvasWidth = 0;
+    this.canScrollX = 0;
+    this.canScrollY = 0;
     this.startX = 0;
     this.startY = 0;
     this.endX = 0;
@@ -66,6 +68,7 @@ class SelectCanvas {
     const startY = this.startY;
     const endX = this.endX = evt.clientX;
     const endY = this.endY = evt.clientY;
+    const toDirection = endX - startX > 0 ? 'right' : 'left'
 
     const startLeft = startX > endX ? endX : startX;
     const startTop = startY > endY ? endY : startY;
@@ -75,7 +78,8 @@ class SelectCanvas {
 
     this._emit('InnerEvents', {
       type: 'multiple:select',
-      range: [startLeft, startTop, endLeft, endTop]
+      range: [startLeft, startTop, endLeft, endTop],
+      toDirection
     });
 
     this.unActive();
@@ -101,8 +105,8 @@ class SelectCanvas {
       return;
     }
     this.clearCanvas();
-    const startX = Math.min(this.startX, this.endX) - this.canvasLeft;
-    const startY = Math.min(this.startY, this.endY) - this.canvasTop;
+    const startX = Math.min(this.startX, this.endX) - this.canvasLeft + this.canScrollX;
+    const startY = Math.min(this.startY, this.endY) - this.canvasTop + this.canScrollY;
     const width = Math.abs(this.startX - this.endX);
     const height = Math.abs(this.startY - this.endY);
 
@@ -136,6 +140,15 @@ class SelectCanvas {
       this.isActive = false;
     }
   }
+
+  _changeCanvasInfo(data) {
+    if (data.terScrollX !== undefined) {
+      this.canScrollX = data.terScrollX;
+    }
+    if (data.terScrollY !== undefined) {
+      this.canScrollY = data.terScrollY;
+    }
+  }
 }
 
-module.exports = SelectCanvas;
+export default SelectCanvas;

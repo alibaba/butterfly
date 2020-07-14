@@ -1,0 +1,78 @@
+
+.industry-base-node {
+  position: absolute;
+  border: none;
+  border-radius: 5px;
+  background: #fff;
+  padding: 21px 10px;
+  width: 144px;
+  height: 100px;
+  border: 1px solid #D9D9D9;
+  box-shadow: 0 2px 3px 0 rgba(0,112,204,0.06);
+  cursor: pointer;
+  &:hover {
+    border: 1px solid #00C1DE;
+  }
+  .logo-container{
+    cursor: move;
+    text-align: center;
+    margin-bottom: 5px;
+    height: 30px;
+    width: 100%;
+
+    .circle {
+      width: 30px;
+      height: 30px;
+      border-radius: 15px;
+      display: inline-block;
+      .iconfont {
+        color: white;
+      }
+    }
+    .purple {
+      background: #9254DE;
+    }
+    .simple-blue {
+      background: #40A9FF;
+    }
+    .deep-blue {
+      background: #597EF7;
+    }
+    .green {
+      background: #73D13D;
+    }
+  }
+  .text {
+    text-align: center;
+  }
+  .logo-toolbar {
+    position: absolute;
+    top: -35px;
+    left: 0;
+    width: 100%;
+    display: none;
+    &.show {
+      display: block;
+    }
+    .box-container {
+      display: flex;
+      justify-content: space-between;
+      .box {
+        width: 32px;
+        height: 32px;
+        display: inline-block;
+        text-align: center;
+        line-height: 32px;
+        background: #fff;
+        box-shadow: 0 2px 3px 0 rgba(0,112,204,0.06);
+        border-radius: 4px;
+        &:hover {
+          color: #40A9FF;
+        }
+      }
+    }
+  }
+  .endpoint-hover, .endpoint-active {
+    
+  }
+}

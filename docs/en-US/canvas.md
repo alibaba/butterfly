@@ -1,6 +1,6 @@
 # Canvas
 
-```
+```js
 let canvas = new Canvas({
   root: dom,               // canvas root dom (require)
   layout: 'ForceLayout'    // layout setting , integrated or custom , (optional)
@@ -17,11 +17,13 @@ let canvas = new Canvas({
       arrowPosition: 0.5,  // arrow position (0 ~ 1)
       arrowOffset: 0.0,    // arrow offset
       Class: XXClass,      // custom Class
-      isExpandWidth: false //  expand line interaction area
+      isExpandWidth: false,// expand line interaction area
+      defaultAnimate: false// turn on line animation by default
     },
     endpoint: {
-      position: []         // limit endpoint position ['Top', 'Bottom', 'Left', 'Right'],
-      linkableHighlight: true // point.linkable method is triggered when connecting, can be highlighted
+      position: [],        // limit endpoint position ['Top', 'Bottom', 'Left', 'Right'],
+      linkableHighlight: true,// point.linkable method is triggered when connecting, can be highlighted
+      limitNum: 10,        // limit the number of anchor connections
       expendArea: {        // when the anchor point is too small, the connection hot zone can be expanded.
         left: 10,
         right: 10,
@@ -29,7 +31,12 @@ let canvas = new Canvas({
         botton: 10
       }
     },
-    zoomGap: 0.001         // mouse zoom in and out gap settings
+    zoomGap: 0.001,       // mouse zoom in and out gap settings
+    autoFixCanvas: {     // auto expand canvas when drag nodes or edges near the edge of canvas.
+      enable: false,
+      autoMovePadding: [20, 20, 20, 20]
+    },
+    autoResizeRootSize: true // automatically adapt to the root size, the default is true
   },
   global: {                // custom configuration, will run through all canvas, group, node, edge, endpoint objects
     isScopeStrict: false   // whether scope is strict mode (default is false)
@@ -37,23 +44,45 @@ let canvas = new Canvas({
 });
 ```
 
-## Property
+## attribute<a name='canvas-attr'></a>：
 
 | key | describe | type | default 
 | :------ | :------ | :------ | :------ 
 | root | canvas root dom | Dom (Require) | `*this dom must set 'position:relative'`
-| <a href='#layout'>layout</a> | auto layout | string/function (optional) | null 
+| layout | auto layout | string/function (optional) | null 
 | zoomable | enable zoom canvas | boolean (optional) | false 
 | moveable | enable move canvas | boolean (optional) | false 
 | draggable | enable drag nodes | boolean (optional) | false 
 | linkable | enable connect edges | boolean (optional) | false 
 | disLinkable | enable disConnect edges | boolean (optional) | false 
 | theme | canvas theme setting | object (optional) | undefined
-| <a href="#global">global</a> | global attribute | object (optional) | undefined
+| global | global attribute | object (optional) | undefined
 
+* **isScopeStrict**，used to set the global scope strict mode
+  * The default is false. If the value is set to true, the scope must match when the scope must be identical; if the value is false, all values are matched when the scope is undefined.
+* **重力布局**，pass `'ForceLayout'`，butterfly built-in layout
+* **自定义布局**，pass in a method, which can be layout according to user needs. Note:`In addition, remember to overwrite the Edge calcPath method, otherwise it will be replaced by butterfly's built-in calculation edge  method, and the resulting edge cannot be realized.`
+* **autoFixCanvas**, auto expand canvas when drag nodes or edges near the margin of canvas, set autoMovePadding to adjust the area of hotspots. See: ![autoFixCanvas](https://img.alicdn.com/tfs/TB16lUNBG61gK0jSZFlXXXDKFXa-1665-801.gif)
 
-### API：
 ```
+let canvas = new Canvas({
+  layout: (opts) => {
+    // canvas width and height
+    let width = opts.width;
+    let height = opts. height;
+    // nodes, groups, and edges data to be rendered
+    let data = opts.data;
+    // assign the left and top values of nodes and groups
+    ......
+  }
+})
+```
+
+## API：
+
+### <a name='canvas-other'>Canvas API</a>：
+
+```js
 /**
   * draw function
   * @param {data} data  - include groups, nodes, edges
@@ -62,18 +91,40 @@ let canvas = new Canvas({
 draw = (data, calllback) => {}
 
 /**
-  * add group function
-  * @param {object|Group} object  - group data or Group instance
+  * Re-rendering method, it will delete all previous elements and re-render
+  * @param {data} data  - include groups, nodes, edges
+  * @param {function} callback  - `*the rendering process is an asynchronous process, please pay attention to the callback.`
   */
-addGroup = (object|Group) => {}
+redraw = (data, calllback) => {}
 
 /**
-  * get node by id
-  * @param {string} id  - node id
-  * @return {Node} - Node Object
+  * get all data from canvas
+  * @return {data} - canvas data
   */
-getNode = (string) => {}
+getDataMap = () => {}
 
+/**
+  * Set whether all nodes of the canvas can linkable
+  * @param {true|false} boolean  - whether to support all nodes can link
+  */
+setLinkable = (boolean) => {}
+
+/**
+  * Set whether all nodes of the canvas can dislinkable
+  * @param {true|false} boolean  - whether to support all nodes can dislink
+  */
+setDisLinkable = (boolean) => {}
+
+/**
+  * Set whether all nodes of the canvas are draggable
+  * @param {true|false} boolean  - whether to support all nodes can drag
+  */
+setDraggable = (boolean) => {}
+```
+
+### <a name='canvas-api-crud'>query,add,delete node，edge，group</a>：
+
+```js
 /**
   * get group by id
   * @param {string} id  - group id
@@ -82,11 +133,27 @@ getNode = (string) => {}
 getGroup = (string) => {}
 
 /**
-  * get neighbor edges by node id 
-  * @param {string} id  - node id
-  * @return {Edges} - neighbor Edges Object
+  * add group function
+  * @param {object|Group} object  - group data or Group instance
+  * @param {array[object|Node]} object  - (Optional) Node information. If there is a value, the node is automatically added to the node group. Allow adding existing nodes in the canvas.
+  * @param {object} options - 参数
+  * @param {string} options.posType - 'absolute or relative' , Identifies whether the coordinates of the node are absolute relative to the canvas or relative to the node group
+  * @param {number} options.padding - add group padding
   */
-getNeighborEdges = (string) => {}
+addGroup = (object|Group, nodes, options) => {}
+
+/**
+  * delete group by id
+  * @param {string} id  - node id
+  * @return {Group} - Group Obejct
+  */
+removeGroup = (string) => {}
+/**
+  * get node by id
+  * @param {string} id  - node id
+  * @return {Node} - Node Object
+  */
+getNode = (string) => {}
 
 /**
   * add node function
@@ -95,10 +162,10 @@ getNeighborEdges = (string) => {}
 addNode = (object|Node) => {}
 
 /**
-  * add edge function
-  * @param {object|Edge} object  - edge data or Edge instance
+  * add multiple nodes
+  * @param {array<object|Node>}  - node data or Node instance
   */
-addEdge = (object|Edge) => {}
+addNodes = (array<object|Node>) => {}
 
 /**
   * delete node by id
@@ -113,11 +180,16 @@ removeNode = (string) => {}
 removeNodes = (array) => {}
 
 /**
-  * delete group by id
-  * @param {string} id  - node id
-  * @return {Group} - Group Obejct
+  * add edge function
+  * @param {object|Edge} object  - edge data or Edge instance
   */
-removeGroup = (string) => {}
+addEdge = (object|Edge) => {}
+
+/**
+  * add multiple edges
+  * @param {array<object|Edge>}   - edge data or Edge instance
+  */
+addEdges = (array<object|Edge>) => {}
 
 /**
   * delete Edge by id or Edge Object
@@ -134,8 +206,32 @@ removeEdge = (param) => {}
 removeEdges = (param) => {}
 
 /**
+  * get neighbor edges by node id 
+  * @param {string} id  - node id
+  * @return {Edges} - neighbor Edges Object
+  */
+getNeighborEdges = (string) => {}
+
+/**
+  * find N-level association nodes and edges
+  * @param {Object} options - parameters
+  * @param {Node} options.node - starting node
+  * @param {Endpoint} options.endpoint - starting endpoint, optional
+  * @param {String} options.type - find direction , optional value all\in\out，default value all , optional
+  * @param {Number} options.level - level，starting level is 0 level , default value Infinity
+  * @param {Function} options.iteratee - whether to continue traversing the decision function, return boolean value
+  * @returns {Object<nodes: Node, edges: Edge>} filteredGraph - lookup result
+  */
+getNeighborNodesAndEdgesByLevel = (options) => {}
+```
+
+### <a name='canvas-api-zoom-move'>缩放，平移</a>：
+
+```js
+/**
   * set canvas zoomable
   * @param {true|false} boolean 
+  * @param {true|false} boolean  - the direction of zoom。Now it defaults to the two finger direction of MAC, but it is opposite to the mouse wheel direction of Window. Default value: false. If true, the direction is opposite
   */
 setZoomable = (boolean) => {}
 
@@ -145,6 +241,47 @@ setZoomable = (boolean) => {}
   */
 setMoveable = (boolean) => {}
 
+/**
+  * set canvas offset
+  * @param {[x, y]} array
+  */
+move = (postion) => {}
+
+/**
+  * set canvas zoom
+  * @param {scale} float  - zoom value between 0-1
+  * @param {function} callback  - zoom callback
+  */
+zoom = (postion) => {}
+
+/**
+  * get canvas zoom value
+  * @return {float} - zoom value (0-1)
+  */
+getZoom = () => {}
+
+/**
+  * get canvas offset value
+  * @return {[x, y]} - offset value
+  */
+getOffset = () => {}
+
+/**
+  * get canvas origin reference point
+  * @return {[x, y]} - canvas origin reference point (percentage)
+  */
+getOrigin = () => {}
+
+/**
+  * set canvas origin reference point
+  * @param {[x, y]} array  - canvas origin reference point (percentage)
+  */
+setOrigin = ([x ,y]) => {}
+```
+
+### <a name='canvas-api-focus'>fit canvas and focus part nodes</a>：
+
+```js
 /**
   * focus on some node/ group
   * @param {string/function} nodeId/groupId or filter  - node/group id or filter
@@ -169,56 +306,74 @@ focusNodesWithAnimate = (objs, type, options, callback) => {}
   * @param {function} callback  - Focused callback
   */
 focusCenterWithAnimate = (options, callback) => {}
+```
 
+### <a name='canvas-api-redo-undo'>redo & undo</a>：
+
+```js
+/**
+  * redo action
+  */
+redo = (options) => {}
+
+/**
+  * rollback action
+  */
+undo = (options) => {}
+
+/**
+  * add the topmost element to the action queue
+  * @param {Object} options - params
+  * @param {String} options.type - element type
+  * @param {Object} options.data - element data
+  */
+pushActionQueue = (options) => {}
+
+/**
+  * remove topmost element from action queue
+  */
+popActionQueue = (options) => {}
+
+/**
+  * clear action queue
+  */
+clearActionQueue = (options) => {}
+```
+
+### <a name='canvas-api-coordinate'>coordinate conversion and offset</a>：
+``` js
+/**
+  * convert the coordinates from screen to canvas
+  * @param {array[number]} coordinates - origin coordinates([x,y])
+  * @return {number} - converted coordinates
+  */
+terminal2canvas = (coordinates) => {}
+
+/**
+  * convert the coordinates from canvas to screen
+  * @param {array[number]} coordinates - origin coordinates([x,y])
+  * @return {number} - converted coordinates
+  */
+canvas2terminal = (coordinates) => {}
+```
+
+* **canvas2terminal**，convert the coordinates from canvas to screen
+  * As shown in the figure, the canvas is scaled, and the coordinates after the movement do not match the coordinates of the original canvas. This method is needed to convert. Special Note: Users who drag and drop nodes pay attention to these two `e.clientX` and `e.clientY`, and need to call this method to convert.
+<img width="400" src="http://img.alicdn.com/tfs/TB1lWIAFHvpK1RjSZPiXXbmwXXa-973-850.jpg">
+
+* **terminal2canvas**，convert the coordinates from screen to canvas
+  * `canvas2terminal` in contrast
+
+### <a name='canvas-api-selected'>mutiply selection</a>：
+
+```js
 /**
   * set select mode
-  * @param {true|false} boolean
-  * @param {array} type - accept select type(node/endpoint/edge, default node)
+  * @param {true|false} boolean enable multiple select
+  * @param {array} contents - accept select contents(node/endpoint/edge, default node)
+  * @param {string} selecMode - accept selec mode(include|touch|senior),default 'include',include:You can select only if the element all included; touch: You can select only if you touch the element; senior: needs to include all from left to right,select only touch from right to left)
   */
-setSelectMode = (boolean, type) => {}
-
-/**
-  * get canvas zoom value
-  * @return {float} - zoom value (0-1)
-  */
-getZoom = () => {}
-
-/**
-  * get canvas offset value
-  * @return {[x, y]} - offset value
-  */
-getOffset = () => {}
-
-/**
-  * get canvas origin reference point
-  * @return {[x, y]} - canvas origin reference point (percentage)
-  */
-getOrigin = () => {}
-
-/**
-  * get all data from canvas
-  * @return {data} - canvas data
-  */
-getDataMap = () => {}
-
-/**
-  * set canvas origin reference point
-  * @param {[x, y]} array  - canvas origin reference point (percentage)
-  */
-setOrigin = ([x ,y]) => {}
-
-/**
-  * set canvas offset
-  * @param {[x, y]} array
-  */
-move = (postion) => {}
-
-/**
-  * set canvas zoom
-  * @param {scale} float  - zoom value between 0-1
-  * @param {function} callback  - zoom callback
-  */
-zoom = (postion) => {}
+setSelectMode = (boolean, contents, selecMode) => {}
 
 /**
   * get union by name
@@ -248,7 +403,51 @@ removeUnion = (name) => {}
   * remove all union
   */
 removeAllUnion = () => {}
+```
 
+* **add2Union**
+  * `name`，union name。add union if it does not exist , add union item if it exists.
+  * `object`，union item
+
+```js
+this.canvas.add2Union('my union name', {
+  nodes: []     // Node object or nodeId
+  groups: []    // Group object or groupId
+  edges: []     // Edge object or edgeId
+  endpoints: [] // Endpoint object
+});
+```
+
+### <a name='canvas-api-events'>events</a>：
+
+```js
+let canvas = new Canvas({...});
+canvas.on('type', (data) => {
+  //data 
+});
+```
+
+| key | describe | return 
+| :------ | :------ | :------
+| system.canvas.click | click on the blank space of the canvas event | -
+| system.canvas.zoom | canvas zoom event | -
+| system.nodes.delete | delete node event | -
+| system.node.move | move node event | -
+| system.nodes.add | add multiple nodes event | -
+| system.links.delete | delete edge event | -
+| system.link.connect | connect edge event | -
+| system.link.reconnect | edge reconnect event | -
+| system.link.click | click edge event | -
+| system.group.delete | delete group event | -
+| system.group.move | move group event | -
+| system.group.addMembers | add node to group event | -
+| system.group.removeMembers | delete node from group event | -
+| system.multiple.select | multiple select callback event | -
+| system.drag.start | drag start event | -
+| system.drag.move | drag move event | -
+| system.drag.end | drag end event | -
+
+```js
 /**
   * emit events
   */
@@ -258,7 +457,11 @@ emit = (string, obj) => {}
   * accept events
   */
 on = (string, callback) => {}
+```
 
+### <a name='canvas-api-other'>other api</a>：
+
+```js
 /**
   * set the grid layout
   * @param {true|false} boolean  - whether to open
@@ -283,22 +486,8 @@ setGuideLine = (show, options) => {}
   * set minimap
   * @param {true|false} boolean  - whether to open
   * @param {Object} please  refer to the minimap section for details
-  /
+  */
 setMinimap = (show, options) => {}
-
-/**
-  * convert the coordinates from screen to canvas
-  * @param {array[number]} coordinates - origin coordinates([x,y])
-  * @return {number} - converted coordinates
-  */
-terminal2canvas = (coordinates) => {}
-
-/**
-  * convert the coordinates from canvas to screen
-  * @param {array[number]} coordinates - origin coordinates([x,y])
-  * @return {number} - converted coordinates
-  */
-canvas2terminal = (coordinates) => {}
 
 /**
   * save canvas to iamge
@@ -315,85 +504,13 @@ save2img = (options) => {}
   * need to update location when root canvas moves or size changes
   */
 updateRootResize = () => {}
-
-/**
-  * find N-level association nodes and edges
-  * @param {Object} options - parameters
-  * @param {Node} options.node - starting node
-  * @param {Endpoint} options.endpoint - starting endpoint, optional
-  * @param {String} options.type - find direction , optional value all\in\out，default value all , optional
-  * @param {Number} options.level - level，starting level is 0 level , default value Infinity
-  * @param {Function} options.iteratee - whether to continue traversing the decision function, return boolean value
-  * @returns {Object<nodes: Node, edges: Edge>} filteredGraph - lookup result
-  */
-getNeighborNodesAndEdgesByLevel = (options) => {}
-
 ```
-
-
-## Event
-
-```
-let canvas = new Canvas({...});
-canvas.on('type', (data) => {
-  //data 
-});
-```
-
-| key | describe | return 
-| :------ | :------ | :------
-| system.canvas.click | click on the blank space of the canvas event | -
-| system.canvas.zoom | canvas zoom event | -
-| system.node.delete | delete node event | -
-| system.node.move | move node event | -
-| system.nodes.add | add multiple nodes event | -
-| system.link.delete | delete edge event | -
-| system.link.connect | connect edge event | -
-| system.link.reconnect | edge reconnect event | -
-| system.link.click | click edge event | -
-| system.group.delete | delete group event | -
-| system.group.move | move group event | -
-| system.group.addMembers | add node to group event | -
-| system.group.removeMembers | delete node from group event | -
-| system.multiple.select | multiple select callback event | -
-| system.drag.start | drag start event | -
-| system.drag.move | drag move event | -
-| system.drag.end | drag end event | -
-
-
-## Detail
-
-### Property description
-
-#### <a name='global'>global</a>
-* **isScopeStrict**，used to set the global scope strict mode
-  * The default is false. If the value is set to true, the scope must match when the scope must be identical; if the value is false, all values are matched when the scope is undefined.
-
-#### <a name='layout'>layout</a>
-* **重力布局**，pass `'ForceLayout'`，butterfly built-in layout
-* **自定义布局**，pass in a method, which can be layout according to user needs. Note:`In addition, remember to overwrite the Edge calcPath method, otherwise it will be replaced by butterfly's built-in calculation edge  method, and the resulting edge cannot be realized.`
-
-```
-let canvas = new Canvas({
-  layout: (opts) => {
-    // canvas width and height
-    let width = opts.width;
-    let height = opts. height;
-    // nodes, groups, and edges data to be rendered
-    let data = opts.data;
-    // assign the left and top values of nodes and groups
-    ......
-  }
-})
-```
-
-### Function description
 
 * **setGirdMode**, Set the grid layout
   * `show`，whether to open
   * `options`，set the parameters of the grid layout ,  please look at the following comment
 
-```
+```js
 this.canvas.setGirdMode(true, {
   isAdsorb: false,         // Whether to automatically adsorb, default value is false
   theme: {
@@ -413,7 +530,7 @@ this.canvas.setGirdMode(true, {
   * `show`, whether to open
   * `options`, the parameters of the guide line, please lookup the following comment
 
-```
+```js
 this.canvas.setGuideLine(true, {
   limit: 1,             // limit guide line number
   theme: {
@@ -422,26 +539,6 @@ this.canvas.setGuideLine(true, {
   }
 });
 ```
-
-* **add2Union**
-  * `name`，union name。add union if it does not exist , add union item if it exists.
-  * `object`，union item
-
-```
-this.canvas.add2Union('my union name', {
-  nodes: []     // Node object or nodeId
-  groups: []    // Group object or groupId
-  edges: []     // Edge object or edgeId
-  endpoints: [] // Endpoint object
-});
-```
-
-* **canvas2terminal**，convert the coordinates from canvas to screen
-  * As shown in the figure, the canvas is scaled, and the coordinates after the movement do not match the coordinates of the original canvas. This method is needed to convert. Special Note: Users who drag and drop nodes pay attention to these two `e.clientX` and `e.clientY`, and need to call this method to convert.
-<img width="400" src="http://img.alicdn.com/tfs/TB1lWIAFHvpK1RjSZPiXXbmwXXa-973-850.jpg">
-
-* **terminal2canvas**，convert the coordinates from screen to canvas
-  * `canvas2terminal` in contrast
  
 * **save2img**，save canvas to image
   * `options`，parameter
@@ -450,7 +547,7 @@ this.canvas.add2Union('my union name', {
   * `options.width`，image width
   * `options.height`，image height
 
-```
+```js
 this.canvas.save2img({type: 'png', width: 1920, height: 1080, quality: 1})
   .then(dataUrl => {
     var link = document.createElement('a');

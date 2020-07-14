@@ -1,8 +1,8 @@
 'use strict';
 
-const EventEmit = require('event-emitter');
+const EventEmit3 = require('eventemitter3');
 
-class Canvas {
+class Canvas extends EventEmit3 {
   constructor() {
     // root             根节点
     // layout           布局支持
@@ -13,7 +13,7 @@ class Canvas {
     // disLinkable      是否可取消连线
     // theme            主题配置
     // global           公共配置
-
+    super();
   }
 
   // 渲染节点
@@ -147,6 +147,5 @@ class Canvas {
   
 }
 
-EventEmit(Canvas.prototype);
 
-module.exports = Canvas;
+export default Canvas;

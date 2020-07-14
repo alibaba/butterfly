@@ -19,7 +19,7 @@ canvas.draw({
 })
 ```
 
-## Property
+## attribute<a name='node-attr'></a>：
 
 | key | describe | type | default 
 | :------ | :------ | :------ | :------ 
@@ -34,8 +34,11 @@ canvas.draw({
 
 `* The returned dom of the node must be set to position: absolute;`
 
-## API
-```
+## API：
+
+### <a name='node-custom'>custom node</a>：
+
+```js
 /**
   * node draw function
   * @param {obj} data - node data
@@ -59,6 +62,21 @@ updated = () => {}
 remove = () => {}
 
 /**
+  * @return {number} - node width
+  */
+getWidth = () => {}
+
+/**
+  * @return {number} - node height
+  */
+getHeight = () => {}
+
+/**
+  * @param {boolean} draggable - set whether the node is draggable
+  */
+setDraggable = (boolean) => {}
+
+/**
   * focus callback
   */
 focus = () => {}
@@ -67,9 +85,18 @@ focus = () => {}
   * unfocus callback
   */
 unFocus = () => {}
+```
 
+### <a name='node-endpoint'>custom endpoint</a>：
+
+```js
 /**
   * @param {obj} data - endpoint data (this method must be executed after the node is mounted)
+  * @param {string} param.id - endpoint id
+  * @param {string} param.orientation - endpoint direction (it can control the direction of the edge linkin or linkout)
+  * @param {string} param.scope - scope
+  * @param {string} param.type - 'source' / 'target' / undefined，ednpoint is both source and target when undefined
+  * @param {string} param.dom - any sub DOM in the node can be used as a custom endpoint
   */
 addEndpoint = (obj) => {}
 
@@ -85,28 +112,21 @@ removeEndpoint = (obj) => {}
   * @return {Endpoint} - Endpoint object
   */
 getEndpoint = (id, type) => {}
+```
 
+### <a name='node-move'>move</a>：
+
+```js
 /**
   * @param {number} x - move to x coordinate
   * @param {number} y - move to y coordinate
   */
 moveTo = (obj) => {}
+```
 
-/**
-  * @param {boolean} draggable - set whether the node is draggable
-  */
-setDraggable = (boolean) => {}
+### <a name='node-event'>event</a>：
 
-/**
-  * @return {number} - node width
-  */
-getWidth = () => {}
-
-/**
-  * @return {number} - node height
-  */
-getHeight = () => {}
-
+```js
 /**
   * emit events
   */

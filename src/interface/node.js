@@ -1,6 +1,8 @@
 'use strict';
 
-class Node {
+const EventEmit3 = require('eventemitter3');
+
+class Node extends EventEmit3 {
   constructor() {
     // id        节点唯一标志
     // top       坐标y
@@ -19,6 +21,7 @@ class Node {
     // endpoints       endpoint对象
     // _endpointsData  真实的endpoint数据
     // _isMoving       标识是否在移动做，兼容冒泡
+    super();
   }
 
   // 渲染节点
@@ -75,4 +78,4 @@ class Node {
 
 }
 
-module.exports = Node;
+export default Node;

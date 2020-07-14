@@ -2,12 +2,16 @@
 
 const _ = require('lodash');
 const $ = require('jquery');
-const DrawUtil = require('../utils/link');
-const ArrowUtil = require('../utils/arrow');
-require('./baseEdge.less');
+import DrawUtil from '../utils/link';
+import ArrowUtil from '../utils/arrow';
+import LinkAnimateUtil from '../utils/link_animate'
 
-class Edge {
+import './baseEdge.less';
+
+import Edge from '../interface/edge';
+class BaseEdge extends Edge {
   constructor(opts) {
+    super(opts);
     this.id = _.get(opts, 'id');
     this.targetNode = _.get(opts, 'targetNode');
     this._targetType = _.get(opts, '_targetType');
@@ -15,7 +19,7 @@ class Edge {
     this.sourceNode = _.get(opts, 'sourceNode');
     this._sourceType = _.get(opts, '_sourceType');
     this.sourceEndpoint = _.get(opts, 'sourceEndpoint');
-    this.type = _.get(opts, 'type');
+    this.type = _.get(opts, 'type') || 'endpoint';
     this.orientationLimit = _.get(opts, 'orientationLimit');
     this.shapeType = _.get(opts, 'shapeType');
     this.label = _.get(opts, 'label');
@@ -23,10 +27,14 @@ class Edge {
     this.arrowPosition = _.get(opts, 'arrowPosition', 0.5);
     this.arrowOffset = _.get(opts, 'arrowOffset', 0),
     this.isExpandWidth = _.get(opts, 'isExpandWidth', false);
+    this.defaultAnimate = _.get(opts, 'defaultAnimate', false);
     this.dom = null;
     this.labelDom = null;
     this.arrowDom = null;
     this.eventHandlerDom = null;
+    // 鸭子辨识手动判断类型
+    this.__type = 'edge';
+    this._path = null;
     // 业务和库内addEdges写法上有区别，需要兼容
     this.options = _.get(opts, 'options') || opts;
     this._isDeletingEdge = opts._isDeletingEdge;
@@ -36,6 +44,9 @@ class Edge {
     // 性能优化
     this._labelWidth = 0;
     this._labelHeight = 0;
+    // 函数节流
+    this._updateTimer = null;
+    this._UPDATE_INTERVAL = 20;
   }
   _init() {
     if (this._isInited) {
@@ -49,6 +60,9 @@ class Edge {
     });
     this.labelDom = this.drawLabel(this.label);
     this.arrowDom = this.drawArrow(this.arrow);
+    if(this.defaultAnimate) {
+      this.addAnimate();
+    }
 
     this._addEventListener();
   }
@@ -81,8 +95,8 @@ class Edge {
         pos: [
           // this.type === 'endpoint' ? this.targetEndpoint._posLeft + this.targetEndpoint._width / 2 : this.targetNode.left + this.targetNode.dom.offsetWidth / 2,
           // this.type === 'endpoint' ? this.targetEndpoint._posTop + this.targetEndpoint._height / 2 : this.targetNode.top + this.targetNode.dom.offsetHeight / 2
-          this.type === 'endpoint' ? this.targetEndpoint._posLeft + this.targetEndpoint._width / 2 : this.targetNode.left + $(this.sourceNode.dom).width() / 2,
-          this.type === 'endpoint' ? this.targetEndpoint._posTop + this.targetEndpoint._height / 2 : this.targetNode.top + $(this.sourceNode.dom).height() / 2
+          this.type === 'endpoint' ? this.targetEndpoint._posLeft + this.targetEndpoint._width / 2 : this.targetNode.left + $(this.targetNode.dom).width() / 2,
+          this.type === 'endpoint' ? this.targetEndpoint._posTop + this.targetEndpoint._height / 2 : this.targetNode.top + $(this.targetNode.dom).height() / 2
         ],
         orientation: (this.type === 'endpoint' && this.targetEndpoint.orientation) ? this.targetEndpoint.orientation : undefined
       };
@@ -101,6 +115,7 @@ class Edge {
     } else if (this.shapeType === 'AdvancedBezier') {
       path = DrawUtil.drawAdvancedBezier(sourcePoint, targetPoint);
     }
+    this._path = path;
     return path;
   }
   redrawLabel() {
@@ -130,6 +145,9 @@ class Edge {
   }
   redrawArrow(path) {
     const length = this.dom.getTotalLength();
+    if(!length) {
+      return;
+    }
     this.arrowFinalPosition = (length * this.arrowPosition + this.arrowOffset) / length;
     if (this.arrowFinalPosition > 1) {
       this.arrowFinalPosition = 1;
@@ -171,21 +189,57 @@ class Edge {
   redraw(sourcePoint, targetPoint, options) {
     // 重新计算线条path
     let path = this._calcPath(sourcePoint, targetPoint);
+
     this.dom.setAttribute('d', path);
     if (this.isExpandWidth) {
       this.eventHandlerDom.setAttribute('d', path);
       $(this.eventHandlerDom).insertAfter(this.dom);
     }
-    // 重新计算label
-    if (this.labelDom) {
-      this.redrawLabel();
-    }
-    // 重新计算arrow
-    if (this.arrowDom) {
-      this.redrawArrow(path);
+    // 函数节流
+    if (!this._updateTimer) {
+      this._updateTimer = setTimeout(() => {
+        // 重新计算label
+        if (this.labelDom) {
+          this.redrawLabel();
+        }
+        // 重新计算arrow
+        if (this.arrowDom) {
+          this.redrawArrow(path);
+        }
+        // 重新计算动画path
+        if (this.animateDom) {
+          this.redrawAnimate(path);
+        }
+        this._updateTimer = null;
+      }, this._UPDATE_INTERVAL);
     }
 
     this.updated && this.updated();
+  }
+  isConnect() {
+    return true;
+  }
+  addAnimate(options) {
+    this.animateDom = LinkAnimateUtil.addAnimate(this.dom, this._path, _.assign({},{
+      num: 1, // 现在只支持1个点点
+      radius: 3,
+      color: '#776ef3'
+    }, options), this.animateDom);
+  }
+  redrawAnimate(path) {
+    LinkAnimateUtil.addAnimate(this.dom, this._path, {
+      _isContinue: true
+    }, this.animateDom);
+  }
+  emit(type, data) {
+    super.emit(type, data);
+    this._emit(type, data);
+  }
+  remove() {
+    this.emit('InnerEvents', {
+      type: 'edge:delete',
+      data: this
+    });
   }
   destroy(isNotEventEmit) {
     if (this.labelDom) {
@@ -197,30 +251,27 @@ class Edge {
     if (this.eventHandlerDom) {
       $(this.eventHandlerDom).remove();
     }
+    if (this.animateDom) {
+      $(this.animateDom).remove();
+    }
     $(this.dom).remove();
     if (this.id && !isNotEventEmit) {
-      this._emit('system.link.delete', {
-        link: this
-      });
-      this._emit('events', {
-        type: 'link:delete',
-        link: this
-      });
+      this.removeAllListeners();
     }
   }
   _addEventListener() {
     $(this.dom).on('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      this._emit('system.link.click', {
+      this.emit('system.link.click', {
         edge: this
       });
-      this._emit('events', {
+      this.emit('events', {
         type: 'link:click',
         edge: this
       });
 
-      this._emit('InnerEvents', {
+      this.emit('InnerEvents', {
         type: 'link:click',
         data: this
       });
@@ -241,4 +292,4 @@ class Edge {
   }
 }
 
-module.exports = Edge;
+export default BaseEdge;

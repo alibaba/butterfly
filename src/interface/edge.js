@@ -1,6 +1,8 @@
 'use strict';
 
-class Edge {
+const EventEmit3 = require('eventemitter3');
+
+class Edge extends EventEmit3 {
   constructor() {
     // id                 节点唯一标志
     // targetNode         目标节点
@@ -33,6 +35,7 @@ class Edge {
     // _endpointsData  真实的endpoint数据
 
     // 需要悬空
+    super();
   }
 
   // 渲染节点
@@ -78,4 +81,4 @@ class Edge {
 
 }
 
-module.exports = Edge;
+export default Edge;
