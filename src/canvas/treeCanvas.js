@@ -216,11 +216,16 @@ class TreeCanvas extends Canvas {
       edges: [],
       groups: []
     });
-
     this.nodes.forEach((item) => {
       if (item.subCollapsed) {
         return;
       }
+      item.endpoints.forEach(endpoint => {
+        this.emit('InnerEvents', {
+          type: 'node:addEndpoint',
+          data: endpoint
+        });
+      })
       let obj = tmpTreeObj[item.id];
       if (item.top !== obj.top || item.left !== obj.left) {
         item.options.top = obj.top;
