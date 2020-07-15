@@ -1,8 +1,10 @@
 'use strict';
-
+import React from 'react'
+import ReactDom from 'react-dom';
 const Node = require('../../../index.js').TreeNode;
 const $ = require('jquery');
 require('./node.less');
+import Custom from './custom'
 
 class BaseNode extends Node {
   constructor(opts) {
@@ -10,23 +12,37 @@ class BaseNode extends Node {
     this.addIcon = null;
     this.expandBtn = null;
   }
-  draw = (opts) => {
+  draw(opts) {
     let container = $('<div class="rule-node"></div>')
                     .css('top', opts.top + 'px')
                     .css('left', opts.left+ 'px')
                     .attr('id', opts.id);
-    
-    let contentDom = $(`<span class="text ${opts.options.color}">${opts.options.text}</span>`);
-    this.addIcon = $(`<i class="iconfont" title="添加节点">&#xe6a1;</i>`);
-    this.expandBtn = $(`<i class="iconfont" title="展开">&#xe786;</i>`);
-
-    container.append(contentDom);
-    container.append(this.addIcon);
-    container.append(this.expandBtn);
 
     this._attachEvent();
-
+    // ReactDom.render(<Custom key={opts.id} node={opts.options} />, container[0]);
     return container[0];
+  }
+  _addEventListener() {
+    // todo 做事件代理的形式
+    $(this.dom).on('mousedown', (e) => {
+      const LEFT_KEY = 0;
+      if (e.button !== LEFT_KEY) {
+        return;
+      }
+      if (this.draggable) {
+        this._isMoving = true;
+        this.emit('InnerEvents', {
+          type: 'node:dragBegin',
+          data: this
+        });
+      } else {
+        // 单纯为了抛错事件给canvas，为了让canvas的dragtype不为空，不会触发canvas:click事件
+        this.emit('InnerEvents', {
+          type: 'node:mouseDown',
+          data: this
+        });
+      }
+    });
   }
   _attachEvent() {
     $(this.expandBtn).on('click', (e) => {

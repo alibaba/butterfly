@@ -1,8 +1,11 @@
 'use strict';
 import React, {Component} from 'react';
+import ReactDom from 'react-dom';
+import Custom from './custom';
+
 require('./index.less');
 const Node = require('./node.js');
-
+let $ = require('jquery');
 const Canvas = require('../../../index.js').TreeCanvas;
 const mockData = {
   nodes: {
@@ -10,6 +13,7 @@ const mockData = {
     isRoot: true,
     text: '半年内企业经营异常记录数',
     color: 'green',
+    width: parseInt((Math.random() * 500)),
     Class: Node,
     endpoints: [{
       id: 'left',
@@ -22,8 +26,10 @@ const mockData = {
     }],
     children: [{
       id: '1',
+      parentId: '0',
       color: 'red',
       text: '小于或等于 5',
+      width: parseInt((Math.random() * 500)),
       Class: Node,
       endpoints: [{
         id: 'left',
@@ -38,6 +44,7 @@ const mockData = {
         id: '3',
         color: 'green',
         text: '企业是否吊销',
+        width: parseInt((Math.random() * 500)),
         Class: Node,
         endpoints: [{
           id: 'left',
@@ -52,6 +59,7 @@ const mockData = {
           id: '4',
           color: 'red',
           text: '等于 是',
+          width: parseInt((Math.random() * 500)),
           Class: Node,
           endpoints: [{
             id: 'left',
@@ -66,6 +74,7 @@ const mockData = {
             id: '6',
             color: 'blue',
             text: '赋值 xxx',
+            width: parseInt((Math.random() * 500)),
             Class: Node,
             endpoints: [{
               id: 'left',
@@ -81,6 +90,7 @@ const mockData = {
           id: '5',
           color: 'red',
           text: '等于 否',
+          width: parseInt((Math.random() * 500)),
           Class: Node,
           endpoints: [{
             id: 'left',
@@ -95,6 +105,7 @@ const mockData = {
             id: '7',
             color: 'blue',
             text: '赋值 xxx',
+            width: parseInt((Math.random() * 500)),
             Class: Node,
             endpoints: [{
               id: 'left',
@@ -110,8 +121,10 @@ const mockData = {
       }]
     }, {
       id: '2',
+      parentId: '0',
       color: 'red',
       text: '大于 5',
+      width: parseInt((Math.random() * 500)),
       Class: Node,
       endpoints: [{
         id: 'left',
@@ -126,6 +139,7 @@ const mockData = {
         id: '8',
         color: 'blue',
         text: '赋值 xxx',
+        width: parseInt((Math.random() * 500)),
         Class: Node,
         endpoints: [{
           id: 'left',
@@ -197,20 +211,37 @@ const mockData = {
     type: 'endpoint'
   }]
 };
-
+const nodesRender = (nodes) => (cb) => {
+  const nodelist = [];
+  const loop = (list) => {
+    list.forEach(node => {
+      nodelist.push(node);
+      if(node?.children?.length > 0) {
+        loop(node.children);
+      }
+    })
+  };
+  if(cb && typeof cb === 'function') {
+    loop(nodes && [nodes] || []); 
+    return nodelist.map(cb);
+  }
+}
 class compactBoxTree extends Component {
   constructor() {
     super();
   }
+  state = {
+    data: {},
+  }
   componentDidMount() {
-
     let root = document.getElementById('dag-canvas');
+    let that = this;
     this.canvas = new Canvas({
       root: root,
       disLinkable: true, // 可删除连线
       linkable: true,    // 可连线
-      draggable: true,   // 可拖动
-      zoomable: true,    // 可放大
+      draggable: false,   // 可拖动
+      zoomable: false,    // 可放大
       moveable: true,    // 可平移
       theme: {
         edge: {
@@ -226,19 +257,32 @@ class compactBoxTree extends Component {
             return 60;
           },
           getWidth(d) {
-            return 180;
+            // console.log(d);
+            // console.log(this);
+            let node = that.canvas.getNode(d.id);
+            if (node) {
+              return $(node.dom).width();
+            } else {
+              return 100;
+            }
+            // return 180;
           },
           getHGap(d) {
-            return 80;
+            return 60;
           },
           getVGap(d) {
-            return 80;
+            return 20;
           },
         }
       }
     });
     this.canvas.draw(mockData, {}, () => {
-      this.canvas.focusCenterWithAnimate();
+      this.setState({
+        data: mockData
+      }, () => {
+        this.canvas.focusCenterWithAnimate();
+        this.canvas.redraw();
+      })
     });
     let _tmpNum = 100;
     this.canvas.on('events', (data) => {
@@ -274,6 +318,20 @@ class compactBoxTree extends Component {
   render() {
     return (
       <div className='ruleTree-page'>
+        {
+          nodesRender(this.state.data.nodes)(
+            node => {
+              const div = document.getElementById(node.id);
+              if (!div) {
+                return null;
+              }
+              return ReactDom.createPortal(
+                <Custom key={node.id} node={node} />,
+                div
+              );
+            }
+          )
+        }
         <div className="ruleTree-canvas" id="dag-canvas">
         </div>
       </div>
