@@ -46,6 +46,18 @@ class TreeCanvas extends Canvas {
       }
     });
   }
+  findSubTree(item) {
+    let queue = [item];
+    let result = [];
+    while (queue.length > 0) {
+      let _item = queue.pop();
+      result.push(_item);
+      if (_item.children?.length > 0) {
+        queue = queue.concat(_item.children);
+      }
+    }
+    return result;
+  }
   collapseNode (nodeId) {
     let collapseNodes = [];
     let collapseEdges = [];
@@ -245,17 +257,28 @@ class TreeCanvas extends Canvas {
     });
     return nodes;
   }
-  removeNodes(nodes, isNotDelEdge, isNotEventEmit) {
-    // let nodes = super.addNodes(data, isNotEventEmit);
-    // nodes.forEach((item) => {
-    //   if(item.parent) {
-    //     let parentNode = this.getNode(item.parent);
-    //     if (!_.some(parentNode.children, ['id', item.id])) {
-    //       parentNode.children.push(item);
-    //     }
-    //   }
-    // });
-    // return nodes;
+  removeNodes(data, isNotDelEdge, isNotEventEmit) {
+
+    let nodes = data.map((item) => {
+      if (item instanceof Node) {
+        return item;
+      } else {
+        return this.getNode(item);
+      }
+    });
+
+    let rmNodes = [];
+
+    nodes.forEach((item) => {
+      let _subTree = this.findSubTree(item);
+      rmNodes = rmNodes.concat(_subTree);
+    });
+
+    rmNodes = _.unionBy(rmNodes, 'id');
+
+    let result = super.removeNodes(rmNodes, isNotDelEdge, isNotEventEmit);
+
+    return result;
   }
   getRootNode() {
     return this.nodes.filter((item) => {
