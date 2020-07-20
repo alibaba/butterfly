@@ -243,6 +243,9 @@ class TreeCanvas extends Canvas {
         item.moveTo(obj.left, obj.top);
       }
     });
+    this.edges.forEach((item) => {
+      item.redraw();
+    });
   }
   addNodes(data, isNotEventEmit) {
     let nodes = super.addNodes(data, isNotEventEmit);
