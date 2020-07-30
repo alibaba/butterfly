@@ -35,4 +35,7 @@ function circleLayout(params) {
   });
 }
 
-module.exports = circleLayout;
+// module.exports = circleLayout;
+export default {
+  circleLayout
+};

@@ -3,7 +3,7 @@
 const d3 = require('d3-force');
 const _ = require('lodash');
 const dagre = require('dagre');
-const circleLayout = require('./circleLayout');
+import Layout from './circleLayout.js';
 
 // 离散布局
 function forceLayout(param) {
@@ -407,5 +407,5 @@ export default {
   treeLayout,
   drageLayout,
   concentLayout,
-  circleLayout
+  circleLayout: Layout.circleLayout
 }
