@@ -109,7 +109,7 @@ canvas.draw({
   * [属性配置](./docs/zh-CN/endpoint.md#endpoint-attr)
   * [通用API](./docs/zh-CN/endpoint.md#endpoint-api)
 * [缩略图(Minimap)](./docs/zh-CN/minimap.md#endpoint-api)
-* [布局(正在整理中)]()
+* [布局(Layout)](./docs/zh-CN/layout.md)
 
 
 ## 🤝贡献

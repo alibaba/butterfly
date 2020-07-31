@@ -110,7 +110,7 @@ canvas.draw({
   * [attribute](./docs/en-US/endpoint.md#endpoint-attr)
   * [API](./docs/en-US/endpoint.md#endpoint-api)
 * [Minimap](./docs/en-US/minimap.md#endpoint-api)
-* [Layout(doing)]()
+* [Layout](./docs/en-US/layout.md)
 
 ## 🤝 Contribution
 Butterfly is a completely open source project and we welcome everyone to contribute to fixing bugs and improvements. For information on how to get started, read our [contribution guide](./docs/en-US/CONTRIBUTING.md).
