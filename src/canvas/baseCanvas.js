@@ -1744,50 +1744,75 @@ class BaseCanvas extends Canvas {
 
   _genSvgWrapper() {
 
+
+    function _detectMob() {
+      const toMatch = [
+          /Android/i,
+          /webOS/i,
+          /iPhone/i,
+          /iPad/i,
+          /iPod/i,
+          /BlackBerry/i,
+          /Windows Phone/i
+      ];
+      return toMatch.some((toMatchItem) => {
+          return window.navigator.userAgent.match(toMatchItem);
+      });
+    }
+    let _isMobi = _detectMob();
+    let _SVGWidth = '100%';
+    let _SVGHeight = '100%';
+
     // hack 适配浏览器的缩放比例
-    let _detectZoom = () => {
-      let ratio = 0;
-      let screen = window.screen;
-      let ua = navigator.userAgent.toLowerCase();
+    if (!_isMobi) {
+      let _detectZoom = () => {
+        let ratio = 0;
+        let screen = window.screen;
+        let ua = navigator.userAgent.toLowerCase();
 
-      if (window.devicePixelRatio !== undefined) {
-        ratio = window.devicePixelRatio;
-      }
-      else if (~ua.indexOf('msie')) {
-        if (screen.deviceXDPI && screen.logicalXDPI) {
-          ratio = screen.deviceXDPI / screen.logicalXDPI;
+        if (window.devicePixelRatio !== undefined) {
+          ratio = window.devicePixelRatio;
         }
-      }
-      else if (window.outerWidth !== undefined && window.innerWidth !== undefined) {
-        ratio = window.outerWidth / window.innerWidth;
-      }
+        else if (~ua.indexOf('msie')) {
+          if (screen.deviceXDPI && screen.logicalXDPI) {
+            ratio = screen.deviceXDPI / screen.logicalXDPI;
+          }
+        }
+        else if (window.outerWidth !== undefined && window.innerWidth !== undefined) {
+          ratio = window.outerWidth / window.innerWidth;
+        }
 
-      if (ratio) {
-        ratio = Math.round(ratio * 100);
-      }
-      return ratio;
-    };
-    let _sclae = 1 / (_detectZoom() / 200);
+        if (ratio) {
+          ratio = Math.round(ratio * 100);
+        }
+        return ratio;
+      };
+      let _sclae = 1 / (_detectZoom() / 200);
+      _SVGWidth = (1 * _sclae) + 'px';
+      _SVGHeight = (1 * _sclae) + 'px';
+    }
 
     // 生成svg的wrapper
     const svg = $(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
       .attr('class', 'butterfly-svg')
-      .attr('width', (1 * _sclae) + 'px')
-      .attr('height', (1 * _sclae) + 'px')
+      .attr('width', _SVGWidth)
+      .attr('height', _SVGHeight)
       .attr('version', '1.1')
       .attr('xmlns', 'http://www.w3.org/2000/svg')
       .appendTo(this.wrapper);
 
-    // hack 监听浏览器的缩放比例并适配
-    window.onresize = () => {
-      let _sclae = 1 / (_detectZoom() / 200);
-      svg.attr('width', (1 * _sclae) + 'px').attr('height', (1 * _sclae) + 'px');
-    }
+    if(!_isMobi) {
+      // hack 监听浏览器的缩放比例并适配
+      window.onresize = () => {
+        let _sclae = 1 / (_detectZoom() / 200);
+        svg.attr('width', (1 * _sclae) + 'px').attr('height', (1 * _sclae) + 'px');
+      }
 
-    // hack 因为width和height为1的时候会有偏移
-    let wrapperOffset = $(this.wrapper).offset();
-    let svgOffset = svg.offset();
-    svg.css('top', (wrapperOffset.top - svgOffset.top) + 'px').css('left', (wrapperOffset.left - svgOffset.left) + 'px');
+      // hack 因为width和height为1的时候会有偏移
+      let wrapperOffset = $(this.wrapper).offset();
+      let svgOffset = svg.offset();
+      svg.css('top', (wrapperOffset.top - svgOffset.top) + 'px').css('left', (wrapperOffset.left - svgOffset.left) + 'px');
+    }
 
     return this.svg = svg;
   }
