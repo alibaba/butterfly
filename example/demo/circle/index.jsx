@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 require('./index.less');
 require('butterfly-dag/dist/index.css');
 
-const Canvas = require('./CircleCanvas.js');
+const Canvas = require('./circleCanvas.js');
 const Edge = require('./edge.js');
 const mockData = require('./data.js');
 
