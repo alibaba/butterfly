@@ -30,7 +30,7 @@ import IndentedTree from './demo/indented-tree/index.jsx';
 import Circle from './demo/circle/index.jsx';
 
 
-import DrageLayout from './demo/DrageLayout/index.jsx';
+import DrageLayout from './demo/drageLayout/index.jsx';
 import ConcentLayout from './demo/concent-layout/index.jsx';
 
 import 'antd/dist/antd.css';

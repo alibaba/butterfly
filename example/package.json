@@ -39,6 +39,8 @@
     "url-loader": "~1.0.1",
     "webpack": "~4.41.5",
     "webpack-cli": "~3.0.8",
-    "webpack-dev-server": "~3.10.1"
+    "webpack-dev-server": "~3.10.1",
+    "@antv/hierarchy": "~0.6.4",
+    "dagre": "~0.8.5"
   }
 }
