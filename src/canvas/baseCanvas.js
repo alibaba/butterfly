@@ -1762,31 +1762,32 @@ class BaseCanvas extends Canvas {
     let _isMobi = _detectMob();
     let _SVGWidth = '100%';
     let _SVGHeight = '100%';
+    
+    let _detectZoom = () => {
+      let ratio = 0;
+      let screen = window.screen;
+      let ua = navigator.userAgent.toLowerCase();
+
+      if (window.devicePixelRatio !== undefined) {
+        ratio = window.devicePixelRatio;
+      }
+      else if (~ua.indexOf('msie')) {
+        if (screen.deviceXDPI && screen.logicalXDPI) {
+          ratio = screen.deviceXDPI / screen.logicalXDPI;
+        }
+      }
+      else if (window.outerWidth !== undefined && window.innerWidth !== undefined) {
+        ratio = window.outerWidth / window.innerWidth;
+      }
+
+      if (ratio) {
+        ratio = Math.round(ratio * 100);
+      }
+      return ratio;
+    };
 
     // hack 适配浏览器的缩放比例
     if (!_isMobi) {
-      let _detectZoom = () => {
-        let ratio = 0;
-        let screen = window.screen;
-        let ua = navigator.userAgent.toLowerCase();
-
-        if (window.devicePixelRatio !== undefined) {
-          ratio = window.devicePixelRatio;
-        }
-        else if (~ua.indexOf('msie')) {
-          if (screen.deviceXDPI && screen.logicalXDPI) {
-            ratio = screen.deviceXDPI / screen.logicalXDPI;
-          }
-        }
-        else if (window.outerWidth !== undefined && window.innerWidth !== undefined) {
-          ratio = window.outerWidth / window.innerWidth;
-        }
-
-        if (ratio) {
-          ratio = Math.round(ratio * 100);
-        }
-        return ratio;
-      };
       let _sclae = 1 / (_detectZoom() / 200);
       _SVGWidth = (1 * _sclae) + 'px';
       _SVGHeight = (1 * _sclae) + 'px';
