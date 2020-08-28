@@ -3,7 +3,7 @@
 ```js
 let canvas = new Canvas({
   root: dom,               //canvas的根节点(必传)
-  layout: 'ForceLayout'    //布局设置(可传)，可使用集成的，也可自定义布局
+  layout: 'ForceLayout',   //布局设置(可传)，可使用集成的，也可自定义布局
   zoomable: true,          //可缩放(可传)
   moveable: true,          //可平移(可传)
   draggable: true,         //节点可拖动(可传)
