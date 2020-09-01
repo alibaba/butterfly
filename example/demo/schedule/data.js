@@ -352,6 +352,7 @@ module.exports = {
     options: {
       title: '测试'
     },
+    draggable:false,
     top: 310,
     left: 185,
     width: 500,
