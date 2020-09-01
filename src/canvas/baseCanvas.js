@@ -259,6 +259,7 @@ class BaseCanvas extends Canvas {
       _global: this.global,
       _emit: this.emit.bind(this),
       _on: this.on.bind(this),
+      draggable: group.draggable !== undefined ? group.draggable : this.draggable
     }));
     if (this._isExistGroup(_groupObj)) {
       // 后续用新的group代码旧的group
