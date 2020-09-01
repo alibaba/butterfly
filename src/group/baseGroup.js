@@ -21,6 +21,7 @@ class BaseGroup extends Group {
     this.width = opts.width || 300;
     this.height = opts.height || 150;
     this.resize = opts.resize;
+    this.draggable = opts.draggable;
     this.dom = null;
     this.nodes = [];
     this.options = opts.options;
@@ -266,10 +267,12 @@ class BaseGroup extends Group {
       }
       e.preventDefault();
       // e.stopPropagation();
-      this.emit('InnerEvents', {
-        type: 'group:dragBegin',
-        data: this
-      });
+      if (this.draggable) {
+        this.emit('InnerEvents', {
+          type: 'group:dragBegin',
+          data: this
+        });
+      }
     });
   }
   _createEndpoint(isInited) {
