@@ -107,7 +107,7 @@ class TreeCanvas extends Canvas {
         item.destroy(true);
       }
 
-      // 重置子节点的coolapsed状态
+      // 重置子节点的collapsed状态
       if (item.id !== nodeId && item.collapsed) {
         delete item.collapsed;
       }
