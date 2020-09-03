@@ -106,6 +106,11 @@ class TreeCanvas extends Canvas {
       if (item.subCollapsed) {
         item.destroy(true);
       }
+
+      // 重置子节点的collapsed状态
+      if (item.id !== nodeId && item.collapsed) {
+        delete item.collapsed;
+      }
     });
     collapseEdges.forEach((item) => {
       item.destroy(true);
@@ -275,6 +280,15 @@ class TreeCanvas extends Canvas {
     nodes.forEach((item) => {
       let _subTree = this.findSubTree(item);
       rmNodes = rmNodes.concat(_subTree);
+
+      // 如果是某个节点的子节点,将此节点从父节点的children中移除
+      if (item.parent) {
+        const parentNode = this.getNode(item.parent);
+
+        if (parentNode) {
+          parentNode.children = parentNode.children.filter((node) => node.id !== item.id);
+        }
+      }
     });
 
     rmNodes = _.unionBy(rmNodes, 'id');
