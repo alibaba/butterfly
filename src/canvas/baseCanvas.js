@@ -209,10 +209,8 @@ class BaseCanvas extends Canvas {
       setTimeout(() => {
         // 生成nodes
         this.addNodes(nodes);
-        // console.log(JSON.stringify(this.nodes[0].children));
         resolve();
       }, 10);
-      // console.log(this.nodes);
     });
     let edgePromise = new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -933,7 +931,6 @@ class BaseCanvas extends Canvas {
         }
       });
     }
-
     return group;
   }
 
@@ -947,9 +944,13 @@ class BaseCanvas extends Canvas {
       }
     });
 
-    groupIds.forEach((item) => {
-      this.removeGroup(item, isNotEventEmit);
-    })
+    let rmGroups = groupIds.map((item) => {
+      return this.removeGroup(item, isNotEventEmit);
+    });
+
+    return {
+      groups: rmGroups
+    }
   }
 
   getNeighborEdges(id, type) {
