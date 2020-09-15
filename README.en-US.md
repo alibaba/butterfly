@@ -97,7 +97,7 @@ canvas.draw({
   * [custom endpoint](./docs/en-US/node.md#node-endpoint)
   * [move node](./docs/en-US/node.md#node-move)
   * [events](./docs/en-US/node.md#node-event)
-  * [[tree layout] collapse and expand sub node]()
+  * [[tree layout] collapse and expand sub node](./docs/en-US/node.md#node-collapse)
 * [Edge](./docs/en-US/edge.md)
   * [attribute](./docs/en-US/edge.md#edge-attr)
   * [custom edge](./docs/en-US/edge.md#edge-custom-dom)

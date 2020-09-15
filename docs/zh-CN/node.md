@@ -137,3 +137,19 @@ emit = (string, obj) => {}
   */
 on = (string, callback) => {}
 ```
+
+### <a name='node-collapse'>[树状布局] 收缩 & 展开子节点</a>：
+
+```js
+/**
+  * [树状布局] 收缩节点
+  * @param {string} nodeId - 节点id 
+  */
+collapseNode = (string) => {}
+
+/**
+  * [树状布局] 展开节点
+  * @param {string} nodeId - 节点id 
+  */
+expandNode = (string) => {}
+```
