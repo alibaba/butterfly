@@ -96,7 +96,7 @@ canvas.draw({
   * [自定义锚点](./docs/zh-CN/node.md#node-endpoint)
   * [移动](./docs/zh-CN/node.md#node-move)
   * [事件](./docs/zh-CN/node.md#node-event)
-  * [[树状布局] 收缩 & 展开子节点]()
+  * [[树状布局] 收缩 & 展开子节点](./docs/zh-CN/node.md#node-collapse)
 * [线(Edge)](./docs/zh-CN/edge.md)
   * [属性配置](./docs/zh-CN/edge.md#edge-attr)
   * [自定义线段](./docs/zh-CN/edge.md#edge-custom-dom)
