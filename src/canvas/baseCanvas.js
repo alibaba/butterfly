@@ -54,7 +54,7 @@ class BaseCanvas extends Canvas {
       endpoint: {
         position: _.get(options, 'theme.endpoint.position'),
         linkableHighlight: _.get(options, 'theme.endpoint.linkableHighlight') || false,
-        limitNum: undefined,
+        limitNum: _.get(options, 'theme.endpoint.limitNum'),
         expandArea: {
           left: _.get(options, 'theme.endpoint.expandArea.left') || 10,
           right: _.get(options, 'theme.endpoint.expandArea.right') || 10,
