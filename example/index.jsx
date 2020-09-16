@@ -28,6 +28,8 @@ import Decision from './demo/decision/index.jsx';
 import RuleTree from './demo/rule-tree/index.jsx';
 import IndentedTree from './demo/indented-tree/index.jsx';
 import Circle from './demo/circle/index.jsx';
+import Grid from './demo/grid/index.jsx';
+import Fruchterman from './demo/fruchterman/index.jsx';
 
 
 import DrageLayout from './demo/drageLayout/index.jsx';
@@ -80,6 +82,12 @@ ReactDOM.render((
             </Menu.Item>
             <Menu.Item key="flow">
               <Link to="/flow">Flow</Link>
+            </Menu.Item>
+            <Menu.Item key="Fruchterman">
+              <Link to="/Fruchterman">Fruchterman</Link>
+            </Menu.Item>
+            <Menu.Item key="grid">
+              <Link to="/grid">Grid</Link>
             </Menu.Item>
             <Menu.Item key="industry">
               <Link to="/industry">Industry</Link>
@@ -145,6 +153,8 @@ ReactDOM.render((
           <Route path="/indented-tree" component={IndentedTree} />
           <Route path="/concent-layout" component={ConcentLayout} />
           <Route path="/circle" component={Circle} />
+          <Route path="/grid" component={Grid} />
+          <Route path="/Fruchterman" component={Fruchterman} />
         </Content>
       </Layout>
     </Layout>

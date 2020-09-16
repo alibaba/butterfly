@@ -10,7 +10,6 @@ class CenterNode extends Node {
     this.options = opts;
   }
   draw = (opts) => {
-    console.log(opts)
     let container = $('<div class="center-new-node"></div>')
                     .attr('id', opts.id)
                     .css('top', opts.top + 'px')
