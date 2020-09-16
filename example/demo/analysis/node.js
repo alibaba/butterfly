@@ -26,7 +26,7 @@ class BaseNode extends Node {
                     .css('top', opts.top + 'px')
                     .css('left', opts.left + 'px')
 
-    this._createTypeIcon(container);
+    // this._createTypeIcon(container);
     this._createText(container);
 
     return container[0];
