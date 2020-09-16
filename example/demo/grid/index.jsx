@@ -27,7 +27,24 @@ class Grid extends Component {
             distance: 50,
             // 线条的粗细
             strength: 1
-          }
+          },
+           // 布局画布总宽度
+          width: 150,
+          // 布局画布总长度
+          height: 100,
+          // 布局相对起始点
+          begin: [20, 20],
+          preventOverlap: true,
+          preventOverlapPadding: 10,
+          condense: false,
+          //宽高
+          rows: undefined,
+          cols: undefined,
+          //位置
+          position: undefined,
+          // 排序方式
+          sortBy: 'degree',
+          nodeSize: 30,
         },
       },
       theme: {
