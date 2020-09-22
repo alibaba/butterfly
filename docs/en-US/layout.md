@@ -61,26 +61,6 @@ this.canvas = new Canvas({
 | controlPoints | Boolean | false | false | | Whether to keep the control points of layout
 
 
-
-## Tree Layout
-
-参考：[antvis/hierarchy](https://github.com/antvis/hierarchy)
-
-``` js
-import {TreeCanvas} from 'butterfly-dag';
-this.canvas = new TreeCanvas({
-  layout: {
-    type: 'drageLayout',
-    options: {
-      rankdir: 'TB',
-      nodesep: 40,
-      ranksep: 40,
-      controlPoints: false,
-    },
-  }
-});
-```
-
 ## Grid Layout
 
 Grid Layout will order the nodes according to the parameters, and then place the nodes on the grids.
@@ -197,64 +177,6 @@ import {TreeCanvas} from 'butterfly-dag';
 | clusterGravity | Number | false | 10 | The gravity of each cluster, which will affect the compactness of each cluster. Takes effect only when clustering is true
 
 
-## Circle Layout
-
-Circular layout orders the nodes according to the configuration, and then places the nodes on a circle.#### 图例
-
-![Circular布局](https://img.alicdn.com/tfs/TB1TuQwgZieb18jSZFvXXaI3FXa-1277-701.png)
-
-#### 代码演示
-
-``` js
-import {TreeCanvas} from 'butterfly-dag';
- this.canvas = new Canvas({
-      layout: {
-        type: 'circleLayout',
-        options: {
-          radius: 200,
-          getWidth: () => {
-            return 15;
-          },
-          getHeight: () => {
-            return 15;
-          }
-        },
-      },
-    });
-    this.canvas.draw(mockData, () => {
-      this.canvas.focusCenterWithAnimate();
-    });
-    this.canvas.on('system.link.connect', ({ links }) => {
-      links.forEach(link => {
-        link.targetNode.active && link.targetNode.active(link.targetNode.dom)
-      })
-    });
-    // 节点点击事件
-    this.canvas.on('clickCircleNode', (event) => {
-      this.canvas.addEdge({
-        id: 3,
-        source: 'centerNode',
-        target: 13,
-        Class: Edge
-      });
-    })
-    // 左箭头点击事件
-    this.canvas.on('clickArrowLeft', (event) => {
-      console.log(event, 'left')
-    })
-    // 右箭头点击事件
-    this.canvas.on('clickArrowRight', (event) => {
-      console.log(event, 'right')
-    })
-
-```
-
-#### API
-
-| Name | Type | Required | Default | Description  
-| :------ | :------ | :------ | :------ | :------ 
-| radius | Number | false | null | The radius of the circle.
-
 ## Concentric Layout
 Concentric Layout places the nodes on concentric circles.
 
@@ -294,3 +216,22 @@ import {TreeCanvas} from 'butterfly-dag';
 | clockwise | Boolean | false | false | lace the nodes in clockwise or not
 | maxLevelDiff | Number | false | undefines |  The sum of concentric values in each level. If it is undefined, maxValue / 4 will take place, where maxValue is the max value of ordering properties. For example, if sortBy is 'degree', maxValue is the max degree value of all the nodes
 | sortBy | String | false | undefined | Order the nodes according to this parameter. It is the property's name of node. The node with higher value will be placed to the center. If it is undefined, the algorithm will order the nodes by their degree
+
+## Tree Layout
+
+参考：[antvis/hierarchy](https://github.com/antvis/hierarchy)
+
+``` js
+import {TreeCanvas} from 'butterfly-dag';
+this.canvas = new TreeCanvas({
+  layout: {
+    type: 'drageLayout',
+    options: {
+      rankdir: 'TB',
+      nodesep: 40,
+      ranksep: 40,
+      controlPoints: false,
+    },
+  }
+});
+```

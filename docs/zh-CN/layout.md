@@ -60,27 +60,6 @@ this.canvas = new Canvas({
 | ranksep | Number | false | 50 |  | 层间距（px）。在rankdir 为 'TB' 或 'BT' 时是竖直方向相邻层间距；在rankdir 为 'LR' 或 'RL' 时代表水平方向相邻层间距
 | controlPoints | Boolean | false | false | |  是否保留布局连线的控制点
 
-
-
-## Tree Layout
-
-参考：[antvis/hierarchy](https://github.com/antvis/hierarchy)
-
-``` js
-import {TreeCanvas} from 'butterfly-dag';
-this.canvas = new TreeCanvas({
-  layout: {
-    type: 'drageLayout',
-    options: {
-      rankdir: 'TB',
-      nodesep: 40,
-      ranksep: 40,
-      controlPoints: false,
-    },
-  }
-});
-```
-
 ## Grid Layout
 
 Grid 网格布局根据参数指定的排序方式对节点进行排序后，将节点排列在网格上。
@@ -196,67 +175,6 @@ import {TreeCanvas} from 'butterfly-dag';
 | clustering | Boolean | false | false |  是否按照聚类布局
 | clusterGravity | Number | false | 10 | 聚类内部的重力大小，影响聚类的紧凑程度，在 clustering 为 true 时生效
 
-## Circle Layout
-
-Circular 环形布局根据参数指定的排序方式对节点进行排序后，将节点排列在圆环上。
-#### 图例
-
-![Circular布局](https://img.alicdn.com/tfs/TB1TuQwgZieb18jSZFvXXaI3FXa-1277-701.png)
-
-#### 代码演示
-
-``` js
-import {TreeCanvas} from 'butterfly-dag';
- this.canvas = new Canvas({
-      layout: {
-        type: 'circleLayout',
-        options: {
-          radius: 200,
-          getWidth: () => {
-            return 15;
-          },
-          getHeight: () => {
-            return 15;
-          }
-        },
-      },
-    });
-    this.canvas.draw(mockData, () => {
-      this.canvas.focusCenterWithAnimate();
-    });
-    this.canvas.on('system.link.connect', ({ links }) => {
-      links.forEach(link => {
-        link.targetNode.active && link.targetNode.active(link.targetNode.dom)
-      })
-    });
-    // 节点点击事件
-    this.canvas.on('clickCircleNode', (event) => {
-      this.canvas.addEdge({
-        id: 3,
-        source: 'centerNode',
-        target: 13,
-        Class: Edge
-      });
-    })
-    // 左箭头点击事件
-    this.canvas.on('clickArrowLeft', (event) => {
-      console.log(event, 'left')
-    })
-    // 右箭头点击事件
-    this.canvas.on('clickArrowRight', (event) => {
-      console.log(event, 'right')
-    })
-
-```
-
-#### API
-
-| 名称 | 类型 | 是否必须 | 默认值 | 说明  
-| :------ | :------ | :------ | :------ | :------ 
-| radius | Number | false | null | 圆的半径
-
-
-
 
 ## Concentric Layout
 
@@ -298,3 +216,23 @@ import {TreeCanvas} from 'butterfly-dag';
 | clockwise | Boolean | false | false | 是否按照顺时针排列
 | maxLevelDiff | Number | false | undefines | 每一层同心值的求和。若为 undefined，则将会被设置为 maxValue / 4 ，其中 maxValue 为最大的排序依据的属性值。例如，若 sortBy 为 'degree'，则 maxValue 为所有节点中度数最大的节点的度数
 | sortBy | String | false | undefined | 指定排序的依据（节点属性名），数值越高则该节点被放置得越中心。若为 undefined，则会计算节点的度数，度数越高，节点将被放置得越中心
+
+
+## Tree Layout
+
+参考：[antvis/hierarchy](https://github.com/antvis/hierarchy)
+
+``` js
+import {TreeCanvas} from 'butterfly-dag';
+this.canvas = new TreeCanvas({
+  layout: {
+    type: 'drageLayout',
+    options: {
+      rankdir: 'TB',
+      nodesep: 40,
+      ranksep: 40,
+      controlPoints: false,
+    },
+  }
+});
+```
