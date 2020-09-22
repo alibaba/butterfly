@@ -8,9 +8,6 @@ class BaseNode extends Node {
   constructor(opts) {
     super(opts);
     this.options = opts;
-    this.data = {
-      'a': 'point1'
-    };
   }
   draw = (opts) => {
     let className = this.options.type;
