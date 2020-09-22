@@ -28,7 +28,7 @@ class ForceTree extends Component {
             distance: 50,
             // 线条的粗细
             strength: 1
-          }
+          },
         },
       },
       theme: {

@@ -23,13 +23,14 @@ class Circle extends Component {
       layout: {
         type: 'circleLayout',
         options: {
-          radius: 200,
+          radius: 100,
           getWidth: () => {
             return 15;
           },
           getHeight: () => {
             return 15;
-          }
+          },
+          
         },
       },
       theme: {
