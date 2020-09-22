@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * cc: https://github.com/antvis/G6/tree/master/src/layout
+ */
+
 const d3 = require('d3-force');
 const _ = require('lodash');
 import Layout from './circleLayout.js';
