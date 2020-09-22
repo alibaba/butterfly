@@ -1886,6 +1886,13 @@ class BaseCanvas extends Canvas {
     this.on('InnerEvents', (data) => {
       if (data.type === 'node:addEndpoint') {
         this._addEndpoint(data.data, 'node', data.isInited);
+      } else if (data.type === 'node:removeEndpoint') {
+        let _point = data.data;
+        let rmEdges = this.edges.filter((item) => {
+          return (item.sourceNode.id === _point.nodeId && item.sourceEndpoint.id === _point.id) ||
+                 (item.targetNode.id === _point.nodeId && item.targetEndpoint.id === _point.id);
+        });
+        this.removeEdges(rmEdges);
       } else if (data.type === 'group:addEndpoint') {
         this._addEndpoint(data.data, 'group', data.isInited);
       } else if (data.type === 'node:dragBegin') {
