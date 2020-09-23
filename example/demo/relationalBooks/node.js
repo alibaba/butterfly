@@ -2,12 +2,21 @@
 
 const Node = require('../../../index.js').Node;
 const $ = require('jquery');
+import { uniqueId } from 'lodash';
 import '../../static/iconfont.css';
+
+let getAttrObj = (namedNodeMap) => {
+  return Array.prototype.reduce.call(namedNodeMap,function (pre, item,index,arr) {            
+    pre[item.nodeName] = item.value;
+    return pre;
+  },{});
+}
 
 class BaseNode extends Node {
   constructor(opts) {
     super(opts);
     this.options = opts;
+    this.childData = opts.data.content;
   }
   draw = (opts) => {
     let className = this.options.type;
@@ -37,12 +46,14 @@ class BaseNode extends Node {
   }
   
   _createChildNode(dom) {
-    $.each(this.options.data.content, (i, item) => {
+    $.each(this.childData, (i, {id, content, sourceNodeId, targetNodeId}) => {
       dom.append(`
-      <div class="content">
+      <div class="content" data-id="${id}" source-id="${sourceNodeId}" target-id="${targetNodeId}">
+        <div class="targetEndPoint butterflie-circle-endpoint" id="${targetNodeId}"></div>
         <span class="remove"><i class="iconfont">&#xe654;</i></span>
-        <span class="text">${item}</span>
+        <span class="text">${content}</span>
         <span class="edit"><i class="iconfont">&#xe66d;</i></span>
+        <div class="sourceEndPoint butterflie-circle-endpoint" id="${sourceNodeId}"></div>
       </div>`);
     });
 
@@ -52,9 +63,32 @@ class BaseNode extends Node {
     this._onEditNode(childNode);
   }
 
+  mounted = () => {
+    this.childData.forEach((({sourceNodeId, targetNodeId})=>{
+      this.addEndpoint({
+        id: sourceNodeId,
+        type: 'source',
+        dom: document.getElementById(sourceNodeId)
+      });
+      this.addEndpoint({
+        id: targetNodeId,
+        type: 'target',
+        dom: document.getElementById(targetNodeId)
+      });
+    }))
+  }
+
   _onRemovedNode(dom) {
+    const _this = this;
     dom.find('.remove').on('click', function () {
+      const attr = getAttrObj(this.parentNode.attributes);
+      _this.childData = _this.childData.filter(item=>item.id !== attr['data-id']);
       this.parentNode.remove();
+      _this.endpoints.forEach((_point) => {
+        _point.updatePos();
+      });
+      _this.removeEndpoint(attr['source-id']);
+      _this.removeEndpoint(attr['target-id']);
     });
   }
 
