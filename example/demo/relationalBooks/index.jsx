@@ -1,6 +1,6 @@
 'use strict';
 import React, {Component} from 'react';
-const Canvas = require('../../../index.js').Canvas;
+const Canvas = require('./canvas.js');
 const mockData = require('./data.js');
 
 require('./index.less');
