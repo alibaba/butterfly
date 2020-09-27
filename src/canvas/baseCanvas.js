@@ -1812,8 +1812,8 @@ class BaseCanvas extends Canvas {
       }
 
       // hack 因为width和height为1的时候会有偏移
-      let wrapperOffset = $(this.wrapper).offset();
-      let svgOffset = svg.offset();
+      let wrapperOffset = $(this.wrapper)[0].getBoundingClientRect();
+      let svgOffset = svg[0].getBoundingClientRect();
       svg.css('top', (wrapperOffset.top - svgOffset.top) + 'px').css('left', (wrapperOffset.left - svgOffset.left) + 'px');
     }
 
