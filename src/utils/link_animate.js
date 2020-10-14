@@ -52,7 +52,6 @@ let addAnimate = (targetDom, path, options = {}, animateDom) => {
 
   if (!_animateDom) {
     _animateDom = circle;
-    $(_animateDom).insertAfter(targetDom);
   }
 
   return _animateDom;

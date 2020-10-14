@@ -605,6 +605,10 @@ class BaseCanvas extends Canvas {
 
         _edgeFragment.appendChild(edge.dom);
 
+        if (edge.animateDom) {
+          $(edge.animateDom).insertAfter(edge.dom)
+        }
+
         if (edge.labelDom) {
           _labelFragment.appendChild(edge.labelDom);
         }
