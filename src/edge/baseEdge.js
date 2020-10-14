@@ -60,9 +60,6 @@ class BaseEdge extends Edge {
     });
     this.labelDom = this.drawLabel(this.label);
     this.arrowDom = this.drawArrow(this.arrow);
-    if(this.defaultAnimate) {
-      this.addAnimate();
-    }
 
     this._addEventListener();
   }
@@ -76,6 +73,11 @@ class BaseEdge extends Edge {
       this.eventHandlerDom.setAttribute('class', 'butterflies-link-event-handler');
     }
     return path;
+  }
+  mounted() {
+    if(this.defaultAnimate) {
+      this.addAnimate();
+    }
   }
   _calcPath(sourcePoint, targetPoint) {
     if (!sourcePoint) {
