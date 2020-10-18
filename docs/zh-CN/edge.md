@@ -86,6 +86,15 @@ drawArrow = () => {}
 drawLabel = () => {}
 ```
 
+### 更新label：
+```js
+/**
+  * @param {string|dom} - label的字符窜或者节点
+  * @return {dom} - 更新label的dom
+  */
+updateLabel = (label) => {}
+```
+
 ### <a name='edge-isConnect'>线段连通性</a>：
 ```js
 /**
