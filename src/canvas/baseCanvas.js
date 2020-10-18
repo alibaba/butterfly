@@ -1985,6 +1985,9 @@ class BaseCanvas extends Canvas {
           });
           this.addNode(item, true);
         });
+      } else if (data.type === 'edge:updateLabel') {
+        let labelDom = data.data.labelDom;
+        $(this.wrapper).append(labelDom);
       }
     });
 

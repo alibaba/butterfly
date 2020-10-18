@@ -145,6 +145,19 @@ class BaseEdge extends Edge {
       }
     }
   }
+  updateLabel(label) {
+    let labelDom = this.drawLabel(label);
+    if (this.labelDom) {
+      $(this.labelDom).off();
+      $(this.labelDom).remove();
+    }
+    this.label = label;
+    this.labelDom = labelDom;
+    this.emit('InnerEvents', {
+      type: 'edge:updateLabel',
+      data: this
+    });
+  }
   redrawArrow(path) {
     const length = this.dom.getTotalLength();
     if(!length) {
@@ -245,12 +258,14 @@ class BaseEdge extends Edge {
   }
   destroy(isNotEventEmit) {
     if (this.labelDom) {
+      $(this.labelDom).off();
       $(this.labelDom).remove();
     }
     if (this.arrowDom) {
       $(this.arrowDom).remove();
     }
     if (this.eventHandlerDom) {
+      $(this.eventHandlerDom).off();
       $(this.eventHandlerDom).remove();
     }
     if (this.animateDom) {

@@ -83,6 +83,15 @@ drawArrow = () => {}
 drawLabel = () => {}
 ```
 
+### update label：
+```js
+/**
+  * @param {string|dom} - label string or label dom
+  * @return {dom} - label dom
+  */
+updateLabel = (label) => {}
+```
+
 ### <a name='edge-isConnect'>edge connectivity</a>：
 
 ```js
