@@ -123,6 +123,7 @@ class BaseCanvas extends Canvas {
     // 初始化一些参数
     this._rootWidth = $(this.root).width();
     this._rootHeight = $(this.root).height();
+    $(this.root).css('overflow', 'hidden');
 
     // 网格布局
     this._gridService = new GridService({
@@ -2985,6 +2986,9 @@ class BaseCanvas extends Canvas {
     }
   }
   _moveNode(node, x, y, isNotEventEmit) {
+    
+    // todo: 支持不拖动出group
+
     if (!isNotEventEmit) {
       this.pushActionQueue({
         type: 'system:moveNodes',
