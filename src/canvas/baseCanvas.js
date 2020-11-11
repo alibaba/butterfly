@@ -39,6 +39,9 @@ class BaseCanvas extends Canvas {
     this.disLinkable = options.disLinkable || false; // 可拆线
 
     this.theme = {
+      group: {
+        type: _.get(options, 'theme.group.type') || 'normal'
+      },
       edge: {
         type: _.get(options, 'theme.edge.type') || 'Bezier',
         Class: _.get(options, 'theme.edge.Class') || Edge,
@@ -2987,7 +2990,20 @@ class BaseCanvas extends Canvas {
   }
   _moveNode(node, x, y, isNotEventEmit) {
     
-    // todo: 支持不拖动出group
+    let _isInGroup = !!node.group;
+    if (_isInGroup) {
+      let groupObj = this.getGroup(node.group);
+      let groupType = groupObj.type || this.theme.group.type;
+      if (groupType === 'inner') {
+        let _groupW = $(groupObj.dom).width();
+        let _groupH = $(groupObj.dom).height();
+        let _nodeW = $(node.dom).width();
+        let _nodeH = $(node.dom).height();
+        if (x < 0 || (x + _nodeW) > _groupW || y < 0 || (y + _nodeH) > _groupH) {
+          return ;
+        }
+      }
+    }
 
     if (!isNotEventEmit) {
       this.pushActionQueue({
