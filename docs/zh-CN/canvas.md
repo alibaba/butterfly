@@ -10,6 +10,9 @@ let canvas = new Canvas({
   linkable: true,          //节点可连接(可传)
   disLinkable: true,       //节点可取消连接(可传)
   theme: {                 //主题定制(可传) 
+    group: {
+      type: 'normal'       //节点组类型(可传): normal(随意拖入拖出),inner(只能拖入不能拖出)
+    },
     edge: {
       type: 'Bezier',      //线条默认类型：贝塞尔曲线，折线，直线，曼哈顿路由线，更美丽的贝塞尔曲线。分别为Bezier/Flow/Straight/Manhattan/AdvancedBezier
       label: 'test',       //线条默认label

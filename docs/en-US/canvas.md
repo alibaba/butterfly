@@ -10,6 +10,9 @@ let canvas = new Canvas({
   linkable: true,          // enable connect edges (optional)
   disLinkable: true,       // enable disConnect edges (optional)
   theme: {                 // theme (optional) 
+    group: {
+      type: 'normal'       // Node group type: normal (drag in and drag out), inner (can only be dragged in and not out)
+    },
     edge: {
       type: 'Bezier',      // edge type：Bezier curve，Polyline ，Straight，Manhattan line，Improved Bezier curve。values ： Bezier/Flow/Straight/Manhattan/AdvancedBezier
       label: 'test',       // edge label
