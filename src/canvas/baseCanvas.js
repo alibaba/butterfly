@@ -2122,6 +2122,36 @@ class BaseCanvas extends Canvas {
       }
     };
 
+    const _clearDraging = () => {
+      if (this._dragNode) {
+        $(this._dragNode.dom).css('z-index', '');
+        _.get(this._dragNode, 'endpoints').forEach((point) => {
+          $(point.dom).css('z-index', '');
+        });
+      }
+      if (this._dragGroup) {
+        $(this._dragGroup.dom).css('z-index', '');
+        _.get(this._dragGroup, 'endpoints').forEach((point) => {
+          $(point.dom).css('z-index', '');
+        });
+      }
+      this._dragType = null;
+      this._dragNode = null;
+      this._dragEndpoint = null;
+      this._dragGroup = null;
+      this._dragEdges = [];
+      nodeOriginPos = {
+        x: 0,
+        y: 0
+      };
+      canvasOriginPos = {
+        x: 0,
+        y: 0
+      };
+      this._autoMoveDir = [];
+      this._guidelineService.isActive && this._guidelineService.clearCanvas();
+    };
+
     const mouseDownEvent = (event) => {
       const LEFT_BUTTON = 0;
       if (event.button !== LEFT_BUTTON) {
@@ -2146,6 +2176,20 @@ class BaseCanvas extends Canvas {
         x: event.clientX,
         y: event.clientY
       };
+
+      // 拖动的时候提高z-index
+      if (this._dragNode) {
+        $(this._dragNode.dom).css('z-index', '998');
+        _.get(this._dragNode, 'endpoints').forEach((point) => {
+          $(point.dom).css('z-index', '999');
+        });
+      }
+      if (this._dragGroup) {
+        $(this._dragGroup.dom).css('z-index', '998');
+        _.get(this._dragGroup, 'endpoints').forEach((point) => {
+          $(point.dom).css('z-index', '999');
+        });
+      }
 
       this.emit('system.drag.start', {
         dragType: this._dragType,
@@ -2895,28 +2939,18 @@ class BaseCanvas extends Canvas {
         unionNodes: _unionNodes
       });
 
-      this._dragType = null;
-      this._dragNode = null;
-      this._dragEndpoint = null;
-      this._dragGroup = null;
-      this._dragEdges = [];
-      nodeOriginPos = {
-        x: 0,
-        y: 0
-      };
-      canvasOriginPos = {
-        x: 0,
-        y: 0
-      };
-      this._autoMoveDir = [];
-      this._guidelineService.isActive && this._guidelineService.clearCanvas();
+      _clearDraging();
     };
 
+    const mouseLeaveEvent = (event) => {
+      _clearDraging();
+    }
 
     this.root.addEventListener('mousedown', mouseDownEvent);
     this.root.addEventListener('mousemove', mouseMoveEvent);
     // this.root.addEventListener('mouseleave', mouseEndEvent);
     this.root.addEventListener('mouseup', mouseEndEvent);
+    this.root.addEventListener('mouseleave', mouseLeaveEvent);
   }
   _autoMoveCanvas(x, y, data, cb) {
 
