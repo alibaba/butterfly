@@ -127,6 +127,7 @@ class BaseCanvas extends Canvas {
     this._rootWidth = $(this.root).width();
     this._rootHeight = $(this.root).height();
     $(this.root).css('overflow', 'hidden');
+    this._dragIndex = 50;
 
     // 网格布局
     this._gridService = new GridService({
@@ -2123,18 +2124,6 @@ class BaseCanvas extends Canvas {
     };
 
     const _clearDraging = () => {
-      if (this._dragNode) {
-        $(this._dragNode.dom).css('z-index', '');
-        _.get(this._dragNode, 'endpoints').forEach((point) => {
-          $(point.dom).css('z-index', '');
-        });
-      }
-      if (this._dragGroup) {
-        $(this._dragGroup.dom).css('z-index', '');
-        _.get(this._dragGroup, 'endpoints').forEach((point) => {
-          $(point.dom).css('z-index', '');
-        });
-      }
       this._dragType = null;
       this._dragNode = null;
       this._dragEndpoint = null;
@@ -2179,15 +2168,15 @@ class BaseCanvas extends Canvas {
 
       // 拖动的时候提高z-index
       if (this._dragNode) {
-        $(this._dragNode.dom).css('z-index', '998');
+        $(this._dragNode.dom).css('z-index', (++this._dragIndex) * 2 - 1);
         _.get(this._dragNode, 'endpoints').forEach((point) => {
-          $(point.dom).css('z-index', '999');
+          $(point.dom).css('z-index', this._dragIndex * 2);
         });
       }
       if (this._dragGroup) {
-        $(this._dragGroup.dom).css('z-index', '998');
+        $(this._dragGroup.dom).css('z-index', (++this._dragIndex) * 2 - 1);
         _.get(this._dragGroup, 'endpoints').forEach((point) => {
-          $(point.dom).css('z-index', '999');
+          $(point.dom).css('z-index', this._dragIndex * 2);
         });
       }
 
