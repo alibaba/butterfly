@@ -62,7 +62,7 @@ const Canvas = require('butterfly-dag').Canvas;
 let canvas = new Canvas({
   root: dom,              //canvas root dom (require)
   zoomable: true,         //enable zoom canvas (option)
-  moveable: true,         //enable move canvas (option)
+  movable: true,         //enable move canvas (option)
   draggable: true,        //enbale drag nodes (options)
 });
 canvas.draw({

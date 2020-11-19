@@ -5,7 +5,7 @@ let canvas = new Canvas({
   root: dom,               // canvas root dom (require)
   layout: 'ForceLayout'    // layout setting , integrated or custom , (optional)
   zoomable: true,          // enable zoom canvas (optional)
-  moveable: true,          // enable move canvas (optional)
+  movable: true,          // enable move canvas (optional)
   draggable: true,         // enable drag nodes (optional)
   linkable: true,          // enable connect edges (optional)
   disLinkable: true,       // enable disConnect edges (optional)
@@ -36,7 +36,7 @@ let canvas = new Canvas({
     },
     zoomGap: 0.001,       // mouse zoom in and out gap settings
     autoFixCanvas: {     // auto expand canvas when drag nodes or edges near the edge of canvas.
-      enable: false,
+      enabled: false,
       autoMovePadding: [20, 20, 20, 20]
     },
     autoResizeRootSize: true // automatically adapt to the root size, the default is true
@@ -54,7 +54,7 @@ let canvas = new Canvas({
 | root | canvas root dom | Dom (Require) | `*this dom must set 'position:relative'`
 | layout | auto layout | string/function (optional) | null 
 | zoomable | enable zoom canvas | boolean (optional) | false 
-| moveable | enable move canvas | boolean (optional) | false 
+| movable | enable move canvas | boolean (optional) | false 
 | draggable | enable drag nodes | boolean (optional) | false 
 | linkable | enable connect edges | boolean (optional) | false 
 | disLinkable | enable disConnect edges | boolean (optional) | false 
@@ -239,10 +239,10 @@ getNeighborNodesAndEdgesByLevel = (options) => {}
 setZoomable = (boolean) => {}
 
 /**
-  * set canvas moveable
+  * set canvas movable
   * @param {true|false} boolean
   */
-setMoveable = (boolean) => {}
+setmovable = (boolean) => {}
 
 /**
   * set canvas offset

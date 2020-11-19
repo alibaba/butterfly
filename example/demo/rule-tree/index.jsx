@@ -222,7 +222,7 @@ const nodesRender = (nodes) => (cb) => {
     })
   };
   if(cb && typeof cb === 'function') {
-    loop(nodes && [nodes] || []); 
+    loop(nodes && [nodes] || []);
     return nodelist.map(cb);
   }
 }
@@ -242,7 +242,7 @@ class compactBoxTree extends Component {
       linkable: true,    // 可连线
       draggable: false,   // 可拖动
       zoomable: false,    // 可放大
-      moveable: true,    // 可平移
+      movable: true,    // 可平移
       theme: {
         edge: {
           type: 'AdvancedBezier',

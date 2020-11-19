@@ -18,9 +18,9 @@ class Industry extends Component {
       linkable: false,    // 可连线
       draggable: true,   // 可拖动
       zoomable: true,    // 可放大
-      moveable: true,    // 可平移
+      movable: true,    // 可平移
       css: {
-        groupHoverClass: 'datac-group-drag-hover',   // 节点移动到上面新增的class 
+        groupHoverClass: 'datac-group-drag-hover',   // 节点移动到上面新增的class
         groupActiveClass: 'datac-group-drag-active'   // 节点可移动到上面新增的class
       },
       theme: {
@@ -30,7 +30,7 @@ class Industry extends Component {
       }
     });
     this.canvas.draw(mockData);
-    
+
   }
   render() {
     return (

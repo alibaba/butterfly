@@ -7,7 +7,7 @@ class Canvas extends EventEmit3 {
     // root             根节点
     // layout           布局支持
     // zoomable         是否可放大缩小
-    // moveable         是否可移动
+    // movable         是否可移动
     // draggable        是否可拖动节点
     // linkable         是否可连接线条
     // disLinkable      是否可取消连线
@@ -44,7 +44,7 @@ class Canvas extends EventEmit3 {
   addGroups() {}
 
   // 删除节点
-  removeNode() {} 
+  removeNode() {}
 
   // 批量删除节点
   removeNodes() {}
@@ -78,7 +78,7 @@ class Canvas extends EventEmit3 {
   // 获取偏移值
   getOffset() {}
   // 动态设置可移动
-  setMoveable() {}
+  setmovable() {}
   // 动态设置移动
   move() {}
 
@@ -125,12 +125,12 @@ class Canvas extends EventEmit3 {
   // 保存为图片
   save2img() {}
 
-  // ********* 需要优化的api ********* 
-  
-  // 更新画布的大小 
+  // ********* 需要优化的api *********
+
+  // 更新画布的大小
   updateRootResize() {}
 
-  // ********* 需要新增的api ********* 
+  // ********* 需要新增的api *********
 
   // 单击的回调
   click() {}
@@ -144,7 +144,7 @@ class Canvas extends EventEmit3 {
   // 集成menu
 
   // 生成/关闭缩略图
-  
+
 }
 
 

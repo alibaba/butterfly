@@ -33,7 +33,7 @@ class BaseCanvas extends Canvas {
     this.root = options.root;
     this.layout = options.layout; // layout部分也需要重新review
     this.zoomable = options.zoomable || false; // 可缩放
-    this.moveable = options.moveable || false; // 可平移
+    this.movable = options.movable || false; // 可平移
     this.draggable = options.draggable || false; // 可拖动
     this.linkable = options.linkable || false; // 可连线
     this.disLinkable = options.disLinkable || false; // 可拆线
@@ -68,7 +68,7 @@ class BaseCanvas extends Canvas {
       zoomGap: _.get(options, 'theme.zoomGap') || 0.001,
       // 鼠标到达边缘画布自动移动
       autoFixCanvas: {
-        enable: _.get(options, 'theme.autoFixCanvas.enable', false),
+        enabled: _.get(options, 'theme.autoFixCanvas.enabled', false),
         autoMovePadding: _.get(options, 'theme.autoFixCanvas.autoMovePadding') || [20, 20, 20, 20] // 上，右，下，左
       },
       // 自动适配父级div大小
@@ -1001,8 +1001,8 @@ class BaseCanvas extends Canvas {
 
   /**
    * 查找 N 层节点
-   * 
-   * @param {Object} options 
+   *
+   * @param {Object} options
    * @param {Node} options.node
    * @param {Endpoint} options.endpoint
    * @param {String} options.type
@@ -1155,14 +1155,14 @@ class BaseCanvas extends Canvas {
     }
   }
 
-  setMoveable(flat) {
+  setmovable(flat) {
     if (flat) {
-      this.moveable = true;
+      this.movable = true;
       if (this._dragType === 'canvas:drag') {
-        this.moveable = false;
+        this.movable = false;
       }
     } else {
-      this.moveable = false;
+      this.movable = false;
     }
   }
 
@@ -1494,15 +1494,15 @@ class BaseCanvas extends Canvas {
       this.selecContents = contents;
       this.selecMode = selecMode;
       this.canvasWrapper.active();
-      this._remarkMove = this.moveable;
+      this._remarkMove = this.movable;
       this._remarkZoom = this.zoomable;
       this.setZoomable(false);
-      this.setMoveable(false);
+      this.setmovable(false);
     } else {
       this.isSelectMode = false;
       this.canvasWrapper.unActive();
       if (this._remarkMove) {
-        this.setMoveable(true);
+        this.setmovable(true);
       }
       if (this._remarkZoom) {
         this.setZoomable(true);
@@ -1769,7 +1769,7 @@ class BaseCanvas extends Canvas {
     let _isMobi = _detectMob();
     let _SVGWidth = '100%';
     let _SVGHeight = '100%';
-    
+
     let _detectZoom = () => {
       let ratio = 0;
       let screen = window.screen;
@@ -1846,8 +1846,8 @@ class BaseCanvas extends Canvas {
     if (this.zoomable) {
       this.setZoomable(true);
     }
-    if (this.moveable) {
-      this.setMoveable(true);
+    if (this.movable) {
+      this.setmovable(true);
     }
 
     let _isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
@@ -2147,7 +2147,7 @@ class BaseCanvas extends Canvas {
         return;
       }
 
-      if (!this._dragType && this.moveable) {
+      if (!this._dragType && this.movable) {
         this._dragType = 'canvas:drag';
       }
 
@@ -2943,7 +2943,7 @@ class BaseCanvas extends Canvas {
   }
   _autoMoveCanvas(x, y, data, cb) {
 
-    if (!this.theme.autoFixCanvas.enable) {
+    if (!this.theme.autoFixCanvas.enabled) {
       return;
     }
 
@@ -3012,7 +3012,7 @@ class BaseCanvas extends Canvas {
     }
   }
   _moveNode(node, x, y, isNotEventEmit) {
-    
+
     let _isInGroup = !!node.group;
     if (_isInGroup) {
       let groupObj = this.getGroup(node.group);

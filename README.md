@@ -62,7 +62,7 @@ const Canvas = require('butterfly-dag').Canvas;
 let canvas = new Canvas({
   root: dom,              //canvas的根节点(必传)
   zoomable: true,         //可缩放(可传)
-  moveable: true,         //可平移(可传)
+  movable: true,         //可平移(可传)
   draggable: true,        //节点可拖动(可传)
 });
 canvas.draw({

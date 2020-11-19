@@ -5,7 +5,7 @@ let canvas = new Canvas({
   root: dom,               //canvas的根节点(必传)
   layout: 'ForceLayout',   //布局设置(可传)，可使用集成的，也可自定义布局
   zoomable: true,          //可缩放(可传)
-  moveable: true,          //可平移(可传)
+  movable: true,          //可平移(可传)
   draggable: true,         //节点可拖动(可传)
   linkable: true,          //节点可连接(可传)
   disLinkable: true,       //节点可取消连接(可传)
@@ -36,7 +36,7 @@ let canvas = new Canvas({
     },
     zoomGap: 0.001,         //鼠标放大缩小间隙设置
     autoFixCanvas: {     //节点拖动或连线拖动到画布边缘时，画布自动延展
-      enable: false,
+      enabled: false,
       autoMovePadding: [20, 20, 20, 20] //触发自动延展的画布内边距
     },
     autoResizeRootSize: true // 自动适配root大小，默认为true
@@ -54,7 +54,7 @@ let canvas = new Canvas({
 | root | 渲染画布的跟节点 | Dom (Require) | `*这个dom必须设置position:relative`
 | layout | 自动布局 | string/function (Option) | null 
 | zoomable | 画布是否可缩放 | boolean (Option) | false 
-| moveable | 画布是否可移动 | boolean (Option) | false 
+| movable | 画布是否可移动 | boolean (Option) | false 
 | draggable | 画布节点是否可拖动 | boolean (Option) | false 
 | linkable | 画布节点是否可连接 | boolean (Option) | false 
 | disLinkable | 画布节点是否可取消连接 | boolean (Option) | false 
@@ -233,7 +233,7 @@ setZoomable = (boolean, boolean) => {}
   * 设置画布平移
   * @param {true|false} boolean  - 是否支持画布平移
   */
-setMoveable = (boolean) => {}
+setmovable = (boolean) => {}
 
 /**
   * 手动设置画布偏移

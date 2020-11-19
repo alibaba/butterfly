@@ -20,7 +20,7 @@ class ConcentLayout extends Component {
       linkable: false,    // 可连线
       draggable: true,   // 可拖动
       zoomable: true,    // 可放大
-      moveable: true,    // 可平移
+      movable: true,    // 可平移
       layout: {
         type: 'concentricLayout',
         options: {
