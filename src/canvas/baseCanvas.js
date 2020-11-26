@@ -202,29 +202,27 @@ class BaseCanvas extends Canvas {
       });
     }
 
-    // 首次加载，异步逐步加载
-    let groupPromise = new Promise((resolve, reject) => {
+    let drawPromise = new Promise((resolve, reject) => {
       setTimeout(() => {
         // 生成groups
         this.addGroups(groups);
         resolve();
       });
-    });
-    let nodePromise = new Promise((resolve, reject) => {
+    }).then((resolve) => {
       setTimeout(() => {
         // 生成nodes
         this.addNodes(nodes);
         resolve();
       }, 10);
-    });
-    let edgePromise = new Promise((resolve, reject) => {
+    }).then((resolve) => {
       setTimeout(() => {
         // 生成edges
         this.addEdges(edges);
         resolve();
       }, 20);
     });
-    Promise.all([groupPromise, nodePromise, edgePromise]).then(() => {
+    
+    drawPromise.then(() => {
       this.actionQueue = [];
       this.actionQueueIndex = -1;
       callback && callback({
