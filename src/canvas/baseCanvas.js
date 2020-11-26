@@ -208,18 +208,22 @@ class BaseCanvas extends Canvas {
         this.addGroups(groups);
         resolve();
       });
+    }).then(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          // 生成nodes
+          this.addNodes(nodes);
+          resolve();
+        }, 10);
+      });
     }).then((resolve) => {
-      setTimeout(() => {
-        // 生成nodes
-        this.addNodes(nodes);
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          // 生成edges
+          this.addEdges(edges);
         resolve();
-      }, 10);
-    }).then((resolve) => {
-      setTimeout(() => {
-        // 生成edges
-        this.addEdges(edges);
-        resolve();
-      }, 20);
+        }, 20);
+      });
     });
     
     drawPromise.then(() => {
