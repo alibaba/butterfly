@@ -55,25 +55,17 @@ const ReactButterfly = (props) => {
     const processNodes = () => {
       const {created, deleted} = diff(nodes, oldNodes);
 
-      process({nodes: created}).nodes.forEach(node => {
-        canvas.addNode(node);
-      });
-
-      process({nodes: deleted}).nodes.forEach(node => {
-        canvas.removeNode(node.id);
-      });
+      canvas.addNodes(process({nodes: created}).nodes);
+      canvas.removeNodes(process({nodes: deleted}).nodes);
     };
 
     const processEdge = () => {
       const {created, deleted} = diff(edges, oldEdges);
 
-      process({edges: created}).edges.forEach(edge => {
-        canvas.addEdge(edge, true);
-      });
 
-      process({edges: deleted}).edges.forEach(edge => {
-        canvas.removeEdge(edge.id);
-      });
+      canvas.addEdges(process({edges: created}).edges.map(e => e.id), true);
+
+      canvas.removeEdges(process({edges: deleted}).edges.map(e => e.id));
     };
 
     const processGroups = () => {
