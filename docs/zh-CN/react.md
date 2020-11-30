@@ -10,7 +10,7 @@ $ npm i butterfly-react butterfly-dag -S
 
 ```jsx
 import React from 'react';
-import ReactButterfly from '@ali/butterfly-react';
+import ReactButterfly from 'butterfly-react';
 
 const endpoints = [
   {
