@@ -1,7 +1,7 @@
 {
-  "name": "react-butterfly",
+  "name": "butterfly-react",
   "version": "0.0.1",
-  "description": "",
+  "description": "react version for butterfly",
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -58,17 +58,5 @@
     "butterfly-dag": "^2.8.31",
     "jquery": "^3.5.1",
     "lodash": "^4.17.20"
-  },
-  "publishConfig": {
-    "registry": "https://registry.npm.alibaba-inc.com"
-  },
-  "eslintConfig": {
-    "extends": "aliyun"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm-run-all eslint check-filename",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
   }
 }
