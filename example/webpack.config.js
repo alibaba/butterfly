@@ -17,7 +17,8 @@ module.exports = {
       path.resolve(process.cwd(), 'node_modules'),
       path.resolve(process.cwd(), '../node_modules'),
       'node_modules'
-    ]
+    ],
+    extensions: ['.js', '.jsx']
   },
   module: {
     rules: [
@@ -27,8 +28,16 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env', '@babel/preset-react'],
-            plugins: ['transform-es2015-modules-commonjs', '@babel/plugin-proposal-object-rest-spread', '@babel/plugin-proposal-class-properties']
+            presets: [
+              '@babel/preset-env',
+              '@babel/preset-react'
+            ],
+            plugins: [
+              '@babel/plugin-transform-runtime',
+              '@babel/plugin-transform-modules-commonjs',
+              '@babel/plugin-proposal-object-rest-spread', 
+              '@babel/plugin-proposal-class-properties',
+            ]
           }
         }
       },
