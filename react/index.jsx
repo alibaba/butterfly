@@ -220,7 +220,7 @@ const ReactButterfly = (props) => {
 
   return (
     <div
-      className={`${className || ''} react-butterfly`}
+      className={`${className || ''} butterfly-react`}
     >
       <CommonRender
         data={nodes}
@@ -239,7 +239,7 @@ const ReactButterfly = (props) => {
         idPrefix="bf_group_"
       />
       <div
-        className="react-butterfly-container"
+        className="butterfly-react-container"
         ref={(ref) => containerRef.current = ref}
       />
     </div>

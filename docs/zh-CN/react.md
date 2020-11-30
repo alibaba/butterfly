@@ -1,16 +1,16 @@
-# React版小蝴蝶（React-Butterfly）
+# React版小蝴蝶（butterfly-react）
 
 ## 安装
 
 ```bash
-$ npm i react-butterfly butterfly-dag -S
+$ npm i butterfly-react butterfly-dag -S
 ```
 
 ## 用法
 
 ```jsx
 import React from 'react';
-import ReactButterfly from '@ali/react-butterfly';
+import ReactButterfly from '@ali/butterfly-react';
 
 const endpoints = [
   {
