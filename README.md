@@ -111,8 +111,8 @@ canvas.draw({
 * [缩略图(Minimap)](./docs/zh-CN/minimap.md#endpoint-api)
 * [布局(Layout)](./docs/zh-CN/layout.md)
 * React & Vue支持
- * [React butterfly组件支持](./docs/zh-CN/react.md)
- * Vue2 butterfly组件支持(开发中)
+  * [React butterfly组件支持](./docs/zh-CN/react.md)
+  * Vue2 butterfly组件支持(开发中)
 
 ## 🤝贡献
 小蝴蝶是一个完全开源的项目，我们欢迎大家为修复错误和改进做出贡献。有关如何开始的信息，请阅读我们的[贡献指南](./docs/zh-CN/CONTRIBUTING.md).
