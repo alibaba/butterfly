@@ -112,8 +112,8 @@ canvas.draw({
 * [Minimap](./docs/en-US/minimap.md#endpoint-api)
 * [Layout](./docs/en-US/layout.md)
 * React & Vue Support
- * [React butterfly](./docs/zh-CN/react.md)
- * Vue2 butterfly(doing)
+  * [React butterfly](./docs/zh-CN/react.md)
+  * Vue2 butterfly(doing)
 
 ## 🤝 Contribution
 Butterfly is a completely open source project and we welcome everyone to contribute to fixing bugs and improvements. For information on how to get started, read our [contribution guide](./docs/en-US/CONTRIBUTING.md).
