@@ -4,7 +4,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {BrowserRouter as Router, Route, Link, Redirect} from 'react-router-dom';
 import {Layout, Menu} from 'antd';
-const {Header, Content, Sider} = Layout;
 
 import Emergency from './demo/emergency/index.jsx';
 import Diodes from './demo/diodes/index.jsx';
@@ -30,7 +29,7 @@ import IndentedTree from './demo/indented-tree/index.jsx';
 import Circle from './demo/circle/index.jsx';
 import Grid from './demo/grid/index.jsx';
 import Fruchterman from './demo/fruchterman/index.jsx';
-
+import ReactSample from './demo/react/sample/index.jsx';
 
 import DrageLayout from './demo/drageLayout/index.jsx';
 import ConcentLayout from './demo/concent-layout/index.jsx';
@@ -38,6 +37,8 @@ import ConcentLayout from './demo/concent-layout/index.jsx';
 import 'antd/dist/antd.css';
 import './static/iconfont.css';
 import './index.less';
+
+const {Header, Content, Sider} = Layout;
 
 ReactDOM.render((
   <Router>
@@ -125,10 +126,12 @@ ReactDOM.render((
             <Menu.Item key="concent-layout">
               <Link to="/concent-layout">concent-layout</Link>
             </Menu.Item>
+            <Menu.Item key="react-sample">
+              <Link to="/react-sample">React-Sample</Link>
+            </Menu.Item>
           </Menu>
         </Sider>
         <Content>
-          <Redirect from="/" to="/analysis" />
           <Route path="/emergency" component={Emergency} />
           <Route path="/diodes" component={Diodes} />
           <Route path="/force" component={Force} />
@@ -155,6 +158,8 @@ ReactDOM.render((
           <Route path="/circle" component={Circle} />
           <Route path="/grid" component={Grid} />
           <Route path="/Fruchterman" component={Fruchterman} />
+          <Route path="/react-sample" component={ReactSample} />
+          <Route exact path="/" component={() => <Redirect exact from="/" to="/analysis" />} />
         </Content>
       </Layout>
     </Layout>
