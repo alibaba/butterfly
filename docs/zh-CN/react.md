@@ -29,9 +29,11 @@ const data = {
   groups: [
     {
       id: '1',
+      left: 10,
+      top: 100,
       render() {
         return (
-          <div>
+          <div style={{width:'250px',textAlign:'center',backgroundColor:'blanchedalmond'}}>
             测试group
           </div>
         )
@@ -41,6 +43,7 @@ const data = {
   nodes: [
     {
       id: '1',
+      group:'1',
       endpoints: endpoints,
       render() {
         return (
@@ -52,6 +55,8 @@ const data = {
     },
     {
       id: '2',
+      top: 25,
+      left: 300,
       endpoints: endpoints,
       render() {
         return (
@@ -62,7 +67,9 @@ const data = {
       }
     },
     {
-      id: 3,
+      id: '3',
+      top: 25,
+      left: 600,
       endpoints: endpoints,
     }
   ],
