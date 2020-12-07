@@ -1,6 +1,7 @@
 'use strict';
 
 const Node = require('../../../index.js').Node;
+const Tips = require('../../../index.js').Tips;
 const $ = require('jquery');
 
 class BaseNode extends Node {
@@ -8,7 +9,14 @@ class BaseNode extends Node {
     super(opts);
   }
   mounted() {
-
+    Tips.creatMenu({
+      targetDom: this.dom,
+      genTipDom: (data) => {
+        return $('<div>this is a menu</div>')[0];
+      },
+      placement: 'right',
+      closable: true
+    });
   }
   draw = (data) => {
     let container = $('<div class="system-base-node"></div>')
