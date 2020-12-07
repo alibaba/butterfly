@@ -1,21 +1,19 @@
+'use strict';
+
+import './toolTip.less';
+
 const $ = require('jquery');
 
-const Default = {
+const DEFUALT = {
   TEMPLATE:
-    '<div class="butterfly-toolTip" role="butterfly-tooltip"><div class="butterfly-tooltip-arrow"></div><div class="butterfly-tooltip-inner"></div></div>',
-
+    '<div class="butterfly-tooltip-container"><div class="butterfly-tooltip-arrow"></div><div class="butterfly-tooltip-inner"></div></div>',
   $viewAppend: 'body',
-  $viewScale: '.butterfly-wrapper', // 有缩放的图层
-
-  $viewCon: '.butterfly-toolTip',
-  $inner: '.butterfly-tooltip-inner',
-  callbackWhitelist: ['LI'],
-
-  evntList: ['hover'],
-
-  callBackOpen: true,
-
-  delay: 300,
+  $viewCon: {
+    tips: '.butterfly-tips',
+    menu: '.butterfly-menu',
+    common: '.butterfly-tooltip-container'
+  },
+  $inner: '.butterfly-tooltip-inner'
 };
 
 const _toFixed_3 = (num) => {
@@ -26,6 +24,7 @@ const _toFixed_3 = (num) => {
     return Number(parseFloat(num).toFixed(3));
   }
 };
+
 const _getTipOffset = (placement, pos) => {
   const _pos = {};
   let { left, top, width, height, actualWidth, actualHeight } = pos;
@@ -59,35 +58,22 @@ const _getTipOffset = (placement, pos) => {
   return _pos;
 };
 
-const show = (opts, dom, toolTipDom, callBackFunc, e) => {
-  $(opts.$viewCon).remove();
+const show = (opts, type, tipsDom, targetDom, callback) => {
+  $(DEFUALT.$viewCon[type]).remove();
 
-  opts.callBackOpen &&
-    toolTipDom.on('click', (e) => {
-      if (callBackFunc) {
-        const res = { key:$(e.target).attr("key"),value: e.target.textContent };
-        if (opts.callbackWhitelist.includes(e.target.nodeName)) {
-          $(opts.$viewCon).remove();
-          callBackFunc(res, e)
-        };
-      }
-      e.stopPropagation();
-    });
+  let tipsContainer = $(DEFUALT.TEMPLATE);
+  tipsContainer.find(DEFUALT.$inner).append(tipsDom);
+  $(tipsContainer).appendTo(DEFUALT.$viewAppend);
 
-  toolTipDom.appendTo($(opts.$viewAppend));
   let placement = opts.placement || 'top';
-  toolTipDom.addClass(placement);
-
-  const scaleArr = ($(opts.$viewScale).css("transform") || 'none').replace('matrix(', '').replace(')', '').split(',');
-  const scale = scaleArr[0] === 'none' ? 1 : scaleArr[0];
 
   const pos = {
-    top: dom.offset().top,
-    left: dom.offset().left,
-    width: dom.outerWidth() * scale,
-    height: dom.outerHeight() * scale,
-    actualWidth: toolTipDom.outerWidth(),
-    actualHeight: toolTipDom.outerHeight(),
+    top: $(targetDom).offset().top,
+    left: $(targetDom).offset().left,
+    width: $(targetDom).outerWidth(),
+    height: $(targetDom).outerHeight(),
+    actualWidth: $(tipsContainer).outerWidth(),
+    actualHeight: $(tipsContainer).outerHeight()
   };
 
   let posInit = {}
@@ -99,86 +85,59 @@ const show = (opts, dom, toolTipDom, callBackFunc, e) => {
   } else {
     posInit = _getTipOffset(placement, pos);
   }
+
   const position = `top: ${posInit.top}px; left: ${posInit.left}px;`;
-  toolTipDom.attr('style', position).addClass('in');
-};
-
-const hide = (toolTipDom) => {
-  toolTipDom.removeClass('in').remove();
-};
-
-function creatTips(option, dom, callBackFunc) {
-  const opts = { ...Default, ...option };
-
-  let toolTipDom = $(opts.TEMPLATE);
-  toolTipDom.find(opts.$inner).html(opts.content);
-
-  let _timeoutMouseover = null;
-
-  opts.evntList.includes('hover') &&
-    dom
-      .on('mouseover', (e) => {
-        clearTimeout(_timeoutMouseover);
-        _timeoutMouseover = setTimeout(() => {
-          show(opts, dom, toolTipDom, callBackFunc, e);
-        }, opts.delay);
-      })
-      .on('mouseout', (e) => {
-        clearTimeout(_timeoutMouseover);
-        !$(opts.$viewCon).hasClass('butterfly-active-tip') && hide(toolTipDom);
-      });
-  const clickOrSame = (e) => {
-    if ($(opts.$viewCon).hasClass('butterfly-active-tip')) {
-      $(opts.$viewCon).removeClass('butterfly-active-tip');
-      hide(toolTipDom);
-    } else {
-      toolTipDom.addClass('butterfly-active-tip');
-      show(opts, dom, toolTipDom, callBackFunc, e);
-    }
-  }
-  opts.evntList.includes('click') &&
-    dom.on('click', (e) => {
-      clickOrSame(e);
-    });
-
-  opts.evntList.includes('mousedown') && dom.mousedown((e) => {
-    $(dom).bind("contextmenu", function (e) {
-      return false;
-    });
-    if (3 == e.which) {
-      clickOrSame(e);
-    }
-  });
-  opts.nowShow && show(opts, dom, toolTipDom, callBackFunc, '');
-
-  return dom;
+  $(tipsContainer)
+    .attr('style', position)
+    .addClass(DEFUALT.$viewCon[type].replace('.', ''))
+    .addClass(placement)
+    .addClass('in'); // todo in的动画
+  return tipsContainer[0];
 }
 
-function creatMenus(opts, dom, callBackFunc, menu = [], showTip = false) {
-  const menuDom = $('<div class="butterfly-tip-menu-div"></div>');
+const hide = (tipsDom) => {
+  $(tipsDom).removeClass('in').remove();
+};
 
-  const menuUl = $('<ul class="butterfly-tip-menu-ul"></ul>');
-
-  (menu || []).forEach((item) => {
-    $('<li class="butterfly-tip-menu-li"></li>')
-      .attr('key', `${item.key}`)
-      .text(item.value)
-      .appendTo(menuUl);
+let creatTip = (opts, callback) => {
+  let currentTips = null;
+  let {data, targetDom, genTipDom} = opts;
+  targetDom.addEventListener('mouseover', () => {
+    let tipstDom = genTipDom(data);
+    currentTips = show(opts, 'tips', tipstDom, targetDom, callback);
   });
 
-  showTip && $(`<div class="butterfly-tip-menu-title">${opts.content}</div>`).appendTo(menuDom);
-  menuUl.appendTo(menuDom);
+  targetDom.addEventListener('mouseout', () => {
+    hide(currentTips);
+  });
+};
 
-  opts.placement = opts.placement || 'right';
-  opts.content = menuDom;
-  opts.evntList = opts.evntList || [];
+let currentMenu = null;
+let _hiveMenu = (e) => {
+  if (e.target === currentMenu || $(currentMenu).find(e.target).length > 0) {
+    return ;
+  }
+  currentMenu && hide(currentMenu);
+  document.removeEventListener('click', _hiveMenu);
+}
+let creatMenu = (opts, callback) => {
+  let {data, targetDom, genTipDom} = opts;
+  targetDom.addEventListener('click', () => {
+    let tipstDom = genTipDom(data);
+    currentMenu = show(opts, 'menu', tipstDom, targetDom, callback);
+    if (opts.closable) {
+      document.addEventListener('click', _hiveMenu);
+    }
+  });
+}
 
-  opts.nowShow = opts.nowShow || true;
-
-  return creatTips(opts, dom, callBackFunc);
+let closeMenu = () => {
+  hide(currentMenu);
+  document.removeEventListener('click', _hiveMenu);
 }
 
 export default {
-  creatTips,
-  creatMenus,
+  creatTip,
+  creatMenu,
+  closeMenu
 };
