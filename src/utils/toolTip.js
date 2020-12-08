@@ -38,19 +38,19 @@ const _getTipOffset = (placement, pos) => {
   switch (placement) {
     case 'top':
       _pos.left = left + width / 2 - actualWidth / 2;
-      _pos.top = top - actualHeight;
+      _pos.top = top - actualHeight - 5;
       break;
     case 'left':
-      _pos.left = left - actualWidth;
+      _pos.left = left - actualWidth - 5;
       _pos.top = top + height / 2 - actualHeight / 2;
       break;
     case 'right':
-      _pos.left = left + width;
+      _pos.left = left + width + 5;
       _pos.top = top + height / 2 - actualHeight / 2;
       break;
     case 'bottom':
       _pos.left = left + width / 2 - actualWidth / 2;
-      _pos.top = top + actualHeight;
+      _pos.top = top + actualHeight + 5;
     default:
       _pos.left = left + width / 2 - actualWidth / 2;
       _pos.top = top - actualHeight;
