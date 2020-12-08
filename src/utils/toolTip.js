@@ -99,7 +99,7 @@ const hide = (tipsDom) => {
   $(tipsDom).removeClass('in').remove();
 };
 
-let creatTip = (opts, callback) => {
+let createTip = (opts, callback) => {
   let currentTips = null;
   let {data, targetDom, genTipDom} = opts;
   targetDom.addEventListener('mouseover', () => {
@@ -120,7 +120,7 @@ let _hiveMenu = (e) => {
   currentMenu && hide(currentMenu);
   document.removeEventListener('click', _hiveMenu);
 }
-let creatMenu = (opts, callback) => {
+let createMenu = (opts, callback) => {
   let {data, targetDom, genTipDom} = opts;
   targetDom.addEventListener('click', () => {
     let tipstDom = genTipDom(data);
@@ -137,7 +137,7 @@ let closeMenu = () => {
 }
 
 export default {
-  creatTip,
-  creatMenu,
+  createTip,
+  createMenu,
   closeMenu
 };

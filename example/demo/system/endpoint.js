@@ -6,7 +6,7 @@ const $ = require('jquery');
 
 class BaseEndpoint extends Endpoint {
   mounted() {
-    Tips.creatTip({
+    Tips.createTip({
       targetDom: this.dom,
       genTipDom: (data) => {
         return $('<div>this is a tips</div>')[0];

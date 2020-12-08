@@ -9,7 +9,7 @@ class BaseNode extends Node {
     super(opts);
   }
   mounted() {
-    Tips.creatMenu({
+    Tips.createMenu({
       targetDom: this.dom,
       genTipDom: (data) => {
         return $('<div>this is a menu</div>')[0];
