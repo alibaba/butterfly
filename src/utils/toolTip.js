@@ -92,6 +92,9 @@ const show = (opts, type, tipsDom, targetDom, callback) => {
     .addClass(DEFUALT.$viewCon[type].replace('.', ''))
     .addClass(placement)
     .addClass('in'); // todo in的动画
+  if (opts.className) {
+    tipsContainer.addClass(opts.className);
+  }
   return tipsContainer[0];
 }
 
