@@ -47,6 +47,9 @@ class BaseEdge extends Edge {
     // 函数节流
     this._updateTimer = null;
     this._UPDATE_INTERVAL = 20;
+    // 线段起始位置
+    this._sourcePoint = null;
+    this._targetPoint = null;
   }
   _init() {
     if (this._isInited) {
@@ -103,6 +106,8 @@ class BaseEdge extends Edge {
         orientation: (this.type === 'endpoint' && this.targetEndpoint.orientation) ? this.targetEndpoint.orientation : undefined
       };
     }
+    this._sourcePoint = sourcePoint;
+    this._targetPoint = targetPoint;
     let path = '';
     if (this.calcPath) {
       path = this.calcPath(sourcePoint, targetPoint);

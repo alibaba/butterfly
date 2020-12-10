@@ -38,7 +38,7 @@ node.addEndpoint({
 | root | endpoint can be attached to a child element | string (Optional) | - 
 | Class | extended class | Class (Optional) | When the extended class is passed in, the node group will be rendered according to the draw method of the extended class, and the related methods of the extended class will also override the method of the parent class.
 | dom | custom dom (any dom on root node) | dom (Optional) | - 
-| expendArea | set the hot zone of the endpoint connection to override the settings in the theme | Object (Optional) | {left:10, right:10, top:10, bottom:10}
+| expandArea | set the hot zone of the endpoint connection to override the settings in the theme | Object (Optional) | {left:10, right:10, top:10, bottom:10}
 
 ## <a name='endpoint-api'> API：
 

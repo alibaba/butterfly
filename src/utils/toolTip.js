@@ -38,22 +38,23 @@ const _getTipOffset = (placement, pos) => {
   switch (placement) {
     case 'top':
       _pos.left = left + width / 2 - actualWidth / 2;
-      _pos.top = top - actualHeight;
+      _pos.top = top - actualHeight - 5;
       break;
     case 'left':
-      _pos.left = left - actualWidth;
+      _pos.left = left - actualWidth - 5;
       _pos.top = top + height / 2 - actualHeight / 2;
       break;
     case 'right':
-      _pos.left = left + width;
+      _pos.left = left + width + 5;
       _pos.top = top + height / 2 - actualHeight / 2;
       break;
     case 'bottom':
       _pos.left = left + width / 2 - actualWidth / 2;
-      _pos.top = top + actualHeight;
+      _pos.top = top + height + 5;
+      break;
     default:
       _pos.left = left + width / 2 - actualWidth / 2;
-      _pos.top = top - actualHeight;
+      _pos.top = top - height - 5;
   }
   return _pos;
 };
@@ -66,6 +67,14 @@ const show = (opts, type, tipsDom, targetDom, callback) => {
   $(tipsContainer).appendTo(DEFUALT.$viewAppend);
 
   let placement = opts.placement || 'top';
+
+  $(tipsContainer)
+    .addClass(DEFUALT.$viewCon[type].replace('.', ''))
+    .addClass(placement)
+    .addClass('in'); // todo in的动画
+  if (opts.className) {
+    tipsContainer.addClass(opts.className);
+  }
 
   const pos = {
     top: $(targetDom).offset().top,
@@ -87,19 +96,17 @@ const show = (opts, type, tipsDom, targetDom, callback) => {
   }
 
   const position = `top: ${posInit.top}px; left: ${posInit.left}px;`;
-  $(tipsContainer)
-    .attr('style', position)
-    .addClass(DEFUALT.$viewCon[type].replace('.', ''))
-    .addClass(placement)
-    .addClass('in'); // todo in的动画
+  $(tipsContainer).attr('style', position);
+  callback && callback(tipsContainer[0]);
   return tipsContainer[0];
 }
 
-const hide = (tipsDom) => {
+const hide = (tipsDom, callback) => {
   $(tipsDom).removeClass('in').remove();
+  callback && callback(tipsDom);
 };
 
-let creatTip = (opts, callback) => {
+let createTip = (opts, callback) => {
   let currentTips = null;
   let {data, targetDom, genTipDom} = opts;
   targetDom.addEventListener('mouseover', () => {
@@ -113,31 +120,36 @@ let creatTip = (opts, callback) => {
 };
 
 let currentMenu = null;
-let _hiveMenu = (e) => {
+let _hideMenu = (e) => {
   if (e.target === currentMenu || $(currentMenu).find(e.target).length > 0) {
     return ;
   }
   currentMenu && hide(currentMenu);
-  document.removeEventListener('click', _hiveMenu);
+  document.removeEventListener('click', _hideMenu);
 }
-let creatMenu = (opts, callback) => {
+let createMenu = (opts, callback) => {
   let {data, targetDom, genTipDom} = opts;
-  targetDom.addEventListener('click', () => {
+  let _createMenu = () => {
     let tipstDom = genTipDom(data);
     currentMenu = show(opts, 'menu', tipstDom, targetDom, callback);
     if (opts.closable) {
-      document.addEventListener('click', _hiveMenu);
+      document.addEventListener('click', _hideMenu);
     }
-  });
+  }
+  if (opts.action === 'click') {
+    targetDom.addEventListener('click', _createMenu);
+  } else {
+    _createMenu();
+  }
 }
 
-let closeMenu = () => {
-  hide(currentMenu);
-  document.removeEventListener('click', _hiveMenu);
+let closeMenu = (callback) => {
+  hide(currentMenu, callback);
+  document.removeEventListener('click', _hideMenu);
 }
 
 export default {
-  creatTip,
-  creatMenu,
+  createTip,
+  createMenu,
   closeMenu
 };
