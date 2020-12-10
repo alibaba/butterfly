@@ -38,7 +38,7 @@ node.addEndpoint({
 | root | 可把锚点附属与某个子元素 | string (Option) | - 
 | Class | 拓展类 | Class (Option) | 当传入拓展类的时候，该节点组则会按拓展类的draw方法进行渲染，拓展类的相关方法也会覆盖父类的方法
 | dom | 可以把此dom作为自定义锚点 | dom (Option) | - 
-| expendArea | 可以设置锚点连接的热区，可覆盖主题内的设置 | Object (Option) | {left:10, right:10, top:10, bottom:10}
+| expandArea | 可以设置锚点连接的热区，可覆盖主题内的设置 | Object (Option) | {left:10, right:10, top:10, bottom:10}
 
 ## <a name='endpoint-api'></a> API：
 
