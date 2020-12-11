@@ -22,7 +22,7 @@ const CommonRender = (props) => {
 
     if (!id) {
       // eslint-disable-next-line
-      console.warn(`${type} ${ind} 不含有ID属性，请检查格式`);
+      console.warn(`${type} ${id} 不含有ID属性，请检查格式`);
 
       return null;
     }
