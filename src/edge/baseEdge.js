@@ -255,6 +255,10 @@ class BaseEdge extends Edge {
     super.emit(type, data);
     this._emit(type, data);
   }
+  on(type, callback) {
+    super.on(type, callback);
+    this._on(type, callback);
+  }
   remove() {
     this.emit('InnerEvents', {
       type: 'edge:delete',

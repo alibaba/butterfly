@@ -129,6 +129,11 @@ class BaseCanvas extends Canvas {
     $(this.root).css('overflow', 'hidden');
     this._dragIndex = 50;
 
+    // 检测节点拖动节点组的hover状态
+    this._hoverGroupQueue = [];
+    this._hoverGroupObj = undefined;
+    this._hoverGroupTimer = undefined;
+
     // 网格布局
     this._gridService = new GridService({
       root: this.root,
@@ -2032,7 +2037,51 @@ class BaseCanvas extends Canvas {
     }
     endpoint.mounted && endpoint.mounted();
   }
-
+  // 拖动节点判断是否在节点组内
+  _findGroupByCoordinates(node, lx, ty, rx, by) {
+    for (let i = 0; i < this.groups.length; i++) {
+      const _group = this.groups[i];
+      const _groupLeft = _group.left;
+      const _groupRight = _group.left + _group.getWidth();
+      const _groupTop = _group.top;
+      const _groupBottom = _group.top + _group.getHeight();
+      let isInGroup = false;
+      if (rx !== undefined && by !== undefined) {
+        isInGroup = _groupLeft <= lx && _groupRight >= rx && _groupTop <= ty && _groupBottom >= by;
+      } else {
+        isInGroup = lx >= _groupLeft && lx <= _groupRight && ty >= _groupTop && ty <= _groupBottom;
+      }
+      if (isInGroup && _group.id !== node.group) {
+        return _group;
+      }
+    }
+  }
+  // 拖动节点移动节点组高亮, 节流500ms检测一次
+  _hoverGroup(node) {
+    this._hoverGroupQueue.push(node);
+    if (!this._hoverGroupTimer) {
+      this._hoverGroupTimer = setInterval(() => {
+        if (this._hoverGroupQueue.length === 0) {
+          clearInterval(this._hoverGroupTimer);
+          this._hoverGroupTimer = undefined;
+          return;
+        }
+        let targetNode = this._hoverGroupQueue.pop();
+        let targetGroup = this._findGroupByCoordinates(targetNode, targetNode.left, targetNode.top);
+        if (targetGroup) {
+          if (!this._hoverGroupObj || targetGroup.id !== this._hoverGroupObj.id) {
+            this._hoverGroupObj && $(this._hoverGroupObj.dom).removeClass('butterfly-group-hover');
+            $(targetGroup.dom).addClass('butterfly-group-hover');
+            this._hoverGroupObj = targetGroup;
+          }
+        } else {
+          this._hoverGroupObj && $(this._hoverGroupObj.dom).removeClass('butterfly-group-hover');
+          this._hoverGroupObj = undefined;
+        }
+        this._hoverGroupQueue = [];
+      }, 500);
+    }
+  }
   _attachMouseDownEvent() {
     let canvasOriginPos = {
       x: 0,
@@ -2181,7 +2230,7 @@ class BaseCanvas extends Canvas {
           $(point.dom).css('z-index', this._dragIndex * 2);
         });
       }
-
+      
       this.emit('system.drag.start', {
         dragType: this._dragType,
         dragNode: this._dragNode,
@@ -2261,6 +2310,7 @@ class BaseCanvas extends Canvas {
               x: canvasX,
               y: canvasY
             };
+            this._hoverGroup(this._dragNode);
             this.emit('system.node.move', {
               nodes: moveNodes
             });
@@ -2717,19 +2767,7 @@ class BaseCanvas extends Canvas {
           }
 
           if (!targetGroup) {
-            for (let i = 0; i < this.groups.length; i++) {
-              const _group = this.groups[i];
-              const _groupLeft = _group.left;
-              const _groupRight = _group.left + _group.getWidth();
-              const _groupTop = _group.top;
-              const _groupBottom = _group.top + _group.getHeight();
-              if (_groupLeft <= _nodeLeft && _groupRight >= _nodeRight && _groupTop <= _nodeTop && _groupBottom >= _nodeBottom) {
-                if (_group.id !== dragNode.group) {
-                  targetGroup = _group;
-                  break;
-                }
-              }
-            }
+            targetGroup = this._findGroupByCoordinates(dragNode, _nodeLeft, _nodeTop, _nodeRight, _nodeBottom)
           }
 
           let neighborEdges = [];
@@ -2753,7 +2791,7 @@ class BaseCanvas extends Canvas {
               }
             });
           };
-
+          this._hoverGroup(this._dragNode);
           if (sourceGroup) {
             // 从源组拖动到目标组
             if (sourceGroup !== targetGroup) {
