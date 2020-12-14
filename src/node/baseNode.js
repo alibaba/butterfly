@@ -147,14 +147,6 @@ class BaseNode extends Node {
     });
     this.top = y;
     this.left = x;
-    // 节点组hover效果
-    // if (this._group) {
-    //   if (x < 0 || x > this._group.width || y < 0 || y > this._group.height) {
-    //     $(this._group.dom).addClass('butterfly-group-hover');
-    //   } else {
-    //     $(this._group.dom).removeClass('butterfly-group-hover');
-    //   }
-    // }
   }
   moveTo(x, y, isNotEventEmit) {
     this.emit('InnerEvents', {

@@ -2056,7 +2056,7 @@ class BaseCanvas extends Canvas {
       }
     }
   }
-  // 拖动节点移动节点组高亮
+  // 拖动节点移动节点组高亮, 节流500ms检测一次
   _hoverGroup(node) {
     this._hoverGroupQueue.push(node);
     if (!this._hoverGroupTimer) {
@@ -2079,7 +2079,7 @@ class BaseCanvas extends Canvas {
           this._hoverGroupObj = undefined;
         }
         this._hoverGroupQueue = [];
-      }, 1000);
+      }, 500);
     }
   }
   _attachMouseDownEvent() {
