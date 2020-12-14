@@ -2068,6 +2068,9 @@ class BaseCanvas extends Canvas {
         }
         let targetNode = this._hoverGroupQueue.pop();
         let targetGroup = this._findGroupByCoordinates(targetNode, targetNode.left, targetNode.top);
+        if (targetGroup.scope && targetGroup.scope !== targetNode.scope) {
+          return;
+        }
         if (targetGroup) {
           if (!this._hoverGroupObj || targetGroup.id !== this._hoverGroupObj.id) {
             this._hoverGroupObj && $(this._hoverGroupObj.dom).removeClass('butterfly-group-hover');
@@ -2079,7 +2082,7 @@ class BaseCanvas extends Canvas {
           this._hoverGroupObj = undefined;
         }
         this._hoverGroupQueue = [];
-      }, 500);
+      }, 200);
     }
   }
   _attachMouseDownEvent() {
