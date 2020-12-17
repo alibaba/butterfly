@@ -1,0 +1,184 @@
+<template>
+  <div class="butterfly-vue" :class="className">
+    <div class="butterfly-vue-container" ref="canvas-dag"></div>
+  </div>
+</template>
+
+<script>
+import "butterfly-dag/dist/index.css";
+import "./butterfly-vue.css";
+import { Canvas } from "butterfly-dag";
+import { defaultOptions } from "./util/default-data";
+import { process, processNodes, processEdge, processGroups } from "./util/process";
+
+import { addCom, addEdgesCom } from "./util/addCom";
+import recalc from "./util/re-calc";
+import relayout from "./util/re-layout";
+
+import Vue from "vue";
+
+export default {
+  name: "butterfly-vue",
+  props: {
+    className: {
+      type: String,
+    },
+    baseCanvas: {
+      type: Function,
+      default: Canvas,
+    },
+    canvasConf: {
+      type: Object,
+      default: () => {
+        return defaultOptions;
+      },
+    },
+    canvasData: {
+      type: Object,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      canvas: null,
+      nodes: [],
+      groups: [],
+      edges: [],
+    };
+  },
+  methods: {
+    //初始化
+    initCanvas() {
+      const root = this.$refs["canvas-dag"];
+      if (!root) {
+        console.warn("当前canvas没有绑定dom节点，无法渲染");
+        return;
+      } else {
+        this.canvasConf.root = root;
+        this.canvas = new this.baseCanvas(this.canvasConf);
+      }
+    },
+
+    //更新画布信息
+    updateCavans() {
+      if (!this.canvas) {
+        console.warn("当前canvas为null，初始化存在问题");
+        return;
+      }
+
+      const oldNodes = this.canvas.nodes;
+      const oldEdges = this.canvas.edges;
+      const oldGroups = this.canvas.groups;
+
+      processGroups(this.canvas, this.groups, oldGroups);
+      processNodes(this.canvas, this.nodes, oldNodes);
+      processEdge(this.canvas, this.edges, oldEdges);
+    },
+
+    //重新计算节点和边的位置
+    re() {
+      if (!this.canvas) {
+        console.warn("当前canvas为null，初始化存在问题");
+        return;
+      }
+
+      recalc(this.canvas);
+      relayout(this.canvas);
+    },
+
+    onCreateEdge(data) {
+      if (data.type === "link:connect") {
+        console.log("link:connect");
+        let edgeInfo = {
+          sourceEndpointId: data.links[0].sourceEndpoint.id,
+          sourceNodeId: data.links[0].sourceNode.id,
+          targetEndpointId: data.links[0].targetEndpoint.id,
+          targetNodeId: data.links[0].targetNode.id,
+        };
+        this.$emit("onCreateEdge", edgeInfo);
+      }
+    },
+
+    onDeleteEdge(data) {
+      if (data.type === "links:delete" && data.links.length > 0) {
+        console.log("link:delete");
+        let edgeInfo = {
+          sourceEndpointId: data.links[0].sourceEndpoint.id,
+          sourceNodeId: data.links[0].sourceNode.id,
+          targetEndpointId: data.links[0].targetEndpoint.id,
+          targetNodeId: data.links[0].targetNode.id,
+        };
+        this.$emit("onDeleteEdge", edgeInfo);
+      }
+    },
+
+    onChangeEdges(data) {
+      if (data.type === "link:reconnect") {
+        console.log("link:reconnect");
+        let edgeInfo = {
+          addLink: {
+            sourceEndpointId: data.addLinks[0].sourceEndpoint.id,
+            sourceNodeId: data.addLinks[0].sourceNode.id,
+            targetEndpointId: data.addLinks[0].targetEndpoint.id,
+            targetNodeId: data.addLinks[0].targetNode.id,
+          },
+          delLinks: {
+            sourceEndpointId: data.delLinks[0].sourceEndpoint.id,
+            sourceNodeId: data.delLinks[0].sourceNode.id,
+            targetEndpointId: data.delLinks[0].targetEndpoint.id,
+            targetNodeId: data.delLinks[0].targetNode.id,
+          },
+          info: data.info,
+        };
+        this.$emit("onChangeEdges", edgeInfo);
+      }
+    },
+  },
+
+  watch: {
+    canvasData: {
+      handler(newValue, oldValue) {
+        this.nodes = newValue.nodes;
+        this.groups = newValue.groups;
+        this.edges = newValue.edges;
+        this.updateCavans();
+        this.re();
+      },
+      deep: true,
+    },
+  },
+  created() {
+    this.nodes = this.canvasData.nodes;
+    this.groups = this.canvasData.groups;
+    this.edges = this.canvasData.edges;
+  },
+  mounted() {
+    this.initCanvas();
+
+    if (!this.canvas) {
+      console.warn("当前canvas为null，初始化存在问题");
+      return;
+    }
+
+    const proData = process({
+      nodes: this.nodes,
+      groups: this.groups,
+      edges: this.edges,
+    });
+
+    this.updateCavans();
+
+    this.re();
+
+    this.$emit("onLoaded", this.canvas);
+
+    this.canvas.on("events", (data) => {
+      this.onCreateEdge(data);
+      this.onDeleteEdge(data);
+      this.onChangeEdges(data);
+    });
+  },
+};
+</script>
+
+<style></style>

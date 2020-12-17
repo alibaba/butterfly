@@ -1,0 +1,22 @@
+{
+  "name": "butterfly-vue",
+  "version": "0.0.1",
+  "description": "vue version for butterfly",
+  "main": "butterfly-vue.umd.min.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "节点式编程，数据图，流程图，连通图"
+  ],
+  "author": "zt448143356",
+  "license": "MIT",
+  "peerDependencies": {
+    "butterfly-dag": "*",
+    "vue":"^2.6.12"
+  },
+  "dependencies": {
+    "butterfly-dag": "^3.0.19",
+    "vue": "^2.6.12"
+  }
+}
