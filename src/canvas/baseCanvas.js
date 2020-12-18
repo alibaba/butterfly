@@ -2068,7 +2068,7 @@ class BaseCanvas extends Canvas {
         }
         let targetNode = this._hoverGroupQueue.pop();
         let targetGroup = this._findGroupByCoordinates(targetNode, targetNode.left, targetNode.top);
-        if (targetGroup.scope && targetGroup.scope !== targetNode.scope) {
+        if (targetGroup && targetGroup.scope && targetGroup.scope !== targetNode.scope) {
           return;
         }
         if (targetGroup) {
