@@ -145,6 +145,9 @@ class BaseCanvas extends Canvas {
       root: this.root,
       canvas: this
     });
+    this._bgObjQueue = [];
+    this._bgObj = null;
+    this._bgTimer = null;
 
     // 坐标转换服务
     this._coordinateService = new CoordinateService({
@@ -1517,19 +1520,48 @@ class BaseCanvas extends Canvas {
     }
   }
 
-  setGirdMode(flat = true, options) {
+  setGirdMode(flat = true, options = this._bgObj, _isResize) {
     if (flat) {
-      this._gridService.create(options);
+      this._bgObjQueue.push(options);
+      if (this._bgTimer) {
+        return;
+      }
+      this._bgTimer = setInterval(() => {
+        if (this._bgObjQueue.length === 0) {
+          clearInterval(this._bgTimer);
+          this._bgTimer = null;
+          return;
+        }
+        this._bgObj = this._bgObjQueue.pop();
+        _isResize && this._gridService._resize();
+        this._gridService.create(this._bgObj);
+        this._bgObjQueue = [];
+      }, 1000);
     } else {
       this._gridService.destroy();
+      this._bgObjQueue = [];
     }
   }
 
-  setGuideLine(flat = true, options) {
+  setGuideLine(flat = true, options = this._bgObj) {
     if (flat) {
-      this._guidelineService.create(options);
+      this._bgObjQueue.push(options);
+      if (this._bgTimer) {
+        return;
+      }
+      this._bgTimer = setInterval(() => {
+        if (this._bgObjQueue.length === 0) {
+          clearInterval(this._bgTimer);
+          this._bgTimer = null;
+          return;
+        }
+        this._bgObj = this._bgObjQueue.pop();
+        this._guidelineService.create(this._bgObj);
+        this._bgObjQueue = [];
+      }, 200);
     } else {
       this._guidelineService.destroy();
+      this._bgObjQueue = [];
     }
   }
 
@@ -1877,6 +1909,7 @@ class BaseCanvas extends Canvas {
           terHeight: $(this.root).height()
         });
         this.canvasWrapper.resize({root: this.root});
+        this.setGirdMode(true, undefined , true);
       });
       _resizeObserver.observe(this.root);
     } else {
@@ -1891,6 +1924,7 @@ class BaseCanvas extends Canvas {
           terHeight: $(this.root).height()
         });
         this.canvasWrapper.resize({root: this.root});
+        this.setGirdMode(true, undefined, true);
       })
     }
 

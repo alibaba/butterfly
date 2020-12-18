@@ -23,7 +23,18 @@ class LiteGraph extends Component{
           }
         }
     })
-    this.canvas.draw(mockData);
+    this.canvas.draw(mockData, () => {
+      this.canvas.setGirdMode(true, {
+        isAdsorb: false,         // 是否自动吸附,默认关闭
+        theme: {
+          shapeType: 'circle',     // 展示的类型，支持line & circle
+          gap: 20,               // 网格间隙
+          backgroud: '#252525',     // 网格背景颜色
+          circleRadiu: 1.5,        // 圆点半径
+          circleColor: 'rgba(255, 255, 255, 0.8)'    // 圆点颜色
+        }
+      });
+    });
     this.canvas.on('events', (data) => {
       console.log(data);
     })
