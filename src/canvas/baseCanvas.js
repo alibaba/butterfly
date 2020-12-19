@@ -146,8 +146,8 @@ class BaseCanvas extends Canvas {
       canvas: this
     });
     this._bgObjQueue = [];
-    this._bgObj = null;
-    this._bgTimer = null;
+    this._bgObj = undefined;
+    this._bgTimer = undefined;
 
     // 坐标转换服务
     this._coordinateService = new CoordinateService({
