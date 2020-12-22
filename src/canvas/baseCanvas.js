@@ -146,8 +146,8 @@ class BaseCanvas extends Canvas {
       canvas: this
     });
     this._bgObjQueue = [];
-    this._bgObj = null;
-    this._bgTimer = null;
+    this._bgObj = undefined;
+    this._bgTimer = undefined;
 
     // 坐标转换服务
     this._coordinateService = new CoordinateService({
@@ -3009,6 +3009,15 @@ class BaseCanvas extends Canvas {
     };
 
     const mouseLeaveEvent = (event) => {
+      if (this._dragEdges && this._dragEdges.length > 0) {
+        this._dragEdges.forEach((edge) => {
+          if (edge._isDeletingEdge) {
+            this.removeEdge(edge);
+          } else {
+            edge.destroy(!edge._isDeletingEdge);
+          }
+        });
+      }
       _clearDraging();
     }
 
