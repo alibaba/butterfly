@@ -3009,6 +3009,15 @@ class BaseCanvas extends Canvas {
     };
 
     const mouseLeaveEvent = (event) => {
+      if (this._dragEdges && this._dragEdges.length > 0) {
+        this._dragEdges.forEach((edge) => {
+          if (edge._isDeletingEdge) {
+            this.removeEdge(edge);
+          } else {
+            edge.destroy(!edge._isDeletingEdge);
+          }
+        });
+      }
       _clearDraging();
     }
 
