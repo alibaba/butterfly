@@ -2119,6 +2119,12 @@ class BaseCanvas extends Canvas {
       }, 200);
     }
   }
+  _clearHoverGroup(group) {
+    this._hoverGroupObj && $(this._hoverGroupObj.dom).removeClass('butterfly-group-hover');
+    this._hoverGroupTimer = undefined;
+    this._hoverGroupObj = undefined;
+    this._hoverGroupQueue = [];
+  }
   _attachMouseDownEvent() {
     let canvasOriginPos = {
       x: 0,
@@ -2889,7 +2895,7 @@ class BaseCanvas extends Canvas {
                     nodes: [rmNode],
                     group: targetGroup
                   });
-
+                  this._clearHoverGroup(targetGroup);
                 } else {
                   console.warn(`nodeId为${dragNode.id}的节点和groupId${targetGroup.id}的节点组scope值不符，无法加入`);
                 }
@@ -2934,6 +2940,7 @@ class BaseCanvas extends Canvas {
                   nodes: [rmNode],
                   group: targetGroup
                 });
+                this._clearHoverGroup(targetGroup);
               } else {
                 console.warn(`nodeId为${dragNode.id}的节点和groupId${targetGroup.id}的节点组scope值不符，无法加入`);
               }
