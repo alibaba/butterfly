@@ -59,10 +59,10 @@ class BaseCanvas extends Canvas {
         linkableHighlight: _.get(options, 'theme.endpoint.linkableHighlight') || false,
         limitNum: _.get(options, 'theme.endpoint.limitNum'),
         expandArea: {
-          left: _.get(options, 'theme.endpoint.expandArea.left') === undefined || 10,
-          right: _.get(options, 'theme.endpoint.expandArea.right') === undefined || 10,
-          top: _.get(options, 'theme.endpoint.expandArea.top') === undefined || 10,
-          bottom: _.get(options, 'theme.endpoint.expandArea.bottom') === undefined || 10,
+          left: _.get(options, 'theme.endpoint.expandArea.left') === undefined ? 10 : _.get(options, 'theme.endpoint.expandArea.left'),
+          right: _.get(options, 'theme.endpoint.expandArea.right') === undefined ? 10 : _.get(options, 'theme.endpoint.expandArea.right'),
+          top: _.get(options, 'theme.endpoint.expandArea.top') === undefined ? 10 : _.get(options, 'theme.endpoint.expandArea.top'),
+          bottom: _.get(options, 'theme.endpoint.expandArea.bottom') === undefined ? 10 : _.get(options, 'theme.endpoint.expandArea.bottom'),
         },
       },
       zoomGap: _.get(options, 'theme.zoomGap') || 0.001,
@@ -126,7 +126,7 @@ class BaseCanvas extends Canvas {
     // 初始化一些参数
     this._rootWidth = $(this.root).width();
     this._rootHeight = $(this.root).height();
-    $(this.root).css('overflow', 'hidden');
+    $(this.root).css('overflow', 'hidden').css('position', 'relative');
     this._dragIndex = 50;
 
     // 检测节点拖动节点组的hover状态
@@ -582,7 +582,7 @@ class BaseCanvas extends Canvas {
             }
 
             if (targetNode) {
-              _result = _result && (targetNode.id === _edge.targetNode.id && targetEndpoint === _edge.targetEndpoint.id && _targetType === _edge.targetEndpoint.nodeType);
+              _result = _result && (targetNode.id === _edge.targetNode.id && targetEndpoint.id === _edge.targetEndpoint.id && _targetType === _edge.targetEndpoint.nodeType);
             }
 
             return _result;
