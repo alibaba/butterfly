@@ -29,8 +29,8 @@ class DrageCanvas extends Canvas {
       data: {
         nodes: addResultNodes,
         edges: edges.map(item => ({
-          source: item.type === 'endpoint' ? item.sourceNode : item.sourceNode.id,
-          target: item.type === 'endpoint' ? item.targetNode : item.targetNode.id
+          source: item.sourceNode.id,
+          target: item.targetNode.id
         }))
       }});
     // 布局计算完位置后left和top赋值给node节点
