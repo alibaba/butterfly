@@ -126,7 +126,7 @@ class BaseCanvas extends Canvas {
     // 初始化一些参数
     this._rootWidth = $(this.root).width();
     this._rootHeight = $(this.root).height();
-    $(this.root).css('overflow', 'hidden');
+    $(this.root).css('overflow', 'hidden').css('position', 'relative');
     this._dragIndex = 50;
 
     // 检测节点拖动节点组的hover状态
@@ -582,7 +582,7 @@ class BaseCanvas extends Canvas {
             }
 
             if (targetNode) {
-              _result = _result && (targetNode.id === _edge.targetNode.id && targetEndpoint === _edge.targetEndpoint.id && _targetType === _edge.targetEndpoint.nodeType);
+              _result = _result && (targetNode.id === _edge.targetNode.id && targetEndpoint.id === _edge.targetEndpoint.id && _targetType === _edge.targetEndpoint.nodeType);
             }
 
             return _result;
