@@ -384,18 +384,7 @@ module.exports = {
       }]
     },
   ],
-  edges: [
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '1',
-      targetNode: '4',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.9,
-      Class: Edge
-    },
-    {
+  edges: [{
       source: 'bottom',
       target: 'top',
       sourceNode: '1',
