@@ -126,7 +126,10 @@ class BaseCanvas extends Canvas {
     // 初始化一些参数
     this._rootWidth = $(this.root).width();
     this._rootHeight = $(this.root).height();
-    $(this.root).css('overflow', 'hidden').css('position', 'relative');
+    $(this.root).css('overflow', 'hidden');
+    if($(this.root).css('position') === 'static') {
+      $(this.root).css('position', 'relative');
+    }
     this._dragIndex = 50;
 
     // 检测节点拖动节点组的hover状态
