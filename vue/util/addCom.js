@@ -1,5 +1,5 @@
-import VueGroup from "../coms/Vue-group";
-import VueNode from "../coms/Vue-node";
+import VueGroup from "../coms/Vue-group.vue";
+import VueNode from "../coms/Vue-node.vue";
 import Vue from 'vue';
 
 /**
