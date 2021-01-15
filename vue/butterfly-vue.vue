@@ -10,17 +10,15 @@ import "./butterfly-vue.css";
 import { Canvas } from "butterfly-dag";
 import { defaultOptions } from "./util/default-data";
 import {
-  process,
   processNodes,
   processEdge,
   processGroups,
 } from "./util/process";
 
-import { addCom, addEdgesCom } from "./util/addCom";
+
 import recalc from "./util/re-calc";
 import relayout from "./util/re-layout";
 
-import Vue from "vue";
 
 export default {
   name: "butterfly-vue",
@@ -46,9 +44,9 @@ export default {
   data() {
     return {
       canvas: null,
-      nodes: [],
-      groups: [],
-      edges: [],
+      nodes: this.canvasData.nodes,
+      groups: this.canvasData.groups,
+      edges: this.canvasData.edges,
     };
   },
   methods: {
@@ -92,7 +90,6 @@ export default {
     },
 
     onCreateEdge(data) {
-      console.log("link:connect");
       let edgeInfo = {
         sourceEndpointId: data.links[0].sourceEndpoint.id,
         sourceNodeId: data.links[0].sourceNode.id,
@@ -103,7 +100,6 @@ export default {
     },
 
     onDeleteEdge(data) {
-      console.log("link:delete");
       let edgeInfo = {
         sourceEndpointId: data.links[0].sourceEndpoint.id,
         sourceNodeId: data.links[0].sourceNode.id,
@@ -114,7 +110,6 @@ export default {
     },
 
     onChangeEdges(data) {
-      console.log("link:reconnect");
       let edgeInfo = {
         addLink: {
           sourceEndpointId: data.addLinks[0].sourceEndpoint.id,
@@ -139,7 +134,7 @@ export default {
 
   watch: {
     canvasData: {
-      handler(newValue, oldValue) {
+      handler(newValue) {
         this.nodes = newValue.nodes;
         this.groups = newValue.groups;
         this.edges = newValue.edges;
@@ -149,11 +144,6 @@ export default {
       deep: true,
     },
   },
-  created() {
-    this.nodes = this.canvasData.nodes;
-    this.groups = this.canvasData.groups;
-    this.edges = this.canvasData.edges;
-  },
   mounted() {
     this.initCanvas();
 
@@ -161,12 +151,6 @@ export default {
       console.warn("当前canvas为null，初始化存在问题");
       return;
     }
-
-    const proData = process({
-      nodes: this.nodes,
-      groups: this.groups,
-      edges: this.edges,
-    });
 
     this.updateCavans();
 

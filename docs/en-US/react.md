@@ -106,17 +106,17 @@ class App extends React.Component {
 
 ## 属性
 
-| Prop          | Type                | Description                                                                                            | Default |
----------------|---------------------|-------------------------------------------------------------------------------------------------|-------
-| nodes         | [INode[]](#INode)|                                                                                                 | []    |
-| egdes         | [IEdge[]](#IEdge) |                                                                                                 | []    |
-| groups        | [IGroup[]](#IGroup) |                                                                                                 | []    |
-| options       | Object              | [see](https://github.com/alibaba/butterfly/blob/master/docs/zh-CN/canvas.md#canvas-attr) |       |
-| onEdgesChange | (IEdge[]) => void;  |                                                                                                 |       |
-| onCreateEdge  | (IEdge) => void;    |                                                                                                 |       |
-| onDeleteEdge  | (IEdge) => void;    |                                                                                                 |       |
-| className     | String              |                                                                                                 |       |
-| onLoaded      | (canvas) => void;   | Canvans onLoaded event                                                                          |       |
+| Prop          | Type                | Description                                                                              | Default |
+|---------------|---------------------|------------------------------------------------------------------------------------------|---------|
+| nodes         | [INode[]](#INode)   |                                                                                          | []      |
+| egdes         | [IEdge[]](#IEdge)   |                                                                                          | []      |
+| groups        | [IGroup[]](#IGroup) |                                                                                          | []      |
+| options       | Object              | [see](https://github.com/alibaba/butterfly/blob/master/docs/zh-CN/canvas.md#canvas-attr) |         |
+| onEdgesChange | (IEdge[]) => void; |                                                                                          |         |
+| onCreateEdge  | (IEdge) => void; |                                                                                          |         |
+| onDeleteEdge  | (IEdge) => void; |                                                                                          |         |
+| className     | String              |                                                                                          |         |
+| onLoaded      | (canvas) => void; | Canvans onLoaded event                                                                   |         |
 
 ### INode
 
@@ -130,7 +130,7 @@ class App extends React.Component {
 
 ### IEdge
 
-```ts
+``` ts
   interface IEdge {
     id: string | number;         // recommend string (require)
     labelRender?: () => JSX.ESLint; // Custom label render function (optional)
@@ -140,7 +140,7 @@ class App extends React.Component {
 
 ### IGroup
 
-```ts
+``` ts
   interface IGroup {
     id: string | number;
   }
