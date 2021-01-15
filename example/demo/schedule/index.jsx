@@ -27,7 +27,7 @@ class Scene4New extends Component {
     });
     this.canvas.draw(mockData);
     this.canvas.on('events', (data) => {
-      console.log(data);
+      // console.log(data);
     });
   }
   render() {

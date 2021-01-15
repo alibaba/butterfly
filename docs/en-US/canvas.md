@@ -3,7 +3,7 @@
 ```js
 let canvas = new Canvas({
   root: dom,               // canvas root dom (require)
-  layout: 'ForceLayout'    // layout setting , integrated or custom , (optional)
+  layout: 'ForceLayout',   // layout setting , integrated or custom , (optional)
   zoomable: true,          // enable zoom canvas (optional)
   moveable: true,          // enable move canvas (optional)
   draggable: true,         // enable drag nodes (optional)

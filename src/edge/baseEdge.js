@@ -255,6 +255,10 @@ class BaseEdge extends Edge {
     super.emit(type, data);
     this._emit(type, data);
   }
+  on(type, callback) {
+    super.on(type, callback);
+    this._on(type, callback);
+  }
   remove() {
     this.emit('InnerEvents', {
       type: 'edge:delete',
@@ -282,7 +286,7 @@ class BaseEdge extends Edge {
     }
   }
   _addEventListener() {
-    $(this.dom).on('click', (e) => {
+    let _emitEvent = (e) => {
       e.preventDefault();
       e.stopPropagation();
       this.emit('system.link.click', {
@@ -297,7 +301,13 @@ class BaseEdge extends Edge {
         type: 'link:click',
         data: this
       });
-    });
+    };
+    
+    if (this.isExpandWidth) {
+      $(this.eventHandlerDom).on('click', _emitEvent);
+    } else {
+      $(this.dom).on('click', _emitEvent);
+    }
   }
   _create(opts) {
     this.id = _.get(opts, 'id') || this.id;
