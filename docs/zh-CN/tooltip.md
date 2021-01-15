@@ -21,9 +21,9 @@
     console.log(['回调', d, e]);
   };
 
-  tip.creatTips(opts, dom); // 使用气泡
+  tip.createTip(opts, dom); // 使用气泡
 
-  tip.creatMenus( // 使用菜单
+  tip.createMenus( // 使用菜单
     opts,
     dom,
     callBack,
@@ -47,7 +47,7 @@
 
 提供一个`操作`的气泡。
 
-- let newDom = tip.creatMenus(option, dom, callBack,menu)
+- let newDom = tip.createMenus(option, dom, callBack,menu)
 - 示例 menu = [
   {key: 1, value: '新增'},
   {key: 2, value: '删除'},

@@ -22,14 +22,12 @@ const CommonRender = (props) => {
 
     if (!id) {
       // eslint-disable-next-line
-      console.warn(`${type} ${ind} 不含有ID属性，请检查格式`);
+      console.warn(`${type} ${id} 不含有ID属性，请检查格式`);
 
       return null;
     }
 
     const dom = document.getElementById(idPrefix + item.id);
-
-    console.log(dom, '==>');
 
     if (!dom) {
       return null;
@@ -39,8 +37,6 @@ const CommonRender = (props) => {
 
     const hasRender = !!item[renderKey];
     const ReactCom = type === 'group' ? ReactGroup : ReactNode;
-
-    console.log(hasRender, '==>');
 
     return ReactDOM.createPortal(
       hasRender ? item[renderKey]() : <ReactCom key={id} {...item} />,

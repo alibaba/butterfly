@@ -3,7 +3,7 @@
 ```js
 let canvas = new Canvas({
   root: dom,               // canvas root dom (require)
-  layout: 'ForceLayout'    // layout setting , integrated or custom , (optional)
+  layout: 'ForceLayout',   // layout setting , integrated or custom , (optional)
   zoomable: true,          // enable zoom canvas (optional)
   moveable: true,          // enable move canvas (optional)
   draggable: true,         // enable drag nodes (optional)
@@ -27,7 +27,7 @@ let canvas = new Canvas({
       position: [],        // limit endpoint position ['Top', 'Bottom', 'Left', 'Right'],
       linkableHighlight: true,// point.linkable method is triggered when connecting, can be highlighted
       limitNum: 10,        // limit the number of anchor connections
-      expendArea: {        // when the anchor point is too small, the connection hot zone can be expanded.
+      expandArea: {        // when the anchor point is too small, the connection hot zone can be expanded.
         left: 10,
         right: 10,
         top: 10,

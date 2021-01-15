@@ -384,8 +384,7 @@ module.exports = {
       }]
     },
   ],
-  edges: [
-    {
+  edges: [{
       source: 'bottom',
       target: 'top',
       sourceNode: '1',
