@@ -29,8 +29,6 @@ const CommonRender = (props) => {
 
     const dom = document.getElementById(idPrefix + item.id);
 
-    console.log(dom, '==>');
-
     if (!dom) {
       return null;
     }
@@ -39,8 +37,6 @@ const CommonRender = (props) => {
 
     const hasRender = !!item[renderKey];
     const ReactCom = type === 'group' ? ReactGroup : ReactNode;
-
-    console.log(hasRender, '==>');
 
     return ReactDOM.createPortal(
       hasRender ? item[renderKey]() : <ReactCom key={id} {...item} />,

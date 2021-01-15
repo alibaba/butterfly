@@ -63,8 +63,7 @@ const ReactButterfly = (props) => {
       const {created, deleted} = diff(edges, oldEdges);
 
 
-      canvas.addEdges(process({edges: created}), true);
-
+      canvas.addEdges(process({edges: created}).edges, true);
       canvas.removeEdges(process({edges: deleted}).edges.map(e => e.id));
     };
 
