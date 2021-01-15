@@ -9,13 +9,16 @@ import "butterfly-dag/dist/index.css";
 import "./butterfly-vue.css";
 import { Canvas } from "butterfly-dag";
 import { defaultOptions } from "./util/default-data";
-import { process, processNodes, processEdge, processGroups } from "./util/process";
+import {
+  processNodes,
+  processEdge,
+  processGroups,
+} from "./util/process";
 
-import { addCom, addEdgesCom } from "./util/addCom";
+
 import recalc from "./util/re-calc";
 import relayout from "./util/re-layout";
 
-import Vue from "vue";
 
 export default {
   name: "butterfly-vue",
@@ -41,9 +44,9 @@ export default {
   data() {
     return {
       canvas: null,
-      nodes: [],
-      groups: [],
-      edges: [],
+      nodes: this.canvasData.nodes,
+      groups: this.canvasData.groups,
+      edges: this.canvasData.edges,
     };
   },
   methods: {
@@ -87,57 +90,51 @@ export default {
     },
 
     onCreateEdge(data) {
-      if (data.type === "link:connect") {
-        console.log("link:connect");
-        let edgeInfo = {
-          sourceEndpointId: data.links[0].sourceEndpoint.id,
-          sourceNodeId: data.links[0].sourceNode.id,
-          targetEndpointId: data.links[0].targetEndpoint.id,
-          targetNodeId: data.links[0].targetNode.id,
-        };
-        this.$emit("onCreateEdge", edgeInfo);
-      }
+      let edgeInfo = {
+        sourceEndpointId: data.links[0].sourceEndpoint.id,
+        sourceNodeId: data.links[0].sourceNode.id,
+        targetEndpointId: data.links[0].targetEndpoint.id,
+        targetNodeId: data.links[0].targetNode.id,
+      };
+      this.$emit("onCreateEdge", edgeInfo);
     },
 
     onDeleteEdge(data) {
-      if (data.type === "links:delete" && data.links.length > 0) {
-        console.log("link:delete");
-        let edgeInfo = {
-          sourceEndpointId: data.links[0].sourceEndpoint.id,
-          sourceNodeId: data.links[0].sourceNode.id,
-          targetEndpointId: data.links[0].targetEndpoint.id,
-          targetNodeId: data.links[0].targetNode.id,
-        };
-        this.$emit("onDeleteEdge", edgeInfo);
-      }
+      let edgeInfo = {
+        sourceEndpointId: data.links[0].sourceEndpoint.id,
+        sourceNodeId: data.links[0].sourceNode.id,
+        targetEndpointId: data.links[0].targetEndpoint.id,
+        targetNodeId: data.links[0].targetNode.id,
+      };
+      this.$emit("onDeleteEdge", edgeInfo);
     },
 
     onChangeEdges(data) {
-      if (data.type === "link:reconnect") {
-        console.log("link:reconnect");
-        let edgeInfo = {
-          addLink: {
-            sourceEndpointId: data.addLinks[0].sourceEndpoint.id,
-            sourceNodeId: data.addLinks[0].sourceNode.id,
-            targetEndpointId: data.addLinks[0].targetEndpoint.id,
-            targetNodeId: data.addLinks[0].targetNode.id,
-          },
-          delLinks: {
-            sourceEndpointId: data.delLinks[0].sourceEndpoint.id,
-            sourceNodeId: data.delLinks[0].sourceNode.id,
-            targetEndpointId: data.delLinks[0].targetEndpoint.id,
-            targetNodeId: data.delLinks[0].targetNode.id,
-          },
-          info: data.info,
-        };
-        this.$emit("onChangeEdges", edgeInfo);
-      }
+      let edgeInfo = {
+        addLink: {
+          sourceEndpointId: data.addLinks[0].sourceEndpoint.id,
+          sourceNodeId: data.addLinks[0].sourceNode.id,
+          targetEndpointId: data.addLinks[0].targetEndpoint.id,
+          targetNodeId: data.addLinks[0].targetNode.id,
+        },
+        delLinks: {
+          sourceEndpointId: data.delLinks[0].sourceEndpoint.id,
+          sourceNodeId: data.delLinks[0].sourceNode.id,
+          targetEndpointId: data.delLinks[0].targetEndpoint.id,
+          targetNodeId: data.delLinks[0].targetNode.id,
+        },
+        info: data.info,
+      };
+      this.$emit("onChangeEdges", edgeInfo);
+    },
+    onOtherEvent(data) {
+      this.$emit("onOtherEvent",data);
     },
   },
 
   watch: {
     canvasData: {
-      handler(newValue, oldValue) {
+      handler(newValue) {
         this.nodes = newValue.nodes;
         this.groups = newValue.groups;
         this.edges = newValue.edges;
@@ -147,11 +144,6 @@ export default {
       deep: true,
     },
   },
-  created() {
-    this.nodes = this.canvasData.nodes;
-    this.groups = this.canvasData.groups;
-    this.edges = this.canvasData.edges;
-  },
   mounted() {
     this.initCanvas();
 
@@ -160,12 +152,6 @@ export default {
       return;
     }
 
-    const proData = process({
-      nodes: this.nodes,
-      groups: this.groups,
-      edges: this.edges,
-    });
-
     this.updateCavans();
 
     this.re();
@@ -173,9 +159,15 @@ export default {
     this.$emit("onLoaded", this.canvas);
 
     this.canvas.on("events", (data) => {
-      this.onCreateEdge(data);
-      this.onDeleteEdge(data);
-      this.onChangeEdges(data);
+      if (data.type === "link:connect") {
+        this.onCreateEdge(data);
+      } else if (data.type === "links:delete" && data.links.length > 0) {
+        this.onDeleteEdge(data);
+      } else if (data.type === "link:reconnect") {
+        this.onChangeEdges(data);
+      } else {
+        this.onOtherEvent(data);
+      }
     });
   },
 };

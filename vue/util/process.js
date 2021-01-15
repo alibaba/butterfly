@@ -2,7 +2,7 @@ import Node from '../coms/node';
 import Edge from '../coms/edge';
 import Group from '../coms/group';
 import diff from './diff'
-import {addNodesCom , addEdgesCom , addGroupsCom} from './addCom'
+import {addNodesCom , addEdgesCom , addGroupsCom} from './add-com'
 
 const process = ({nodes = [], edges = [], groups = []}) => {
   return {

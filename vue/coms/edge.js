@@ -17,6 +17,6 @@ class DefaultEdge extends Edge {
 
     return div;
   }
-};
+}
 
 export default DefaultEdge;
