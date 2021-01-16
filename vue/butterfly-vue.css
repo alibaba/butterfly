@@ -1,0 +1,46 @@
+.butterfly-vue {
+  min-height: 500px;
+  min-width: 500px;
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: relative;
+}
+
+.butterfly-vue .butterfly-vue-container {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  display: block;
+}
+
+.butterfly-vue .butterfly-node {
+  position: absolute;
+  user-select: none;
+}
+
+.butterfly-vue .butterfly-node .vue-bf-node {
+  width: 50px;
+  height: 25px;
+  border-radius: 5px;
+  background-color: white;
+  border: 1px solid #aaa;
+  text-align: center;
+}
+
+.butterfly-vue .vue-bf-group {
+  border-radius: 5px;
+  min-width: 250px;
+  border: 1px solid #aaa;
+}
+
+.butterfly-vue .vue-bf-group .vue-bf-group-header {
+  height: 30px;
+  background-color: #aaa;
+  text-align: center;
+  line-height: 30px;
+}
+
+.butterfly-vue .vue-bf-group .vue-bf-group-content {
+  min-height: 120px;
+}
