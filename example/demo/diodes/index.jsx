@@ -2,7 +2,8 @@
 import React, {Component} from 'react';
 require('./index.less');
 
-const Canvas = require('../../../index.js').Canvas;
+// const Canvas = require('../../../index.js').Canvas;
+import { Canvas } from 'butterfly-dag';
 const mockData = require('./data');
 
 class Diodes extends Component {

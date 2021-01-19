@@ -1,7 +1,8 @@
 'use strict';
 
 import './node.less';
-const Node = require('../../../index.js').Node;
+// const Node = require('../../../index.js').Node;
+import { Node } from 'butterfly-dag';
 const $ = require('jquery');
 
 class BaseNode extends Node {

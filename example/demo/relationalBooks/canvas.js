@@ -1,4 +1,5 @@
-const Canvas = require('../../../index.js').Canvas;
+// const Canvas = require('../../../index.js').Canvas;
+import { Canvas } from 'butterfly-dag';
 
 class RelationalBooksCanvas extends Canvas {
   constructor(...args) {
