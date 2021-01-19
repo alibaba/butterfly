@@ -6,7 +6,8 @@ import Custom from './custom';
 require('./index.less');
 const Node = require('./node.js');
 let $ = require('jquery');
-const Canvas = require('../../../index.js').TreeCanvas;
+// const Canvas = require('../../../index.js').TreeCanvas;
+import { TreeCanvas } from 'butterfly-dag';
 const mockData = {
   nodes: {
     id: '0',
@@ -236,7 +237,7 @@ class compactBoxTree extends Component {
   componentDidMount() {
     let root = document.getElementById('dag-canvas');
     let that = this;
-    this.canvas = new Canvas({
+    this.canvas = new TreeCanvas({
       root: root,
       disLinkable: true, // 可删除连线
       linkable: true,    // 可连线

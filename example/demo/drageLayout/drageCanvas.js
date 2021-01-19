@@ -1,6 +1,8 @@
 'use strict';
-const Canvas = require('../../../index.js').Canvas;
-const Layout = require('../../../index.js').Layout;
+// const Canvas = require('../../../index.js').Canvas;
+// const Layout = require('../../../index.js').Layout;
+import { Canvas, Layout } from 'butterfly-dag';
+
 
 class DrageCanvas extends Canvas {
   constructor(options) {
