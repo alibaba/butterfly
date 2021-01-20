@@ -53,7 +53,8 @@
     "d3-force": "~2.0.1",
     "dagre": "~0.8.5",
     "dom-to-image": "~2.6.0",
-    "eventemitter3": "4.0.0"
+    "eventemitter3": "4.0.0",
+    "ml-matrix": "^6.5.0"
   },
   "keywords": [
     "节点式编程，数据图，流程图，连通图"

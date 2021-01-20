@@ -11,7 +11,8 @@ import fruchterman from './fruchterman.js';
 import gridLayout from './gridLayout.js'
 import forceLayout from './forceLayout.js'
 import concentLayout from './concentLayout.js'
-import drageLayout from './drageLayout.js'
+import drageLayout from './drageLayout.js';
+import radial from './radial/radial.js';
 
 
 // 离散树形布局
@@ -58,5 +59,6 @@ export default {
   concentLayout,
   gridLayout,
   fruchterman,
-  circleLayout: Layout.circleLayout
+  circleLayout: Layout.circleLayout,
+  radial,
 }

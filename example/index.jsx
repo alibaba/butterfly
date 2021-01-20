@@ -34,6 +34,8 @@ import ReactSample from './demo/react/sample/index.jsx';
 import DrageLayout from './demo/drageLayout/index.jsx';
 import ConcentLayout from './demo/concent-layout/index.jsx';
 
+import Radial from './demo/radial/index.jsx';
+
 import 'antd/dist/antd.css';
 import './static/iconfont.css';
 import './index.less';
@@ -129,6 +131,9 @@ ReactDOM.render((
             <Menu.Item key="react-sample">
               <Link to="/react-sample">React-Sample</Link>
             </Menu.Item>
+            <Menu.Item key="radial">
+              <Link to="/radial">radial</Link>
+            </Menu.Item>
           </Menu>
         </Sider>
         <Content>
@@ -159,6 +164,7 @@ ReactDOM.render((
           <Route path="/grid" component={Grid} />
           <Route path="/Fruchterman" component={Fruchterman} />
           <Route path="/react-sample" component={ReactSample} />
+          <Route path="/radial" component={Radial} />
           <Route exact path="/" component={() => <Redirect exact from="/" to="/analysis" />} />
         </Content>
       </Layout>

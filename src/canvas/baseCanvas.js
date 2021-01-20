@@ -3398,6 +3398,59 @@ class BaseCanvas extends Canvas {
             }
           })
         }
+      }else if(_.get(this.layout, 'type') === 'radial') {
+        const _opts = $.extend({
+          // 布局画布总宽度
+          width,
+          // 布局画布总长度
+          height,
+           /** 停止迭代的最大迭代数 */
+         maxIteration: 1000,
+           /** 布局中心 */
+         center: [width / 2, height / 2],
+           /** 中心点，默认为数据中第一个点 */
+         focusNode: null,
+           /** 每一圈半径 */
+         unitRadius: null,
+           /** 默认边长度 */
+         linkDistance: 50,
+           /** 是否防止重叠 */
+         preventOverlap: false,
+           /** 节点直径 */
+         nodeSize: undefined,
+           /** 节点间距，防止节点重叠时节点之间的最小距离（两节点边缘最短距离） */
+         nodeSpacing: undefined,
+           /** 是否必须是严格的 radial 布局，即每一层的节点严格布局在一个环上。preventOverlap 为 true 时生效 */
+         strictRadial: true,
+           /** 防止重叠步骤的最大迭代次数 */
+         maxPreventOverlapIteration: 200,
+         sortBy:undefined,
+         sortStrength: 10,
+         link: {
+           // 以node的什么字段为寻找id，跟d3原理一样
+           id: 'id',
+           // 线条的距离
+           distance: 100,
+           // 线条的粗细
+           strength: 1
+         }
+       }, _.get(this.layout, 'options'), true);
+       // 自动布局
+       if (_.get(this.layout, 'type') === 'radial') {
+
+         Layout.fruchterman({
+           opts: _opts,
+           data: {
+             groups: data.groups,
+             nodes: data.nodes,
+             // 加工线条数据，兼容endpoint为id的属性，d3没这个概念
+             edges: data.edges.map(item => ({
+               source: item.type === 'endpoint' ? item.sourceNode : item.source,
+               target: item.type === 'endpoint' ? item.targetNode : item.target
+             }))
+           }
+         })
+       }
       }
     }
   }
