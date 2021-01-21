@@ -1,34 +1,46 @@
 'use strict';
-function RadialNonoverlapForce(params) {
-    let positions = params.positions;
-    let adjMatrix = params.adjMatrix;
-    let focusID = params.focusID;
-    let radii = params.radii;
-    let iterations = params.iterations || 10;
-    let height = params.height || 10;
-    let width = params.width || 10;
-    let speed = params.speed || 100;
-    let gravity = params.gravity || 10;
-    let nodeSizeFunc = params.nodeSizeFunc;
-    let k = params.k || 5;
-    let strictRadial = params.strictRadial;
-    let nodes = params.nodes;
-    // const disp = [];
-    // const maxDisplace = params.width / 10;
-    // let maxDisplace = params.width / 10;
-    let disp = [];
+// to: https://github.com/antvis/G6/tree/3.5.1/src/layout/radial
+
+const SPEED_DIVISOR = 800;
+export default class RadialNonoverlapForce {
+  
+  constructor(params) {
+    this.positions = params.positions;
+    this.adjMatrix = params.adjMatrix;
+    this.focusID = params.focusID;
+    this.radii = params.radii;
+    this.iterations = params.iterations || 10;
+    this.height = params.height || 10;
+    this.width = params.width || 10;
+    this.speed = params.speed || 100;
+    this.gravity = params.gravity || 10;
+    this.nodeSizeFunc = params.nodeSizeFunc;
+    this.k = params.k || 5;
+    this.strictRadial = params.strictRadial;
+    this.nodes = params.nodes;
+  }
+
+  layout() {
+    const self = this;
+    const positions = self.positions;
+    const disp = [];
+    const iterations = self.iterations;
+    const maxDisplace = self.width / 10;
+    self.maxDisplace = maxDisplace;
+    self.disp = disp;
     for (let i = 0; i < iterations; i++) {
       positions.forEach((_, k) => {
         disp[k] = { x: 0, y: 0 };
       });
       // 给重叠的节点增加斥力
-      getRepulsion(params);
-      updatePositions(params);
+      self.getRepulsion();
+      self.updatePositions();
     }
     return positions;
-}
-function getRepulsion(params) {
-    const self = params;
+  }
+
+  getRepulsion() {
+    const self = this;
     const positions = self.positions;
     const nodes = self.nodes;
     const disp = self.disp;
@@ -64,8 +76,8 @@ function getRepulsion(params) {
     });
   }
 
-  function updatePositions(param) {
-    const self = param;
+  updatePositions() {
+    const self = this;
     const positions = self.positions;
     const disp = self.disp;
     const speed = self.speed;
@@ -116,4 +128,4 @@ function getRepulsion(params) {
       }
     });
   }
-module.exports = RadialNonoverlapForce
+}

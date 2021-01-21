@@ -2,6 +2,7 @@
 import React, {Component} from 'react';
 
 const Canvas = require('../../../index.js').Canvas;
+// import {Canvas} from 'butterfly-dag';
 const {data} = require('./data');
 require('./index.less');
 require('butterfly-dag/dist/index.css');
@@ -23,15 +24,15 @@ class Radial extends Component {
               type: 'radial',
               options: {
                   // 布局画布总宽度
-                  width:500,
+                  width:800,
                   // 布局画布总长度
-                  height:500,
+                  height:800,
                   /** 停止迭代的最大迭代数 */
                   maxIteration: 200,
                   /** 布局中心 */
-                  center: [100, 100],
+                  center: [300, 300],
                   /** 中心点，默认为数据中第一个点 */
-                  focusNode: '10',
+                  focusNode: '0',
                   /** 每一圈半径 */
                   unitRadius: 80,
                   /** 默认边长度 */

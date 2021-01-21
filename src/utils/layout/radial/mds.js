@@ -1,11 +1,19 @@
 'use strict';
+// to: https://github.com/antvis/G6/tree/3.5.1/src/layout/radial
+
 import { Matrix as MLMatrix, SingularValueDecomposition } from 'ml-matrix';
-function mds(params) {
-//   let distances = params.distances;
-//   let dimension = params.dimension || 2;
-//   let linkDistance = params.linkDistance;
-  const self = param.opts
-  const { dimension, distances, linkDistance } = self;
+
+export default class MDS {
+ 
+  constructor(params) {
+    this.distances = params.distances;
+    this.dimension = params.dimension || 2;
+    this.linkDistance = params.linkDistance;
+  }
+
+  layout() {
+    const self = this;
+    const { dimension, distances, linkDistance } = self;
     try {
         // square distances
         const M = MLMatrix.mul(MLMatrix.pow(distances, 2), -0.5);
@@ -32,6 +40,5 @@ function mds(params) {
         }
         return res;
       }
-    }
-
-module.exports = mds;
+  }
+}

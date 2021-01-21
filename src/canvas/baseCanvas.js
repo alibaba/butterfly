@@ -3438,7 +3438,7 @@ class BaseCanvas extends Canvas {
        // 自动布局
        if (_.get(this.layout, 'type') === 'radial') {
          console.log(_opts,'_opts')
-         Layout.fruchterman({
+         Layout.radial({
            opts: _opts,
            data: {
              groups: data.groups,

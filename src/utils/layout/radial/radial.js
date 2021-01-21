@@ -1,6 +1,8 @@
 'use strict';
+// to: https://github.com/antvis/G6/tree/3.5.1/src/layout/radial
 import MDS from './mds';
-import RadialNonoverlapForce, { RadialNonoverlapForceParam } from './radialNonoverlapForce';
+import RadialNonoverlapForce from './radialNonoverlapForce';
+import { floydWarshall, getAdjMatrix } from './math';
 function getWeightMatrix(M) {
     const rows = M.length;
     const cols = M[0].length;
@@ -33,9 +35,9 @@ function getWeightMatrix(M) {
     return Math.sqrt((p1[0] - p2[0]) * (p1[0] - p2[0]) + (p1[1] - p2[1]) * (p1[1] - p2[1]));
   }
 function RadialLayout(params) {
-    const self = params;
-    const nodes = self.nodes;
-    const edges = self.edges || [];
+    const self = params.opts;
+    const nodes = params.data.nodes;
+    const edges = params.data.edges || [];
     const center = self.center;
     if (!nodes || nodes.length === 0) {
       return;
@@ -48,7 +50,7 @@ function RadialLayout(params) {
     const linkDistance = self.linkDistance;
     // layout
     let focusNode = null;
-    if (isString(self.focusNode)) {
+    if (String(self.focusNode)) {
       let found = false;
       for (let i = 0; i < nodes.length; i++) {
         if (nodes[i].id === self.focusNode) {
@@ -112,7 +114,7 @@ function RadialLayout(params) {
     });
     self.radii = radii;
 
-    const eIdealD = eIdealDisMatrix();
+    const eIdealD = eIdealDisMatrix(params);
     // const eIdealD = scaleMatrix(D, linkDistance);
     self.eIdealDistances = eIdealD;
     // the weight matrix, Wij = 1 / dij^(-2)
@@ -140,7 +142,7 @@ function RadialLayout(params) {
       p[0] -= positions[focusIndex][0];
       p[1] -= positions[focusIndex][1];
     });
-    run();
+    run(params);
     const preventOverlap = self.preventOverlap;
     const nodeSize = self.nodeSize;
     let nodeSizeFunc;
@@ -149,9 +151,9 @@ function RadialLayout(params) {
     if (preventOverlap) {
       const nodeSpacing = self.nodeSpacing;
       let nodeSpacingFunc;
-      if (isNumber(nodeSpacing)) {
+      if (_.isNumber(nodeSpacing)) {
         nodeSpacingFunc = () => nodeSpacing;
-      } else if (isFunction(nodeSpacing)) {
+      } else if (_.isFunction(nodeSpacing)) {
         nodeSpacingFunc = nodeSpacing;
       } else {
         nodeSpacingFunc = () => 0;
@@ -159,7 +161,7 @@ function RadialLayout(params) {
       if (!nodeSize) {
         nodeSizeFunc = (d) => {
           if (d.size) {
-            if (isArray(d.size)) {
+            if (_.isArray(d.size)) {
               const res = d.size[0] > d.size[1] ? d.size[0] : d.size[1];
               return res + nodeSpacingFunc(d);
             }
@@ -167,7 +169,7 @@ function RadialLayout(params) {
           }
           return 10 + nodeSpacingFunc(d);
         };
-      } else if (isArray(nodeSize)) {
+      } else if (_.isArray(nodeSize)) {
         nodeSizeFunc = (d) => {
           const res = nodeSize[0] > nodeSize[1] ? nodeSize[0] : nodeSize[1];
           return res + nodeSpacingFunc(d);
@@ -198,8 +200,8 @@ function RadialLayout(params) {
     });
     
 }
-function run() {
-    const self = this;
+function run(params) {
+    const self = params.opts;
     const maxIteration = self.maxIteration;
     const positions = self.positions || [];
     const W = self.weights || [];
@@ -207,7 +209,7 @@ function run() {
     const radii = self.radii || [];
     for (let i = 0; i <= maxIteration; i++) {
       const param = i / maxIteration;
-      oneIteration(param, positions, radii, eIdealDis, W);
+      oneIteration(param, positions, radii, eIdealDis, W, params);
     }
   }
 
@@ -217,8 +219,9 @@ function run() {
     radii,
     D,
     W,
+    params
   ) {
-    const self = this;
+    const self = params.opts;
     const vparam = 1 - param;
     const focusIndex = self.focusIndex;
     positions.forEach((v, i) => {
@@ -261,9 +264,9 @@ function run() {
     });
   }
 
-  function eIdealDisMatrix() {
-    const self = this;
-    const nodes = self.nodes;
+  function eIdealDisMatrix(params) {
+    const self = params.opts;
+    const nodes = params.data.nodes;
     if (!nodes) return [];
     const D = self.distances;
     const linkDis = self.linkDistance;
