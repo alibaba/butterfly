@@ -1,10 +1,10 @@
 'use strict';
 // const Node = require('../../../index.js').TreeNode;
-import { Node } from 'butterfly-dag';
+import { TreeNode } from 'butterfly-dag';
 const $ = require('jquery');
 require('./node.less');
 
-class BaseNode extends Node {
+class BaseNode extends TreeNode {
   constructor(opts) {
     super(opts);
     this.addIcon = null;
