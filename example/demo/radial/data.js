@@ -1,6 +1,6 @@
 'use strict';
 const Node = require('./node.jsx');
-module.exports = {
+export const data = {
     nodes: [{
       id: "0",
       label: "0",
