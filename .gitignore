@@ -5,3 +5,4 @@ package-lock.json
 es
 pack
 .nyc_output
+.idea
