@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import mockData from './data.js';
 // const Canvas = require('../../../index.js').TreeCanvas;
-import { Canvas } from 'butterfly-dag';
+import { TreeCanvas } from 'butterfly-dag';
 require('./index.less');
 
 class MindMap extends Component {
@@ -11,7 +11,7 @@ class MindMap extends Component {
   }
   componentDidMount() {
     let root = document.getElementById('dag-canvas');
-    this.canvas = new Canvas({
+    this.canvas = new TreeCanvas({
       root: root,
       disLinkable: true, // 可删除连线
       linkable: true,    // 可连线
