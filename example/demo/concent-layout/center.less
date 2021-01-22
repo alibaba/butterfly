@@ -1,15 +1,36 @@
 .center-new-node {
-  position: absolute;
+  position: absolute;  
+  height: 60px;
+  line-height: 60px;
+  text-align: center;
+  width: 60px;
+  background: @butterfly-theme-color;
+  border-radius: @butterfly-box-radius;
+  font-size: 12px;
+  border: @butterfly-box-border;
+  box-shadow: @butterfly-box-shadow;
+  .icon-box {
+    display: block;
+    height: 24px;
+    line-height: 24px;
+    width: 24px;
+    border-radius: 12px;
+    margin: 6px auto;
+    position: relative;
+    left: 2px;
+    .newIconfont {
+      color: @butterfly-overlay-font-color;
+    }
+  }
+  .icon-background{
+    background: @butterfly-primary-color;
+  }
   .name-box {
-    display: inline-block;
-    height: 60px;
-    line-height: 60px;
-    text-align: center;
-    width: 60px;
-    border-radius: 50%;
+    display: block;
+    height: 20px;
+    line-height: 18px;
     font-size: 12px;
-    border: 1px solid #D9D9D9;
-    box-shadow: 0 2px 3px 0 rgba(0,112,204,0.06);
+    text-align: center;
   }
   .simple-blue {
     background: #40A9FF;

@@ -8,7 +8,6 @@ module.exports = {
     {
       id: '1',
       label: 'common..',
-      className: 'simple-blue',
       iconType: 'icon-rds',
       top: 25,
       left: 0,
@@ -22,7 +21,6 @@ module.exports = {
     {
       id: '2',
       label: 'ticket_type',
-      className: 'simple-blue',
       iconType: 'icon-rds',
       top: 25,
       left: 300,
@@ -36,7 +34,6 @@ module.exports = {
     {
       id: '3',
       label: 'status',
-      className: 'simple-blue',
       iconType: 'icon-rds',
       top: 25,
       left: 600,
@@ -50,7 +47,6 @@ module.exports = {
     {
       id: '4',
       label: 'tql_1',
-      className: 'purple',
       iconType: 'icon-guize-kai',
       top: 200,
       left: 0,
@@ -68,7 +64,6 @@ module.exports = {
     {
       id: '5',
       label: 'tql_2',
-      className: 'purple',
       iconType: 'icon-guize-kai',
       top: 200,
       left: 200,
@@ -86,7 +81,6 @@ module.exports = {
     {
       id: '6',
       label: 'tql_3',
-      className: 'purple',
       iconType: 'icon-guize-kai',
       top: 200,
       left: 400,
@@ -104,7 +98,6 @@ module.exports = {
     {
       id: '7',
       label: 'tql_4',
-      className: 'purple',
       iconType: 'icon-guize-kai',
       top: 200,
       left: 600,
@@ -122,7 +115,6 @@ module.exports = {
     {
       id: '8',
       label: 'tql_5',
-      className: 'purple',
       iconType: 'icon-guize-kai',
       top: 200,
       left: 800,
@@ -140,7 +132,6 @@ module.exports = {
     {
       id: '9',
       label: 'tql_6',
-      className: 'purple',
       iconType: 'icon-guize-kai',
       top: 200,
       left: 1000,
@@ -158,7 +149,6 @@ module.exports = {
     {
       id: '10',
       label: 'tql_7',
-      className: 'purple',
       iconType: 'icon-guize-kai',
       top: 200,
       left: 1200,
@@ -288,7 +278,6 @@ module.exports = {
     {
       id: '18',
       label: '职业分布',
-      className: 'deep-blue',
       iconType: 'icon-juxing',
       top: 550,
       left: 0,
@@ -302,7 +291,6 @@ module.exports = {
     {
       id: '19',
       label: 'Echarts',
-      className: 'deep-blue',
       iconType: 'icon-juxing',
       top: 550,
       left: 200,
@@ -316,7 +304,6 @@ module.exports = {
     {
       id: '20',
       label: '国内国际',
-      className: 'deep-blue',
       iconType: 'icon-juxing',
       top: 550,
       left: 400,
@@ -330,7 +317,6 @@ module.exports = {
     {
       id: '21',
       label: '年龄分布',
-      className: 'deep-blue',
       iconType: 'icon-juxing',
       top: 550,
       left: 600,
@@ -344,7 +330,6 @@ module.exports = {
     {
       id: '22',
       label: '性别分布',
-      className: 'deep-blue',
       iconType: 'icon-juxing',
       top: 550,
       left: 800,
@@ -358,7 +343,6 @@ module.exports = {
     {
       id: '23',
       label: '省份分布',
-      className: 'deep-blue',
       iconType: 'icon-juxing',
       top: 550,
       left: 1000,
@@ -372,7 +356,6 @@ module.exports = {
     {
       id: '24',
       label: '国家分布',
-      className: 'deep-blue',
       iconType: 'icon-juxing',
       top: 550,
       left: 1200,

@@ -66,6 +66,12 @@ module.exports = {
             options: {
               javascriptEnabled: true
             }
+          },
+          {
+            loader: 'style-resources-loader',
+            options: {
+              patterns: path.resolve(__dirname, './colorVariable.less'),
+            },
           }
         ]
       },

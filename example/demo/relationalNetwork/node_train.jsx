@@ -8,7 +8,7 @@ class Train extends Node {
     super(...args);
   }
   genLogo = () => {
-    return $('<i class="iconfont datac-icon">&#xe7fa;</i>');
+    return $('<i class="newIconfont iconapplication"></i>');
   }
 }
 

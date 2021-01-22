@@ -36,6 +36,7 @@ import ConcentLayout from './demo/concent-layout/index.jsx';
 
 import 'antd/dist/antd.css';
 import './static/iconfont.css';
+import './static/newIconfont.css';
 import './index.less';
 
 const {Header, Content, Sider} = Layout;
