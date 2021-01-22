@@ -1,3 +1,4 @@
+// to: https://github.com/antvis/G6/tree/3.5.1/src/util/math.ts
 import { mat3, transform, vec3 } from '@antv/matrix-util';
 
 const isBetween = (value, min, max) => value >= min && value <= max;
@@ -43,7 +44,12 @@ const getLineIntersect = (p0, p1, p2, p3) => {
   return point;
 };
 
-
+/**
+ * point and rectangular intersection point
+ * @param  {IRect} rect  rect
+ * @param  {Point} point point
+ * @return {PointPoint} rst;
+ */
 export const getRectIntersectByPoint = (rect, point) => {
   const { x, y, width, height } = rect;
   const cx = x + width / 2;

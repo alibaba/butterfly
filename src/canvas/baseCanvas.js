@@ -3437,7 +3437,6 @@ class BaseCanvas extends Canvas {
        }, _.get(this.layout, 'options'), true);
        // 自动布局
        if (_.get(this.layout, 'type') === 'radial') {
-         console.log(_opts,'_opts')
          Layout.radial({
            opts: _opts,
            data: {

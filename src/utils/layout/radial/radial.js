@@ -1,5 +1,6 @@
-'use strict';
 // to: https://github.com/antvis/G6/tree/3.5.1/src/layout/radial
+'use strict';
+
 import MDS from './mds';
 import RadialNonoverlapForce from './radialNonoverlapForce';
 import { floydWarshall, getAdjMatrix } from './math';

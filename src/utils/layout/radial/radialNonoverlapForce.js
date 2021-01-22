@@ -1,5 +1,7 @@
-'use strict';
+
 // to: https://github.com/antvis/G6/tree/3.5.1/src/layout/radial
+
+'use strict';
 
 const SPEED_DIVISOR = 800;
 export default class RadialNonoverlapForce {

@@ -30,7 +30,7 @@ class Radial extends Component {
                   /** 停止迭代的最大迭代数 */
                   maxIteration: 200,
                   /** 布局中心 */
-                  center: [300, 300],
+                  center: [400, 400],
                   /** 中心点，默认为数据中第一个点 */
                   focusNode: '0',
                   /** 每一圈半径 */

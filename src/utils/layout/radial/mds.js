@@ -1,8 +1,8 @@
-'use strict';
+
 // to: https://github.com/antvis/G6/tree/3.5.1/src/layout/radial
+'use strict';
 
 import { Matrix as MLMatrix, SingularValueDecomposition } from 'ml-matrix';
-
 export default class MDS {
  
   constructor(params) {
