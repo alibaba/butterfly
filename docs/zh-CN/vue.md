@@ -1,4 +1,4 @@
-# React版小蝴蝶（butterfly-vue）
+# Vue版小蝴蝶（butterfly-vue）
 
 ## 安装
 
