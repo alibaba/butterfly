@@ -9,7 +9,6 @@ module.exports = {
       text: 'Gets Paid',
       top: 175,
       left: 600,
-      color: 'purple',
       shape: 'diamond',
       Class: BaseNode,
       width: 128,
@@ -48,20 +47,20 @@ module.exports = {
       width: 95,
       height: 45,
       color: 'box-background-color',
-      shape: 'ellipse-border',
+      shape: 'ellipse',
       Class: BaseNode,
-      fill: '#FFA940',
-      ellipseBorderWidth: 2,
-      ellipseDasharray: 'none'
+      // fill: '#FFA940',
+      // ellipseBorderWidth: 2,
+      // ellipseDasharray: 'none'
     }
     , {
       id: '6',
       text: 'ISA',
       top: 280,
       left: 320,
-      shape: 'triangle',
       width: 100,
       height: 50,
+      shape: 'triangle',
       fill: '#fff',
       Class: BaseNode,
     }, {
@@ -119,11 +118,11 @@ module.exports = {
       width: 95,
       height: 45,
       color: 'box-background-color',
-      shape: 'ellipse-border',
+      shape: 'ellipse',
       Class: BaseNode,
-      fill: '#FFA940',
-      ellipseBorderWidth: 2,
-      ellipseDasharray: '3 1'
+      // fill: '#FFA940',
+      // ellipseBorderWidth: 2,
+      // ellipseDasharray: '3 1'
     }, , {
       id: '13',
       text: 'Date',

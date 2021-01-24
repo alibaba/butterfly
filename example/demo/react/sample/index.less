@@ -30,22 +30,28 @@
 }
 
 .node {
-  box-shadow: 5px 5px 10px #eee;
-  background: white;
-
+  box-shadow: @butterfly-box-shadow;
+  background-color: @butterfly-theme-color;
+  border-radius:0 0 5px 5px;
   .header {
     padding: 10px;
     width: 250px;
+    border-radius: 5px 5px 0 0;
     color: @butterfly-overlay-font-color;
     background-color: @butterfly-primary-color;
+    border: @butterfly-box-border;
   }
 
   .content {
     color:@butterfly-normal-font-color;
-    padding: 10px;
+    padding: 10px; 
+    border: @butterfly-box-border;
+    border-top: none;
+    border-radius: 0 0 5px 5px;
     .info{
       .ant-input-sm {
         height: 29px;
+        background-color: @butterfly-theme-color;
       }
     }
     .history {
@@ -62,7 +68,7 @@
   height: 22px;
   background-color: @butterfly-theme-color;
   box-shadow: @butterfly-box-shadow;
-  border-radius: @butterfly-connect-node-radius;
+  border-radius: @butterfly-box-radius;
   cursor: pointer;
   z-index: 1;
   position: relative;

@@ -22,6 +22,8 @@
         text-align: center;
         vertical-align: middle;
         border-radius: 5px;
+        color: @butterfly-normal-font-color;
+        box-shadow: @butterfly-box-shadow;
         .title {
           line-height: 32px;
           height: 32px;
@@ -31,7 +33,7 @@
           background: @butterfly-primary-color;
           border-radius: 15px 15px 0px 0px;
           padding: 0 8px;
-          color: #fff;
+          color:@butterfly-overlay-font-color;
           .remove {
             cursor: pointer;
           }
@@ -47,7 +49,7 @@
           align-items: center;
           padding: 0 8px;
           background: @butterfly-theme-color;
-          border-bottom: 1px solid #000;
+          border: @butterfly-box-border;
           position: relative;
           cursor: pointer;
           .targetEndPoint{
@@ -65,7 +67,7 @@
           .text {
             .input-text {
               height: 28px;
-              border: 1px solid #000;
+              border: @butterfly-box-border;
               width: 130px;
               padding: 0 4px;
             }
@@ -101,14 +103,15 @@
           display: flex;
           justify-content: space-between;
           background: @butterfly-primary-color;
+          border-radius: 15px 15px 0px 0px;
           padding: 0 8px;
-          color: #fff;
+          color:@butterfly-overlay-font-color;
           .title-text {
             input {
               width: 140px;
-              color: #333;
+              color: @butterfly-normal-font-color;
               height: 28px;
-              border: 1px solid #ccc;
+              border: @butterfly-box-border;
             }
           }
           #close {
@@ -122,8 +125,10 @@
           display: flex;
           padding: 8px;
           justify-content: space-between;
-          border: 1px solid #ccc;
-          background: #fff;
+          border: @butterfly-box-border;
+          background: @butterfly-theme-color;
+          border-radius: 0px 0px 15px 15px;
+          color: @butterfly-normal-font-color;
           p {
             textarea {
               min-height: 80px;
@@ -131,7 +136,14 @@
             }
           }
           .alis-node-edit {
+            display: none;
+          }
+        }
+        .container:hover {
+          background: @butterfly-box-move-background-color;
+          .alis-node-edit {
             cursor: pointer;
+            display: contents;
           }
         }
       }
