@@ -3,7 +3,8 @@ import './index.less';
 import {mockData} from './data';
 
 require('butterfly-dag/dist/index.css');
-const Canvas = require('../../../index.js').Canvas;
+// const Canvas = require('../../../index.js').Canvas;
+import { Canvas } from 'butterfly-dag';
 
 class Flow extends React.Component {
   constructor() {

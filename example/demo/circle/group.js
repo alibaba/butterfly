@@ -1,6 +1,7 @@
 'use strict';
 
-const Group = require('../../../index.js').Group;
+// const Group = require('../../../index.js').Group;
+import { Group } from 'butterfly-dag';
 const $ = require('jquery');
 require('./group.less');
 

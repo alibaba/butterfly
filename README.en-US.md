@@ -26,7 +26,7 @@ English | [简体中文](./README.md)
 * Use dom to customize elements: flexibility and excellent expandability
 
 <p align="center">
-  <img width="900" src="https://img.alicdn.com/tfs/TB1nq6hCeT2gK0jSZFvXXXnFXXa-1200-2660.png">
+  <img width="900" src="https://img.alicdn.com/imgextra/i4/O1CN01d7WHVs1vkEDzWRRlW_!!6000000006210-2-tps-2400-8172.png">
 </p>
 
 ## QUCIK DEMO LOCAL
