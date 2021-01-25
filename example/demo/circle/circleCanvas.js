@@ -1,6 +1,7 @@
 'use strict';
 
-const Canvas = require('../../../index.js').Canvas;
+// const Canvas = require('../../../index.js').Canvas;
+import { Canvas } from 'butterfly-dag';
 const Group = require('./group');
 const NoteSourceNode = require('./noteSourceNode.js');
 const NoteTargetNode = require('./noteTargetNode.js');

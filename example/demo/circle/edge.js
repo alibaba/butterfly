@@ -1,6 +1,8 @@
 'use strict';
 
-const Edge = require('../../../index.js').Edge;
+// const Edge = require('../../../index.js').Edge;
+import { Edge } from 'butterfly-dag';
+
 const $ = require('jquery');
 require('./edge.less');
 

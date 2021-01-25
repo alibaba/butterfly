@@ -4,7 +4,6 @@ const Node = require('./node.js');
 const CenterNode = require('./centerNode.js');
 const Edge = require('./edge.js');
 // const Group = require('./group.js');
-
 module.exports = {
   nodes: [{
     id: 0,
