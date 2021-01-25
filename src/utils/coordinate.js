@@ -17,6 +17,7 @@ class CoordinateService {
     this.scrollTop = 0;
     this.scrollLeft = 0;
     this.scrollTimer = undefined;
+    this._calcScrollPos();
 
     // 中心点
     this.originX = undefined;
