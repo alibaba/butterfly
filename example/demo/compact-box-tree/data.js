@@ -6,7 +6,6 @@ export const mockData = {
     id: 'Root',
     title: '根节点',
     content: 'root',
-    color: 'purple',
     iconClass: 'icon-class',
     iconType: 'icon-shujuji',
     Class: Node,
@@ -20,7 +19,6 @@ export const mockData = {
       Class: Node,
       title: '子节点 1',
       content: 'sub node 1',
-      color: 'drak-blue',
       // collapsed: true,
       iconType: 'icon-guize-kai',
       iconClass: 'icon-class',
@@ -38,7 +36,6 @@ export const mockData = {
         Class: Node,
         title: '子节点 1-1',
         content: 'sub node 1-1',
-        color: 'blue',
         iconType: 'icon-guize-kai',
         iconClass: 'icon-class',
         endpoints: [{
@@ -55,7 +52,6 @@ export const mockData = {
         Class: Node,
         title: '子节点 1-2',
         content: 'sub node 1-2',
-        color: 'blue',
         iconType: 'icon-guize-kai',
         iconClass: 'icon-class',
         endpoints: [{
@@ -73,7 +69,6 @@ export const mockData = {
       Class: Node,
       title: '子节点 2',
       content: 'sub node 2',
-      color: 'drak-blue',
       iconType: 'icon-guize-kai',
       iconClass: 'icon-class',
       // collapsed: true,
@@ -91,7 +86,6 @@ export const mockData = {
         Class: Node,
         title: '子节点 2-1',
         content: 'sub node 2-1',
-        color: 'blue',
         iconType: 'icon-guize-kai',
         iconClass: 'icon-class',
         endpoints: [{
@@ -108,7 +102,6 @@ export const mockData = {
         Class: Node,
         title: '子节点 2-2',
         content: 'sub node 2-2',
-        color: 'blue',
         iconType: 'icon-guize-kai',
         iconClass: 'icon-class',
         endpoints: [{
@@ -126,7 +119,6 @@ export const mockData = {
       Class: Node,
       title: '子节点 3',
       content: 'sub node 3',
-      color: 'drak-blue',
       iconType: 'icon-guize-kai',
       iconClass: 'icon-class',
       endpoints: [{

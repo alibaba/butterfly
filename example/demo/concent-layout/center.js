@@ -17,12 +17,19 @@ class CenterNode extends Node {
                     .css('left', opts.left + 'px')
 
     this._createTypeIcon(container);
+    this._createText(container);
 
     return container[0];
   }
   _createTypeIcon(dom = this.dom) {
-    const textContainer = $(`<span class="name-box simple-blue">${this.options.name}</span>`)[0];
-    $(dom).append(textContainer);
+    const iconContainer = $(`<span class="icon-box ${this.options.className}"></span>`)[0];
+    const icon = $(`<i class="newIconfont ${this.options.iconType}"></i>`)[0];
+
+    iconContainer.append(icon);
+    $(dom).append(iconContainer);
+  }
+  _createText(dom = this.dom) {
+    $('<span class="name-box"></span>').text(this.options.name).appendTo(dom);
   }
 }
 

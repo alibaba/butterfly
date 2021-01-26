@@ -30,21 +30,32 @@
 }
 
 .node {
-  box-shadow: 5px 5px 10px #eee;
-  background: white;
-
+  box-shadow: @butterfly-box-shadow;
+  background-color: @butterfly-theme-color;
+  border-radius:0 0 5px 5px;
   .header {
     padding: 10px;
     width: 250px;
-    color: white;
+    border-radius: 5px 5px 0 0;
+    color: @butterfly-overlay-font-color;
+    background-color: @butterfly-primary-color;
+    border: @butterfly-box-border;
   }
 
   .content {
-    padding: 10px;
-
+    color:@butterfly-normal-font-color;
+    padding: 10px; 
+    border: @butterfly-box-border;
+    border-top: none;
+    border-radius: 0 0 5px 5px;
+    .info{
+      .ant-input-sm {
+        height: 29px;
+        background-color: @butterfly-theme-color;
+      }
+    }
     .history {
       padding: 5px 0;
-      color: grey;
       font-size: 12px;
       border-top: 1px solid #eee;
       margin-top: 10px;
@@ -53,18 +64,22 @@
 }
 
 .label {
-  width: 30px;
-  height: 30px;
-  background-color: #fff;
-  box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
-  border-radius: 10px;
+  width: 38px;
+  height: 22px;
+  background-color: @butterfly-theme-color;
+  box-shadow: @butterfly-box-shadow;
+  border-radius: @butterfly-box-radius;
   cursor: pointer;
   z-index: 1;
   position: relative;
   outline: none;
-  border: none;
-  color: #f5bc21;
+  border: @butterfly-box-border;
+  color: @butterfly-normal-font-color;
   text-align: center;
-  line-height: 30px;
-  font-size: 25px;
+  line-height: 19px;
+  font-size: 12px;
+}
+.label:hover {
+  background: @butterfly-primary-color;
+  color: @butterfly-overlay-font-color;
 }
