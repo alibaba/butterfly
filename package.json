@@ -1,6 +1,6 @@
 {
   "name": "butterfly-dag",
-  "version": "3.1.4",
+  "version": "3.1.6",
   "description": "一个基于数据驱动的节点式编排组件库，让你有方便快捷定制可视化流程图表",
   "main": "dist/index.js",
   "es": "es/index.js",
@@ -53,7 +53,9 @@
     "d3-force": "~2.0.1",
     "dagre": "~0.8.5",
     "dom-to-image": "~2.6.0",
-    "eventemitter3": "4.0.0"
+    "eventemitter3": "4.0.0",
+    "ml-matrix": "^6.5.0",
+    "@antv/matrix-util": "^2.0.4"
   },
   "keywords": [
     "节点式编程，数据图，流程图，连通图"
