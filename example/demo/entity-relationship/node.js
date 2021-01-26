@@ -61,7 +61,7 @@ class BaseNode extends Node {
       let triangleSvg = $(`
         <svg width="100%" height="100%">
           <polygon points="0,0 ${width},0 ${width / 2},${height}"
-          style="fill:${data.options.fill};"/>
+          />
         </svg>`);
       container.append(triangleSvg);
     }

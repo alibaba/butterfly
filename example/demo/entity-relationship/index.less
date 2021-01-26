@@ -14,6 +14,7 @@
     vertical-align: middle;
     border-radius: 5px;
     line-height: 3;
+    border: @butterfly-box-border;
   }
 
   .butterflies-link {
@@ -21,6 +22,8 @@
   }
   .box-background-color{
     background-color: @butterfly-primary-color;
+    fill:#f00;
+    stroke: aqua;
   }
 
   .circle {
@@ -44,8 +47,9 @@
     .rotate {
       transform: rotate(-45deg) translateX(-3%) translateY(-72%);
     }
+   
   }
-
+  
   .rect {
     width: 137px;
     height: 42px;
@@ -72,6 +76,10 @@
     width: 100px;
     height: 50px;
     background-color: transparent;
+    fill: @butterfly-theme-color;
+    stroke: @butterfly-box-border-color-base;
+    border:none;
+    stroke-width:1
   }
 
   .dashed {
