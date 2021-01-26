@@ -1,10 +1,14 @@
 .indented-tree-canvas {
   .rule-node {
     position: absolute;
+    font-size: 12px;
+    color: @butterfly-normal-font-color;
     .rule-select {
       padding: 4px 2px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
+      border-radius: 5px;
+      border: @butterfly-box-border;
+      background-color: @butterfly-theme-color;
+      color: @butterfly-normal-font-color;
     }
     .rule-text {
       display: inline-block;
@@ -13,12 +17,52 @@
       white-space:nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      &.text-right {
-        position: absolute;
-        top: 4px;
-        right: -160px;
-        width: 150px;
+      &.text-normal {
+        background: @butterfly-theme-color;
         display: inline-block;
+        width: 100px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        border:@butterfly-box-border;
+        box-shadow: @butterfly-box-shadow;
+        border-radius: 5px;
+      }
+    }
+    .index-expand-node{
+      width: 180px;
+      height: 36px;
+      display: inline-block;
+      background-color: @butterfly-theme-color;
+      line-height: 36px;
+      text-align: center;
+      border:@butterfly-box-border;
+      box-shadow: @butterfly-box-shadow;
+      border-radius:5px;
+    
+      .text-right {
+        display: inline-block;
+        height: 36px;
+        width: 140px;
+        padding: 0 10px;
+        line-height: 36px;
+        vertical-align: bottom;
+        position: unset;
+      }
+    }
+    .icon-box {
+      cursor: pointer;
+      display: inline-block;
+      height: 25px;
+      line-height: 25px;
+      width: 25px;
+      text-align: center;
+      border-radius: 15px;
+      position: relative;
+      background-color: @butterfly-primary-color;
+      left: 2px;
+      .iconfont {
+        color: @butterfly-overlay-font-color;
       }
     }
   }

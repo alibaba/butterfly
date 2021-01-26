@@ -1,3 +1,4 @@
+@import '../../example/colorVariable.less';
 .butterfly-wrapper {
   .group {
     position: absolute;
@@ -7,17 +8,17 @@
       height: 30px;
       cursor: move;
       font-size: 12px;
-      color: #fff;
+      color: @butterfly-overlay-font-color;
       line-height: 30px;
       padding-left: 12px;
       border-radius: 9px 9px 0 0;
-      background: rgba(0, 0, 0, 0.6);
+      background: @butterfly-primary-color;
     }
     .container {
       // position: relative;
       width: 100%;
       height: calc(~'100% - 30px');
-      background: rgba(0, 0, 0, 0.1);
+      background: @butterfly-box-move-background-color;
       border-radius: 0 0 9px 9px;
     }
     .group-icon-resize {

@@ -1,15 +1,23 @@
+@import '../../example/colorVariable.less';
 .butterflies-link {
   fill: none;
-  stroke: #B9B9B9;
+  stroke: @butterfly-line-color;
   stroke-width: 1px;
+}
+.butterflies-link:hover {
+  stroke: @butterfly-primary-color;
 }
 .butterflies-label {
   position: absolute;
 }
 .butterflies-arrow {
-  fill: #B9B9B9;
-  stroke: #B9B9B9;
+  fill: @butterfly-line-color;
+  stroke: @butterfly-line-color;
   stroke-width: 1px;
+}
+.butterflies-arrow:hover {
+  fill: @butterfly-primary-color;
+  stroke: @butterfly-primary-color;
 }
 
 .butterflies-link-event-handler {

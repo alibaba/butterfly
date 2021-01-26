@@ -9,7 +9,7 @@ class Email extends Node {
     super(...args);
   }
   genLogo = () => {
-    return $('<i class="iconfont datac-icon">&#xe648;</i>');
+    return $('<i class="newIconfont iconapplication"></i>');
   }
 }
 

@@ -22,7 +22,7 @@ class BaseEdge extends Edge {
   drawLabel(text) {
     let dom = null;
     if (!!text) {
-      dom = $(`<i class="iconfont icon-jiandao label ${text}"></i>`)[0];
+      dom = $(`<i class="newIconfont iconjiandao-tianchong label ${text}"></i>`)[0];
     }
     return dom;
   }

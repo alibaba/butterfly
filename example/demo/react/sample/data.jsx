@@ -36,7 +36,6 @@ const data = {
       render() {
         return (
           <Node
-            color="orange"
             title="审批人"
           />
         );
