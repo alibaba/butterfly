@@ -38,6 +38,7 @@ import Radial from './demo/radial/index.jsx';
 
 import 'antd/dist/antd.css';
 import './static/iconfont.css';
+import './static/newIconfont.css';
 import './index.less';
 
 const {Header, Content, Sider} = Layout;

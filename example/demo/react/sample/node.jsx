@@ -4,10 +4,7 @@ import PropTypes from 'prop-types';
 
 import './index.less';
 
-const color = {
-  black: 'linear-gradient(90deg,#324963 3%,#828fa5 93%)',
-  orange: 'linear-gradient(90deg,#f69b31,#f7d44d 99%)'
-};
+
 
 const Node = (props) => {
   const {size} = props;
@@ -16,9 +13,6 @@ const Node = (props) => {
     <div className="node">
       <div
         className="header"
-        style={{
-          background: color[props.color]
-        }}
       >
         {props.title}
       </div>
