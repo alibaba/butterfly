@@ -12,7 +12,7 @@ module.exports = {
     left: 50,
     Class: BaseNode,
     iconType: 'icon-rds',
-    circleColor: 'purple',
+    circleColor: 'icon-background-color',
     endpoints: [{
       id: 'right',
       orientation: [1, 0],
@@ -26,7 +26,7 @@ module.exports = {
     left: 50,
     Class: BaseNode,
     iconType: 'icon-rds',
-    circleColor: 'purple',
+    circleColor: 'icon-background-color',
     endpoints: [{
       id: 'right',
       orientation: [1, 0],
@@ -40,7 +40,7 @@ module.exports = {
     left: 300,
     Class: BaseNode,
     iconType: 'icon-shujuji',
-    circleColor: 'deep-blue',
+    circleColor: 'icon-background-color',
     endpoints: [{
       id: 'left',
       orientation: [-1, 0],
@@ -58,7 +58,7 @@ module.exports = {
     left: 540,
     Class: BaseNode,
     iconType: 'icon-shujuji',
-    circleColor: 'deep-blue',
+    circleColor: 'icon-background-color',
     endpoints: [{
       id: 'top',
       orientation: [0, -1],
@@ -80,7 +80,7 @@ module.exports = {
     left: 770,
     Class: BaseNode,
     iconType: 'icon-shujuji',
-    circleColor: 'deep-blue',
+    circleColor: 'icon-background-color',
     endpoints: [{
       id: 'left',
       orientation: [-1, 0],
@@ -102,7 +102,7 @@ module.exports = {
     left: 1000,
     Class: BaseNode,
     iconType: 'icon-juxing',
-    circleColor: 'green',
+    circleColor: 'icon-background-color',
     endpoints: [{
       id: 'left',
       orientation: [-1, 0],
@@ -116,7 +116,7 @@ module.exports = {
     left: 50,
     Class: BaseNode,
     iconType: 'icon-yun',
-    circleColor: 'simple-blue',
+    circleColor: 'icon-background-color',
     endpoints: [{
       id: 'right',
       orientation: [1, 0],
@@ -130,7 +130,7 @@ module.exports = {
     left: 380,
     Class: BaseNode,
     iconType: 'icon-yun',
-    circleColor: 'simple-blue',
+    circleColor: 'icon-background-color',
     endpoints: [{
       id: 'bottom',
       orientation: [0, 1],
@@ -144,7 +144,7 @@ module.exports = {
     left: 700,
     Class: BaseNode,
     iconType: 'icon-yun',
-    circleColor: 'simple-blue',
+    circleColor: 'icon-background-color',
     endpoints: [{
       id: 'bottom',
       orientation: [0, 1],
@@ -158,7 +158,7 @@ module.exports = {
     left: 770,
     Class: BaseNode,
     iconType: 'icon-yun',
-    circleColor: 'simple-blue',
+    circleColor: 'icon-background-color',
     endpoints: [{
       id: 'top',
       orientation: [0, -1],

@@ -5,37 +5,37 @@ module.exports = {
     id: 'test1',
     name: 'test1',
     Class: node,
-    color: '#c6e5ff'
+    className: 'nodeBackground-color'
   }, {
     id: 'test2',
     name: 'test2',
     Class: node,
-    color: '#c6e5ff'
+    className: 'nodeBackground-color'
   }, {
     id: 'test3',
     name: 'test3',
     Class: node,
-    color: '#c6e5ff'
+    className: 'nodeBackground-color'
   }, {
     id: 'test4',
     name: 'test4',
     Class: node,
-    color: '#c6e5ff'
+    className: 'nodeBackground-color'
   }, {
     id: 'test5',
     name: 'test5',
     Class: node,
-    color: '#c6e5ff'
+    className: 'nodeBackground-color'
   }, {
     id: 'test6',
     name: 'test6',
     Class: node,
-    color: '#c6e5ff'
+    className: 'nodeBackground-color'
   }, {
     id: 'test7',
     name: 'test7',
     Class: node,
-    color: '#c6e5ff'
+    className: 'nodeBackground-color'
   }
 ],
   edges: [{
