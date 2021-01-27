@@ -1,0 +1,38 @@
+{
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "peerDependencies": {
+    "prop-types": "^15.5.4",
+    "react": "^15.0.0 || ^16.0.0",
+    "react-dom": "^15.0.0 || ^16.0.0",
+    "butterfly-dag": "*",
+    "lodash": "*",
+    "jquery": "*"
+  },
+  "eslintConfig": {
+    "extends": "aliyun"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@vitejs/plugin-react-refresh": "^1.1.0",
+    "vite": "^2.0.0-beta.12",
+    "less": "^4.1.0"
+  },
+  "files": [
+    "dist",
+    "doc"
+  ],
+  "dependencies": {
+    "@ant-design/icons": "^4.4.0",
+    "antd": "^4.11.2",
+    "butterfly-dag": "^2.8.31",
+    "jquery": "^3.5.1",
+    "lodash": "^4.17.20",
+    "prop-types": "^15.5.4",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-router-dom": "^5.2.0"
+  }
+}
