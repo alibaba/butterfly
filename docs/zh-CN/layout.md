@@ -215,7 +215,7 @@ import {TreeCanvas} from 'butterfly-dag';
 | startAngle | Number | false | 3 / 2 * Math.PI | 开始方式节点的弧度 
 | clockwise | Boolean | false | false | 是否按照顺时针排列
 | maxLevelDiff | Number | false | undefines | 每一层同心值的求和。若为 undefined，则将会被设置为 maxValue / 4 ，其中 maxValue 为最大的排序依据的属性值。例如，若 sortBy 为 'degree'，则 maxValue 为所有节点中度数最大的节点的度数
-| sortBy | String | false | undefined | 指定排序的依据（节点属性名），数值越高则该节点被放置得越中心。若为 undefined，则会计算节点的度数，度数越高，节点将被放置得越中心
+| sortBy | String | false | undefined | 指定排序的依据（节点属性名），数值越高则该节点被放置得越中心。若为 undefined，则会计算节点的度数，度数越高，节点将被放置得越中心。
 
 
 ## Tree Layout
