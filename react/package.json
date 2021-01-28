@@ -10,6 +10,9 @@
   "scripts": {
     "build": "rollup -c ./rollup.config.js"
   },
+  "eslintConfig": {
+    "extends": "aliyun"
+  },  
   "peerDependencies": {
     "prop-types": "^15.5.4",
     "react": "^15.0.0 || ^16.0.0",
@@ -35,7 +38,8 @@
     "doc"
   ],
   "dependencies": {
-    "butterfly-dag": "^2.8.31",
+    "butterfly-dag": "^3.1.6",
+    "debug": "^4.3.1",
     "jquery": "^3.5.1",
     "lodash": "^4.17.20",
     "rollup-plugin-peer-deps-external": "^2.2.4",

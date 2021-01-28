@@ -1,7 +1,8 @@
 import React from 'react';
 import {Layout, Menu} from 'antd';
+import PropTypes from 'prop-types';
 import {DesktopOutlined, PieChartOutlined} from '@ant-design/icons';
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 
 const {Header, Content, Sider} = Layout;
 
@@ -21,18 +22,29 @@ class SiderDemo extends React.Component {
 
   render() {
     const {collapsed, title} = this.state;
+    const pathname = this.props.location.pathname;
+    const active = pathname.replace(/^\//, '') || 'basic';
+
     return (
       <Layout style={{minHeight: '100vh'}}>
-        <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapse.bind(this)}>
+        <Sider
+          collapsible
+          collapsed={collapsed}
+          onCollapse={this.onCollapse.bind(this)}
+        >
           <div className="logo">
             Butterfly-React
           </div>
-          <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-            <Menu.Item key="1" icon={<PieChartOutlined />}>
+          <Menu
+            theme="dark"
+            mode="inline"
+            defaultSelectedKeys={[active]}
+          >
+            <Menu.Item key="basic" icon={<PieChartOutlined />}>
               <Link to="/basic">基础组件</Link>
             </Menu.Item>
-            <Menu.Item key="2" icon={<DesktopOutlined />}>
-              <Link to="/endpoint">锚点组件</Link>
+            <Menu.Item key="endpoints" icon={<DesktopOutlined />}>
+              <Link to="/endpoints">锚点组件</Link>
             </Menu.Item>
           </Menu>
         </Sider>
@@ -59,5 +71,9 @@ class SiderDemo extends React.Component {
   }
 }
 
-export default SiderDemo;
+SiderDemo.propTypes = {
+  location: PropTypes.object
+};
+
+export default withRouter(SiderDemo);
 

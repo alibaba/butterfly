@@ -6,6 +6,6 @@ import reactRefresh from '@vitejs/plugin-react-refresh';
 export default {
   plugins: [reactRefresh()],
   optimizeDeps: {
-    // include: ['regenerator-runtime/runtime.js']
+    include: ['react-dev-utils/webpackHotDevClient']
   }
 };

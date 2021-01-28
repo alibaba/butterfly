@@ -5,8 +5,10 @@ import {Canvas} from 'butterfly-dag';
 
 import diff from './util/diff.js';
 import recalc from './util/re-calc.js';
+import CEndpoint from './coms/endpoint';
 import process from './util/process.js';
 import relayout from './util/re-layout.js';
+import NodeRender from './coms/node-render.jsx';
 import CommonRender from './coms/common-render.jsx';
 import defaultOptions from './util/default-options';
 
@@ -79,9 +81,11 @@ const ReactButterfly = (props) => {
       });
     };
 
-    processNodes();
-    processEdge();
     processGroups();
+    processNodes();
+    setTimeout(() => {
+      processEdge();
+    });
 
     setStep(currentStep + 1);
   }, [nodes, edges, groups]);
@@ -131,8 +135,16 @@ const ReactButterfly = (props) => {
 
       await new Promise((res, rej) => {
         try {
-          canvas.draw(data, () => {
+          // 优先画节点
+          canvas.draw({
+            nodes: data.nodes,
+            groups: data.groups
+          }, () => {
             res();
+
+            setTimeout(() => {
+              canvas.addEdges(data.edges);
+            });
           });
         } catch (e) {
           rej(e);
@@ -221,10 +233,10 @@ const ReactButterfly = (props) => {
     <div
       className={`${className || ''} butterfly-react`}
     >
-      <CommonRender
-        data={nodes}
-        type="node"
+      <NodeRender
+        nodes={nodes}
         idPrefix="bf_node_"
+        canvas={canvasRef.current}
       />
       <CommonRender
         data={edges}
@@ -281,4 +293,5 @@ ReactButterfly.propTypes = {
 };
 
 
+export const Endpoint = CEndpoint;
 export default ReactButterfly;

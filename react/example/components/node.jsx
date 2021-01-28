@@ -9,12 +9,16 @@ const Node = (props) => {
       <div className="bf-title">
         {props.title}
       </div>
+      {
+        props.children
+      }
     </div>
   );
 };
 
 Node.propTypes = {
-  title: PropTypes.string
+  title: PropTypes.string,
+  children: PropTypes.element
 };
 
 export default Node;
