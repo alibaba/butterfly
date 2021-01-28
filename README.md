@@ -23,13 +23,13 @@
 ## ✨ 特性
 * 丰富DEMO，开箱即用
 * 全方位管理画布，开发者只需要更专注定制化的需求
-* 利用dom来定制元素；灵活性，可塑性，拓展性优秀
+* 利用DOM/REACT/VUE来定制元素；灵活性，可塑性，拓展性优秀
 
 <p align="center">
   <img width="900" src="https://img.alicdn.com/imgextra/i4/O1CN01d7WHVs1vkEDzWRRlW_!!6000000006210-2-tps-2400-8172.png">
 </p>
 
-## 快速本地DEMO
+## 🚀快速本地DEMO
 ```
 git clone git@github.com:alibaba/butterfly.git
 npm install
