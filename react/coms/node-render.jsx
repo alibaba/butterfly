@@ -61,14 +61,26 @@ const NodeRender = (props) => {
     return null;
   }
 
+  // ============== Set React Endpoint To Canvas ==============
   useEffect(() => {
     if (!canvas) {
       return;
     }
 
+    // 如果用户已经使用endpoints代替自定义node
+    // 此时不需要渲染React Endpoint
+    const isUserCfgEndpoint = (nodeId) => {
+      const userDefNode = nodes.find(n => n.id === nodeId);
+      return !!userDefNode?.endpoints;
+    };
+
     // 添加节点
     endpoints.forEach((endpoint) => {
       const {nodeId, endpointId} = endpoint;
+
+      if (isUserCfgEndpoint(nodeId)) {
+        return;
+      }
 
       if (!canvas || !nodeId) {
         return;
@@ -88,14 +100,18 @@ const NodeRender = (props) => {
 
       node.addEndpoint({
         id: endpointId,
-        orientation: [-1, 0],
-        dom: document.getElementById(endpointId)
+        dom: document.getElementById(endpointId),
+        ...endpoint,
       });
     });
 
     // 移除多余锚点
     canvas.nodes.forEach(node => {
       const nodeId = node.id;
+      if (isUserCfgEndpoint(nodeId)) {
+        return;
+      }
+
       const nodeEndpoints = endpoints.filter(endpoint => {
         return endpoint.nodeId === nodeId;
       });
@@ -111,6 +127,10 @@ const NodeRender = (props) => {
 
     // 存量的锚点需要重新获取 dom，因为dom被移除，可能导致锚点失效
     canvas.nodes.forEach(node => {
+      if (isUserCfgEndpoint(node.id)) {
+        return;
+      }
+
       node.endpoints.forEach(endpoint => {
         const dom = document.getElementById(endpoint.id);
 
@@ -145,6 +165,7 @@ const NodeRender = (props) => {
     const hasRender = !!item.render;
     const element = hasRender ? item.render() : <BfNode key={id} {...item} />;
 
+    // ============== Gather React Endpoints ==============
     deepWalk(element).forEach(child => {
       if (typeof child !== 'object') {
         return;

@@ -8,7 +8,12 @@ const Option = Select.Option;
 const noop = () => null;
 
 const Toolbar = (props) => {
-  const {onAddEdge = noop, onAddNode = noop, onSwitchData = noop} = props;
+  const {
+    onAddEdge = noop,
+    onAddNode = noop,
+    onSwitchData = noop,
+    onSwitchColor = noop
+  } = props;
 
   return (
     <div className="basic-tools">
@@ -36,6 +41,7 @@ const Toolbar = (props) => {
       边颜色：
       <Select
         style={{width: 120}}
+        onSelect={onSwitchColor}
       >
         {
           ['red', 'blue', 'yellow', 'black'].map((color) => {
@@ -53,6 +59,7 @@ Toolbar.propTypes = {
   onAddNode: PropTypes.func,
   onAddEdge: PropTypes.func,
   onSwitchData: PropTypes.func,
+  onSwitchColor: PropTypes.func,
 };
 
 export default Toolbar;

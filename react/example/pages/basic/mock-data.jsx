@@ -1,10 +1,5 @@
 import React from 'react';
-
-import Node from '../components/node';
-import ButterflyReact from '../../index';
-import Toolbar from '../components/tool-bar';
-
-import './basic.less';
+import Node from '../../components/node';
 
 const endpoints = [
   {
@@ -19,10 +14,11 @@ const endpoints = [
   }
 ];
 
-const data = {
+export const data = {
   nodes: [
     {
       id: '1',
+      top: 100,
       endpoints: endpoints,
       render() {
         return <Node title="测试节点1" />;
@@ -39,7 +35,7 @@ const data = {
     },
     {
       id: '3',
-      top: 25,
+      top: 250,
       left: 300,
       endpoints: endpoints,
       render() {
@@ -52,6 +48,8 @@ const data = {
       id: '1-2',
       sourceNode: '1',
       targetNode: '2',
+      className: 'red',
+      arrowClassName: 'red',
       source: 'right',
       target: 'left',
       labelRender: () => {
@@ -70,14 +68,3 @@ const data = {
     }
   ],
 };
-
-const Basic = () => {
-  return (
-    <div className="basic-demo">
-      <Toolbar />
-      <ButterflyReact {...data} />
-    </div>
-  );
-};
-
-export default Basic;

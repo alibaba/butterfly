@@ -17,6 +17,7 @@ import './index.less';
 
 const noop = () => null;
 window._ = _;
+const defaultLinkCls = 'butterflies-link';
 
 const call = (fn) => {
   if (!fn) {
@@ -244,6 +245,49 @@ const ReactButterfly = (props) => {
     recalc(canvas);
   }, [currentStep]);
 
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) {
+      return;
+    }
+
+    // 对齐edges和canvas.edges的className
+    canvas.edges.forEach(cvsEdge => {
+      const userEdge = edges.find(e => e.id === cvsEdge.id);
+
+      // 对齐Edge的Classname
+      const alignEdgeCls = () => {
+        if (!cvsEdge.dom || !userEdge) {
+          return;
+        }
+
+        const cls = [defaultLinkCls];
+
+        if (userEdge.className) {
+          cls.push(userEdge.className);
+        }
+
+        cvsEdge.dom.setAttribute('class', cls .join(' '));
+      };
+
+      // 对齐边上的arrow的Cls
+      const alignEdgeArrowCls = () => {
+        if (!cvsEdge.arrowDom || !userEdge) {
+          return;
+        }
+
+        if (!userEdge.arrowClassName) {
+          return;
+        }
+
+        cvsEdge.arrowDom.setAttribute('class', userEdge.arrowClassName);
+      };
+
+      alignEdgeCls();
+      alignEdgeArrowCls();
+    });
+  });
+
   return (
     <div
       className={`${className || ''} butterfly-react`}
@@ -289,13 +333,18 @@ ReactButterfly.propTypes = {
   edges: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      labelRender: PropTypes.func       // label渲染函数
+      labelRender: PropTypes.func,      // label渲染函数
+      className: PropTypes.string       // 线条的className
     })
   ),
   groups: PropTypes.array,              // 组的数据
   options: PropTypes.shape({            // 画布属性
-    layout: PropTypes.func,
-    zoomable: PropTypes.func,
+    layout: PropTypes.oneOfType([
+      PropTypes.func,
+      PropTypes.string,
+      PropTypes.object
+    ]),
+    zoomable: PropTypes.bool,
     moveable: PropTypes.bool,
     draggable: PropTypes.bool,
     linkable: PropTypes.bool,

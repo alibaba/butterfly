@@ -6,9 +6,9 @@ import {
 } from 'react-router-dom';
 import 'antd/dist/antd.css';
 
-import Basic from './pages/basic';
 import Layout from './pages/layout';
-import Endpoint from './pages/endpoints';
+import Basic from './pages/basic/index';
+import Endpoint from './pages/endpoint/index';
 
 const RouterCfg = () => {
   return (
