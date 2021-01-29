@@ -1,43 +1,60 @@
 import React, {useEffect} from 'react';
 import _ from 'lodash';
+import _debug from 'debug';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import _debug from 'debug';
 
 import BfNode from '../coms/node';
 import checkRender from '../util/check-render.js';
 
 const debug = _debug('butterflf-react');
 
-const deepWalk = (element) => {
+const deepWalk = function deepWalk(element) {
   const childElements = [];
 
-  const walk = (ele) => {
-    const children = _.get(ele, 'props.children');
+  const walk = function walk(ele) {
+    let PreElement = ele;
+    let children = _.get(PreElement, 'props.children');
+    if (!PreElement) {
+      return;
+    }
+
+    // FIXME: is there a better way？
+    if (typeof PreElement.type === 'function' && !PreElement.props.children) {
+      try {
+        // eslint-disable-next-line
+        PreElement = new PreElement.type(PreElement.props);
+        walk(PreElement.render());
+      } catch (e) {
+        e;
+      }
+
+      return;
+    }
+
     if (!children) {
       return;
     }
 
     if (Array.isArray(children)) {
-      children.forEach(child => {
+      children.forEach(function (child) {
         childElements.push(child);
-
         walk(child);
       });
     }
-
 
     childElements.push(children);
     walk(children);
   };
 
   walk(element);
-
   return childElements;
 };
 
+const noop = () => null;
+
 const NodeRender = (props) => {
-  const {nodes, idPrefix, canvas} = props;
+  const {nodes, idPrefix, canvas, onRenderFinish = noop} = props;
   const endpoints = [];
 
   if (!Array.isArray(nodes)) {
@@ -91,6 +108,8 @@ const NodeRender = (props) => {
         }
       });
     });
+
+    onRenderFinish();
   });
 
   return nodes.map(item => {
@@ -134,9 +153,10 @@ const NodeRender = (props) => {
 };
 
 NodeRender.propTypes = {
-  canvas: PropTypes.object,
+  canvas: PropTypes.object,             // 小蝴蝶实例
   nodes: PropTypes.array,
-  idPrefix: PropTypes.string
+  idPrefix: PropTypes.string,
+  onRenderFinish: PropTypes.func       // 节点以及锚点是否全部渲染完毕
 };
 
 export default NodeRender;

@@ -43,9 +43,13 @@ const ReactButterfly = (props) => {
   const containerRef = useRef();
   const canvasRef = useRef();
 
-  useEffect(() => {
+  /**
+   * 对齐画布数据和React数据
+   * @param {BaseCanvas} canvas 画布实例
+   * @param {Boolean} edge 是否对齐边
+   */
+  const alignCanvasData = (canvas, edge = false) => {
     // 利用ID，和当前的边，当前的节点进行对比
-    const canvas = canvasRef.current;
     if (!canvas) {
       return;
     }
@@ -84,9 +88,19 @@ const ReactButterfly = (props) => {
     processGroups();
     processNodes();
 
-    setTimeout(() => {
+    if (edge) {
       processEdge();
-    });
+    }
+  };
+
+  useEffect(() => {
+    // // 利用ID，和当前的边，当前的节点进行对比
+    const canvas = canvasRef.current;
+    if (!canvas) {
+      return;
+    }
+
+    alignCanvasData(canvas);
 
     setStep(currentStep + 1);
   }, [nodes, edges, groups]);
@@ -238,6 +252,9 @@ const ReactButterfly = (props) => {
         nodes={nodes}
         idPrefix="bf_node_"
         canvas={canvasRef.current}
+        onRenderFinish={() => {
+          alignCanvasData(canvasRef.current, true);
+        }}
       />
       <CommonRender
         data={edges}

@@ -1,4 +1,6 @@
 import React, {useState, useRef, useEffect} from 'react';
+import _ from 'lodash';
+
 import Node from '../components/node';
 import Toolbar from '../components/tool-bar';
 import ButterflyReact, {Endpoint} from '../../index';
@@ -75,6 +77,38 @@ const initialValue = {
   ]
 };
 
+const switchData = _.cloneDeep(initialValue);
+
+switchData.nodes.push({
+  id: '100',
+  render() {
+    return (
+      <Node title="节点">
+        <Endpoint id={`endpoint-100`}>
+          锚点100
+        </Endpoint>
+      </Node>
+    );
+  }
+});
+
+switchData.edges.push({
+  id: '1-100',
+  sourceNode: '1',
+  targetNode: '100',
+  source: 'endpoint-1',
+  target: 'endpoint-100'
+});
+
+switchData.edges.push({
+  id: '2-100',
+  sourceNode: '2',
+  targetNode: '100',
+  source: 'endpoint-2',
+  target: 'endpoint-100'
+});
+
+
 const EndpointDemo = () => {
   const canvasRef = useRef();
   const [data, setData] = useState(initialValue);
@@ -130,39 +164,11 @@ const EndpointDemo = () => {
   };
 
   const onSwitchData = () => {
-    data.nodes.push({
-      id: '100',
-      render() {
-        return (
-          <Node title="节点">
-            <Endpoint id={`endpoint-100`}>
-              锚点100
-            </Endpoint>
-          </Node>
-        );
-      }
-    });
-
-    data.edges.push({
-      id: '1-100',
-      sourceNode: '1',
-      targetNode: '100',
-      source: 'endpoint-1',
-      target: 'endpoint-100'
-    });
-
-    data.edges.push({
-      id: '2-100',
-      sourceNode: '2',
-      targetNode: '100',
-      source: 'endpoint-2',
-      target: 'endpoint-100'
-    });
-
-    setData({
-      nodes: [...data.nodes],
-      edges: [...data.edges]
-    });
+    if (data === switchData) {
+      setData(initialValue);
+    } else {
+      setData(switchData);
+    }
   };
 
   return (
