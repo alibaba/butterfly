@@ -83,6 +83,7 @@ const ReactButterfly = (props) => {
 
     processGroups();
     processNodes();
+
     setTimeout(() => {
       processEdge();
     });

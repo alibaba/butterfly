@@ -39,13 +39,13 @@ export default {
     }),
     babel(
       {
-        "presets": [
+        presets: [
           [
-            "@babel/preset-env", {
-              "modules": false
+            '@babel/preset-env', {
+              modules: false
             }
           ],
-          "@babel/preset-react"
+          '@babel/preset-react'
         ],
         plugins: [
         ]

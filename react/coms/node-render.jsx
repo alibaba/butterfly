@@ -118,7 +118,7 @@ const NodeRender = (props) => {
         return;
       }
 
-      if (child.type.name === 'Endpoint') {
+      if (child?.type?.name === 'Endpoint') {
         endpoints.push({
           endpointId: child.props.id,
           nodeId: item.id

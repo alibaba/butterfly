@@ -2,9 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
-import ReactNode from './react-node.jsx';
+import ReactLabel from './react-label';
 import ReactGroup from './react-group.jsx';
 import checkRender from '../util/check-render.js';
+
 
 // 公共渲染模块
 const CommonRender = (props) => {
@@ -36,7 +37,7 @@ const CommonRender = (props) => {
     checkRender(item.render, type);
 
     const hasRender = !!item[renderKey];
-    const ReactCom = type === 'group' ? ReactGroup : ReactNode;
+    const ReactCom = type === 'group' ? ReactGroup : ReactLabel;
 
     return ReactDOM.createPortal(
       hasRender ? item[renderKey]() : <ReactCom key={id} {...item} />,

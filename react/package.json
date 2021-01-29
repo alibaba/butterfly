@@ -8,7 +8,8 @@
   "unpkg": "dist/index.unpkg.js",
   "jsnext:main": "dist/index.es.js",
   "scripts": {
-    "build": "rollup -c ./rollup.config.js"
+    "build": "rollup -c ./rollup.config.js",
+    "eslint": "eslint --ext .js --ext .jsx --ignore-path ../.gitignore ."
   },
   "eslintConfig": {
     "extends": "aliyun"
