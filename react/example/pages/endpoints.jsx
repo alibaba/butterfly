@@ -79,6 +79,30 @@ const initialValue = {
 
 const switchData = _.cloneDeep(initialValue);
 
+switchData.nodes[1].render = function render() {
+  return (
+    <Node title="节点2">
+      <Endpoint id="endpoint-2">
+        锚点2
+      </Endpoint>
+      <Endpoint id="endpoint-4">
+        锚点4
+      </Endpoint>
+      <Endpoint id="endpoint-5">
+        锚点5
+      </Endpoint>
+      <Endpoint id="endpoint-6">
+        锚点6
+      </Endpoint>
+      <div style={{position: 'absolute', right: 0, bottom: 0}}>
+        <Endpoint id="endpoint-3">
+          锚点3
+        </Endpoint>
+      </div>
+    </Node>
+  );
+};
+
 switchData.nodes.push({
   id: '100',
   render() {
@@ -100,6 +124,16 @@ switchData.edges.push({
   target: 'endpoint-100'
 });
 
+[4, 5, 6].forEach(key => {
+  switchData.edges.push({
+    id: `1-2-${key}`,
+    sourceNode: '1',
+    targetNode: '2',
+    source: 'endpoint-1',
+    target: `endpoint-${key}`
+  });
+});
+
 switchData.edges.push({
   id: '2-100',
   sourceNode: '2',
@@ -107,7 +141,6 @@ switchData.edges.push({
   source: 'endpoint-2',
   target: 'endpoint-100'
 });
-
 
 const EndpointDemo = () => {
   const canvasRef = useRef();
@@ -170,6 +203,8 @@ const EndpointDemo = () => {
       setData(switchData);
     }
   };
+
+  console.log(data.edges);
 
   return (
     <div className="basic-demo">

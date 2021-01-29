@@ -9,7 +9,7 @@
   "jsnext:main": "dist/index.es.js",
   "scripts": {
     "build": "rollup -c ./rollup.config.js",
-    "eslint": "eslint --ext .js --ext .jsx --ignore-path ../.gitignore ."
+    "eslint": "eslint --ext .js --ext .jsx --ignore-path .eslintignore ."
   },
   "eslintConfig": {
     "extends": "aliyun"

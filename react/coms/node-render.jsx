@@ -103,9 +103,22 @@ const NodeRender = (props) => {
       node.endpoints.forEach((endpoint) => {
         const nodeEndpointIds = nodeEndpoints.map(e => e.endpointId);
         if (!nodeEndpointIds.includes(endpoint.id)) {
-          console.log(`remove endpoint ${endpoint.id} from ${node.id} successfully`);
+          debug(`remove endpoint ${endpoint.id} from ${node.id} successfully`);
           node.removeEndpoint(endpoint.id);
         }
+      });
+    });
+
+    // 存量的锚点需要重新获取 dom，因为dom被移除，可能导致锚点失效
+    canvas.nodes.forEach(node => {
+      node.endpoints.forEach(endpoint => {
+        const dom = document.getElementById(endpoint.id);
+
+        if (!dom) {
+          node.removeEndpoint(endpoint.id);
+        }
+
+        endpoint.dom = dom;
       });
     });
 
