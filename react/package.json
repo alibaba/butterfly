@@ -1,6 +1,6 @@
 {
   "name": "butterfly-react",
-  "version": "0.0.6",
+  "version": "0.0.7-beta",
   "description": "react version for butterfly",
   "license": "MIT",
   "main": "dist/index.js",
@@ -13,14 +13,15 @@
   },
   "eslintConfig": {
     "extends": "aliyun"
-  },  
+  },
   "peerDependencies": {
     "prop-types": "^15.5.4",
     "react": "^15.0.0 || ^16.0.0",
     "react-dom": "^15.0.0 || ^16.0.0",
     "butterfly-dag": "*",
     "lodash": "*",
-    "jquery": "*"
+    "jquery": "*",
+    "debug": "*"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.12.1",
@@ -39,6 +40,8 @@
     "doc"
   ],
   "dependencies": {
+    "@rollup/plugin-commonjs": "^17.0.0",
+    "@rollup/plugin-node-resolve": "^11.1.0",
     "butterfly-dag": "^3.1.6",
     "debug": "^4.3.1",
     "jquery": "^3.5.1",
