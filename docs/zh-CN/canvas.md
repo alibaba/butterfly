@@ -478,7 +478,7 @@ setGuideLine = (show, options) => {}
   * 设置缩略图
   * @param {true|false} boolean  - 是否开启缩略图功能
   * @param {Object} 具体请参考缩略图章节
-  /
+  */
 setMinimap = (show, options) => {}
 
 /**

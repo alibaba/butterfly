@@ -197,6 +197,11 @@ class BaseCanvas extends Canvas {
       terScrollX: opts.terScrollX || 0,
       terScrollY: opts.terScrollY || 0
     });
+    this.canvasWrapper.resize({
+      root: this.root
+    });
+    this._gridService._resize();
+    this._guidelineService._resize();
   }
 
   draw(opts, callback) {
@@ -1792,7 +1797,6 @@ class BaseCanvas extends Canvas {
   }
 
   _genSvgWrapper() {
-
 
     function _detectMob() {
       const toMatch = [
