@@ -23,13 +23,13 @@ English | [简体中文](./README.md)
 ## ✨ Features
 * Simple & Poweful & Rich DEMO
 * Manage the canvas in all aspects, developers only need to focus more on customized needs
-* Use dom to customize elements: flexibility and excellent expandability
+* Use DOM/REACT/VUE to customize elements: flexibility and excellent expandability
 
 <p align="center">
   <img width="900" src="https://img.alicdn.com/imgextra/i4/O1CN01d7WHVs1vkEDzWRRlW_!!6000000006210-2-tps-2400-8172.png">
 </p>
 
-## QUCIK DEMO LOCAL
+## 🚀QUCIK DEMO LOCAL
 ```
 git clone git@github.com:alibaba/butterfly.git
 npm install
