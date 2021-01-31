@@ -3138,7 +3138,12 @@ class BaseCanvas extends Canvas {
         }
       });
     }
+
+    // todo 防抖
     node._moveTo(x, y);
+    node.endpoints && node.endpoints.forEach((item) => {
+      item.updatePos();
+    });
     this.edges.forEach((edge) => {
       if (edge.type === 'endpoint') {
         const isLink = _.find(node.endpoints, (point) => {
