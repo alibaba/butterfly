@@ -26,7 +26,7 @@ class CustomGroup extends Group {
     return div;
   }
 
-  _addEventListener = () => {
+  _addEventListener() {
     $(this.dom).on('mousedown', (e) => {
       const LEFT_KEY = 0;
       if (e.button !== LEFT_KEY) {

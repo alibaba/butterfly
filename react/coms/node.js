@@ -11,7 +11,7 @@ const getNodeStyle = (left, top) => {
 
 class CustomNode extends Node {
   // 这个方法只会被调用一次
-  draw = (obj) => {
+  draw(obj) {
     const div = document.createElement('div');
     const style = getNodeStyle(obj.left, obj.top);
     Object.keys(style).forEach(key => {
@@ -24,7 +24,7 @@ class CustomNode extends Node {
     return div;
   }
 
-  _addEventListener = () => {
+  _addEventListener() {
     $(this.dom).on('mousedown', (e) => {
       const LEFT_KEY = 0;
       if (e.button !== LEFT_KEY) {
