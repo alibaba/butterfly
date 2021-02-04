@@ -58,14 +58,14 @@ class BaseNode extends Node {
         isInited
       });
       return obj;
-    } 
+    }
     // 这部分可能还需要想一下
     const EndpointClass = obj.Class || Endpoint;
     const endpoint = new EndpointClass(_.assign({
+      limitNum: obj.limitNum || this._endpointLimitNum,
       _on: this._on,
       _emit: this._emit,
       _node: this,
-      _limitNum: obj.limitNum || this._endpointLimitNum,
       _global: this.global
     }, obj));
     
