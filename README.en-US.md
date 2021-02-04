@@ -114,6 +114,13 @@ canvas.draw({
 * React & Vue Support
   * [React butterfly](./docs/en-US/react.md)
   * [Vue2 butterfly](./docs/en-US/vue.md)
+* React Components Extension
+ * [Data/Table-Field mapping](https://github.com/aliyun/react-data-mapping/blob/master/README.en-US.md)
+ * Blood Map(doing)
+ * Visual Modeling(doing)
+ * Scheduling Diagram(doing)
+ * Monitoring(doing)
+ * Butterfly-Editor(doing)
 
 ## 🤝 Contribution
 Butterfly is a completely open source project and we welcome everyone to contribute to fixing bugs and improvements. For information on how to get started, read our [contribution guide](./docs/en-US/CONTRIBUTING.md).
