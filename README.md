@@ -113,6 +113,13 @@ canvas.draw({
 * React & Vue支持
   * [React butterfly组件支持](./docs/zh-CN/react.md)
   * [Vue2 butterfly组件支持](./docs/zh-CN/vue.md)
+* React拓展组件
+ * [数据/字段映射组件](https://github.com/aliyun/react-data-mapping)
+ * 血缘图(doing)
+ * 可视化建模图(doing)
+ * 调度编排图(doing)
+ * 监控图(doing)
+ * butterfly-editor(doing)
 
 ## 🤝贡献
 小蝴蝶是一个完全开源的项目，我们欢迎大家为修复错误和改进做出贡献。有关如何开始的信息，请阅读我们的[贡献指南](./docs/zh-CN/CONTRIBUTING.md).
