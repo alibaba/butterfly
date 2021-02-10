@@ -1000,6 +1000,20 @@ class BaseCanvas extends Canvas {
     });
   }
 
+  getNeighborEdgesByEndpoint(id, pointId) {
+    let edges = this.getNeighborEdges(id);
+    return edges.filter((item) => {
+      if (item.type === 'node') {
+        return false;
+      } else {
+        return (
+          (item.sourceNode.id === id && item.sourceEndpoint.id === pointId) || 
+          (item.targetNode.id === id && item.targetEndpoint.id === pointId)
+        );
+      }
+    });
+  }
+
   getNeighborNodes(nodeId) {
     const result = [];
     const node = _.find(this.nodes, item => nodeId === item.id);
