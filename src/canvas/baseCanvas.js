@@ -1819,7 +1819,7 @@ class BaseCanvas extends Canvas {
     let _detectZoom = () => {
       let ratio = 0;
       let screen = window.screen;
-      let ua = navigator.userAgent.toLowerCase();
+      let ua = window.navigator.userAgent.toLowerCase();
 
       if (window.devicePixelRatio !== undefined) {
         ratio = window.devicePixelRatio;
@@ -1896,7 +1896,7 @@ class BaseCanvas extends Canvas {
       this.setMoveable(true);
     }
 
-    let _isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+    let _isChrome = /Chrome/.test(window.navigator.userAgent) && /Google Inc/.test(window.navigator.vendor);
     let _getChromeVersion = () => {
       var raw = window.navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
       return raw ? parseInt(raw[2], 10) : false;
