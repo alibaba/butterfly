@@ -600,7 +600,6 @@ class BaseCanvas extends Canvas {
             return;
           }
         }
-
         let edge = new EdgeClass({
           type: 'endpoint',
           id: link.id,
@@ -2451,19 +2450,26 @@ class BaseCanvas extends Canvas {
                 endpoints = [this._dragEndpoint];
               }
               endpoints.forEach((point) => {
+                let _sourceNode = point.nodeType === 'node' ? this.getNode(point.nodeId) : this.getGroup(point.nodeId);
+                let _sourceEndpoint = point;
                 let pointObj = {
                   type: 'endpoint',
                   shapeType: this.theme.edge.type,
                   orientationLimit: this.theme.endpoint.position,
                   _sourceType: point.nodeType,
-                  sourceNode: point.nodeType === 'node' ? this.getNode(point.nodeId) : this.getGroup(point.nodeId),
-                  sourceEndpoint: point,
+                  sourceNode: _sourceNode,
+                  sourceEndpoint: _sourceEndpoint,
                   arrow: this.theme.edge.arrow,
                   arrowPosition: this.theme.edge.arrowPosition,
                   arrowOffset: this.theme.edge.arrowOffset,
                   label: this.theme.edge.label,
                   isExpandWidth: this.theme.edge.isExpandWidth
                 };
+                pointObj['options'] = _.assign({}, pointObj, {
+                  sourceNode: _sourceNode.id,
+                  sourceEndpoint: _sourceEndpoint.id
+                });
+                console.log(pointObj)
                 // 检查endpoint限制连接数目
                 let _linkNums = this.edges.filter((_edge) => {
                   return _edge.sourceEndpoint.id === point.id;
