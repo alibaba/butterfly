@@ -61,11 +61,17 @@ let canvas = new Canvas({
 | theme | 画布主题 | object (Option) | undefined
 | global| 全局属性 | object (Option) | undefined
 
+* **layout布局**，把string/function传入layout的属性即可
+ * forceLayout
+ * drageLayout
+ * concentricLayout
+ * circleLayout
+ * fruchterman
+ * radial
+ * 自定义布局，传入自定义方法，里面可以按照用户需求进行布局。注:`除此之外，记得把Edge的calcPath的方法复写掉，不然会由小蝴蝶的内置计算线段的方法代替，无法实现所得的线段`
+* **autoFixCanvas**，自动延展画布，适用于画布内节点与画布外节点有互动的场景。效果如下：![自动延展画布](https://img.alicdn.com/tfs/TB16lUNBG61gK0jSZFlXXXDKFXa-1665-801.gif)
 * **isScopeStrict**，用于设置全局scope严格模式
   * 默认为false。假如该值设置为true，当scope必须完全一致才能匹配；假如该值为false，当scope为undefined时，都能匹配所有值。
-* **重力布局**，传入`'ForceLayout'`即可，小蝴蝶内置布局
-* **自定义布局**，传入一个方法，里面可以按照用户需求进行布局。注:`除此之外，记得把Edge的calcPath的方法复写掉，不然会由小蝴蝶的内置计算线段的方法代替，无法实现所得的线段`
-* **autoFixCanvas**，自动延展画布，适用于画布内节点与画布外节点有互动的场景。效果如下：![自动延展画布](https://img.alicdn.com/tfs/TB16lUNBG61gK0jSZFlXXXDKFXa-1665-801.gif)
 
 ```js
 let canvas = new Canvas({
@@ -200,11 +206,19 @@ removeEdge = (param) => {}
   */
 removeEdges = (param) => {}
 /**
-  * 根据id获取相邻的edge
-  * @param {string} id  - node id
+  * 根据node id获取相邻的edge
+  * @param {string} nodeId  - node id
   * @return {Edges} - 相邻的连线
   */
 getNeighborEdges = (string) => {}
+
+/**
+  * 根据endpoint id获取相邻的edge
+  * @param {string} nodeId  - node id
+  * @param {string} endpointId  - endpoint id
+  * @return {Edges} - 相邻的连线
+  */
+getNeighborEdgesByEndpoint = (string, string) => {}
 
 /**
   * 查找 N 层关联节点和边
@@ -416,7 +430,7 @@ this.canvas.add2Union('我的聚合组', {
 
 ```js
 let canvas = new Canvas({...});
-canvas.on('type', (data) => {
+canvas.on('type key', (data) => {
   //data 数据
 });
 ```

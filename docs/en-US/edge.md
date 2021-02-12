@@ -1,7 +1,8 @@
 # Edge
 
 ## Usage
-```
+```js
+// Initialize draw
 canvas.draw({
   edges: [{
     source: 'point_1',
@@ -16,6 +17,11 @@ canvas.draw({
   }],
   groups: ...
   nodes: ...
+})
+// Dynamic addition
+canvas.addEdge({
+  // the attribute below
+  ...
 })
 ```
 
