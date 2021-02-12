@@ -1,15 +1,14 @@
-'use strict';
-
-// const Node = require('../../../index.js').Node;
 import { Node } from 'butterfly-dag';
-const $ = require('jquery');
-require('./node.less');
+import $ from 'jquery';
+
+import './node.less';
 
 class BaseNode extends Node {
   constructor(opts) {
     super(opts);
     this.options = opts;
   }
+
   draw = (opts) => {
     if (opts.options.type === 'circle') {
       const container = $('<div class="analysis-circle-base-node"></div>')
@@ -45,4 +44,4 @@ class BaseNode extends Node {
   }
 }
 
-module.exports = BaseNode;
+export default BaseNode;

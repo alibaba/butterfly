@@ -1,16 +1,11 @@
-'use strict';
 import React, {Component} from 'react';
-require('./index.less');
-require('butterfly-dag/dist/index.css');
-
-// const Canvas = require('../../../index.js').Canvas;
+import ReactDOM from 'react-dom';
 import { Canvas } from 'butterfly-dag';
-const mockData = require('./data.js');
+import mockData from './data.js';
+
+import './index.less';
 
 class Scene4New extends Component {
-  constructor() {
-    super();
-  }
   componentDidMount() {
     let root = document.getElementById('dag-canvas');
     this.canvas = new Canvas({
@@ -31,6 +26,7 @@ class Scene4New extends Component {
       console.log(data);
     });
   }
+
   render() {
     return (
       <div className='analysis'>
@@ -41,4 +37,5 @@ class Scene4New extends Component {
   }
 }
 
-module.exports = Scene4New;
+const rootElement = document.getElementById("root");
+ReactDOM.render(<Scene4New />, rootElement);
