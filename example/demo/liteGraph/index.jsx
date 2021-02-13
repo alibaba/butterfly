@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import mockData from './data.js'
 import './index.less';
-const $ = require('jquery');
+import $ from 'jquery';
 // const Canvas = require('../../../index.js').Canvas;
 import { Canvas } from 'butterfly-dag';
 class LiteGraph extends Component{

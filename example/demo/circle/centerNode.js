@@ -1,15 +1,14 @@
-'use strict';
-
-// const Node = require('../../../index.js').Node;
+import $ from 'jquery';
 import {Node} from 'butterfly-dag';
-const $ = require('jquery');
-require('./node.less');
+
+import './node.less';
 
 class CenterNode extends Node {
   constructor(opts) {
     super(opts);
     this.options = opts;
   }
+
   draw = (opts) => {
     let container = $('<div class="decision-node"></div>')
       .attr('id', opts.id)
@@ -25,6 +24,7 @@ class CenterNode extends Node {
   _createText(dom = this.dom) {
     $('<span class="text-box"></span>').text(this.options.text).appendTo(dom);
   }
+
   _createLeft(dom = this.dom) {
     let arrowLeft = $('<span class="arrow-left"></span>').appendTo(dom);
     arrowLeft.on('click', (event) => {
@@ -32,6 +32,7 @@ class CenterNode extends Node {
     });
     return arrowLeft;
   }
+
   _createRight(dom = this.dom) {
     let arrowRight = $('<span class="arrow-right"></span>').appendTo(dom);
     arrowRight.on('click', (event) => {

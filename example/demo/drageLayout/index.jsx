@@ -2,9 +2,9 @@
 import React, {Component} from 'react';
 import DrageCanvas from './drageCanvas';
 import {Button, Select, Slider} from 'antd';
-require('./index.less');
-require('butterfly-dag/dist/index.css');
-const mockData = require('./data.js');
+import './index.less';
+import 'butterfly-dag/dist/index.css'
+import mockData from './data.js';
 const node = require('./base_node.jsx');
 const RelationEdge = require('./edge_relation.jsx');
 

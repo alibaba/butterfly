@@ -1,15 +1,9 @@
-'use strict';
-
-// const Node = require('../../../index.js').TreeNode;
+import $ from 'jquery';
 import {TreeNode} from 'butterfly-dag';
 
-const $ = require('jquery');
-require('./node.less');
+import './node.less';
 
 class BaseNode extends TreeNode {
-  constructor(opts) {
-    super(opts);
-  }
   draw = (opts) => {
     let container = $('<div class="iot-node"></div>')
       .css('top', opts.top + 'px')
@@ -40,4 +34,4 @@ class BaseNode extends TreeNode {
   }
 }
 
-module.exports = BaseNode;
+export default BaseNode;

@@ -1,6 +1,6 @@
 'use strict';
 import React, {Component} from 'react';
-require('./index.less');
+import './index.less';
 
 // const Canvas = require('../../../index.js').Canvas;
 import { Canvas } from 'butterfly-dag';

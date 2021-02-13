@@ -2,7 +2,7 @@
 
 const BaseNode = require('./node.js');
 const AlisBaseNode = require('./alis-node.js');
-const $ = require('jquery');
+import $ from 'jquery';
 
 module.exports = {
   nodes: [

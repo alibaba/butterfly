@@ -1,7 +1,7 @@
 'use strict';
 
 const Node = require('./base_node.jsx');
-const $ = require('jquery');
+import $ from 'jquery';
 
 class Train extends Node {
   constructor(...args) {

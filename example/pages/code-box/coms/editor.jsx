@@ -81,6 +81,10 @@ const Editor = (props) => {
   }, [editorCodes]);
 
   useEffect(() => {
+    setActive(null);
+  }, [demo]);
+
+  useEffect(() => {
     setEditorCodes([...codes]);
 
     if (codes && codes.length > 0 && !active) {

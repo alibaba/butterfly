@@ -5,8 +5,8 @@ import React, {Component} from 'react';
 import { Canvas } from 'butterfly-dag';
 const mockData = require('./data');
 
-require('./index.less');
-require('butterfly-dag/dist/index.css');
+import './index.less';
+import 'butterfly-dag/dist/index.css'
 
 class ForceTree extends Component {
   constructor() {

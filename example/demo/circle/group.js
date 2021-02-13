@@ -1,10 +1,7 @@
-'use strict';
-
-// const Group = require('../../../index.js').Group;
 import {Group} from 'butterfly-dag';
-const $ = require('jquery');
-require('./group.less');
+import $ from 'jquery';
 
+import './group.less';
 class BaseGroup extends Group {
   constructor(opts) {
     super(opts);
@@ -56,4 +53,4 @@ class BaseGroup extends Group {
   }
 }
 
-module.exports = BaseGroup;
+export default BaseGroup;

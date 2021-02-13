@@ -2,11 +2,11 @@
 import React, {Component} from 'react';
 // const Canvas = require('../../../index.js').Canvas;
 import { Canvas } from 'butterfly-dag';
-const mockData = require('./data.js');
+import mockData from './data.js';
 const RelationEdge = require('./edge_relation.jsx');
 
-require('./index.less');
-require('butterfly-dag/dist/index.css');
+import './index.less';
+import 'butterfly-dag/dist/index.css'
 
 class RelationalNetwork extends Component {
   constructor() {

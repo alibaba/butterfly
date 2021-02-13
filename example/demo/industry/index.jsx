@@ -1,10 +1,10 @@
 'use strict';
 import React, {Component} from 'react';
-require('./index.less');
-require('butterfly-dag/dist/index.css');
+import './index.less';
+import 'butterfly-dag/dist/index.css'
 
 const IndustryCanvas = require('./canvas');
-const mockData = require('./data.js');
+import mockData from './data.js';
 
 class Industry extends Component {
   constructor() {

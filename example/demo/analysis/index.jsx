@@ -35,5 +35,4 @@ class Scene4New extends Component {
   }
 }
 
-const rootElement = document.getElementById('root');
-ReactDOM.render(<Scene4New />, rootElement);
+ReactDOM.render(<Scene4New />, document.getElementById('root'));

@@ -3,7 +3,7 @@
 // const Endpoint = require('../../../index.js').Endpoint;
 import {Endpoint, Tips} from 'butterfly-dag';
 // const Tips = require('../../../index.js').Tips;
-const $ = require('jquery');
+import $ from 'jquery';
 
 class BaseEndpoint extends Endpoint {
   mounted() {

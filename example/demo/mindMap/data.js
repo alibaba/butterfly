@@ -1,6 +1,6 @@
 'use strict';
 
-const Node = require('./node.js');
+import Node from './node.js';
 
 module.exports = {
   nodes: {

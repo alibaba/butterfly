@@ -2,7 +2,7 @@
 
 // const Node = require('../../../index.js').Node;
 import { Node } from 'butterfly-dag';
-const $ = require('jquery');
+import $ from 'jquery';
 require('./base_node.less');
 
 class BaseNode extends Node {
@@ -28,4 +28,4 @@ class BaseNode extends Node {
   }
 }
 
-module.exports = BaseNode;
+export default BaseNode;

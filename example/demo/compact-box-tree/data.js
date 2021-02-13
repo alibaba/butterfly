@@ -1,4 +1,4 @@
-const Node = require('./node.js');
+import Node from './node.js';
 
 export const mockData = {
   nodes: {

@@ -2,7 +2,7 @@
 
 // const Group = require('../../../index.js').Group;
 import {Group} from 'butterfly-dag';
-const $ = require('jquery');
+import $ from 'jquery';
 const _ = require('lodash');
 
 class BaseGroup extends Group {

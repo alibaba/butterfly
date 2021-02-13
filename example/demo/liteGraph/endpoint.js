@@ -2,7 +2,7 @@
 
 // const Endpoint = require('../../../index.js').Endpoint;
 import {Endpoint} from 'butterfly-dag';
-const $ = require('jquery');
+import $ from 'jquery';
 
 class BaseEndpoint extends Endpoint {
   draw(obj) {

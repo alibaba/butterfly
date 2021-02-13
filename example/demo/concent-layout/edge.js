@@ -1,8 +1,5 @@
-'use strict';
-
-// const Edge = require('../../../index.js').Edge;
+import $ from 'jquery';
 import {Edge} from 'butterfly-dag';
-const $ = require('jquery');
 
 class BaseEdge extends Edge {
   draw(obj) {

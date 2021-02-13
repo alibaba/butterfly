@@ -1,9 +1,8 @@
-'use strict';
-const Node = require('./node.js');
-const Edge = require('./edge');
-const Center = require('./center');
+import Edge from './edge';
+import Node from './node.js';
+import Center from './center';
 
-module.exports = {
+export default {
   nodes: [{
     id: 'test1',
     name: '小蝴蝶',
