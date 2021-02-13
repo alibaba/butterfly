@@ -14,6 +14,7 @@ export default `
     }
   </style>
   <div id="root"></div>
+  <script src="/app.js"></script>
  </body>
-</html>    
+</html>  
 `;

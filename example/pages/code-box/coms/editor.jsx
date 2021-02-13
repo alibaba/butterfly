@@ -1,43 +1,29 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import AceEditor from 'react-ace';
 import PropTypes from 'prop-types';
-import {Icon, Tooltip} from 'antd';
+import {Icon, Tooltip, message} from 'antd';
 import classnames from 'classnames';
 import Hotkeys from 'react-hot-keys';
+
+import exportCode from './export-code';
 
 import 'ace-builds/src-noconflict/mode-javascript';
 import 'ace-builds/src-noconflict/theme-github';
 
 import './editor.less';
 
-const ops = [
-  {
-    name: '在github上编辑',
-    action: 'edit',
-    icon: <Icon type="edit" />,
-  },
-  {
-    name: '执行',
-    action: 'play',
-    icon: <Icon type="play-circle" />
-  },
-  {
-    name: '导出',
-    action: 'export',
-    icon: <Icon type="cloud-download" />
-  }
-];
-
 const Editor = (props) => {
   const {codes = [], demo = ''} = props;
   const [editorCodes, setEditorCodes] = useState([]);
   const [active, setActive] = useState(null);
+  const [exporting, setExporting] = useState(false);
   const editorRef = useRef(null);
   if (editorRef.current) {
     editorRef.current.editorCodes = editorCodes;
   }
 
-  const onOpClick = useCallback((op) => {
+  // 选项点击
+  const onOpClick = useCallback(async (op) => {
     if (op.link) {
       return window.open(op.link, '_blank');
     }
@@ -47,7 +33,15 @@ const Editor = (props) => {
         props.onCodeChange(editorCodes);
         break;
       case 'export':
-        props.onExportCode();
+        setExporting(true);
+        try {
+          await exportCode(editorCodes);
+          message.success('导出成功！');
+        } catch (e) {
+          message.error(`导出失败，错误原因：${e.message}`);
+        } finally {
+          setExporting(false);
+        }
         break;
       case 'edit':
         window.open(
@@ -58,10 +52,12 @@ const Editor = (props) => {
     }
   }, [editorCodes]);
 
+  // 点击文件
   const onClickFile = (filename) => {
     setActive(filename);
   };
 
+  // 触发代码变更
   const onCodeChange = (code) => {
     editorCodes.forEach(file => {
       if (file.filename === active) {
@@ -72,6 +68,7 @@ const Editor = (props) => {
     setEditorCodes([...editorCodes]);
   };
 
+  // componentDidMount & 监听 cmd + s 热键
   const onEditorLoad = useCallback((editor) => {
     editorRef.current = editor;
     editor.commands.addCommand({
@@ -92,6 +89,24 @@ const Editor = (props) => {
   }, [codes]);
 
   const activefile = editorCodes.find(code => code.filename === active);
+
+  const ops = [
+    {
+      name: '在github上编辑',
+      action: 'edit',
+      icon: <Icon type="edit" />,
+    },
+    {
+      name: '执行',
+      action: 'play',
+      icon: <Icon type="play-circle" />
+    },
+    {
+      name: '导出',
+      action: 'export',
+      icon: <Icon type={exporting ? 'loading' : 'cloud-download'} />
+    }
+  ];
 
   return (
     <div className="code-editor">

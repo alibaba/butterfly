@@ -5,7 +5,7 @@ import sdk from '@stackblitz/sdk';
 import PropTypes from 'prop-types';
 import {withRouter} from 'react-router-dom';
 
-import html from './html';
+import html from './coms/html';
 import Editor from './coms/editor';
 import Sider from '../../components/sider';
 
