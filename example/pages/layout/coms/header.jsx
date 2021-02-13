@@ -51,7 +51,7 @@ class Header extends React.Component {
         className="home-header menu-light"
       >
         <div className="home-header-wrap" >
-          <div className="home-lego-title" >Butterfly Demo</div>
+          <div className="home-lego-title" >Butterfly</div>
         </div>
         <div className="home-header-wrap right-menu" >
           <Menu

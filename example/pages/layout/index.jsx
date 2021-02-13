@@ -12,11 +12,11 @@ const Layout = (props) => {
         {props.children}
       </div>
     </div>
-  )
-}
+  );
+};
 
 Layout.propTypes = {
   children: PropTypes.element
-}
+};
 
 export default Layout;

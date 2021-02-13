@@ -13,7 +13,7 @@ import './editor.less';
 const ops = [
   {
     name: '在github上编辑',
-    link: '',
+    action: 'edit',
     icon: <Icon type="edit" />,
   },
   {
@@ -29,7 +29,7 @@ const ops = [
 ];
 
 const Editor = (props) => {
-  const {codes = []} = props;
+  const {codes = [], demo = ''} = props;
   const [editorCodes, setEditorCodes] = useState([]);
   const [active, setActive] = useState(null);
   const editorRef = useRef(null);
@@ -48,6 +48,12 @@ const Editor = (props) => {
         break;
       case 'export':
         props.onExportCode();
+        break;
+      case 'edit':
+        window.open(
+          `https://github.com/alibaba/butterfly/tree/master/example/demo/${demo}/${active}`,
+          '_blank'
+        );
         break;
     }
   }, [editorCodes]);
@@ -159,7 +165,8 @@ Editor.propTypes = {
   onPlayCode: PropTypes.func,
   onExportCode: PropTypes.func,
   codes: PropTypes.object,
-  onCodeChange: PropTypes.object
+  onCodeChange: PropTypes.object,
+  demo: PropTypes.string
 };
 
 export default Editor;

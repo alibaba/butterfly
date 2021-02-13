@@ -84,6 +84,7 @@ const CodeBox = (props) => {
       <Sider />
       <div className="editor">
         <Editor
+          demo={demo}
           codes={files}
           onCodeChange={codes => {
             setFiles([...codes]);

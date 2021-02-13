@@ -9,7 +9,8 @@ module.exports = {
   },
   output: {
     filename: '[name].js',
-    chunkFilename: '[name].js'
+    chunkFilename: '[name].js',
+    publicPath: '/'
   },
   resolve: {
     modules: [
@@ -37,6 +38,7 @@ module.exports = {
               '@babel/plugin-transform-modules-commonjs',
               '@babel/plugin-proposal-object-rest-spread',
               '@babel/plugin-proposal-class-properties',
+              '@babel/plugin-syntax-dynamic-import'
             ]
           }
         }
