@@ -1,7 +1,7 @@
 'use strict';
 
 // const Node = require('../../../index.js').TreeNode;
-import { TreeNode } from 'butterfly-dag';
+import {TreeNode} from 'butterfly-dag';
 
 const $ = require('jquery');
 require('./node.less');
@@ -12,10 +12,10 @@ class BaseNode extends TreeNode {
   }
   draw = (opts) => {
     let container = $('<div class="iot-node"></div>')
-                    .css('top', opts.top + 'px')
-                    .css('left', opts.left+ 'px')
-                    .attr('id', opts.id);
-    
+      .css('top', opts.top + 'px')
+      .css('left', opts.left + 'px')
+      .attr('id', opts.id);
+
     let titleDom = $(`<div class="title ${opts.options.color}"><i class="iconfont ${opts.options.iconType} ${opts.options.iconClass}"></i>${opts.options.title}<div>`);
     let contentDom = $(`<div class="content">${opts.options.content}<div>`);
 
@@ -35,7 +35,7 @@ class BaseNode extends TreeNode {
       } else {
         this.collapse();
       }
-    })
+    });
     expandBtn.appendTo(container);
   }
 }

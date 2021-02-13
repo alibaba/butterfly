@@ -1,7 +1,7 @@
 'use strict';
 
 // const Node = require('../../../index.js').Node;
-import { Node } from 'butterfly-dag';
+import {Node} from 'butterfly-dag';
 const $ = require('jquery');
 require('./node.less');
 
@@ -12,9 +12,9 @@ class BaseNode extends Node {
   }
   draw = (opts) => {
     let container = $('<div class="note-target-node"></div>')
-                    .attr('id', opts.id)
-                    .css('top', opts.top + 'px')
-                    .css('left', opts.left + 'px')
+      .attr('id', opts.id)
+      .css('top', opts.top + 'px')
+      .css('left', opts.left + 'px');
 
     let textDom = $(`<span class="note-text ${opts.options.side}-side">${opts.options.text}</span>`);
     container.append(textDom);

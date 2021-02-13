@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import { Canvas } from 'butterfly-dag';
+import {Canvas} from 'butterfly-dag';
 import mockData from './data.js';
 
 import './index.less';
+import 'butterfly-dag/dist/index.css';
 
 class Scene4New extends Component {
   componentDidMount() {
@@ -22,9 +23,6 @@ class Scene4New extends Component {
       }
     });
     this.canvas.draw(mockData);
-    this.canvas.on('events', (data) => {
-      console.log(data);
-    });
   }
 
   render() {
@@ -37,5 +35,5 @@ class Scene4New extends Component {
   }
 }
 
-const rootElement = document.getElementById("root");
+const rootElement = document.getElementById('root');
 ReactDOM.render(<Scene4New />, rootElement);

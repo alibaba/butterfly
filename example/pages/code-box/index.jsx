@@ -1,82 +1,103 @@
 import React, {useEffect, useState} from 'react';
-import request from 'axios';
 import _ from 'lodash';
-import {withRouter} from 'react-router-dom';
+import request from 'axios';
+import sdk from '@stackblitz/sdk';
 import PropTypes from 'prop-types';
-import GravityDemoSDK from '@alipay/gravity-demo-sdk/dist/gravityDemoSdk/sdk/sdk.js';
+import {withRouter} from 'react-router-dom';
 
+import html from './html';
+import Editor from './coms/editor';
 import Sider from '../../components/sider';
+
+import './index.less';
 
 window.React = React;
 
-const getModulesCode = (files) => {
-  const code = {
-    type: 'demo',
-    modules: {}
-  };
-
-  for(let file of files) {
-    const key = file.filename;
-    code.modules[key] = {
-      code: file.code,
-      fpath: '/' + file.filename,
-    }
-
-    if(file.filename === 'index.jsx') {
-      code.modules[key].entry = 1;
-    }
-
-    if(file.filename === 'package.json') {
-      code.modules[key].packagejson = 1;
-    }    
-  }
-
-  return code;
-}
-
 const CodeBox = (props) => {
   const [files, setFiles] = useState([]);
+  const [deps, setDeps] = useState({});
   const demo = _.get(props, 'match.params.demo');
 
   const getDemoFiles = async (demo) => {
-    if(!demo) {
+    if (!demo) {
       return;
     }
 
     const result = await request.get(`/${demo}/files.json`);
+    const pkgjson = result.data.find(r => r.filename === 'package.json');
+
+    try {
+      setDeps(JSON.parse(pkgjson.code).dependencies);
+    } catch (e) {
+      // eslint-disable-next-line
+      console.warn(e);
+    }
 
     setFiles(result.data);
-  }
+  };
 
   useEffect(() => {
     getDemoFiles(demo);
   }, [demo]);
 
-  const modulesCode = getModulesCode(files);
+  const codesandboxFiles = {};
 
-  if(!files || files.length === 0) {
-    return null;
-  }
+  files.forEach(file => {
+    let key = file.filename;
+    if (key === 'index.jsx') {
+      key = 'index.js';
+    }
 
-  console.log(modulesCode);
+    codesandboxFiles[key] = file.code;
+  });
+
+  codesandboxFiles['index.html'] = html;
+
+  useEffect(() => {
+    const project = {
+      files: codesandboxFiles,
+      title: `Butterfly-Dag Demos - ${demo}`,
+      description: 'butterfly demos',
+      template: 'javascript',
+      tags: ['butterfly-dag', 'react'],
+      dependencies: deps
+    };
+
+    const options = {
+      view: 'preview',
+      hideExplorer: true,
+      hideNavigation: false,
+      forceEmbedLayout: false,
+      height: '100%',
+      width: '100%',
+    };
+
+    sdk.embedProject(
+      'demo-div',
+      project,
+      options
+    );
+  }, [files]);
 
   return (
-    <div>
+    <div className="code-box">
       <Sider />
-      <div>
-        <div></div>
-        <div>
-          <GravityDemoSDK
-            code={modulesCode}
-            width="100%"
-            height="300px"
-            src="https://gw.alipayobjects.com/as/g/Gravity/gravity/3.10.3/gravityDemoSdk/index.html"
-          />
+      <div className="editor">
+        <Editor
+          codes={files}
+          onCodeChange={codes => {
+            setFiles([...codes]);
+          }}
+        />
+        <div className="demo">
+          <div id="demo-div">
+            加载中...
+          </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 CodeBox.propTypes = {
   params: PropTypes.object

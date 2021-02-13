@@ -1,6 +1,6 @@
 'use strict';
 // const Node = require('../../../index.js').TreeNode;
-import { TreeNode } from 'butterfly-dag';
+import {TreeNode} from 'butterfly-dag';
 const $ = require('jquery');
 require('./node.less');
 
@@ -12,9 +12,9 @@ class BaseNode extends TreeNode {
   }
   draw(opts) {
     let container = $('<div class="rule-node"></div>')
-                    .css('top', opts.top + 'px')
-                    .css('left', opts.left+ 'px')
-                    .attr('id', opts.id);
+      .css('top', opts.top + 'px')
+      .css('left', opts.left + 'px')
+      .attr('id', opts.id);
 
     this._attachEvent();
     return container[0];

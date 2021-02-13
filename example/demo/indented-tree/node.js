@@ -1,7 +1,7 @@
 'use strict';
 
 // const Node = require('../../../index.js').TreeNode;
-import { Node } from 'butterfly-dag';
+import {Node} from 'butterfly-dag';
 const $ = require('jquery');
 require('./node.less');
 
@@ -10,13 +10,13 @@ class BaseNode extends Node {
     super(opts);
     this.addIcon = null;
     this.expandBtn = null;
-    this.indexExpandNode=null
+    this.indexExpandNode = null;
   }
   draw = (opts) => {
     let container = $('<div class="rule-node"></div>')
-                    .css('top', opts.top + 'px')
-                    .css('left', opts.left+ 'px')
-                    .attr('id', opts.id);
+      .css('top', opts.top + 'px')
+      .css('left', opts.left + 'px')
+      .attr('id', opts.id);
 
     let textDom = $(`<span class="rule-text">${opts.options.desc}</span>`);
     this.indexExpandNode = $(`<div class="index-expand-node"></div>`);
@@ -34,7 +34,7 @@ class BaseNode extends Node {
       this.indexExpandNode.append(iconBox);
       this.indexExpandNode.append(textDom);
       container.append(this.indexExpandNode);
-    }else{
+    } else {
       textDom.addClass('text-normal');
       container.append(textDom);
       container.append(this.addIcon);

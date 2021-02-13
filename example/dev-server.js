@@ -1,10 +1,6 @@
 const fs = require('fs-extra');
 const path = require('path');
 
-const colorTheme = fs.readFileSync(
-  path.join(__dirname, 'colorVariable.less')
-).toString();
-
 
 module.exports = (app) => {
   app.get('/list.json', async (req, res) => {
@@ -12,11 +8,18 @@ module.exports = (app) => {
     const demos = await fs.readdir(demosdir);
 
     const list = await Promise.all(demos.map(async demodir => {
+      const coverExsit = await fs.exists(
+        path.join(demosdir, demodir, 'cover.png')
+      );
+
       let pkg = {
         name: demodir,
+        // eslint-disable-next-line
         cn_name: demodir,
         description: demodir,
-        cn_description: demodir
+        // eslint-disable-next-line
+        cn_description: demodir,
+        cover: coverExsit ? `/${demodir}/cover.png` : 'https://s3.ax1x.com/2021/02/13/yrjkOH.jpg'
       };
 
       try {
@@ -24,17 +27,13 @@ module.exports = (app) => {
           (await fs.readFile(
             path.join(__dirname, demodir, 'package.json')
           )).toString()
-        )
+        );
       } catch (e) {
         return pkg;
       }
     }));
 
     return res.send(list);
-  });
-
-  app.get('/:demo/package.json', (req, res) => {
-
   });
 
   app.get('/:demo/files.json', async (req, res) => {
@@ -55,4 +54,4 @@ module.exports = (app) => {
 
     return res.send(json);
   });
-}
+};

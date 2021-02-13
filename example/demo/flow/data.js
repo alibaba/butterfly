@@ -95,7 +95,7 @@ export const mockData = {
         orientation: [1, 0],
         pos: [0, 0.5]
       }]
-    }, 
+    },
     {
       id: '6',
       label: '首次入系统',

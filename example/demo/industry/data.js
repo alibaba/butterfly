@@ -45,7 +45,7 @@ module.exports = {
       id: 'left',
       orientation: [-1, 0],
       pos: [0, 0.5]
-    },{
+    }, {
       id: 'right',
       orientation: [1, 0],
       pos: [0, 0.5]
@@ -72,7 +72,7 @@ module.exports = {
       orientation: [-1, 0],
       pos: [0, 0.5]
     }]
-  },  {
+  }, {
     id: 7,
     name: '第二脂化(280℃)',
     type: 'blue',
@@ -85,11 +85,11 @@ module.exports = {
       id: 'left',
       orientation: [-1, 0],
       pos: [0, 0.5]
-    },{
+    }, {
       id: 'right',
       orientation: [1, 0],
       pos: [0, 0.5]
-    },{
+    }, {
       id: 'bottom',
       orientation: [0, 1],
       pos: [0.5, 0]
@@ -122,7 +122,7 @@ module.exports = {
       orientation: [1, 0],
       pos: [0, 0.5]
     }]
-  },{
+  }, {
     id: 5,
     name: '乙二醇MEG(液体)',
     type: 'blue',
@@ -150,7 +150,7 @@ module.exports = {
       orientation: [0, 1],
       pos: [0.5, 0]
     }]
-  },{
+  }, {
     id: 9,
     name: '乙二醇MEG(液体)',
     type: 'blue',
@@ -174,7 +174,7 @@ module.exports = {
     arrow: true,
     arrowPosition: 0.5,
     Class: BaseEdge
-  },{
+  }, {
     source: 'right',
     target: 'left',
     sourceNode: 1,
@@ -228,7 +228,7 @@ module.exports = {
     arrow: true,
     arrowPosition: 0.5,
     Class: BaseEdge
-  },{
+  }, {
     source: 'bottom',
     target: 'top',
     sourceNode: 5,
@@ -237,7 +237,7 @@ module.exports = {
     arrow: true,
     arrowPosition: 0.5,
     Class: BaseEdge
-  },{
+  }, {
     source: 'bottom',
     target: 'top',
     sourceNode: 6,
@@ -248,4 +248,4 @@ module.exports = {
     Class: BaseEdge
   },],
   groupd: []
-}
+};

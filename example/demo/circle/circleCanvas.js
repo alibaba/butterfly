@@ -1,7 +1,7 @@
 'use strict';
 
 // const Canvas = require('../../../index.js').Canvas;
-import { Canvas } from 'butterfly-dag';
+import {Canvas} from 'butterfly-dag';
 const Group = require('./group');
 const NoteSourceNode = require('./noteSourceNode.js');
 const NoteTargetNode = require('./noteTargetNode.js');
@@ -24,7 +24,7 @@ class CircleCanvas extends Canvas {
     });
   }
   _drawCirlce() {
-    let circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+    let circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     circle.setAttribute('class', 'orange-circle');
     circle.setAttribute('cx', '0');
     circle.setAttribute('cy', '7');
@@ -101,8 +101,8 @@ class CircleCanvas extends Canvas {
       }, {
         id: `note-target-${index}`,
         top: group.options.posInfo.outterPos[5],
-        left: group.options.posInfo.outterPos[4] > 0 ? rightSideX: leftSideX,
-        side: group.options.posInfo.outterPos[4] > 0 ? 'right': 'left',
+        left: group.options.posInfo.outterPos[4] > 0 ? rightSideX : leftSideX,
+        side: group.options.posInfo.outterPos[4] > 0 ? 'right' : 'left',
         Class: NoteTargetNode,
         text: note.text
       }]);
@@ -110,7 +110,7 @@ class CircleCanvas extends Canvas {
         id: `note-${index}`,
         source: `note-source-${index}`,
         target: `note-target-${index}`
-      })
+      });
     });
   }
 }

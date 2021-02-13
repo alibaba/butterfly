@@ -1,7 +1,7 @@
 'use strict';
 
 // const Node = require('../../../index.js').Node;
-import { Node } from 'butterfly-dag';
+import {Node} from 'butterfly-dag';
 const $ = require('jquery');
 
 class Input extends Node {
@@ -24,14 +24,14 @@ class Input extends Node {
       .attr('id', data.id);
 
     container.append($(`<span class="text">${_.get(data, 'options.type').toUpperCase()}</span>`));
-    
+
     container.append($(`<div class="line ${data.options.type}-line"></div>`));
 
     this.endpointDom = $(`<div class="point ${data.options.type}-point"></div>`);
 
     container.append(this.endpointDom);
-    
-    return container[0]
+
+    return container[0];
   }
 }
 

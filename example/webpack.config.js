@@ -19,6 +19,7 @@ module.exports = {
     ],
     extensions: ['.js', '.jsx']
   },
+  devtool: 'cheap-source-map',
   module: {
     rules: [
       {
@@ -34,7 +35,7 @@ module.exports = {
             plugins: [
               '@babel/plugin-transform-runtime',
               '@babel/plugin-transform-modules-commonjs',
-              '@babel/plugin-proposal-object-rest-spread', 
+              '@babel/plugin-proposal-object-rest-spread',
               '@babel/plugin-proposal-class-properties',
             ]
           }

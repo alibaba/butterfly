@@ -1,7 +1,7 @@
 'use strict';
 
 // const Group = require('../../../index.js').Group;
-import { Group } from 'butterfly-dag';
+import {Group} from 'butterfly-dag';
 const $ = require('jquery');
 const _ = require('lodash');
 
@@ -19,7 +19,7 @@ class BaseGroup extends Group {
 
     this._container = $('<div></div>')
       .attr('class', 'container');
-    
+
     group.append(this._container);
 
     // 添加文字
@@ -45,5 +45,5 @@ class BaseGroup extends Group {
   //   }
   //   return dom;
   // }
-};
+}
 module.exports = BaseGroup;

@@ -1,7 +1,7 @@
 'use strict';
 
 // const Node = require('../../../index.js').Node;
-import { Node } from 'butterfly-dag';
+import {Node} from 'butterfly-dag';
 const $ = require('jquery');
 require('./center.less');
 
@@ -12,9 +12,9 @@ class CenterNode extends Node {
   }
   draw = (opts) => {
     let container = $('<div class="center-new-node"></div>')
-                    .attr('id', opts.id)
-                    .css('top', opts.top + 'px')
-                    .css('left', opts.left + 'px')
+      .attr('id', opts.id)
+      .css('top', opts.top + 'px')
+      .css('left', opts.left + 'px');
 
     this._createTypeIcon(container);
     this._createText(container);

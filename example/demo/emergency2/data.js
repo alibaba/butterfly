@@ -62,7 +62,7 @@ module.exports = {
       orientation: [0, 1],
       pos: [0.5, 0]
     }]
-  },{
+  }, {
     id: '3',
     text: 'Actiate evacuation',
     top: 110,
@@ -80,7 +80,7 @@ module.exports = {
       orientation: [-1, 0],
       pos: [0, 0.5]
     }]
-  },{
+  }, {
     id: '4',
     text: 'Alarm monitoring service…',
     top: 210,
@@ -120,7 +120,7 @@ module.exports = {
       orientation: [1, 0],
       pos: [0, 0.5]
     }]
-  },{
+  }, {
     id: '6',
     text: 'Evacuees report …',
     top: 190,
@@ -138,7 +138,7 @@ module.exports = {
       orientation: [0, 1],
       pos: [0.5, 0]
     }, ]
-  },{
+  }, {
     id: '7',
     text: 'Roll call taken by …',
     top: 280,
@@ -156,7 +156,7 @@ module.exports = {
       orientation: [0, 1],
       pos: [0.5, 0]
     }, ]
-  },{
+  }, {
     id: '8',
     text: 'Floor Marshals brief…',
     top: 370,
@@ -170,7 +170,7 @@ module.exports = {
       orientation: [0, -1],
       pos: [0.5, 0]
     }],
-  },{
+  }, {
     id: '9',
     text: 'Primary contact con…',
     top: 310,
@@ -183,12 +183,12 @@ module.exports = {
       id: 'top',
       orientation: [0, -1],
       pos: [0.5, 0]
-    },{
+    }, {
       id: 'bottom',
       orientation: [0, 1],
       pos: [0.5, 0]
     }, ],
-  },{
+  }, {
     id: '10',
     text: 'Primary contect infor…',
     top: 410,
@@ -201,12 +201,12 @@ module.exports = {
       id: 'top',
       orientation: [0, -1],
       pos: [0.5, 0]
-    },{
+    }, {
       id: 'bottom',
       orientation: [0, 1],
       pos: [0.5, 0]
     }, ],
-  },{
+  }, {
     id: '11',
     text: 'Emergency response…',
     top: 510,
@@ -220,7 +220,7 @@ module.exports = {
       orientation: [0, -1],
       pos: [0.5, 0]
     }],
-  },{
+  }, {
     id: '12',
     text: 'Primary contact fire…',
     top: 310,
@@ -233,12 +233,12 @@ module.exports = {
       id: 'top',
       orientation: [0, -1],
       pos: [0.5, 0]
-    },{
+    }, {
       id: 'bottom',
       orientation: [0, 1],
       pos: [0.5, 0]
     }, ],
-  },{
+  }, {
     id: '13',
     text: 'Service Provider…',
     top: 410,
@@ -251,12 +251,12 @@ module.exports = {
       id: 'top',
       orientation: [0, -1],
       pos: [0.5, 0]
-    },{
+    }, {
       id: 'bottom',
       orientation: [0, 1],
       pos: [0.5, 0]
     }, ],
-  },{
+  }, {
     id: '14',
     text: 'Fire Engines arr…',
     top: 510,
@@ -281,7 +281,7 @@ module.exports = {
     arrow: true,
     arrowPosition: 0.5,
     Class: BaseEdge
-  },{
+  }, {
     source: 'left',
     target: 'right',
     sourceNode: '1',
@@ -291,7 +291,7 @@ module.exports = {
     label: 'No',
     arrowPosition: 0.7,
     Class: BaseEdge
-  },{
+  }, {
     source: 'right',
     target: 'left',
     sourceNode: '1',
@@ -300,7 +300,7 @@ module.exports = {
     arrow: true,
     arrowPosition: 0.5,
     Class: BaseEdge
-  },{
+  }, {
     source: 'bottom',
     target: 'top',
     sourceNode: '1',
@@ -310,7 +310,7 @@ module.exports = {
     label: 'Yes',
     arrowPosition: 0.8,
     Class: BaseEdge
-  },{
+  }, {
     source: 'bottom',
     target: 'top',
     sourceNode: '2',
@@ -319,7 +319,7 @@ module.exports = {
     arrow: true,
     arrowPosition: 0.5,
     Class: BaseEdge
-  },{
+  }, {
     source: 'right',
     target: 'left',
     sourceNode: '5',
@@ -328,7 +328,7 @@ module.exports = {
     arrow: true,
     arrowPosition: 0.5,
     Class: BaseEdge
-  },{
+  }, {
     source: 'bottom',
     target: 'top',
     sourceNode: '3',
@@ -337,7 +337,7 @@ module.exports = {
     arrow: true,
     arrowPosition: 0.5,
     Class: BaseEdge
-  },{
+  }, {
     source: 'bottom',
     target: 'top',
     sourceNode: '6',
@@ -346,7 +346,7 @@ module.exports = {
     arrow: true,
     arrowPosition: 0.5,
     Class: BaseEdge
-  },{
+  }, {
     source: 'bottom',
     target: 'top',
     sourceNode: '7',
@@ -355,7 +355,7 @@ module.exports = {
     arrow: true,
     arrowPosition: 0.5,
     Class: BaseEdge
-  },{
+  }, {
     source: 'bottom',
     target: 'top',
     sourceNode: '9',
@@ -364,7 +364,7 @@ module.exports = {
     arrow: true,
     arrowPosition: 0.5,
     Class: BaseEdge
-  },{
+  }, {
     source: 'bottom',
     target: 'top',
     sourceNode: '10',
@@ -373,7 +373,7 @@ module.exports = {
     arrow: true,
     arrowPosition: 0.5,
     Class: BaseEdge
-  },{
+  }, {
     source: 'bottom',
     target: 'top',
     sourceNode: '12',
@@ -382,7 +382,7 @@ module.exports = {
     arrow: true,
     arrowPosition: 0.5,
     Class: BaseEdge
-  },{
+  }, {
     source: 'bottom',
     target: 'top',
     sourceNode: '13',
@@ -391,7 +391,7 @@ module.exports = {
     arrow: true,
     arrowPosition: 0.5,
     Class: BaseEdge
-  },{
+  }, {
     source: 'bottom',
     target: 'top',
     sourceNode: '4',
@@ -400,7 +400,7 @@ module.exports = {
     shapeType: 'AdvancedBezier',
     arrowPosition: 0.5,
     Class: BaseEdge
-  },{
+  }, {
     source: 'bottom',
     target: 'top',
     sourceNode: '4',
@@ -411,4 +411,4 @@ module.exports = {
     Class: BaseEdge
   },],
   groupd: []
-}
+};

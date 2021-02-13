@@ -1,7 +1,7 @@
 'use strict';
 
 // const Endpoint = require('../../../index.js').Endpoint;
-import { Endpoint,Tips } from 'butterfly-dag';
+import {Endpoint, Tips} from 'butterfly-dag';
 // const Tips = require('../../../index.js').Tips;
 const $ = require('jquery');
 
@@ -20,5 +20,5 @@ class BaseEndpoint extends Endpoint {
     $(point).addClass('purple-point');
     return point;
   }
-};
+}
 module.exports = BaseEndpoint;

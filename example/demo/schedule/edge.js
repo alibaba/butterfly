@@ -1,7 +1,7 @@
 'use strict';
 
 // const Edge = require('../../../index.js').Edge;
-import { Edge } from 'butterfly-dag';
+import {Edge} from 'butterfly-dag';
 const $ = require('jquery');
 
 class BaseEdge extends Edge {
@@ -19,5 +19,5 @@ class BaseEdge extends Edge {
     }
     return dom;
   }
-};
+}
 module.exports = BaseEdge;

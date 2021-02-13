@@ -89,7 +89,7 @@ module.exports = {
     Class: Node,
     _group: 'group_4',
     _isCircle: true
-  },{
+  }, {
     id: 15,
     text: '测试14',
     Class: Node,
@@ -155,7 +155,7 @@ module.exports = {
     Class: Node,
     _group: 'group_5',
     _isCircle: true
-  },{
+  }, {
     id: 'centerNode',
     text: '城市出行',
     top: -18,
@@ -217,4 +217,4 @@ module.exports = {
     _group: 'group_5',
     text: '这是group5的注释'
   }]
-}
+};

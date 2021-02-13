@@ -37,7 +37,7 @@ module.exports = {
     Class: node,
     className: 'nodeBackground-color'
   }
-],
+  ],
   edges: [{
     source: 'test1',
     target: 'test2'
@@ -61,5 +61,5 @@ module.exports = {
     source: 'test4',
     target: 'test7'
   }
-]
+  ]
 };

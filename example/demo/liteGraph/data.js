@@ -257,4 +257,4 @@ export default {
     type: 'endpoint',
     Class: Edge
   }]
-}
+};
