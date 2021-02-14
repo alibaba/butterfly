@@ -22,6 +22,8 @@ module.exports = (app) => {
         return false;
       }
 
+      let cover = coverExsit ? `/${demodir}/cover.png` : DEFAULT_IMG;
+
       let pkg = {
         name: demodir,
         // eslint-disable-next-line
@@ -29,16 +31,23 @@ module.exports = (app) => {
         description: demodir,
         // eslint-disable-next-line
         cn_description: demodir,
-        cover: coverExsit ? `/${demodir}/cover.png` : DEFAULT_IMG
+        cover: cover
       };
 
       try {
-        pkg = JSON.parse(
-          (await fs.readFile(
-            path.join(__dirname, demodir, 'package.json')
-          )).toString()
+        pkg = Object.assign(
+          {}, pkg,
+          JSON.parse(
+            (await fs.readFile(
+              path.join(__dirname, 'demo', demodir, 'package.json')
+            )).toString()
+          )
         );
+
+        return pkg;
       } catch (e) {
+        // eslint-disable-next-line no-console
+        console.warn(e);
         return pkg;
       }
     }));

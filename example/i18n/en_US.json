@@ -1,0 +1,11 @@
+{
+  "layout_header_home": "Home",
+  "layout_header_demo": "Demo",
+  "layout_header_doc": "Doc",
+  "codebox_loading": "loading...",
+  "codebox_editor_export_success": "export success！",
+  "codebox_editor_export_failed": "export failed! cause by：",
+  "codebox_editor_edit": "edit on github",
+  "codebox_editor_play": "play（cmd+s）",
+  "codebox_editor_export": "export"
+}

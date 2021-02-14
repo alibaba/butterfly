@@ -19,6 +19,8 @@
     "axios": "^0.21.1",
     "butterfly-dag": "*",
     "download.js": "^1.0.0",
+    "i18next": "^19.8.7",
+    "i18next-browser-languagedetector": "^6.0.1",
     "jquery": "^3.4.1",
     "jszip": "^3.6.0",
     "react": "~16.12.0",

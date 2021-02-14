@@ -1,0 +1,11 @@
+{
+  "layout_header_home": "首页",
+  "layout_header_demo": "示例",
+  "layout_header_doc": "文档",
+  "codebox_loading": "加载中...",
+  "codebox_editor_export_success": "导出成功！",
+  "codebox_editor_export_failed": "导出失败！错误原因：",
+  "codebox_editor_edit": "在github上编辑",
+  "codebox_editor_play": "执行（cmd+s）",
+  "codebox_editor_export": "导出"
+}

@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import _ from 'lodash';
 import request from 'axios';
+import i18next from 'i18next';
 import sdk from '@stackblitz/sdk';
 import PropTypes from 'prop-types';
 import {withRouter} from 'react-router-dom';
@@ -92,7 +93,7 @@ const CodeBox = (props) => {
         />
         <div className="demo">
           <div id="demo-div">
-            加载中...
+            {i18next.t('codebox_loading')}
           </div>
         </div>
       </div>

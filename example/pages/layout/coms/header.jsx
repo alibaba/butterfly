@@ -1,4 +1,5 @@
 import React from 'react';
+import i18next from 'i18next';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import {Menu, Icon, Dropdown} from 'antd';
@@ -12,19 +13,25 @@ class Header extends React.Component {
     menu: PropTypes.object
   }
 
+  onChangeLang = ({key}) => {
+    i18next.changeLanguage(key);
+    localStorage.i18nextLng = key;
+    window.location.reload();
+  }
+
   constructor(props) {
     super(props);
     this.menu = [
       {
-        name: '首页',
+        name: i18next.t('layout_header_home'),
         key: 'home'
       },
       {
-        name: '示例',
+        name: i18next.t('layout_header_demo'),
         key: 'demo'
       },
       {
-        name: '文档',
+        name: i18next.t('layout_header_doc'),
         key: 'doc',
         link: 'https://github.com/alibaba/butterfly/blob/master/README.md'
       },
@@ -33,11 +40,11 @@ class Header extends React.Component {
         key: 'translate',
         action: 'translate',
         menu: (
-          <Menu>
-            <Menu.Item>
+          <Menu onClick={this.onChangeLang}>
+            <Menu.Item key="zh">
               中文
             </Menu.Item>
-            <Menu.Item>
+            <Menu.Item key="en">
               English
             </Menu.Item>
           </Menu>

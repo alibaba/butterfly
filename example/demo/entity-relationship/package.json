@@ -1,8 +1,8 @@
 {
-  "name": "decision",
-  "cn_name": "决策树",
-  "description": "英文描述",
-  "cn_description": "中文描述",
+  "name": "entity-relationship",
+  "cn_name": "实体关系图",
+  "description": "a dag to show relationship between entities",
+  "cn_description": "用于描述实体关系之间的DAG图",
   "dependencies": {
     "butterfly-dag": "*",
     "react": "^16.0.0",

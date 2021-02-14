@@ -1,8 +1,8 @@
 {
   "name": "decision",
   "cn_name": "决策树",
-  "description": "英文描述",
-  "cn_description": "中文描述",
+  "description": "a decision tree",
+  "cn_description": "决策树场景DAG",
   "dependencies": {
     "butterfly-dag": "*",
     "react": "^16.0.0",
