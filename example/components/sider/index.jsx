@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import i18next from 'i18next';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
@@ -6,6 +7,24 @@ import {Link, withRouter} from 'react-router-dom';
 import {Tooltip, notification, Spin, Icon} from 'antd';
 
 import './index.less';
+
+const tips = (file) => {
+  const lng = i18next.language;
+  const isZh = lng === 'zh';
+
+  return (
+    <div>
+      {
+        isZh ? file.cn_name : file.name
+      }
+      <br />
+      {
+        isZh ? file.cn_description : file.description
+      }
+    </div>
+  );
+};
+
 
 const Sider = (props) => {
   const [isFold, setIsFold] = useState(false);
@@ -44,14 +63,14 @@ const Sider = (props) => {
           list.map(file => {
             return (
               <div
-                className={classnames('demo-cover', {active: active === file.name})}
-                key={file.name}
+                className={classnames('demo-cover', {active: active === file.dir})}
+                key={file.dir}
               >
                 <Tooltip
-                  title={file.cn_name}
+                  title={tips(file)}
                   placement="right"
                 >
-                  <Link to={`/demo/${file.name}`}><img src={file.cover} /></Link>
+                  <Link to={`/demo/${file.dir}`}><img src={file.cover} /></Link>
                 </Tooltip>
               </div>
             );

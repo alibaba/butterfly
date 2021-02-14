@@ -1,9 +1,10 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react';
+import i18next from 'i18next';
 import AceEditor from 'react-ace';
 import PropTypes from 'prop-types';
-import {Icon, Tooltip, message} from 'antd';
 import classnames from 'classnames';
 import Hotkeys from 'react-hot-keys';
+import {Icon, Tooltip, message} from 'antd';
 
 import exportCode from './export-code';
 
@@ -36,9 +37,11 @@ const Editor = (props) => {
         setExporting(true);
         try {
           await exportCode(editorCodes);
-          message.success('导出成功！');
+          message.success(
+            i18next.t('codebox_editor_export_success')
+          );
         } catch (e) {
-          message.error(`导出失败，错误原因：${e.message}`);
+          message.error(`${i18next.t('codebox_editor_export_failed')}${e.message}`);
         } finally {
           setExporting(false);
         }
@@ -96,17 +99,17 @@ const Editor = (props) => {
 
   const ops = [
     {
-      name: '在github上编辑',
+      name: i18next.t('codebox_editor_edit'),
       action: 'edit',
       icon: <Icon type="edit" />,
     },
     {
-      name: '执行',
+      name: i18next.t('codebox_editor_play'),
       action: 'play',
       icon: <Icon type="play-circle" />
     },
     {
-      name: '导出',
+      name: i18next.t('codebox_editor_export'),
       action: 'export',
       icon: <Icon type={exporting ? 'loading' : 'cloud-download'} />
     }

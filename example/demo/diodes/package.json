@@ -1,8 +1,8 @@
 {
-  "name": "decision",
-  "cn_name": "决策树",
-  "description": "英文描述",
-  "cn_description": "中文描述",
+  "name": "diodes",
+  "cn_name": "二极管模拟",
+  "description": "dag to mock diodes",
+  "cn_description": "一个模拟二极管电路的DAG图",
   "dependencies": {
     "butterfly-dag": "*",
     "react": "^16.0.0",

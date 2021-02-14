@@ -1,9 +1,66 @@
 const path = require('path');
+const fs = require('fs-extra');
+const {getDemoList, getDemoFiles} = require('./dev/util');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-const devServer = require('./dev-server');
+const devServer = require('./dev/dev-server');
+const distdir = path.join(__dirname, 'dist');
+
+fs.removeSync(distdir);
+fs.ensureDirSync(distdir);
+
+const generate = async () => {
+  const list = await getDemoList();
+
+  await fs.writeFile(
+    path.join(
+      distdir,
+      'list.json'
+    ),
+    JSON.stringify(list, null, 2)
+  );
+
+  for (let demo of list) {
+    try {
+      await fs.ensureDir(
+        path.join(distdir, demo.dir)
+      );
+
+      const filesjson = await getDemoFiles(demo.dir);
+      await fs.ensureDir(distdir, demo.dir);
+
+      await fs.writeFile(
+        path.join(distdir, demo.dir, 'files.json'),
+        JSON.stringify(filesjson, null, 2)
+      );
+
+      await fs.copy(
+        path.join(__dirname, 'demo', demo.dir, 'cover.png'),
+        path.join(distdir, demo.dir, 'cover.png')
+      );
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.warn(`处理${demo.dir}失败`, e.stack);
+    }
+  }
+
+  await fs.copy(
+    path.join(__dirname, 'index.html'),
+    path.join(distdir, 'index.html')
+  );
+
+  await fs.copy(
+    path.join(__dirname, 'static'),
+    path.join(distdir, 'static')
+  );
+};
+
+if (process.env.NODE_ENV === 'production') {
+  generate();
+}
 
 module.exports = {
+  mode: process.env.NODE_ENV || 'development',
   entry: {
     app: './index.jsx'
   },
@@ -18,7 +75,7 @@ module.exports = {
       path.resolve(process.cwd(), '../node_modules'),
       'node_modules'
     ],
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx', '.json']
   },
   devtool: 'cheap-source-map',
   module: {

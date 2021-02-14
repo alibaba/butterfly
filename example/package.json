@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server",
-    "eslint": "eslint . --fix"
+    "eslint": "eslint . --fix",
+    "build": "NODE_ENV=production webpack"
   },
   "eslintConfig": {
     "extends": "aliyun"
@@ -19,6 +20,8 @@
     "axios": "^0.21.1",
     "butterfly-dag": "*",
     "download.js": "^1.0.0",
+    "i18next": "^19.8.7",
+    "i18next-browser-languagedetector": "^6.0.1",
     "jquery": "^3.4.1",
     "jszip": "^3.6.0",
     "react": "~16.12.0",

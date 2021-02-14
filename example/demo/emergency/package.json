@@ -1,8 +1,8 @@
 {
-  "name": "decision",
-  "cn_name": "决策树",
-  "description": "英文描述",
-  "cn_description": "中文描述",
+  "name": "emergency",
+  "cn_name": "紧急情况决策树",
+  "description": "a dag to show to how to make a decision when in a emergency",
+  "cn_description": "一个决策树，用于展示如何在紧急情况下做决定",
   "dependencies": {
     "butterfly-dag": "*",
     "react": "^16.0.0",

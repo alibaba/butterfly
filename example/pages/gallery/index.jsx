@@ -11,7 +11,7 @@ const Gallery = (props) => {
 
     const demo = list[0];
 
-    props.history.push(`/demo/${demo.name}`);
+    props.history.push(`/demo/${demo.dir}`);
   };
 
   useEffect(() => {
