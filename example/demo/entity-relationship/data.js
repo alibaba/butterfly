@@ -1,9 +1,7 @@
-'use strict';
+import BaseNode from './node';
+import BaseEdge from './edge';
 
-const BaseNode = require('./node');
-const BaseEdge = require('./edge');
-
-module.exports = {
+export default {
   nodes: [{
     id: '1',
     text: 'Gets Paid',
@@ -120,18 +118,15 @@ module.exports = {
     color: 'box-background-color',
     shape: 'ellipse',
     Class: BaseNode,
-    // fill: '#FFA940',
-    // ellipseBorderWidth: 2,
-    // ellipseDasharray: '3 1'
-  }, , {
-      id: '13',
-      text: 'Date',
-      top: 90,
-      left: 810,
-      color: 'box-background-color',
-      shape: 'ellipse',
-      Class: BaseNode,
-    }
+  }, {
+    id: '13',
+    text: 'Date',
+    top: 90,
+    left: 810,
+    color: 'box-background-color',
+    shape: 'ellipse',
+    Class: BaseNode,
+  }
   ],
   edges: [{
     source: '1',

@@ -1,4 +1,4 @@
-const Node = require('./node');
+import Node from './node';
 import Edge from './edge';
 
 export const mockData = {

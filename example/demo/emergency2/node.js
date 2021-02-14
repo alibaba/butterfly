@@ -1,19 +1,13 @@
-'use strict';
-
-// const Node = require('../../../index.js').Node;
 import {Node} from 'butterfly-dag';
 import $ from 'jquery';
 
 class BaseNode extends Node {
-  constructor(opts) {
-    super(opts);
-  }
   mounted() {
     // 假如菱形的话定制锚点，可指定任意的dom为endopoint
     // console.log(this)
     if (this.options.shape === 'diamond') {
       let pointPos = ['top', 'right', 'bottom', 'left'];
-      pointPos.forEach((pos, index) => {
+      pointPos.forEach((pos) => {
         let point = $(`<div class='butterflie-circle-endpoint ${pos}'></div>`);
         $(this.dom).append(point);
         let obj = {
@@ -41,6 +35,7 @@ class BaseNode extends Node {
       });
     }
   }
+
   draw = (data) => {
     let container = $('<div class="emergency2-base-node"></div>')
       .css('top', data.top)

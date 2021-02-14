@@ -1,9 +1,9 @@
 'use strict';
 
-const BaseNode = require('./node');
-const BaseEdge = require('./edge');
+import BaseNode from './node';
+import BaseEdge from './edge';
 
-module.exports = {
+export default {
   nodes: [{
     id: '0',
     text: 'Fire Incident',
