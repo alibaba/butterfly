@@ -109,6 +109,7 @@ canvas.draw({
   * [属性配置](./docs/zh-CN/endpoint.md#endpoint-attr)
   * [通用API](./docs/zh-CN/endpoint.md#endpoint-api)
 * [缩略图(Minimap)](./docs/zh-CN/minimap.md#endpoint-api)
+* [提示 & 菜单(tooltips & menu)](./docs/zh-CN/tooltip.md)
 * [布局(Layout)](./docs/zh-CN/layout.md)
 * React & Vue支持
   * [React butterfly组件支持](./docs/zh-CN/react.md)
