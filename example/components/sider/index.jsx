@@ -63,7 +63,7 @@ const Sider = (props) => {
           list.map(file => {
             return (
               <div
-                className={classnames('demo-cover', {active: active === file.name})}
+                className={classnames('demo-cover', {active: active === file.dir})}
                 key={file.dir}
               >
                 <Tooltip
