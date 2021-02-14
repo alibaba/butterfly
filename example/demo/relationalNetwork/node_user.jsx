@@ -1,6 +1,6 @@
 'use strict';
 
-const Node = require('./base_node.jsx');
+import node from './base_node.jsx';
 import $ from 'jquery';
 
 class People extends Node {

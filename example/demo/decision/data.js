@@ -1,9 +1,7 @@
-'use strict';
-
 import Node from './node.js';
-const Edge = require('./edge');
+import Edge from './edge';
 
-module.exports = {
+export default {
   nodes: [
     {
       id: '1',

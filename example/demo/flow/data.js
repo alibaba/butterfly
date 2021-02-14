@@ -1,5 +1,5 @@
 const Node = require('./node');
-const Edge = require('./edge');
+import Edge from './edge';
 
 export const mockData = {
   nodes: [

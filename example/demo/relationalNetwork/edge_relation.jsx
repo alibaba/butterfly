@@ -2,7 +2,7 @@
 
 // let Edge = require('../../../index.js').Edge;
 import { Edge } from 'butterfly-dag';
-let $ = require('jquery');
+import $ from 'jquery';
 
 class RelationEdge extends Edge {
   draw = (obj) => {

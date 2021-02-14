@@ -1,9 +1,6 @@
-'use strict';
-
-// const Node = require('../../../index.js').Node;
+/* eslint-disable camelcase */
 import {Node} from 'butterfly-dag';
 import $ from 'jquery';
-
 class Semiconductor extends Node {
   constructor(opts) {
     super(opts);
@@ -21,6 +18,7 @@ class Semiconductor extends Node {
       semiconductor_8: 'https://img.alicdn.com/tfs/TB1ek6ofuH2gK0jSZJnXXaT1FXa-313-150.png'
     };
   }
+
   mounted() {
     // 设置右侧锚点
     this.addEndpoint({
@@ -39,6 +37,7 @@ class Semiconductor extends Node {
       });
     });
   }
+
   draw = (data) => {
     let container = $('<div class="diodes-base-node"></div>')
       .css('top', data.top)
@@ -76,4 +75,4 @@ class Semiconductor extends Node {
   }
 }
 
-module.exports = Semiconductor;
+export default Semiconductor;

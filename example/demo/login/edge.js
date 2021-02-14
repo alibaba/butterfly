@@ -29,4 +29,4 @@ class BaseEdge extends Edge {
     return dom;
   }
 }
-module.exports = BaseEdge;
+export default BaseEdge;

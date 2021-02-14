@@ -66,8 +66,8 @@ const CodeBox = (props) => {
     const options = {
       view: 'preview',
       hideExplorer: true,
-      hideNavigation: false,
-      forceEmbedLayout: false,
+      hideNavigation: true,
+      hideDevTools: true,
       height: '100%',
       width: '100%',
     };

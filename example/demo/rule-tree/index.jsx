@@ -5,7 +5,7 @@ import Custom from './custom';
 
 import './index.less';
 import Node from './node.js';
-let $ = require('jquery');
+import $ from 'jquery';
 // const Canvas = require('../../../index.js').TreeCanvas;
 import { TreeCanvas } from 'butterfly-dag';
 const mockData = {

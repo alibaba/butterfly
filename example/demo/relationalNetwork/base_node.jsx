@@ -3,7 +3,7 @@
 // const Node = require('../../../index.js').Node;
 import { Node } from 'butterfly-dag';
 import $ from 'jquery';
-require('./base_node.less');
+import './base_node.less';
 
 class BaseNode extends Node {
   constructor(opts) {

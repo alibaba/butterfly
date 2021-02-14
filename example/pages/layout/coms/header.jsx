@@ -1,6 +1,7 @@
 import React from 'react';
-import {Menu, Icon} from 'antd';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
+import {Menu, Icon, Dropdown} from 'antd';
 import {Link, withRouter} from 'react-router-dom';
 
 import './index.less';
@@ -15,15 +16,32 @@ class Header extends React.Component {
     super(props);
     this.menu = [
       {
-        name: '首页', key: 'home'
+        name: '首页',
+        key: 'home'
       },
       {
-        name: '示例', key: 'demo'
+        name: '示例',
+        key: 'demo'
       },
       {
         name: '文档',
         key: 'doc',
         link: 'https://github.com/alibaba/butterfly/blob/master/README.md'
+      },
+      {
+        icon: <Icon type="global" />,
+        key: 'translate',
+        action: 'translate',
+        menu: (
+          <Menu>
+            <Menu.Item>
+              中文
+            </Menu.Item>
+            <Menu.Item>
+              English
+            </Menu.Item>
+          </Menu>
+        )
       },
       {
         icon: <Icon type="github" />,
@@ -43,8 +61,10 @@ class Header extends React.Component {
     return key;
   }
 
+
   render() {
     const key = this.getKey();
+
 
     return (
       <div
@@ -66,6 +86,9 @@ class Header extends React.Component {
                   return (
                     <Menu.Item
                       key={item.key}
+                      className={classnames({
+                        icon: !!item.icon
+                      })}
                     >
                       <a
                         rel="noopener noreferrer"
@@ -80,8 +103,30 @@ class Header extends React.Component {
                   );
                 }
 
+                if (item.menu) {
+                  return (
+                    <Menu.Item
+                      key={item.key}
+                      className={classnames({
+                        icon: !!item.icon
+                      })}
+                      onClick={() => this.onMenuClick(item.action)}
+                    >
+                      <Dropdown
+                        overlay={item.menu}
+                        placement="bottomRight"
+                      >
+                        {item.name || item.icon}
+                      </Dropdown>
+                      <div className="select-buttom" />
+                    </Menu.Item>
+                  );
+                }
+
                 return (
-                  <Menu.Item key={item.key}>
+                  <Menu.Item
+                    key={item.key}
+                  >
                     <Link to={`/${item.key}`}>
                       {item.name}
                     </Link>

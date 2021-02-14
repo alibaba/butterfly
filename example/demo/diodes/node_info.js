@@ -1,8 +1,6 @@
-'use strict';
-
-// const Node = require('../../../index.js').Node;
-import {Node} from 'butterfly-dag';
+import _ from 'lodash';
 import $ from 'jquery';
+import {Node} from 'butterfly-dag';
 
 class Input extends Node {
   constructor(opts) {
@@ -10,6 +8,7 @@ class Input extends Node {
     // 自定义变量
     this.endpointDom = null;
   }
+
   mounted() {
     this.addEndpoint({
       id: '0',
@@ -17,6 +16,7 @@ class Input extends Node {
       dom: this.endpointDom
     });
   }
+
   draw = (data) => {
     let container = $(`<div class="diodes-base-node info-node ${data.options.type}-node"></div>`)
       .css('top', data.top)
@@ -35,4 +35,4 @@ class Input extends Node {
   }
 }
 
-module.exports = Input;
+export default Input;

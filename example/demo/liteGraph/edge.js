@@ -13,4 +13,4 @@ class BaseEdge extends Edge {
   drawLabel(texts) {
   }
 }
-module.exports = BaseEdge;
+export default BaseEdge;
