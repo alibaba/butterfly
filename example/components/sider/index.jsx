@@ -64,13 +64,13 @@ const Sider = (props) => {
             return (
               <div
                 className={classnames('demo-cover', {active: active === file.name})}
-                key={file.name}
+                key={file.dir}
               >
                 <Tooltip
                   title={tips(file)}
                   placement="right"
                 >
-                  <Link to={`/demo/${file.name}`}><img src={file.cover} /></Link>
+                  <Link to={`/demo/${file.dir}`}><img src={file.cover} /></Link>
                 </Tooltip>
               </div>
             );
