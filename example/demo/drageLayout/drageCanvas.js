@@ -1,13 +1,6 @@
-'use strict';
-// const Canvas = require('../../../index.js').Canvas;
-// const Layout = require('../../../index.js').Layout;
+import _ from 'lodash';
 import {Canvas, Layout} from 'butterfly-dag';
-
-
 class DrageCanvas extends Canvas {
-  constructor(options) {
-    super(options);
-  }
   drageReDraw(newParam) {
     let {nodes, layout, edges} = this;
     let addResultNodes = nodes.map((item) => {
