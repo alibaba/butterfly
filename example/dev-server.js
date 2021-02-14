@@ -3,6 +3,11 @@ const path = require('path');
 
 const DEFAULT_IMG = 'https://s3.ax1x.com/2021/02/13/yrjkOH.jpg';
 
+const less = {
+  filename: 'theme.less',
+  code: fs.readFileSync('./theme.less').toString()
+};
+
 module.exports = (app) => {
   app.get('/list.json', async (req, res) => {
     const demosdir = path.join(__dirname, 'demo');
@@ -58,13 +63,20 @@ module.exports = (app) => {
         path.join(__dirname, 'demo', demo, file)
       )).toString();
 
+      if (file.endsWith('.less')) {
+        code = '@import \'theme.less\'; \n' + code;
+      }
+
       return {
         filename: file,
         code: code
       };
     }));
 
-    json = json.filter(i => !!i);
+    json = [
+      ...json.filter(i => !!i),
+      less
+    ];
 
     return res.send(json);
   });
