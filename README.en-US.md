@@ -110,6 +110,7 @@ canvas.draw({
   * [attribute](./docs/en-US/endpoint.md#endpoint-attr)
   * [API](./docs/en-US/endpoint.md#endpoint-api)
 * [Minimap](./docs/en-US/minimap.md#endpoint-api)
+* [Tooltips & Menu](./docs/en-US/tooltip.md)
 * [Layout](./docs/en-US/layout.md)
 * React & Vue Support
   * [React butterfly](./docs/en-US/react.md)
