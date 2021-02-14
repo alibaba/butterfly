@@ -1,6 +1,3 @@
-'use strict';
-
-// const Node = require('../../../index.js').TreeNode;
 import {Node} from 'butterfly-dag';
 import $ from 'jquery';
 import './node.less';

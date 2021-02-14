@@ -1,5 +1,3 @@
-'use strict';
-
 import BaseNode from './node';
 import BaseEdge from './edge';
 
@@ -93,7 +91,7 @@ module.exports = {
       id: 'bottom',
       orientation: [0, 1],
       pos: [0.5, 0]
-    }, ]
+    }]
   }, {
     id: 8,
     name: '聚酯熔体',
@@ -164,7 +162,7 @@ module.exports = {
       orientation: [0, -1],
       pos: [0.5, 0]
     }]
-  }, ],
+  }],
   edges: [{
     source: 'right',
     target: 'left',
@@ -246,6 +244,6 @@ module.exports = {
     arrow: true,
     arrowPosition: 0.5,
     Class: BaseEdge
-  },],
+  }],
   groupd: []
 };

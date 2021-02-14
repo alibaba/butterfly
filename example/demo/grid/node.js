@@ -1,8 +1,4 @@
-'use strict';
-
-// const Node = require('../../../index.js').Node;
-import { Node } from 'butterfly-dag';
-// const Node = require('../../../services/butterflies/src/node/baseNode');
+import {Node} from 'butterfly-dag';
 import $ from 'jquery';
 import './node.less';
 
@@ -16,9 +12,9 @@ class BaseNode extends Node {
   }
   draw = (opts) => {
     let container = $('<div class="grid-node"></div>')
-                    .css('top', this.top + 'px')
-                    .css('left', this.left+ 'px')
-                    .attr('id',  this.id = opts.id);
+      .css('top', this.top + 'px')
+      .css('left', this.left + 'px')
+      .attr('id', this.id = opts.id);
 
     container.text(opts.options.id);
 
