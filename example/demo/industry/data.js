@@ -1,7 +1,7 @@
 import BaseNode from './node';
 import BaseEdge from './edge';
 
-module.exports = {
+export default {
   nodes: [{
     id: 0,
     name: '乙二醇MEG(液体)',

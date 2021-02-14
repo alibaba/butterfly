@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import IndustryCanvas from './canvas';
+import mockData from './data.js';
+
 import './index.less';
 import 'butterfly-dag/dist/index.css';
-
-import mockData from './data.js';
 
 class Industry extends Component {
   componentDidMount() {

@@ -1,5 +1,5 @@
 import {Canvas} from 'butterfly-dag';
-import _ from 'loadsh';
+import _ from 'lodash';
 import './canvas.less';
 
 const EVENTTYPE = {
