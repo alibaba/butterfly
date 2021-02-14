@@ -1,5 +1,5 @@
 // const Canvas = require('../../../index.js').Canvas;
-import { Canvas } from 'butterfly-dag';
+import {Canvas} from 'butterfly-dag';
 
 class RelationalBooksCanvas extends Canvas {
   constructor(...args) {
@@ -9,9 +9,9 @@ class RelationalBooksCanvas extends Canvas {
         let edges = this.getNeighborEdges(data.data.nodeId);
         edges.forEach((item) => {
           item.redraw();
-        })
+        });
       }
-    })
+    });
   }
 }
 

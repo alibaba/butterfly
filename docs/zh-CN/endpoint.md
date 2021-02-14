@@ -29,7 +29,7 @@ node.addEndpoint({
 | key | 说明 | 类型 | 默认值 
 | :------ | :------ | :------ | :------ 
 | id | 节点唯一标识 | string (Require) | - 
-| orientation | 方向 | array (Option) | 下:[0,1]/上:[0,-1]/右:[1,0]/左:[-1,0]
+| orientation | 方向 | array (Option) | 下:[0,1]/上:[0,-1]/右:[1,0]/左:[-1,0],除了控制系统锚点方向，而且能控制线段的出入口方向
 | pos | 位置 | array (Option) | - 
 | scope | 作用域 | string (Option) | 锚点scope相同才可以连线
 | limitNum | 连线数目限制 | Number (Option) | 限制锚点的连接数目

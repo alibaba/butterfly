@@ -23,13 +23,13 @@
 ## ✨ 特性
 * 丰富DEMO，开箱即用
 * 全方位管理画布，开发者只需要更专注定制化的需求
-* 利用dom来定制元素；灵活性，可塑性，拓展性优秀
+* 利用DOM/REACT/VUE来定制元素；灵活性，可塑性，拓展性优秀
 
 <p align="center">
   <img width="900" src="https://img.alicdn.com/imgextra/i4/O1CN01d7WHVs1vkEDzWRRlW_!!6000000006210-2-tps-2400-8172.png">
 </p>
 
-## 快速本地DEMO
+## 🚀快速本地DEMO
 ```
 git clone git@github.com:alibaba/butterfly.git
 npm install
@@ -113,6 +113,13 @@ canvas.draw({
 * React & Vue支持
   * [React butterfly组件支持](./docs/zh-CN/react.md)
   * [Vue2 butterfly组件支持](./docs/zh-CN/vue.md)
+* React拓展组件
+  * [数据/字段映射组件](https://github.com/aliyun/react-data-mapping)
+  * 血缘图(doing)
+  * 可视化建模图(doing)
+  * 调度编排图(doing)
+  * 监控图(doing)
+  * butterfly-editor(doing)
 
 ## 🤝贡献
 小蝴蝶是一个完全开源的项目，我们欢迎大家为修复错误和改进做出贡献。有关如何开始的信息，请阅读我们的[贡献指南](./docs/zh-CN/CONTRIBUTING.md).

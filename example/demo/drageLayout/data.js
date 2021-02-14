@@ -1,43 +1,42 @@
-'use strict';
-const node = require('./base_node.jsx');
-module.exports = {
+import node from './base_node';
+export default {
   nodes: [{
     id: 'test1',
     name: 'test1',
     Class: node,
-    color: '#c6e5ff'
+    className: 'nodeBackground-color'
   }, {
     id: 'test2',
     name: 'test2',
     Class: node,
-    color: '#c6e5ff'
+    className: 'nodeBackground-color'
   }, {
     id: 'test3',
     name: 'test3',
     Class: node,
-    color: '#c6e5ff'
+    className: 'nodeBackground-color'
   }, {
     id: 'test4',
     name: 'test4',
     Class: node,
-    color: '#c6e5ff'
+    className: 'nodeBackground-color'
   }, {
     id: 'test5',
     name: 'test5',
     Class: node,
-    color: '#c6e5ff'
+    className: 'nodeBackground-color'
   }, {
     id: 'test6',
     name: 'test6',
     Class: node,
-    color: '#c6e5ff'
+    className: 'nodeBackground-color'
   }, {
     id: 'test7',
     name: 'test7',
     Class: node,
-    color: '#c6e5ff'
+    className: 'nodeBackground-color'
   }
-],
+  ],
   edges: [{
     source: 'test1',
     target: 'test2'
@@ -61,5 +60,5 @@ module.exports = {
     source: 'test4',
     target: 'test7'
   }
-]
+  ]
 };

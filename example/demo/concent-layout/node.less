@@ -1,57 +1,63 @@
+@butterfly-theme-color-base:#fff;
+@butterfly-normal-font-color-base:#222;;
+@butterfly-overlay-font-color-base:#FFF;
+@butterfly-primary-color-base:#F66902;
+@butterfly-box-border-color-base: #D9D9D9;
+@butterfly-box-shadow-base:0 2px 3px 0 rgba(0,112,204,0.06);
+@butterfly-box-radius-base:100px;
+@butterfly-line-color-base: #BFBFBF;
+// 主题背景色（画布背景色）
+@butterfly-theme-background-color: @butterfly-theme-color-base;
+// （各图形框）普通情况背景色
+@butterfly-theme-color: fade(@butterfly-theme-color-base,80%);
+// 主题色
+@butterfly-primary-color: @butterfly-primary-color-base;
+// 普通情况下字体颜色
+@butterfly-normal-font-color: @butterfly-normal-font-color-base;
+// 主题背景色上的字体颜色及icon颜色
+@butterfly-overlay-font-color: @butterfly-overlay-font-color-base;
+// 拖动时的背景色
+@butterfly-box-move-background-color: fade(@butterfly-primary-color, 20%);
+// 边框的样式
+@butterfly-box-border: 1px solid @butterfly-box-border-color-base;
+@butterfly-box-shadow: @butterfly-box-shadow-base;
+@butterfly-box-radius: @butterfly-box-radius-base;
+@butterfly-box-node-border-hover: 1px solid @butterfly-primary-color;
+// 线条样式
+@butterfly-line-color: @butterfly-line-color-base;
+
 .decision-new-node {
   position: absolute;
   height: 60px;
   width: 60px;
   line-height: 60px;
   text-align: center;
-  background: #fff;
-  border-radius: 50%;
-  border: 1px solid #D9D9D9;
-  box-shadow: 0 2px 3px 0 rgba(0,112,204,0.06);
-  // .icon-box {
-  //   display: inline-block;
-  //   height: 30px;
-  //   line-height: 30px;
-  //   width: 30px;
-  //   border-radius: 15px;
-  //   position: relative;
-  //   left: 2px;
-  //   .iconfont {
-  //     color: #f00;
-  //   }
-  // }
-  .name-box {
+  background: @butterfly-theme-color;
+  border-radius:@butterfly-box-radius;
+  border: @butterfly-box-border;
+  box-shadow: @butterfly-box-shadow;
+  color: @butterfly-normal-font-color;
+
+  .icon-box {
     display: inline-block;
+    height: 24px;
+    line-height: 24px;
+    width: 24px;
+    border-radius: 12px;
+    position: relative;
+    left: 2px;
+    .newIconfont {
+      color: @butterfly-overlay-font-color;
+    }
+  }
+  .icon-background{
+    background: @butterfly-primary-color;
+  }
+  .name-box {
+    display: block;
     height: 60px;
-    line-height: 60px;
+    line-height: 18px;
     font-size: 12px;
     text-align: center;
-  }
-  .green {
-    background: #73D13D;
-  }
-  .simple-blue {
-    background: #40A9FF;
-  }
-  .deep-blue {
-    background: #597EF7;
-  }
-  .orange {
-    background: #FFA940;
-  }
-  .simple-yellow {
-    background: #FFC53D;
-  }
-  .gray {
-    background: #909090;
-  }
-  .deep-green {
-    background: #36CFC9;
-  }
-  .purple {
-    background: #9254DE;
-  }
-  .pink {
-    background: #F759AB;
   }
 }

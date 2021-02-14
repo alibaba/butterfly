@@ -1,5 +1,5 @@
 const Node = require('./node');
-const Edge = require('./edge');
+import Edge from './edge';
 
 export const mockData = {
   nodes: [
@@ -95,7 +95,7 @@ export const mockData = {
         orientation: [1, 0],
         pos: [0, 0.5]
       }]
-    }, 
+    },
     {
       id: '6',
       label: '首次入系统',

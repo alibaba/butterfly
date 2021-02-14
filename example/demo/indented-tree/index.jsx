@@ -1,8 +1,8 @@
 'use strict';
 import React, {Component} from 'react';
-require('./index.less');
-const Node = require('./node.js');
-const $ = require('jquery');
+import './index.less';
+import Node from './node.js';
+import $ from 'jquery';
 
 // const Canvas = require('../../../index.js').TreeCanvas;
 import { TreeCanvas } from 'butterfly-dag';

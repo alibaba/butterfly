@@ -1,8 +1,8 @@
 'use strict';
 
 // const Edge = require('../../../index.js').Edge;
-import { Edge } from 'butterfly-dag';
-const $ = require('jquery');
+import {Edge} from 'butterfly-dag';
+import $ from 'jquery';
 
 class BaseEdge extends Edge {
   draw(obj) {
@@ -23,10 +23,10 @@ class BaseEdge extends Edge {
     // let dom = super.drawArrow(text);
     // console.log(dom);
     let dom = null;
-    if (!!text) {
+    if (text) {
       dom = $(`<span class="label">${text}</span>`)[0];
     }
     return dom;
   }
-};
-module.exports = BaseEdge;
+}
+export default BaseEdge;

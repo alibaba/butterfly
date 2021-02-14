@@ -744,4 +744,4 @@ module.exports = {
     Class: BaseEdge
   }],
   groupd: []
-}
+};

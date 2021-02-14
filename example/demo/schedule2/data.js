@@ -1,7 +1,7 @@
 'use strict';
 
-const Node = require('./node.js');
-const Edge = require('./edge');
+import Node from './node.js';
+import Edge from './edge';
 
 module.exports = {
   nodes: [

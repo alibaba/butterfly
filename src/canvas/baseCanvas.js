@@ -197,6 +197,11 @@ class BaseCanvas extends Canvas {
       terScrollX: opts.terScrollX || 0,
       terScrollY: opts.terScrollY || 0
     });
+    this.canvasWrapper.resize({
+      root: this.root
+    });
+    this._gridService._resize();
+    this._guidelineService._resize();
   }
 
   draw(opts, callback) {
@@ -1793,7 +1798,6 @@ class BaseCanvas extends Canvas {
 
   _genSvgWrapper() {
 
-
     function _detectMob() {
       const toMatch = [
           /Android/i,
@@ -1815,7 +1819,7 @@ class BaseCanvas extends Canvas {
     let _detectZoom = () => {
       let ratio = 0;
       let screen = window.screen;
-      let ua = navigator.userAgent.toLowerCase();
+      let ua = window.navigator.userAgent.toLowerCase();
 
       if (window.devicePixelRatio !== undefined) {
         ratio = window.devicePixelRatio;
@@ -1892,7 +1896,7 @@ class BaseCanvas extends Canvas {
       this.setMoveable(true);
     }
 
-    let _isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+    let _isChrome = /Chrome/.test(window.navigator.userAgent) && /Google Inc/.test(window.navigator.vendor);
     let _getChromeVersion = () => {
       var raw = window.navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
       return raw ? parseInt(raw[2], 10) : false;
@@ -3134,7 +3138,12 @@ class BaseCanvas extends Canvas {
         }
       });
     }
+
+    // todo 防抖
     node._moveTo(x, y);
+    node.endpoints && node.endpoints.forEach((item) => {
+      item.updatePos();
+    });
     this.edges.forEach((edge) => {
       if (edge.type === 'endpoint') {
         const isLink = _.find(node.endpoints, (point) => {
@@ -3398,6 +3407,58 @@ class BaseCanvas extends Canvas {
             }
           })
         }
+      }else if(_.get(this.layout, 'type') === 'radial') {
+        const _opts = $.extend({
+          // 布局画布总宽度
+          width: _.get(this.layout, 'options.width') || 500,
+          // 布局画布总长度
+          height: _.get(this.layout, 'options.height') || 500,
+           /** 停止迭代的最大迭代数 */
+         maxIteration:  _.get(this.layout, 'options.maxIteration')|| 1000,
+           /** 布局中心 */
+         center: _.get(this.layout, 'options.center')|| [width / 2, height / 2],
+           /** 中心点，默认为数据中第一个点 */
+         focusNode: _.get(this.layout, 'options.focusNode') || null,
+           /** 每一圈半径 */
+         unitRadius: _.get(this.layout, 'options.unitRadius') || null,
+           /** 默认边长度 */
+         linkDistance: _.get(this.layout, 'options.linkDistance') || 50,
+           /** 是否防止重叠 */
+         preventOverlap: _.get(this.layout, 'options.preventOverlap') || false,
+           /** 节点直径 */
+         nodeSize: _.get(this.layout, 'options.nodeSize') || undefined,
+           /** 节点间距，防止节点重叠时节点之间的最小距离（两节点边缘最短距离） */
+         nodeSpacing: _.get(this.layout, 'options.nodeSpacing') || undefined,
+           /** 是否必须是严格的 radial 布局，即每一层的节点严格布局在一个环上。preventOverlap 为 true 时生效 */
+         strictRadial: _.get(this.layout, 'options.strictRadial') || true,
+           /** 防止重叠步骤的最大迭代次数 */
+         maxPreventOverlapIteration: _.get(this.layout, 'options.maxPreventOverlapIteration') || 200,
+         sortBy: _.get(this.layout, 'options.sortBy') || undefined,
+         sortStrength: _.get(this.layout, 'options.sortStrength') || 10,
+         link: {
+           // 以node的什么字段为寻找id，跟d3原理一样
+           id: 'id',
+           // 线条的距离
+           distance: 100,
+           // 线条的粗细
+           strength: 1
+         }
+       }, _.get(this.layout, 'options'), true);
+       // 自动布局
+       if (_.get(this.layout, 'type') === 'radial') {
+         Layout.radial({
+           opts: _opts,
+           data: {
+             groups: data.groups,
+             nodes: data.nodes,
+             // 加工线条数据，兼容endpoint为id的属性，d3没这个概念
+             edges: data.edges.map(item => ({
+               source: item.type === 'endpoint' ? item.sourceNode : item.source,
+               target: item.type === 'endpoint' ? item.targetNode : item.target
+             }))
+           }
+         })
+       }
       }
     }
   }

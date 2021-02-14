@@ -29,7 +29,7 @@ node.addEndpoint({
 | key | describe | type | default 
 | :------ | :------ | :------ | :------ 
 | id | unique id | string (Require) | - 
-| orientation | direction | array (Optional) | Bottom:[0,1]/Top:[0,-1]/Right:[1,0]/Left:[-1,0]
+| orientation | direction | array (Optional) | Bottom:[0,1]/Top:[0,-1]/Right:[1,0]/Left:[-1,0],In addition to controlling the direction of the system anchor point, it can also control the direction of the entrance and exit of the line segment
 | pos | position | array (Optional) | - 
 | scope | scope | string (Optional) | endpoint scope is the same to connect
 | limitNum | connection limit | Number (Option) | limit the number of anchor connections

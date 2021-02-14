@@ -1,23 +1,16 @@
-'use strict';
-// const Canvas = require('../../../index.js').Canvas;
-// const Layout = require('../../../index.js').Layout;
-import { Canvas, Layout } from 'butterfly-dag';
-
-
+import _ from 'lodash';
+import {Canvas, Layout} from 'butterfly-dag';
 class DrageCanvas extends Canvas {
-  constructor(options) {
-    super(options);
-  }
   drageReDraw(newParam) {
     let {nodes, layout, edges} = this;
     let addResultNodes = nodes.map((item) => {
-      return item.options
+      return item.options;
     });
-    if(newParam) {
+    if (newParam) {
       layout.options = {
         ...layout.options,
         ...newParam
-      }
+      };
     }
     Layout.drageLayout({
       rankdir: (newParam && newParam.rankdir) || _.get(layout, 'options.rankdir') || 'TB',

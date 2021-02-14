@@ -72,8 +72,8 @@ class BaseEndpoint extends Endpoint {
       // 计算width,height,left,top
       this._width = $(this.dom).width();
       this._height = $(this.dom).height();
-      this._left = this._coordinateService._terminal2canvas('x', $(this.dom).offset().left);
-      this._top = this._coordinateService._terminal2canvas('y', $(this.dom).offset().top);
+      this._left = this._coordinateService._terminal2canvas('x', $(this.dom).offset().left + this._coordinateService.scrollLeft);
+      this._top = this._coordinateService._terminal2canvas('y', $(this.dom).offset().top + this._coordinateService.scrollTop);
 
       this._posTop = this._top;
       this._posLeft = this._left;
@@ -98,8 +98,9 @@ class BaseEndpoint extends Endpoint {
       this._width = $(this.dom).width();
       this._height = $(this.dom).height();
       // 计算锚点起始值
-      this._left = this._coordinateService._terminal2canvas('x', $(this.dom).offset().left);
-      this._top = this._coordinateService._terminal2canvas('y', $(this.dom).offset().top);
+      this._left = this._coordinateService._terminal2canvas('x', $(this.dom).offset().left + this._coordinateService.scrollLeft);
+      this._top = this._coordinateService._terminal2canvas('y', $(this.dom).offset().top + this._coordinateService.scrollTop);
+
       this._posLeft = this._left;
       this._posTop = this._top;
     } else {

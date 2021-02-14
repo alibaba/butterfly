@@ -3,9 +3,9 @@ import React, {Component} from 'react';
 import ReactDom from 'react-dom';
 import Custom from './custom';
 
-require('./index.less');
-const Node = require('./node.js');
-let $ = require('jquery');
+import './index.less';
+import Node from './node.js';
+import $ from 'jquery';
 // const Canvas = require('../../../index.js').TreeCanvas;
 import { TreeCanvas } from 'butterfly-dag';
 const mockData = {

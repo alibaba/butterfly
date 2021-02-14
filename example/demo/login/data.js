@@ -1,14 +1,14 @@
 'use strict';
 
-const Node = require('./node.js');
-const Edge = require('./edge');
+import Node from './node.js';
+import Edge from './edge';
 
 module.exports = {
   nodes: [
     {
       id: '1',
       label: '扫码',
-      className: 'deep-green',
+      className: 'circle-border',
       iconType: 'icon-rds',
       top: 300,
       left: 50,
@@ -72,7 +72,7 @@ module.exports = {
     {
       id: '5',
       label: '继续',
-      className: 'blue',
+      className: 'circle-border',
       iconType: 'icon-bofang',
       top: 300,
       left: 500,
@@ -94,7 +94,7 @@ module.exports = {
     {
       id: '6',
       label: '兑换',
-      className: 'purple',
+      className: 'circle-border',
       iconType: 'icon-naswenjiancunchuNAS',
       top: 300,
       left: 650,
@@ -186,7 +186,7 @@ module.exports = {
     {
       id: '11',
       label: '解锁完整版',
-      className: 'simple-green',
+      className: 'circle-border',
       iconType: 'icon-xianshang',
       top: 300,
       left: 1100,

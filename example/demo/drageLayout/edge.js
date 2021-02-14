@@ -1,8 +1,5 @@
-'use strict';
-
-// let Edge = require('../../../index.js').Edge;
-import { Edge } from 'butterfly-dag';
-let $ = require('jquery');
+import $ from 'jquery';
+import {Edge} from 'butterfly-dag';
 
 class RelationEdge extends Edge {
   draw(obj) {
@@ -12,6 +9,7 @@ class RelationEdge extends Edge {
     }
     return path;
   }
+
   drawArrow(isShow) {
     let dom = super.drawArrow(isShow);
     if (this.options.color) {
@@ -19,12 +17,14 @@ class RelationEdge extends Edge {
     }
     return dom;
   }
+
   drawLabel(text) {
     let dom = null;
-    if (!!text) {
+    if (text) {
       dom = $(`<span class="butterflies-label">${text}</span>`)[0];
     }
     return dom;
   }
-};
-module.exports = RelationEdge;
+}
+
+export default RelationEdge;

@@ -1,14 +1,14 @@
 'use strict';
 
-const Node = require('./node.js');
-const Edge = require('./edge');
+import Node from './node.js';
+import Edge from './edge';
 
 module.exports = {
   nodes: [
     {
       id: '1',
       label: '开始',
-      className: 'green',
+      className: 'icon-background-color',
       iconType: 'icon-bofang',
       top: 50,
       left: 63,
@@ -17,7 +17,7 @@ module.exports = {
     {
       id: '2',
       label: '默认通过',
-      className: 'simple-blue',
+      className: 'icon-background-color',
       iconType: 'icon-rds',
       top: 150,
       left: 50,
@@ -26,7 +26,7 @@ module.exports = {
     {
       id: '3',
       label: '政策监管准入',
-      className: 'deep-blue',
+      className: 'icon-background-color',
       iconType: 'icon-guize-kai',
       top: 250,
       left: 36,
@@ -42,7 +42,7 @@ module.exports = {
     {
       id: '4',
       label: '条件分支',
-      className: 'orange',
+      className: 'icon-background-color',
       iconType: 'icon-slbfuzaijunhengSLB',
       top: 250,
       left: 250,
@@ -63,7 +63,7 @@ module.exports = {
     {
       id: '5',
       label: '行内准入',
-      className: 'deep-blue',
+      className: 'icon-background-color',
       iconType: 'icon-guize-kai',
       top: 180,
       left: 400,
@@ -84,7 +84,7 @@ module.exports = {
     {
       id: '6',
       label: '拒绝',
-      className: 'simple-blue',
+      className: 'icon-background-color',
       iconType: 'icon-rds',
       top: 330,
       left: 400,
@@ -105,7 +105,7 @@ module.exports = {
     {
       id: '7',
       label: '结束',
-      className: 'gray',
+      className: 'icon-background-color',
       iconType: 'icon-tingzhi',
       top: 330,
       left: 550,
@@ -121,7 +121,7 @@ module.exports = {
     {
       id: '8',
       label: '企业资质评分卡',
-      className: 'simple-yellow',
+      className: 'icon-background-color',
       iconType: 'icon-rds',
       top: 180,
       left: 750,
@@ -137,7 +137,7 @@ module.exports = {
     {
       id: '9',
       label: '企业评分卡等级',
-      className: 'deep-green',
+      className: 'icon-background-color',
       iconType: 'icon-ossduixiangcunchuOSS',
       top: 270,
       left: 750,
@@ -146,7 +146,7 @@ module.exports = {
     {
       id: '10',
       label: '条件分支',
-      className: 'orange',
+      className: 'icon-background-color',
       iconType: 'icon-slbfuzaijunhengSLB',
       top: 360,
       left: 771,
@@ -155,7 +155,7 @@ module.exports = {
     {
       id: '11',
       label: 'E档拒绝',
-      className: 'simple-blue',
+      className: 'icon-background-color',
       iconType: 'icon-rds',
       top: 460,
       left: 700,
@@ -164,7 +164,7 @@ module.exports = {
     {
       id: '12',
       label: '结束',
-      className: 'gray',
+      className: 'icon-background-color',
       iconType: 'icon-tingzhi',
       top: 540,
       left: 710,
@@ -173,7 +173,7 @@ module.exports = {
     {
       id: '13',
       label: '企业信用额度',
-      className: 'purple',
+      className: 'icon-background-color',
       iconType: 'icon-shujuji',
       top: 460,
       left: 850,
@@ -182,7 +182,7 @@ module.exports = {
     {
       id: '14',
       label: '回落脚本',
-      className: 'pink',
+      className: 'icon-background-color',
       iconType: 'icon-edit',
       top: 540,
       left: 864,
@@ -191,7 +191,7 @@ module.exports = {
     {
       id: '15',
       label: '赋值通过',
-      className: 'simple-blue',
+      className: 'icon-background-color',
       iconType: 'icon-rds',
       top: 620,
       left: 864,
@@ -200,7 +200,7 @@ module.exports = {
     {
       id: '16',
       label: '结束',
-      className: 'gray',
+      className: 'icon-background-color',
       iconType: 'icon-bofang',
       top: 700,
       left: 877,

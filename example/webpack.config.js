@@ -1,8 +1,7 @@
-'use strict';
-
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+const devServer = require('./dev-server');
 
 module.exports = {
   entry: {
@@ -10,7 +9,8 @@ module.exports = {
   },
   output: {
     filename: '[name].js',
-    chunkFilename: '[name].js'
+    chunkFilename: '[name].js',
+    publicPath: '/'
   },
   resolve: {
     modules: [
@@ -20,6 +20,7 @@ module.exports = {
     ],
     extensions: ['.js', '.jsx']
   },
+  devtool: 'cheap-source-map',
   module: {
     rules: [
       {
@@ -35,8 +36,9 @@ module.exports = {
             plugins: [
               '@babel/plugin-transform-runtime',
               '@babel/plugin-transform-modules-commonjs',
-              '@babel/plugin-proposal-object-rest-spread', 
+              '@babel/plugin-proposal-object-rest-spread',
               '@babel/plugin-proposal-class-properties',
+              '@babel/plugin-syntax-dynamic-import'
             ]
           }
         }
@@ -66,6 +68,12 @@ module.exports = {
             options: {
               javascriptEnabled: true
             }
+          },
+          {
+            loader: 'style-resources-loader',
+            options: {
+              patterns: path.resolve(__dirname, './colorVariable.less'),
+            },
           }
         ]
       },
@@ -82,17 +90,17 @@ module.exports = {
   plugins: [
     new MiniCssExtractPlugin({
       filename: '[name].css'
-    }),
-    new HtmlWebpackPlugin({
-      template: './index.html'
     })
   ],
   devServer: {
-    contentBase: './dist', // 本地服务器所加载的页面所在的目录
+    contentBase: __dirname, // 本地服务器所加载的页面所在的目录
     historyApiFallback: true, // 不跳转
     inline: true, // 实时刷新
     index: 'index.html',
     port: 8080,
-    open: true
+    open: true,
+    before(app) {
+      devServer(app);
+    }
   }
 };

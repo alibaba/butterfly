@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import mockData from './data.js';
 // const Canvas = require('../../../index.js').TreeCanvas;
 import { TreeCanvas } from 'butterfly-dag';
-require('./index.less');
+import './index.less';
 
 class MindMap extends Component {
   constructor() {

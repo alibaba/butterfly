@@ -2,7 +2,7 @@ import React from 'react';
 import './index.less';
 import {mockData} from './data';
 
-require('butterfly-dag/dist/index.css');
+import 'butterfly-dag/dist/index.css'
 // const Canvas = require('../../../index.js').Canvas;
 import { Canvas } from 'butterfly-dag';
 

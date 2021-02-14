@@ -12,7 +12,7 @@ module.exports = {
     left: 50,
     Class: BaseNode,
     iconType: 'icon-rds',
-    circleColor: 'purple',
+    circleColor: 'icon-background-color',
     endpoints: [{
       id: 'right',
       orientation: [1, 0],
@@ -26,7 +26,7 @@ module.exports = {
     left: 50,
     Class: BaseNode,
     iconType: 'icon-rds',
-    circleColor: 'purple',
+    circleColor: 'icon-background-color',
     endpoints: [{
       id: 'right',
       orientation: [1, 0],
@@ -40,12 +40,12 @@ module.exports = {
     left: 300,
     Class: BaseNode,
     iconType: 'icon-shujuji',
-    circleColor: 'deep-blue',
+    circleColor: 'icon-background-color',
     endpoints: [{
       id: 'left',
       orientation: [-1, 0],
       pos: [0, 0.5]
-    },{
+    }, {
       id: 'right',
       orientation: [1, 0],
       pos: [0, 0.5]
@@ -58,7 +58,7 @@ module.exports = {
     left: 540,
     Class: BaseNode,
     iconType: 'icon-shujuji',
-    circleColor: 'deep-blue',
+    circleColor: 'icon-background-color',
     endpoints: [{
       id: 'top',
       orientation: [0, -1],
@@ -72,7 +72,7 @@ module.exports = {
       orientation: [-1, 0],
       pos: [0, 0.5]
     }]
-  },  {
+  }, {
     id: 7,
     name: '第二脂化(280℃)',
     type: 'blue',
@@ -80,16 +80,16 @@ module.exports = {
     left: 770,
     Class: BaseNode,
     iconType: 'icon-shujuji',
-    circleColor: 'deep-blue',
+    circleColor: 'icon-background-color',
     endpoints: [{
       id: 'left',
       orientation: [-1, 0],
       pos: [0, 0.5]
-    },{
+    }, {
       id: 'right',
       orientation: [1, 0],
       pos: [0, 0.5]
-    },{
+    }, {
       id: 'bottom',
       orientation: [0, 1],
       pos: [0.5, 0]
@@ -102,7 +102,7 @@ module.exports = {
     left: 1000,
     Class: BaseNode,
     iconType: 'icon-juxing',
-    circleColor: 'green',
+    circleColor: 'icon-background-color',
     endpoints: [{
       id: 'left',
       orientation: [-1, 0],
@@ -116,13 +116,13 @@ module.exports = {
     left: 50,
     Class: BaseNode,
     iconType: 'icon-yun',
-    circleColor: 'simple-blue',
+    circleColor: 'icon-background-color',
     endpoints: [{
       id: 'right',
       orientation: [1, 0],
       pos: [0, 0.5]
     }]
-  },{
+  }, {
     id: 5,
     name: '乙二醇MEG(液体)',
     type: 'blue',
@@ -130,7 +130,7 @@ module.exports = {
     left: 380,
     Class: BaseNode,
     iconType: 'icon-yun',
-    circleColor: 'simple-blue',
+    circleColor: 'icon-background-color',
     endpoints: [{
       id: 'bottom',
       orientation: [0, 1],
@@ -144,13 +144,13 @@ module.exports = {
     left: 700,
     Class: BaseNode,
     iconType: 'icon-yun',
-    circleColor: 'simple-blue',
+    circleColor: 'icon-background-color',
     endpoints: [{
       id: 'bottom',
       orientation: [0, 1],
       pos: [0.5, 0]
     }]
-  },{
+  }, {
     id: 9,
     name: '乙二醇MEG(液体)',
     type: 'blue',
@@ -158,7 +158,7 @@ module.exports = {
     left: 770,
     Class: BaseNode,
     iconType: 'icon-yun',
-    circleColor: 'simple-blue',
+    circleColor: 'icon-background-color',
     endpoints: [{
       id: 'top',
       orientation: [0, -1],
@@ -174,7 +174,7 @@ module.exports = {
     arrow: true,
     arrowPosition: 0.5,
     Class: BaseEdge
-  },{
+  }, {
     source: 'right',
     target: 'left',
     sourceNode: 1,
@@ -228,7 +228,7 @@ module.exports = {
     arrow: true,
     arrowPosition: 0.5,
     Class: BaseEdge
-  },{
+  }, {
     source: 'bottom',
     target: 'top',
     sourceNode: 5,
@@ -237,7 +237,7 @@ module.exports = {
     arrow: true,
     arrowPosition: 0.5,
     Class: BaseEdge
-  },{
+  }, {
     source: 'bottom',
     target: 'top',
     sourceNode: 6,
@@ -248,4 +248,4 @@ module.exports = {
     Class: BaseEdge
   },],
   groupd: []
-}
+};

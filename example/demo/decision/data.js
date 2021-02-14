@@ -1,14 +1,12 @@
-'use strict';
+import Node from './node.js';
+import Edge from './edge';
 
-const Node = require('./node.js');
-const Edge = require('./edge');
-
-module.exports = {
+export default {
   nodes: [
     {
       id: '1',
       label: 'Number',
-      className: 'purple',
+      className: 'icon-background',
       iconType: 'icon-wo',
       top: 25,
       left: 380,
@@ -22,7 +20,7 @@ module.exports = {
     {
       id: '2',
       label: 'Name',
-      className: 'purple',
+      className: 'icon-background',
       iconType: 'icon-wo',
       top: 25,
       left: 520,
@@ -36,7 +34,7 @@ module.exports = {
     {
       id: '3',
       label: 'Skills',
-      className: 'purple',
+      className: 'icon-background',
       iconType: 'icon-wo',
       top: 25,
       left: 660,
@@ -50,7 +48,7 @@ module.exports = {
     {
       id: '4',
       label: 'Employee',
-      className: 'simple-blue',
+      className: 'icon-background',
       iconType: 'icon-guanlian',
       top: 125,
       left: 520,
@@ -72,7 +70,7 @@ module.exports = {
     {
       id: '5',
       label: 'Gets Paid',
-      className: 'green',
+      className: 'icon-background',
       iconType: 'icon-rds',
       top: 125,
       left: 740,
@@ -90,7 +88,7 @@ module.exports = {
     {
       id: '6',
       label: 'Wage',
-      className: 'simple-blue',
+      className: 'icon-background',
       iconType: 'icon-guanlian',
       top: 125,
       left: 960,
@@ -108,7 +106,7 @@ module.exports = {
     {
       id: '7',
       label: 'Amount',
-      className: 'purple',
+      className: 'icon-background',
       iconType: 'icon-wo',
       top: 225,
       left: 800,
@@ -122,7 +120,7 @@ module.exports = {
     {
       id: '8',
       label: 'Date',
-      className: 'purple',
+      className: 'icon-background',
       iconType: 'icon-wo',
       top: 225,
       left: 1120,
@@ -136,7 +134,7 @@ module.exports = {
     {
       id: '9',
       label: 'Salesman',
-      className: 'simple-blue',
+      className: 'icon-background',
       iconType: 'icon-guanlian',
       top: 275,
       left: 520,
@@ -154,7 +152,7 @@ module.exports = {
     {
       id: '10',
       label: 'User',
-      className: 'green',
+      className: 'icon-background',
       iconType: 'icon-guanlian',
       top: 425,
       left: 520,
@@ -172,7 +170,7 @@ module.exports = {
     {
       id: '11',
       label: 'Company',
-      className: 'simple-blue',
+      className: 'icon-background',
       iconType: 'icon-guanlian',
       top: 575,
       left: 520,
@@ -190,7 +188,7 @@ module.exports = {
     {
       id: '12',
       label: 'Plate',
-      className: 'purple',
+      className: 'icon-background',
       iconType: 'icon-wo',
       top: 725,
       left: 520,

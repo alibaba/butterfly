@@ -1,24 +1,23 @@
-'use strict';
+import $ from 'jquery';
+import {Node} from 'butterfly-dag';
 
-// const Node = require('../../../index.js').Node;
-import { Node } from 'butterfly-dag';
-const $ = require('jquery');
-require('./base_node.less');
+import './base_node.less';
 
 class BaseNode extends Node {
   constructor(opts) {
     super(opts);
     this.options = opts;
   }
+
   draw = (opts) => {
     let container = $('<div class="relation-node"></div>')
       .css('top', opts.top)
       .css('left', opts.left)
       .attr('id', opts.id)
-      .css('background-color', opts.options.color);
+      .addClass(opts.options.className);
 
     let logoContainer = $(`<div class="logo-container">${opts.options.name}</div>`);
-    logoContainer.css('background-color', opts.options.color);
+    logoContainer.addClass(opts.options.className);
 
     container.append(logoContainer);
 
@@ -26,4 +25,4 @@ class BaseNode extends Node {
   }
 }
 
-module.exports = BaseNode;
+export default BaseNode;
