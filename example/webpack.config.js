@@ -48,6 +48,11 @@ const generate = async () => {
     path.join(__dirname, 'index.html'),
     path.join(distdir, 'index.html')
   );
+
+  await fs.copy(
+    path.join(__dirname, 'static'),
+    path.join(distdir, 'static')
+  );
 };
 
 if (process.env.NODE_ENV === 'production') {

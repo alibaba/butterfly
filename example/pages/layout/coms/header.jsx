@@ -5,6 +5,8 @@ import classnames from 'classnames';
 import {Menu, Icon, Dropdown} from 'antd';
 import {Link, withRouter} from 'react-router-dom';
 
+import LOGO from '../../../static/logo.png';
+
 import './index.less';
 
 class Header extends React.Component {
@@ -78,6 +80,7 @@ class Header extends React.Component {
         className="home-header menu-light"
       >
         <div className="home-header-wrap" >
+          <img className="logo" src={LOGO} title="data-design design for data" />
           <div className="home-lego-title" >Butterfly</div>
         </div>
         <div className="home-header-wrap right-menu" >
