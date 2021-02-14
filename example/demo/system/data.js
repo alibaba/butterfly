@@ -1,8 +1,8 @@
 'use strict';
 
 const BaseGroup = require('./group');
-const BaseNode = require('./node');
-const BaseEdge = require('./edge');
+import BaseNode from './node';
+import BaseEdge from './edge';
 const BaseEndpoint = require('./endpoint');
 
 module.exports = {

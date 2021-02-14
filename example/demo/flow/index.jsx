@@ -1,16 +1,18 @@
 import React from 'react';
-import './index.less';
+import ReactDOM from 'react-dom';
+import {Canvas} from 'butterfly-dag';
+
 import {mockData} from './data';
 
-import 'butterfly-dag/dist/index.css'
-// const Canvas = require('../../../index.js').Canvas;
-import { Canvas } from 'butterfly-dag';
+import './index.less';
+import 'butterfly-dag/dist/index.css';
 
 class Flow extends React.Component {
   constructor() {
     super();
     this.canvas = null;
   }
+
   componentDidMount() {
     // css里面的类名限制太死了
     let root = document.getElementById('dag-canvas');
@@ -28,8 +30,8 @@ class Flow extends React.Component {
       }
     });
     this.canvas.draw(mockData);
-    // this.canvas.zoom(0.5);
   }
+
   render() {
     return (
       <div className='flow-page'>
@@ -40,4 +42,4 @@ class Flow extends React.Component {
   }
 }
 
-export default Flow;
+ReactDOM.render(<Flow />, document.getElementById('root'));

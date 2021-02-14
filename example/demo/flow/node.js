@@ -1,8 +1,6 @@
-'use strict';
-
-// const Node = require('../../../index.js').Node;
-import {Node} from 'butterfly-dag';
 import $ from 'jquery';
+import {Node} from 'butterfly-dag';
+
 import './node.less';
 
 class BaseNode extends Node {
@@ -10,6 +8,7 @@ class BaseNode extends Node {
     super(opts);
     this.options = opts;
   }
+
   draw = (opts) => {
     const container = $('<div class="flow-base-node"></div>')
       .css('top', opts.top)

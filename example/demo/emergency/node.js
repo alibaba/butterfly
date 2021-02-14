@@ -1,13 +1,7 @@
-'use strict';
-
-// const Node = require('../../../index.js').Node;
-import {Node} from 'butterfly-dag';
 import $ from 'jquery';
+import {Node} from 'butterfly-dag';
 
 class BaseNode extends Node {
-  constructor(opts) {
-    super(opts);
-  }
   mounted() {
     // 假如菱形的话定制锚点，可指定任意的dom为endopoint
     // console.log(this)
@@ -41,6 +35,7 @@ class BaseNode extends Node {
       });
     }
   }
+
   draw = (data) => {
     let container = $('<div class="emergency-base-node"></div>')
       .css('top', data.top)

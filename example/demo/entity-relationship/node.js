@@ -1,13 +1,7 @@
-'use strict';
-
-// const Node = require('../../../index.js').Node;
-import {Node} from 'butterfly-dag';
 import $ from 'jquery';
+import {Node} from 'butterfly-dag';
 
 class BaseNode extends Node {
-  constructor(opts) {
-    super(opts);
-  }
   draw = (data) => {
     let container = $('<div class="entity-base-node"></div>')
       .css('top', data.top)
