@@ -4,6 +4,8 @@ import request from 'axios';
 import PropTypes from 'prop-types';
 import {withRouter} from 'react-router-dom';
 
+const prefix = window.CONFIG.prefix;
+
 const Gallery = (props) => {
   const init = async () => {
     const result = await request.get('/list.json');
@@ -11,7 +13,7 @@ const Gallery = (props) => {
 
     const demo = list[0];
 
-    props.history.push(`/demo/${demo.dir}`);
+    props.history.push(`${prefix}demo/${demo.dir}`);
   };
 
   useEffect(() => {

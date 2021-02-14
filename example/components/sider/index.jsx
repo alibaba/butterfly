@@ -8,6 +8,8 @@ import {Tooltip, notification, Spin, Icon} from 'antd';
 
 import './index.less';
 
+const prefix = window.CONFIG.prefix;
+
 const tips = (file) => {
   const lng = i18next.language;
   const isZh = lng === 'zh';
@@ -70,7 +72,7 @@ const Sider = (props) => {
                   title={tips(file)}
                   placement="right"
                 >
-                  <Link to={`/demo/${file.dir}`}><img src={file.cover} /></Link>
+                  <Link to={`${prefix}demo/${file.dir}`}><img src={file.cover} /></Link>
                 </Tooltip>
               </div>
             );

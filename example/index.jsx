@@ -17,6 +17,13 @@ const Home = dynamic(() => import('./pages/home'));
 const Gallery = dynamic(() => import('./pages/gallery'));
 const CodeBox = dynamic(() => import('./pages/code-box'));
 
+window.CONFIG = {
+  // eslint-disable-next-line no-undef
+  prefix: PREFIX
+};
+
+const prefix = window.CONFIG.prefix;
+
 const main = async () => {
   try {
     await i18next.use(LanguageDetector).init({
@@ -39,10 +46,10 @@ const main = async () => {
     <Router history={createBrowserHistory()}>
       <Layout>
         <Switch>
-          <Route exact path="/home" component={Home} />
-          <Route exact path="/demo/:demo" component={CodeBox} />
-          <Route exact path="/demo" component={Gallery} />
-          <Redirect from="/" to="/home" />
+          <Route exact path={`${prefix}home`} component={Home} />
+          <Route exact path={`${prefix}demo/:demo`} component={CodeBox} />
+          <Route exact path={`${prefix}demo`} component={Gallery} />
+          <Redirect from="/" to={`${prefix}home`} />
         </Switch>
       </Layout>
     </Router>
