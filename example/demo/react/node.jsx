@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 
 import './index.less';
 
-
-
 const Node = (props) => {
   const {size} = props;
 

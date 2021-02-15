@@ -1,8 +1,6 @@
-'use strict';
-
 import Node from './node.js';
 
-module.exports = {
+export default {
   nodes: {
     isRoot: true,
     id: 'Root',

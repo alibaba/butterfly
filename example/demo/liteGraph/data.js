@@ -1,7 +1,5 @@
-'use strict';
-
 import Edge from './edge';
-const BaseEndpoint = require('./endpoint');
+import BaseEndpoint from './endpoint';
 import Node from './node';
 import BaseGroup from './group';
 

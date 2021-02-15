@@ -1,10 +1,7 @@
-'use strict';
+import BaseNode from './node';
+import AlisBaseNode from './alis-node';
 
-const BaseNode = require('./node.js');
-const AlisBaseNode = require('./alis-node.js');
-import $ from 'jquery';
-
-module.exports = {
+export default {
   nodes: [
     {
       id: '0',

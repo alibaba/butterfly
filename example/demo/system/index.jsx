@@ -1,12 +1,9 @@
-'use strict';
 import React, {Component} from 'react';
-
-import './index.less';
-import 'butterfly-dag/dist/index.css'
-
-// const Canvas = require('../../../index.js').Canvas;
-import { Canvas } from 'butterfly-dag';
+import ReactDOM from 'react-dom';
+import {Canvas} from 'butterfly-dag';
 import mockData from './data';
+import './index.less';
+import 'butterfly-dag/dist/index.css';
 
 class System extends Component {
   constructor() {
@@ -42,4 +39,5 @@ class System extends Component {
   }
 }
 
-module.exports = System;
+ReactDOM.render(<System />, document.getElementById('root'));
+

@@ -1,7 +1,5 @@
 
-'use strict';
-
-import node from './base_node.jsx';
+import Node from './base_node.js';
 import $ from 'jquery';
 
 class Email extends Node {
@@ -13,4 +11,4 @@ class Email extends Node {
   }
 }
 
-module.exports = Email;
+export default Email;

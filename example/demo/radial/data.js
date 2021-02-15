@@ -1,6 +1,5 @@
-'use strict';
-const Node = require('./node.jsx');
-export const data = {
+import Node from './node';
+export default {
   nodes: [{
     id: '0',
     label: '0',

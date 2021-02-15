@@ -1,10 +1,6 @@
-'use strict';
-
-// const Node = require('../../../index.js').Node;
 import {Node} from 'butterfly-dag';
 import $ from 'jquery';
-import {uniqueId} from 'lodash';
-import '../../static/iconfont.css';
+// import '../../static/iconfont.css';
 
 let getAttrObj = (namedNodeMap) => {
   return Array.prototype.reduce.call(namedNodeMap, function (pre, item, index, arr) {

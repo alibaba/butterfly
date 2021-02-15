@@ -1,9 +1,6 @@
-'use strict';
-
-// const Group = require('../../../index.js').Group;
 import {Group} from 'butterfly-dag';
 import $ from 'jquery';
-const _ = require('lodash');
+import _ from 'lodash';
 
 class BaseGroup extends Group {
   draw(obj) {
@@ -46,4 +43,4 @@ class BaseGroup extends Group {
   //   return dom;
   // }
 }
-module.exports = BaseGroup;
+export default BaseGroup;

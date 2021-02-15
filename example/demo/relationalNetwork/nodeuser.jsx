@@ -1,6 +1,4 @@
-'use strict';
-
-import node from './base_node.jsx';
+import Node from './base_node.js';
 import $ from 'jquery';
 
 class People extends Node {
@@ -12,4 +10,4 @@ class People extends Node {
   }
 }
 
-module.exports = People;
+export default People;

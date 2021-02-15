@@ -1,8 +1,4 @@
-'use strict';
-
-// const Endpoint = require('../../../index.js').Endpoint;
 import {Endpoint, Tips} from 'butterfly-dag';
-// const Tips = require('../../../index.js').Tips;
 import $ from 'jquery';
 
 class BaseEndpoint extends Endpoint {
@@ -21,4 +17,4 @@ class BaseEndpoint extends Endpoint {
     return point;
   }
 }
-module.exports = BaseEndpoint;
+export default BaseEndpoint;

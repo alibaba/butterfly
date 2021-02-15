@@ -1,11 +1,9 @@
-'use strict';
-
-const BaseGroup = require('./group');
+import BaseGroup from './group';
 import BaseNode from './node';
 import BaseEdge from './edge';
-const BaseEndpoint = require('./endpoint');
+import BaseEndpoint from './endpoint';
 
-module.exports = {
+export default {
   nodes: [{
     id: '0',
     top: 160,

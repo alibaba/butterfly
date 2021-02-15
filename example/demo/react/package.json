@@ -1,0 +1,15 @@
+{
+  "name": "react",
+  "cn_name": "分析模板",
+  "description": "英文描述",
+  "cn_description": "中文描述",
+  "dependencies": {
+    "butterfly-dag": "*",
+    "butterfly-react": "*",
+    "prop-types": "*",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "jquery": "*",
+    "lodash": "*"
+  }
+}

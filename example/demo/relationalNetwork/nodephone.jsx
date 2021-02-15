@@ -1,9 +1,8 @@
-'use strict';
 
-import node from './base_node.jsx';
+import Node from './base_node.js';
 import $ from 'jquery';
 
-class Train extends Node {
+class Phone extends Node {
   constructor(...args) {
     super(...args);
   }
@@ -12,4 +11,4 @@ class Train extends Node {
   }
 }
 
-module.exports = Train;
+export default Phone;

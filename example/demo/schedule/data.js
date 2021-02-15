@@ -1,9 +1,7 @@
-'use strict';
-
-import Node from './node.js';
+import Node from './node';
 import Edge from './edge';
 
-module.exports = {
+export default {
   nodes: [
     {
       id: '1',
