@@ -6,7 +6,7 @@ import mockData from './data.js';
 import './index.less';
 import 'butterfly-dag/dist/index.css';
 
-class RelationalNetwork extends Component {
+class RelationalBook extends Component {
   constructor() {
     super();
     this.canvas = null;
@@ -41,4 +41,4 @@ class RelationalNetwork extends Component {
   }
 }
 
-ReactDOM.render(<RelationalNetwork />, document.getElementById('root'));
+ReactDOM.render(<RelationalBook />, document.getElementById('root'));

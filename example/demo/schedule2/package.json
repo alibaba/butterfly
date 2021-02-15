@@ -1,8 +1,8 @@
 {
   "name": "schedule2",
-  "cn_name": "分析模板",
-  "description": "英文描述",
-  "cn_description": "中文描述",
+  "cn_name": "清单图2",
+  "description": "yet another dag to show to how to make a schedule",
+  "cn_description": "另外一个清单图",
   "dependencies": {
     "butterfly-dag": "*",
     "react": "^16.0.0",

@@ -1,8 +1,8 @@
 {
-  "name": "relational_network",
-  "cn_name": "分析模板",
-  "description": "英文描述",
-  "cn_description": "中文描述",
+  "name": "relational-network",
+  "cn_name": "人的网络关系图",
+  "description": "a dag to show to how to make a relational diagram of people",
+  "cn_description": "一个人的网络关系图",
   "dependencies": {
     "butterfly-dag": "*",
     "react": "^16.0.0",

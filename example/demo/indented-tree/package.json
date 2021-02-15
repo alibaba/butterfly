@@ -1,8 +1,8 @@
 {
   "name": "indented-tree",
-  "cn_name": "分析模板",
-  "description": "英文描述",
-  "cn_description": "中文描述",
+  "cn_name": "缩进式树",
+  "description": "a dag to show to how to make a indented-tree",
+  "cn_description": "一个缩进式的树",
   "dependencies": {
     "butterfly-dag": "*",
     "react": "^16.0.0",

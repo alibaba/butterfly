@@ -45,9 +45,6 @@ class MindMap extends Component {
       this.canvas.focusCenterWithAnimate();
     }
     );
-    this.canvas.on('events', (data) => {
-      console.log(data, this.canvas);
-    });
   }
   render() {
     return (

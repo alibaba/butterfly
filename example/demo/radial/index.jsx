@@ -62,9 +62,6 @@ class Radial extends Component {
       }
     });
     this.canvas.draw(mockData);
-    this.canvas.on('events', (data) => {
-      console.log(data);
-    });
   }
   render() {
     return (

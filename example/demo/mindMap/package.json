@@ -1,8 +1,8 @@
 {
-  "name": "mind_map",
-  "cn_name": "分析模板",
-  "description": "英文描述",
-  "cn_description": "中文描述",
+  "name": "mind-map",
+  "cn_name": "脑图",
+  "description": "a dag to show to how to make a mind map",
+  "cn_description": "一个脑图（思维导图）",
   "dependencies": {
     "butterfly-dag": "*",
     "react": "^16.0.0",

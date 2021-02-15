@@ -1,8 +1,8 @@
 {
   "name": "lite_graph",
-  "cn_name": "分析模板",
-  "description": "英文描述",
-  "cn_description": "中文描述",
+  "cn_name": "网格背景模板",
+  "description": "？？TODO: ADD？？",
+  "cn_description": "？？待补充？？",
   "dependencies": {
     "butterfly-dag": "*",
     "react": "^16.0.0",

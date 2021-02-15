@@ -1,8 +1,8 @@
 {
   "name": "react",
-  "cn_name": "分析模板",
-  "description": "英文描述",
-  "cn_description": "中文描述",
+  "cn_name": "react版本模板",
+  "description": "a demo of butterfly-react",
+  "cn_description": "react版本使用样例",
   "dependencies": {
     "butterfly-dag": "*",
     "butterfly-react": "*",

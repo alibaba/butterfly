@@ -1,8 +1,8 @@
 {
-  "name": "rule_tree",
-  "cn_name": "分析模板",
-  "description": "英文描述",
-  "cn_description": "中文描述",
+  "name": "rule-tree",
+  "cn_name": "规则树",
+  "description": "a dag to show to how to make a rule-tree",
+  "cn_description": "一个规则树",
   "dependencies": {
     "butterfly-dag": "*",
     "react": "^16.0.0",

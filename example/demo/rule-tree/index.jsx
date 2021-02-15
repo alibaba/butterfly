@@ -1,12 +1,13 @@
 'use strict';
 import React, {Component} from 'react';
 import ReactDom from 'react-dom';
-import Custom from './custom';
-
-import './index.less';
+import Custom from './custom.jsx';
 import Node from './node.js';
 import $ from 'jquery';
 import {TreeCanvas} from 'butterfly-dag';
+
+import './index.less';
+
 const mockData = {
   nodes: {
     id: '0',

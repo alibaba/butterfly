@@ -46,7 +46,6 @@ class IndentedTree extends Component {
 
     let _tmpNum = 100;
     this.canvas.on('events', (data) => {
-      console.log(this.canvas);
       if (data.type === 'custom:addSubNode') {
         // addNode，removeNode可以还需要重写下
         this.canvas.addNode({
