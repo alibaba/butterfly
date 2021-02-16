@@ -4,6 +4,7 @@ import {TreeCanvas} from 'butterfly-dag';
 import mockData from './data';
 import Node from './node';
 
+import 'butterfly-dag/dist/index.css';
 import './index.less';
 
 class IndentedTree extends Component {

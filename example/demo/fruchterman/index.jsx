@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import {Canvas} from 'butterfly-dag';
 import mockData from './data';
 
-import './index.less';
 import 'butterfly-dag/dist/index.css';
+import './index.less';
 
 class Fruchterman extends Component {
   componentDidMount() {
