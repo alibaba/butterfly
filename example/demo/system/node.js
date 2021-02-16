@@ -1,7 +1,3 @@
-'use strict';
-
-// const Node = require('../../../index.js').Node;
-// const Tips = require('../../../index.js').Tips;
 import {Node, Tips} from 'butterfly-dag';
 import $ from 'jquery';
 

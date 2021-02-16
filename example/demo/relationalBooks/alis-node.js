@@ -1,6 +1,3 @@
-'use strict';
-
-// const Node = require('../../../index.js').Node;
 import {Node} from 'butterfly-dag';
 import $ from 'jquery';
 
@@ -76,4 +73,4 @@ class AlisBaseNode extends Node {
     });
   }
 }
-module.exports = AlisBaseNode;
+export default AlisBaseNode;

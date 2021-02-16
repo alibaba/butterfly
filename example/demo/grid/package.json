@@ -1,0 +1,13 @@
+{
+  "name": "grid",
+  "cn_name": "grid布局",
+  "description": "a dag to display Layout of grid",
+  "cn_description": "用于展示grid布局的DAG图",
+  "dependencies": {
+    "butterfly-dag": "*",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "jquery": "*",
+    "lodash": "*"
+  }
+}

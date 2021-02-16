@@ -1,0 +1,13 @@
+{
+  "name": "force",
+  "cn_name": "forceLayout布局",
+  "description": "a dag to display forceLayout",
+  "cn_description": "用于展示forceLayout布局的DAG图",
+  "dependencies": {
+    "butterfly-dag": "*",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "jquery": "*",
+    "lodash": "*"
+  }
+}

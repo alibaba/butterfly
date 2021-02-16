@@ -1,16 +1,12 @@
-'use strict';
 import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
+import {Canvas} from 'butterfly-dag';
+import mockData from './data';
 
-// const Canvas = require('../../../index.js').Canvas;
-import { Canvas } from 'butterfly-dag';
-const {data} = require('./data');
+import 'butterfly-dag/dist/index.css';
 import './index.less';
-import 'butterfly-dag/dist/index.css'
 
-class Grid extends Component {
-  constructor() {
-    super();
-  }
+class Fruchterman extends Component {
   componentDidMount() {
     let root = document.getElementById('dag-canvas');
     this.canvas = new Canvas({
@@ -23,28 +19,28 @@ class Grid extends Component {
       layout: {
         type: 'fruchterman',
         options: {
-            // 布局画布总宽度
-            width: 500,
-            // 布局画布总长度
-            height: 500,
-            /** 停止迭代的最大迭代数 */
-            // maxIteration: 1000,
-            /** 布局中心 */
-            center: [250, 250],
-            /** 重力大小，影响图的紧凑程度 */
-            gravity: 5,
-            /** 速度 */
-            speed: 5,
-            /** 是否产生聚类力 */
-            clustering: true,
-            /** 聚类力大小 */
-            clusterGravity: 8,
-            link: {
-                // 线条的距离
-                distance: 50,
-                // 线条的粗细
-                strength: 1
-            },
+          // 布局画布总宽度
+          width: 500,
+          // 布局画布总长度
+          height: 500,
+          /** 停止迭代的最大迭代数 */
+          // maxIteration: 1000,
+          /** 布局中心 */
+          center: [250, 250],
+          /** 重力大小，影响图的紧凑程度 */
+          gravity: 5,
+          /** 速度 */
+          speed: 5,
+          /** 是否产生聚类力 */
+          clustering: true,
+          /** 聚类力大小 */
+          clusterGravity: 8,
+          link: {
+            // 线条的距离
+            distance: 50,
+            // 线条的粗细
+            strength: 1
+          },
         },
       },
       theme: {
@@ -55,15 +51,7 @@ class Grid extends Component {
         }
       }
     });
-    // setTimeout(() => {
-    //   this.canvas.draw(mockData);
-    // }, 500);
-    // console.log(mockData);
-    this.canvas.draw(data);
-
-    this.canvas.on('events', (data) => {
-      console.log(data);
-    });
+    this.canvas.draw(mockData);
   }
   render() {
     return (
@@ -75,4 +63,4 @@ class Grid extends Component {
   }
 }
 
-module.exports = Grid;
+ReactDOM.render(<Fruchterman />, document.getElementById('root'));

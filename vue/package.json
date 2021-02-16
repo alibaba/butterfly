@@ -1,6 +1,6 @@
 {
   "name": "butterfly-vue",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "vue version for butterfly",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -23,7 +23,7 @@
     "vue": "^2.6.12"
   },
   "dependencies": {
-    "butterfly-dag": "^3.1.0",
+    "butterfly-dag": "^3.1.2",
     "lodash": "^4.17.20",
     "vue": "^2.6.12"
   },

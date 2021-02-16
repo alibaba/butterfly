@@ -1,12 +1,12 @@
-'use strict';
 import React, {Component} from 'react';
-// const Canvas = require('../../../index.js').Canvas;
-import { Canvas } from 'butterfly-dag';
+import ReactDOM from 'react-dom';
+import {Canvas} from 'butterfly-dag';
 import mockData from './data.js';
-const RelationEdge = require('./edge_relation.jsx');
+import RelationEdge from './edgerelation.js';
 
 import './index.less';
-import 'butterfly-dag/dist/index.css'
+import './newIconfont.css';
+import 'butterfly-dag/dist/index.css';
 
 class RelationalNetwork extends Component {
   constructor() {
@@ -46,4 +46,4 @@ class RelationalNetwork extends Component {
   }
 }
 
-module.exports = RelationalNetwork;
+ReactDOM.render(<RelationalNetwork />, document.getElementById('root'));

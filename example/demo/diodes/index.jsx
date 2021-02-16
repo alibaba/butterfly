@@ -4,6 +4,7 @@ import {Canvas} from 'butterfly-dag';
 
 import mockData from './data';
 
+import 'butterfly-dag/dist/index.css';
 import './index.less';
 
 class Diodes extends Component {

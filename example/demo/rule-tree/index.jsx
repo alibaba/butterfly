@@ -1,13 +1,15 @@
-'use strict';
 import React, {Component} from 'react';
 import ReactDom from 'react-dom';
-import Custom from './custom';
-
-import './index.less';
+import Custom from './custom.js';
 import Node from './node.js';
 import $ from 'jquery';
-// const Canvas = require('../../../index.js').TreeCanvas;
-import { TreeCanvas } from 'butterfly-dag';
+import {TreeCanvas} from 'butterfly-dag';
+
+import './index.less';
+import 'antd/dist/antd.css';
+import 'butterfly-dag/dist/index.css';
+
+
 const mockData = {
   nodes: {
     id: '0',
@@ -217,17 +219,17 @@ const nodesRender = (nodes) => (cb) => {
   const loop = (list) => {
     list.forEach(node => {
       nodelist.push(node);
-      if(node?.children?.length > 0) {
+      if (node?.children?.length > 0) {
         loop(node.children);
       }
-    })
+    });
   };
-  if(cb && typeof cb === 'function') {
-    loop(nodes && [nodes] || []); 
+  if (cb && typeof cb === 'function') {
+    loop(nodes && [nodes] || []);
     return nodelist.map(cb);
   }
-}
-class compactBoxTree extends Component {
+};
+class CompactBoxTree extends Component {
   constructor() {
     super();
   }
@@ -242,7 +244,7 @@ class compactBoxTree extends Component {
       disLinkable: true, // 可删除连线
       linkable: true,    // 可连线
       draggable: false,   // 可拖动
-      zoomable: false,    // 可放大
+      zoomable: true,    // 可放大
       moveable: true,    // 可平移
       theme: {
         edge: {
@@ -283,7 +285,7 @@ class compactBoxTree extends Component {
       }, () => {
         this.canvas.focusCenterWithAnimate();
         this.canvas.redraw();
-      })
+      });
     });
     let _tmpNum = 100;
     this.canvas.on('events', (data) => {
@@ -339,4 +341,5 @@ class compactBoxTree extends Component {
   }
 }
 
-module.exports = compactBoxTree;
+ReactDom.render(<CompactBoxTree />, document.getElementById('root'));
+

@@ -1,14 +1,12 @@
-'use strict';
 import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
 import mockData from './data.js';
-// const Canvas = require('../../../index.js').TreeCanvas;
-import { TreeCanvas } from 'butterfly-dag';
+import {TreeCanvas} from 'butterfly-dag';
+
+import 'butterfly-dag/dist/index.css';
 import './index.less';
 
 class MindMap extends Component {
-  constructor() {
-    super();
-  }
   componentDidMount() {
     let root = document.getElementById('dag-canvas');
     this.canvas = new TreeCanvas({
@@ -49,9 +47,6 @@ class MindMap extends Component {
       this.canvas.focusCenterWithAnimate();
     }
     );
-    this.canvas.on('events', (data) => {
-      console.log(data);
-    });
   }
   render() {
     return (
@@ -63,4 +58,5 @@ class MindMap extends Component {
   }
 }
 
-module.exports = MindMap;
+ReactDOM.render(<MindMap />, document.getElementById('root'));
+
