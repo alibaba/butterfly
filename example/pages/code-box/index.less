@@ -1,11 +1,14 @@
 .code-box {
-
  .editor {
    float: right;
    width: calc(100% - 120px);
    display: flex;
    height: calc(100vh - 60px);
    overflow: hidden;
+
+   &.fold {
+    width: calc(100% - 1px);
+   }
 
    .code-editor {
      width: 50%;

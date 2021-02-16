@@ -12,7 +12,7 @@ const prefix = window.CONFIG.prefix;
 
 const tips = (file) => {
   const lng = i18next.language;
-  const isZh = lng === 'zh';
+  const isZh = lng !== 'en';
 
   return (
     <div>
@@ -27,11 +27,14 @@ const tips = (file) => {
   );
 };
 
+const noop = () => null;
 
 const Sider = (props) => {
   const [isFold, setIsFold] = useState(false);
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const {onFold = noop} = props;
+
   // eslint-disable-next-line
   const active = props?.match?.params?.demo;
 
@@ -83,6 +86,7 @@ const Sider = (props) => {
         className={classnames('folder-op', {active: isFold})}
         onClick={() => {
           setIsFold(!isFold);
+          onFold(!isFold);
         }}
       >
         <Icon type={isFold ? 'right' : 'left'} />
@@ -97,7 +101,8 @@ Sider.propTypes = {
     params: PropTypes.shape({
       demo: PropTypes.string
     })
-  })
+  }),
+  onFold: PropTypes.func
 };
 
 export default withRouter(Sider);

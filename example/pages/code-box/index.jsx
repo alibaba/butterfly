@@ -4,6 +4,7 @@ import request from 'axios';
 import i18next from 'i18next';
 import sdk from '@stackblitz/sdk';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import {withRouter} from 'react-router-dom';
 
 import html from './coms/html';
@@ -17,6 +18,7 @@ window.React = React;
 const CodeBox = (props) => {
   const [files, setFiles] = useState([]);
   const [deps, setDeps] = useState({});
+  const [isFold, setIsFold] = useState(false);
   const demo = _.get(props, 'match.params.demo');
 
   const getDemoFiles = async (demo) => {
@@ -80,10 +82,25 @@ const CodeBox = (props) => {
     );
   }, [files]);
 
+  const onFold = (isFold) => {
+    setIsFold(isFold);
+  };
+
   return (
     <div className="code-box">
-      <Sider />
-      <div className="editor">
+      <Sider
+        onFold={onFold}
+      />
+      <div
+        className={
+          classnames(
+            'editor',
+            {
+              fold: isFold
+            }
+          )
+        }
+      >
         <Editor
           demo={demo}
           codes={files}
