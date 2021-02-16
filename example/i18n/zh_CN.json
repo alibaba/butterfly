@@ -8,6 +8,8 @@
   "codebox_editor_edit": "在github上编辑",
   "codebox_editor_play": "执行（cmd+s）",
   "codebox_editor_export": "导出",
+  "codebox_open": "展开",
+  "codebox_close": "收起",
   "home_out_of_the_box": "开箱即用",
   "home_box_desc": "丰富DEMO，开箱即用，支持demo调试，导出即用",
   "home_manage_canvas": "全方位管理画布",

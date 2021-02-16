@@ -13,8 +13,10 @@ import 'ace-builds/src-noconflict/theme-github';
 
 import './editor.less';
 
+const noop = () => null;
+
 const Editor = (props) => {
-  const {codes = [], demo = ''} = props;
+  const {codes = [], demo = '', onFold = noop} = props;
   const [editorCodes, setEditorCodes] = useState([]);
   const [active, setActive] = useState(null);
   const [exporting, setExporting] = useState(false);
@@ -51,6 +53,9 @@ const Editor = (props) => {
           `https://github.com/alibaba/butterfly/tree/master/example/demo/${demo}/${active}`,
           '_blank'
         );
+        break;
+      case 'fold':
+        onFold();
         break;
     }
   }, [editorCodes]);
@@ -112,6 +117,11 @@ const Editor = (props) => {
       name: i18next.t('codebox_editor_export'),
       action: 'export',
       icon: <Icon type={exporting ? 'loading' : 'cloud-download'} />
+    },
+    {
+      name: i18next.t('codebox_close'),
+      action: 'fold',
+      icon: <Icon type="fullscreen-exit" />
     }
   ];
 
@@ -188,7 +198,8 @@ Editor.propTypes = {
   onExportCode: PropTypes.func,
   codes: PropTypes.object,
   onCodeChange: PropTypes.object,
-  demo: PropTypes.string
+  demo: PropTypes.string,
+  onFold: PropTypes.func
 };
 
 export default Editor;

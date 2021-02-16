@@ -4,6 +4,7 @@ import request from 'axios';
 import i18next from 'i18next';
 import sdk from '@stackblitz/sdk';
 import PropTypes from 'prop-types';
+import {Icon, Tooltip} from 'antd';
 import classnames from 'classnames';
 import {withRouter} from 'react-router-dom';
 
@@ -13,12 +14,11 @@ import Sider from '../../components/sider';
 
 import './index.less';
 
-window.React = React;
-
 const CodeBox = (props) => {
   const [files, setFiles] = useState([]);
   const [deps, setDeps] = useState({});
   const [isFold, setIsFold] = useState(false);
+  const [isEditorFold, setIsEditorFold] = useState(false);
   const demo = _.get(props, 'match.params.demo');
 
   const getDemoFiles = async (demo) => {
@@ -86,6 +86,10 @@ const CodeBox = (props) => {
     setIsFold(isFold);
   };
 
+  const onEditorFold = () => {
+    setIsEditorFold(!isEditorFold);
+  };
+
   return (
     <div className="code-box">
       <Sider
@@ -96,7 +100,8 @@ const CodeBox = (props) => {
           classnames(
             'editor',
             {
-              fold: isFold
+              fold: isFold,
+              'editor-fold': isEditorFold
             }
           )
         }
@@ -107,7 +112,22 @@ const CodeBox = (props) => {
           onCodeChange={codes => {
             setFiles([...codes]);
           }}
+          onFold={onEditorFold}
         />
+        {
+          isEditorFold && (
+            <div
+              className="codebox_open"
+              onClick={() => onEditorFold()}
+            >
+              <Tooltip
+                title={i18next.t('codebox_open')}
+              >
+                <Icon type="fullscreen" />
+              </Tooltip>
+            </div>
+          )
+        }
         <div className="demo">
           <div id="demo-div">
             {i18next.t('codebox_loading')}

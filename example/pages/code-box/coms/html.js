@@ -4,6 +4,7 @@ export default `
  <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1682597_i8e4t4hezrp.css">
   <title>Demo</title>
  </head>
  <body>
