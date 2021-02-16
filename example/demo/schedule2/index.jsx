@@ -4,6 +4,7 @@ import {Canvas} from 'butterfly-dag';
 import mockData from './data.js';
 
 import './index.less';
+import './iconfont.css';
 import 'butterfly-dag/dist/index.css';
 
 class Scene4New extends Component {

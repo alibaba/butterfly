@@ -2,9 +2,10 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import {Canvas} from 'butterfly-dag';
 import mockData from './data.js';
-import RelationEdge from './edgerelation.jsx';
+import RelationEdge from './edgerelation.js';
 
 import './index.less';
+import './newIconfont.css';
 import 'butterfly-dag/dist/index.css';
 
 class RelationalNetwork extends Component {

@@ -5,6 +5,7 @@ import mockData from './data';
 import Node from './node';
 
 import 'butterfly-dag/dist/index.css';
+import './iconfont.css';
 import './index.less';
 
 class IndentedTree extends Component {
@@ -74,7 +75,12 @@ class IndentedTree extends Component {
           targetNode: (_tmpNum++).toString(),
           type: 'endpoint'
         });
-        this.canvas.redraw();
+        // TODO :问题在这里
+        try {
+          this.canvas.redraw();
+        } catch (e) {
+          console.log(e);
+        }
       }
     });
   }

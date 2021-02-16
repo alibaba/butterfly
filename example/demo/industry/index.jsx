@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom';
 import IndustryCanvas from './canvas';
 import mockData from './data.js';
 
-import './index.less';
 import 'butterfly-dag/dist/index.css';
+import './index.less';
+import './iconfont.css';
 
 class Industry extends Component {
   componentDidMount() {

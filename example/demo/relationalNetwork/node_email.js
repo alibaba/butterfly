@@ -1,8 +1,7 @@
-
 import Node from './base_node.js';
 import $ from 'jquery';
 
-class Phone extends Node {
+class Email extends Node {
   constructor(...args) {
     super(...args);
   }
@@ -11,4 +10,4 @@ class Phone extends Node {
   }
 }
 
-export default Phone;
+export default Email;

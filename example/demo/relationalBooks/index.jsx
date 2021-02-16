@@ -4,6 +4,7 @@ import Canvas from './canvas';
 import mockData from './data.js';
 
 import './index.less';
+import './iconfont.css';
 import 'butterfly-dag/dist/index.css';
 
 class RelationalBook extends Component {

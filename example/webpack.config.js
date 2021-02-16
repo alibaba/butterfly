@@ -154,7 +154,7 @@ module.exports = {
     historyApiFallback: true, // 不跳转
     inline: true, // 实时刷新
     index: 'index.html',
-    port: 8080,
+    port: 8085,
     open: true,
     before(app) {
       devServer(app);

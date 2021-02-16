@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import mockData from './data.js';
 import {TreeCanvas} from 'butterfly-dag';
+
+import 'butterfly-dag/dist/index.css';
 import './index.less';
 
 class MindMap extends Component {

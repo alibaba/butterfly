@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import {Canvas} from 'butterfly-dag';
 import mockData from './data.js';
 import 'butterfly-dag/dist/index.css';
+import './iconfont.css';
 import './index.less';
 
 class Scene4New extends Component {

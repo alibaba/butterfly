@@ -1,7 +1,7 @@
-import User from './nodeuser.jsx';
-import Train from './nodetrain.jsx';
-import Phone from './nodephone.jsx';
-import Email from './nodeemail.jsx';
+import User from './node_user.js';
+import Train from './node_train.js';
+import Phone from './node_phone.js';
+import Email from './node_email.js';
 
 export default {
   nodes: [{

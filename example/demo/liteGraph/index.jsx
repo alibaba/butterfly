@@ -1,8 +1,11 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import mockData from './data.js';
-import './index.less';
 import {Canvas} from 'butterfly-dag';
+import mockData from './data.js';
+
+import 'butterfly-dag/dist/index.css';
+import './index.less';
+
 class LiteGraph extends Component {
   constructor() {
     super();
