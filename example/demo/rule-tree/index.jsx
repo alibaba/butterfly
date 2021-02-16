@@ -1,12 +1,14 @@
-'use strict';
 import React, {Component} from 'react';
 import ReactDom from 'react-dom';
-import Custom from './custom.jsx';
+import Custom from './custom.js';
 import Node from './node.js';
 import $ from 'jquery';
 import {TreeCanvas} from 'butterfly-dag';
 
 import './index.less';
+import 'antd/dist/antd.css';
+import 'butterfly-dag/dist/index.css';
+
 
 const mockData = {
   nodes: {
@@ -242,7 +244,7 @@ class CompactBoxTree extends Component {
       disLinkable: true, // 可删除连线
       linkable: true,    // 可连线
       draggable: false,   // 可拖动
-      zoomable: false,    // 可放大
+      zoomable: true,    // 可放大
       moveable: true,    // 可平移
       theme: {
         edge: {
