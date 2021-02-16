@@ -63,9 +63,12 @@ class Header extends React.Component {
   }
 
   getKey = () => {
-    const pathname = this.props.location.pathname;
+    const prefix = window.CONFIG.prefix;
+    let pathname = this.props.location.pathname;
+    // ${prefix}demo -> demo
+    pathname = pathname.replace(prefix, '');
 
-    const [, key] = pathname.split('/');
+    const [key] = pathname.split('/');
 
     return key;
   }
@@ -73,7 +76,7 @@ class Header extends React.Component {
 
   render() {
     const key = this.getKey();
-
+    const prefix = window.CONFIG.prefix;
 
     return (
       <div
@@ -137,7 +140,7 @@ class Header extends React.Component {
                   <Menu.Item
                     key={item.key}
                   >
-                    <Link to={`/${item.key}`}>
+                    <Link to={`${prefix}${item.key}`}>
                       {item.name}
                     </Link>
                     <div className="select-buttom" />

@@ -4,6 +4,8 @@ import {Link} from 'react-router-dom';
 
 import './index.less';
 
+const prefix = window.CONFIG.prefix;
+
 // ref to dumi doc image[https://d.umijs.org/], thanks a lot!
 const features = [
   {
@@ -42,7 +44,7 @@ const Home = () => {
           </a>
           <Link
             className="link-button"
-            to="/demo"
+            to={`${prefix}demo`}
           >
             {i18next.t('home_see_demo')}
           </Link>

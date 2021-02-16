@@ -1,9 +1,11 @@
 const path = require('path');
 const fs = require('fs-extra');
-const {getDemoList, getDemoFiles} = require('./dev/util');
+const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const devServer = require('./dev/dev-server');
+const {getDemoList, getDemoFiles} = require('./dev/util');
+
 const distdir = path.join(__dirname, 'dist');
 
 fs.removeSync(distdir);
@@ -55,6 +57,8 @@ const generate = async () => {
   );
 };
 
+const publicPath = '/butterfly-dag/';
+
 if (process.env.NODE_ENV === 'production') {
   generate();
 }
@@ -67,7 +71,7 @@ module.exports = {
   output: {
     filename: '[name].js',
     chunkFilename: '[name].js',
-    publicPath: '/'
+    publicPath: publicPath
   },
   resolve: {
     modules: [
@@ -147,6 +151,9 @@ module.exports = {
   plugins: [
     new MiniCssExtractPlugin({
       filename: '[name].css'
+    }),
+    new webpack.DefinePlugin({
+      PREFIX: `"${publicPath}"`
     })
   ],
   devServer: {
@@ -154,7 +161,8 @@ module.exports = {
     historyApiFallback: true, // 不跳转
     inline: true, // 实时刷新
     index: 'index.html',
-    port: 8085,
+    publicPath: '/butterfly-dag',
+    port: 8080,
     open: true,
     before(app) {
       devServer(app);
