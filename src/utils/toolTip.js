@@ -109,12 +109,16 @@ const hide = (tipsDom, callback) => {
 let createTip = (opts, callback) => {
   let currentTips = null;
   let {data, targetDom, genTipDom} = opts;
-  targetDom.addEventListener('mouseover', () => {
+  targetDom.addEventListener('mouseover', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     let tipstDom = genTipDom(data);
     currentTips = show(opts, 'tips', tipstDom, targetDom, callback);
   });
 
-  targetDom.addEventListener('mouseout', () => {
+  targetDom.addEventListener('mouseout', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     hide(currentTips);
   });
 };
