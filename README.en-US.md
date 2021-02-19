@@ -130,6 +130,7 @@ canvas.draw({
 * Blood Map(doing)
 * Visual Modeling(doing)
 <img width="98%" src="https://img.alicdn.com/imgextra/i4/O1CN01VZxfyl1pOLc15k7XM_!!6000000005350-1-tps-1665-829.gif">
+
 * Scheduling Diagram(doing)
 * Monitoring(doing)
 <img width="98%" src="https://img.alicdn.com/imgextra/i4/O1CN01tbmIry23xWea1YcBQ_!!6000000007322-1-tps-1665-829.gif">
