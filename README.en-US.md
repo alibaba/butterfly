@@ -115,13 +115,24 @@ canvas.draw({
 * React & Vue Support
   * [React butterfly](./docs/en-US/react.md)
   * [Vue2 butterfly](./docs/en-US/vue.md)
-* React Components Extension
-  * [Data/Table-Field mapping](https://github.com/aliyun/react-data-mapping/blob/master/README.en-US.md)
-  * Blood Map(doing)
-  * Visual Modeling(doing)
-  * Scheduling Diagram(doing)
-  * Monitoring(doing)
-  * Butterfly-Editor(doing)
+
+## ⌨️Business-specific React Extension Components
+* [Data/Table-Field mapping](https://github.com/aliyun/react-data-mapping/blob/master/README.en-US.md)
+<p align="center">
+  <img width="49%" src="https://img.alicdn.com/imgextra/i2/O1CN01O8w0tT26WuU5J6lty_!!6000000007670-1-tps-595-411.gif">
+  <img width="49%" src="https://img.alicdn.com/imgextra/i2/O1CN017Gcu0Y1mbgIHcgqwr_!!6000000004973-1-tps-595-411.gif">
+</p>
+<p align="center">
+  <img width="49%" src="https://img.alicdn.com/imgextra/i3/O1CN01f4Ek5H1oCbqDjM7sL_!!6000000005189-1-tps-595-411.gif">
+  <img width="49%" src="https://img.alicdn.com/imgextra/i4/O1CN01Nt9rpo25y6NlRMUtR_!!6000000007594-1-tps-595-411.gif">
+</p>
+* Blood Map(doing)
+* Visual Modeling(doing)
+<img width="98%" src="https://img.alicdn.com/imgextra/i4/O1CN01VZxfyl1pOLc15k7XM_!!6000000005350-1-tps-1665-829.gif">
+* Scheduling Diagram(doing)
+* Monitoring(doing)
+<img width="98%" src="https://img.alicdn.com/imgextra/i4/O1CN01tbmIry23xWea1YcBQ_!!6000000007322-1-tps-1665-829.gif">
+* Butterfly-Editor(doing)
 
 ## 🤝 Contribution
 Butterfly is a completely open source project and we welcome everyone to contribute to fixing bugs and improvements. For information on how to get started, read our [contribution guide](./docs/en-US/CONTRIBUTING.md).
