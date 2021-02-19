@@ -126,6 +126,7 @@ canvas.draw({
   <img width="49%" src="https://img.alicdn.com/imgextra/i3/O1CN01f4Ek5H1oCbqDjM7sL_!!6000000005189-1-tps-595-411.gif">
   <img width="49%" src="https://img.alicdn.com/imgextra/i4/O1CN01Nt9rpo25y6NlRMUtR_!!6000000007594-1-tps-595-411.gif">
 </p>
+
 * Blood Map(doing)
 * Visual Modeling(doing)
 <img width="98%" src="https://img.alicdn.com/imgextra/i4/O1CN01VZxfyl1pOLc15k7XM_!!6000000005350-1-tps-1665-829.gif">
