@@ -136,5 +136,8 @@ canvas.draw({
 <img width="98%" src="https://img.alicdn.com/imgextra/i4/O1CN01tbmIry23xWea1YcBQ_!!6000000007322-1-tps-1665-829.gif">
 * Butterfly-Editor(doing)
 
-## 🤝 Contribution
-Butterfly is a completely open source project and we welcome everyone to contribute to fixing bugs and improvements. For information on how to get started, read our [contribution guide](./docs/en-US/CONTRIBUTING.md).
+## 🤝 How to contribute
+We welcome all contributors, please read the [Contribution Guide](./docs/en-US/CONTRIBUTING.md) before becoming a Contributor.
+
+If you already know, come to [Issus](https://github.com/alibaba/butterfly/issues) or [Pull requests](https://github.com/alibaba/butterfly/issues) to become contributors, and let's grow and be better and better together.
+
