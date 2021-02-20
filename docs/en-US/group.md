@@ -2,7 +2,7 @@
 
 ## Usage
 
-```
+```js
 const Group = require('butterfly-dag').Group;
 class AGroup extends Group {
   draw(obj) {
@@ -10,6 +10,7 @@ class AGroup extends Group {
   }
 }
 
+// Initialize draw
 canvas.draw({
   groups: [{
     id: 'xxxx',
@@ -20,6 +21,12 @@ canvas.draw({
   nodes: ...
   edges: ...
 })
+
+// Dynamic addition
+canvas.addGroup({
+  ...
+  // the attribute below
+});
 ```
 
 ## attribute<a name='group-attr'></a>：
@@ -31,6 +38,7 @@ canvas.draw({
 | left | x coordinate | number (Require) | - 
 | width | group width | number (Option) | - 
 | height | group height | number (Option) | - 
+| type | group type | string (Option) | normal (drag in and drag out), inner (can only be dragged in and not out)
 | endpoints | endpoint data | array (Option) | - 
 | Class | extended class | Class (Option) | When the extended class is passed in, the node group will be rendered according to the draw method of the extended class, and the related methods of the extended class will also override the method of the parent class.
 | scope | scope | boolean (Option) | When the scope of the node is consistent with the scope of the group, it can be added to the group. You can join as you like without setting it by default.

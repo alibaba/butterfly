@@ -21,6 +21,7 @@ class BaseGroup extends Group {
     this.width = opts.width || 300;
     this.height = opts.height || 150;
     this.resize = opts.resize;
+    this.draggable = opts.draggable;
     this.dom = null;
     this.nodes = [];
     this.options = opts.options;
@@ -33,6 +34,8 @@ class BaseGroup extends Group {
     // endpoint 这部分需要考虑
     this.endpoints = [];
     this._endpointsData = opts.endpoints;
+    // 记录节点是否在拖动
+    // this._dragingNode = undefined;
   }
   init() {
     this.dom = this.draw({
@@ -236,6 +239,7 @@ class BaseGroup extends Group {
     });
   }
   _addEventListener() {
+    // 节点组点击事件
     $(this.dom).on('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
@@ -247,6 +251,7 @@ class BaseGroup extends Group {
         group: this
       });
     });
+    // 节点组鼠标点下事件
     $(this.dom).on('mousedown', (e) => {
       // 兼容节点冒泡上来的事件
       let isChildNodeMoving = _.some(this.nodes, (item) => {
@@ -256,7 +261,7 @@ class BaseGroup extends Group {
         return;
       }
       // 兼容resize按钮冒泡上来的事件
-      if(_.get(e, 'target.className', '').indexOf('butterfly-group-icon-resize') !== -1) {
+      if($(e.target).attr('class').indexOf('butterfly-group-icon-resize') !== -1) {
         return;
       }
 
@@ -266,11 +271,41 @@ class BaseGroup extends Group {
       }
       e.preventDefault();
       // e.stopPropagation();
-      this.emit('InnerEvents', {
-        type: 'group:dragBegin',
-        data: this
-      });
+      if (this.draggable) {
+        this.emit('InnerEvents', {
+          type: 'group:dragBegin',
+          data: this
+        });
+      }
     });
+    // 节点移入移出事件
+    // this.dom.addEventListener('mousemove', (e) => {
+    //   if (this._dragingNode) {
+    //     if (this.scope && this.scope !== this._dragingNode.scope) {
+    //       return;
+    //     }
+    //     $(this.dom).addClass('butterfly-group-hover');
+    //   }
+    // });
+    // this.dom.addEventListener('mouseout', (e) => {
+    //   if (this._dragingNode) {
+    //     $(this.dom).removeClass('butterfly-group-hover');
+    //     this._dragingNode = undefined;
+    //   }
+    // });
+    // // 监听节点在移动
+    // this.on('system.drag.start', (data) => {
+    //   if (data.dragType === 'node:drag' && data.dragNode && !data.dragNode._group) {
+    //     this._dragingNode = data.dragNode;
+    //     console.log('----');
+    //     console.log(this._dragingNode);
+    //   }
+    // });
+    // this.on('system.drag.end', (data) => {
+    //   if (data.dragType === 'node:drag' && data.dragNode && !data.dragNode._group) {
+    //     this._dragingNode = undefined;
+    //   }
+    // });
   }
   _createEndpoint(isInited) {
     if (isInited) {
@@ -307,6 +342,10 @@ class BaseGroup extends Group {
   emit(type, data) {
     super.emit(type, data);
     this._emit(type, data);
+  }
+  on(type, callback) {
+    super.on(type, callback);
+    this._on(type, callback);
   }
   destroy(isNotEventEmit) {
     this.endpoints.forEach((item) => {

@@ -23,13 +23,13 @@
 ## ✨ 特性
 * 丰富DEMO，开箱即用
 * 全方位管理画布，开发者只需要更专注定制化的需求
-* 利用dom来定制元素；灵活性，可塑性，拓展性优秀
+* 利用DOM/REACT/VUE来定制元素；灵活性，可塑性，拓展性优秀
 
 <p align="center">
-  <img width="900" src="https://img.alicdn.com/tfs/TB1nq6hCeT2gK0jSZFvXXXnFXXa-1200-2660.png">
+  <img width="900" src="https://img.alicdn.com/imgextra/i4/O1CN01d7WHVs1vkEDzWRRlW_!!6000000006210-2-tps-2400-8172.png">
 </p>
 
-## 快速本地DEMO
+## 🚀快速本地DEMO
 ```
 git clone git@github.com:alibaba/butterfly.git
 npm install
@@ -81,36 +81,60 @@ canvas.draw({
   * [重做和撤销](./docs/zh-CN/canvas.md#canvas-api-redo-undo)
   * [坐标转换和坐标偏移](./docs/zh-CN/canvas.md#canvas-api-coordinate)
   * [框选](./docs/zh-CN/canvas.md#canvas-api-selected)
-  * [事件](./docs/zh-CN/canvas.md#canvas-api-events)
-  * [其他辅助方法](./docs/zh-CN/canvas.md#canvas-api-other)
+  * [发出/接收事件](./docs/zh-CN/canvas.md#canvas-api-events)
+  * [其他辅助方法(网格背景，辅助线，保存画布为图片)](./docs/zh-CN/canvas.md#canvas-api-other)
 * [节点组(Group)](./docs/zh-CN/group.md)
   * [属性配置](./docs/zh-CN/group.md#group-attr)
   * [自定义节点组](./docs/zh-CN/group.md#group-custom)
   * [新增，删除成员节点](./docs/zh-CN/group.md#group-member)
   * [自定义锚点](./docs/zh-CN/group.md#group-endpoint)
-  * [移动](./docs/zh-CN/group.md#group-move)
+  * [发出/接收事件](./docs/zh-CN/group.md#group-move)
   * [事件](./docs/zh-CN/group.md#group-event)
 * [节点(Node)](./docs/zh-CN/node.md)
   * [属性配置](./docs/zh-CN/node.md#node-attr)
   * [自定义节点](./docs/zh-CN/node.md#node-custom)
   * [自定义锚点](./docs/zh-CN/node.md#node-endpoint)
-  * [移动](./docs/zh-CN/node.md#node-move)
+  * [发出/接收事件](./docs/zh-CN/node.md#node-move)
   * [事件](./docs/zh-CN/node.md#node-event)
-  * [[树状布局] 收缩 & 展开子节点]()
+  * [[树状布局] 收缩 & 展开子节点](./docs/zh-CN/node.md#node-collapse)
 * [线(Edge)](./docs/zh-CN/edge.md)
   * [属性配置](./docs/zh-CN/edge.md#edge-attr)
   * [自定义线段](./docs/zh-CN/edge.md#edge-custom-dom)
   * [自定义箭头](./docs/zh-CN/edge.md#edge-custom-arrow)
   * [自定义label](./docs/zh-CN/edge.md#edge-custom-label)
   * [线段连通性](./docs/zh-CN/edge.md#edge-isConnect)
-  * [事件](./docs/zh-CN/edge.md#edge-event)
+  * [发出/接收事件](./docs/zh-CN/edge.md#edge-event)
   * [线段动画](./docs/zh-CN/edge.md#edge-animation)
 * [锚点(Endpoint)](./docs/zh-CN/endpoint.md)
   * [属性配置](./docs/zh-CN/endpoint.md#endpoint-attr)
   * [通用API](./docs/zh-CN/endpoint.md#endpoint-api)
 * [缩略图(Minimap)](./docs/zh-CN/minimap.md#endpoint-api)
-* [布局(正在整理中)]()
+* [提示 & 菜单(tooltips & menu)](./docs/zh-CN/tooltip.md)
+* [布局(Layout)](./docs/zh-CN/layout.md)
+* React & Vue支持
+  * [React butterfly组件支持](./docs/zh-CN/react.md)
+  * [Vue2 butterfly组件支持](./docs/zh-CN/vue.md)
 
+
+## ⌨️垂直业务React拓展组件
+* [数据/字段映射组件](https://github.com/aliyun/react-data-mapping)
+<p align="center">
+  <img width="49%" src="https://img.alicdn.com/imgextra/i2/O1CN01O8w0tT26WuU5J6lty_!!6000000007670-1-tps-595-411.gif">
+  <img width="49%" src="https://img.alicdn.com/imgextra/i2/O1CN017Gcu0Y1mbgIHcgqwr_!!6000000004973-1-tps-595-411.gif">
+</p>
+<p align="center">
+  <img width="49%" src="https://img.alicdn.com/imgextra/i3/O1CN01f4Ek5H1oCbqDjM7sL_!!6000000005189-1-tps-595-411.gif">
+  <img width="49%" src="https://img.alicdn.com/imgextra/i4/O1CN01Nt9rpo25y6NlRMUtR_!!6000000007594-1-tps-595-411.gif">
+</p>
+
+* 血缘图(doing)
+* 可视化建模图(开源中)
+<img width="98%" src="https://img.alicdn.com/imgextra/i4/O1CN01VZxfyl1pOLc15k7XM_!!6000000005350-1-tps-1665-829.gif">
+
+* 调度编排图(doing)
+* 监控图(开源中)
+<img width="98%" src="https://img.alicdn.com/imgextra/i4/O1CN01tbmIry23xWea1YcBQ_!!6000000007322-1-tps-1665-829.gif">
+* Butterfly-Editor(doing)
 
 ## 🤝贡献
 小蝴蝶是一个完全开源的项目，我们欢迎大家为修复错误和改进做出贡献。有关如何开始的信息，请阅读我们的[贡献指南](./docs/zh-CN/CONTRIBUTING.md).

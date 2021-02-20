@@ -13,7 +13,6 @@ module.exports = {
     left: 0,
     top: 200,
     Class: User,
-    color: '#19A97B'
   }, {
     id: '2',
     name: 'K1239',
@@ -21,7 +20,6 @@ module.exports = {
     left: 150,
     top: 50,
     Class: Train,
-    color: '#436EEE'
   }, {
     id: '3',
     name: '5144xxxxxx@qq.com',
@@ -29,7 +27,6 @@ module.exports = {
     left: 300,
     top: 110,
     Class: Email,
-    color: '#7A67EE'
   }, {
     id: '4',
     name: 'D1228',
@@ -38,7 +35,6 @@ module.exports = {
     top: 260,
     Class: Train,
     scope: 'leftg',
-    color: '#436EEE'
   }, {
     id: '5',
     name: '51449xxxx@qq.com',
@@ -47,7 +43,6 @@ module.exports = {
     top: 220,
     Class: Email,
     scope: 'centerg',
-    color: '#436EEE'
   }, {
     id: '6',
     name: '18703224669',
@@ -56,7 +51,6 @@ module.exports = {
     top: 90,
     Class: User,
     scope: 'centerg',
-    color: '#19A97B'
   }, {
     id: '7',
     name: '王小萌',
@@ -65,7 +59,6 @@ module.exports = {
     top: 200,
     Class: User,
     scope: 'centerg',
-    color: '#DD5A41'
   }, {
     id: '8',
     name: 'email',
@@ -74,7 +67,6 @@ module.exports = {
     top: 100,
     Class: Email,
     scope: 'centerg',
-    color: '#19A97B'
   }, {
     id: '9',
     name: '联系方式',
@@ -83,7 +75,6 @@ module.exports = {
     top: 300,
     Class: Phone,
     scope: 'centerg',
-    color: '#7A67EE'
   }, {
     id: '10',
     name: 'G887',
@@ -92,7 +83,6 @@ module.exports = {
     top: 30,
     Class: Train,
     scope: 'rightg',
-    color: '#436EEE'
   }, {
     id: '11',
     name: '王中萌',
@@ -101,7 +91,6 @@ module.exports = {
     top: 200,
     Class: User,
     scope: 'rightg',
-    color: '#19A97B'
   }, {
     id: '12',
     name: '王也',
@@ -110,7 +99,6 @@ module.exports = {
     top: 100,
     Class: User,
     scope: 'rightg',
-    color: '#DD5A41'
   }],
   edges: [{
     source: '1',

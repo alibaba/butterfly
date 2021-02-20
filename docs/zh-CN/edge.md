@@ -3,6 +3,7 @@
 ## 用法
 
 ```js
+// 初始化画布渲染
 canvas.draw({
   edges: [{
     source: 'point_1',
@@ -10,13 +11,19 @@ canvas.draw({
     sourceNode: 'node_1',
     targetNode: 'node_2',
     type: 'endpoint',
-    arrow: ture,
+    arrow: true,
     arrowPosition: 0.5,
     arrowOffset: 0,  // 箭头的最终位置：线条长度 * arrowPosition + arrowOffset
     label: 'I am label'   //这里也可以传dom，当然也可以拓展父类的drawLabel来自定义label
   }],
   groups: ...
   nodes: ...
+})
+
+// 动态添加
+canvas.addEdge({
+  // 参考下面属性
+  ...
 })
 ```
 
@@ -84,6 +91,15 @@ drawArrow = () => {}
   * @return {dom} - 自定义label的dom
   */
 drawLabel = () => {}
+```
+
+### 更新label：
+```js
+/**
+  * @param {string|dom} - label的字符窜或者节点
+  * @return {dom} - 更新label的dom
+  */
+updateLabel = (label) => {}
 ```
 
 ### <a name='edge-isConnect'>线段连通性</a>：

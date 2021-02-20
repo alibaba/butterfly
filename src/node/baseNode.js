@@ -58,14 +58,14 @@ class BaseNode extends Node {
         isInited
       });
       return obj;
-    } 
+    }
     // 这部分可能还需要想一下
     const EndpointClass = obj.Class || Endpoint;
     const endpoint = new EndpointClass(_.assign({
+      limitNum: obj.limitNum || this._endpointLimitNum,
       _on: this._on,
       _emit: this._emit,
       _node: this,
-      _limitNum: obj.limitNum || this._endpointLimitNum,
       _global: this.global
     }, obj));
     
@@ -82,6 +82,10 @@ class BaseNode extends Node {
     const rmEndpointIndex = _.findIndex(this.endpoints, point => point.id === pointId);
     if (rmEndpointIndex !== -1) {
       const rmEndpoint = this.endpoints.splice(rmEndpointIndex, 1)[0];
+      this.emit('InnerEvents', {
+        type: 'node:removeEndpoint',
+        data: rmEndpoint
+      });
       rmEndpoint.destroy();
       return rmEndpoint;
     }
@@ -221,6 +225,10 @@ class BaseNode extends Node {
   emit(type, data) {
     super.emit(type, data);
     this._emit(type, data);
+  }
+  on(type, callback) {
+    super.on(type, callback);
+    this._on(type, callback);
   }
   destroy(isNotEvent) {
     if (!isNotEvent) {

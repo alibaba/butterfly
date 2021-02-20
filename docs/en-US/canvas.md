@@ -3,13 +3,16 @@
 ```js
 let canvas = new Canvas({
   root: dom,               // canvas root dom (require)
-  layout: 'ForceLayout'    // layout setting , integrated or custom , (optional)
+  layout: 'ForceLayout',   // layout setting , integrated or custom , (optional)
   zoomable: true,          // enable zoom canvas (optional)
   moveable: true,          // enable move canvas (optional)
   draggable: true,         // enable drag nodes (optional)
   linkable: true,          // enable connect edges (optional)
   disLinkable: true,       // enable disConnect edges (optional)
   theme: {                 // theme (optional) 
+    group: {
+      type: 'normal'       // Node group type: normal (drag in and drag out), inner (can only be dragged in and not out)
+    },
     edge: {
       type: 'Bezier',      // edge type：Bezier curve，Polyline ，Straight，Manhattan line，Improved Bezier curve。values ： Bezier/Flow/Straight/Manhattan/AdvancedBezier
       label: 'test',       // edge label
@@ -24,7 +27,7 @@ let canvas = new Canvas({
       position: [],        // limit endpoint position ['Top', 'Bottom', 'Left', 'Right'],
       linkableHighlight: true,// point.linkable method is triggered when connecting, can be highlighted
       limitNum: 10,        // limit the number of anchor connections
-      expendArea: {        // when the anchor point is too small, the connection hot zone can be expanded.
+      expandArea: {        // when the anchor point is too small, the connection hot zone can be expanded.
         left: 10,
         right: 10,
         top: 10,
@@ -35,7 +38,8 @@ let canvas = new Canvas({
     autoFixCanvas: {     // auto expand canvas when drag nodes or edges near the edge of canvas.
       enable: false,
       autoMovePadding: [20, 20, 20, 20]
-    }
+    },
+    autoResizeRootSize: true // automatically adapt to the root size, the default is true
   },
   global: {                // custom configuration, will run through all canvas, group, node, edge, endpoint objects
     isScopeStrict: false   // whether scope is strict mode (default is false)
@@ -57,11 +61,18 @@ let canvas = new Canvas({
 | theme | canvas theme setting | object (optional) | undefined
 | global | global attribute | object (optional) | undefined
 
+
+* **layout**，pass string / function into the property of layout
+ * forceLayout
+ * drageLayout
+ * concentricLayout
+ * circleLayout
+ * fruchterman
+ * radial
+ * custom layout，pass in custom method, which can be layout according to user needs. Note:`In addition, remember to overwrite the Edge calcPath method, otherwise it will be replaced by butterfly's built-in calculation edge  method, and the resulting edge cannot be realized.`
+* **autoFixCanvas**, auto expand canvas when drag nodes or edges near the margin of canvas, set autoMovePadding to adjust the area of hotspots. See: ![autoFixCanvas](https://img.alicdn.com/tfs/TB16lUNBG61gK0jSZFlXXXDKFXa-1665-801.gif)
 * **isScopeStrict**，used to set the global scope strict mode
   * The default is false. If the value is set to true, the scope must match when the scope must be identical; if the value is false, all values are matched when the scope is undefined.
-* **重力布局**，pass `'ForceLayout'`，butterfly built-in layout
-* **自定义布局**，pass in a method, which can be layout according to user needs. Note:`In addition, remember to overwrite the Edge calcPath method, otherwise it will be replaced by butterfly's built-in calculation edge  method, and the resulting edge cannot be realized.`
-* **autoFixCanvas**, auto expand canvas when drag nodes or edges near the margin of canvas, set autoMovePadding to adjust the area of hotspots. See: ![autoFixCanvas](https://img.alicdn.com/tfs/TB16lUNBG61gK0jSZFlXXXDKFXa-1665-801.gif)
 
 ```
 let canvas = new Canvas({
@@ -88,6 +99,13 @@ let canvas = new Canvas({
   * @param {function} callback  - `*the rendering process is an asynchronous process, please pay attention to the callback.`
   */
 draw = (data, calllback) => {}
+
+/**
+  * Re-rendering method, it will delete all previous elements and re-render
+  * @param {data} data  - include groups, nodes, edges
+  * @param {function} callback  - `*the rendering process is an asynchronous process, please pay attention to the callback.`
+  */
+redraw = (data, calllback) => {}
 
 /**
   * get all data from canvas
@@ -203,6 +221,14 @@ removeEdges = (param) => {}
   * @return {Edges} - neighbor Edges Object
   */
 getNeighborEdges = (string) => {}
+
+/**
+  * get neighbor edges by endpoint id 
+  * @param {string} nodeId  - node id
+  * @param {string} endpointId  - endpoint id
+  * @return {Edges} - neighbor Edges Object
+  */
+getNeighborEdgesByEndpoint = (string, string) => {}
 
 /**
   * find N-level association nodes and edges
@@ -414,7 +440,7 @@ this.canvas.add2Union('my union name', {
 
 ```js
 let canvas = new Canvas({...});
-canvas.on('type', (data) => {
+canvas.on('type key', (data) => {
   //data 
 });
 ```

@@ -3,13 +3,16 @@
 ```js
 let canvas = new Canvas({
   root: dom,               //canvas的根节点(必传)
-  layout: 'ForceLayout'    //布局设置(可传)，可使用集成的，也可自定义布局
+  layout: 'ForceLayout',   //布局设置(可传)，可使用集成的，也可自定义布局
   zoomable: true,          //可缩放(可传)
   moveable: true,          //可平移(可传)
   draggable: true,         //节点可拖动(可传)
   linkable: true,          //节点可连接(可传)
   disLinkable: true,       //节点可取消连接(可传)
   theme: {                 //主题定制(可传) 
+    group: {
+      type: 'normal'       //节点组类型(可传): normal(随意拖入拖出),inner(只能拖入不能拖出)
+    },
     edge: {
       type: 'Bezier',      //线条默认类型：贝塞尔曲线，折线，直线，曼哈顿路由线，更美丽的贝塞尔曲线。分别为Bezier/Flow/Straight/Manhattan/AdvancedBezier
       label: 'test',       //线条默认label
@@ -24,7 +27,7 @@ let canvas = new Canvas({
       position: [],        //限制锚点位置['Top', 'Bottom', 'Left', 'Right'],
       linkableHighlight: true,//连线时会触发point.linkable的方法，可做高亮
       limitNum: 10,        //限制锚点的连接数目
-      expendArea: {        //锚点过小时，可扩大连线热区
+      expandArea: {        //锚点过小时，可扩大连线热区
         left: 10,
         right: 10,
         top: 10,
@@ -35,7 +38,8 @@ let canvas = new Canvas({
     autoFixCanvas: {     //节点拖动或连线拖动到画布边缘时，画布自动延展
       enable: false,
       autoMovePadding: [20, 20, 20, 20] //触发自动延展的画布内边距
-    }
+    },
+    autoResizeRootSize: true // 自动适配root大小，默认为true
   },
   global: {                //自定义配置，会贯穿所有canvas，group，node，edge，endpoint对象
     isScopeStrict: false   //scope是否为严格模式(默认为false)
@@ -57,11 +61,17 @@ let canvas = new Canvas({
 | theme | 画布主题 | object (Option) | undefined
 | global| 全局属性 | object (Option) | undefined
 
+* **layout布局**，把string/function传入layout的属性即可
+ * forceLayout
+ * drageLayout
+ * concentricLayout
+ * circleLayout
+ * fruchterman
+ * radial
+ * 自定义布局，传入自定义方法，里面可以按照用户需求进行布局。注:`除此之外，记得把Edge的calcPath的方法复写掉，不然会由小蝴蝶的内置计算线段的方法代替，无法实现所得的线段`
+* **autoFixCanvas**，自动延展画布，适用于画布内节点与画布外节点有互动的场景。效果如下：![自动延展画布](https://img.alicdn.com/tfs/TB16lUNBG61gK0jSZFlXXXDKFXa-1665-801.gif)
 * **isScopeStrict**，用于设置全局scope严格模式
   * 默认为false。假如该值设置为true，当scope必须完全一致才能匹配；假如该值为false，当scope为undefined时，都能匹配所有值。
-* **重力布局**，传入`'ForceLayout'`即可，小蝴蝶内置布局
-* **自定义布局**，传入一个方法，里面可以按照用户需求进行布局。注:`除此之外，记得把Edge的calcPath的方法复写掉，不然会由小蝴蝶的内置计算线段的方法代替，无法实现所得的线段`
-* **autoFixCanvas**，自动延展画布，适用于画布内节点与画布外节点有互动的场景。效果如下：![自动延展画布](https://img.alicdn.com/tfs/TB16lUNBG61gK0jSZFlXXXDKFXa-1665-801.gif)
 
 ```js
 let canvas = new Canvas({
@@ -87,6 +97,13 @@ let canvas = new Canvas({
   * @param {function} callback  - `*渲染过程是异步的过程，需要的用户请留意回调`
   */
 draw = (data, calllback) => {}
+
+/**
+  * 重新渲染方法，会将之前的所有元素删除重新渲染
+  * @param {data} data  - 里面包含分组，节点，连线
+  * @param {function} callback  - `*渲染过程是异步的过程，需要的用户请留意回调`
+  */
+redraw = (data, calllback) => {}
 
 /**
   * 获取画布的数据模型
@@ -189,11 +206,19 @@ removeEdge = (param) => {}
   */
 removeEdges = (param) => {}
 /**
-  * 根据id获取相邻的edge
-  * @param {string} id  - node id
+  * 根据node id获取相邻的edge
+  * @param {string} nodeId  - node id
   * @return {Edges} - 相邻的连线
   */
 getNeighborEdges = (string) => {}
+
+/**
+  * 根据endpoint id获取相邻的edge
+  * @param {string} nodeId  - node id
+  * @param {string} endpointId  - endpoint id
+  * @return {Edges} - 相邻的连线
+  */
+getNeighborEdgesByEndpoint = (string, string) => {}
 
 /**
   * 查找 N 层关联节点和边
@@ -232,10 +257,10 @@ move = (postion) => {}
 
 /**
   * 手动设置画布缩放
-  * @param {scale} float  - 0-1之间的缩放值
+  * @param {float} scale - 0-1之间的缩放值
   * @param {function} callback  - 缩放后的回调
   */
-zoom = (postion) => {}
+zoom = (scale) => {}
 
 /**
   * 获取画布的缩放
@@ -405,7 +430,7 @@ this.canvas.add2Union('我的聚合组', {
 
 ```js
 let canvas = new Canvas({...});
-canvas.on('type', (data) => {
+canvas.on('type key', (data) => {
   //data 数据
 });
 ```
@@ -465,9 +490,9 @@ setGuideLine = (show, options) => {}
 
 /**
   * 设置缩略图
-  * @param {true|false} boolean  - 是否开启辅助线功能
+  * @param {true|false} boolean  - 是否开启缩略图功能
   * @param {Object} 具体请参考缩略图章节
-  /
+  */
 setMinimap = (show, options) => {}
 
 /**

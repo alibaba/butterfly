@@ -47,6 +47,9 @@ class BaseEdge extends Edge {
     // 函数节流
     this._updateTimer = null;
     this._UPDATE_INTERVAL = 20;
+    // 线段起始位置
+    this._sourcePoint = null;
+    this._targetPoint = null;
   }
   _init() {
     if (this._isInited) {
@@ -60,9 +63,6 @@ class BaseEdge extends Edge {
     });
     this.labelDom = this.drawLabel(this.label);
     this.arrowDom = this.drawArrow(this.arrow);
-    if(this.defaultAnimate) {
-      this.addAnimate();
-    }
 
     this._addEventListener();
   }
@@ -76,6 +76,11 @@ class BaseEdge extends Edge {
       this.eventHandlerDom.setAttribute('class', 'butterflies-link-event-handler');
     }
     return path;
+  }
+  mounted() {
+    if(this.defaultAnimate) {
+      this.addAnimate();
+    }
   }
   _calcPath(sourcePoint, targetPoint) {
     if (!sourcePoint) {
@@ -101,6 +106,8 @@ class BaseEdge extends Edge {
         orientation: (this.type === 'endpoint' && this.targetEndpoint.orientation) ? this.targetEndpoint.orientation : undefined
       };
     }
+    this._sourcePoint = sourcePoint;
+    this._targetPoint = targetPoint;
     let path = '';
     if (this.calcPath) {
       path = this.calcPath(sourcePoint, targetPoint);
@@ -142,6 +149,19 @@ class BaseEdge extends Edge {
         return dom;
       }
     }
+  }
+  updateLabel(label) {
+    let labelDom = this.drawLabel(label);
+    if (this.labelDom) {
+      $(this.labelDom).off();
+      $(this.labelDom).remove();
+    }
+    this.label = label;
+    this.labelDom = labelDom;
+    this.emit('InnerEvents', {
+      type: 'edge:updateLabel',
+      data: this
+    });
   }
   redrawArrow(path) {
     const length = this.dom.getTotalLength();
@@ -189,6 +209,7 @@ class BaseEdge extends Edge {
   redraw(sourcePoint, targetPoint, options) {
     // 重新计算线条path
     let path = this._calcPath(sourcePoint, targetPoint);
+
     this.dom.setAttribute('d', path);
     if (this.isExpandWidth) {
       this.eventHandlerDom.setAttribute('d', path);
@@ -234,6 +255,10 @@ class BaseEdge extends Edge {
     super.emit(type, data);
     this._emit(type, data);
   }
+  on(type, callback) {
+    super.on(type, callback);
+    this._on(type, callback);
+  }
   remove() {
     this.emit('InnerEvents', {
       type: 'edge:delete',
@@ -242,12 +267,14 @@ class BaseEdge extends Edge {
   }
   destroy(isNotEventEmit) {
     if (this.labelDom) {
+      $(this.labelDom).off();
       $(this.labelDom).remove();
     }
     if (this.arrowDom) {
       $(this.arrowDom).remove();
     }
     if (this.eventHandlerDom) {
+      $(this.eventHandlerDom).off();
       $(this.eventHandlerDom).remove();
     }
     if (this.animateDom) {
@@ -259,7 +286,7 @@ class BaseEdge extends Edge {
     }
   }
   _addEventListener() {
-    $(this.dom).on('click', (e) => {
+    let _emitEvent = (e) => {
       e.preventDefault();
       e.stopPropagation();
       this.emit('system.link.click', {
@@ -274,7 +301,13 @@ class BaseEdge extends Edge {
         type: 'link:click',
         data: this
       });
-    });
+    };
+    
+    if (this.isExpandWidth) {
+      $(this.eventHandlerDom).on('click', _emitEvent);
+    } else {
+      $(this.dom).on('click', _emitEvent);
+    }
   }
   _create(opts) {
     this.id = _.get(opts, 'id') || this.id;

@@ -1,7 +1,8 @@
 # Edge
 
 ## Usage
-```
+```js
+// Initialize draw
 canvas.draw({
   edges: [{
     source: 'point_1',
@@ -16,6 +17,11 @@ canvas.draw({
   }],
   groups: ...
   nodes: ...
+})
+// Dynamic addition
+canvas.addEdge({
+  // the attribute below
+  ...
 })
 ```
 
@@ -81,6 +87,15 @@ drawArrow = () => {}
   * @return {dom} - 自定义label的dom
   */
 drawLabel = () => {}
+```
+
+### update label：
+```js
+/**
+  * @param {string|dom} - label string or label dom
+  * @return {dom} - label dom
+  */
+updateLabel = (label) => {}
 ```
 
 ### <a name='edge-isConnect'>edge connectivity</a>：

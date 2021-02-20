@@ -46,6 +46,18 @@ class TreeCanvas extends Canvas {
       }
     });
   }
+  findSubTree(item) {
+    let queue = [item];
+    let result = [];
+    while (queue.length > 0) {
+      let _item = queue.pop();
+      result.push(_item);
+      if (_item.children?.length > 0) {
+        queue = queue.concat(_item.children);
+      }
+    }
+    return result;
+  }
   collapseNode (nodeId) {
     let collapseNodes = [];
     let collapseEdges = [];
@@ -93,6 +105,11 @@ class TreeCanvas extends Canvas {
     collapseNodes.forEach((item) => {
       if (item.subCollapsed) {
         item.destroy(true);
+      }
+
+      // 重置子节点的collapsed状态
+      if (item.id !== nodeId && item.collapsed) {
+        delete item.collapsed;
       }
     });
     collapseEdges.forEach((item) => {
@@ -216,11 +233,13 @@ class TreeCanvas extends Canvas {
       edges: [],
       groups: []
     });
-
     this.nodes.forEach((item) => {
       if (item.subCollapsed) {
         return;
       }
+      item?.endpoints?.forEach(endpoint => {
+        endpoint.updatePos();
+      });
       let obj = tmpTreeObj[item.id];
       if (item.top !== obj.top || item.left !== obj.left) {
         item.options.top = obj.top;
@@ -228,6 +247,9 @@ class TreeCanvas extends Canvas {
         item.options.treePos = obj.treePos;
         item.moveTo(obj.left, obj.top);
       }
+    });
+    this.edges.forEach((item) => {
+      item.redraw();
     });
   }
   addNodes(data, isNotEventEmit) {
@@ -243,17 +265,37 @@ class TreeCanvas extends Canvas {
     });
     return nodes;
   }
-  removeNodes(nodes, isNotDelEdge, isNotEventEmit) {
-    // let nodes = super.addNodes(data, isNotEventEmit);
-    // nodes.forEach((item) => {
-    //   if(item.parent) {
-    //     let parentNode = this.getNode(item.parent);
-    //     if (!_.some(parentNode.children, ['id', item.id])) {
-    //       parentNode.children.push(item);
-    //     }
-    //   }
-    // });
-    // return nodes;
+  removeNodes(data, isNotDelEdge, isNotEventEmit) {
+
+    let nodes = data.map((item) => {
+      if (item instanceof Node) {
+        return item;
+      } else {
+        return this.getNode(item);
+      }
+    });
+
+    let rmNodes = [];
+
+    nodes.forEach((item) => {
+      let _subTree = this.findSubTree(item);
+      rmNodes = rmNodes.concat(_subTree);
+
+      // 如果是某个节点的子节点,将此节点从父节点的children中移除
+      if (item.parent) {
+        const parentNode = this.getNode(item.parent);
+
+        if (parentNode) {
+          parentNode.children = parentNode.children.filter((node) => node.id !== item.id);
+        }
+      }
+    });
+
+    rmNodes = _.unionBy(rmNodes, 'id');
+
+    let result = super.removeNodes(rmNodes, isNotDelEdge, isNotEventEmit);
+
+    return result;
   }
   getRootNode() {
     return this.nodes.filter((item) => {

@@ -29,7 +29,7 @@ node.addEndpoint({
 | key | 说明 | 类型 | 默认值 
 | :------ | :------ | :------ | :------ 
 | id | 节点唯一标识 | string (Require) | - 
-| orientation | 方向 | array (Option) | 下:[0,1]/上:[0,-1]/右:[1,0]/左:[-1,0]
+| orientation | 方向 | array (Option) | 下:[0,1]/上:[0,-1]/右:[1,0]/左:[-1,0],除了控制系统锚点方向，而且能控制线段的出入口方向
 | pos | 位置 | array (Option) | - 
 | scope | 作用域 | string (Option) | 锚点scope相同才可以连线
 | limitNum | 连线数目限制 | Number (Option) | 限制锚点的连接数目
@@ -38,7 +38,7 @@ node.addEndpoint({
 | root | 可把锚点附属与某个子元素 | string (Option) | - 
 | Class | 拓展类 | Class (Option) | 当传入拓展类的时候，该节点组则会按拓展类的draw方法进行渲染，拓展类的相关方法也会覆盖父类的方法
 | dom | 可以把此dom作为自定义锚点 | dom (Option) | - 
-| expendArea | 可以设置锚点连接的热区，可覆盖主题内的设置 | Object (Option) | {left:10, right:10, top:10, bottom:10}
+| expandArea | 可以设置锚点连接的热区，可覆盖主题内的设置 | Object (Option) | {left:10, right:10, top:10, bottom:10}
 
 ## <a name='endpoint-api'></a> API：
 

@@ -18,20 +18,22 @@ class GuidelineService {
       lineWidth: 1
     };
   }
+  _resize() {
+    this.canvasHeight = $(this.root).height();
+    this.canvasWidth = $(this.root).width();
+    $(this.guideLineCanvas).attr('width', this.canvasWidth);
+    $(this.guideLineCanvas).attr('height', this.canvasHeight);
+  }
   create(options = {}) {
     this.theme = _.merge(this.theme, options.theme || {});
 
-    this.canvasHeight = $(this.root).height();
-    this.canvasWidth = $(this.root).width();
-
-    this.dom = $('<div class="butterfly-gird-canvas-wrapper"></div>')[0];
-
-    this.guideLineCanvas = $('<canvas class="butterfly-guideline-canvas"></canvas>')[0];
-    $(this.guideLineCanvas).attr('width', this.canvasWidth);
-    $(this.guideLineCanvas).attr('height', this.canvasHeight);
-    $(this.guideLineCanvas).appendTo(this.dom);
-
-    $(this.dom).appendTo(this.root);
+    if (!this.dom) {
+      this.dom = $('<div class="butterfly-gird-canvas-wrapper"></div>')[0];
+      this.guideLineCanvas = $('<canvas class="butterfly-guideline-canvas"></canvas>')[0];
+      this._resize();
+      $(this.guideLineCanvas).appendTo(this.dom);
+      $(this.dom).appendTo(this.root);
+    }
 
     this.cxt = this.guideLineCanvas.getContext('2d');
     this.cxt.strokeStyle = this.theme.lineColor || '#000';
