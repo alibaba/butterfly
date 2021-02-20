@@ -136,5 +136,7 @@ canvas.draw({
 <img width="98%" src="https://img.alicdn.com/imgextra/i4/O1CN01tbmIry23xWea1YcBQ_!!6000000007322-1-tps-1665-829.gif">
 * Butterfly-Editor(doing)
 
-## 🤝贡献
-小蝴蝶是一个完全开源的项目，我们欢迎大家为修复错误和改进做出贡献。有关如何开始的信息，请阅读我们的[贡献指南](./docs/zh-CN/CONTRIBUTING.md).
+## 🤝如何贡献
+我们欢迎所有的贡献者，在成为贡献者之前，请先阅读[贡献指南](./docs/zh-CN/CONTRIBUTING.md)。
+
+如果您已经了解，快来[Issus](https://github.com/alibaba/butterfly/issues)或[Pull requests](c)成为贡献者吧，让我们和小蝴蝶一起成长，一起变得更好、更棒！

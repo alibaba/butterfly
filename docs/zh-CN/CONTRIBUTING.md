@@ -1,10 +1,10 @@
 # 为ButterFly做贡献
 
 我们很乐意为您贡献源代码，让ButterFly变得越来越好。在您提交代码之前，请仔细阅读以下指南：
-* [行为守则](https://github.com/alibaba/butterfly/blob/master/docs/CODE_OF_CONDUCT.md)
+* [行为守则](./CODE_OF_CONDUCT.md)
 * [issue 规范](#issue-submit)
 * [pull request 规范](#pull-request-guidelines)
-
+* [代码提交规范](#code-commit)
 ## <a name='issue-submit'></a> issue 规范
 * 在您提交问题之前，请先搜索存档，检查是否已存在问题。
 
@@ -26,4 +26,26 @@
 * 确保PR是提交到`dev`分支，而不是`master`分支。
 
 * 如果修复的是bug，请在PR中给出描述信息。
+
+## <a name="code-commit"></a>代码提交规范
+commit 信息分类标准
+* feat：新功能
+* fix：修补bug
+* docs：文档
+* style： 格式（不影响代码运行的变动）
+* refactor：重构（即不是新增功能，也不是修改bug的代码变动）
+* test：增加测试
+* chore：构建过程或辅助工具的变动
+  
+**例如**
+```bash
+git add xxx
+git commit -m 'feat: 新增xxx功能'
+git commit -m 'fix: 修复xxx问题'
+git commit -m 'docs: 添加xxx文档/xxx文档更新'
+git commit -m 'style: 代码风格调整'
+git commit -m 'refactor: xxx函数逻辑重构'
+git commit -m 'test: xxx功能添加测试'
+git commit -m 'chore: webpack 打包模块升级'
+```
 
