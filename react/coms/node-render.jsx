@@ -4,6 +4,7 @@ import _debug from 'debug';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
+import Context from '../context';
 import BfNode from '../coms/node';
 import checkRender from '../util/check-render.js';
 
@@ -165,23 +166,18 @@ const NodeRender = (props) => {
     const hasRender = !!item.render;
     const element = hasRender ? item.render() : <BfNode key={id} {...item} />;
 
-    // ============== Gather React Endpoints ==============
-    deepWalk(element).forEach(child => {
-      if (typeof child !== 'object') {
-        return;
-      }
-
-      if (child?.type?.name === 'Endpoint') {
-        endpoints.push({
-          endpointId: child.props.id,
-          nodeId: item.id
-        });
-      }
-    });
-
-    return ReactDOM.createPortal(
-      element,
-      dom
+    return (
+      <Context.Provider
+        value={{
+          gather: ({id, nodeId}) => {
+            endpoints.push({
+              endpointId: id, nodeId
+            })
+          }
+        }}
+      >
+        {ReactDOM.createPortal(element,dom)}
+      </Context.Provider>
     );
   });
 };
