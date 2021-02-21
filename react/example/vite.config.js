@@ -6,6 +6,9 @@ import reactRefresh from '@vitejs/plugin-react-refresh';
 export default {
   plugins: [reactRefresh()],
   optimizeDeps: {
-    include: ['react-dev-utils/webpackHotDevClient']
+    include: [
+      'react-dev-utils/webpackHotDevClient',
+      'butterfly-dag/es'
+    ]
   }
 };

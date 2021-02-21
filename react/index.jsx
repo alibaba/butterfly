@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import {Canvas} from 'butterfly-dag';
+import {Canvas} from 'butterfly-dag/es';
 
 import diff from './util/diff.js';
 import recalc from './util/re-calc.js';
@@ -12,7 +12,7 @@ import NodeRender from './coms/node-render.jsx';
 import CommonRender from './coms/common-render.jsx';
 import defaultOptions from './util/default-options';
 
-import 'butterfly-dag/dist/index.css';
+import 'butterfly-dag/es/index.css';
 import './index.less';
 
 const noop = () => null;

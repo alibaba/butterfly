@@ -34,6 +34,7 @@
     "querystring": "^0.2.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
+    "react-error-overlay": "^6.0.9",
     "react-router-dom": "^5.2.0",
     "url": "^0.11.0"
   }

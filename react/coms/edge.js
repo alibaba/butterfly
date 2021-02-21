@@ -1,4 +1,4 @@
-import {Edge} from 'butterfly-dag';
+import {Edge} from 'butterfly-dag/es';
 
 
 class CustomEdge extends Edge {
