@@ -139,4 +139,4 @@ canvas.draw({
 ## 🤝如何贡献
 我们欢迎所有的贡献者，在成为贡献者之前，请先阅读[贡献指南](./docs/zh-CN/CONTRIBUTING.md)。
 
-如果您已经了解，快来[Issus](https://github.com/alibaba/butterfly/issues)或[Pull requests](c)成为贡献者吧，让我们和小蝴蝶一起成长，一起变得更好、更棒！
+如果您已经了解，快来[Issus](https://github.com/alibaba/butterfly/issues)或[Pull requests](https://github.com/alibaba/butterfly/pulls)成为贡献者吧，让我们和小蝴蝶一起成长，一起变得更好、更棒！
