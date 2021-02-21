@@ -27,7 +27,7 @@ function Endpoint(props) {
 Endpoint.propTypes = {
   id: PropTypes.string,
   nodeId: PropTypes.string,
-  children: PropTypes.element
+  children: PropTypes.any
 };
 
 export default Endpoint;

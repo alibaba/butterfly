@@ -292,25 +292,31 @@ const ReactButterfly = (props) => {
     <div
       className={`${className || ''} butterfly-react`}
     >
-      <NodeRender
-        nodes={nodes}
-        idPrefix="bf_node_"
-        canvas={canvasRef.current}
-        onRenderFinish={() => {
-          alignCanvasData(canvasRef.current, true);
-        }}
-      />
-      <CommonRender
-        data={edges}
-        renderKey="labelRender"
-        idPrefix="edge_label_"
-        type="edge"
-      />
-      <CommonRender
-        data={groups}
-        type="group"
-        idPrefix="bf_group_"
-      />
+      {
+        canvasRef.current && (
+          <React.Fragment>
+            <NodeRender
+              nodes={nodes}
+              idPrefix="bf_node_"
+              canvas={canvasRef.current}
+              onRenderFinish={() => {
+                alignCanvasData(canvasRef.current, true);
+              }}
+            />
+            <CommonRender
+              data={edges}
+              renderKey="labelRender"
+              idPrefix="edge_label_"
+              type="edge"
+            />
+            <CommonRender
+              data={groups}
+              type="group"
+              idPrefix="bf_group_"
+            />
+          </React.Fragment>
+        )
+      }
       <div
         className="butterfly-react-container"
         ref={(ref) => containerRef.current = ref}

@@ -10,48 +10,6 @@ import checkRender from '../util/check-render.js';
 
 const debug = _debug('butterflf-react');
 
-const deepWalk = function deepWalk(element) {
-  const childElements = [];
-
-  const walk = function walk(ele) {
-    let PreElement = ele;
-    let children = _.get(PreElement, 'props.children');
-    if (!PreElement) {
-      return;
-    }
-
-    // FIXME: is there a better way？
-    if (typeof PreElement.type === 'function' && !PreElement.props.children) {
-      try {
-        // eslint-disable-next-line
-        PreElement = new PreElement.type(PreElement.props);
-        walk(PreElement.render());
-      } catch (e) {
-        e;
-      }
-
-      return;
-    }
-
-    if (!children) {
-      return;
-    }
-
-    if (Array.isArray(children)) {
-      children.forEach(function (child) {
-        childElements.push(child);
-        walk(child);
-      });
-    }
-
-    childElements.push(children);
-    walk(children);
-  };
-
-  walk(element);
-  return childElements;
-};
-
 const noop = () => null;
 
 const NodeRender = (props) => {
@@ -146,7 +104,7 @@ const NodeRender = (props) => {
     onRenderFinish();
   });
 
-  return nodes.map(item => {
+  const elements = nodes.map(item => {
     const id = item.id;
 
     if (!id) {
@@ -166,20 +124,22 @@ const NodeRender = (props) => {
     const hasRender = !!item.render;
     const element = hasRender ? item.render() : <BfNode key={id} {...item} />;
 
-    return (
-      <Context.Provider
-        value={{
-          gather: ({id, nodeId}) => {
-            endpoints.push({
-              endpointId: id, nodeId
-            })
-          }
-        }}
-      >
-        {ReactDOM.createPortal(element,dom)}
-      </Context.Provider>
-    );
+    return ReactDOM.createPortal(element,dom);
   });
+
+  return (
+    <Context.Provider
+      value={{
+        gather: ({id, nodeId}) => {
+          endpoints.push({
+            endpointId: id, nodeId
+          })
+        }
+      }}
+    >
+      {elements}
+    </Context.Provider>
+  )
 };
 
 NodeRender.propTypes = {
