@@ -35,5 +35,5 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      # run compile
-      - run: npm run build
+      # run compile & test
+      - run: npm run build & npm run test
