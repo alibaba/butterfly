@@ -2,6 +2,14 @@ import {Edge} from 'butterfly-dag/es';
 
 
 class CustomEdge extends Edge {
+  constructor(options) {
+    super(options);
+
+    if (options && options.calcPath) {
+      this.calcPath = options.calcPath;
+    }
+  }
+
   drawLabel() {
     const div = document.createElement('div');
 
