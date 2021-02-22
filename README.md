@@ -117,7 +117,7 @@ canvas.draw({
 
 
 ## ⌨️垂直业务React拓展组件
-* [数据/字段映射组件](https://github.com/aliyun/react-data-mapping)
+* [数据/字段映射组件](https://github.com/aliyun/react-data-mapping): 适用于做数据字段映射，表字段映射，表格连线等业务
 <p align="center">
   <img width="49%" src="https://img.alicdn.com/imgextra/i2/O1CN01O8w0tT26WuU5J6lty_!!6000000007670-1-tps-595-411.gif">
   <img width="49%" src="https://img.alicdn.com/imgextra/i2/O1CN017Gcu0Y1mbgIHcgqwr_!!6000000004973-1-tps-595-411.gif">
@@ -127,12 +127,12 @@ canvas.draw({
   <img width="49%" src="https://img.alicdn.com/imgextra/i4/O1CN01Nt9rpo25y6NlRMUtR_!!6000000007594-1-tps-595-411.gif">
 </p>
 
-* 血缘图(doing)
-* 可视化建模图(开源中)
+* 血缘图(开源中)
+* [可视化建模图](https://github.com/aliyun/react-visual-modeling): 适用于UML，数据库建模，数据仓库建设等业务
 <img width="98%" src="https://img.alicdn.com/imgextra/i4/O1CN01VZxfyl1pOLc15k7XM_!!6000000005350-1-tps-1665-829.gif">
 
 * 调度编排图(doing)
-* 监控图(开源中)
+* [监控图](https://github.com/aliyun/react-monitor-dag): 适用于任务流，数据流等业务的状态展示
 <img width="98%" src="https://img.alicdn.com/imgextra/i4/O1CN01tbmIry23xWea1YcBQ_!!6000000007322-1-tps-1665-829.gif">
 
 * Butterfly-Editor(doing)
