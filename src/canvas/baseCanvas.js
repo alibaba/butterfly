@@ -3193,7 +3193,6 @@ class BaseCanvas extends Canvas {
         }, _.get(this.layout, 'options'), true);
         // 自动布局
         if (_.get(this.layout, 'type') === 'gridLayout') {
-
           Layout.gridLayout({
             opts: _opts,
             data: {
