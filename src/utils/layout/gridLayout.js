@@ -10,6 +10,8 @@ function gridLayout (param) {
     if (n === 1) {
       nodes[0].x = center[0];
       nodes[0].y = center[1];
+      nodes[0].left = center[0];
+      nodes[0].top = center[1];
       return;
     }
   
