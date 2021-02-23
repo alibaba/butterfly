@@ -4,15 +4,17 @@ import PropTypes from 'prop-types';
 import Context from '../context';
 
 function Endpoint(props) {
-  const {id, nodeId} = props;
+  // 其他属性参考：https://github.com/alibaba/butterfly/blob/dcd6a79ac6b939c2dacf16a8d160586035f10496/docs/zh-CN/endpoint.md#%E5%B1%9E%E6%80%A7
+  const {id, nodeId, ...rest} = props;
 
   const {gather} = useContext(Context);
 
   useEffect(() => {
     gather && gather({
       id,
-      nodeId
-    })
+      nodeId,
+      ...rest
+    });
   });
 
   return (

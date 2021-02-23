@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react';
-import _ from 'lodash';
 import _debug from 'debug';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
@@ -58,9 +57,9 @@ const NodeRender = (props) => {
       }
 
       node.addEndpoint({
+        ...endpoint,
         id: endpointId,
         dom: document.getElementById(endpointId),
-        ...endpoint,
       });
     });
 
@@ -124,22 +123,24 @@ const NodeRender = (props) => {
     const hasRender = !!item.render;
     const element = hasRender ? item.render() : <BfNode key={id} {...item} />;
 
-    return ReactDOM.createPortal(element,dom);
+    return ReactDOM.createPortal(element, dom);
   });
 
   return (
     <Context.Provider
       value={{
-        gather: ({id, nodeId}) => {
+        gather: ({id, nodeId, ...rest}) => {
           endpoints.push({
-            endpointId: id, nodeId
-          })
+            endpointId: id,
+            nodeId,
+            ...rest,
+          });
         }
       }}
     >
       {elements}
     </Context.Provider>
-  )
+  );
 };
 
 NodeRender.propTypes = {

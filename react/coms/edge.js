@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {Edge} from 'butterfly-dag/es';
 
 
@@ -5,8 +6,10 @@ class CustomEdge extends Edge {
   constructor(options) {
     super(options);
 
-    if (options && options.calcPath) {
-      this.calcPath = options.calcPath;
+    const calcPath = _.get(options, 'options.calcPath');
+
+    if (calcPath && _.isFunction(calcPath)) {
+      this.calcPath = calcPath;
     }
   }
 
