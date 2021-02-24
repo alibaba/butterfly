@@ -1,6 +1,7 @@
 import './canvas.less';
 
-const Canvas = require('../../../index.js').Canvas;
+// const Canvas = require('../../../index.js').Canvas;
+import { Canvas } from 'butterfly-dag';
 const EVENTTYPE  = {
   NODECLICK: 'node:click',
   CANVASCLICK: 'canvas:click'

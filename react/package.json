@@ -1,0 +1,53 @@
+{
+  "name": "butterfly-react",
+  "version": "0.0.10-beta",
+  "description": "react version for butterfly",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "unpkg": "dist/index.unpkg.js",
+  "jsnext:main": "dist/index.es.js",
+  "scripts": {
+    "start": "cd example && npm run dev",
+    "build": "rollup -c ./rollup.config.js",
+    "eslint": "eslint --ext .js --ext .jsx --ignore-path .eslintignore ."
+  },
+  "eslintConfig": {
+    "extends": "aliyun"
+  },
+  "peerDependencies": {
+    "prop-types": "^15.5.4",
+    "react": "^15.0.0 || ^16.0.0",
+    "react-dom": "^15.0.0 || ^16.0.0",
+    "butterfly-dag": "*",
+    "lodash": "*",
+    "jquery": "*",
+    "debug": "*"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/preset-env": "^7.12.11",
+    "@babel/preset-react": "^7.12.10",
+    "@rollup/plugin-babel": "^5.2.2",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.18.0",
+    "eslint-config-aliyun": "^2.0.3",
+    "eslint-plugin-react": "^7.22.0",
+    "less": "^4.1.0",
+    "rollup": "^2.38.0"
+  },
+  "files": [
+    "dist",
+    "doc"
+  ],
+  "dependencies": {
+    "@rollup/plugin-commonjs": "^17.0.0",
+    "@rollup/plugin-node-resolve": "^11.1.0",
+    "butterfly-dag": "^3.1.6",
+    "debug": "^4.3.1",
+    "jquery": "^3.5.1",
+    "lodash": "^4.17.20",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.0"
+  }
+}

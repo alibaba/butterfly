@@ -1,13 +1,12 @@
 'use strict';
 
-const Edge = require('../../../index.js').Edge;
+// const Edge = require('../../../index.js').Edge;
+import { Edge } from 'butterfly-dag';
 const $ = require('jquery');
 
 class BaseEdge extends Edge {
   draw(obj) {
-    console.log(obj)
     let path = super.draw(obj);
-
     if (this.options.lineType) {
       $(path).addClass(this.options.lineType);
     }

@@ -11,7 +11,7 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    border: 1px solid #000;
+    border: @butterfly-box-border;
     cursor: pointer;
   }
   .point-1 {
@@ -27,15 +27,19 @@
     top: 20px;
     right: 20px;
     z-index: 999;
-    box-shadow:2px 2px 5px #333333;
+    box-shadow:@butterfly-box-shadow;
+    border:@butterfly-box-border;
+    border-radius: 4px;
     padding: 10px;
-    background-color: #ffffff;
+    background-color: @butterfly-theme-color;
+    color:@butterfly-normal-font-color;
     .operate-bar-title{
       height: 30px;
       width: 100%;
       line-height: 30px;
       text-align: center;
-      background-color: rgb(198, 229, 255);
+      background-color: @butterfly-primary-color;
+      color: @butterfly-overlay-font-color;
       margin-bottom: 10px;
     }
     .operate-item{
@@ -45,6 +49,53 @@
         display: flex;
         align-items: center;
       }
+      
+      .ant-select-focused{
+        .ant-select-selection{
+          background-color: @butterfly-theme-color;
+          border: @butterfly-box-node-border-hover;
+          box-shadow:0 0 2px @butterfly-primary-color;
+        }
+      }
+      .ant-select-enabled{
+        .ant-select-selection{
+          background-color: @butterfly-theme-color;
+          color:@butterfly-normal-font-color;
+        }
+      }
+      .ant-btn{
+        background-color: @butterfly-theme-color;
+        color:@butterfly-normal-font-color;
+      }
+      .ant-btn:hover,.ant-btn:focus,.ant-select-selection:hover{
+        border: @butterfly-box-node-border-hover;
+        color: @butterfly-primary-color;
+      }
+      .ant-slider{
+        .ant-slider-track{
+          background-color: @butterfly-primary-color;
+        }
+        .ant-slider-handle{
+          border:2px solid @butterfly-primary-color;
+        }
+      }
     }
   }
+}
+
+.ant-select-dropdown{
+  border-radius: 0 0 10px 10px;  
+  overflow: hidden; 
+  .ant-select-dropdown-menu-item-active:not(.ant-select-dropdown-menu-item-disabled){
+    background-color: @butterfly-box-move-background-color;
+  }
+    .ant-select-dropdown-menu,.ant-select-dropdown-menu-root,.ant-select-dropdown-menu-vertical{
+      li:hover{
+        background-color: @butterfly-box-move-background-color;
+      }
+      background-color: @butterfly-theme-color; 
+    }
+    .ant-select-dropdown-menu-item-active{ 
+      background-color: @butterfly-primary-color; 
+    }
 }

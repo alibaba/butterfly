@@ -8,7 +8,7 @@ class People extends Node {
     super(...args);
   }
   genLogo = () => {
-    return $('<i class="iconfont datac-icon">&#xe69e;</i>');
+    return $('<i class="newIconfont iconapplication"></i>');
   }
 }
 

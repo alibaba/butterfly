@@ -5,18 +5,11 @@
   .title {
     height: 28px;
     line-height: 28px;
-    color: #fff;
+    color: @butterfly-overlay-font-color;
     padding: 0 5px;
     border-radius: 8.04px 8.04px 0 0;
-    &.purple {
-      background: #9254DE
-    }
-    &.blue {
-      background: #40A9FF;
-    }
-    &.drak-blue {
-      background: #597EF7;
-    }
+    border:@butterfly-box-border;
+    background: @butterfly-primary-color;
     .icon-class {
       vertical-align: bottom;
       margin-right: 5px;
@@ -26,10 +19,11 @@
     height: 32px;
     line-height: 32px;
     padding: 0 8px;
-    background: #fff;
+    border:@butterfly-box-border;
+    background: @butterfly-theme-color;
     border-radius: 0 0 8.04px 8.04px;
     font-size: 12px;
-    color: #333333;
+    color: @butterfly-normal-font-color;
     text-align: center;
   }
   .expand-btn {
@@ -40,8 +34,14 @@
     width: 20px;
     line-height: 8px;
     text-align: center;
-    border-radius: 30%;
-    background: #fff;
+    border-radius: 4px;
+    border:@butterfly-box-border;
+    box-shadow:@butterfly-box-shadow;
+    background: @butterfly-theme-color;
     cursor: pointer;
+  }
+  .expand-btn:hover{
+    border:@butterfly-box-node-border-hover;
+    border-radius: 5px;
   }
 }

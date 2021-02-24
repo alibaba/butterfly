@@ -1,6 +1,7 @@
 'use strict';
 
-const Node = require('../../../index.js').Node;
+// const Node = require('../../../index.js').Node;
+import { Node } from 'butterfly-dag';
 const $ = require('jquery');
 
 class BaseNode extends Node {
@@ -60,7 +61,7 @@ class BaseNode extends Node {
       let triangleSvg = $(`
         <svg width="100%" height="100%">
           <polygon points="0,0 ${width},0 ${width / 2},${height}"
-          style="fill:${data.options.fill};"/>
+          />
         </svg>`);
       container.append(triangleSvg);
     }

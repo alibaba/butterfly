@@ -12,5 +12,41 @@
     .iconfont {
       cursor: pointer;
     }
+    .custom-node{
+      .ant-select{
+        color: @butterfly-normal-font-color;
+          .ant-select-selection{
+            border:@butterfly-box-border;
+            background-color: @butterfly-theme-color;
+          }
+        }
+        .ant-select-focused{
+          .ant-select-selection{
+              background-color: @butterfly-theme-color;
+              border: @butterfly-box-node-border-hover;
+              box-shadow:0 0 2px @butterfly-primary-color;
+            }
+        }
+          .ant-select-selection:hover{
+            border: @butterfly-box-node-border-hover;
+            color: @butterfly-primary-color;
+          }
+      }
   }
+}
+.ant-select-dropdown{
+  border-radius: 0 0 10px 10px;  
+  overflow: hidden; 
+  .ant-select-dropdown-menu-item-active:not(.ant-select-dropdown-menu-item-disabled){
+    background-color: @butterfly-box-move-background-color;
+  }
+    .ant-select-dropdown-menu,.ant-select-dropdown-menu-root,.ant-select-dropdown-menu-vertical{
+      li:hover{
+        background-color: @butterfly-box-move-background-color;
+      }
+      background-color: @butterfly-theme-color; 
+    }
+    .ant-select-dropdown-menu-item-active{ 
+      background-color: @butterfly-primary-color; 
+    }
 }

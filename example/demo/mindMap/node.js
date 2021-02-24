@@ -1,6 +1,7 @@
 'use strict';
 
-const Node = require('../../../index.js').TreeNode;
+// const Node = require('../../../index.js').TreeNode;
+import { Node } from 'butterfly-dag';
 const $ = require('jquery');
 
 class BaseNode extends Node {

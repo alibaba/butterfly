@@ -25,17 +25,20 @@ class GridService {
       circleColor: '#000' // 断电颜色
     };
   }
+  _resize() {
+    this.canvasHeight = $(this.root).height();
+    this.canvasWidth = $(this.root).width();
+    $(this.dom).attr('width', this.canvasWidth);
+    $(this.dom).attr('height', this.canvasHeight);
+  }
   create(options = {}) {
     this.theme = _.merge(this.theme, options.theme || {});
 
-    this.canvasHeight = $(this.root).height();
-    this.canvasWidth = $(this.root).width();
-
-    this.dom = $('<canvas class="butterfly-gird-canvas"></canvas>')[0];
-    $(this.dom).attr('width', this.canvasWidth);
-    $(this.dom).attr('height', this.canvasHeight);
-
-    $(this.dom).appendTo(this.root);
+    if (!this.dom) {
+      this.dom = $('<canvas class="butterfly-gird-canvas"></canvas>')[0];
+      this._resize();
+      $(this.dom).appendTo(this.root); 
+    }
 
     if (this.theme.shapeType === 'circle') {
       this.createCircle();
@@ -46,6 +49,10 @@ class GridService {
   }
   createCircle() {
     let _ctx = this.dom.getContext('2d');
+    // _ctx.fillStyle = "rgba(0, 0, 0, 1)";
+    // _ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
+    _ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight); 
+    _ctx.beginPath();
     _ctx.fillStyle = this.theme.circleColor || '#000';
     let _p = Math.PI * 2;
     let _gap = parseInt(this.theme.gap);
