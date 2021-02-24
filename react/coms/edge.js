@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {Edge} from 'butterfly-dag/es';
+import {Edge} from 'butterfly-dag/pack';
 
 
 class CustomEdge extends Edge {

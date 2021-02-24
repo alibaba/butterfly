@@ -1,4 +1,4 @@
-import {Node} from 'butterfly-dag/es';
+import {Node} from 'butterfly-dag/pack';
 import $ from 'jquery';
 
 const getNodeStyle = (left, top) => {

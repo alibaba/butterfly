@@ -8,7 +8,7 @@ export default {
   optimizeDeps: {
     include: [
       'react-dev-utils/webpackHotDevClient',
-      'butterfly-dag/es'
+      'butterfly-dag/pack'
     ]
   }
 };
