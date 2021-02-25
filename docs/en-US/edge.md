@@ -70,6 +70,12 @@ mounted = () => {}
   * callback after line updated
   */
 updated = () => {}
+
+/**
+  * set z-index
+  * @param {number} zIndex -  zIndex value
+  */
+setZIndex = (index) => {}
 ```
 
 ### <a name='edge-custom-arrow'>custom arrow</a>：
