@@ -2296,6 +2296,11 @@ class BaseCanvas extends Canvas {
             $(point.dom).css('z-index', this._dragNodeZIndex * 2);
           });
         });
+        this.edges.forEach((item) => {
+          if (item.labelDom) {
+            $(item.labelDom).css('z-index', this._dragEdgeZindex + 1);
+          }
+        });
         this._isInitEdgeZIndex = true;
       }
       // 拖动的时候提高z-index
