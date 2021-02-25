@@ -18,7 +18,7 @@ class GridService {
       shapeType: 'circle',  // 展示的类型，支持line & circle
       gap: 5,            // 网格间隙
       adsorbGap: '5px',      // 吸附间距
-      backgroud: '#fff',  // 网格背景颜色
+      background: '#fff',  // 网格背景颜色
       lineColor: '#000',  // 网格线条颜色
       lineWidth: '1px',   // 网格粗细
       circleRadiu: 2, // 圆点半径

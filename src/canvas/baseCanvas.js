@@ -3344,22 +3344,23 @@ class BaseCanvas extends Canvas {
       } else if(_.get(this.layout, 'type') === 'gridLayout') {
         const _opts = $.extend({
           // 布局画布总宽度
-          width: 150,
+          width:  _.get(this.layout, 'width') || 150,
           // 布局画布总长度
-          height: 100,
+          height: _.get(this.layout, 'height') || 100,
           // 布局相对起始点
-          begin: [0, 0],
-          preventOverlap: true,
-          preventOverlapPadding: 10,
-          condense: false,
+          begin: _.get(this.layout, 'begin') || [0, 0],
+          center:  _.get(this.layout, 'center') || [width / 2, height / 2],
+          preventOverlap: _.get(this.layout, 'preventOverlap') || true,
+          preventOverlapPadding: _.get(this.layout, 'preventOverlapPadding') || 10,
+          condense: _.get(this.layout, 'condense') || false,
           //宽高
-          rows: undefined,
-          cols: undefined,
+          rows: _.get(this.layout, 'rows'),
+          cols: _.get(this.layout, 'cols'),
           //位置
-          position: undefined,
+          position: _.get(this.layout, 'position'),
           // 排序方式
-          sortBy: 'degree',
-          nodeSize: 30,
+          sortBy: _.get(this.layout, 'sortBy') || 'degree',
+          nodeSize: _.get(this.layout, 'nodeSize') || 30,
           link: {
             // 以node的什么字段为寻找id，跟d3原理一样
             id: 'id',
@@ -3371,7 +3372,6 @@ class BaseCanvas extends Canvas {
         }, _.get(this.layout, 'options'), true);
         // 自动布局
         if (_.get(this.layout, 'type') === 'gridLayout') {
-
           Layout.gridLayout({
             opts: _opts,
             data: {
