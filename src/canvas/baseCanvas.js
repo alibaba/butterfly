@@ -2054,6 +2054,8 @@ class BaseCanvas extends Canvas {
       } else if (data.type === 'edge:updateLabel') {
         let labelDom = data.data.labelDom;
         $(this.wrapper).append(labelDom);
+      } else if (data.type === 'edge:setZIndex') {
+        this.setEdgeZIndex([data.edge], data.index);
       }
     });
 
@@ -2469,7 +2471,6 @@ class BaseCanvas extends Canvas {
                   sourceNode: _sourceNode.id,
                   sourceEndpoint: _sourceEndpoint.id
                 });
-                console.log(pointObj)
                 // 检查endpoint限制连接数目
                 let _linkNums = this.edges.filter((_edge) => {
                   return _edge.sourceEndpoint.id === point.id;
@@ -3906,6 +3907,64 @@ class BaseCanvas extends Canvas {
   clearActionQueue() {
     this.actionQueue = [];
     this.actionQueueIndex = -1;
+  }
+  // 设置线段的z-index
+  setEdgeZIndex(edges = [], zIndex = 0) {
+    if (edges.length === 0) {
+      return;
+    }
+    edges.forEach((edge) => {
+      edge._zIndex = zIndex;
+      let index = _.findIndex(this.edges, (item) => {
+        return item === edge;
+      });
+      if (index !== -1) {
+        let delEdge = this.edges.splice(index, 1);
+        $(delEdge.dom).detach();
+        delEdge.eventHandlerDom && $(delEdge.eventHandlerDom).detach();
+        delEdge.arrowDom && $(delEdge.arrowDom).detach();
+      } else {
+        return;
+      }
+    });
+    let addIndex = this._findEdgeIndex(edges[0]);
+    let addEdgesDom = [];
+    edges.forEach((item) => {
+      addEdgesDom.push(item.dom);
+      item.eventHandlerDom && addEdgesDom.push(item.eventHandlerDom);
+      item.arrowDom && addEdgesDom.push(item.arrowDom);
+    });
+
+    // 插入dom
+    let beforeEdge = this.edges[addIndex];
+    let afterEdge = this.edges[addIndex + 1];
+    
+    if (beforeEdge) {
+      let targetDom = beforeEdge.dom;
+      beforeEdge.eventHandlerDom && (targetDom = beforeEdge.eventHandlerDom);
+      beforeEdge.arrowDom && (targetDom = beforeEdge.arrowDom);
+      $(targetDom).after(addEdgesDom);
+    } else if (afterEdge) {
+      $(afterEdge.dom).before(addEdgesDom);
+    } else {
+      $(this.svg).append(addEdgesDom);
+    }
+
+    this.edges.splice(addIndex + 1, 0 , ...edges);
+  }
+  _findEdgeIndex(edge) {
+    let index = 0;
+    let currentZIndex = edge._zIndex || 0;
+    this.edges.forEach((item, i) => {
+      if (currentZIndex < (item._zIndex || 0)) {
+        index = i;
+        return;
+      }
+      if (i === this.edges.length - 1) {
+        index = i;
+      }
+    });
+    return index;
   }
 }
 

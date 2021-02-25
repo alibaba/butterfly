@@ -1,7 +1,8 @@
 'use strict';
 
 // const Node = require('../../../index.js').TreeNode;
-import { TreeNode } from 'butterfly-dag';
+// import { TreeNode } from 'butterfly-dag';
+import { TreeNode } from '../../../index';
 
 const $ = require('jquery');
 require('./node.less');
