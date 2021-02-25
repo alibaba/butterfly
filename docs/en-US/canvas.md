@@ -241,6 +241,13 @@ getNeighborEdgesByEndpoint = (string, string) => {}
   * @returns {Object<nodes: Node, edges: Edge>} filteredGraph - lookup result
   */
 getNeighborNodesAndEdgesByLevel = (options) => {}
+
+/**
+  * set z-index attribute to edge
+  * @param {Array<Edge>} edges - edges
+  * @param {number} zIndex - z-index value
+  */
+setEdgeZIndex = (edges, zIndex) => {}
 ```
 
 ### <a name='canvas-api-zoom-move'>缩放，平移</a>：
