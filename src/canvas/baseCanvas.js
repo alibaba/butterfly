@@ -130,7 +130,12 @@ class BaseCanvas extends Canvas {
     if($(this.root).css('position') === 'static') {
       $(this.root).css('position', 'relative');
     }
-    this._dragIndex = 50;
+
+    // 节点,线段,节点组z-index值，顺序：节点 > 线段 > 节点组
+    this._dragGroupZIndex = 50;
+    this._dragNodeZIndex = 250;
+    this._dragEdgeZindex = 499;
+    this._isInitEdgeZIndex = false;
 
     // 检测节点拖动节点组的hover状态
     this._hoverGroupQueue = [];
@@ -2281,18 +2286,29 @@ class BaseCanvas extends Canvas {
         x: event.clientX,
         y: event.clientY
       };
-
+      
+      // 初始化z-index
+      if (!this._isInitEdgeZIndex) {
+        $(this.svg).css('z-index', this._dragEdgeZindex);
+        this.nodes.forEach((item) => {
+          $(item.dom).css('z-index', (this._dragNodeZIndex) * 2 - 1);
+          _.get(item, 'endpoints').forEach((point) => {
+            $(point.dom).css('z-index', this._dragNodeZIndex * 2);
+          });
+        });
+        this._isInitEdgeZIndex = true;
+      }
       // 拖动的时候提高z-index
       if (this._dragNode) {
-        $(this._dragNode.dom).css('z-index', (++this._dragIndex) * 2 - 1);
+        $(this._dragNode.dom).css('z-index', (++this._dragNodeZIndex) * 2 - 1);
         _.get(this._dragNode, 'endpoints').forEach((point) => {
-          $(point.dom).css('z-index', this._dragIndex * 2);
+          $(point.dom).css('z-index', this._dragNodeZIndex * 2);
         });
       }
       if (this._dragGroup) {
-        $(this._dragGroup.dom).css('z-index', (++this._dragIndex) * 2 - 1);
+        $(this._dragGroup.dom).css('z-index', (++this._dragGroupZIndex) * 2 - 1);
         _.get(this._dragGroup, 'endpoints').forEach((point) => {
-          $(point.dom).css('z-index', this._dragIndex * 2);
+          $(point.dom).css('z-index', this._dragGroupZIndex * 2);
         });
       }
       
