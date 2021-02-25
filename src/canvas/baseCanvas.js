@@ -2299,15 +2299,15 @@ class BaseCanvas extends Canvas {
         this._isInitEdgeZIndex = true;
       }
       // 拖动的时候提高z-index
-      if (this._dragNode) {
+      if (this._dragNode && this._dragNode.__type == 'node') {
         $(this._dragNode.dom).css('z-index', (++this._dragNodeZIndex) * 2 - 1);
         _.get(this._dragNode, 'endpoints').forEach((point) => {
           $(point.dom).css('z-index', this._dragNodeZIndex * 2);
         });
       }
-      if (this._dragGroup) {
-        $(this._dragGroup.dom).css('z-index', (++this._dragGroupZIndex) * 2 - 1);
-        _.get(this._dragGroup, 'endpoints').forEach((point) => {
+      if (this._dragNode && this._dragNode.__type == 'group') {
+        $(this._dragNode.dom).css('z-index', (++this._dragGroupZIndex) * 2 - 1);
+        _.get(this._dragNode, 'endpoints').forEach((point) => {
           $(point.dom).css('z-index', this._dragGroupZIndex * 2);
         });
       }
