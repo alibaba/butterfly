@@ -1,5 +1,5 @@
 import React from 'react';
-import _, {has} from 'lodash';
+import _ from 'lodash';
 import _debug from 'debug';
 import {Canvas} from 'butterfly-dag/pack';
 
@@ -127,11 +127,8 @@ class ButterflyReact extends React.Component {
 
     call(this.props.onLoaded)(this.canvas);
   }
-
   // 控制渲染边上的cls
-  shouldComponentUpdate() {
-    debug('align edge class');
-
+  alignEdgesCls() {
     const canvas = this.canvas;
     const {edges} = this.props;
 
@@ -170,7 +167,11 @@ class ButterflyReact extends React.Component {
       alignEdgeCls();
       alignEdgeArrowCls();
     });
+  }
 
+  shouldComponentUpdate() {
+    debug('align edge class');
+    this.alignEdgesCls();
     return true;
   }
 
@@ -242,21 +243,6 @@ class ButterflyReact extends React.Component {
       return;
     }
 
-    // const prePHash = this.phash;
-    // const hash = this.getPropsHash(this.props);
-
-    // let hasCanvasChanged = false;
-
-    // Object.keys(hash).forEach(key => {
-    //   if (hasCanvasChanged) {
-    //     return;
-    //   }
-
-    //   if (prePHash[key] !== hash[key]) {
-    //     hasCanvasChanged = true;
-    //   }
-    // });
-
     const hasCanvasChanged = this.props.nodes !== preProps.nodes ||
     this.props.edges !== preProps.edges ||
     this.props.groups !== preProps.groups ||
@@ -266,8 +252,6 @@ class ButterflyReact extends React.Component {
 
     if (hasCanvasChanged) {
       debug('has sth change, align data');
-      this.savePropsHash();
-
       this.alignCanvasData();
     }
   }
@@ -325,6 +309,7 @@ class ButterflyReact extends React.Component {
       processEdge();
     }
 
+    this.alignEdgesCls();
     call(onEachFrame)();
   }
 
