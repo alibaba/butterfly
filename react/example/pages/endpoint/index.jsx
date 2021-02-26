@@ -107,6 +107,9 @@ const EndpointDemo = () => {
         onLoaded={(canvas) => {
           canvasRef.current = canvas;
         }}
+        onEachFrame={() => {
+          console.log('render frame finish');
+        }}
         {...data}
       />
     </div>
