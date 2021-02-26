@@ -1,7 +1,7 @@
 'use strict';
-const Canvas = require('../../../index.js').Canvas;
-const Layout = require('../../../index.js').Layout;
-// import { Canvas, Layout } from 'butterfly-dag';
+// const Canvas = require('../../../index.js').Canvas;
+// const Layout = require('../../../index.js').Layout;
+import { Canvas, Layout } from 'butterfly-dag';
 
 
 class DagreCanvas extends Canvas {
