@@ -237,25 +237,32 @@ class ButterflyReact extends React.Component {
     });
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(preProps) {
     if (!this.canvas) {
       return;
     }
 
-    const prePHash = this.phash;
-    const hash = this.getPropsHash(this.props);
+    // const prePHash = this.phash;
+    // const hash = this.getPropsHash(this.props);
 
-    let hasCanvasChanged = false;
+    // let hasCanvasChanged = false;
 
-    Object.keys(hash).forEach(key => {
-      if (hasCanvasChanged) {
-        return;
-      }
+    // Object.keys(hash).forEach(key => {
+    //   if (hasCanvasChanged) {
+    //     return;
+    //   }
 
-      if (prePHash[key] !== hash[key]) {
-        hasCanvasChanged = true;
-      }
-    });
+    //   if (prePHash[key] !== hash[key]) {
+    //     hasCanvasChanged = true;
+    //   }
+    // });
+
+    const hasCanvasChanged = this.props.nodes !== preProps.nodes ||
+    this.props.edges !== preProps.edges ||
+    this.props.groups !== preProps.groups ||
+    this.props.nodes?.length !== preProps.nodes?.length ||
+    this.props.edges?.length !== preProps.edges?.length ||
+    this.props.groups?.length !== preProps.groups?.length;
 
     if (hasCanvasChanged) {
       debug('has sth change, align data');
@@ -358,6 +365,7 @@ class ButterflyReact extends React.Component {
                 idPrefix="bf_node_"
                 canvas={this.canvas}
                 onRenderFinish={() => {
+                  debug('node has rended finish, render edges');
                   // 对齐所有的锚点
                   this.canvas.recalc();
                   this.alignEdge();
