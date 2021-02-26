@@ -9,7 +9,7 @@ import '../color.less';
 
 const options = {
   layout: {
-    type: 'drageLayout',
+    type: 'dagreLayout',
     options: {
       rankdir: 'TB',
       nodesep: 100,

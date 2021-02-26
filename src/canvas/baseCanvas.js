@@ -3247,8 +3247,8 @@ class BaseCanvas extends Canvas {
             }
           });
         }
-      } else if (_.get(this.layout, 'type') === 'drageLayout') {
-        Layout.drageLayout({
+      } else if (_.get(this.layout, 'type') === 'dagreLayout') {
+        Layout.dagreLayout({
           //  /** layout 方向, 可选 TB, BT, LR, RL */
           // public rankdir: 'TB' | 'BT' | 'LR' | 'RL' = 'TB';
           rankdir: _.get(this.layout, 'options.rankdir') || 'TB',

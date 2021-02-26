@@ -4,11 +4,11 @@ const Layout = require('../../../index.js').Layout;
 // import { Canvas, Layout } from 'butterfly-dag';
 
 
-class DrageCanvas extends Canvas {
+class DagreCanvas extends Canvas {
   constructor(options) {
     super(options);
   }
-  drageReDraw(newParam) {
+  dagreReDraw(newParam) {
     let {nodes, layout, edges} = this;
     let addResultNodes = nodes.map((item) => {
       return item.options
@@ -19,7 +19,7 @@ class DrageCanvas extends Canvas {
         ...newParam
       }
     }
-    Layout.drageLayout({
+    Layout.dagreLayout({
       rankdir: (newParam && newParam.rankdir) || _.get(layout, 'options.rankdir') || 'TB',
       align: (newParam && newParam.align) || _.get(layout, 'options.align'),
       nodeSize: (newParam && newParam.nodeSize) || _.get(layout, 'options.nodeSize'),
@@ -50,4 +50,4 @@ class DrageCanvas extends Canvas {
   }
 }
 
-export default DrageCanvas;
+export default DagreCanvas;

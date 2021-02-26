@@ -63,7 +63,7 @@ let canvas = new Canvas({
 
 * **layout布局**，把string/function传入layout的属性即可
  * forceLayout
- * drageLayout
+ * dagreLayout
  * concentricLayout
  * circleLayout
  * fruchterman
