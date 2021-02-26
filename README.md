@@ -123,7 +123,7 @@ canvas.draw({
   <img width="49%" src="https://img.alicdn.com/imgextra/i2/O1CN017Gcu0Y1mbgIHcgqwr_!!6000000004973-1-tps-595-411.gif">
 </p>
 <p align="center">
-  <img width="49%" src="https://img.alicdn.com/imgextra/i3/O1CN01f4Ek5H1oCbqDjM7sL_!!6000000005189-1-tps-595-411.gif">
+  <img width="49%" src="https://img.alicdn.com/imgextra/i2/O1CN011xYzxM1ZenzfVE0Xq_!!6000000003220-1-tps-595-411.gif">
   <img width="49%" src="https://img.alicdn.com/imgextra/i4/O1CN01Nt9rpo25y6NlRMUtR_!!6000000007594-1-tps-595-411.gif">
 </p>
 
