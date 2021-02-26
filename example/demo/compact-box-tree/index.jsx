@@ -4,6 +4,7 @@ require('./index.less');
 
 // const Canvas = require('../../../index.js').TreeCanvas;
 import { TreeCanvas } from 'butterfly-dag';
+// import { TreeCanvas } from '../../../index';
 const {mockData} = require('./data');
 
 class CompactBoxTree extends Component {

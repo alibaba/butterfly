@@ -50,6 +50,8 @@ class BaseEdge extends Edge {
     // 线段起始位置
     this._sourcePoint = null;
     this._targetPoint = null;
+    // 线段的z-index
+    this._zIndex = 0;
   }
   _init() {
     if (this._isInited) {
@@ -264,6 +266,13 @@ class BaseEdge extends Edge {
       type: 'edge:delete',
       data: this
     });
+  }
+  setZIndex(index) {
+    this.emit('InnerEvents', {
+      type: 'edge:setZIndex',
+      edge: this,
+      index: index
+    })
   }
   destroy(isNotEventEmit) {
     if (this.labelDom) {
