@@ -1223,7 +1223,6 @@ class BaseCanvas extends Canvas {
     let canRight = -Infinity;
     let canTop = Infinity;
     let canBottom = -Infinity;
-
     if (_.includes(type, 'node')) {
       let nodeIds = param.nodes;
       this.nodes.filter((_node) => {
@@ -1291,11 +1290,13 @@ class BaseCanvas extends Canvas {
     let terDisY = this._rootHeight - customOffset[1];
     let scaleX = terDisX / canDisX;
     let scaleY = terDisY / canDisY;
-
     // 这里要根据scale来判断
     let scale = scaleX < scaleY ? scaleX : scaleY;
-    scale = 1 < scale ? 1 : scale;
-
+    if (_.get(options, 'keepPreZoom')) {
+      scale = this._zoomData < scale ? this._zoomData : scale;
+    } else {
+      scale = 1 < scale ? 1 : scale;
+    }
     let terLeft = this._coordinateService._canvas2terminal('x', canLeft, {
       scale: scale,
       canOffsetX: 0,
