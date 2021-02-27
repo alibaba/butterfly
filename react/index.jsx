@@ -47,10 +47,6 @@ class ButterflyReact extends React.Component {
     this.canvas = null;
     // 渲染节点实例
     this.dom = null;
-
-    ['alignCanvasData'].forEach(key => {
-      this[key] = this[key].bind(this);
-    });
   }
 
   savePropsHash() {
@@ -238,7 +234,7 @@ class ButterflyReact extends React.Component {
     });
   }
 
-  componentDidUpdate(preProps) {
+  async componentDidUpdate(preProps) {
     if (!this.canvas) {
       return;
     }
@@ -252,7 +248,9 @@ class ButterflyReact extends React.Component {
 
     if (hasCanvasChanged) {
       debug('has sth change, align data');
-      this.alignCanvasData();
+      await this.alignCanvasData();
+      // 等待下一次更新
+      this.updateFlag = true;
     }
   }
 
@@ -305,12 +303,7 @@ class ButterflyReact extends React.Component {
     processNodes();
 
     await this.forceUpdate();
-    if (edge) {
-      processEdge();
-    }
-
     this.alignEdgesCls();
-    call(onEachFrame)();
   }
 
   alignEdge() {
@@ -333,6 +326,12 @@ class ButterflyReact extends React.Component {
     };
 
     processEdge();
+    this.alignEdgesCls();
+
+    if (this.updateFlag) {
+      call(this.props.onEachFrame)();
+      this.updateFlag = false;
+    }
   }
 
   render() {
