@@ -128,6 +128,8 @@ canvas.draw({
 </p>
 
 * Blood Map(doing)
+<img width="98%" src="https://img.alicdn.com/imgextra/i4/O1CN01ou8wTq20SQv4AnedD_!!6000000006848-1-tps-1337-761.gif">
+
 * (Visual Modeling)[https://github.com/aliyun/react-visual-modeling/blob/master/README.en-US.md]: Suitable for UML, database modeling, data warehouse construction
 <img width="98%" src="https://img.alicdn.com/imgextra/i4/O1CN01VZxfyl1pOLc15k7XM_!!6000000005350-1-tps-1665-829.gif">
 
