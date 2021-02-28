@@ -127,7 +127,7 @@ canvas.draw({
   <img width="49%" src="https://img.alicdn.com/imgextra/i4/O1CN01Nt9rpo25y6NlRMUtR_!!6000000007594-1-tps-595-411.gif">
 </p>
 
-* Blood Map(doing)
+* Blood Map(doing): Suitable for table blood dag, table field blood dag, business chain blood dag and other blood dag
 <img width="98%" src="https://img.alicdn.com/imgextra/i4/O1CN01ou8wTq20SQv4AnedD_!!6000000006848-1-tps-1337-761.gif">
 
 * (Visual Modeling)[https://github.com/aliyun/react-visual-modeling/blob/master/README.en-US.md]: Suitable for UML, database modeling, data warehouse construction
