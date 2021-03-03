@@ -18,5 +18,6 @@
   "home_flexible_desc": "利用DOM/REACT/VUE来定制元素；灵活性，可塑性，拓展性优秀",
   "home_sub_title": "一个基于JS的数据驱动的节点式编排组件库",
   "home_begin": "开始使用",
-  "home_see_demo": "查看示例"
+  "home_see_demo": "查看示例",
+  "home_example": "实例"
 }

@@ -18,5 +18,6 @@
   "home_flexible_desc": "Use DOM / react / Vue to customize elements; excellent flexibility, plasticity and expansibility",
   "home_sub_title": "A JS based data driven nodal choreography component library",
   "home_begin": "Getting Started",
-  "home_see_demo": "Demos"
+  "home_see_demo": "Demos",
+  "home_example": "Example"
 }
