@@ -1,6 +1,6 @@
 'use strict';
 import React, {Component} from 'react';
-import DrageCanvas from './drageCanvas';
+import DagreCanvas from './dagreCanvas';
 import {Button, Select, Slider} from 'antd';
 require('./index.less');
 require('butterfly-dag/dist/index.css');
@@ -8,7 +8,7 @@ const mockData = require('./data.js');
 const node = require('./base_node.jsx');
 const RelationEdge = require('./edge_relation.jsx');
 
-class DrageLayout extends Component {
+class DagreLayout extends Component {
   constructor() {
     super();
     this.canvas = null;
@@ -18,7 +18,7 @@ class DrageLayout extends Component {
   }
   componentDidMount() {
     let root = document.getElementById('dag-canvas');
-    this.canvas = new DrageCanvas({
+    this.canvas = new DagreCanvas({
       root: root,
       disLinkable: true, // 可删除连线
       linkable: true,    // 可连线
@@ -26,7 +26,7 @@ class DrageLayout extends Component {
       zoomable: true,    // 可放大
       moveable: true,    // 可平移
       layout: {
-        type: 'drageLayout',
+        type: 'dagreLayout',
         options: {
           rankdir: 'TB',
           nodesep: 40,
@@ -105,7 +105,7 @@ class DrageLayout extends Component {
   }
   render() {
     return (
-      <div className='drageLayout-page'>
+      <div className='dagreLayout-page'>
         <div className='operate-bar'>
           <div className='operate-bar-title'>属性配置</div>
           <div className='operate-item'>
@@ -148,4 +148,4 @@ class DrageLayout extends Component {
   }
 }
 
-module.exports = DrageLayout;
+module.exports = DagreLayout;

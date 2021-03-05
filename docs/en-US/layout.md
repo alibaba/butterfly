@@ -24,21 +24,21 @@ this.canvas = new Canvas({
 ```
 
 
-## Darge Layout
+## Dagre Layout
 
 Dagre Layout is an appropriate layout method for directed flow graph.It will calculate the levels and positions of nodes automatically according to the edge directions in the data. 
 
 
 #### legend
 
-![Darge布局](https://img.alicdn.com/tfs/TB1kzjEkRFR4u4jSZFPXXanzFXa-1335-782.png)
+![Dagre布局](https://img.alicdn.com/tfs/TB1kzjEkRFR4u4jSZFPXXanzFXa-1335-782.png)
 
 #### Examples
 
 ``` js
 this.canvas = new Canvas({
   layout: {
-    type: 'drageLayout',
+    type: 'dagreLayout',
     options: {
       rankdir: 'TB',
       nodesep: 40,
@@ -225,7 +225,7 @@ import {TreeCanvas} from 'butterfly-dag';
 import {TreeCanvas} from 'butterfly-dag';
 this.canvas = new TreeCanvas({
   layout: {
-    type: 'drageLayout',
+    type: 'dagreLayout',
     options: {
       rankdir: 'TB',
       nodesep: 40,

@@ -64,7 +64,7 @@ let canvas = new Canvas({
 
 * **layout**，pass string / function into the property of layout
  * forceLayout
- * drageLayout
+ * dagreLayout
  * concentricLayout
  * circleLayout
  * fruchterman

@@ -6,7 +6,8 @@ module.exports = {
     name: 'test1',
     Class: node,
     className: 'nodeBackground-color'
-  }, {
+  },
+  {
     id: 'test2',
     name: 'test2',
     Class: node,
@@ -40,8 +41,9 @@ module.exports = {
 ],
   edges: [{
     source: 'test1',
-    target: 'test2'
-  }, {
+    target: 'test2',
+  }, 
+  {
     source: 'test1',
     target: 'test3'
   }, {
