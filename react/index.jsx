@@ -120,6 +120,8 @@ class ButterflyReact extends React.Component {
 
     // 强制更新，渲染节点、锚点、节点组
     await this._fourceUpdate();
+    // 事件监听
+    this.onLinkEvent();
 
     call(this.props.onLoaded)(this.canvas);
   }
@@ -179,8 +181,11 @@ class ButterflyReact extends React.Component {
       onDeleteEdge
     } = this.props;
 
+    console.log(canvas);
+
     canvas.on('system.link.connect', ({links}) => {
       const link = links[0];
+
       if (!link) {
         return;
       }
@@ -259,7 +264,7 @@ class ButterflyReact extends React.Component {
    * @param {BaseCanvas} canvas 画布实例
    * @param {Boolean} edge 是否对齐边
    */
-  async alignCanvasData(edge = false) {
+  async alignCanvasData() {
     const canvas = this.canvas;
 
     // 利用ID，和当前的边，当前的节点进行对比
@@ -267,10 +272,9 @@ class ButterflyReact extends React.Component {
       return;
     }
 
-    const {nodes, edges, groups, onEachFrame} = this.props;
+    const {nodes, groups} = this.props;
 
     const oldNodes = canvas.nodes;
-    const oldEdges = canvas.edges;
     const oldGroups = canvas.groups;
 
     const processNodes = () => {
@@ -278,13 +282,6 @@ class ButterflyReact extends React.Component {
 
       canvas.addNodes(process({nodes: created}).nodes);
       canvas.removeNodes(process({nodes: deleted}).nodes);
-    };
-
-    const processEdge = () => {
-      const {created, deleted} = diff(edges, oldEdges);
-
-      canvas.addEdges(process({edges: created}).edges, true);
-      canvas.removeEdges(process({edges: deleted}).edges.map(e => e.id));
     };
 
     const processGroups = () => {
@@ -355,12 +352,14 @@ class ButterflyReact extends React.Component {
                   this.alignEdge();
                 }}
               />
-              <CommonRender
-                data={edges}
-                renderKey="labelRender"
-                idPrefix="edge_label_"
-                type="edge"
-              />
+              {
+                <CommonRender
+                  data={edges}
+                  renderKey="labelRender"
+                  idPrefix="edge_label_"
+                  type="edge"
+                />
+              }
               <CommonRender
                 data={groups}
                 type="group"

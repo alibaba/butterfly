@@ -40,7 +40,7 @@ const EndpointDemo = () => {
       render() {
         return (
           <Node title="节点">
-            <Endpoint 
+            <Endpoint
               id={`endpoint-${id}`}
               nodeId={id}
             >
