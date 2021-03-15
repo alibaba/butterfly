@@ -79,7 +79,7 @@ const Home = () => {
       <div className='home-footer'>
         <div className='home-footer-content'>
           <div className='home-footer-item home-footer-team'>
-            <h3>Butterfle核心成员</h3>
+            <h3>Butterfly核心成员</h3>
             <div className='home-user-list'>
               <div className='user-item'>
                 <img className='avatar' src="/static/wuwei.png" />
@@ -99,9 +99,8 @@ const Home = () => {
             <h3>友情链接</h3>
             <div className='link-item-list'>
               <span className='link-item'>集团物料中心</span>
-              <span className='link-item'>xconsle</span>
-              <span className='link-item'>阿里云设计资产平台</span>
-              <span className='link-item'>B-Design</span>
+              <span className='link-item'>DT design</span>
+              <span className='link-item'>Xconsle</span>
               <span className='link-item'>Visbar</span>
             </div>
           </div>
@@ -112,7 +111,7 @@ const Home = () => {
         </div>
         <hr className='home-footer-hr' />
         <div className='home-footer-info'>
-          <p>copyright @ 2019 alibaba.inc</p>
+          <p>copyright &copy; 2019 alibaba.inc</p>
           <p>阿里云智能技术部 x 阿里云ACD设计中心</p>
         </div>
       </div>
