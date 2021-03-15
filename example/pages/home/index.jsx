@@ -76,6 +76,46 @@ const Home = () => {
         <div className="demo-title">{i18next.t('home_example')}</div>
         <img src="https://camo.githubusercontent.com/27d85184fdd0e518610f681ca4249178db75962af2ceb3c3bd6f26469702395a/68747470733a2f2f696d672e616c6963646e2e636f6d2f696d6765787472612f69342f4f31434e303164375748567331766b45447a5752526c575f2121363030303030303030363231302d322d7470732d323430302d383137322e706e67" />
       </div>
+      <div className='home-footer'>
+        <div className='home-footer-content'>
+          <div className='home-footer-item home-footer-team'>
+            <h3>Butterfle核心成员</h3>
+            <div className='home-user-list'>
+              <div className='user-item'>
+                <img className='avatar' src="/static/wuwei.png" />
+                <div className='name'>无惟</div>
+              </div>
+              <div className='user-item'>
+                <img className='avatar' src="/static/jianyi.png" />
+                <div className='name'>简逸</div>
+              </div>
+              <div className='user-item'>
+                <img className='avatar' src="/static/yunxi.png" />
+                <div className='name'>筠曦</div>
+              </div>
+            </div>
+          </div>
+          <div className='home-footer-item home-footer-link'>
+            <h3>友情链接</h3>
+            <div className='link-item-list'>
+              <span className='link-item'>集团物料中心</span>
+              <span className='link-item'>xconsle</span>
+              <span className='link-item'>阿里云设计资产平台</span>
+              <span className='link-item'>B-Design</span>
+              <span className='link-item'>Visbar</span>
+            </div>
+          </div>
+          <div className='home-footer-item home-footer-help'>
+            <h3>帮助与反馈</h3>
+            <img className="home-footer-help-img" src={`/static/QRCode.png`} />
+          </div>
+        </div>
+        <hr className='home-footer-hr' />
+        <div className='home-footer-info'>
+          <p>copyright @ 2019 alibaba.inc</p>
+          <p>阿里云智能技术部 x 阿里云ACD设计中心</p>
+        </div>
+      </div>
     </div>
   );
 };
