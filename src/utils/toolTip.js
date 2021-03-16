@@ -66,6 +66,7 @@ const _getTipOffset = (placement, pos, offset = {x: 0, y: 0}) => {
   return _pos;
 };
 
+let _menuOldPos = {x: 0, y: 0}
 const show = (opts, type, tipsDom, targetDom, callback) => {
   $(DEFUALT.$viewCon[type]).remove();
 
@@ -111,6 +112,10 @@ const show = (opts, type, tipsDom, targetDom, callback) => {
     }
     posInit = _getTipOffset(placement, pos, offset);
   }
+  _menuOldPos = {
+    x: posInit.left,
+    y: posInit.top
+  };
   const position = `top: ${posInit.top}px; left: ${posInit.left}px;`;
   $(tipsContainer).attr('style', position);
   callback && callback(tipsContainer[0]);
@@ -149,9 +154,15 @@ let createTip = (opts, callback) => {
     }, 50);
   }
   let {data, targetDom, genTipDom} = opts;
+  let _tipsDom = opts.tipsDom;
   targetDom.addEventListener('mouseover', (e) => {
     isMouseInTarget = true;
-    tipstDom = genTipDom(data);
+    if (_tipsDom) {
+      tipstDom = _tipsDom;
+    }
+    if (genTipDom) {
+      tipstDom = genTipDom(data);
+    }
     currentTips = show(opts, 'tips', tipstDom, targetDom, callback);
     currentTips.addEventListener('mouseover', _mouseIn);
     currentTips.addEventListener('mousemove', _mouseIn);
@@ -166,6 +177,9 @@ let createTip = (opts, callback) => {
 };
 
 let currentMenu = null;
+let currentDragDom = null;
+let _isDraggingMenu = false;
+let _mouseOldPos = {x: 0, y: 0};
 let _hideMenu = (e) => {
   if (e.target === currentMenu || $(currentMenu).find(e.target).length > 0) {
     return ;
@@ -176,10 +190,27 @@ let _hideMenu = (e) => {
 let createMenu = (opts, callback) => {
   let {data, targetDom, genTipDom} = opts;
   let _createMenu = () => {
-    let tipstDom = genTipDom(data);
-    currentMenu = show(opts, 'menu', tipstDom, targetDom, callback);
+    let tipsDom = null;
+    if (genTipDom) {
+      tipsDom = genTipDom(data);
+    }
+    if (opts.tipsDom) {
+      tipsDom = opts.tipsDom;
+    }
+    currentMenu = show(opts, 'menu', tipsDom, targetDom, callback);
     if (opts.closable) {
       document.addEventListener('click', _hideMenu);
+    }
+
+    if (opts.draggable) {
+      if (!opts.dragDom) {
+        currentDragDom = currentMenu;
+      } else {
+        currentDragDom = opts.dragDom;
+      }
+      document.addEventListener('mousedown', _dragBegin);
+      document.addEventListener('mousemove', _dragMove);
+      document.addEventListener('mouseup', _dragEnd);
     }
   }
   if (opts.action === 'click') {
@@ -191,7 +222,49 @@ let createMenu = (opts, callback) => {
 
 let closeMenu = (callback) => {
   hide(currentMenu, callback);
+  currentMenu = null;
   document.removeEventListener('click', _hideMenu);
+  if (currentDragDom) {
+    document.removeEventListener('mousedown', _dragBegin);
+    document.removeEventListener('mousemove', _dragMove);
+    document.removeEventListener('mouseup', _dragEnd);
+    currentDragDom = null;
+  }
+}
+
+let _dragBegin = (e) => {
+  _isDraggingMenu = true;
+  _mouseOldPos = {
+    x: e.clientX,
+    y: e.clientY
+  }
+}
+let _dragTimer = null;
+let _dragMove = (e) => {
+  if (_isDraggingMenu && currentDragDom) {
+    if (_dragTimer) {
+      return;
+    }
+    _dragTimer = setTimeout(() => {
+      let _y = _menuOldPos.y + (e.clientY - _mouseOldPos.y);
+      let _x = _menuOldPos.x + (e.clientX - _mouseOldPos.x);
+      $(currentMenu)
+        .css('top', _y)
+        .css('left', _x);
+        _mouseOldPos = {
+          x: e.clientX,
+          y: e.clientY
+        }
+        _menuOldPos = {
+          x: _x,
+          y: _y
+        }
+        _dragTimer = null;
+    }, 20);
+  }
+}
+let _dragEnd = (e) => {
+  _isDraggingMenu = false;
 }
 
 export default {
