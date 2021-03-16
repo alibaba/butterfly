@@ -25,7 +25,7 @@ const _toFixed_3 = (num) => {
   }
 };
 
-const _getTipOffset = (placement, pos) => {
+const _getTipOffset = (placement, pos, offset = {x: 0, y: 0}) => {
   const _pos = {};
   let { left, top, width, height, actualWidth, actualHeight } = pos;
   left = _toFixed_3(left);
@@ -55,6 +55,13 @@ const _getTipOffset = (placement, pos) => {
     default:
       _pos.left = left + width / 2 - actualWidth / 2;
       _pos.top = top - height - 5;
+  }
+
+  if (offset.x) {
+    _pos.left += offset.x;
+  }
+  if (offset.y) {
+    _pos.top += offset.y;
   }
   return _pos;
 };
@@ -88,13 +95,22 @@ const show = (opts, type, tipsDom, targetDom, callback) => {
   let posInit = {}
   if (opts.x || opts.x === 0) {
     posInit = {
-      left: opts.x,
-      top: opts.y
+      left: opts.offsetX ? opts.x + opts.offsetX : opts.x,
+      top: opts.offsetY ? opts.y + opts.offsetY : opts.y
     }
   } else {
-    posInit = _getTipOffset(placement, pos);
+    let offset = {
+      x: 0,
+      y: 0
+    };
+    if (opts.offsetX) {
+      offset.x = opts.offsetX;
+    }
+    if (opts.offsetY) {
+      offset.y = opts.offsetY;
+    }
+    posInit = _getTipOffset(placement, pos, offset);
   }
-
   const position = `top: ${posInit.top}px; left: ${posInit.left}px;`;
   $(tipsContainer).attr('style', position);
   callback && callback(tipsContainer[0]);
@@ -108,19 +124,45 @@ const hide = (tipsDom, callback) => {
 
 let createTip = (opts, callback) => {
   let currentTips = null;
+  let tipstDom = null;
+  let isMouseInTips = false;
+  let isMouseInTarget = false;
+  let timer = null;
+  let _mouseIn = (e) => {
+    isMouseInTips = true;
+  }
+  let _mouseOut = (e) => {
+    isMouseInTips = false;
+    _hide();
+  }
+  let _hide = () => {
+    if (timer) {
+      clearTimeout(timer);
+    }
+    timer = setTimeout(() => {
+      if (!isMouseInTips && !isMouseInTarget && currentTips) {
+        hide(currentTips);
+        currentTips.removeEventListener('mouseover', _mouseIn);
+        currentTips.removeEventListener('mousemove', _mouseIn);
+        currentTips.removeEventListener('mouseout', _mouseOut);
+      }
+    }, 50);
+  }
   let {data, targetDom, genTipDom} = opts;
   targetDom.addEventListener('mouseover', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    let tipstDom = genTipDom(data);
+    isMouseInTarget = true;
+    tipstDom = genTipDom(data);
     currentTips = show(opts, 'tips', tipstDom, targetDom, callback);
+    currentTips.addEventListener('mouseover', _mouseIn);
+    currentTips.addEventListener('mousemove', _mouseIn);
+    currentTips.addEventListener('mouseout', _mouseOut);
   });
 
   targetDom.addEventListener('mouseout', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    hide(currentTips);
+    isMouseInTarget = false;
+    _hide();
   });
+
 };
 
 let currentMenu = null;
