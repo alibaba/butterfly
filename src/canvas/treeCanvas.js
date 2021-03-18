@@ -3,6 +3,7 @@
 import Canvas from "./baseCanvas";
 const _ = require('lodash');
 import TreeNode from '../node/treeNode';
+import Node from '../node/baseNode';
 import Hierarchy from '../utils/layout/hierarchy';
 
 class TreeCanvas extends Canvas {
@@ -251,6 +252,10 @@ class TreeCanvas extends Canvas {
     this.edges.forEach((item) => {
       item.redraw();
     });
+    this.emit('system.canvas.redraw');
+    this.emit('events', {
+      type: 'canvas:redraw'
+    });
   }
   addNodes(data, isNotEventEmit) {
     let nodes = super.addNodes(data, isNotEventEmit);
@@ -266,7 +271,6 @@ class TreeCanvas extends Canvas {
     return nodes;
   }
   removeNodes(data, isNotDelEdge, isNotEventEmit) {
-
     let nodes = data.map((item) => {
       if (item instanceof Node) {
         return item;
@@ -280,11 +284,9 @@ class TreeCanvas extends Canvas {
     nodes.forEach((item) => {
       let _subTree = this.findSubTree(item);
       rmNodes = rmNodes.concat(_subTree);
-
       // 如果是某个节点的子节点,将此节点从父节点的children中移除
       if (item.parent) {
         const parentNode = this.getNode(item.parent);
-
         if (parentNode) {
           parentNode.children = parentNode.children.filter((node) => node.id !== item.id);
         }
