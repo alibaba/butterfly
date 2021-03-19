@@ -3101,6 +3101,9 @@ class BaseCanvas extends Canvas {
     this.root.addEventListener('mouseup', mouseEndEvent);
     this.root.addEventListener('mouseleave', (e) => {
       let toDom = e.toElement;
+      if (!toDom) {
+        return;
+      }
       let toDomClassName = toDom.className;
       if (toDomClassName.indexOf('butterfly-tooltip') === -1) {
         mouseLeaveEvent();

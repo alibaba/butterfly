@@ -119,6 +119,18 @@ class TreeCanvas extends Canvas {
 
     this.redraw();
 
+    this.emit('system.node.collapse', {
+      target: targetNode,
+      nodes: collapseNodes,
+      edges: collapseEdges
+    });
+    this.emit('events', {
+      type: 'node.collapse',
+      target: targetNode,
+      nodes: collapseNodes,
+      edges: collapseEdges
+    });
+
     return {
       nodes: collapseNodes,
       edges: collapseEdges
@@ -159,7 +171,7 @@ class TreeCanvas extends Canvas {
       return _isCollapsed;
     });
     this.nodes = _.differenceBy(this.nodes, subNodes, 'id');
-    this.addNodes(subNodes, true);
+    let addNodes = this.addNodes(subNodes, true);
     this.edges = _.filter(this.edges, (a) => {
       if (a.type === 'endpoint') {
         return !_.some(collapseEdges, ((b) => {
@@ -171,7 +183,7 @@ class TreeCanvas extends Canvas {
         }));
       }
     });
-    this.addEdges(collapseEdges, true);
+    let addEdges = this.addEdges(collapseEdges, true);
     subNodes.forEach((item) => {
       delete item.subCollapsed;
     });
@@ -180,6 +192,17 @@ class TreeCanvas extends Canvas {
       delete item.collapsed;
     });
     this.redraw();
+    this.emit('system.node.expand', {
+      target: targetNode,
+      nodes: addNodes,
+      edges: addEdges
+    });
+    this.emit('events', {
+      type: 'node.expand',
+      target: targetNode,
+      nodes: addNodes,
+      edges: addEdges
+    });
   }
 
   redraw() {
