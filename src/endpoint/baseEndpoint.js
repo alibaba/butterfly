@@ -187,6 +187,10 @@ class BaseEndpoint extends Endpoint {
     }
   }
 
+  hasConnection() {
+    return (this.connectedNum > 0);
+  }
+
   moveTo(x, y) {
     this._top = y;
     this._left = x;

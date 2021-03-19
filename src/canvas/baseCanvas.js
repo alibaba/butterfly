@@ -3099,7 +3099,13 @@ class BaseCanvas extends Canvas {
     this.root.addEventListener('mousemove', mouseMoveEvent);
     // this.root.addEventListener('mouseleave', mouseEndEvent);
     this.root.addEventListener('mouseup', mouseEndEvent);
-    this.root.addEventListener('mouseleave', mouseLeaveEvent);
+    this.root.addEventListener('mouseleave', (e) => {
+      let toDom = e.toElement;
+      let toDomClassName = toDom.className;
+      if (toDomClassName.indexOf('butterfly-tooltip') === -1) {
+        mouseLeaveEvent();
+      }
+    });
   }
   _autoMoveCanvas(x, y, data, cb) {
 
