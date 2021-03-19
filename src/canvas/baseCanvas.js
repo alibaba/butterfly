@@ -642,6 +642,9 @@ class BaseCanvas extends Canvas {
 
         this.edges.push(edge);
 
+        sourceEndpoint.connectedNum += 1;
+        targetEndpoint.connectedNum += 1;
+
         edge.mounted && edge.mounted();
 
         // 假如sourceEndpoint和targetEndpoint没属性，则自动添加上
@@ -838,6 +841,12 @@ class BaseCanvas extends Canvas {
     edges.forEach((_edge) => {
       let edgeIndex = -1;
       if (_edge instanceof Edge || _edge.__type === 'edge') {
+        if (_edge.sourceEndpoint) {
+          _edge.sourceEndpoint.connectedNum -= 1;
+        }
+        if (_edge.targetEndpoint) {
+          _edge.targetEndpoint.connectedNum -= 1;
+        }
         edgeIndex = _.findIndex(this.edges, (item) => {
           if (item.type === 'node') {
             return _edge.sourceNode.id === item.sourceNode.id && _edge.targetNode.id === item.targetNode.id;
@@ -2748,6 +2757,14 @@ class BaseCanvas extends Canvas {
                 currentTargetNodeId: _currentTargetNode.id,
                 currentTargetPointId: _currentTargetEndpoint.id
               });
+              // source发生变化，target未变化
+              edge.targetEndpoint.connectedNum -= 1;
+              _targetEndpoint.connectedNum += 1;
+            } else {
+              // source和target都是新增
+              edge.sourceEndpoint.connectedNum += 1;
+              _targetEndpoint.connectedNum += 1;
+
             }
             edge._create({
               id: edge.id && !edge._isDeletingEdge ? edge.id : `${edge.sourceEndpoint.id}-${_targetEndpoint.id}`,
