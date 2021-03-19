@@ -21,6 +21,8 @@ class BaseEndpoint extends Endpoint {
     this.scope = opts.scope;
     this.expandArea = opts.expandArea;
     this.limitNum = opts.limitNum;
+    // 已连接数
+    this.connectedNum = 0;
     this.options = opts;
     // 鸭子辨识手动判断类型
     this.__type = 'endpoint';
@@ -183,6 +185,10 @@ class BaseEndpoint extends Endpoint {
 
       this.updated && this.updated();
     }
+  }
+
+  hasConnection() {
+    return (this.connectedNum > 0);
   }
 
   moveTo(x, y) {
