@@ -6,8 +6,8 @@ const process = ({nodes = [], edges = [], groups = []}) => {
   return {
     nodes: nodes.map((node) => {
       return {
-        ...node,
         Class: Node,
+        ...node,
       };
     }),
     edges: edges.map(edge => {
@@ -15,15 +15,15 @@ const process = ({nodes = [], edges = [], groups = []}) => {
       labelDOM.id = edge.id;
 
       return {
-        ...edge,
         type: 'endpoint',
         Class: Edge,
+        ...edge,
       };
     }),
     groups: groups.map(group => {
       return {
-        ...group,
         Class: Group,
+        ...group,
       };
     })
   };
