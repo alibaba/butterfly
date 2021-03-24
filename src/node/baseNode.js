@@ -125,7 +125,6 @@ class BaseNode extends Node {
       this.dom = obj.dom;
       obj.left && ($(this.dom).css('left', `${obj.left}px`));
       obj.top && ($(this.dom).css('top', `${obj.top}px`));
-
     } else {
       this.dom = this.draw(_.assign({
         id: this.id,
@@ -134,7 +133,10 @@ class BaseNode extends Node {
         dom: this.dom,
         options: this.options
       }, obj));
+    }
+    if (!this._hasEventListener) {
       this._addEventListener();
+      this._hasEventListener = true;
     }
   }
   // drag的时候移动的api
@@ -237,6 +239,7 @@ class BaseNode extends Node {
       });
       $(this.dom).remove();
       this.removeAllListeners();
+      this._hasEventListener = false;
     } else {
       this.endpoints.forEach((item) => {
         !item._isInitedDom && item.destroy(isNotEvent);
