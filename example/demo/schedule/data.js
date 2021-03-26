@@ -370,6 +370,16 @@ module.exports = {
       type: 'endpoint',
       arrowPosition: 0.5,
       Class: Edge
+    },
+    {
+      source: 'bottom',
+      target: 'top',
+      sourceNode: '1',
+      targetNode: 'group_1',
+      arrow: true,
+      type: 'endpoint',
+      arrowPosition: 0.5,
+      Class: Edge
     }
   ],
   groups: [{
@@ -383,7 +393,12 @@ module.exports = {
     left: 20,
     width: 250,
     height: 150,
-    resize: true
+    resize: true,
+    endpoints: [{
+      id: 'top',
+      orientation: [0, -1],
+      pos: [0.5, 0]
+    }]
   }, {
     id: 'group',
     options: {

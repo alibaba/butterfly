@@ -24,14 +24,18 @@ class Scene4New extends Component {
       theme: {
         edge: {
           type: 'AdvancedBezier',
+        },
+        // 允许group嵌套
+        group: {
+          includeGroups: true
         }
       }
     });
     this.canvas.draw(mockData, () => {
-      setTimeout(() => {
-        this.canvas.removeGroup('group');
-        // this.canvas.removeNode('1');
-      }, 3000);
+      // setTimeout(() => {
+      //   this.canvas.removeGroup('group');
+      //   this.canvas.removeNode('1');
+      // }, 3000);
     });
     this.canvas.on('events', (data) => {
       // console.log(data);

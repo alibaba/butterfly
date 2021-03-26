@@ -36,10 +36,10 @@ class BaseGroup extends Group {
     // endpoint 这部分需要考虑
     this.endpoints = [];
     this._endpointsData = opts.endpoints;
-    // 记录节点是否在拖动
-    // this._dragingNode = undefined;
+    // 标识是否在移动做，兼容冒泡
+    this._isMoving = false;
   }
-  init(obj = {}) {
+  _init(obj = {}) {
     if (this._isInited) {
       return;
     }
@@ -308,9 +308,16 @@ class BaseGroup extends Group {
     // 节点组鼠标点下事件
     $(this.dom).on('mousedown', (e) => {
       // 兼容节点冒泡上来的事件
-      let isChildNodeMoving = _.some(this.nodes, (item) => {
-        return item._isMoving;
-      });
+      let allGroups = this.getSubGroup().concat(this);
+      let isChildNodeMoving = false;
+      for (let i = 0; i < allGroups.length; i++) {
+        isChildNodeMoving = _.some(allGroups[i].nodes.concat(allGroups[i].groups), (item) => {
+          return item._isMoving;
+        });
+        if (isChildNodeMoving) {
+          break;
+        }
+      }
       if (isChildNodeMoving) {
         return;
       }
@@ -328,6 +335,7 @@ class BaseGroup extends Group {
         e.stopPropagation();
       }
       if (this.draggable) {
+        this._isMoving = true;
         this.emit('InnerEvents', {
           type: 'group:dragBegin',
           data: this
@@ -341,6 +349,25 @@ class BaseGroup extends Group {
     } else if (this._endpointsData) {
       this._endpointsData.map(item => this.addEndpoint(item));
     }
+  }
+  getParentGroup() {
+    let result = [];
+    let targetGroup = this;
+    while (targetGroup) {
+      targetGroup = targetGroup._group;
+      targetGroup && result.push(targetGroup);
+    }
+    return result;
+  }
+  getSubGroup() {
+    let result = [];
+    let queue = [this];
+    while(queue.length > 0) {
+      let group = queue.pop();
+      result = result.concat(group.groups);
+      queue = queue.concat(group.groups);
+    }
+    return result;
   }
   addEndpoint(obj, isInited) {
     if (isInited) {
