@@ -80,6 +80,7 @@ class BaseGroup extends Group {
         dom: this.dom,
         options: this.options
       });
+      $(this.dom).css('visibility', 'hidden');
     }
     if (!this._hasEventListener) {
       this._addEventListener();

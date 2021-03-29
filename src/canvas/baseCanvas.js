@@ -190,6 +190,19 @@ class BaseCanvas extends Canvas {
     // 画布边缘
     this._autoMoveDir = [];
     this._autoMoveTimer = null;
+
+    // 画布是否初始化成功
+    this._hasInited = false;
+
+    // 画布节点大小缓存更新
+    this._updateInterval = setInterval(() => {
+      this.nodes.forEach((item) => {
+        item._isForceUpdateSize = true;
+      });
+    }, 5000);
+    this._cache = {
+      nodes: {}
+    }
   }
 
   //===============================
@@ -241,6 +254,7 @@ class BaseCanvas extends Canvas {
         edges: this.edges,
         groups: this.groups
       });
+      this._hasInited = true;
     });
   }
   redraw (opts, callback) {
@@ -1401,193 +1415,6 @@ class BaseCanvas extends Canvas {
         _unionItems = moveItems;
         this._rmSystemUnion();
       }
-
-      // if (this._dragType === 'node:drag' && this._dragNode) {
-
-      //   let _handleDragNode = (dragNode) => {
-      //     let sourceGroup = null;
-      //     let targetGroup = null;
-      //     let _nodeLeft = dragNode.left;
-      //     let _nodeRight = dragNode.left + dragNode.getWidth();
-      //     let _nodeTop = dragNode.top;
-      //     let _nodeBottom = dragNode.top + dragNode.getHeight();
-
-      //     if (dragNode.group) {
-      //       const _group = this.getGroup(dragNode.group);
-      //       const _groupLeft = _group.left;
-      //       const _groupTop = _group.top;
-      //       if (_nodeRight < 0 || _nodeLeft > _group.getWidth() || _nodeBottom < 0 || _nodeTop > _group.getHeight()) {
-      //         _nodeLeft += _groupLeft;
-      //         _nodeTop += _groupTop;
-      //         _nodeRight += _groupLeft;
-      //         _nodeBottom += _groupTop;
-      //         sourceGroup = _group;
-      //       } else {
-      //         sourceGroup = _group;
-      //         targetGroup = _group;
-      //       }
-      //     }
-
-      //     if (!targetGroup) {
-      //       targetGroup = this._findGroupByCoordinates(dragNode, _nodeLeft, _nodeTop, _nodeRight, _nodeBottom)
-      //     }
-
-      //     let neighborEdges = [];
-
-      //     // 更新edge里面的字段，以防外面操作了里面dom
-      //     let _updateNeighborEdge = (node, neighborEdges) => {
-      //       neighborEdges.forEach((_edge) => {
-      //         if (_edge.sourceNode.id === node.id) {
-      //           _edge.sourceNode = node;
-      //           let _sourceEndpoint = _.find(_edge.sourceNode.endpoints, (_point) => {
-      //             return _edge.sourceEndpoint.id === _point.id;
-      //           });
-      //           _edge.sourceEndpoint = _sourceEndpoint;
-      //         }
-      //         if (_edge.targetNode.id === node.id) {
-      //           _edge.targetNode = node;
-      //           let _targetEndpoint = _.find(_edge.targetNode.endpoints, (_point) => {
-      //             return _edge.targetEndpoint.id === _point.id;
-      //           });
-      //           _edge.targetEndpoint = _targetEndpoint;
-      //         }
-      //       });
-      //     };
-      //     this._hoverGroup(this._dragNode);
-      //     if (sourceGroup) {
-      //       // 从源组拖动到目标组
-      //       if (sourceGroup !== targetGroup) {
-      //         const rmItem = this.removeNode(dragNode.id, true, true);
-      //         const rmNode = rmItem.nodes[0];
-      //         neighborEdges = rmItem.edges;
-      //         const nodeData = {
-      //           id: rmNode.id,
-      //           top: _nodeTop,
-      //           left: _nodeLeft,
-      //           dom: rmNode.dom,
-      //           _isDeleteGroup: true
-      //         };
-      //         let step = this.actionQueue[this.actionQueueIndex];
-      //         if (step.type === 'system:moveNodes') {
-      //           step.data._isDraging = true;
-      //         }
-      //         this.pushActionQueue({
-      //           type: 'system:groupRemoveMembers',
-      //           data: {
-      //             group: sourceGroup,
-      //             nodes: [rmNode],
-      //             _isDraging: true
-      //           }
-      //         })
-      //         this.emit('events', {
-      //           type: 'system.group.removeMembers',
-      //           group: sourceGroup,
-      //           nodes: [rmNode]
-      //         });
-      //         this.emit('system.group.removeMembers', {
-      //           group: sourceGroup,
-      //           nodes: [rmNode]
-      //         });
-
-      //         if (targetGroup) {
-      //           if (ScopeCompare(dragNode.scope, targetGroup.scope, _.get(this, 'global.isScopeStrict'))) {
-      //             nodeData.top -= targetGroup.top;
-      //             nodeData.left -= targetGroup.left;
-      //             nodeData.group = targetGroup.id;
-      //             nodeData._isDeleteGroup = false;
-      //             this.popActionQueue();
-      //             this.pushActionQueue({
-      //               type: 'system:groupAddMembers',
-      //               data: {
-      //                 sourceGroup: sourceGroup,
-      //                 targetGroup: targetGroup,
-      //                 nodes: [rmNode],
-      //                 _isDraging: true
-      //               }
-      //             });
-      //             this.emit('events', {
-      //               type: 'system.group.addMembers',
-      //               nodes: [rmNode],
-      //               group: targetGroup
-      //             });
-      //             this.emit('system.group.addMembers', {
-      //               nodes: [rmNode],
-      //               group: targetGroup
-      //             });
-      //             this._clearHoverGroup(targetGroup);
-      //           } else {
-      //             console.warn(`nodeId为${dragNode.id}的节点和groupId${targetGroup.id}的节点组scope值不符，无法加入`);
-      //           }
-      //         }
-      //         rmNode._init(nodeData);
-      //         this.addNode(rmNode, true);
-      //         _updateNeighborEdge(rmNode, neighborEdges);
-      //       }
-      //     } else {
-      //       if (targetGroup) {
-      //         if (ScopeCompare(dragNode.scope, targetGroup.scope, _.get(this, 'global.isScopeStrict'))) {
-      //           const rmItem = this.removeNode(dragNode.id, true, true);
-      //           const rmNode = rmItem.nodes[0];
-      //           neighborEdges = rmItem.edges;
-      //           rmNode._init({
-      //             top: _nodeTop - targetGroup.top,
-      //             left: _nodeLeft - targetGroup.left,
-      //             dom: rmNode.dom,
-      //             group: targetGroup.id
-      //           });
-      //           this.addNode(rmNode, true);
-      //           let step = this.actionQueue[this.actionQueueIndex];
-      //           if (step.type === 'system:moveNodes') {
-      //             step.data._isDraging = true;
-      //           }
-      //           _updateNeighborEdge(rmNode, neighborEdges);
-      //           this.pushActionQueue({
-      //             type: 'system:groupAddMembers',
-      //             data: {
-      //               sourceGroup: undefined,
-      //               targetGroup: targetGroup,
-      //               nodes: [rmNode],
-      //               _isDraging: true
-      //             }
-      //           });
-      //           this.emit('events', {
-      //             type: 'system.group.addMembers',
-      //             nodes: [rmNode],
-      //             group: targetGroup
-      //           });
-      //           this.emit('system.group.addMembers', {
-      //             nodes: [rmNode],
-      //             group: targetGroup
-      //           });
-      //           this._clearHoverGroup(targetGroup);
-      //         } else {
-      //           console.warn(`nodeId为${dragNode.id}的节点和groupId${targetGroup.id}的节点组scope值不符，无法加入`);
-      //         }
-      //       }
-      //     }
-      //     neighborEdges.forEach((item) => {
-      //       item.redraw();
-      //     });
-      //     dragNode.endpoints.forEach((item) => {
-      //       item.updatePos && item.updatePos();
-      //     });
-      //     dragNode._isMoving = false;
-      //   }
-      //   let moveNodes = [this._dragNode];
-      //   const unionKeys = this._findUnion('nodes', this._dragNode);
-      //   if (unionKeys && unionKeys.length > 0) {
-      //     unionKeys.forEach((key) => {
-      //       moveNodes = moveNodes.concat(this._unionData[key].nodes);
-      //     });
-      //     moveNodes = _.uniqBy(moveNodes, 'id');
-      //   }
-      //   moveNodes.forEach((dragNode) => {
-      //     _handleDragNode(dragNode);
-      //   });
-      //   _unionItems = moveNodes;
-      //   this._rmSystemUnion();
-      // }
-
       // 节点组放大缩小
       if (this._dragType === 'group:resize' && this._dragGroup) {
         this.emit('events', {
@@ -1669,7 +1496,12 @@ class BaseCanvas extends Canvas {
   //[ 节点渲染 ]
   //===============================
   getNode(id) {
-    return _.find(this.nodes, item => item.id === id);
+    let result = this._cache.nodes[id];
+    if (!result) {
+      result = _.find(this.nodes, item => item.id === id);
+      result && (this._cache.nodes[result.id] = result);
+    }
+    return result;
   }
   addNodes(nodes, isNotEventEmit) {
     const _canvasFragment = document.createDocumentFragment();
@@ -1724,6 +1556,9 @@ class BaseCanvas extends Canvas {
       } else {
         _canvasFragment.appendChild(_nodeObj.dom);
       }
+      // 挂载回调
+      !isNotEventEmit && _nodeObj.mounted && _nodeObj.mounted();
+      this._cache.nodes[_nodeObj.id] = _nodeObj;
       return _nodeObj;
     }).filter((item) => {
       return !!item;
@@ -1805,6 +1640,7 @@ class BaseCanvas extends Canvas {
         rmEdges = rmEdges.concat(neighborEdges);
       }
 
+      delete this._cache.nodes[nodeId];
     });
 
     if (rmNodes.length > 0) {
@@ -2743,11 +2579,11 @@ class BaseCanvas extends Canvas {
         };
       } else if (link.type === 'node') {
         _soucePoint = {
-          pos: [link.sourceNode.left + link.sourceNode.getWidth() / 2, link.sourceNode.top + link.sourceNode.getHeight() / 2]
+          pos: [link.sourceNode.left + link.sourceNode.getWidth(true) / 2, link.sourceNode.top + link.sourceNode.getHeight(true) / 2]
         };
 
         _targetPoint = {
-          pos: [link.targetNode.left + link.targetNode.getWidth() / 2, link.targetNode.top + link.targetNode.getHeight() / 2]
+          pos: [link.targetNode.left + link.targetNode.getWidth(true) / 2, link.targetNode.top + link.targetNode.getHeight(true) / 2]
         };
       }
       link.redraw(_soucePoint, _targetPoint);
@@ -3345,9 +3181,9 @@ class BaseCanvas extends Canvas {
         }) !== undefined;
       }).forEach((_node) => {
         let _nodeLeft = _node.left;
-        let _nodeRight = _node.left + _node.getWidth();
+        let _nodeRight = _node.left + _node.getWidth(true);
         let _nodeTop = _node.top;
-        let _nodeBottom = _node.top + _node.getHeight();
+        let _nodeBottom = _node.top + _node.getHeight(true);
         if (_node.group) {
           let group = this.getGroup(_node.group);
           if (group) {

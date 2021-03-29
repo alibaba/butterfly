@@ -26,6 +26,10 @@ class BaseNode extends Node {
     this._endpointLimitNum = opts._endpointLimitNum;
     // 标识是否在移动做，兼容冒泡
     this._isMoving = false;
+    // 长宽
+    this.width = undefined;
+    this.height = undefined;
+    this._isForceUpdateSize = false;
   }
 
   draw(obj) {
@@ -160,12 +164,20 @@ class BaseNode extends Node {
     });
   }
 
-  getWidth() {
-    return $(this.dom).outerWidth();
+  getWidth(useCache) {
+    if (!useCache || this.width === undefined || this._isForceUpdateSize) {
+      this.width = $(this.dom).outerWidth();
+      this._isForceUpdateSize = false;
+    }
+    return this.width;
   }
 
-  getHeight() {
-    return $(this.dom).outerHeight();
+  getHeight(useCache) {
+    if (!useCache || this.height === undefined || this._isForceUpdateSize) {
+      this.height = $(this.dom).outerHeight();
+      this._isForceUpdateSize = false;
+    }
+    return this.height;
   }
 
   _createEndpoint(isInited) {
