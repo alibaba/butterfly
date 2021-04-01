@@ -1556,8 +1556,6 @@ class BaseCanvas extends Canvas {
       } else {
         _canvasFragment.appendChild(_nodeObj.dom);
       }
-      // 挂载回调
-      !isNotEventEmit && _nodeObj.mounted && _nodeObj.mounted();
       this._cache.nodes[_nodeObj.id] = _nodeObj;
       return _nodeObj;
     }).filter((item) => {

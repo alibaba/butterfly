@@ -96,7 +96,6 @@ class BaseEndpoint extends Endpoint {
   }
 
   updatePos(dom = this.dom, orientation = this.orientation, pos = this.pos) {
-    console.log('*****');
     if (this._isInitedDom) {
       // 计算width,height,left,top
       this._width = $(this.dom).outerWidth();

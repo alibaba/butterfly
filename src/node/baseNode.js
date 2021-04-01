@@ -72,7 +72,6 @@ class BaseNode extends Node {
       _node: this,
       _global: this.global
     }, obj));
-    
     this.emit('InnerEvents', {
       type: 'node:addEndpoint',
       data: endpoint
