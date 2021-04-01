@@ -241,7 +241,7 @@ class BaseCanvas extends Canvas {
         setTimeout(() => {
           // 生成edges
           this.addEdges(edges);
-        resolve();
+          resolve();
         }, 20);
       });
     });
