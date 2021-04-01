@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import {Canvas, Layout} from 'butterfly-dag';
+
 class DagreCanvas extends Canvas {
   drageReDraw(newParam) {
     let {nodes, layout, edges} = this;

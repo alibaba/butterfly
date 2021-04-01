@@ -5,7 +5,7 @@ import {Button, Select, Slider} from 'antd';
 import mockData from './data';
 import node from './base_node';
 import RelationEdge from './edge';
-import DagreCanvas from './drageCanvas';
+import DagreCanvas from './dagre-canvas';
 
 import './index.less';
 import 'antd/dist/antd.css';
