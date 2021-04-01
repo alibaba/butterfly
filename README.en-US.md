@@ -83,20 +83,20 @@ canvas.draw({
   * [coordinate conversion and offset](./docs/en-US/canvas.md#canvas-api-coordinate)
   * [mutiply selection](./docs/en-US/canvas.md#canvas-api-selected)
   * [events](./docs/en-US/canvas.md#canvas-api-events)
-  * [other api](./docs/en-US/canvas.md#canvas-api-other)
+  * [other api(grid background, auxiliary line, save canvas as picture)](./docs/en-US/canvas.md#canvas-api-other)
 * [Group](./docs/en-US/group.md)
   * [attribute](./docs/en-US/group.md#group-attr)
   * [custom group](./docs/en-US/group.md#group-custom)
   * [add and delete members](./docs/en-US/group.md#group-member)
   * [custom endpoint](./docs/en-US/group.md#group-endpoint)
   * [move group](./docs/en-US/group.md#group-move)
-  * [events](./docs/en-US/group.md#group-event)
+  * [emit/on events](./docs/en-US/group.md#group-event)
 * [Node](./docs/en-US/node.md)
   * [attribute](./docs/en-US/node.md#node-attr)
   * [custom node](./docs/en-US/node.md#node-custom)
   * [custom endpoint](./docs/en-US/node.md#node-endpoint)
   * [move node](./docs/en-US/node.md#node-move)
-  * [events](./docs/en-US/node.md#node-event)
+  * [emit/on events](./docs/en-US/node.md#node-event)
   * [[tree layout] collapse and expand sub node](./docs/en-US/node.md#node-collapse)
 * [Edge](./docs/en-US/edge.md)
   * [attribute](./docs/en-US/edge.md#edge-attr)
@@ -104,23 +104,40 @@ canvas.draw({
   * [custom arrow](./docs/en-US/edge.md#edge-custom-arrow)
   * [custom label](./docs/en-US/edge.md#edge-custom-label)
   * [edge connectivity](./docs/en-US/edge.md#edge-isConnect)
-  * [events](./docs/en-US/edge.md#edge-event)
+  * [emit/on events](./docs/en-US/edge.md#edge-event)
   * [animation](./docs/en-US/edge.md#edge-animation)
 * [Endpoint](./docs/en-US/endpoint.md)
   * [attribute](./docs/en-US/endpoint.md#endpoint-attr)
   * [API](./docs/en-US/endpoint.md#endpoint-api)
 * [Minimap](./docs/en-US/minimap.md#endpoint-api)
+* [Tooltips & Menu](./docs/en-US/tooltip.md)
 * [Layout](./docs/en-US/layout.md)
 * React & Vue Support
   * [React butterfly](./docs/en-US/react.md)
   * [Vue2 butterfly](./docs/en-US/vue.md)
-* React Components Extension
-  * [Data/Table-Field mapping](https://github.com/aliyun/react-data-mapping/blob/master/README.en-US.md)
-  * Blood Map(doing)
-  * Visual Modeling(doing)
-  * Scheduling Diagram(doing)
-  * Monitoring(doing)
-  * Butterfly-Editor(doing)
 
-## 🤝 Contribution
-Butterfly is a completely open source project and we welcome everyone to contribute to fixing bugs and improvements. For information on how to get started, read our [contribution guide](./docs/en-US/CONTRIBUTING.md).
+## ⌨️Business-specific React Extension Components
+* [Data/Table-Field mapping](https://github.com/aliyun/react-data-mapping/blob/master/README.en-US.md)
+<p align="center">
+  <img width="49%" src="https://img.alicdn.com/imgextra/i2/O1CN01O8w0tT26WuU5J6lty_!!6000000007670-1-tps-595-411.gif">
+  <img width="49%" src="https://img.alicdn.com/imgextra/i2/O1CN017Gcu0Y1mbgIHcgqwr_!!6000000004973-1-tps-595-411.gif">
+</p>
+<p align="center">
+  <img width="49%" src="https://img.alicdn.com/imgextra/i3/O1CN01f4Ek5H1oCbqDjM7sL_!!6000000005189-1-tps-595-411.gif">
+  <img width="49%" src="https://img.alicdn.com/imgextra/i4/O1CN01Nt9rpo25y6NlRMUtR_!!6000000007594-1-tps-595-411.gif">
+</p>
+
+* Blood Map(doing)
+* Visual Modeling(doing)
+<img width="98%" src="https://img.alicdn.com/imgextra/i4/O1CN01VZxfyl1pOLc15k7XM_!!6000000005350-1-tps-1665-829.gif">
+
+* Scheduling Diagram(doing)
+* Monitoring(doing)
+<img width="98%" src="https://img.alicdn.com/imgextra/i4/O1CN01tbmIry23xWea1YcBQ_!!6000000007322-1-tps-1665-829.gif">
+* Butterfly-Editor(doing)
+
+## 🤝 How to contribute
+We welcome all contributors, please read the [Contribution Guide](./docs/en-US/CONTRIBUTING.md) before becoming a Contributor.
+
+If you already know, come to [Issus](https://github.com/alibaba/butterfly/issues) or [Pull requests](https://github.com/alibaba/butterfly/issues) to become contributors, and let's grow and be better and better together.
+

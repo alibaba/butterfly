@@ -3,6 +3,7 @@
 ## 用法
 
 ```js
+// 初始化画布渲染
 canvas.draw({
   edges: [{
     source: 'point_1',
@@ -17,6 +18,12 @@ canvas.draw({
   }],
   groups: ...
   nodes: ...
+})
+
+// 动态添加
+canvas.addEdge({
+  // 参考下面属性
+  ...
 })
 ```
 
