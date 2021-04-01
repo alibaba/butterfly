@@ -84,5 +84,10 @@ hoverLinkable = () => {}
   */
 unHoverLinkable = () => {}
 
+/**
+  * 该endpoint是否有连接边
+  */
+hasConnection = () => {}
+
 ```
 

@@ -31,6 +31,7 @@ class Grid extends Component {
           height: 100,
           // 布局相对起始点
           begin: [20, 20],
+          center: [10,100],
           preventOverlap: true,
           preventOverlapPadding: 10,
           condense: false,

@@ -84,5 +84,9 @@ hoverLinkable = () => {}
   */
 unHoverLinkable = () => {}
 
+/**
+  * check whether the endpoint is connected
+  */
+hasConection = () => {}
 ```
 

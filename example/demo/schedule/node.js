@@ -1,7 +1,6 @@
 import {Node} from 'butterfly-dag';
 import $ from 'jquery';
 import './node.less';
-
 class BaseNode extends Node {
   constructor(opts) {
     super(opts);

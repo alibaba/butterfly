@@ -63,7 +63,7 @@ let canvas = new Canvas({
 
 * **layout布局**，把string/function传入layout的属性即可
  * forceLayout
- * drageLayout
+ * dagreLayout
  * concentricLayout
  * circleLayout
  * fruchterman
@@ -231,6 +231,13 @@ getNeighborEdgesByEndpoint = (string, string) => {}
   * @returns {Object<nodes: Node, edges: Edge>} filteredGraph - 查找结果
   */
 getNeighborNodesAndEdgesByLevel = (options) => {}
+
+/**
+  * 设置线段z-index属性
+  * @param {Array<Edge>} edges - 线段
+  * @param {number} zIndex - z-index的值
+  */
+setEdgeZIndex = (edges, zIndex) => {}
 ```
 
 ### <a name='canvas-api-zoom-move'>缩放，平移</a>：

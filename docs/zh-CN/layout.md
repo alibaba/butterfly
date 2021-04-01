@@ -24,21 +24,21 @@ this.canvas = new Canvas({
 ```
 
 
-## Darge Layout
+## Dagre Layout
 
 Dagre 是适合有向流程图的布局算法。其根据图数据中边的方向，自动计算节点的层级及位置。
 
 
 #### 图例
 
-![Darge布局](https://img.alicdn.com/tfs/TB1kzjEkRFR4u4jSZFPXXanzFXa-1335-782.png)
+![Dagre布局](https://img.alicdn.com/tfs/TB1kzjEkRFR4u4jSZFPXXanzFXa-1335-782.png)
 
 #### 代码演示
 
 ``` js
 this.canvas = new Canvas({
   layout: {
-    type: 'drageLayout',
+    type: 'dagreLayout',
     options: {
       rankdir: 'TB',
       nodesep: 40,
@@ -226,7 +226,7 @@ import {TreeCanvas} from 'butterfly-dag';
 import {TreeCanvas} from 'butterfly-dag';
 this.canvas = new TreeCanvas({
   layout: {
-    type: 'drageLayout',
+    type: 'dagreLayout',
     options: {
       rankdir: 'TB',
       nodesep: 40,

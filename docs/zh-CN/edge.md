@@ -73,6 +73,12 @@ mounted = () => {}
   * 线条重绘后的回调
   */
 updated = () => {}
+
+/**
+  * 设置线段z-index
+  * @param {number} zIndex -  zIndex的值
+  */
+setZIndex = (index) => {}
 ```
 
 ### <a name='edge-custom-arrow'>自定义箭头</a>：

@@ -1,6 +1,6 @@
 const dagre = require('dagre');
 //drage布局
-function drageLayout(param) {
+function dagreLayout(param) {
     const {nodeSize, rankdir, nodesepFunc, ranksepFunc, nodesep, ranksep, controlPoints} = param;
     const {edges = []} = param.data;
     const curnode = param.data.nodes;
@@ -97,4 +97,4 @@ function drageLayout(param) {
     return resultFunc;
   }
 
-  module.exports = drageLayout
+  module.exports = dagreLayout

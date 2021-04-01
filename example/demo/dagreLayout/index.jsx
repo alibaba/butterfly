@@ -5,14 +5,14 @@ import {Button, Select, Slider} from 'antd';
 import mockData from './data';
 import node from './base_node';
 import RelationEdge from './edge';
-import DrageCanvas from './drageCanvas';
+import DagreCanvas from './drageCanvas';
 
 import './index.less';
 import 'antd/dist/antd.css';
 import 'butterfly-dag/dist/index.css';
 
 const Option = Select.Option;
-class DrageLayout extends Component {
+class DagreLayout extends Component {
   constructor() {
     super();
     this.canvas = null;
@@ -23,7 +23,7 @@ class DrageLayout extends Component {
 
   componentDidMount() {
     let root = document.getElementById('dag-canvas');
-    this.canvas = new DrageCanvas({
+    this.canvas = new DagreCanvas({
       root: root,
       disLinkable: true, // 可删除连线
       linkable: true,    // 可连线
@@ -31,7 +31,7 @@ class DrageLayout extends Component {
       zoomable: true,    // 可放大
       moveable: true,    // 可平移
       layout: {
-        type: 'drageLayout',
+        type: 'dagreLayout',
         options: {
           rankdir: 'TB',
           nodesep: 40,
@@ -114,7 +114,7 @@ class DrageLayout extends Component {
 
   render() {
     return (
-      <div className='drageLayout-page'>
+      <div className='dagreLayout-page'>
         <div className='operate-bar'>
           <div className='operate-bar-title'>属性配置</div>
           <div className='operate-item'>
@@ -157,4 +157,4 @@ class DrageLayout extends Component {
   }
 }
 
-ReactDOM.render(<DrageLayout />, document.getElementById('root'));
+ReactDOM.render(<DagreLayout />, document.getElementById('root'));

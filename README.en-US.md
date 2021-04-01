@@ -123,21 +123,24 @@ canvas.draw({
   <img width="49%" src="https://img.alicdn.com/imgextra/i2/O1CN017Gcu0Y1mbgIHcgqwr_!!6000000004973-1-tps-595-411.gif">
 </p>
 <p align="center">
-  <img width="49%" src="https://img.alicdn.com/imgextra/i3/O1CN01f4Ek5H1oCbqDjM7sL_!!6000000005189-1-tps-595-411.gif">
+  <img width="49%" src="https://img.alicdn.com/imgextra/i2/O1CN011xYzxM1ZenzfVE0Xq_!!6000000003220-1-tps-595-411.gif">
   <img width="49%" src="https://img.alicdn.com/imgextra/i4/O1CN01Nt9rpo25y6NlRMUtR_!!6000000007594-1-tps-595-411.gif">
 </p>
 
-* Blood Map(doing)
-* Visual Modeling(doing)
+* Blood Map(doing): Suitable for table blood dag, table field blood dag, business chain blood dag and other blood dag
+<img width="98%" src="https://img.alicdn.com/imgextra/i4/O1CN01ou8wTq20SQv4AnedD_!!6000000006848-1-tps-1337-761.gif">
+
+* (Visual Modeling)[https://github.com/aliyun/react-visual-modeling/blob/master/README.en-US.md]: Suitable for UML, database modeling, data warehouse construction
 <img width="98%" src="https://img.alicdn.com/imgextra/i4/O1CN01VZxfyl1pOLc15k7XM_!!6000000005350-1-tps-1665-829.gif">
 
 * Scheduling Diagram(doing)
-* Monitoring(doing)
+* (Monitoring)[https://github.com/aliyun/react-monitor-dag/blob/master/README.en-US.md]: Suitable for the status display of task flow, data flow and other business
 <img width="98%" src="https://img.alicdn.com/imgextra/i4/O1CN01tbmIry23xWea1YcBQ_!!6000000007322-1-tps-1665-829.gif">
+
 * Butterfly-Editor(doing)
 
 ## 🤝 How to contribute
 We welcome all contributors, please read the [Contribution Guide](./docs/en-US/CONTRIBUTING.md) before becoming a Contributor.
 
-If you already know, come to [Issus](https://github.com/alibaba/butterfly/issues) or [Pull requests](https://github.com/alibaba/butterfly/issues) to become contributors, and let's grow and be better and better together.
+If you already know, come to [Issus](https://github.com/alibaba/butterfly/issues) or [Pull requests](https://github.com/alibaba/butterfly/pulls) to become contributors, and let's grow and be better and better together.
 
