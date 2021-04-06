@@ -22,7 +22,7 @@ import GuidelineService from '../utils/guidelineService';
 // 小地图模式
 import Minimap from '../utils/minimap';
 // 线段动画
-import LinkAnimateUtil from '../utils/link_animate';
+import LinkAnimateUtil from '../utils/link/link_animate';
 
 
 import './baseCanvas.less';
