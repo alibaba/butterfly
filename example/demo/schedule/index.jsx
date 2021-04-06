@@ -4,8 +4,8 @@ require('./index.less');
 require('butterfly-dag/dist/index.css');
 
 // const Canvas = require('../../../index.js').Canvas;
-import { Canvas } from 'butterfly-dag';
-// import { Canvas } from '../../../index';
+// import { Canvas } from 'butterfly-dag';
+import { Canvas } from '../../../index';
 const mockData = require('./data.js');
 
 class Scene4New extends Component {
@@ -24,10 +24,19 @@ class Scene4New extends Component {
       theme: {
         edge: {
           type: 'AdvancedBezier',
+        },
+        // 允许group嵌套
+        group: {
+          includeGroups: true
         }
       }
     });
-    this.canvas.draw(mockData);
+    this.canvas.draw(mockData, () => {
+      // setTimeout(() => {
+      //   this.canvas.removeGroup('group');
+      //   this.canvas.removeNode('1');
+      // }, 3000);
+    });
     this.canvas.on('events', (data) => {
       // console.log(data);
     });
@@ -35,6 +44,8 @@ class Scene4New extends Component {
   render() {
     return (
       <div className='schedule'>
+        <button className='action-btn undo-btn' onClick={() => { this.canvas.undo(); }}>undo</button>
+        <button className='action-btn redo-btn' onClick={() => { this.canvas.redo(); }}>redo</button>
         <div className="schedule-canvas" id="dag-canvas">
         </div>
       </div>
