@@ -26,7 +26,11 @@ class Scene4New extends Component {
         }
       }
     });
-    this.canvas.draw(mockData);
+    this.canvas.draw(mockData, () => {
+      setTimeout(() => {
+        this.canvas.redraw();
+      }, 3000);
+    });
     this.canvas.on('events', (data) => {
       console.log(data);
     });
