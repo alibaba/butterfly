@@ -258,13 +258,8 @@ class BaseCanvas extends Canvas {
     });
   }
   redraw (opts, callback) {
-<<<<<<< HEAD
-    this.removeNodes(this.nodes || []);
-    this.removeGroups(this.groups || []);
-=======
     this.removeNodes(this.nodes.map((item) => item.id) || []);
     this.removeGroups(this.groups.map((item) => item.id) || []);
->>>>>>> master
     this.clearActionQueue();
     this.draw(opts || {}, callback);
   }
