@@ -258,8 +258,8 @@ class BaseCanvas extends Canvas {
     });
   }
   redraw (opts, callback) {
-    this.removeNodes(this.nodes);
-    this.removeGroups(this.groups);
+    this.removeNodes(this.nodes || []);
+    this.removeGroups(this.groups || []);
     this.clearActionQueue();
     this.draw(opts, callback);
   }
@@ -2193,7 +2193,7 @@ class BaseCanvas extends Canvas {
       groups: insideGroups || []
     };
   }
-  removeGroups(groups, isNotEventEmit) {
+  removeGroups(groups = [], isNotEventEmit) {
     let groupIds = [];
     groupIds = groups.map((item) => {
       if (item instanceof Group) {
