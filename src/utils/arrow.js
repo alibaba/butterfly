@@ -50,7 +50,6 @@ function calcSlope(opts) {
       p1 = dom.getPointAtLength(dom.getTotalLength() * arrowPosition);
     }
     
-
     x = p1.x - p0.x;
     y = p1.y - p0.y;
   }
