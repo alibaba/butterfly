@@ -13,9 +13,6 @@ const process = ({nodes = [], edges = [], groups = []}) => {
       };
     }),
     edges: edges.map(edge => {
-      const labelDOM = document.createElement('div');
-      labelDOM.id = edge.id;
-
       return {
         ...edge,
         type: 'endpoint',

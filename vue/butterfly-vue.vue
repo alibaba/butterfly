@@ -87,51 +87,48 @@ export default {
     },
 
     onCreateEdge(data) {
-      if (data.type === "link:connect") {
-        console.log("link:connect");
-        let edgeInfo = {
-          sourceEndpointId: data.links[0].sourceEndpoint.id,
-          sourceNodeId: data.links[0].sourceNode.id,
-          targetEndpointId: data.links[0].targetEndpoint.id,
-          targetNodeId: data.links[0].targetNode.id,
-        };
-        this.$emit("onCreateEdge", edgeInfo);
-      }
+      console.log("link:connect");
+      let edgeInfo = {
+        sourceEndpointId: data.links[0].sourceEndpoint.id,
+        sourceNodeId: data.links[0].sourceNode.id,
+        targetEndpointId: data.links[0].targetEndpoint.id,
+        targetNodeId: data.links[0].targetNode.id,
+      };
+      this.$emit("onCreateEdge", edgeInfo);
     },
 
     onDeleteEdge(data) {
-      if (data.type === "links:delete" && data.links.length > 0) {
-        console.log("link:delete");
-        let edgeInfo = {
-          sourceEndpointId: data.links[0].sourceEndpoint.id,
-          sourceNodeId: data.links[0].sourceNode.id,
-          targetEndpointId: data.links[0].targetEndpoint.id,
-          targetNodeId: data.links[0].targetNode.id,
-        };
-        this.$emit("onDeleteEdge", edgeInfo);
-      }
+      console.log("link:delete");
+      let edgeInfo = {
+        sourceEndpointId: data.links[0].sourceEndpoint.id,
+        sourceNodeId: data.links[0].sourceNode.id,
+        targetEndpointId: data.links[0].targetEndpoint.id,
+        targetNodeId: data.links[0].targetNode.id,
+      };
+      this.$emit("onDeleteEdge", edgeInfo);
     },
 
     onChangeEdges(data) {
-      if (data.type === "link:reconnect") {
-        console.log("link:reconnect");
-        let edgeInfo = {
-          addLink: {
-            sourceEndpointId: data.addLinks[0].sourceEndpoint.id,
-            sourceNodeId: data.addLinks[0].sourceNode.id,
-            targetEndpointId: data.addLinks[0].targetEndpoint.id,
-            targetNodeId: data.addLinks[0].targetNode.id,
-          },
-          delLinks: {
-            sourceEndpointId: data.delLinks[0].sourceEndpoint.id,
-            sourceNodeId: data.delLinks[0].sourceNode.id,
-            targetEndpointId: data.delLinks[0].targetEndpoint.id,
-            targetNodeId: data.delLinks[0].targetNode.id,
-          },
-          info: data.info,
-        };
-        this.$emit("onChangeEdges", edgeInfo);
-      }
+      console.log("link:reconnect");
+      let edgeInfo = {
+        addLink: {
+          sourceEndpointId: data.addLinks[0].sourceEndpoint.id,
+          sourceNodeId: data.addLinks[0].sourceNode.id,
+          targetEndpointId: data.addLinks[0].targetEndpoint.id,
+          targetNodeId: data.addLinks[0].targetNode.id,
+        },
+        delLinks: {
+          sourceEndpointId: data.delLinks[0].sourceEndpoint.id,
+          sourceNodeId: data.delLinks[0].sourceNode.id,
+          targetEndpointId: data.delLinks[0].targetEndpoint.id,
+          targetNodeId: data.delLinks[0].targetNode.id,
+        },
+        info: data.info,
+      };
+      this.$emit("onChangeEdges", edgeInfo);
+    },
+    onOtherEvent(data) {
+      this.$emit("onOtherEvent", data);
     },
   },
 
@@ -173,9 +170,15 @@ export default {
     this.$emit("onLoaded", this.canvas);
 
     this.canvas.on("events", (data) => {
-      this.onCreateEdge(data);
-      this.onDeleteEdge(data);
-      this.onChangeEdges(data);
+      if (data.type === "link:connect") {
+        this.onCreateEdge(data);
+      } else if (data.type === "links:delete" && data.links.length > 0) {
+        this.onDeleteEdge(data);
+      } else if (data.type === "link:reconnect") {
+        this.onChangeEdges(data);
+      } else {
+        this.onOtherEvent(data);
+      }
     });
   },
 };
