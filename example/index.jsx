@@ -31,11 +31,14 @@ import Grid from './demo/grid/index.jsx';
 import Fruchterman from './demo/fruchterman/index.jsx';
 import ReactSample from './demo/react/sample/index.jsx';
 
-import DrageLayout from './demo/drageLayout/index.jsx';
+import DagreLayout from './demo/dagreLayout/index.jsx';
 import ConcentLayout from './demo/concent-layout/index.jsx';
+
+import Radial from './demo/radial/index.jsx';
 
 import 'antd/dist/antd.css';
 import './static/iconfont.css';
+import './static/newIconfont.css';
 import './index.less';
 
 const {Header, Content, Sider} = Layout;
@@ -63,8 +66,8 @@ ReactDOM.render((
             <Menu.Item key="diodes">
               <Link to="/diodes">Diodes</Link>
             </Menu.Item>
-            <Menu.Item key="drage">
-              <Link to="/drageLayout">Drage</Link>
+            <Menu.Item key="dagre">
+              <Link to="/dagreLayout">Dagre</Link>
             </Menu.Item>
             <Menu.Item key="decision">
               <Link to="/decision">Decision</Link>
@@ -129,6 +132,9 @@ ReactDOM.render((
             <Menu.Item key="react-sample">
               <Link to="/react-sample">React-Sample</Link>
             </Menu.Item>
+            <Menu.Item key="radial">
+              <Link to="/radial">radial</Link>
+            </Menu.Item>
           </Menu>
         </Sider>
         <Content>
@@ -140,7 +146,7 @@ ReactDOM.render((
           <Route path="/lite_graph" component={liteGraph} />
           <Route path="/relational_books" component={RelationalBooks} />
           <Route path="/mind_map" component={MindMap} />
-          <Route path="/drageLayout" component={DrageLayout} />
+          <Route path="/dagreLayout" component={DagreLayout} />
           <Route path="/compactBoxTree" component={CompactBoxTree} />
           <Route path="/entity-relationship" component={EntityRelationship} />
           <Route path="/emergency2" component={Emergency2} />
@@ -159,6 +165,7 @@ ReactDOM.render((
           <Route path="/grid" component={Grid} />
           <Route path="/Fruchterman" component={Fruchterman} />
           <Route path="/react-sample" component={ReactSample} />
+          <Route path="/radial" component={Radial} />
           <Route exact path="/" component={() => <Redirect exact from="/" to="/analysis" />} />
         </Content>
       </Layout>

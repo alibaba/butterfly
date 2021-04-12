@@ -3,7 +3,8 @@ import React, {Component} from 'react';
 require('./index.less');
 require('butterfly-dag/dist/index.css');
 
-const Canvas = require('../../../index.js').Canvas;
+// const Canvas = require('../../../index.js').Canvas;
+import { Canvas } from 'butterfly-dag';
 const mockData = require('./data.js');
 
 class LoginNew extends Component {

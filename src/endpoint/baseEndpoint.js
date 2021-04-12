@@ -21,6 +21,8 @@ class BaseEndpoint extends Endpoint {
     this.scope = opts.scope;
     this.expandArea = opts.expandArea;
     this.limitNum = opts.limitNum;
+    // 已连接数
+    this.connectedNum = 0;
     this.options = opts;
     // 鸭子辨识手动判断类型
     this.__type = 'endpoint';
@@ -70,10 +72,11 @@ class BaseEndpoint extends Endpoint {
       });
     } else {
       // 计算width,height,left,top
-      this._width = $(this.dom).width();
-      this._height = $(this.dom).height();
-      this._left = this._coordinateService._terminal2canvas('x', $(this.dom).offset().left);
-      this._top = this._coordinateService._terminal2canvas('y', $(this.dom).offset().top);
+      this._width = $(this.dom).outerWidth();
+      this._height = $(this.dom).outerHeight();
+      
+      this._left = this._coordinateService._terminal2canvas('x', $(this.dom).offset().left + this._coordinateService.scrollLeft);
+      this._top = this._coordinateService._terminal2canvas('y', $(this.dom).offset().top + this._coordinateService.scrollTop);
 
       this._posTop = this._top;
       this._posLeft = this._left;
@@ -95,11 +98,13 @@ class BaseEndpoint extends Endpoint {
   updatePos(dom = this.dom, orientation = this.orientation, pos = this.pos) {
     if (this._isInitedDom) {
       // 计算width,height,left,top
-      this._width = $(this.dom).width();
-      this._height = $(this.dom).height();
+      this._width = $(this.dom).outerWidth();
+      this._height = $(this.dom).outerHeight();
+
       // 计算锚点起始值
-      this._left = this._coordinateService._terminal2canvas('x', $(this.dom).offset().left);
-      this._top = this._coordinateService._terminal2canvas('y', $(this.dom).offset().top);
+      this._left = this._coordinateService._terminal2canvas('x', $(this.dom).offset().left + this._coordinateService.scrollLeft);
+      this._top = this._coordinateService._terminal2canvas('y', $(this.dom).offset().top + this._coordinateService.scrollTop);
+
       this._posLeft = this._left;
       this._posTop = this._top;
     } else {
@@ -180,6 +185,10 @@ class BaseEndpoint extends Endpoint {
 
       this.updated && this.updated();
     }
+  }
+
+  hasConnection() {
+    return this.connectedNum > 0;
   }
 
   moveTo(x, y) {

@@ -1,6 +1,9 @@
 'use strict';
 
-const Node = require('../../../index.js').Node;
+// const Node = require('../../../index.js').Node;
+import { Node } from 'butterfly-dag';
+// import { Node } from '../../../index';
+
 const $ = require('jquery');
 require('./node.less');
 

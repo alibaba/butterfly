@@ -1,6 +1,7 @@
 'use strict';
 
-const Node = require('../../../index.js').Node;
+// const Node = require('../../../index.js').Node;
+import { Node } from 'butterfly-dag';
 const $ = require('jquery');
 import { uniqueId } from 'lodash';
 import '../../static/iconfont.css';
@@ -20,7 +21,7 @@ class BaseNode extends Node {
   }
   draw = (opts) => {
     let className = this.options.type;
-    let container = $('<div class="relational-book-base-node"></div>')
+    let container = $('<div class="relational-book-base-node base-node"></div>')
       .css('top', opts.top + 'px')
       .css('left', opts.left + 'px')
       .addClass(className)

@@ -9,7 +9,6 @@ module.exports = {
       text: 'Gets Paid',
       top: 175,
       left: 600,
-      color: 'purple',
       shape: 'diamond',
       Class: BaseNode,
       width: 128,
@@ -21,7 +20,7 @@ module.exports = {
       text: 'Employee',
       top: 185,
       left: 300,
-      color: 'green',
+      color: 'box-background-color',
       shape: 'rect',
       Class: BaseNode,
     }, {
@@ -29,7 +28,7 @@ module.exports = {
       text: 'Number',
       top: 90,
       left: 200,
-      color: 'yellow',
+      color: 'box-background-color',
       shape: 'ellipse',
       Class: BaseNode,
     }, {
@@ -37,7 +36,7 @@ module.exports = {
       text: 'Name',
       top: 30,
       left: 325,
-      color: 'orange',
+      color: 'box-background-color',
       shape: 'ellipse',
       Class: BaseNode,
     }, {
@@ -47,21 +46,21 @@ module.exports = {
       left: 450,
       width: 95,
       height: 45,
-      color: 'yellow',
-      shape: 'ellipse-border',
+      color: 'box-background-color',
+      shape: 'ellipse',
       Class: BaseNode,
-      fill: '#FFA940',
-      ellipseBorderWidth: 2,
-      ellipseDasharray: 'none'
+      // fill: '#FFA940',
+      // ellipseBorderWidth: 2,
+      // ellipseDasharray: 'none'
     }
     , {
       id: '6',
       text: 'ISA',
       top: 280,
       left: 320,
-      shape: 'triangle',
       width: 100,
       height: 50,
+      shape: 'triangle',
       fill: '#fff',
       Class: BaseNode,
     }, {
@@ -69,7 +68,7 @@ module.exports = {
       text: 'Salesman',
       top: 370,
       left: 300,
-      color: 'green',
+      color: 'box-background-color',
       shape: 'rect',
       Class: BaseNode,
     }, {
@@ -87,7 +86,7 @@ module.exports = {
       text: 'Company car',
       top: 370,
       left: 900,
-      color: 'green',
+      color: 'box-background-color',
       shape: 'rect',
       Class: BaseNode,
     } , {
@@ -95,7 +94,7 @@ module.exports = {
       text: 'Plate',
       top: 370,
       left: 1100,
-      color: 'yellow',
+      color: 'box-background-color',
       shape: 'ellipse',
       Class: BaseNode,
     },
@@ -104,7 +103,7 @@ module.exports = {
       text: 'Wage',
       top: 185,
       left: 900,
-      color: 'green',
+      color: 'box-background-color',
       shape: 'rect',
       Class: BaseNode,
       width: 137,
@@ -118,18 +117,18 @@ module.exports = {
       left: 1040,
       width: 95,
       height: 45,
-      color: 'pink',
-      shape: 'ellipse-border',
+      color: 'box-background-color',
+      shape: 'ellipse',
       Class: BaseNode,
-      fill: '#FFA940',
-      ellipseBorderWidth: 2,
-      ellipseDasharray: '3 1'
+      // fill: '#FFA940',
+      // ellipseBorderWidth: 2,
+      // ellipseDasharray: '3 1'
     }, , {
       id: '13',
       text: 'Date',
       top: 90,
       left: 810,
-      color: 'orange',
+      color: 'box-background-color',
       shape: 'ellipse',
       Class: BaseNode,
     }

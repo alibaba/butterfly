@@ -1,10 +1,10 @@
 # Contribute to ButterFly
 
 We are happy to contribute source code to you and make ButterFly getting better and better. Please read the following guidelines carefully before you submit your code.：
-* [Code of Conduct](https://github.com/alibaba/butterfly/blob/master/docs/CODE_OF_CONDUCT.md)
+* [Code of Conduct](./CODE_OF_CONDUCT.md)
 * [Issue rule](#issue-submit)
 * [Pull request rule](#pull-request-guidelines)
-
+* [Code submission specification](#code-commit)
 ## <a name='issue-submit'></a> Issue rule
 * Before you submit a question, search the archive to see if there is a problem.
 
@@ -27,3 +27,26 @@ We are happy to contribute source code to you and make ButterFly getting better 
 
 * If the bug is fixed, please give a description in the PR.
 
+## <a name="code-commit"></a>Code submission specification
+
+commit information classification standard
+* feat：new feature description
+* fix：fix bug description
+* docs：document description
+* style： style description（Changes that do not affect code operation）
+* refactor：refactor description（It's not a new feature or a code change to modify a bug）
+* test：test description
+* chore：Change of construction process or auxiliary tools
+
+  
+**For example**
+```bash
+git add xxx
+git commit -m 'feat: add xxx feature'
+git commit -m 'fix: fix xxx problem'
+git commit -m 'docs: add xxx document or xxx document update'
+git commit -m 'style: code style adjustment'
+git commit -m 'refactor: xxx the function logic refactor'
+git commit -m 'test: add xxx feature test'
+git commit -m 'chore: webpack package module upgrade'
+```

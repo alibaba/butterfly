@@ -1,6 +1,7 @@
 'use strict';
 
-const Node = require('../../../index.js').Node;
+// const Node = require('../../../index.js').Node;
+import { Node } from 'butterfly-dag';
 const $ = require('jquery');
 require('./base_node.less');
 
@@ -14,10 +15,12 @@ class BaseNode extends Node {
       .css('top', opts.top)
       .css('left', opts.left)
       .attr('id', opts.id)
-      .css('background-color', opts.options.color);
+      .addClass(opts.options.className)
+      // .css('background-color', opts.options.color);
 
-    let logoContainer = $(`<div class="logo-container">${opts.options.name}</div>`);
-    logoContainer.css('background-color', opts.options.color);
+    let logoContainer = $(`<div class="logo-container">${opts.options.name || opts.id}</div>`);
+    logoContainer.addClass(opts.options.className);
+    // logoContainer.css('background-color', opts.options.color);
 
     container.append(logoContainer);
 

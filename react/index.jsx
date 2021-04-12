@@ -5,8 +5,10 @@ import {Canvas} from 'butterfly-dag';
 
 import diff from './util/diff.js';
 import recalc from './util/re-calc.js';
+import CEndpoint from './coms/endpoint';
 import process from './util/process.js';
 import relayout from './util/re-layout.js';
+import NodeRender from './coms/node-render.jsx';
 import CommonRender from './coms/common-render.jsx';
 import defaultOptions from './util/default-options';
 
@@ -15,6 +17,7 @@ import './index.less';
 
 const noop = () => null;
 window._ = _;
+const defaultLinkCls = 'butterflies-link';
 
 const call = (fn) => {
   if (!fn) {
@@ -41,9 +44,13 @@ const ReactButterfly = (props) => {
   const containerRef = useRef();
   const canvasRef = useRef();
 
-  useEffect(() => {
+  /**
+   * 对齐画布数据和React数据
+   * @param {BaseCanvas} canvas 画布实例
+   * @param {Boolean} edge 是否对齐边
+   */
+  const alignCanvasData = (canvas, edge = false) => {
     // 利用ID，和当前的边，当前的节点进行对比
-    const canvas = canvasRef.current;
     if (!canvas) {
       return;
     }
@@ -63,8 +70,7 @@ const ReactButterfly = (props) => {
       const {created, deleted} = diff(edges, oldEdges);
 
 
-      canvas.addEdges(process({edges: created}), true);
-
+      canvas.addEdges(process({edges: created}).edges, true);
       canvas.removeEdges(process({edges: deleted}).edges.map(e => e.id));
     };
 
@@ -80,9 +86,22 @@ const ReactButterfly = (props) => {
       });
     };
 
-    processNodes();
-    processEdge();
     processGroups();
+    processNodes();
+
+    if (edge) {
+      processEdge();
+    }
+  };
+
+  useEffect(() => {
+    // // 利用ID，和当前的边，当前的节点进行对比
+    const canvas = canvasRef.current;
+    if (!canvas) {
+      return;
+    }
+
+    alignCanvasData(canvas);
 
     setStep(currentStep + 1);
   }, [nodes, edges, groups]);
@@ -132,8 +151,16 @@ const ReactButterfly = (props) => {
 
       await new Promise((res, rej) => {
         try {
-          canvas.draw(data, () => {
+          // 优先画节点
+          canvas.draw({
+            nodes: data.nodes,
+            groups: data.groups
+          }, () => {
             res();
+
+            setTimeout(() => {
+              canvas.addEdges(data.edges);
+            });
           });
         } catch (e) {
           rej(e);
@@ -218,14 +245,60 @@ const ReactButterfly = (props) => {
     recalc(canvas);
   }, [currentStep]);
 
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) {
+      return;
+    }
+
+    // 对齐edges和canvas.edges的className
+    canvas.edges.forEach(cvsEdge => {
+      const userEdge = edges.find(e => e.id === cvsEdge.id);
+
+      // 对齐Edge的Classname
+      const alignEdgeCls = () => {
+        if (!cvsEdge.dom || !userEdge) {
+          return;
+        }
+
+        const cls = [defaultLinkCls];
+
+        if (userEdge.className) {
+          cls.push(userEdge.className);
+        }
+
+        cvsEdge.dom.setAttribute('class', cls .join(' '));
+      };
+
+      // 对齐边上的arrow的Cls
+      const alignEdgeArrowCls = () => {
+        if (!cvsEdge.arrowDom || !userEdge) {
+          return;
+        }
+
+        if (!userEdge.arrowClassName) {
+          return;
+        }
+
+        cvsEdge.arrowDom.setAttribute('class', userEdge.arrowClassName);
+      };
+
+      alignEdgeCls();
+      alignEdgeArrowCls();
+    });
+  });
+
   return (
     <div
       className={`${className || ''} butterfly-react`}
     >
-      <CommonRender
-        data={nodes}
-        type="node"
+      <NodeRender
+        nodes={nodes}
         idPrefix="bf_node_"
+        canvas={canvasRef.current}
+        onRenderFinish={() => {
+          alignCanvasData(canvasRef.current, true);
+        }}
       />
       <CommonRender
         data={edges}
@@ -260,13 +333,18 @@ ReactButterfly.propTypes = {
   edges: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      labelRender: PropTypes.func       // label渲染函数
+      labelRender: PropTypes.func,      // label渲染函数
+      className: PropTypes.string       // 线条的className
     })
   ),
   groups: PropTypes.array,              // 组的数据
   options: PropTypes.shape({            // 画布属性
-    layout: PropTypes.func,
-    zoomable: PropTypes.func,
+    layout: PropTypes.oneOfType([
+      PropTypes.func,
+      PropTypes.string,
+      PropTypes.object
+    ]),
+    zoomable: PropTypes.bool,
     moveable: PropTypes.bool,
     draggable: PropTypes.bool,
     linkable: PropTypes.bool,
@@ -282,4 +360,5 @@ ReactButterfly.propTypes = {
 };
 
 
+export const Endpoint = CEndpoint;
 export default ReactButterfly;

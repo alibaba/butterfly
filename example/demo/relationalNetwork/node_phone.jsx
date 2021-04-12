@@ -9,7 +9,7 @@ class Phone extends Node {
     super(...args);
   }
   genLogo = () => {
-    return $('<i class="iconfont datac-icon">&#xe628;</i>');
+    return $('<i class="newIconfont iconapplication"></i>');
   }
 }
 

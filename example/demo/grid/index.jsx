@@ -1,7 +1,8 @@
 'use strict';
 import React, {Component} from 'react';
 
-const Canvas = require('../../../index.js').Canvas;
+// const Canvas = require('../../../index.js').Canvas;
+import { Canvas } from 'butterfly-dag';
 const {mockData} = require('./data');
 require('./index.less');
 require('butterfly-dag/dist/index.css');
@@ -34,6 +35,7 @@ class Grid extends Component {
           height: 100,
           // 布局相对起始点
           begin: [20, 20],
+          center: [10,100],
           preventOverlap: true,
           preventOverlapPadding: 10,
           condense: false,

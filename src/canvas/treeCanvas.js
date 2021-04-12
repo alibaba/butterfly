@@ -3,6 +3,7 @@
 import Canvas from "./baseCanvas";
 const _ = require('lodash');
 import TreeNode from '../node/treeNode';
+import Node from '../node/baseNode';
 import Hierarchy from '../utils/layout/hierarchy';
 
 class TreeCanvas extends Canvas {
@@ -118,6 +119,18 @@ class TreeCanvas extends Canvas {
 
     this.redraw();
 
+    this.emit('system.node.collapse', {
+      target: targetNode,
+      nodes: collapseNodes,
+      edges: collapseEdges
+    });
+    this.emit('events', {
+      type: 'node.collapse',
+      target: targetNode,
+      nodes: collapseNodes,
+      edges: collapseEdges
+    });
+
     return {
       nodes: collapseNodes,
       edges: collapseEdges
@@ -158,7 +171,7 @@ class TreeCanvas extends Canvas {
       return _isCollapsed;
     });
     this.nodes = _.differenceBy(this.nodes, subNodes, 'id');
-    this.addNodes(subNodes, true);
+    let addNodes = this.addNodes(subNodes, true);
     this.edges = _.filter(this.edges, (a) => {
       if (a.type === 'endpoint') {
         return !_.some(collapseEdges, ((b) => {
@@ -170,7 +183,7 @@ class TreeCanvas extends Canvas {
         }));
       }
     });
-    this.addEdges(collapseEdges, true);
+    let addEdges = this.addEdges(collapseEdges, true);
     subNodes.forEach((item) => {
       delete item.subCollapsed;
     });
@@ -179,6 +192,17 @@ class TreeCanvas extends Canvas {
       delete item.collapsed;
     });
     this.redraw();
+    this.emit('system.node.expand', {
+      target: targetNode,
+      nodes: addNodes,
+      edges: addEdges
+    });
+    this.emit('events', {
+      type: 'node.expand',
+      target: targetNode,
+      nodes: addNodes,
+      edges: addEdges
+    });
   }
 
   redraw() {
@@ -251,6 +275,10 @@ class TreeCanvas extends Canvas {
     this.edges.forEach((item) => {
       item.redraw();
     });
+    this.emit('system.canvas.redraw');
+    this.emit('events', {
+      type: 'canvas:redraw'
+    });
   }
   addNodes(data, isNotEventEmit) {
     let nodes = super.addNodes(data, isNotEventEmit);
@@ -266,7 +294,6 @@ class TreeCanvas extends Canvas {
     return nodes;
   }
   removeNodes(data, isNotDelEdge, isNotEventEmit) {
-
     let nodes = data.map((item) => {
       if (item instanceof Node) {
         return item;
@@ -280,11 +307,9 @@ class TreeCanvas extends Canvas {
     nodes.forEach((item) => {
       let _subTree = this.findSubTree(item);
       rmNodes = rmNodes.concat(_subTree);
-
       // 如果是某个节点的子节点,将此节点从父节点的children中移除
       if (item.parent) {
         const parentNode = this.getNode(item.parent);
-
         if (parentNode) {
           parentNode.children = parentNode.children.filter((node) => node.id !== item.id);
         }

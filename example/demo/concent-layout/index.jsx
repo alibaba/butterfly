@@ -1,7 +1,8 @@
 'use strict';
 import React, {Component} from 'react';
 // const DrageCanvas = require('../../../index.js').DrageCanvas;
-const Canvas = require('../../../index.js').Canvas;
+// const Canvas = require('../../../index.js').Canvas;
+import { Canvas } from 'butterfly-dag';
 const mockData = require('./data.js');
 
 require('./index.less');

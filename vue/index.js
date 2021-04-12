@@ -1,3 +1,7 @@
+/**
+ * 暂无使用
+ */
+
 import butterflyVue from './butterfly-vue.vue';
 
 const install = (Vue)=>{

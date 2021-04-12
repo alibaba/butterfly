@@ -3,6 +3,7 @@
 ## 用法
 
 ```js
+// 初始化画布渲染
 canvas.draw({
   edges: [{
     source: 'point_1',
@@ -17,6 +18,12 @@ canvas.draw({
   }],
   groups: ...
   nodes: ...
+})
+
+// 动态添加
+canvas.addEdge({
+  // 参考下面属性
+  ...
 })
 ```
 
@@ -66,6 +73,12 @@ mounted = () => {}
   * 线条重绘后的回调
   */
 updated = () => {}
+
+/**
+  * 设置线段z-index
+  * @param {number} zIndex -  zIndex的值
+  */
+setZIndex = (index) => {}
 ```
 
 ### <a name='edge-custom-arrow'>自定义箭头</a>：

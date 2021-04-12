@@ -1,5 +1,5 @@
 import {Node} from 'butterfly-dag';
-// import $ from 'jquery';
+
 
 const getNodeStyle = (left, top) => {
   return {

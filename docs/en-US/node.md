@@ -1,7 +1,7 @@
 # Node
 
 ## Usage
-```
+```js
 const Node = require('butterfly-dag').Node;
 class ANode extends Node {
   draw(obj) {
@@ -9,13 +9,25 @@ class ANode extends Node {
   }
 }
 
+// Initialize draw
 canvas.draw({
   nodes: [{
     id: 'xxxx',
     top: 100,
     left: 100,
     Class: ANode // after setting the base class, the canvas will render based on the custom class.
+    // the attribute below
+    ...
   }]
+})
+// Dynamic addition
+canvas.addNode({
+  id: 'xxx',
+  top: 100,
+  left: 100,
+  Class: ANode
+  // the attribute below
+  ...
 })
 ```
 
@@ -95,7 +107,7 @@ unFocus = () => {}
   * @param {string} param.id - endpoint id
   * @param {string} param.orientation - endpoint direction (it can control the direction of the edge linkin or linkout)
   * @param {string} param.scope - scope
-  * @param {string} param.type - 'source' / 'target' / undefined，ednpoint is both source and target when undefined
+  * @param {string} param.type - 'source' / 'target' / undefined / 'onlyConnect'. If value is undefine, endpoint is both source and target, but it can't be the same as 'source' and 'target', first come first setting; If value is 'onlyConnect', endpoint is both source and target, it can be the same as 'source' and 'target'
   * @param {string} param.dom - any sub DOM in the node can be used as a custom endpoint
   */
 addEndpoint = (obj) => {}

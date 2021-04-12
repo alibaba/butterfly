@@ -24,21 +24,21 @@ this.canvas = new Canvas({
 ```
 
 
-## Darge Layout
+## Dagre Layout
 
 Dagre Layout is an appropriate layout method for directed flow graph.It will calculate the levels and positions of nodes automatically according to the edge directions in the data. 
 
 
 #### legend
 
-![Darge布局](https://img.alicdn.com/tfs/TB1kzjEkRFR4u4jSZFPXXanzFXa-1335-782.png)
+![Dagre布局](https://img.alicdn.com/tfs/TB1kzjEkRFR4u4jSZFPXXanzFXa-1335-782.png)
 
 #### Examples
 
 ``` js
 this.canvas = new Canvas({
   layout: {
-    type: 'drageLayout',
+    type: 'dagreLayout',
     options: {
       rankdir: 'TB',
       nodesep: 40,
@@ -225,7 +225,7 @@ import {TreeCanvas} from 'butterfly-dag';
 import {TreeCanvas} from 'butterfly-dag';
 this.canvas = new TreeCanvas({
   layout: {
-    type: 'drageLayout',
+    type: 'dagreLayout',
     options: {
       rankdir: 'TB',
       nodesep: 40,
@@ -235,3 +235,70 @@ this.canvas = new TreeCanvas({
   }
 });
 ```
+
+
+## Radial Layout
+
+Radial layout is a kind of layout method to make the graph radial. Taking a focusnode as the center, the rest of the nodes are arranged on rings with different distances according to the degree relationship with focusnode. Nodes one degree away from focusnode are placed on the first ring nearest to it, nodes two degrees away from focusnode are placed on the second ring, and so on.
+
+
+#### legend
+
+![Radial layout](https://img.alicdn.com/imgextra/i4/O1CN017UUWwh1u9l4RfYcyi_!!6000000005995-2-tps-1240-489.png)
+
+#### Examples
+
+``` js
+this.canvas = new Canvas({
+  layout: {
+    type: 'Radial',
+    options: {
+        // total width of layout canvas
+        width:800,
+        // total length of layout canvas
+        height:800,
+        /** the maximum iteration number of stopping iteration */
+        maxIteration: 200,
+        /** layout Center */
+        center: [400, 400],
+        /** center point, the default is the first point in the data */
+        focusNode: '0',
+        /** radius of each circle */
+        unitRadius: 80,
+        /** default edge length */
+        linkDistance: 100,
+        /** Is overlapping prevented */
+        preventOverlap: true,
+        /** node diameter */
+        nodeSize: 20,
+        /** node spacing, the minimum distance between nodes to prevent node overlap (the shortest distance between the edges of two nodes) */
+        nodeSpacing: undefined,
+        /** whether it must be a strict radial layout, that is, the nodes of each layer are strictly arranged on a ring. When preventoverlap is true  */
+        strictRadial: true,
+        /** maximum number of iterations to prevent overlapping steps */
+        maxPreventOverlapIteration: 200,
+        link: {
+            // the distance between lines
+            distance: 50,
+            // the thickness of the line
+            strength: 1
+        },
+    },
+  }
+});
+```
+
+#### API
+
+
+| Name | Type | Required | Default | Description   
+| :------ | :------ | :------ | :------ | :------ 
+| center | Array | false | [0,0] | the center of the layout
+| maxIteration | Number | false | 1000 | the maximum iteration number of stopping iteration
+| focusNode | String/Object | false | null | the center point of the radiation, which is the first node in the data by default. You can pass in the node ID or the node itself
+| unitRadius | Number | false | 100 | the distance between each lap and the previous lap. The entire canvas is filled by default, which is determined by the size of the graph
+| linkDistance | Number | false | 50 | default edge length
+| preventOverlap | Boolean | false | false | whether to prevent overlapping or not must cooperate with the following attribute nodesize. Only when the nodesize value is set to be the same as the current graph node size, can the collision detection of node overlapping be carried out
+| nodeSize | Number | false | 10 | node size (diameter, used to prevent collision detection when nodes overlap)
+| strictRadial | Boolean | false | true | whether it must be a strict radial layout, that is, the nodes of each layer are strictly arranged on a ring. It takes effect when preventoverlap is true. When preventoverlap is true and strictradial is false, the overlapped nodes expand strictly along the ring. However, if there are too many nodes in a ring, the overlapped nodes may not be completely avoided. When preventoverlap is true and strictradial is true, the overlapped nodes on the same ring are not strictly arranged along the ring, and the overlapped nodes can be offset before and after the ring to avoid overlapping.
+| maxPreventOverlapIteration | Number | false | 200 | maximum number of iterations to prevent overlapping steps

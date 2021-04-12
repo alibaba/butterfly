@@ -2,7 +2,9 @@
 import React, {Component} from 'react';
 require('./index.less');
 
-const Canvas = require('../../../index.js').TreeCanvas;
+// const Canvas = require('../../../index.js').TreeCanvas;
+import { TreeCanvas } from 'butterfly-dag';
+// import { TreeCanvas } from '../../../index';
 const {mockData} = require('./data');
 
 class CompactBoxTree extends Component {
@@ -12,7 +14,7 @@ class CompactBoxTree extends Component {
   componentDidMount() {
 
     let root = document.getElementById('dag-canvas');
-    this.canvas = new Canvas({
+    this.canvas = new TreeCanvas({
       root: root,
       disLinkable: true, // 可删除连线
       linkable: true,    // 可连线
