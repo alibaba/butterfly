@@ -69,6 +69,7 @@ let canvas = new Canvas({
  * circleLayout
  * fruchterman
  * radial
+ * dagreCompound
  * custom layout，pass in custom method, which can be layout according to user needs. Note:`In addition, remember to overwrite the Edge calcPath method, otherwise it will be replaced by butterfly's built-in calculation edge  method, and the resulting edge cannot be realized.`
 * **autoFixCanvas**, auto expand canvas when drag nodes or edges near the margin of canvas, set autoMovePadding to adjust the area of hotspots. See: ![autoFixCanvas](https://img.alicdn.com/tfs/TB16lUNBG61gK0jSZFlXXXDKFXa-1665-801.gif)
 * **isScopeStrict**，used to set the global scope strict mode

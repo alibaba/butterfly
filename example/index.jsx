@@ -35,6 +35,7 @@ import DagreLayout from './demo/dagreLayout/index.jsx';
 import ConcentLayout from './demo/concent-layout/index.jsx';
 
 import Radial from './demo/radial/index.jsx';
+import DagreCompound from './demo/dagreCompound/index';
 
 import 'antd/dist/antd.css';
 import './static/iconfont.css';
@@ -135,6 +136,9 @@ ReactDOM.render((
             <Menu.Item key="radial">
               <Link to="/radial">radial</Link>
             </Menu.Item>
+            <Menu.Item key="dagreCompound">
+              <Link to="/dagreCompound">dagreCompound</Link>
+            </Menu.Item>
           </Menu>
         </Sider>
         <Content>
@@ -166,6 +170,7 @@ ReactDOM.render((
           <Route path="/Fruchterman" component={Fruchterman} />
           <Route path="/react-sample" component={ReactSample} />
           <Route path="/radial" component={Radial} />
+          <Route path="/dagreCompound" component={DagreCompound} />
           <Route exact path="/" component={() => <Redirect exact from="/" to="/analysis" />} />
         </Content>
       </Layout>

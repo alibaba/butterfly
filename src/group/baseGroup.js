@@ -197,7 +197,7 @@ class BaseGroup extends Group {
     this.nodes.forEach((node) => {
       node.endpoints.forEach((point) => {
         point.updatePos();
-      });
+      });   
     });
     // 节点组的锚点移动
     this.endpoints.forEach((item) => {

@@ -3476,7 +3476,7 @@ class BaseCanvas extends Canvas {
             }
           })
         }
-      }else if(_.get(this.layout, 'type') === 'radial') {
+      } else if(_.get(this.layout, 'type') === 'radial') {
         const _opts = $.extend({
           // 布局画布总宽度
           width: _.get(this.layout, 'options.width') || 500,
@@ -3528,6 +3528,21 @@ class BaseCanvas extends Canvas {
            }
          })
        }
+      } else if (_.get(this.layout, 'type') === 'dagreCompound') {
+        Layout.dagreCompound({
+          opts: {
+            /** 布局方向, 可选 TB, BT, LR, RL */
+            rankdir: _.get(this.layout, 'options.rankdir') || 'TB'
+          },
+          data: {
+            groups: data.groups,
+            nodes: data.nodes,
+            edges: data.edges.map(item => ({
+              source: item.type === 'endpoint' ? item.sourceNode : item.source,
+              target: item.type === 'endpoint' ? item.targetNode : item.target
+            }))
+          }
+        });
       }
     }
   }

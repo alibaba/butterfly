@@ -68,6 +68,7 @@ let canvas = new Canvas({
  * circleLayout
  * fruchterman
  * radial
+ * dagreCompound
  * 自定义布局，传入自定义方法，里面可以按照用户需求进行布局。注:`除此之外，记得把Edge的calcPath的方法复写掉，不然会由小蝴蝶的内置计算线段的方法代替，无法实现所得的线段`
 * **autoFixCanvas**，自动延展画布，适用于画布内节点与画布外节点有互动的场景。效果如下：![自动延展画布](https://img.alicdn.com/tfs/TB16lUNBG61gK0jSZFlXXXDKFXa-1665-801.gif)
 * **isScopeStrict**，用于设置全局scope严格模式

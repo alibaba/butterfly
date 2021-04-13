@@ -302,3 +302,26 @@ this.canvas = new Canvas({
 | nodeSize | Number | false | 10 | node size (diameter, used to prevent collision detection when nodes overlap)
 | strictRadial | Boolean | false | true | whether it must be a strict radial layout, that is, the nodes of each layer are strictly arranged on a ring. It takes effect when preventoverlap is true. When preventoverlap is true and strictradial is false, the overlapped nodes expand strictly along the ring. However, if there are too many nodes in a ring, the overlapped nodes may not be completely avoided. When preventoverlap is true and strictradial is true, the overlapped nodes on the same ring are not strictly arranged along the ring, and the overlapped nodes can be offset before and after the ring to avoid overlapping.
 | maxPreventOverlapIteration | Number | false | 200 | maximum number of iterations to prevent overlapping steps
+
+## DagreCompound Layout
+Visual layout of composite hierarchical DAG based on dagre
+
+#### legend
+![DagreCompound布局](https://img.alicdn.com/imgextra/i1/O1CN01tfFzxK1hpoRzuamxX_!!6000000004327-0-tps-720-420.jpg)
+
+#### Examples
+
+``` js
+this.canvas = new Canvas({
+  layout: {
+    type: 'dagreCompound'
+  }
+});
+
+```
+
+#### API
+
+| name | Type | Required | Default | Options | Description  
+| :------ | :------ | :------ | :------ | :------ | :------
+| rankdir | String | false | TB| "TB/BT/LR/RL"  | The alignment of the nodes. T: top; B：bottom; L: left; R: right

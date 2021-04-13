@@ -303,3 +303,26 @@ this.canvas = new Canvas({
 | nodeSize | Number | false | 10 | 节点大小（直径, 用于防止节点重叠时的碰撞检测)
 | strictRadial | Boolean | false | true | 是否必须是严格的 radial 布局，即每一层的节点严格布局在一个环上。preventOverlap 为 true 时生效。当 preventOverlap 为 true，且 strictRadial 为 false 时，有重叠的节点严格沿着所在的环展开，但在一个环上若节点过多，可能无法完全避免节点重叠。当 preventOverlap 为 true，且 strictRadial 为 true 时，允许同环上重叠的节点不严格沿着该环布局，可以在该环的前后偏移以避免重叠。
 | maxPreventOverlapIteration | Number | false | 200 | 防止重叠步骤的最大迭代次数
+
+
+## DagreCompound Layout
+基于 dagre 实现的复合分层 DAG 的可视化布局
+
+#### 图例
+![DagreCompound布局](https://img.alicdn.com/imgextra/i1/O1CN01tfFzxK1hpoRzuamxX_!!6000000004327-0-tps-720-420.jpg)
+
+#### 代码演示
+
+``` js
+this.canvas = new Canvas({
+  layout: {
+    type: 'dagreCompound'
+  }
+});
+
+```
+#### API
+
+| 名称 | 类型 | 是否必须 | 默认值 | 选项 | 说明  
+| :------ | :------ | :------ | :------ | :------ | :------
+| rankdir | String | false | TB| "TB/BT/LR/RL"  | The alignment of the nodes. T: top; B：bottom; L: left; R: right
