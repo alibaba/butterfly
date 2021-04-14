@@ -24,6 +24,7 @@ class BaseEdge extends Edge {
     this.shapeType = _.get(opts, 'shapeType');
     this.label = _.get(opts, 'label');
     this.arrow = _.get(opts, 'arrow');
+    this.arrowShapeType = _.get(opts, 'arrowShapeType', 'default');
     this.arrowPosition = _.get(opts, 'arrowPosition', 0.5);
     this.arrowOffset = _.get(opts, 'arrowOffset', 0),
     this.isExpandWidth = _.get(opts, 'isExpandWidth', false);
@@ -178,8 +179,8 @@ class BaseEdge extends Edge {
       this.arrowFinalPosition = 0;
     }
     // 防止箭头窜出线条
-    if (1 - this.arrowFinalPosition < ArrowUtil.arrow.length / length) {
-      this.arrowFinalPosition = (length * this.arrowFinalPosition - ArrowUtil.arrow.length) / length;
+    if (1 - this.arrowFinalPosition < ArrowUtil.ARROW_TYPE.length / length) {
+      this.arrowFinalPosition = (length * this.arrowFinalPosition - ArrowUtil.ARROW_TYPE.length) / length;
     }
     // 贝塞尔曲线是反着画的，需要调整
     if (this.shapeType === 'Bezier') {
@@ -197,15 +198,26 @@ class BaseEdge extends Edge {
       path: path
     });
     let deg = Math.atan2(vector.y, vector.x) / Math.PI * 180;
-
-    this.arrowDom.setAttribute('d', ArrowUtil.arrow.default);
+    let arrowObj = ArrowUtil.ARROW_TYPE[this.arrowShapeType];
+    if (arrowObj.type === 'pathString') {
+      this.arrowDom.setAttribute('d', arrowObj.content);
+    }
     this.arrowDom.setAttribute('transform', `rotate(${deg}, ${x}, ${y})translate(${x}, ${y})`);
   }
   drawArrow(arrow) {
     if (arrow) {
-      let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      path.setAttribute('class', 'butterflies-arrow');
-      return path;
+      let arrowObj = ArrowUtil.ARROW_TYPE[this.arrowShapeType];
+      let dom = undefined;
+      if (arrowObj.type === 'pathString') {
+        dom = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      } else if (arrowObj.type === 'svg') {
+        dom = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+        dom.setAttribute('href', arrowObj.content);
+        dom.setAttribute('width', '5px');
+        dom.setAttribute('height', '5px');
+      }
+      dom.setAttribute('class', 'butterflies-arrow');
+      return dom;
     }
   }
   redraw(sourcePoint, targetPoint, options) {
