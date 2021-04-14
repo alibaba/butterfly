@@ -315,9 +315,9 @@ class BaseCanvas extends Canvas {
 
     // hack 适配浏览器的缩放比例
     if (!_isMobi) {
-      let _sclae = 1 / (_detectZoom() / 200);
-      _SVGWidth = (1 * _sclae) + 'px';
-      _SVGHeight = (1 * _sclae) + 'px';
+      let _scale = 1 / (_detectZoom() / 200);
+      _SVGWidth = (1 * _scale) + 'px';
+      _SVGHeight = (1 * _scale) + 'px';
     }
 
     // 生成svg的wrapper
@@ -332,8 +332,8 @@ class BaseCanvas extends Canvas {
     if(!_isMobi) {
       // hack 监听浏览器的缩放比例并适配
       window.onresize = () => {
-        let _sclae = 1 / (_detectZoom() / 200);
-        svg.attr('width', (1 * _sclae) + 'px').attr('height', (1 * _sclae) + 'px');
+        let _scale = 1 / (_detectZoom() / 200);
+        svg.attr('width', (1 * _scale) + 'px').attr('height', (1 * _scale) + 'px');
       }
 
       // hack 因为width和height为1的时候会有偏移
