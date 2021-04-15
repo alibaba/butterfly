@@ -190,6 +190,8 @@ class BaseEdge extends Edge {
     let point = this.dom.getPointAtLength(length * this.arrowFinalPosition);
     let x = point.x;
     let y = point.y;
+    let _x = x;
+    let _y = y;
 
     let vector = ArrowUtil.calcSlope({
       shapeType: this.shapeType,
@@ -198,11 +200,58 @@ class BaseEdge extends Edge {
       path: path
     });
     let deg = Math.atan2(vector.y, vector.x) / Math.PI * 180;
+    if (this.sourceNode.id == 1 && this.targetNode.id == 5) {
+      console.log(this);
+      console.log(vector);
+      console.log(this.dom);
+      console.log(deg);
+      console.log('--------');
+    }
+    // console.log(this);
+    // console.log(vector);
+    // console.log(this.dom);
+    // console.log(deg);
+    // console.log('--------');
     let arrowObj = ArrowUtil.ARROW_TYPE[this.arrowShapeType];
     if (arrowObj.type === 'pathString') {
       this.arrowDom.setAttribute('d', arrowObj.content);
+    } else if (arrowObj.type === 'svg') {
+      if (vector.x === 0) {
+        _y -= 4;
+      } else {
+        let angle = 180 - deg;
+        // console.log(angle);
+        let _intervalX = Math.abs(4 * Math.sin(angle));
+        let _intervalY = Math.abs(4 * Math.cos(angle));
+        if (angle > 0 && angle < 90) {
+          _x = x - 4 * _intervalX;
+          _y = y - 4 * _intervalY;
+        } else if (angle >= 90 && angle < 180) {
+          _x = x - 4 * _intervalX;
+          _y = y + 4 * _intervalY;
+        } else if (angle >= 180 && angle < 270) {
+          _x = x + 4 * _intervalX;
+          _y = y - 4 * _intervalY;
+        } else {
+          _x = x + 4 * _intervalX;
+          _y = y + 4 * _intervalY;
+        }
+
+
+        // if (angle > 145 && angle < 180) {
+        //   _x = x + 4 * Math.sin(180 - deg);
+        //   _y = y + 4 * Math.cos(180 - deg);
+        // } else {
+        //   _x = x - 4 * Math.sin(180 - deg);
+        //   _y = y - 4 * Math.cos(180 - deg);
+        // }
+        // _x = x - 4 * Math.sin(180 - deg);
+        // _y = y - 4 * Math.cos(180 - deg);
+        // console.log(4 * Math.cos(angle));
+        // console.log(4 * Math.sin(angle));
+      }
     }
-    this.arrowDom.setAttribute('transform', `rotate(${deg}, ${x}, ${y})translate(${x}, ${y})`);
+    this.arrowDom.setAttribute('transform', `rotate(${deg}, ${x}, ${y})translate(${_x}, ${_y})`);
   }
   drawArrow(arrow) {
     if (arrow) {
@@ -213,8 +262,8 @@ class BaseEdge extends Edge {
       } else if (arrowObj.type === 'svg') {
         dom = document.createElementNS('http://www.w3.org/2000/svg', 'image');
         dom.setAttribute('href', arrowObj.content);
-        dom.setAttribute('width', '5px');
-        dom.setAttribute('height', '5px');
+        dom.setAttribute('width', '8px');
+        dom.setAttribute('height', '8px');
       }
       dom.setAttribute('class', 'butterflies-arrow');
       return dom;
