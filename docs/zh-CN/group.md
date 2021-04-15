@@ -15,6 +15,8 @@ canvas.draw({
     top: 100,
     left: 100,
     Class: AGroup //设置基类之后，画布会根据自定义的类来渲染
+    ...
+    // 参考下面属性
   }],
   nodes: ...
   edges: ...
@@ -29,42 +31,45 @@ canvas.addGroup({
 
 ## 属性
 
-### id <string>(必填)
+### id \<String\> （必填）
   节点唯一标识
-### top <number>(必填)
+### top \<Number\> （必填）
    y轴坐标
-### left <number>(必填)
+### left \<Number\> （必填）
   x轴坐标
-### width <number>(选填)
+### width \<Number\> (选填)
   宽度
-### height <number>(选填)
+### height \<Number\> (选填)
   高度
-### type <string> (选填)
+### type \<String\> (选填)
   类型
-### endpoints <array> (选填)
+### endpoints \<Array\> (选填)
   锚点信息
-### Class <Class> (选填)
+### Class \<Class\> (选填)
   拓展类
-### scope <boolean> (选填)
+### scope \<Boolean\> (选填)
   作用域
 
 `* 节点的返回的dom必须设置position: absolute;`
+
+
 
 ## API：
 
 ### group.draw (obj)
 
-参数
+*参数*
 
 * `data`节点基本信息
 
-返回
+*返回*
 
 * `dom`返回渲染dom的根节点
 
 ```js
 draw = (obj) => {}
 ```
+
 ### group.mounted()
 
 ```js
@@ -73,7 +78,7 @@ mounted = () => {}
 
 ### group.getWidth ()
 
-返回
+*返回*
 
 * `number`节点组宽度
 
@@ -83,25 +88,27 @@ getWidth = () => {}
 
 ### group.getHeight ()
 
-返回
+*返回*
 
 * `number`节点组高度
 
 ```js
 getHeight = () => {}
 ```
+
 ### group.addNode (node)
 
-参数
+*参数*
 
 * `{obj} node`节点数据
 
 ```js
 addNode = (node) => {}
 ```
+
 ### group.addNodes (nodes)
 
-参数
+*参数*
 
 * `{array} nodes`节点数组
 
@@ -111,7 +118,7 @@ addNodes = (nodes) => {}
 
 ### group.removeNode (node)
 
-参数
+*参数*
 
 * `{obj} node`节点数据
 
@@ -121,7 +128,7 @@ removeNode = (node) => {}
 
 ### group.removeNode (node)
 
-参数
+*参数*
 
 * `{obj} node`节点数据
 
@@ -131,7 +138,7 @@ removeNode = (node) => {}
 
 ### group.addEndpoint (obj)
 
-参数
+*参数*
 
 * `{obj} param`锚点基本信息(此方法必须在节点挂载后执行才有效)
 * `{string} param.id`锚点id
@@ -146,11 +153,11 @@ addEndpoint = (obj) => {}
 
 ### group.getEndpoint (id)
 
-参数
+*参数*
 
 * `{string} pointId`锚点的信息 
 
-返回
+*返回*
 
 * `{Endpoint}`Endpoint的对象
 
@@ -160,7 +167,7 @@ getEndpoint = (id) => {}
 
 ### group.moveTo (obj)
 
-参数
+*参数*
 
 * `{number} x `移动位置的x坐标
 * `{number} y `移动位置的y坐标
@@ -168,13 +175,20 @@ getEndpoint = (id) => {}
 ```js
 moveTo = (obj) => {}
 ```
-### group.emit (string, obj)
+
+### group.emit (event, data)
+
+* `{string} event `发送事件名称
+* `{number} data `发送事件数据
 
 ```js
 emit = (string, obj) => {}
 ```
 
 ### group.on (string, callback)
+
+* `{string} event `接收事件名称
+* `{function} data `接收事件回调
 
 ```js
 on = (string, callback) => {}
