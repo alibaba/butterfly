@@ -27,155 +27,115 @@ canvas.addGroup({
 });
 ```
 
-## 属性
+## 属性<a name='group-attr'></a>：
 
-### id <string>(必填)
-  节点唯一标识
-### top <number>(必填)
-   y轴坐标
-### left <number>(必填)
-  x轴坐标
-### width <number>(选填)
-  宽度
-### height <number>(选填)
-  高度
-### type <string> (选填)
-  类型
-### endpoints <array> (选填)
-  锚点信息
-### Class <Class> (选填)
-  拓展类
-### scope <boolean> (选填)
-  作用域
+| key | 说明 | 类型 | 默认值 
+| :------ | :------ | :------ | :------ 
+| id | 节点唯一标识 | string (Require) | - 
+| top | y轴坐标 | number (Require) | - 
+| left | x轴坐标 | number (Require) | - 
+| width | 宽度 | number (Option) | - 
+| height | 高度 | number (Option) | - 
+| type | 类型 | string (Option) | normal(随意拖入拖出),inner(只能拖入不能拖出)
+| endpoints | 锚点信息 | array (Option) | - 
+| Class | 拓展类 | Class (Option) | 当传入拓展类的时候，该节点组则会按拓展类的draw方法进行渲染，拓展类的相关方法也会覆盖父类的方法
+| scope | 作用域 | boolean (Option) | 当node的scope和group的scope一致才能加入到节点组。默认不设置即可随意加入
 
 `* 节点的返回的dom必须设置position: absolute;`
 
 ## API：
 
-### group.draw (obj)
-
-参数
-
-* `data`节点基本信息
-
-返回
-
-* `dom`返回渲染dom的根节点
+### <a name='group-custom'>自定义节点组</a>：
 
 ```js
+/**
+  * group的渲染方法
+  * @param {obj} data - 节点基本信息 
+  * @return {dom} - 返回渲染dom的根节点
+  */
 draw = (obj) => {}
-```
-### group.mounted()
 
-```js
+/**
+  * 节点组挂载后的回调
+  */
 mounted = () => {}
-```
-
-### group.getWidth ()
-
-返回
-
-* `number`节点组宽度
-
-```js
+/**
+  * @return {number} - 节点组宽度
+  */
 getWidth = () => {}
-```
 
-### group.getHeight ()
-
-返回
-
-* `number`节点组高度
-
-```js
+/**
+  * @return {number} - 节点组高度
+  */
 getHeight = () => {}
 ```
-### group.addNode (node)
 
-参数
-
-* `{obj} node`节点数据
+### <a name='group-member'>新增，删除成员节点</a>：
 
 ```js
+/**
+  * group添加节点
+  * @param {obj} node - 节点数据
+  */
 addNode = (node) => {}
-```
-### group.addNodes (nodes)
 
-参数
-
-* `{array} nodes`节点数组
-
-```js
+/**
+  * group批量添加节点
+  * @param {array} nodes - 节点数组
+  */
 addNodes = (nodes) => {}
-```
 
-### group.removeNode (node)
-
-参数
-
-* `{obj} node`节点数据
-
-```js
+/**
+  * group删除节点
+  * @param {obj} node - 节点数据
+  */
 removeNode = (node) => {}
+
+/**
+  * group删除节点
+  * @param {array} nodes - 节点数组
+  */
+removeNodes = (nodes) => {}
 ```
 
-### group.removeNode (node)
-
-参数
-
-* `{obj} node`节点数据
+### <a name='group-endpoint'>自定义锚点</a>：
 
 ```js
-removeNode = (node) => {}
-```
-
-### group.addEndpoint (obj)
-
-参数
-
-* `{obj} param`锚点基本信息(此方法必须在节点挂载后执行才有效)
-* `{string} param.id`锚点id
-* `{string} param.orientation`锚点方向(可控制线段的进行和外出方向)
-* `{string} param.scope`作用域
-* `{string} param.type`'source' / 'target' / undefined，当undefined的时候锚点既是source又是target
-* `{string} param.dom`可以把分组内的任意一个子dom作为自定义锚点
-
-```js
+/**
+  * @param {obj} param - 锚点基本信息(此方法必须在节点挂载后执行才有效)
+  * @param {string} param.id - 锚点id
+  * @param {string} param.orientation - 锚点方向(可控制线段的进行和外出方向)
+  * @param {string} param.scope - 作用域
+  * @param {string} param.type - 'source' / 'target' / undefined，当undefined的时候锚点既是source又是target
+  * @param {string} param.dom - 可以把分组内的任意一个子dom作为自定义锚点
+  */
 addEndpoint = (obj) => {}
-```
 
-### group.getEndpoint (id)
-
-参数
-
-* `{string} pointId`锚点的信息 
-
-返回
-
-* `{Endpoint}`Endpoint的对象
-
-```js
+/**
+  * @param {string} pointId - 锚点的信息 
+  * @return {Endpoint} - Endpoint的对象
+  */
 getEndpoint = (id) => {}
 ```
 
-### group.moveTo (obj)
-
-参数
-
-* `{number} x `移动位置的x坐标
-* `{number} y `移动位置的y坐标
-
+### <a name='group-move'>移动</a>：
 ```js
+/**
+  * @param {number} x - 移动位置的x坐标 
+  * @param {number} y - 移动位置的y坐标 
+  */
 moveTo = (obj) => {}
 ```
-### group.emit (string, obj)
 
+### <a name='group-event'>事件</a>：
 ```js
+/**
+  * 发送事件
+  */
 emit = (string, obj) => {}
-```
 
-### group.on (string, callback)
-
-```js
+/**
+  * 接受事件
+  */
 on = (string, callback) => {}
 ```
