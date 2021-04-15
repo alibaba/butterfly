@@ -29,31 +29,28 @@ canvas.addGroup({
 });
 ```
 
-
-
 # 属性
 
-### id \<String\> （必填）
+### id <font color='red'>*\<String\>*</font> （必填）
   节点唯一标识
-### top \<Number\> （必填）
+### top <font color='red'>*\<Number\>*</font> （必填）
    y轴坐标
-### left \<Number\> （必填）
+### left <font color='red'>*\<Number\>*</font> （必填）
   x轴坐标
-### width \<Number\> (选填)
+### width <font color='red'>*\<Number\>*</font> (选填)
   宽度
-### height \<Number\> (选填)
+### height <font color='red'>*\<Number\>*</font> (选填)
   高度
-### type \<String\> (选填)
+### type <font color='red'>*\<String\>*</font> (选填)
   类型
-### endpoints \<Array\> (选填)
+### endpoints <font color='red'>*\<Array\>*</font> (选填)
   锚点信息
-### Class \<Class\> (选填)
+### Class <font color='red'>*\<Class\>*</font> (选填)
   拓展类
-### scope \<Boolean\> (选填)
+### scope <font color='red'>*\<String\>*</font> (选填)
   作用域
 
 `* 节点的返回的dom必须设置position: absolute;`
-
 
 
 
