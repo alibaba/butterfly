@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="28px" height="16px" viewBox="0 0 28 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>箭头-22</title>
+    <g id="箭头-22" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="箭头-2(1)" transform="translate(14.000000, 8.000000) rotate(90.000000) translate(-14.000000, -8.000000) translate(6.000000, -6.000000)" fill="#000000" fill-rule="nonzero">
+            <polygon id="形状结合" points="8 0 16 9 11 9 11 28 5 28 5 9 0 9"></polygon>
+        </g>
+    </g>
+</svg>

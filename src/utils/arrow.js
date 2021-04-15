@@ -2,9 +2,27 @@
 import _ from 'lodash';
 
 // todo:丰富箭头样式
-const arrow = {
-    default1: 'M0 0 L-3 3 L2 0 L-3 -3 Z',
-    default: `M5 0 L0 -2 Q 1.0 0 0 2 Z`,
+const ARROW_TYPE = {
+    default1: {
+      type: 'pathString',
+      content: 'M0 0 L-3 3 L2 0 L-3 -3 Z'
+    },
+    default: {
+      type: 'pathString',
+      content: 'M5 0 L0 -2 Q 1.0 0 0 2 Z'
+    },
+    arrow1: {
+      type: 'svg',
+      content: require('../../static/arrow/arrow1.svg')
+    },
+    arrow2: {
+      type: 'svg',
+      content: require('../../static/arrow/arrow2.svg')
+    },
+    arrow3: {
+      type: 'svg',
+      content: require('../../static/arrow/arrow3.svg')
+    },
     length: 5,
 };
 
@@ -50,7 +68,6 @@ function calcSlope(opts) {
       p1 = dom.getPointAtLength(dom.getTotalLength() * arrowPosition);
     }
     
-
     x = p1.x - p0.x;
     y = p1.y - p0.y;
   }
@@ -60,5 +77,5 @@ function calcSlope(opts) {
 
 export default {
   calcSlope,
-  arrow
+  ARROW_TYPE
 };

@@ -47,6 +47,7 @@ class BaseCanvas extends Canvas {
         type: _.get(options, 'theme.edge.type') || 'Bezier',
         Class: _.get(options, 'theme.edge.Class') || Edge,
         arrow: _.get(options, 'theme.edge.arrow'),
+        arrowShapeType: _.get(options, 'theme.edge.arrowShapeType', 'default'),
         arrowPosition: _.get(options, 'theme.edge.arrowPosition'),
         arrowOffset: _.get(options, 'theme.edge.arrowOffset'),
         label: _.get(options, 'theme.edge.label'),
@@ -314,9 +315,9 @@ class BaseCanvas extends Canvas {
 
     // hack 适配浏览器的缩放比例
     if (!_isMobi) {
-      let _sclae = 1 / (_detectZoom() / 200);
-      _SVGWidth = (1 * _sclae) + 'px';
-      _SVGHeight = (1 * _sclae) + 'px';
+      let _scale = 1 / (_detectZoom() / 200);
+      _SVGWidth = (1 * _scale) + 'px';
+      _SVGHeight = (1 * _scale) + 'px';
     }
 
     // 生成svg的wrapper
@@ -331,8 +332,8 @@ class BaseCanvas extends Canvas {
     if(!_isMobi) {
       // hack 监听浏览器的缩放比例并适配
       window.onresize = () => {
-        let _sclae = 1 / (_detectZoom() / 200);
-        svg.attr('width', (1 * _sclae) + 'px').attr('height', (1 * _sclae) + 'px');
+        let _scale = 1 / (_detectZoom() / 200);
+        svg.attr('width', (1 * _scale) + 'px').attr('height', (1 * _scale) + 'px');
       }
 
       // hack 因为width和height为1的时候会有偏移
@@ -850,6 +851,7 @@ class BaseCanvas extends Canvas {
                   sourceNode: _sourceNode,
                   sourceEndpoint: _sourceEndpoint,
                   arrow: this.theme.edge.arrow,
+                  arrowShapeType: this.theme.edge.arrowShapeType,
                   arrowPosition: this.theme.edge.arrowPosition,
                   arrowOffset: this.theme.edge.arrowOffset,
                   label: this.theme.edge.label,
@@ -2474,6 +2476,7 @@ class BaseCanvas extends Canvas {
           sourceEndpoint,
           targetEndpoint,
           arrow: link.arrow === undefined ? _.get(this, 'theme.edge.arrow') : link.arrow,
+          arrowShapeType: link.arrowShapeType === undefined ? _.get(this, 'theme.edge.arrowShapeType') : link.arrowShapeType,
           arrowPosition: link.arrowPosition === undefined ? _.get(this, 'theme.edge.arrowPosition') : link.arrowPosition,
           arrowOffset: link.arrowOffset === undefined ? _.get(this, 'theme.edge.arrowOffset') : link.arrowOffset,
           options: link,
@@ -2530,6 +2533,7 @@ class BaseCanvas extends Canvas {
           shapeType: link.shapeType || this.theme.edge.type,
           orientationLimit: this.theme.endpoint.position,
           arrow: link.arrow === undefined ? _.get(this, 'theme.edge.arrow') : link.arrow,
+          arrowShapeType: link.arrowShapeType === undefined ? _.get(this, 'theme.edge.arrowShapeType') : link.arrowShapeType,
           arrowPosition: link.arrowPosition === undefined ? _.get(this, 'theme.edge.arrowPosition') : link.arrowPosition,
           arrowOffset: link.arrowOffset === undefined ? _.get(this, 'theme.edge.arrowOffset') : link.arrowOffset,
           isExpandWidth: this.theme.edge.isExpandWidth,
