@@ -29,7 +29,9 @@ canvas.addGroup({
 });
 ```
 
-## 属性
+
+
+# 属性
 
 ### id \<String\> （必填）
   节点唯一标识
@@ -54,7 +56,8 @@ canvas.addGroup({
 
 
 
-## API：
+
+# API：
 
 ### group.draw (obj)
 
