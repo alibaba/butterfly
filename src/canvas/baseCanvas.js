@@ -516,6 +516,12 @@ class BaseCanvas extends Canvas {
         $(this.wrapper).append(labelDom);
       } else if (data.type === 'edge:setZIndex') {
         this.setEdgeZIndex([data.edge], data.index);
+      } else if (data.type === 'endpoint:updatePos') {
+        let point = data.point;
+        let edges = this.getNeighborEdgesByEndpoint(point.nodeId, point.id);
+        edges.forEach((item) => {
+          item.redraw();
+        });
       }
     });
 

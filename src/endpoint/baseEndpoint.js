@@ -186,6 +186,11 @@ class BaseEndpoint extends Endpoint {
 
       this.updated && this.updated();
     }
+
+    this.emit('InnerEvents', {
+      type: 'endpoint:updatePos',
+      point: this
+    });
   }
   _getGroupPos(group) {
     let targetGroup = group;

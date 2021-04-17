@@ -237,12 +237,17 @@ class BaseEdge extends Edge {
     }
   }
   redraw(sourcePoint, targetPoint, options) {
-    // 重新计算线条path
-    let path = this._calcPath(sourcePoint, targetPoint);
-
-    this.dom.setAttribute('d', path);
+    
+    // 检查线段是否有变化
+    let _oldPath = this._path;
+    let _newPath = this._calcPath(sourcePoint, targetPoint);
+    if (_oldPath === _newPath) {
+      return ;
+    }
+    
+    this.dom.setAttribute('d', _newPath);
     if (this.isExpandWidth) {
-      this.eventHandlerDom.setAttribute('d', path);
+      this.eventHandlerDom.setAttribute('d', _newPath);
       $(this.eventHandlerDom).insertAfter(this.dom);
     }
     // 函数节流
@@ -254,11 +259,11 @@ class BaseEdge extends Edge {
         }
         // 重新计算arrow
         if (this.arrowDom) {
-          this.redrawArrow(path);
+          this.redrawArrow(_newPath);
         }
         // 重新计算动画path
         if (this.animateDom) {
-          this.redrawAnimate(path);
+          this.redrawAnimate(_newPath);
         }
         this._updateTimer = null;
       }, this._UPDATE_INTERVAL);
