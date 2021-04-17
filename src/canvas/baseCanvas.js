@@ -51,6 +51,8 @@ class BaseCanvas extends Canvas {
         arrowPosition: _.get(options, 'theme.edge.arrowPosition'),
         arrowOffset: _.get(options, 'theme.edge.arrowOffset'),
         label: _.get(options, 'theme.edge.label'),
+        labelPosition: _.get(options, 'theme.edge.labelPosition'),
+        labelOffset: _.get(options, 'theme.edge.labelOffset'),
         isRepeat: _.get(options, 'theme.edge.isRepeat') || false,
         isLinkMyself: _.get(options, 'theme.edge.isLinkMyself') || false,
         isExpandWidth: _.get(options, 'theme.edge.isExpandWidth') || false,
@@ -855,6 +857,8 @@ class BaseCanvas extends Canvas {
                   arrowPosition: this.theme.edge.arrowPosition,
                   arrowOffset: this.theme.edge.arrowOffset,
                   label: this.theme.edge.label,
+                  labelPosition: this.theme.edge.labelPosition,
+                  labelOffset: this.theme.edge.labelOffset,
                   isExpandWidth: this.theme.edge.isExpandWidth
                 };
                 pointObj['options'] = _.assign({}, pointObj, {
@@ -2479,6 +2483,8 @@ class BaseCanvas extends Canvas {
           arrowShapeType: link.arrowShapeType === undefined ? _.get(this, 'theme.edge.arrowShapeType') : link.arrowShapeType,
           arrowPosition: link.arrowPosition === undefined ? _.get(this, 'theme.edge.arrowPosition') : link.arrowPosition,
           arrowOffset: link.arrowOffset === undefined ? _.get(this, 'theme.edge.arrowOffset') : link.arrowOffset,
+          labelPosition: link.labelPosition === undefined ? _.get(this, 'theme.edge.labelPosition') : link.labelPosition,
+          labelOffset: link.labelOffset === undefined ? _.get(this, 'theme.edge.labelOffset') : link.labelOffset,
           options: link,
           _sourceType,
           _targetType,
@@ -2536,6 +2542,8 @@ class BaseCanvas extends Canvas {
           arrowShapeType: link.arrowShapeType === undefined ? _.get(this, 'theme.edge.arrowShapeType') : link.arrowShapeType,
           arrowPosition: link.arrowPosition === undefined ? _.get(this, 'theme.edge.arrowPosition') : link.arrowPosition,
           arrowOffset: link.arrowOffset === undefined ? _.get(this, 'theme.edge.arrowOffset') : link.arrowOffset,
+          labelPosition: link.labelPosition === undefined ? _.get(this, 'theme.edge.labelPosition') : link.labelPosition,
+          labelOffset: link.labelOffset === undefined ? _.get(this, 'theme.edge.labelOffset') : link.labelOffset,
           isExpandWidth: this.theme.edge.isExpandWidth,
           defaultAnimate: this.theme.edge.defaultAnimate,
           _global: this.global,

@@ -27,6 +27,8 @@ class BaseEdge extends Edge {
     this.arrowShapeType = _.get(opts, 'arrowShapeType', 'default');
     this.arrowPosition = _.get(opts, 'arrowPosition', 0.5);
     this.arrowOffset = _.get(opts, 'arrowOffset', 0),
+    this.labelPosition = _.get(opts, 'labelPosition', 0.5);
+    this.labelOffset = _.get(opts, 'labelOffset', 0),
     this.isExpandWidth = _.get(opts, 'isExpandWidth', false);
     this.defaultAnimate = _.get(opts, 'defaultAnimate', false);
     this.dom = null;
@@ -129,11 +131,16 @@ class BaseEdge extends Edge {
     return path;
   }
   redrawLabel() {
-    let pathLength = this.dom.getTotalLength() / 2;
-    let centerPoint = this.dom.getPointAtLength(pathLength);
+    const length = this.dom.getTotalLength();
+    if(!length) {
+      return;
+    }
+    let labelLenth = length * this.labelPosition + this.labelOffset;
+    let point = this.dom.getPointAtLength(labelLenth);
+    console.log(point);
     $(this.labelDom)
-      .css('left', centerPoint.x - this.labelDom.offsetWidth / 2)
-      .css('top', centerPoint.y - this.labelDom.offsetHeight / 2);
+      .css('left', point.x - this.labelDom.offsetWidth / 2)
+      .css('top', point.y - this.labelDom.offsetHeight / 2);
   }
   drawLabel(label) {
     let isDom = typeof HTMLElement === 'object' ? (obj) => {

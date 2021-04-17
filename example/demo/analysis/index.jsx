@@ -26,6 +26,9 @@ class Scene4New extends Component {
           type: 'Straight', 
           // 可以跟下面自定义注册箭头类型对应
           // arrowShapeType: 'arrow1'
+          // labelPosition和labelOffset配合使用
+          // labelPosition: 1,
+          // labelOffset: -20,
         }
       }
     });
