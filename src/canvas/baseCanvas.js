@@ -1854,6 +1854,8 @@ class BaseCanvas extends Canvas {
       } else {
         $(this.wrapper).prepend(endpointDom);
       }
+      let _zIndex = $(endpoint._node.dom).attr('z-index');
+      $(endpointDom).css('z-index', _zIndex);
       endpoint.updatePos();
     }
     endpoint.mounted && endpoint.mounted();
