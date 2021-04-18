@@ -22,7 +22,8 @@ class Diodes extends Component {
       theme: {
         edge: {
           type: 'Manhattan',
-          defaultAnimate: true
+          defaultAnimate: true,
+          draggable: true // 只有曼哈顿线段可拖动
         }
       }
     });

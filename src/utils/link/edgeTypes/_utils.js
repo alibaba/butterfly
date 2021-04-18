@@ -6,10 +6,10 @@ const TOL = 0.1;
 const TOLxTOL = 0.01;
 const TOGGLE_DIST = 20;
 
-const Point = function(x, y) {
-  this.x = x;
-  this.y = y;
-}
+// const Point = function(x, y) {
+//   this.x = x;
+//   this.y = y;
+// }
 
 export const LEFT = 'Left';
 export const RIGHT = 'Right';
@@ -31,10 +31,10 @@ export function _route(conn, fromPt, fromDir, toPt, toDir) {
   let dir;
   let pos;
 
-  conn.push(new Point(fromPt.x, fromPt.y));
+  conn.push({x: fromPt.x, y: fromPt.y});
 
   if (((xDiff * xDiff) < (TOLxTOL)) && ((yDiff * yDiff) < (TOLxTOL))) {
-    conn.push(new Point(toPt.x, toPt.y));
+    // conn.push({x: toPt.x, y: toPt.y});
     return;
   }
 
@@ -45,17 +45,17 @@ export function _route(conn, fromPt, fromDir, toPt, toDir) {
     }
     else {
       if (xDiff < 0) {
-        point = new Point(fromPt.x - MINDIST, fromPt.y);
+        point = {x: fromPt.x - MINDIST, y: fromPt.y};
       }
       else if (((yDiff > 0) && (toDir === BOTTOM)) || ((yDiff < 0) && (toDir === TOP))) {
-        point = new Point(toPt.x, fromPt.y);
+        point = {x: toPt.x, y: fromPt.y};
       }
       else if (fromDir === toDir) {
         pos = Math.min(fromPt.x, toPt.x) - MINDIST
-        point = new Point(pos, fromPt.y);
+        point = {x: pos, y: fromPt.y};
       }
       else {
-        point = new Point(fromPt.x - (xDiff / 2), fromPt.y);
+        point = {x: fromPt.x - (xDiff / 2), y: fromPt.y};
       }
 
       if (yDiff > 0) {
@@ -72,78 +72,78 @@ export function _route(conn, fromPt, fromDir, toPt, toDir) {
     }
     else {
       if (xDiff > 0) {
-        point = new Point(fromPt.x + MINDIST, fromPt.y);
+        point = {x: fromPt.x + MINDIST, y: fromPt.y};
       }
       else if (((yDiff > 0) && (toDir === BOTTOM)) || ((yDiff < 0) && (toDir === TOP))) {
-        point = new Point(toPt.x, fromPt.y);
+        point = {x: toPt.x, y: fromPt.y};
       }
       else if (fromDir === toDir) {
         pos = Math.max(fromPt.x, toPt.x) + MINDIST
-        point = new Point(pos, fromPt.y);
+        point = {x: pos, y: fromPt.y};
       }
       else {
-        point = new Point(fromPt.x - (xDiff / 2), fromPt.y);
+        point = {x: fromPt.x - (xDiff / 2), y: fromPt.y};
       }
 
       if (yDiff > 0) {
-        dir = TOP
+        dir = TOP;
       }
       else {
-        dir = BOTTOM
+        dir = BOTTOM;
       }
     }
   } else if (fromDir === BOTTOM) {
     if (((xDiff * xDiff) < TOL) && (yDiff < 0) && (toDir === TOP)) {
-      point = toPt
-      dir = toDir
+      point = toPt;
+      dir = toDir;
     }
     else {
       if (yDiff > 0) {
-        point = new Point(fromPt.x, fromPt.y + MINDIST)
+        point = {x: fromPt.x, y: fromPt.y + MINDIST};
       }
       else if (((xDiff > 0) && (toDir === RIGHT)) || ((xDiff < 0) && (toDir === LEFT))) {
-        point = new Point(fromPt.x, toPt.y)
+        point = {x: fromPt.x, y: toPt.y};
       }
       else if (fromDir === toDir) {
-        pos = Math.max(fromPt.y, toPt.y) + MINDIST
-        point = new Point(fromPt.x, pos)
+        pos = Math.max(fromPt.y, toPt.y) + MINDIST;
+        point = {x: fromPt.x, y: pos};
       }
       else {
-        point = new Point(fromPt.x, fromPt.y - (yDiff / 2))
+        point = {x: fromPt.x, y: fromPt.y - (yDiff / 2)};
       }
 
       if (xDiff > 0) {
-        dir = LEFT
+        dir = LEFT;
       }
       else {
-        dir = RIGHT
+        dir = RIGHT;
       }
     }
   } else if (fromDir === TOP) {
     if (((xDiff * xDiff) < TOL) && (yDiff > 0) && (toDir === BOTTOM)) {
-      point = toPt
-      dir = toDir
+      point = toPt;
+      dir = toDir;
     }
     else {
       if (yDiff < 0) {
-        point = new Point(fromPt.x, fromPt.y - MINDIST)
+        point = {x: fromPt.x, y: fromPt.y - MINDIST};
       }
       else if (((xDiff > 0) && (toDir === RIGHT)) || ((xDiff < 0) && (toDir === LEFT))) {
-        point = new Point(fromPt.x, toPt.y)
+        point = {x: fromPt.x, y: toPt.y};
       }
       else if (fromDir === toDir) {
         pos = Math.min(fromPt.y, toPt.y) - MINDIST
-        point = new Point(fromPt.x, pos)
+        point = {x: fromPt.x, y: pos};
       }
       else {
-        point = new Point(fromPt.x, fromPt.y - (yDiff / 2))
+        point = {x: fromPt.x, y: fromPt.y - (yDiff / 2)};
       }
 
       if (xDiff > 0) {
-        dir = LEFT
+        dir = LEFT;
       }
       else {
-        dir = RIGHT
+        dir = RIGHT;
       }
     }
   }
@@ -280,3 +280,35 @@ export function _findControlPoint(point, sourcePoint, targetPoint, _so, _to) {
   return result;
 }
 
+export function _findManhattanPoint (points, pos) {
+  let result = undefined;
+  let gap = Infinity;
+  for(let i = 0; i < points.length - 1; i++) {
+    let _dir = points[i].x === points[i + 1].x ? 'vertical' : 'horizontal';
+    let _from = points[i];
+    let _to = points[i + 1];
+
+    if (_dir === 'vertical') {
+      if (gap > Math.abs(pos.x - _from.x)) {
+        gap = Math.abs(pos.x - _from.x);
+        result = {
+          from: _from,
+          to: _to,
+          direction: _dir,
+          index: i
+        }
+      }
+    } else {
+      if (gap > Math.abs(pos.y - _from.y)) {
+        gap = Math.abs(pos.y - _from.y);
+        result = {
+          from: _from,
+          to: _to,
+          direction: _dir,
+          index: i
+        }
+      }
+    }
+  }
+  return result;
+}
