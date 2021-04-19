@@ -108,7 +108,7 @@ getHeight = () => {}
 
 ### node.setDraggable (boolean)
 
-对象
+参数
 
 * `boolean`设置节点是否可移动
 
@@ -183,13 +183,19 @@ getEndpoint = (id, type) => {}
 moveTo = (obj) => {}
 ```
 
-### node.emit (string, obj)
+### node.emit (event, data)
+
+*`{string} event` 发送事件名称
+*`{obj}data` 发送事件数据
 
 ```js
 emit = (string, obj) => {}
 ```
 
 ### node.on (string, callback)
+
+*`{string} event` 接收事件名称
+*`{function}data` 接收事件数据
 
 ```js
 on = (string, callback) => {}
