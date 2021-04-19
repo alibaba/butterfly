@@ -25,60 +25,115 @@ node.addEndpoint({
 });
 ```
 
+--------------------
+
 ## 属性
 
 ### id  _`<String>`_ (必填)
 
 节点唯一标识
 
+
 ### orientation _`<Array>`_（选填）
 
-方向
+方向: (1) 控制系统锚点方向 (2) 控制线段的出入口方向
 
-取值：下:[0,1]/上:[0,-1]/右:[1,0]/左:[-1,0],除了控制系统锚点方向，而且能控制线段的出入口方向
+* 下: [0,1]
+* 上: [0,-1]
+* 右: [1,0]
+* 左: [-1,0]
+
 
 ### pos _`<Array>`_ (选填)
 
-位置
+位置: 控制系统锚点位置
+
+取值: [0-1之间 , 0-1之间]
+
 
 ### type _`<String>`_ (选填)
 
-目标锚点还是源锚点
+锚点类型: 
 
-取值：'source' / 'target' / undefined / 'onlyConnect'，当undefined的时候锚点既是source又是target；当onlyConnect的时候锚点既是source又是target，但锚点不能拖动删除线段
+* source: 来源锚点。线段只出不入
+* target: 目标锚点。线段只入不出
+* undefined: 未定义锚点。线段能入能出，但取决于第一根连线是入还是出
+* onlyConnect: 不能拖动断开线的锚点。线段能入能出，但拖动断开线
 
-### root _`<String>`_ (选填)
-
-可把锚点附属于某个子元素
 
 ### scope _`<String>`_ (选填)
 
-作用域（锚点scope相同才可以连线）
+作用域: 锚点之间scope相同才可以连线。
+
+```js
+// 单scope
+endpoint.scope = 'xxx';
+// 多scope，任意一个匹配中都能连接
+endpoint.scope = 'xxx1 xxx2 xxx3';
+
+```
+
+
+### disLinkable _`<Boolean >`_ (选填)
+
+禁止锚点拖动断开线段
+
 
 ### expandArea _`<Object>`_ (选填)
 
-可以设置锚点连接的热区，可覆盖主题内的设置
+锚点连接的热区: 由于锚点区域有可能过小，所以提供了热区扩大的属性。此外，此属性可覆盖canvas中的主题属性。
+
+```js
+node.addEndpoint({
+  id: 'xxxx',
+  type: 'target',
+  expandArea: {
+    left: 10,
+    right: 10,
+    top: 10,
+    botton: 10
+  }
+  ...
+});
+```
+
 
 
 ### limitNum _`<Number>`_ (选填)
 
 连线数目限制
 
+
 ### connectedNum _`<Number>`_ (选填)
 
-已连接数
+已连接线段数量
+
 
 ### dom _`<Dom>`_ (选填)
 
-可以把此dom作为自定义锚点
+自定义锚点dom: 假如传入此参数，则这个dom将成为锚点
 
-### disLinkable _`<Boolean >`_ (选填)
+```js
+node.addEndpoint({
+  id: 'xxxx',
+  type: 'target',
+  dom: dom,
+  ...
+});
+```
 
-禁止锚点拖动断开线段
 
 ### Class _`<Class>`_ (选填)
 
 扩展类
+
+
+### root _`<String>`_ (选填)
+
+可把锚点附属于某个子元素
+
+
+--------------------
 
 ## API
 

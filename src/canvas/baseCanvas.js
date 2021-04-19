@@ -50,7 +50,10 @@ class BaseCanvas extends Canvas {
         arrowShapeType: _.get(options, 'theme.edge.arrowShapeType', 'default'),
         arrowPosition: _.get(options, 'theme.edge.arrowPosition'),
         arrowOffset: _.get(options, 'theme.edge.arrowOffset'),
+        draggable: _.get(options, 'theme.edge.draggable'),
         label: _.get(options, 'theme.edge.label'),
+        labelPosition: _.get(options, 'theme.edge.labelPosition'),
+        labelOffset: _.get(options, 'theme.edge.labelOffset'),
         isRepeat: _.get(options, 'theme.edge.isRepeat') || false,
         isLinkMyself: _.get(options, 'theme.edge.isLinkMyself') || false,
         isExpandWidth: _.get(options, 'theme.edge.isExpandWidth') || false,
@@ -122,7 +125,8 @@ class BaseCanvas extends Canvas {
     this._dragType = null;
     this._dragNode = null;
     this._dragEndpoint = null;
-    this._dragEdges = [];
+    this._dragEdges = [];      // 拖动连线的edge
+    this._dragPathEdge = null;     // 拖动edge中的某段path改变路径
     this._dragGroup = null;
 
     // 初始化一些参数
@@ -436,6 +440,12 @@ class BaseCanvas extends Canvas {
         this._moveGroup(data.group, data.x, data.y, data.isNotEventEmit);
       } else if (data.type === 'link:click') {
         this._dragType = 'link:click';
+      } else if (data.type === 'link:dragBegin') {
+        this._dragType = 'link:drag';
+        this._dragPathEdge = {
+          edge: data.edge,
+          path: data.path
+        }
       } else if (data.type === 'multiple:select') {
         const result = this._selectMultiplyItem(data.range, data.toDirection);
         // 把框选的加到union的数组
@@ -514,6 +524,12 @@ class BaseCanvas extends Canvas {
         $(this.wrapper).append(labelDom);
       } else if (data.type === 'edge:setZIndex') {
         this.setEdgeZIndex([data.edge], data.index);
+      } else if (data.type === 'endpoint:updatePos') {
+        let point = data.point;
+        let edges = this.getNeighborEdgesByEndpoint(point.nodeId, point.id);
+        edges.forEach((item) => {
+          item.redraw();
+        });
       }
     });
 
@@ -617,6 +633,7 @@ class BaseCanvas extends Canvas {
       this._dragNode = null;
       this._dragEndpoint = null;
       this._dragGroup = null;
+      this._dragPathEdge = null;
       this._dragEdges = [];
       nodeOriginPos = {
         x: 0,
@@ -854,7 +871,10 @@ class BaseCanvas extends Canvas {
                   arrowShapeType: this.theme.edge.arrowShapeType,
                   arrowPosition: this.theme.edge.arrowPosition,
                   arrowOffset: this.theme.edge.arrowOffset,
+                  draggable: this.theme.edge.draggable,
                   label: this.theme.edge.label,
+                  labelPosition: this.theme.edge.labelPosition,
+                  labelOffset: this.theme.edge.labelOffset,
                   isExpandWidth: this.theme.edge.isExpandWidth
                 };
                 pointObj['options'] = _.assign({}, pointObj, {
@@ -874,7 +894,9 @@ class BaseCanvas extends Canvas {
                   _on: this.on.bind(this),
                   _emit: this.emit.bind(this),
                 }));
-                _newEdge._init();
+                _newEdge._init({
+                  _coordinateService: this._coordinateService
+                });
                 $(this.svg).append(_newEdge.dom);
                 if (_newEdge.labelDom) {
                   $(this.wrapper).append(_newEdge.labelDom);
@@ -975,10 +997,12 @@ class BaseCanvas extends Canvas {
               _focusLinkableEndpoint(event.clientX, event.clientY);
             }
           }
+        } else if (this._dragType === 'link:drag') {
+          this._dragPathEdge.edge._updatePath(this._dragPathEdge.path, {
+            x: canvasX,
+            y: canvasY
+          });
         } else if (this._dragType === 'group:resize') {
-          let canvasX = this._coordinateService._terminal2canvas('x', event.clientX);
-          let canvasY = this._coordinateService._terminal2canvas('y', event.clientY);
-
           let pos = this._getGroupPos(this._dragGroup);
           let _newWidth = canvasX - pos.left;
           let _newHeight = canvasY - pos.top;
@@ -1823,13 +1847,20 @@ class BaseCanvas extends Canvas {
       item.updatePos();
     });
     this.edges.forEach((edge) => {
+      // 重新渲染
       if (edge.type === 'endpoint') {
         const isLink = _.find(node.endpoints, (point) => {
           return (point.nodeId === edge.sourceNode.id && !!edge.sourceNode.getEndpoint(point.id, 'source')) || (point.nodeId === edge.targetNode.id && !!edge.targetNode.getEndpoint(point.id, 'target'));
         });
+        // 曼哈顿线拖动状态清除
+        edge._hasDragged = false;
+        edge._breakPoints = [];
         isLink && edge.redraw();
       } else if (edge.type === 'node') {
         const isLink = edge.sourceNode.id === node.id || edge.targetNode.id === node.id;
+        // 曼哈顿线拖动状态清除
+        edge._hasDragged = false;
+        edge._breakPoints = [];
         isLink && edge.redraw();
       }
     });
@@ -1850,6 +1881,8 @@ class BaseCanvas extends Canvas {
       } else {
         $(this.wrapper).prepend(endpointDom);
       }
+      let _zIndex = $(endpoint._node.dom).attr('z-index');
+      $(endpointDom).css('z-index', _zIndex);
       endpoint.updatePos();
     }
     endpoint.mounted && endpoint.mounted();
@@ -2351,7 +2384,9 @@ class BaseCanvas extends Canvas {
 
       // link已经存在
       if (link instanceof Edge) {
-        link._init();
+        link._init({
+          _coordinateService: this._coordinateService
+        });
 
         _edgeFragment.appendChild(link.dom);
 
@@ -2479,6 +2514,9 @@ class BaseCanvas extends Canvas {
           arrowShapeType: link.arrowShapeType === undefined ? _.get(this, 'theme.edge.arrowShapeType') : link.arrowShapeType,
           arrowPosition: link.arrowPosition === undefined ? _.get(this, 'theme.edge.arrowPosition') : link.arrowPosition,
           arrowOffset: link.arrowOffset === undefined ? _.get(this, 'theme.edge.arrowOffset') : link.arrowOffset,
+          draggable: link.draggable === undefined ? _.get(this, 'theme.edge.draggable') : link.draggable,
+          labelPosition: link.labelPosition === undefined ? _.get(this, 'theme.edge.labelPosition') : link.labelPosition,
+          labelOffset: link.labelOffset === undefined ? _.get(this, 'theme.edge.labelOffset') : link.labelOffset,
           options: link,
           _sourceType,
           _targetType,
@@ -2487,7 +2525,9 @@ class BaseCanvas extends Canvas {
           _emit: this.emit.bind(this),
         });
 
-        edge._init();
+        edge._init({
+          _coordinateService: this._coordinateService
+        });
 
         _edgeFragment.appendChild(edge.dom);
 
@@ -2536,6 +2576,9 @@ class BaseCanvas extends Canvas {
           arrowShapeType: link.arrowShapeType === undefined ? _.get(this, 'theme.edge.arrowShapeType') : link.arrowShapeType,
           arrowPosition: link.arrowPosition === undefined ? _.get(this, 'theme.edge.arrowPosition') : link.arrowPosition,
           arrowOffset: link.arrowOffset === undefined ? _.get(this, 'theme.edge.arrowOffset') : link.arrowOffset,
+          draggable: link.draggable === undefined ? _.get(this, 'theme.edge.draggable') : link.draggable,
+          labelPosition: link.labelPosition === undefined ? _.get(this, 'theme.edge.labelPosition') : link.labelPosition,
+          labelOffset: link.labelOffset === undefined ? _.get(this, 'theme.edge.labelOffset') : link.labelOffset,
           isExpandWidth: this.theme.edge.isExpandWidth,
           defaultAnimate: this.theme.edge.defaultAnimate,
           _global: this.global,
@@ -2543,7 +2586,9 @@ class BaseCanvas extends Canvas {
           _emit: this.emit.bind(this),
         });
 
-        edge._init();
+        edge._init({
+          _coordinateService: this._coordinateService
+        });
 
         _edgeFragment.appendChild(edge.dom);
 

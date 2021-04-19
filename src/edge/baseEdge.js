@@ -27,12 +27,16 @@ class BaseEdge extends Edge {
     this.arrowShapeType = _.get(opts, 'arrowShapeType', 'default');
     this.arrowPosition = _.get(opts, 'arrowPosition', 0.5);
     this.arrowOffset = _.get(opts, 'arrowOffset', 0),
+    this.labelPosition = _.get(opts, 'labelPosition', 0.5);
+    this.labelOffset = _.get(opts, 'labelOffset', 0),
     this.isExpandWidth = _.get(opts, 'isExpandWidth', false);
     this.defaultAnimate = _.get(opts, 'defaultAnimate', false);
     this.dom = null;
     this.labelDom = null;
     this.arrowDom = null;
     this.eventHandlerDom = null;
+    this._hasEventListener = false;
+    this._coordinateService = null;
     // 鸭子辨识手动判断类型
     this.__type = 'edge';
     this._path = null;
@@ -53,10 +57,23 @@ class BaseEdge extends Edge {
     this._targetPoint = null;
     // 线段的z-index
     this._zIndex = 0;
+    // 曼哈顿线可拖动变量
+    this.draggable = _.get(opts, 'draggable', false);;
+    this._breakPoints = [];
+    if (this.options.breakPoints && this.options.breakPoints.length > 0) {
+      this._breakPoints = this.options.breakPoints;
+      this._breakPoints[0].type === 'start';
+      this._breakPoints[this._breakPoints.length - 1].type === 'end';
+      delete this.options.breakPoints;
+    }
+    this._hasDragged = false;
   }
-  _init() {
+  _init(obj) {
     if (this._isInited) {
       return;
+    }
+    if (obj._coordinateService) {
+      this._coordinateService = obj._coordinateService;
     }
     this._isInited = true;
     this.dom = this.draw({
@@ -67,7 +84,10 @@ class BaseEdge extends Edge {
     this.labelDom = this.drawLabel(this.label);
     this.arrowDom = this.drawArrow(this.arrow);
 
-    this._addEventListener();
+    if (!this._hasEventListener) {
+      this._addEventListener();
+      this._hasEventListener = true;
+    }
   }
   draw(obj) {
     let path = document.createElementNS('http://www.w3.org/2000/svg', 'path')
@@ -121,7 +141,15 @@ class BaseEdge extends Edge {
     } else if (this.shapeType === 'Flow') {
       path = DrawUtil.drawFlow(sourcePoint, targetPoint, this.orientationLimit);
     } else if (this.shapeType === 'Manhattan') {
-      path = DrawUtil.drawManhattan(sourcePoint, targetPoint);
+      let obj = DrawUtil.drawManhattan(sourcePoint, targetPoint, {
+        breakPoints: this._breakPoints,
+        hasDragged: this._hasDragged,
+        draggable: this.draggable
+      });
+      path = obj.path;
+      obj.breakPoints[0].type = 'start';
+      obj.breakPoints[obj.breakPoints.length - 1].type = 'end';
+      this._breakPoints = obj.breakPoints;
     } else if (this.shapeType === 'AdvancedBezier') {
       path = DrawUtil.drawAdvancedBezier(sourcePoint, targetPoint);
     }
@@ -129,11 +157,15 @@ class BaseEdge extends Edge {
     return path;
   }
   redrawLabel() {
-    let pathLength = this.dom.getTotalLength() / 2;
-    let centerPoint = this.dom.getPointAtLength(pathLength);
+    const length = this.dom.getTotalLength();
+    if(!length) {
+      return;
+    }
+    let labelLenth = length * this.labelPosition + this.labelOffset;
+    let point = this.dom.getPointAtLength(labelLenth);
     $(this.labelDom)
-      .css('left', centerPoint.x - this.labelDom.offsetWidth / 2)
-      .css('top', centerPoint.y - this.labelDom.offsetHeight / 2);
+      .css('left', point.x - this.labelDom.offsetWidth / 2)
+      .css('top', point.y - this.labelDom.offsetHeight / 2);
   }
   drawLabel(label) {
     let isDom = typeof HTMLElement === 'object' ? (obj) => {
@@ -200,18 +232,6 @@ class BaseEdge extends Edge {
       path: path
     });
     let deg = Math.atan2(vector.y, vector.x) / Math.PI * 180;
-    if (this.sourceNode.id == 1 && this.targetNode.id == 5) {
-      console.log(this);
-      console.log(vector);
-      console.log(this.dom);
-      console.log(deg);
-      console.log('--------');
-    }
-    // console.log(this);
-    // console.log(vector);
-    // console.log(this.dom);
-    // console.log(deg);
-    // console.log('--------');
     let arrowObj = ArrowUtil.ARROW_TYPE[this.arrowShapeType];
     if (arrowObj.type === 'pathString') {
       this.arrowDom.setAttribute('d', arrowObj.content);
@@ -219,36 +239,8 @@ class BaseEdge extends Edge {
       if (vector.x === 0) {
         _y -= 4;
       } else {
-        let angle = 180 - deg;
-        // console.log(angle);
-        let _intervalX = Math.abs(4 * Math.sin(angle));
-        let _intervalY = Math.abs(4 * Math.cos(angle));
-        if (angle > 0 && angle < 90) {
-          _x = x - 4 * _intervalX;
-          _y = y - 4 * _intervalY;
-        } else if (angle >= 90 && angle < 180) {
-          _x = x - 4 * _intervalX;
-          _y = y + 4 * _intervalY;
-        } else if (angle >= 180 && angle < 270) {
-          _x = x + 4 * _intervalX;
-          _y = y - 4 * _intervalY;
-        } else {
-          _x = x + 4 * _intervalX;
-          _y = y + 4 * _intervalY;
-        }
-
-
-        // if (angle > 145 && angle < 180) {
-        //   _x = x + 4 * Math.sin(180 - deg);
-        //   _y = y + 4 * Math.cos(180 - deg);
-        // } else {
-        //   _x = x - 4 * Math.sin(180 - deg);
-        //   _y = y - 4 * Math.cos(180 - deg);
-        // }
-        // _x = x - 4 * Math.sin(180 - deg);
-        // _y = y - 4 * Math.cos(180 - deg);
-        // console.log(4 * Math.cos(angle));
-        // console.log(4 * Math.sin(angle));
+        _x -= 4;
+        _y -= 4;
       }
     }
     this.arrowDom.setAttribute('transform', `rotate(${deg}, ${x}, ${y})translate(${_x}, ${_y})`);
@@ -270,12 +262,16 @@ class BaseEdge extends Edge {
     }
   }
   redraw(sourcePoint, targetPoint, options) {
-    // 重新计算线条path
-    let path = this._calcPath(sourcePoint, targetPoint);
-
-    this.dom.setAttribute('d', path);
+    
+    // 检查线段是否有变化
+    let _oldPath = this._path;
+    let _newPath = this._calcPath(sourcePoint, targetPoint);
+    if (_oldPath === _newPath) {
+      return ;
+    }
+    this.dom.setAttribute('d', _newPath);
     if (this.isExpandWidth) {
-      this.eventHandlerDom.setAttribute('d', path);
+      this.eventHandlerDom.setAttribute('d', _newPath);
       $(this.eventHandlerDom).insertAfter(this.dom);
     }
     // 函数节流
@@ -287,11 +283,11 @@ class BaseEdge extends Edge {
         }
         // 重新计算arrow
         if (this.arrowDom) {
-          this.redrawArrow(path);
+          this.redrawArrow(_newPath);
         }
         // 重新计算动画path
         if (this.animateDom) {
-          this.redrawAnimate(path);
+          this.redrawAnimate(_newPath);
         }
         this._updateTimer = null;
       }, this._UPDATE_INTERVAL);
@@ -355,8 +351,12 @@ class BaseEdge extends Edge {
       this.removeAllListeners();
     }
   }
+  // 曼哈顿线的拐点
+  getBreakPoints() {
+    return this._breakPoints;
+  }
   _addEventListener() {
-    let _emitEvent = (e) => {
+    let _clickEvent = (e) => {
       e.preventDefault();
       e.stopPropagation();
       this.emit('system.link.click', {
@@ -366,17 +366,39 @@ class BaseEdge extends Edge {
         type: 'link:click',
         edge: this
       });
-
       this.emit('InnerEvents', {
         type: 'link:click',
         data: this
       });
     };
+
+    let _mouseDownEvent = (e) => {
+      let clickX = e.clientX;
+      let clickY = e.clientY;
+      let x = this._coordinateService._terminal2canvas('x', clickX);
+      let y = this._coordinateService._terminal2canvas('y', clickY);
+      
+      //把 _coordinateService 传进来
+      let targetPath = DrawUtil.findManhattanPoint(this._breakPoints, {x, y});
+      this.emit('InnerEvents', {
+        type: 'link:dragBegin',
+        edge: this,
+        path: targetPath
+      });
+    }
     
     if (this.isExpandWidth) {
-      $(this.eventHandlerDom).on('click', _emitEvent);
+      $(this.eventHandlerDom).on('click', _clickEvent);
+      // if (this.type === 'Manhattan' && this.draggable) {
+      //   $(this.eventHandlerDom).on('mousedown', _mouseDownEvent);
+      // }
+      $(this.eventHandlerDom).on('mousedown', _mouseDownEvent);
     } else {
-      $(this.dom).on('click', _emitEvent);
+      $(this.dom).on('click', _clickEvent);
+      // if (this.type === 'Manhattan' && this.draggable) {
+      //   $(this.dom).on('mousedown', _mouseDownEvent);
+      // }
+      $(this.dom).on('mousedown', _mouseDownEvent);
     }
   }
   _create(opts) {
@@ -391,6 +413,40 @@ class BaseEdge extends Edge {
     _.set(this, 'options.targetNode', _.get(this, 'targetNode.id'));
     _.set(this, 'options.targetEndpoint', _.get(this, 'targetEndpoint.id'));
     this.redraw();
+  }
+  _updatePath(path, pos) {
+
+    // 增加拐点
+    if (this._breakPoints[path.index].type === 'start') {
+      let newBreakPoint = _.cloneDeep(this._breakPoints[path.index]);
+      this._breakPoints.unshift(newBreakPoint);
+      path.index++;
+      delete this._breakPoints[path.index].type;
+    } else if (this._breakPoints[path.index + 1].type === 'end') {
+      let newBreakPoint = _.cloneDeep(this._breakPoints[path.index + 1]);
+      this._breakPoints.push(newBreakPoint);
+      delete this._breakPoints[path.index + 1].type;
+    }
+
+    if (path.direction === 'vertical') {
+      this._breakPoints[path.index].x = pos.x;
+      this._breakPoints[path.index + 1].x = pos.x;
+    } else {
+      this._breakPoints[path.index].y = pos.y;
+      this._breakPoints[path.index + 1].y = pos.y;
+    }
+    this._hasDragged = true;
+    this.redraw();
+
+    // 减少拐点
+    for(let i = 0; i < this._breakPoints.length - 1; i++) {
+      let point1 = this._breakPoints[i];
+      let point2 = this._breakPoints[i + 1];
+      if (point1.x === point2.x && point1.y === point2.y && point1.type !== 'start' && point2.type !== 'end') {
+        this._breakPoints.splice(i, 2);
+        path.index = path.index - 2 > 0 ? path.index - 2: 0;
+      }
+    }
   }
 }
 

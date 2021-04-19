@@ -1,11 +1,12 @@
 'use strict';
 import React, {Component} from 'react';
 require('./index.less');
-require('butterfly-dag/dist/index.css');
+// require('butterfly-dag/dist/index.css');
 
 const Canvas = require('../../../index.js').Canvas;
 // import { Canvas } from 'butterfly-dag';
 const mockData = require('./data.js');
+const Arrow = require('../../../index.js').Arrow;
 
 class Scene4New extends Component {
   constructor() {
@@ -22,11 +23,22 @@ class Scene4New extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'Straight',
-          arrowShapeType: 'arrow1'
+          type: 'Straight', 
+          // 可以跟下面自定义注册箭头类型对应
+          // arrowShapeType: 'arrow1'
+          // labelPosition和labelOffset配合使用
+          // labelPosition: 1,
+          // labelOffset: -20,
         }
       }
     });
+    //自定义注册箭头，与上面theme.edge.arrowShapeType对应
+    Arrow.registerArrow([{
+      key: 'arrow1',
+      type: 'svg',
+      content: require('../../../static/arrow/arrow1.svg')
+    }]);
+
     this.canvas.draw(mockData, () => {
     });
     this.canvas.on('events', (data) => {
