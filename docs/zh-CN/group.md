@@ -28,13 +28,19 @@ canvas.addGroup({
   // 参考下面属性
 });
 ```
+<br>
 
-# 属性
+**`节点的返回的dom必须设置position: absolute;`**
+
+<br>
+<br>
+
+## 属性
 
 ### id _`<String>`_ （必填）
   节点唯一标识
 ### top _`<Number>`_ （必填）
-   y轴坐标
+  y轴坐标
 ### left _`<Number>`_ （必填）
   x轴坐标
 ### width _`<Number>`_ (选填)
@@ -48,35 +54,41 @@ canvas.addGroup({
 ### Class _`<Class>`_ (选填)
   拓展类
 ### scope _`<String>`_ (选填)
-  作用域
-
-`* 节点的返回的dom必须设置position: absolute;`
+  作用域: 当scope一致的节点才能拖动进入节点组
 
 
+<br>
+<br>
 
-# API：
-
-### group.draw (obj)
-
-*参数*
-
-* `data`节点基本信息
-
-*返回*
-
-* `dom`返回渲染dom的根节点
+## 类重写API：
 
 ```js
-draw = (obj) => {}
+import {Group} from 'butterfly-dag';
+
+Class YourGroup extends Group {
+  
+  /**
+    * 节点组挂载后的回调
+    */
+  mount() {}
+
+  /**
+    * group的渲染方法
+    * @param {obj} data - 节点基本信息 
+    * @return {dom} - 返回渲染dom的根节点
+    */
+  draw(obj) {}
+}
 ```
 
-### group.mounted()
+<br>
+<br>
 
-```js
-mounted = () => {}
-```
+## 外部调用API：
 
-### group.getWidth ()
+### group.getWidth()
+
+*作用*： 获取节点组宽度
 
 *返回*
 
@@ -88,6 +100,8 @@ getWidth = () => {}
 
 ### group.getHeight ()
 
+*作用*： 获取节点组高度
+
 *返回*
 
 * `number`节点组高度
@@ -97,6 +111,8 @@ getHeight = () => {}
 ```
 
 ### group.addNode (node)
+
+*作用*： 节点组添加单个节点的方法
 
 *参数*
 
@@ -108,6 +124,8 @@ addNode = (node) => {}
 
 ### group.addNodes (nodes)
 
+*作用*： 节点组添加多个节点的方法
+
 *参数*
 
 * `{array} nodes`节点数组
@@ -118,6 +136,8 @@ addNodes = (nodes) => {}
 
 ### group.removeNode (node)
 
+*作用*： 节点组删除单个节点的方法
+
 *参数*
 
 * `{obj} node`节点数据
@@ -126,7 +146,9 @@ addNodes = (nodes) => {}
 removeNode = (node) => {}
 ```
 
-### group.removeNode (node)
+### group.removeNodes (nodes)
+
+*作用*： 节点组删除多个节点的方法
 
 *参数*
 
@@ -137,6 +159,8 @@ removeNode = (node) => {}
 ```
 
 ### group.addEndpoint (obj)
+
+*作用*： 节点组添加锚点的方法
 
 *参数*
 
@@ -153,6 +177,8 @@ addEndpoint = (obj) => {}
 
 ### group.getEndpoint (id)
 
+*作用*： 节点组获取锚点的方法
+
 *参数*
 
 * `{string} pointId`锚点的信息 
@@ -167,6 +193,8 @@ getEndpoint = (id) => {}
 
 ### group.moveTo (obj)
 
+*作用*： 节点组移动坐标的方法
+
 *参数*
 
 * `{number} x `移动位置的x坐标
@@ -178,6 +206,10 @@ moveTo = (obj) => {}
 
 ### group.emit (event, data)
 
+*作用*： 节点组发送事件的方法，画布及任何一个元素都可接收。
+
+*参数*
+
 * `{string} event `发送事件名称
 * `{number} data `发送事件数据
 
@@ -186,6 +218,10 @@ emit = (string, obj) => {}
 ```
 
 ### group.on (string, callback)
+
+*作用*： 节点组接收事件的方法，能接收画布及任何一个元素的事件。
+
+*参数*
 
 * `{string} event `接收事件名称
 * `{function} data `接收事件回调
