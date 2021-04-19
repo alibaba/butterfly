@@ -25,7 +25,8 @@ node.addEndpoint({
 });
 ```
 
---------------------
+<br>
+<br>
 
 ## 属性
 
@@ -133,41 +134,58 @@ node.addEndpoint({
 可把锚点附属于某个子元素
 
 
---------------------
+<br>
+<br>
 
-## API
 
-### endpoint.draw(obj)
-
-*参数*
-
-* `obj`节点基本信息
-
-*返回*
-
-* `dom`返回自定义节点的dom
-
+## 类重写API：
 ```js
-draw = (obj) => {}
+import {Endpoint} from 'butterfly-dag';
+
+Class YourEndpoint extends Endpoint {
+
+  /**
+    * 锚点挂载后的回调
+    */
+  mount() {}
+  
+  /**
+    * endpoint的渲染方法
+    * @param {obj} data - 节点基本信息 
+    * @return {dom} - 返回渲染dom的根节点
+    */
+  draw(obj) {}
+  
+  /**
+    * 拖动锚点时设置连线时linkable的状态回调，可定义linkable样式 
+    * (需要设置this.theme.endpoint.linkableHighlight属性才能触发此回调)
+    */
+  linkable() {}
+  
+  /**
+    * 释放鼠标取消连线时linkable的状态回调，可定义取消线段样式清除
+    * (与linkable对应配合使用)
+    */
+  unLinkable() {}
+  
+  /**
+    * 拖动锚点时设置连线时linkable并且hover到此锚点的状态回调，可定义linkable的hover状态样式 
+    * (与linkable对应配合使用)
+    */
+  hoverLinkable() {}
+  
+  /**
+    * 释放鼠标取消连线时linkable并且hover状态回调，可定义取消线段linkable的hover状态的样式清楚
+    * (与hoverLinkable对应配合使用)
+    */
+  unHoverLinkable() {}
+}
 ```
 
-### endpoint.mounted()
+<br>
+<br>
 
-```js
-/**
-  * 锚点挂载后的回调
-  */
-mounted = () => {}
-```
-
-### endpoint.updated ()
-
-```js
-/**
-  * 锚点更新后的回调
-  */
-updated = () => {}
-```
+## 外部调用API
 
 ### endpoint.updatePos(dom,orientation,pos)
 
@@ -192,42 +210,6 @@ updatePos = (dom,orientation,pos) => {}
 moveTo = (obj) => {}
 ```
 
-### endpoint.linkable()
-
-```js
-/**
-  * 设置连线时linkable的状态 (需要设置this.theme.endpoint.linkableHighlight属性)
-  */
-linkable = () => {}
-```
-
-### endpoint.unLinkable()
-
-```js
-/**
-  * 取消连线时linkable的状态
-  */
-unLinkable = () => {}
-```
-
-### endpoint.hoverLinkable()
-
-```js
-/**
-  * 设置连线时linkable并且hover状态 (需要设置this.theme.endpoint.linkableHighlight属性)
-  */
-hoverLinkable = () => {}
-```
-
-### endpoint.unHoverLinkable()
-
-```js
-/**
-  * 取消连线时linkable并且hover状态
-  */
-unHoverLinkable = () => {}
-```
-
 ### endpoint.hasConnection()
 
 ```js
@@ -246,3 +228,11 @@ hasConnection = () => {}
 emit = (string, obj) => {}
 ```
 
+### endpoint.on(event,callback)
+
+* `{string} event`接收事件名称
+* `{function} callback`接收事件回调
+
+```js
+on = (string, function) => {}
+```
