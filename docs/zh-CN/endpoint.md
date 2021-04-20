@@ -44,13 +44,15 @@ node.addEndpoint({
 * 右: [1,0]
 * 左: [-1,0]
 
+<img width="400" src="https://img.alicdn.com/imgextra/i2/O1CN01UcRB7j1nQWGvFm1jM_!!6000000005084-0-tps-800-460.jpg">
 
 ### pos _`<Array>`_ (选填)
 
-&nbsp;&nbsp;位置: 控制系统锚点位置
+&nbsp;&nbsp;位置: 控制系统锚点位置。可配合orientation使用，控制系统锚点
 
-&nbsp;&nbsp;取值: [0-1之间 , 0-1之间]
+&nbsp;&nbsp;取值: [0-1之间 , 0-1之间]，0代表最左/上侧，1代表最右/下侧
 
+<img width="400" src="https://img.alicdn.com/imgextra/i3/O1CN012Z29af27tdlsRTaiC_!!6000000007855-0-tps-800-460.jpg">
 
 ### type _`<String>`_ (选填)
 
@@ -72,7 +74,6 @@ endpoint.scope = 'xxx';
 // 多scope，任意一个匹配中都能连接
 endpoint.scope = 'xxx1 xxx2 xxx3';
 ```
-
 
 ### disLinkable _`<Boolean >`_ (选填)
 
