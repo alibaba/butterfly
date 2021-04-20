@@ -32,12 +32,12 @@ node.addEndpoint({
 
 ### id  _`<String>`_ (必填)
 
-节点唯一标识
+&nbsp;&nbsp;节点唯一标识
 
 
 ### orientation _`<Array>`_（选填）
 
-方向: (1) 控制系统锚点方向 (2) 控制线段的出入口方向
+&nbsp;&nbsp;方向: (1) 控制系统锚点方向 (2) 控制线段的出入口方向
 
 * 下: [0,1]
 * 上: [0,-1]
@@ -47,14 +47,14 @@ node.addEndpoint({
 
 ### pos _`<Array>`_ (选填)
 
-位置: 控制系统锚点位置
+&nbsp;&nbsp;位置: 控制系统锚点位置
 
-取值: [0-1之间 , 0-1之间]
+&nbsp;&nbsp;取值: [0-1之间 , 0-1之间]
 
 
 ### type _`<String>`_ (选填)
 
-锚点类型: 
+&nbsp;&nbsp;锚点类型: 
 
 * source: 来源锚点。线段只出不入
 * target: 目标锚点。线段只入不出
@@ -64,25 +64,24 @@ node.addEndpoint({
 
 ### scope _`<String>`_ (选填)
 
-作用域: 锚点之间scope相同才可以连线。
+&nbsp;&nbsp;作用域: 锚点之间scope相同才可以连线。
 
 ```js
 // 单scope
 endpoint.scope = 'xxx';
 // 多scope，任意一个匹配中都能连接
 endpoint.scope = 'xxx1 xxx2 xxx3';
-
 ```
 
 
 ### disLinkable _`<Boolean >`_ (选填)
 
-禁止锚点拖动断开线段
+&nbsp;&nbsp;禁止锚点拖动断开线段
 
 
 ### expandArea _`<Object>`_ (选填)
 
-锚点连接的热区: 由于锚点区域有可能过小，所以提供了热区扩大的属性。此外，此属性可覆盖canvas中的主题属性。
+&nbsp;&nbsp;锚点连接的热区: 由于锚点区域有可能过小，所以提供了热区扩大的属性。此外，此属性可覆盖canvas中的主题属性。
 
 ```js
 node.addEndpoint({
@@ -102,17 +101,17 @@ node.addEndpoint({
 
 ### limitNum _`<Number>`_ (选填)
 
-连线数目限制
+&nbsp;&nbsp;连线数目限制
 
 
 ### connectedNum _`<Number>`_ (选填)
 
-已连接线段数量
+&nbsp;&nbsp;已连接线段数量
 
 
 ### dom _`<Dom>`_ (选填)
 
-自定义锚点dom: 假如传入此参数，则这个dom将成为锚点
+&nbsp;&nbsp;自定义锚点dom: 假如传入此参数，则这个dom将成为锚点
 
 ```js
 node.addEndpoint({
@@ -126,12 +125,12 @@ node.addEndpoint({
 
 ### Class _`<Class>`_ (选填)
 
-扩展类
+&nbsp;&nbsp;扩展类
 
 
 ### root _`<String>`_ (选填)
 
-可把锚点附属于某个子元素
+&nbsp;&nbsp;可把锚点附属于某个子元素
 
 
 <br>
@@ -189,6 +188,8 @@ Class YourEndpoint extends Endpoint {
 
 ### endpoint.updatePos(dom,orientation,pos)
 
+*作用*： 当锚点位置发生变化时，需要调用此方法更新锚点的位置并更新相邻的线段
+
 *参数*
 
 * `{dom} dom`自定义锚点
@@ -201,6 +202,8 @@ updatePos = (dom,orientation,pos) => {}
 
 ### endpoint.moveTo ()
 
+*作用*： 锚点移动坐标的方法
+
 *参数*
 
 * `{number} x`移动位置的x坐标
@@ -212,6 +215,12 @@ moveTo = (obj) => {}
 
 ### endpoint.hasConnection()
 
+*作用*： 判断锚点是否有线段连接
+
+*返回*
+
+* `boolean`
+
 ```js
 /**
   * 该endpoint是否有连接边
@@ -221,6 +230,10 @@ hasConnection = () => {}
 
 ### endpoint.emit(event,data)
 
+*作用*： 锚点发送事件的方法，画布及任何一个元素都可接收。
+
+*参数*
+
 * `{string} event`发送事件名称
 * `{number} data`发送事件数据
 
@@ -229,6 +242,10 @@ emit = (string, obj) => {}
 ```
 
 ### endpoint.on(event,callback)
+
+*作用*： 锚点接收事件的方法，能接收画布及任何一个元素的事件。
+
+*参数*
 
 * `{string} event`接收事件名称
 * `{function} callback`接收事件回调

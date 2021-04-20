@@ -38,24 +38,33 @@ canvas.addGroup({
 ## 属性
 
 ### id _`<String>`_ （必填）
-  节点唯一标识
+&nbsp;&nbsp;节点唯一标识
 ### top _`<Number>`_ （必填）
-  y轴坐标
+&nbsp;&nbsp;y轴坐标
 ### left _`<Number>`_ （必填）
-  x轴坐标
+&nbsp;&nbsp;x轴坐标
 ### width _`<Number>`_ (选填)
-  宽度
+&nbsp;&nbsp;宽度
 ### height _`<Number>`_ (选填)
-  高度
-### type _`<String>`_ (选填)
-  类型
+&nbsp;&nbsp;高度
 ### endpoints _`<Array>`_ (选填)
-  锚点信息
+&nbsp;&nbsp;系统锚点配置: 当有此配置会加上系统的锚点
 ### Class _`<Class>`_ (选填)
-  拓展类
+&nbsp;&nbsp;拓展类
 ### scope _`<String>`_ (选填)
-  作用域: 当scope一致的节点才能拖动进入节点组
+&nbsp;&nbsp;作用域: 当scope一致的节点才能拖动进入节点组
 
+```js
+// 单scope
+group.scope = 'xxx';
+// 多scope，任意一个匹配中都能连接
+group.scope = 'xxx1 xxx2 xxx3';
+```
+
+### group _`<String>`_ (选填)
+  父级group的id: 需要开启canvas.theme.group.includeGroups的属性才能支持group嵌套
+  
+<img width="400" src="https://img.alicdn.com/imgextra/i4/O1CN01qmOWWj1CKtcvZZJ7Q_!!6000000000063-2-tps-842-536.png">
 
 <br>
 <br>
@@ -168,7 +177,7 @@ removeNode = (node) => {}
 * `{string} param.id`锚点id
 * `{string} param.orientation`锚点方向(可控制线段的进行和外出方向)
 * `{string} param.scope`作用域
-* `{string} param.type`'source' / 'target' / undefined，当undefined的时候锚点既是source又是target
+* `{string} param.type`'source' / 'target' / undefined / 'onlyConnect'，可看锚点的type文档
 * `{string} param.dom`可以把分组内的任意一个子dom作为自定义锚点
 
 ```js
@@ -197,8 +206,8 @@ getEndpoint = (id) => {}
 
 *参数*
 
-* `{number} x `移动位置的x坐标
-* `{number} y `移动位置的y坐标
+* `{number} obj.x `移动位置的x坐标
+* `{number} obj.y `移动位置的y坐标
 
 ```js
 moveTo = (obj) => {}
