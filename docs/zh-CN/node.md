@@ -34,57 +34,63 @@ canvas.addNode({
 
 ## 属性
 
-### id <string>(必填)
+### id  _`<String>`_    (必填)
   节点唯一标识
-### top <number>(必填)
+### top  _`<Number>`_    (必填)
    y轴坐标
-### left <number>(必填)
+### left _`<Number>`_   (必填)
   x轴坐标
-### draggable <boolean>(选填)
-  可以设置该节点是否能拖动
-### group <string> (选填)
+### draggable _`<Boolean>`_   (选填)
+  可以设置该节点是否能拖动：为可覆盖全局的draggable属性
+### group _`<String>`_    (选填)
   group的唯一标识
-### endpoints <array> (选填)
-  锚点信息
-### Class <Class> (选填)
-  拓展类
-### scope <boolean> (选填)
-  作用域
+### endpoints _`<Array>`_    (选填)
+  锚点信息: 当有此配置会加上系统的锚点
+### Class _`<Class>`_    (选填)
+  拓展类：当传入拓展类的时候，该节点组则会按拓展类的draw方法进行渲染，拓展类的相关方法也会覆盖父类的方法
+### scope _`<Boolean>`_    (选填)
+  作用域：当scope一致的节点才能拖动进入节点组
+
+```js
+// 单scope
+node.scope = 'xxx';
+// 多scope，任意一个匹配中都能连接
+node.scope = 'xxx1 xxx2 xxx3';
+```
 
 `* 节点的返回的dom必须设置position: absolute;`
 
-## API：
-
-### node.draw (obj)
-
-参数
-
-* `data`节点基本信息
-
-返回
-
-* `dom`返回渲染dom的根节点
+## 类重写API：
 
 ```js
-draw = (obj) => {}
+import {Node} from 'butterfly-dag';
+
+Class YourNode extends Node {
+  
+  /**
+    * 节点挂载后的回调
+    */
+  mounted() {}
+
+  /**
+    * node的渲染方法
+    * @param {obj} data - 节点基本信息 
+    * @return {dom} - 返回渲染dom的根节点
+    */
+  draw(obj) {}
+  
+  /**
+    * 节点更新后的回调
+    */
+  updated() {}
+  /**
+    * 删除节点
+    */
+  remove() {}
+}
 ```
-### node.mounted()
 
-```js
-mounted = () => {}
-```
-
-### node.updated()
-
-```js
-updated = () => {}
-```
-
-### node.remove()
-
-```js
-remove = () => {}
-```
+## 外部调用API：
 
 ### node.getWidth ()
 
@@ -108,7 +114,7 @@ getHeight = () => {}
 
 ### node.setDraggable (boolean)
 
-对象
+参数
 
 * `boolean`设置节点是否可移动
 
@@ -151,7 +157,7 @@ addEndpoint = (obj) => {}
 
 返回
 
-*` {Endpoint}`Endpoint的对象
+* ` {Endpoint}`Endpoint的对象
 
 ```js
 removeEndpoint = (obj) => {}
@@ -161,12 +167,12 @@ removeEndpoint = (obj) => {}
 
 参数
 
-*`{string(必填)} pointId`锚点的信息
-*`{string(选填)} type`锚点的信息
+* `{string(必填)} pointId`锚点的信息
+* `{string(选填)} type`锚点的信息
 
 返回
 
-*`{Endpoint}`Endpoint的对象
+* `{Endpoint}`Endpoint的对象
 
 ```
 getEndpoint = (id, type) => {}
@@ -183,13 +189,19 @@ getEndpoint = (id, type) => {}
 moveTo = (obj) => {}
 ```
 
-### node.emit (string, obj)
+### node.emit (event, data)
+
+* `{string} event` 发送事件名称
+* `{obj}data` 发送事件数据
 
 ```js
 emit = (string, obj) => {}
 ```
 
 ### node.on (string, callback)
+
+* `{string} event` 接收事件名称
+* `{function}data` 接收事件数据
 
 ```js
 on = (string, callback) => {}
@@ -199,7 +211,7 @@ on = (string, callback) => {}
 
 参数
 
-*`{string} nodeId`节点id
+* `{string} nodeId`节点id
 
 ```js
 collapseNode = (string) => {}
@@ -209,7 +221,7 @@ collapseNode = (string) => {}
 
 参数
 
-*`{string} nodeId`节点id
+* `{string} nodeId`节点id
 
 ```js
 expandNode = (string) => {}
