@@ -1,6 +1,6 @@
 # 节点组(Group)
 
-```
+```js
 const Group = require('butterfly-dag').Group;
 class AGroup extends Group {
   draw(obj) {
@@ -8,6 +8,7 @@ class AGroup extends Group {
   }
 }
 
+// 初始化画布渲染
 canvas.draw({
   groups: [{
     id: 'xxxx',
@@ -18,6 +19,12 @@ canvas.draw({
   nodes: ...
   edges: ...
 })
+
+// 动态添加
+canvas.addGroup({
+  ...
+  // 参考下面属性
+});
 ```
 
 ## 属性<a name='group-attr'></a>：

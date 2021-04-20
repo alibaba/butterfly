@@ -61,11 +61,18 @@ let canvas = new Canvas({
 | theme | canvas theme setting | object (optional) | undefined
 | global | global attribute | object (optional) | undefined
 
+
+* **layout**，pass string / function into the property of layout
+ * forceLayout
+ * dagreLayout
+ * concentricLayout
+ * circleLayout
+ * fruchterman
+ * radial
+ * custom layout，pass in custom method, which can be layout according to user needs. Note:`In addition, remember to overwrite the Edge calcPath method, otherwise it will be replaced by butterfly's built-in calculation edge  method, and the resulting edge cannot be realized.`
+* **autoFixCanvas**, auto expand canvas when drag nodes or edges near the margin of canvas, set autoMovePadding to adjust the area of hotspots. See: ![autoFixCanvas](https://img.alicdn.com/tfs/TB16lUNBG61gK0jSZFlXXXDKFXa-1665-801.gif)
 * **isScopeStrict**，used to set the global scope strict mode
   * The default is false. If the value is set to true, the scope must match when the scope must be identical; if the value is false, all values are matched when the scope is undefined.
-* **重力布局**，pass `'ForceLayout'`，butterfly built-in layout
-* **自定义布局**，pass in a method, which can be layout according to user needs. Note:`In addition, remember to overwrite the Edge calcPath method, otherwise it will be replaced by butterfly's built-in calculation edge  method, and the resulting edge cannot be realized.`
-* **autoFixCanvas**, auto expand canvas when drag nodes or edges near the margin of canvas, set autoMovePadding to adjust the area of hotspots. See: ![autoFixCanvas](https://img.alicdn.com/tfs/TB16lUNBG61gK0jSZFlXXXDKFXa-1665-801.gif)
 
 ```
 let canvas = new Canvas({
@@ -95,7 +102,7 @@ draw = (data, calllback) => {}
 
 /**
   * Re-rendering method, it will delete all previous elements and re-render
-  * @param {data} data  - include groups, nodes, edges
+  * @param {data} data  - new groups, nodes, and connections when redrawing
   * @param {function} callback  - `*the rendering process is an asynchronous process, please pay attention to the callback.`
   */
 redraw = (data, calllback) => {}
@@ -216,6 +223,14 @@ removeEdges = (param) => {}
 getNeighborEdges = (string) => {}
 
 /**
+  * get neighbor edges by endpoint id 
+  * @param {string} nodeId  - node id
+  * @param {string} endpointId  - endpoint id
+  * @return {Edges} - neighbor Edges Object
+  */
+getNeighborEdgesByEndpoint = (string, string) => {}
+
+/**
   * find N-level association nodes and edges
   * @param {Object} options - parameters
   * @param {Node} options.node - starting node
@@ -226,6 +241,13 @@ getNeighborEdges = (string) => {}
   * @returns {Object<nodes: Node, edges: Edge>} filteredGraph - lookup result
   */
 getNeighborNodesAndEdgesByLevel = (options) => {}
+
+/**
+  * set z-index attribute to edge
+  * @param {Array<Edge>} edges - edges
+  * @param {number} zIndex - z-index value
+  */
+setEdgeZIndex = (edges, zIndex) => {}
 ```
 
 ### <a name='canvas-api-zoom-move'>缩放，平移</a>：
@@ -425,7 +447,7 @@ this.canvas.add2Union('my union name', {
 
 ```js
 let canvas = new Canvas({...});
-canvas.on('type', (data) => {
+canvas.on('type key', (data) => {
   //data 
 });
 ```

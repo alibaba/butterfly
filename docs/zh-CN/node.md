@@ -1,7 +1,7 @@
 # 节点(Node)
 
 ## 用法
-```
+``` js
 const Node = require('butterfly-dag').Node;
 class ANode extends Node {
   draw(obj) {
@@ -9,14 +9,27 @@ class ANode extends Node {
   }
 }
 
+// 初始化画布渲染
 canvas.draw({
   nodes: [{
     id: 'xxxx',
     top: 100,
     left: 100,
     Class: ANode //设置基类之后，画布会根据自定义的类来渲染
+    // 参考下面属性
+    ...
   }]
 })
+
+// 动态添加
+canvas.addNode({
+  id: 'xxx',
+  top: 100,
+  left: 100,
+  Class: ANode
+  // 参考下面属性
+  ...
+});
 ```
 
 ## 属性<a name='node-attr'></a>：
@@ -95,7 +108,7 @@ unFocus = () => {}
   * @param {string} param.id - 锚点id
   * @param {string} param.orientation - 锚点方向(可控制线段的进行和外出方向)
   * @param {string} param.scope - 作用域
-  * @param {string} param.type - 'source' / 'target' / undefined，当undefined的时候锚点既是source又是target
+  * @param {string} param.type - 'source' / 'target' / undefined / 'onlyConnect'。 当undefined的时候锚点既是source又是target，但不能为同是为'source'和'target'，先来先到 ; 'onlyConnect'，锚点既是source又是target，可同时存在
   * @param {string} param.dom - 可以把节点内的任意一个子dom作为自定义锚点
   */
 addEndpoint = (obj) => {}

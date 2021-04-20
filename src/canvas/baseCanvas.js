@@ -130,7 +130,12 @@ class BaseCanvas extends Canvas {
     if($(this.root).css('position') === 'static') {
       $(this.root).css('position', 'relative');
     }
-    this._dragIndex = 50;
+
+    // 节点,线段,节点组z-index值，顺序：节点 > 线段 > 节点组
+    this._dragGroupZIndex = 50;
+    this._dragNodeZIndex = 250;
+    this._dragEdgeZindex = 499;
+    this._isInitEdgeZIndex = false;
 
     // 检测节点拖动节点组的hover状态
     this._hoverGroupQueue = [];
@@ -186,19 +191,9 @@ class BaseCanvas extends Canvas {
     this._autoMoveTimer = null;
   }
 
-  updateRootResize(opts = {}) {
-    this._coordinateService._changeCanvasInfo({
-      terOffsetX: opts.terOffsetX || $(this.root).offset().left,
-      terOffsetY: opts.terOffsetY || $(this.root).offset().top,
-      terWidth: opts.terWidth || $(this.root).width(),
-      terHeight: opts.terHeight || $(this.root).height()
-    });
-    this.canvasWrapper._changeCanvasInfo({
-      terScrollX: opts.terScrollX || 0,
-      terScrollY: opts.terScrollY || 0
-    });
-  }
-
+  //===============================
+  //[ 画布渲染 ]
+  //===============================
   draw(opts, callback) {
     const groups = opts.groups || [];
     const nodes = opts.nodes || [];
@@ -247,1251 +242,12 @@ class BaseCanvas extends Canvas {
       });
     });
   }
-
   redraw (opts, callback) {
-    this.removeNodes(this.nodes);
-    this.removeGroups(this.groups);
+    this.removeNodes(this.nodes.map((item) => item.id) || []);
+    this.removeGroups(this.groups.map((item) => item.id) || []);
     this.clearActionQueue();
-    this.draw(opts, callback);
+    this.draw(opts || {}, callback);
   }
-
-  getNode(id) {
-    return _.find(this.nodes, item => item.id === id);
-  }
-
-  getEdge(id) {
-    return _.find(this.edges, item => item.id === id);
-  }
-
-  getGroup(id) {
-    return _.find(this.groups, item => item.id === id);
-  }
-
-  addGroup(group, nodes, options, isNotEventEmit) {
-    const container = $(this.wrapper);
-    const GroupClass = group.Class || Group;
-    let _newNodes = [];
-    const _groupObj = new GroupClass(_.assign(_.cloneDeep(group), {
-      _global: this.global,
-      _emit: this.emit.bind(this),
-      _on: this.on.bind(this),
-      draggable: group.draggable !== undefined ? group.draggable : this.draggable
-    }));
-    if (this._isExistGroup(_groupObj)) {
-      // 后续用新的group代码旧的group
-      console.warn(`group:${_groupObj.id} has existed`);
-      return;
-    }
-    _groupObj.init();
-    container.prepend(_groupObj.dom);
-    this.groups.push(_groupObj);
-
-    _groupObj._createEndpoint();
-
-    _groupObj.mounted && _groupObj.mounted();
-
-    if (nodes && nodes.length > 0) {
-      // 过滤掉scope不匹配的节点 和 已存在其他组的node
-      nodes = nodes.filter((_node) => {
-        return ScopeCompare(_node.scope, _groupObj.scope, _.get(this, 'global.isScopeStrict')) && (_node.group === _groupObj.id || _node.group == undefined);
-      });
-
-      let _isAbsolutePos = _.get(options, 'posType', 'absolute') === 'absolute';
-      // 重新计算group的位置
-      let _groupLeft = Infinity;
-      let _groupTop = Infinity;
-      nodes.forEach((_node) => {
-        if (_isAbsolutePos) {
-          if (_node.left < _groupLeft) {
-            _groupLeft = _node.left;
-          }
-          if (_node.top < _groupTop) {
-            _groupTop = _node.top;
-          }
-        }
-      });
-      _groupObj._moveTo(_groupLeft - _.get(options, 'padding', 5), _groupTop - _.get(options, 'padding', 5));
-
-      // 添加节点
-      _newNodes = nodes.map((_node) => {
-        let newNode = null;
-        // 已存在节点
-        let _existNode = _.find(this.nodes, (__node) => {
-          return __node.id === _node.id;
-        });
-        if (_existNode) {
-          this.removeNode(_existNode.id, true, true);
-          _existNode._init({
-            dom: _existNode.dom,
-            top: _existNode.top - _groupObj.top,
-            left: _existNode.left - _groupObj.left,
-            group: _groupObj.id
-          })
-          newNode = this.addNode(_existNode, true);
-        } else {
-          let _nodeObj = null;
-          if (_node instanceof Node || _node.__type === 'node') {
-            _nodeObj = _node;
-          } else {
-            const _NodeClass = _node.Class || this._NodeClass;
-            _nodeObj = new _NodeClass(_.assign(_.cloneDeep(_node), {
-              _global: this.global,
-              _on: this.on.bind(this),
-              _emit: this.emit.bind(this),
-              _endpointLimitNum: this.theme.endpoint.limitNum,
-              draggable: _node.draggable !== undefined ? _node.draggable : this.draggable
-            }));
-          }
-          if (_isAbsolutePos) {
-            _nodeObj.top = _nodeObj.top - _groupObj.top;
-            _nodeObj.left = _nodeObj.left - _groupObj.left;
-          }
-          _nodeObj.group = _groupObj.id;
-          newNode = this.addNode(_nodeObj);
-        }
-        return newNode;
-      });
-
-      // 重新计算group的大小
-      let _groupWidth = -Infinity;
-      let _groupHeight = -Infinity;
-      _newNodes.forEach((_node) => {
-        let _w = $(_node.dom).width();
-        let _h = $(_node.dom).height();
-        if (_groupWidth < _node.left + _w) {
-          _groupWidth = _node.left + _w;
-        }
-        if (_groupHeight < _node.top + _h) {
-          _groupHeight = _node.top + _h;
-        }
-      });
-      _groupObj.setSize(_groupWidth + _.get(options, 'padding', 5) * 2, _groupHeight + _.get(options, 'padding', 5) * 2);
-    }
-
-    if (!isNotEventEmit) {
-      this.pushActionQueue({
-        type: 'system:addGroups',
-        data: [{
-          group: _groupObj,
-          nodes: _newNodes
-        }]
-      });
-      this.emit('events', {
-        type: 'group:add',
-        group: _groupObj
-      });
-    }
-
-    return _groupObj;
-  }
-
-  addNodes(nodes, isNotEventEmit) {
-    const _canvasFragment = document.createDocumentFragment();
-    const container = $(this.wrapper);
-    const result = nodes.filter((node) => {
-      if (node.group) {
-        let _existGroup = this.getGroup(node.group);
-        if (!_existGroup) {
-          console.warn(`nodeId为${node.id}的节点找不到groupId为${node.group}的节点组，因此无法渲染`);
-          return false;
-        }
-      }
-      return true;
-    }).map((node) => {
-      let _nodeObj = null;
-      if (node instanceof Node || node.__type === 'node') {
-        _nodeObj = node;
-      } else {
-        const _NodeClass = node.Class || this._NodeClass;
-        _nodeObj = new _NodeClass(_.assign(_.cloneDeep(node), {
-          _global: this.global,
-          _on: this.on.bind(this),
-          _emit: this.emit.bind(this),
-          _endpointLimitNum: this.theme.endpoint.limitNum,
-          draggable: node.draggable !== undefined ? node.draggable : this.draggable
-        }));
-      }
-
-      if (this._isExistNode(_nodeObj)) {
-        // 后续用新的node代码旧的node
-        console.warn(`node:${_nodeObj.id} has existed`);
-        return;
-      }
-
-      // 节点初始化，假如已经存在过的节点就不需要重绘了
-      let initObj = {};
-      if (_nodeObj.dom) {
-        initObj['dom'] = _nodeObj.dom
-      }
-      _nodeObj._init(initObj);
-      // 一定要比group的addNode执行的之前，不然会重复把node加到this.nodes里面
-      this.nodes.push(_nodeObj);
-
-      // 假如节点存在group，即放进对应的节点组里
-      const existGroup = _nodeObj.group ? this.getGroup(_nodeObj.group) : null;
-      if (existGroup) {
-        if (ScopeCompare(_nodeObj.scope, existGroup.scope, _.get(this, 'global.isScopeStrict'))) {
-          existGroup._appendNodes([_nodeObj]);
-        } else {
-          console.warn(`nodeId为${_nodeObj.id}的节点和groupId${existGroup.id}的节点组scope值不符，无法加入`);
-        }
-      } else {
-        _canvasFragment.appendChild(_nodeObj.dom);
-      }
-      return _nodeObj;
-    }).filter((item) => {
-      return !!item;
-    });
-
-    // 批量插入dom，性能优化
-    container.append(_canvasFragment);
-
-    result.forEach((item) => {
-      // 渲染endpoint
-      item._createEndpoint(isNotEventEmit);
-
-      // 节点挂载
-      !isNotEventEmit && item.mounted && item.mounted();
-    });
-
-    if (result && result.length > 0 && !isNotEventEmit) {
-      this.pushActionQueue({
-        type: 'system:addNodes',
-        data: result
-      });
-      this.emit('system.nodes.add', {
-        nodes: result
-      });
-      this.emit('events', {
-        type: 'nodes:add',
-        nodes: result
-      });
-    }
-    return result;
-  }
-
-  addNode(node, isNotEventEmit) {
-    return this.addNodes([node], isNotEventEmit)[0];
-  }
-
-  addEdges(links, isNotEventEmit) {
-    $(this.svg).css('visibility', 'hidden');
-
-    const _edgeFragment = document.createDocumentFragment();
-    const _labelFragment = document.createDocumentFragment();
-    const result = links.map((link) => {
-
-      // link已经存在
-      if (link instanceof Edge) {
-        link._init();
-
-        _edgeFragment.appendChild(link.dom);
-
-        if (link.labelDom) {
-          _labelFragment.appendChild(link.labelDom);
-        }
-
-        if (link.arrowDom) {
-          _edgeFragment.appendChild(link.arrowDom);
-        }
-
-        this.edges.push(link);
-
-        link.mounted && link.mounted();
-        return link;
-      }
-
-      // link不存在的话
-      const EdgeClass = link.Class || this.theme.edge.Class;
-      if (link.type === 'endpoint') {
-        let sourceNode = null;
-        let targetNode = null;
-        let _sourceType = link._sourceType;
-        let _targetType = link._targetType;
-
-        if (link.sourceNode instanceof Node || link.sourceNode.__type === 'node') {
-          _sourceType = 'node';
-          sourceNode = link.sourceNode;
-        } else if (link.sourceNode instanceof Group || link.sourceNode.__type === 'group') {
-          _sourceType = 'group';
-          sourceNode = link.sourceNode;
-        } else {
-          if (link._sourceType) {
-            sourceNode = _sourceType === 'node' ? this.getNode(link.sourceNode) : this.getGroup(link.sourceNode);
-          } else {
-            let _node = this.getNode(link.sourceNode);
-            if (_node) {
-              _sourceType = 'node';
-              sourceNode = _node;
-            } else {
-              _sourceType = 'group';
-              sourceNode = this.getGroup(link.sourceNode);
-            }
-          }
-        }
-
-        if (link.targetNode instanceof Node || link.targetNode.__type === 'node') {
-          _targetType = 'node';
-          targetNode = link.targetNode;
-        } else if (link.targetNode instanceof Group || link.targetNode.__type === 'group') {
-          _targetType = 'group';
-          targetNode = link.targetNode;
-        } else {
-          if (link._targetType) {
-            targetNode = _targetType === 'node' ? this.getNode(link.targetNode) : this.getGroup(link.targetNode);
-          } else {
-            let _node = this.getNode(link.targetNode);
-            if (_node) {
-              _targetType = 'node';
-              targetNode = _node;
-            } else {
-              _targetType = 'group';
-              targetNode = this.getGroup(link.targetNode);
-            }
-          }
-        }
-
-        if (!sourceNode || !targetNode) {
-          console.warn(`butterflies error: can not connect edge. link sourceNodeId:${link.sourceNode};link targetNodeId:${link.targetNode}`);
-          return;
-        }
-
-        let sourceEndpoint = null;
-        let targetEndpoint = null;
-
-        if (link.sourceEndpoint && (link.sourceEndpoint instanceof Endpoint || link.sourceEndpoint.__type === 'endpoint')) {
-          sourceEndpoint = link.sourceEndpoint;
-        } else {
-          sourceEndpoint = sourceNode.getEndpoint(link.source, 'source');
-        }
-
-        if (link.targetEndpoint && (link.targetEndpoint instanceof Endpoint || link.targetEndpoint.__type === 'endpoint')) {
-          targetEndpoint = link.targetEndpoint;
-        } else {
-          targetEndpoint = targetNode.getEndpoint(link.target, 'target');
-        }
-
-        if (!sourceEndpoint || !targetEndpoint) {
-          console.warn(`butterflies error: can not connect edge. link sourceId:${link.source};link targetId:${link.target}`);
-          return;
-        }
-
-        // 线条去重
-        if (!this.theme.edge.isRepeat) {
-          let _isRepeat = _.some(this.edges, (_edge) => {
-            let _result = false;
-            if (sourceNode) {
-              _result = sourceNode.id === _edge.sourceNode.id && sourceEndpoint.id === _edge.sourceEndpoint.id && _sourceType === _edge.sourceEndpoint.nodeType;
-            }
-
-            if (targetNode) {
-              _result = _result && (targetNode.id === _edge.targetNode.id && targetEndpoint.id === _edge.targetEndpoint.id && _targetType === _edge.targetEndpoint.nodeType);
-            }
-
-            return _result;
-          });
-          if (_isRepeat) {
-            console.warn(`id为${sourceEndpoint.id}-${targetEndpoint.id}的线条连接重复，请检查`);
-            return;
-          }
-        }
-
-        let edge = new EdgeClass({
-          type: 'endpoint',
-          id: link.id,
-          label: link.label,
-          shapeType: link.shapeType || this.theme.edge.type,
-          orientationLimit: this.theme.endpoint.position,
-          isExpandWidth: this.theme.edge.isExpandWidth,
-          defaultAnimate: this.theme.edge.defaultAnimate,
-          sourceNode,
-          targetNode,
-          sourceEndpoint,
-          targetEndpoint,
-          arrow: link.arrow === undefined ? _.get(this, 'theme.edge.arrow') : link.arrow,
-          arrowPosition: link.arrowPosition === undefined ? _.get(this, 'theme.edge.arrowPosition') : link.arrowPosition,
-          arrowOffset: link.arrowOffset === undefined ? _.get(this, 'theme.edge.arrowOffset') : link.arrowOffset,
-          options: link,
-          _sourceType,
-          _targetType,
-          _global: this.global,
-          _on: this.on.bind(this),
-          _emit: this.emit.bind(this),
-        });
-
-        edge._init();
-
-        _edgeFragment.appendChild(edge.dom);
-
-        if (edge.labelDom) {
-          _labelFragment.appendChild(edge.labelDom);
-        }
-
-        if (edge.arrowDom) {
-          _edgeFragment.appendChild(edge.arrowDom);
-        }
-
-        this.edges.push(edge);
-
-        edge.mounted && edge.mounted();
-
-        // 假如sourceEndpoint和targetEndpoint没属性，则自动添加上
-        if (sourceEndpoint.type === undefined) {
-          sourceEndpoint._tmpType = 'source';
-        }
-        if (targetEndpoint.type === undefined) {
-          targetEndpoint._tmpType = 'target';
-        }
-
-        return edge;
-      } else {
-        const sourceNode = this.getNode(link.source);
-        const targetNode = this.getNode(link.target);
-
-        if (!sourceNode || !targetNode) {
-          console.warn(`butterflies error: can not connect edge. link sourceId:${link.source};link targetId:${link.target}`);
-          return;
-        }
-
-        let edge = new EdgeClass({
-          type: 'node',
-          id: link.id,
-          label: link.label,
-          sourceNode,
-          targetNode,
-          shapeType: link.shapeType || this.theme.edge.type,
-          orientationLimit: this.theme.endpoint.position,
-          arrow: link.arrow === undefined ? _.get(this, 'theme.edge.arrow') : link.arrow,
-          arrowPosition: link.arrowPosition === undefined ? _.get(this, 'theme.edge.arrowPosition') : link.arrowPosition,
-          arrowOffset: link.arrowOffset === undefined ? _.get(this, 'theme.edge.arrowOffset') : link.arrowOffset,
-          isExpandWidth: this.theme.edge.isExpandWidth,
-          defaultAnimate: this.theme.edge.defaultAnimate,
-          _global: this.global,
-          _on: this.on.bind(this),
-          _emit: this.emit.bind(this),
-        });
-
-        edge._init();
-
-        _edgeFragment.appendChild(edge.dom);
-
-        if (edge.labelDom) {
-          _labelFragment.appendChild(edge.labelDom);
-        }
-
-        if (edge.arrowDom) {
-          _edgeFragment.appendChild(edge.arrowDom);
-        }
-
-        this.edges.push(edge);
-
-        edge.mounted && edge.mounted();
-
-        return edge;
-      }
-    }).filter(item => item);
-
-    $(this.svg).append(_edgeFragment);
-
-    $(this.wrapper).append(_labelFragment);
-
-    result.forEach((link) => {
-      let _soucePoint = {};
-      let _targetPoint = {};
-      if (link.type === 'endpoint') {
-        _soucePoint = {
-          pos: [link.sourceEndpoint._posLeft + link.sourceEndpoint._width / 2, link.sourceEndpoint._posTop + link.sourceEndpoint._height / 2],
-          orientation: link.sourceEndpoint.orientation ? link.sourceEndpoint.orientation : undefined
-        };
-        _targetPoint = {
-          pos: [link.targetEndpoint._posLeft + link.targetEndpoint._width / 2, link.targetEndpoint._posTop + link.targetEndpoint._height / 2],
-          orientation: link.targetEndpoint.orientation ? link.targetEndpoint.orientation : undefined
-        };
-      } else if (link.type === 'node') {
-        _soucePoint = {
-          pos: [link.sourceNode.left + link.sourceNode.getWidth() / 2, link.sourceNode.top + link.sourceNode.getHeight() / 2]
-        };
-
-        _targetPoint = {
-          pos: [link.targetNode.left + link.targetNode.getWidth() / 2, link.targetNode.top + link.targetNode.getHeight() / 2]
-        };
-      }
-      link.redraw(_soucePoint, _targetPoint);
-    });
-
-    if (!isNotEventEmit) {
-      this.pushActionQueue({
-        type: 'system:addEdges',
-        data: result
-      });
-      this.emit('system.link.connect', {
-        links: result
-      });
-      this.emit('events', {
-        type: 'link:connect',
-        links: result
-      });
-    }
-
-    $(this.svg).css('visibility', 'visible');
-
-    return result;
-  }
-
-  addEdge(link, isNotEventEmit) {
-    return this.addEdges([link], isNotEventEmit)[0];
-  }
-
-  addGroups(datas) {
-    return datas.map(item => this.addGroup(item)).filter(item => item);
-  }
-
-  removeNode(nodeId, isNotDelEdge, isNotEventEmit) {
-    return this.removeNodes([nodeId], isNotDelEdge, isNotEventEmit);
-  }
-
-  removeNodes(nodes, isNotDelEdge, isNotEventEmit) {
-
-    let nodeIds = [];
-    nodeIds = nodes.map((item) => {
-      if (item instanceof Node) {
-        return item.id
-      } else {
-        return item;
-      }
-    });
-
-
-    let rmNodes = [];
-    let rmEdges = [];
-    nodeIds.forEach((nodeId) => {
-      const index = _.findIndex(this.nodes, _node => _node.id === nodeId);
-      if (index === -1) {
-        console.warn(`找不到id为：${nodeId}的节点`);
-        return;
-      }
-
-      // 删除邻近的线条
-      const neighborEdges = this.getNeighborEdges(nodeId);
-      if (!isNotDelEdge) {
-        this.removeEdges(neighborEdges, true, true);
-      }
-
-      // 删除节点
-      const node = this.nodes[index];
-      node.destroy(isNotEventEmit);
-
-      const _rmNodes = this.nodes.splice(index, 1);
-      // 假如在group里面
-      if (node.group) {
-        const group = this.getGroup(node.group);
-        if (group) {
-          group.nodes = group.nodes.filter(item => item.id !== node.id);
-        }
-      }
-
-      if (_rmNodes.length > 0) {
-        rmNodes = rmNodes.concat(_rmNodes);
-        rmEdges = rmEdges.concat(neighborEdges);
-      }
-
-    });
-
-    if (rmNodes.length > 0) {
-      if (!isNotEventEmit) {
-        this.pushActionQueue({
-          type: 'system:removeNodes',
-          data: {
-            nodes: rmNodes,
-            edges: rmEdges
-          }
-        });
-        this.emit('system.nodes.delete', {
-          nodes: rmNodes,
-          edges: rmEdges
-        });
-        this.emit('events', {
-          type: 'nodes:delete',
-          nodes: rmNodes,
-          edges: rmEdges
-        });
-      }
-    }
-
-    return {
-      nodes: rmNodes,
-      edges: rmEdges
-    };
-  }
-
-  removeEdges(edges, isNotEventEmit, isNotPushActionQueue) {
-    let result = [];
-    edges.forEach((_edge) => {
-      let edgeIndex = -1;
-      if (_edge instanceof Edge || _edge.__type === 'edge') {
-        edgeIndex = _.findIndex(this.edges, (item) => {
-          if (item.type === 'node') {
-            return _edge.sourceNode.id === item.sourceNode.id && _edge.targetNode.id === item.targetNode.id;
-          } else {
-            return (
-              _.get(_edge, 'sourceNode.id') === _.get(item, 'sourceNode.id') &&
-              _.get(_edge, 'sourceEndpoint.id') === _.get(item, 'sourceEndpoint.id') &&
-              _.get(_edge, 'sourceEndpoint.nodeType') === _.get(item, 'sourceEndpoint.nodeType')
-            ) && (
-                _.get(_edge, 'targetNode.id') === _.get(item, 'targetNode.id') &&
-                _.get(_edge, 'targetEndpoint.id') === _.get(item, 'targetEndpoint.id') &&
-                _.get(_edge, 'targetEndpoint.nodeType') === _.get(item, 'targetEndpoint.nodeType')
-              );
-          }
-        });
-      } else if (_.isString(_edge)) {
-        edgeIndex = _.findIndex(this.edges, (item) => {
-          return _edge === item.id;
-        });
-      } else {
-        console.warn(`删除线条错误，传入参数有误，请检查`);
-        return;
-      }
-      if (edgeIndex !== -1) {
-        result = result.concat(this.edges.splice(edgeIndex, 1));
-      } else {
-        console.warn(`删除线条错误，不存在值为${_edge.id}的线`);
-      }
-    });
-
-    if (!isNotPushActionQueue) {
-      this.pushActionQueue({
-        type: 'system:removeEdges',
-        data: result
-      });
-    }
-
-    if (!isNotEventEmit) {
-      this.emit('system.links.delete', {
-        links: result
-      });
-      this.emit('events', {
-        type: 'links:delete',
-        links: result
-      });
-    }
-
-
-    result.forEach((item) => {
-      item.destroy(isNotEventEmit);
-    });
-
-    // 把endpoint重新赋值
-    result.forEach((_rmEdge) => {
-      if (_.get(_rmEdge, 'sourceEndpoint._tmpType') === 'source') {
-        let isExistEdge = _.some(this.edges, (edge) => {
-          return _rmEdge.sourceNode.id === edge.sourceNode.id && _rmEdge.sourceEndpoint.id === edge.sourceEndpoint.id;
-        });
-        !isExistEdge && (_rmEdge.sourceEndpoint._tmpType = undefined);
-      }
-      if (_.get(_rmEdge, 'targetEndpoint._tmpType') === 'target') {
-        let isExistEdge = _.some(this.edges, (edge) => {
-          return _rmEdge.targetNode.id === edge.targetNode.id && _rmEdge.targetEndpoint.id === edge.targetEndpoint.id;
-        });
-        !isExistEdge && (_rmEdge.targetEndpoint._tmpType = undefined);
-      }
-    });
-    return result;
-  }
-
-  removeEdge(edge, isNotEventEmit, isNotPushActionQueue) {
-    return this.removeEdges([edge], isNotEventEmit, isNotPushActionQueue)[0];
-  }
-
-  removeGroup(data, isNotEventEmit) {
-    let groupId = undefined;
-    if (data instanceof Group) {
-      groupId = data.id;
-    } else {
-      groupId = data;
-    }
-
-    const group = this.getGroup(groupId);
-    if (!group) {
-      console.warn(`未找到id为${groupId}的节点组`);
-    }
-    group._isDeleting = true;
-    let insideNodes = group.nodes.map((_node) => {
-      let rmItem = this.removeNode(_node.id, true, true);
-      let rmNode = rmItem.nodes[0];
-      let neighborEdges = rmItem.edges;
-      rmNode._init({
-        top: _node.top + group.top,
-        left: _node.left + group.left,
-        dom: _node.dom,
-        _isDeleteGroup: true
-      });
-      this.addNode(rmNode, true);
-      neighborEdges.forEach((item) => {
-        item.redraw();
-      });
-      return rmNode;
-    });
-    // 删除邻近的线条
-    const neighborEdges = this.getNeighborEdges(group.id, 'group');
-    this.removeEdges(neighborEdges, isNotEventEmit);
-    // 删除group
-    const index = _.findIndex(this.groups, _group => _group.id === groupId);
-    this.groups.splice(index, 1)[0];
-    group.destroy(isNotEventEmit);
-
-    if (isNotEventEmit) {
-      this.pushActionQueue({
-        type: 'system:removeGroup',
-        data: {
-          group: group,
-          nodes: insideNodes
-        }
-      });
-    }
-    return group;
-  }
-
-  removeGroups(groups, isNotEventEmit) {
-    let groupIds = [];
-    groupIds = groups.map((item) => {
-      if (item instanceof Group) {
-        return item.id
-      } else {
-        return item;
-      }
-    });
-
-    let rmGroups = groupIds.map((item) => {
-      return this.removeGroup(item, isNotEventEmit);
-    });
-
-    return {
-      groups: rmGroups
-    }
-  }
-
-  getNeighborEdges(id, type) {
-
-    let node = undefined;
-    let group = undefined;
-    if (type === 'node') {
-      node = _.find(this.nodes, item => id === item.id);
-    } else if (type === 'group') {
-      group = _.find(this.groups, item => id === item.id);
-    } else {
-      node = _.find(this.nodes, item => id === item.id);
-      node && !type && (type = 'node');
-      group = _.find(this.groups, item => id === item.id);
-      group && !type && (type = 'group');
-    }
-
-    return this.edges.filter((item) => {
-      if (type === 'node') {
-        return _.get(item, 'sourceNode.id') === node.id || _.get(item, 'targetNode.id') === node.id;
-      } else {
-        return _.get(item, 'sourceNode.id') === group.id || _.get(item, 'targetNode.id') === group.id;
-      }
-    });
-  }
-
-  getNeighborNodes(nodeId) {
-    const result = [];
-    const node = _.find(this.nodes, item => nodeId === item.id);
-    if (!node) {
-      console.warn(`找不到id为${nodeId}的节点`);
-    }
-    this.edges.forEach((item) => {
-      if (item.sourceNode && item.sourceNode.id === nodeId) {
-        result.push(item.targetNode.id);
-      } else if (item.targetNode && item.targetNode.id === nodeId) {
-        result.push(item.sourceNode.id);
-      }
-    });
-
-    return result.map(id => this.getNode(id));
-  }
-
-  /**
-   * 查找 N 层节点
-   * 
-   * @param {Object} options 
-   * @param {Node} options.node
-   * @param {Endpoint} options.endpoint
-   * @param {String} options.type
-   * @param {Number} options.level
-   * @param {Function} options.iteratee
-   * @returns {Object} filteredGraph
-   */
-  getNeighborNodesAndEdgesByLevel({node, endpoint, type = 'out', level = Infinity, iteratee = () => true}) {
-    // 先求source-target level 层
-    if (!node || !this.nodes.length) return {nodes: [], edges: []};
-    if (level == 0 || !this.edges.length) return {nodes: [node], edges: []};
-    let quene = [];
-    let neighbors = [];
-    const visited = new Set();
-
-    // 1. 生成邻接表
-    // adjTable = {[nodeId]: {[endpointId]: [[targetNode, targetEndpoint]]}}
-    const adjTable = this.getAdjcentTable(type);
-
-    if (endpoint) {
-      quene = _.get(adjTable, [node.id, endpoint.id], []).map(d => [...d, 1]);
-    } else {
-      quene = (Object.values(_.get(adjTable, node.id, {})) || []).flatMap(d => d.map(n => n.concat(1)));
-    }
-
-    visited.add(node.id);
-
-    if (!quene.length) return {nodes: [node], edges: []};
-    // 2. BFS,得到 nodes 集合
-    while (quene.length) {
-      const [$node, $endpoint, $level] = quene.shift();
-      if (
-        visited.has($node.id) ||
-        $level > level ||
-        !iteratee($node, $endpoint, $level)
-      ) continue;
-
-      // TODO: 锚点向后传递？节点向后传递？
-      neighbors = (Object.values(_.get(adjTable, $node.id, {})) || []).forEach((neighborsWithEndpoint) => {
-        neighborsWithEndpoint.forEach(neighbor => {
-          const [$nNode, $nEndpoint] = neighbor;
-          if (visited.has($nNode.id)) return;
-          quene.push([...neighbor, $level + 1]);
-        });
-      });
-      visited.add($node.id);
-    }
-    const nodes = new Set();
-    const edges = new Set();
-    // 4. 获取 edges，1. 只考虑点集 2. 考虑边
-    // 目前只考虑点集内的全部边
-    this.edges.forEach(edge => {
-      const {sourceNode, sourceEndpoint, targetNode, targetEndpoint} = edge;
-      if (visited.has(sourceNode.id) && visited.has(targetNode.id)) {
-        nodes.add(sourceNode);
-        nodes.add(targetNode);
-        edges.add(edge);
-      }
-    });
-
-    return {
-      nodes: [...nodes],
-      edges: [...edges]
-    }
-  }
-
-  getAdjcentTable(type) {
-    // 包含正逆的邻接表
-    // {[nodeId]: {[endpointId]: [[targetNode, targetEndpoint]]}}
-    const adjTable = {};
-    this.edges.forEach(edge => {
-      const {sourceNode, sourceEndpoint, targetNode, targetEndpoint} = edge;
-      const sourceNodeId = sourceNode.id;
-      const sourceEndpointId = sourceEndpoint.id;
-      const targetNodeId = targetNode.id;
-      const targetEndpointId = targetEndpoint.id;
-      // in and all
-      if (type !== 'out') {
-        if (!adjTable[targetNodeId]) adjTable[targetNodeId] = {};
-        if (!adjTable[targetNodeId][targetEndpointId]) adjTable[targetNodeId][targetEndpointId] = [];
-
-        adjTable[targetNodeId][targetEndpointId].push([sourceNode, sourceEndpoint]);
-      }
-      // out and all
-      if (type !== 'in') {
-        if (!adjTable[sourceNodeId]) adjTable[sourceNodeId] = {};
-        if (!adjTable[sourceNodeId][sourceEndpointId]) adjTable[sourceNodeId][sourceEndpointId] = [];
-
-        adjTable[sourceNodeId][sourceEndpointId].push([targetNode, targetEndpoint]);
-      }
-
-    });
-    this.nodes.forEach(node => {
-      if (!adjTable[node.id]) adjTable[node.id] = {};
-    });
-    return adjTable;
-  }
-
-  setZoomable(flat, zoomDirection = this._zoomDirection) {
-    if (zoomDirection !== undefined) {
-      this._zoomDirection = zoomDirection;
-    }
-    if (!this._zoomCb) {
-      this._zoomCb = (event) => {
-        event.preventDefault();
-        const deltaY = event.deltaY;
-        if (this._zoomDirection) {
-          this._zoomData -= deltaY * this.theme.zoomGap;
-        } else {
-          this._zoomData += deltaY * this.theme.zoomGap;
-        }
-
-        if (this._zoomData < 0.25) {
-          this._zoomData = 0.25;
-          return;
-        } if (this._zoomData > 5) {
-          this._zoomData = 5;
-          return;
-        }
-
-        const platform = ['webkit', 'moz', 'ms', 'o'];
-        const scale = `scale(${this._zoomData})`;
-        for (let i = 0; i < platform.length; i++) {
-          this.wrapper.style[`${platform[i]}Transform`] = scale;
-        }
-        this.wrapper.style.transform = scale;
-        this._coordinateService._changeCanvasInfo({
-          wrapper: this.wrapper,
-          girdWrapper: this._guidelineService.dom,
-          mouseX: event.clientX,
-          mouseY: event.clientY,
-          scale: this._zoomData
-        });
-        this._guidelineService.zoom(this._zoomData);
-        this.emit('system.canvas.zoom', {
-          zoom: this._zoomData
-        });
-        this.emit('events', {
-          type: 'canvas.zoom',
-          zoom: this._zoomData
-        });
-      };
-    }
-
-    if (flat) {
-      // 双指Mac下缩放正常，Window鼠标滑轮方向相反
-      this.root.addEventListener('wheel', this._zoomCb);
-    } else {
-      this.root.removeEventListener('wheel', this._zoomCb);
-    }
-  }
-
-  setMoveable(flat) {
-    if (flat) {
-      this.moveable = true;
-      if (this._dragType === 'canvas:drag') {
-        this.moveable = false;
-      }
-    } else {
-      this.moveable = false;
-    }
-  }
-
-  setLinkable(flat) {
-    this.linkable = !!flat;
-  }
-
-  setDisLinkable(flat) {
-    this.disLinkable = !!flat;
-  }
-
-  setDraggable(flat) {
-    this.nodes.forEach((node) => {
-      node.setDraggable(flat);
-    });
-    this.draggable = flat;
-  }
-
-  focusNodesWithAnimate(param, type = ['node'], options, callback) {
-    // 画布里的可视区域
-    let canLeft = Infinity;
-    let canRight = -Infinity;
-    let canTop = Infinity;
-    let canBottom = -Infinity;
-
-    if (_.includes(type, 'node')) {
-      let nodeIds = param.nodes;
-      this.nodes.filter((_node) => {
-        return _.find(nodeIds, (id) => {
-          return _node.id === id;
-        }) !== undefined;
-      }).forEach((_node) => {
-        let _nodeLeft = _node.left;
-        let _nodeRight = _node.left + _node.getWidth();
-        let _nodeTop = _node.top;
-        let _nodeBottom = _node.top + _node.getHeight();
-        if (_node.group) {
-          let group = this.getGroup(_node.group);
-          if (group) {
-            _nodeLeft += group.left;
-            _nodeRight += group.left;
-            _nodeTop += group.top;
-            _nodeBottom += group.top;
-          }
-        }
-        if (_nodeLeft < canLeft) {
-          canLeft = _nodeLeft;
-        }
-        if (_nodeRight > canRight) {
-          canRight = _nodeRight;
-        }
-        if (_nodeTop < canTop) {
-          canTop = _nodeTop;
-        }
-        if (_nodeBottom > canBottom) {
-          canBottom = _nodeBottom;
-        }
-      });
-    }
-
-    if (_.includes(type, 'group')) {
-      let groupIds = param.groups;
-      this.groups.filter((_group) => {
-        return _.find(groupIds, (id) => {
-          return id === _group.id;
-        });
-      }).forEach((_group) => {
-        let _groupLeft = _group.left;
-        let _groupRight = _group.left + _group.getWidth();
-        let _groupTop = _group.top;
-        let _groupBottom = _group.top + _group.getHeight();
-        if (_groupLeft < canLeft) {
-          canLeft = _groupLeft;
-        }
-        if (_groupRight > canRight) {
-          canRight = _groupRight;
-        }
-        if (_groupTop < canTop) {
-          canTop = _groupTop;
-        }
-        if (_groupBottom > canBottom) {
-          canBottom = _groupBottom;
-        }
-      });
-    }
-    let customOffset = _.get(options, 'offset') || [0, 0];
-    let canDisX = canRight - canLeft;
-    let terDisX = this._rootWidth - customOffset[0];
-    let canDisY = canBottom - canTop;
-    let terDisY = this._rootHeight - customOffset[1];
-    let scaleX = terDisX / canDisX;
-    let scaleY = terDisY / canDisY;
-
-    // 这里要根据scale来判断
-    let scale = scaleX < scaleY ? scaleX : scaleY;
-    scale = 1 < scale ? 1 : scale;
-
-    let terLeft = this._coordinateService._canvas2terminal('x', canLeft, {
-      scale: scale,
-      canOffsetX: 0,
-      canOffsetY: 0,
-      terOffsetX: 0,
-      terOffsetY: 0,
-      originX: 50,
-      originY: 50
-    });
-    let terRight = this._coordinateService._canvas2terminal('x', canRight, {
-      scale: scale,
-      canOffsetX: 0,
-      canOffsetY: 0,
-      terOffsetX: 0,
-      terOffsetY: 0,
-      originX: 50,
-      originY: 50
-    });
-    let terTop = this._coordinateService._canvas2terminal('y', canTop, {
-      scale: scale,
-      canOffsetX: 0,
-      canOffsetY: 0,
-      terOffsetX: 0,
-      terOffsetY: 0,
-      originX: 50,
-      originY: 50
-    });
-    let terBottom = this._coordinateService._canvas2terminal('y', canBottom, {
-      scale: scale,
-      canOffsetX: 0,
-      canOffsetY: 0,
-      terOffsetX: 0,
-      terOffsetY: 0,
-      originX: 50,
-      originY: 50
-    });
-
-    let offsetX = (terLeft + terRight - this._rootWidth) / 2;
-    let offsetY = (terTop + terBottom - this._rootHeight) / 2;
-
-    offsetX = -offsetX + customOffset[0];
-    offsetY = -offsetY + customOffset[1];
-
-    const time = 500;
-    $(this.wrapper).animate({
-      top: offsetY,
-      left: offsetX,
-    }, time);
-    this._moveData = [offsetX, offsetY];
-
-    this._coordinateService._changeCanvasInfo({
-      canOffsetX: offsetX,
-      canOffsetY: offsetY,
-      scale: scale,
-      originX: 50,
-      originY: 50
-    });
-
-    this.zoom(scale, callback);
-  }
-  focusCenterWithAnimate(options, callback) {
-    let nodeIds = this.nodes.map((item) => {
-      return item.id;
-    });
-    let groupIds = this.groups.map((item) => {
-      return item.id;
-    });
-
-    this.focusNodesWithAnimate({
-      nodes: nodeIds,
-      groups: groupIds
-    }, ['node', 'group'], options, callback);
-  }
-  focusNodeWithAnimate(param, type = 'node', options, callback) {
-    let node = null;
-
-    if (_.isFunction(param)) { // 假如传入的是filter，则按照用户自定义的规则来寻找
-      node = type === 'node' ? _.find(this.nodes, param) : _.find(this.groups, param);
-    } else { // 假如传入的是id，则按照默认规则寻找
-      node = type === 'node' ? _.find(this.nodes, item => item.id === param) : _.find(this.groups, item => item.id === param);
-    }
-
-    let top = 0;
-    let left = 0;
-    if (!node) {
-      return;
-    }
-    top = node.top || node.y;
-    left = node.left || node.x;
-    if (node.height) {
-      top += node.height / 2;
-    }
-    if (node.width) {
-      left += node.width / 2;
-    }
-
-    if (node.group) {
-      const group = _.find(this.groups, _group => _group.id === node.group);
-      if (!group) return;
-      top += group.top || group.y;
-      left += group.left || group.x;
-      if (group.height) {
-        top += group.height / 2;
-      }
-      if (group.width) {
-        left += group.width / 2;
-      }
-    }
-
-    let customOffset = _.get(options, 'offset') || [0, 0];
-
-    const containerW = this._rootWidth;
-    const containerH = this._rootHeight;
-
-    const targetY = containerH / 2 - top + customOffset[1];
-    const targetX = containerW / 2 - left + customOffset[0];
-
-    const time = 500;
-
-    // animate不支持scale，使用setInterval自己实现
-    $(this.wrapper).animate({
-      top: targetY,
-      left: targetX,
-    }, time);
-    this._moveData = [targetX, targetY];
-
-    this._coordinateService._changeCanvasInfo({
-      canOffsetX: targetX,
-      canOffsetY: targetY,
-      originX: 50,
-      originY: 50,
-      scale: 1
-    });
-
-    this.zoom(1, callback);
-
-    this._guidelineService.isActive && this._guidelineService.clearCanvas();
-  }
-
-  zoom(param, callback) {
-    if (param < 0.25) {
-      param = 0.25;
-    } if (param > 5) {
-      param = 5;
-    }
-    const time = 50;
-    let frame = 1;
-    const gap = param - this._zoomData;
-    const interval = gap / 20;
-    clearInterval(this._zoomTimer);
-    this._zoomTimer = null;
-    if (gap !== 0) {
-      this._zoomTimer = setInterval(() => {
-        this._zoomData += interval;
-        let _canvasInfo = {
-          scale: this._zoomData
-        };
-        if (this._coordinateService.originX === undefined || this._coordinateService.originY === undefined) {
-          _canvasInfo['originX'] = 50;
-          _canvasInfo['originY'] = 50;
-        }
-        this._coordinateService._changeCanvasInfo(_canvasInfo);
-        this._guidelineService.zoom(this._zoomData);
-        $(this.wrapper).css({
-          transform: `scale(${this._zoomData})`
-        });
-        if (frame === 20) {
-          clearInterval(this._zoomTimer);
-          this.emit('system.canvas.zoom', {
-            zoom: this._zoomData
-          });
-          this.emit('events', {
-            type: 'canvas.zoom',
-            zoom: this._zoomData
-          });
-          callback && callback();
-        }
-        frame++;
-      }, time / 20);
-    } else {
-      callback && callback();
-    }
-  }
-
-  setOrigin(data) {
-    let originX = (data[0] || '0').toString().replace('%', '');
-    let originY = (data[1] || '0').toString().replace('%', '');
-    this._coordinateService._changeCanvasInfo({
-      originX: parseFloat(originX),
-      originY: parseFloat(originY)
-    });
-  }
-
-  move(position) {
-    $(this.wrapper)
-      .css('left', position[0])
-      .css('top', position[1]);
-    this._coordinateService._changeCanvasInfo({
-      canOffsetX: position[0],
-      canOffsetY: position[1]
-    });
-    this._guidelineService.isActive && this._guidelineService.move(position[0], position[1]);
-    this._moveData = position;
-    this.emit('system.canvas.move');
-    this.emit('events', {type: 'system.canvas.move'});
-  }
-
-  getZoom() {
-    return this._zoomData;
-  }
-
-  getOffset() {
-    return this._moveData;
-  }
-
-  getOrigin() {
-    return [this._coordinateService.originX + '%', this._coordinateService.originY + '%']
-  }
-
   getDataMap() {
     return {
       nodes: this.nodes,
@@ -1499,301 +255,7 @@ class BaseCanvas extends Canvas {
       groups: this.groups
     };
   }
-
-  setSelectMode(flat = true, contents = ['node'], selecMode = 'include') {
-    if (flat) {
-      this.isSelectMode = true;
-      this._rmSystemUnion();
-      this.selecContents = contents;
-      this.selecMode = selecMode;
-      this.canvasWrapper.active();
-      this._remarkMove = this.moveable;
-      this._remarkZoom = this.zoomable;
-      this.setZoomable(false);
-      this.setMoveable(false);
-    } else {
-      this.isSelectMode = false;
-      this.canvasWrapper.unActive();
-      if (this._remarkMove) {
-        this.setMoveable(true);
-      }
-      if (this._remarkZoom) {
-        this.setZoomable(true);
-      }
-    }
-  }
-
-  setGirdMode(flat = true, options = this._bgObj, _isResize) {
-    if (flat) {
-      this._bgObjQueue.push(options);
-      if (this._bgTimer) {
-        return;
-      }
-      this._bgTimer = setInterval(() => {
-        if (this._bgObjQueue.length === 0) {
-          clearInterval(this._bgTimer);
-          this._bgTimer = null;
-          return;
-        }
-        this._bgObj = this._bgObjQueue.pop();
-        _isResize && this._gridService._resize();
-        this._gridService.create(this._bgObj);
-        this._bgObjQueue = [];
-      }, 1000);
-    } else {
-      this._gridService.destroy();
-      this._bgObjQueue = [];
-    }
-  }
-
-  setGuideLine(flat = true, options = this._bgObj) {
-    if (flat) {
-      this._bgObjQueue.push(options);
-      if (this._bgTimer) {
-        return;
-      }
-      this._bgTimer = setInterval(() => {
-        if (this._bgObjQueue.length === 0) {
-          clearInterval(this._bgTimer);
-          this._bgTimer = null;
-          return;
-        }
-        this._bgObj = this._bgObjQueue.pop();
-        this._guidelineService.create(this._bgObj);
-        this._bgObjQueue = [];
-      }, 200);
-    } else {
-      this._guidelineService.destroy();
-      this._bgObjQueue = [];
-    }
-  }
-
-  setMinimap(flat = true, options = {}) {
-    if (!options.events) {
-      options.events = [];
-    }
-
-    const updateEvts = [
-      'system.canvas.zoom',
-      'system.node.delete',
-      'system.node.move',
-      'system.nodes.add',
-      'system.group.delete',
-      'system.group.move',
-      'system.drag.move',
-      'system.canvas.move',
-      ...options.events
-    ];
-
-    const getNodes = () => {
-      return this.nodes.map(node => {
-        return {
-          id: node.id,
-          left: node.left,
-          top: node.top,
-          width: node.getWidth(),
-          height: node.getHeight(),
-          group: node.group,
-          minimapActive: _.get(node, 'options.minimapActive')
-        }
-      });
-    }
-
-    const getGroups = () => {
-      return this.groups.map(group => {
-        return {
-          id: group.id,
-          left: group.left,
-          top: group.top,
-          width: group.getWidth(),
-          height: group.getHeight(),
-          minimapActive: _.get(group, 'options.minimapActive')
-        }
-      });
-    }
-
-    if (flat && !this.minimap) {
-      this.minimap = new Minimap({
-        root: this.root,
-        move: this.move.bind(this),
-        terminal2canvas: this.terminal2canvas.bind(this),
-        canvas2terminal: this.canvas2terminal.bind(this),
-        nodes: getNodes(),
-        groups: getGroups(),
-        zoom: this.getZoom(),
-        offset: this.getOffset(),
-        ...options
-      });
-
-      this.updateFn = () => {
-        this.minimap.update({
-          nodes: getNodes(),
-          groups: getGroups(),
-          zoom: this.getZoom(),
-          offset: this.getOffset()
-        });
-      };
-
-      for (let ev of updateEvts) {
-        this.on(ev, this.updateFn);
-      }
-
-      return;
-    }
-
-    if (!this.minimap) {
-      return;
-    }
-
-    this.minimap.destroy();
-    for (let ev of updateEvts) {
-      this.off(ev, this.updateFn);
-    }
-
-    delete this.minimap;
-    delete this.updateFn;
-  }
-
-  getUnion(name) {
-    if (!name) {
-      console.error('传入正确的name');
-      return;
-    }
-    return this._unionData[name];
-  }
-
-  getAllUnion() {
-    return this._unionData;
-  }
-
-  add2Union(name, obj) {
-    if (!name || !obj) {
-      return;
-    }
-
-    if (!this._unionData[name]) {
-      this._unionData[name] = {
-        nodes: [],
-        groups: [],
-        edges: [],
-        endpoints: []
-      }
-    }
-
-    let _data = this._unionData[name];
-    if (obj.nodes) {
-      obj.nodes.forEach((item) => {
-        let isId = _.isString(item);
-        let node = isId ? this.getNode(item) : item;
-        _data.nodes.push(node);
-      });
-      _data.nodes = _.uniqBy(_data.nodes, 'id');
-    }
-
-    if (obj.groups) {
-      obj.groups.forEach((item) => {
-        let isId = _.isString(item);
-        let group = isId ? this.getGroup(item) : item;
-        _data.groups.push(group);
-      });
-      _data.groups = _.uniqBy(_data.groups, 'id');
-    }
-
-    if (obj.edges) {
-      obj.edges.forEach((item) => {
-        let isId = _.isString(item);
-        let edge = isId ? this.getEdge(item) : item;
-        _data.edges.push(edge);
-      });
-      _data.edges = _.uniqBy(_data.edges, 'id');
-    }
-
-    if (obj.endpoints) {
-      _data.endpoints = _data.endpoints.concat(obj.endpoints);
-    }
-  }
-
-  removeUnion(name) {
-    this._unionData[name] = {
-      nodes: [],
-      edges: [],
-      groups: [],
-      endpoints: []
-    };
-  }
-
-  removeAllUnion() {
-    this._unionData = {
-      __system: {
-        nodes: [],
-        edges: [],
-        groups: [],
-        endpoints: []
-      }
-    };
-  }
-
-  _rmSystemUnion() {
-    this._unionData['__system'].nodes = [];
-    this._unionData['__system'].edges = [];
-    this._unionData['__system'].groups = [];
-    this._unionData['__system'].endpoints = [];
-  }
-
-  _findUnion(type, item) {
-    let result = [];
-    for (let key in this._unionData) {
-      let isExist = _.find(_.get(this._unionData, [key, type], []), (_item) => {
-        return _.toString(_item.id) === _.toString(item.id);
-      });
-      if (isExist) {
-        result.push(key);
-      }
-    }
-    return result;
-  }
-
-  canvas2terminal(coordinates, options) {
-    return this._coordinateService.canvas2terminal(coordinates, options);
-  }
-  terminal2canvas(coordinates, options) {
-    return this._coordinateService.terminal2canvas(coordinates, options);
-  }
-
-  save2img(options) {
-    let method = 'toPng';
-
-    switch (options.type) {
-      case 'jpeg':
-      case '.jpeg':
-        method = 'toJpeg';
-        break;
-      case 'png':
-      case '.png':
-        method = 'toPng';
-        break;
-      case 'svg':
-      case '.svg':
-        method = 'toSvg';
-        break;
-    }
-
-    return domtoimage[method](this.root, options)
-      .then(function (dataUrl) {
-        return dataUrl;
-      })
-      .catch(function (error) {
-        console.error('oops, something went wrong!', error);
-      });
-  }
-
-  justifyCoordinate() {
-    this._gridService.justifyAllCoordinate();
-  }
-
   _genSvgWrapper() {
-
-
     function _detectMob() {
       const toMatch = [
           /Android/i,
@@ -1815,7 +277,7 @@ class BaseCanvas extends Canvas {
     let _detectZoom = () => {
       let ratio = 0;
       let screen = window.screen;
-      let ua = navigator.userAgent.toLowerCase();
+      let ua = window.navigator.userAgent.toLowerCase();
 
       if (window.devicePixelRatio !== undefined) {
         ratio = window.devicePixelRatio;
@@ -1866,14 +328,12 @@ class BaseCanvas extends Canvas {
 
     return this.svg = svg;
   }
-
   _genWrapper() {
     // 生成wrapper
     const wrapper = $('<div class="butterfly-wrapper"></div>')
       .appendTo(this.root);
     return this.wrapper = wrapper[0];
   }
-
   _genCanvasWrapper() {
     // 生成canvas wrapper
     this.canvasWrapper = new SelectCanvas();
@@ -1883,7 +343,6 @@ class BaseCanvas extends Canvas {
       _emit: this.emit.bind(this)
     });
   }
-
   _addEventListener() {
     if (this.zoomable) {
       this.setZoomable(true);
@@ -1892,7 +351,7 @@ class BaseCanvas extends Canvas {
       this.setMoveable(true);
     }
 
-    let _isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+    let _isChrome = /Chrome/.test(window.navigator.userAgent) && /Google Inc/.test(window.navigator.vendor);
     let _getChromeVersion = () => {
       var raw = window.navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
       return raw ? parseInt(raw[2], 10) : false;
@@ -2037,96 +496,13 @@ class BaseCanvas extends Canvas {
       } else if (data.type === 'edge:updateLabel') {
         let labelDom = data.data.labelDom;
         $(this.wrapper).append(labelDom);
+      } else if (data.type === 'edge:setZIndex') {
+        this.setEdgeZIndex([data.edge], data.index);
       }
     });
 
     // 绑定拖动事件
     this._attachMouseDownEvent();
-  }
-
-  _isExistNode(node) {
-    const hasNodes = this.nodes.filter(item => item.id === node.id);
-    return hasNodes.length > 0;
-  }
-
-  _isExistGroup(group) {
-    const hasGroups = this.groups.filter(item => item.id === group.id);
-    return hasGroups.length > 0;
-  }
-
-  _addEndpoint(endpoint, type, isInited) {
-    let initOtps = {
-      nodeType: type,
-      _coordinateService: this._coordinateService
-    };
-    endpoint._init(initOtps);
-
-    // 非自定义dom，自定义dom不需要定位
-    if (!endpoint._isInitedDom) {
-      const endpointDom = endpoint.dom;
-      if (_.get(endpoint, '_node.group')) {
-        const group = this.getGroup(endpoint._node.group);
-        $(group.dom).append(endpointDom);
-      } else {
-        $(this.wrapper).prepend(endpointDom);
-      }
-      endpoint.updatePos();
-    }
-    endpoint.mounted && endpoint.mounted();
-  }
-  // 拖动节点判断是否在节点组内
-  _findGroupByCoordinates(node, lx, ty, rx, by) {
-    for (let i = 0; i < this.groups.length; i++) {
-      const _group = this.groups[i];
-      const _groupLeft = _group.left;
-      const _groupRight = _group.left + _group.getWidth();
-      const _groupTop = _group.top;
-      const _groupBottom = _group.top + _group.getHeight();
-      let isInGroup = false;
-      if (rx !== undefined && by !== undefined) {
-        isInGroup = _groupLeft <= lx && _groupRight >= rx && _groupTop <= ty && _groupBottom >= by;
-      } else {
-        isInGroup = lx >= _groupLeft && lx <= _groupRight && ty >= _groupTop && ty <= _groupBottom;
-      }
-      if (isInGroup && _group.id !== node.group) {
-        return _group;
-      }
-    }
-  }
-  // 拖动节点移动节点组高亮, 节流500ms检测一次
-  _hoverGroup(node) {
-    this._hoverGroupQueue.push(node);
-    if (!this._hoverGroupTimer) {
-      this._hoverGroupTimer = setInterval(() => {
-        if (this._hoverGroupQueue.length === 0) {
-          clearInterval(this._hoverGroupTimer);
-          this._hoverGroupTimer = undefined;
-          return;
-        }
-        let targetNode = this._hoverGroupQueue.pop();
-        let targetGroup = this._findGroupByCoordinates(targetNode, targetNode.left, targetNode.top);
-        if (targetGroup && targetGroup.scope && targetGroup.scope !== targetNode.scope) {
-          return;
-        }
-        if (targetGroup) {
-          if (!this._hoverGroupObj || targetGroup.id !== this._hoverGroupObj.id) {
-            this._hoverGroupObj && $(this._hoverGroupObj.dom).removeClass('butterfly-group-hover');
-            $(targetGroup.dom).addClass('butterfly-group-hover');
-            this._hoverGroupObj = targetGroup;
-          }
-        } else {
-          this._hoverGroupObj && $(this._hoverGroupObj.dom).removeClass('butterfly-group-hover');
-          this._hoverGroupObj = undefined;
-        }
-        this._hoverGroupQueue = [];
-      }, 200);
-    }
-  }
-  _clearHoverGroup(group) {
-    this._hoverGroupObj && $(this._hoverGroupObj.dom).removeClass('butterfly-group-hover');
-    this._hoverGroupTimer = undefined;
-    this._hoverGroupObj = undefined;
-    this._hoverGroupQueue = [];
   }
   _attachMouseDownEvent() {
     let canvasOriginPos = {
@@ -2262,18 +638,34 @@ class BaseCanvas extends Canvas {
         x: event.clientX,
         y: event.clientY
       };
-
+      
+      // 初始化z-index
+      if (!this._isInitEdgeZIndex) {
+        $(this.svg).css('z-index', this._dragEdgeZindex);
+        this.nodes.forEach((item) => {
+          $(item.dom).css('z-index', (this._dragNodeZIndex) * 2 - 1);
+          _.get(item, 'endpoints').forEach((point) => {
+            $(point.dom).css('z-index', this._dragNodeZIndex * 2);
+          });
+        });
+        this.edges.forEach((item) => {
+          if (item.labelDom) {
+            $(item.labelDom).css('z-index', this._dragEdgeZindex + 1);
+          }
+        });
+        this._isInitEdgeZIndex = true;
+      }
       // 拖动的时候提高z-index
-      if (this._dragNode) {
-        $(this._dragNode.dom).css('z-index', (++this._dragIndex) * 2 - 1);
+      if (this._dragNode && this._dragNode.__type == 'node') {
+        $(this._dragNode.dom).css('z-index', (++this._dragNodeZIndex) * 2 - 1);
         _.get(this._dragNode, 'endpoints').forEach((point) => {
-          $(point.dom).css('z-index', this._dragIndex * 2);
+          $(point.dom).css('z-index', this._dragNodeZIndex * 2);
         });
       }
-      if (this._dragGroup) {
-        $(this._dragGroup.dom).css('z-index', (++this._dragIndex) * 2 - 1);
-        _.get(this._dragGroup, 'endpoints').forEach((point) => {
-          $(point.dom).css('z-index', this._dragIndex * 2);
+      if (this._dragNode && this._dragNode.__type == 'group') {
+        $(this._dragNode.dom).css('z-index', (++this._dragGroupZIndex) * 2 - 1);
+        _.get(this._dragNode, 'endpoints').forEach((point) => {
+          $(point.dom).css('z-index', this._dragGroupZIndex * 2);
         });
       }
       
@@ -2433,19 +825,25 @@ class BaseCanvas extends Canvas {
                 endpoints = [this._dragEndpoint];
               }
               endpoints.forEach((point) => {
+                let _sourceNode = point.nodeType === 'node' ? this.getNode(point.nodeId) : this.getGroup(point.nodeId);
+                let _sourceEndpoint = point;
                 let pointObj = {
                   type: 'endpoint',
                   shapeType: this.theme.edge.type,
                   orientationLimit: this.theme.endpoint.position,
                   _sourceType: point.nodeType,
-                  sourceNode: point.nodeType === 'node' ? this.getNode(point.nodeId) : this.getGroup(point.nodeId),
-                  sourceEndpoint: point,
+                  sourceNode: _sourceNode,
+                  sourceEndpoint: _sourceEndpoint,
                   arrow: this.theme.edge.arrow,
                   arrowPosition: this.theme.edge.arrowPosition,
                   arrowOffset: this.theme.edge.arrowOffset,
                   label: this.theme.edge.label,
                   isExpandWidth: this.theme.edge.isExpandWidth
                 };
+                pointObj['options'] = _.assign({}, pointObj, {
+                  sourceNode: _sourceNode.id,
+                  sourceEndpoint: _sourceEndpoint.id
+                });
                 // 检查endpoint限制连接数目
                 let _linkNums = this.edges.filter((_edge) => {
                   return _edge.sourceEndpoint.id === point.id;
@@ -2701,6 +1099,14 @@ class BaseCanvas extends Canvas {
                 currentTargetNodeId: _currentTargetNode.id,
                 currentTargetPointId: _currentTargetEndpoint.id
               });
+              // source发生变化，target未变化
+              edge.targetEndpoint.connectedNum -= 1;
+              _targetEndpoint.connectedNum += 1;
+            } else {
+              // source和target都是新增
+              edge.sourceEndpoint.connectedNum += 1;
+              _targetEndpoint.connectedNum += 1;
+
             }
             edge._create({
               id: edge.id && !edge._isDeletingEdge ? edge.id : `${edge.sourceEndpoint.id}-${_targetEndpoint.id}`,
@@ -3035,77 +1441,307 @@ class BaseCanvas extends Canvas {
     this.root.addEventListener('mousemove', mouseMoveEvent);
     // this.root.addEventListener('mouseleave', mouseEndEvent);
     this.root.addEventListener('mouseup', mouseEndEvent);
-    this.root.addEventListener('mouseleave', mouseLeaveEvent);
-  }
-  _autoMoveCanvas(x, y, data, cb) {
-
-    if (!this.theme.autoFixCanvas.enable) {
-      return;
-    }
-
-    this._autoMoveDir = [];
-    let _terOffsetX = this._coordinateService.terOffsetX;
-    let _terOffsetY = this._coordinateService.terOffsetY;
-
-    clearInterval(this._autoMoveTimer);
-    this._autoMoveTimer = null;
-
-    if (this._autoMoveTimer && this._autoMoveDir.length > 0) {
-      return;
-    }
-    let _autoMovePadding = this.theme.autoFixCanvas.autoMovePadding;
-    if (x - _terOffsetX <= _autoMovePadding[3]) {
-      this._autoMoveDir.push('left');
-    }
-    if (this._rootWidth - (x - _terOffsetX) <= _autoMovePadding[1]) {
-      this._autoMoveDir.push('right');
-    }
-    if (y - _terOffsetY <= _autoMovePadding[0]) {
-      this._autoMoveDir.push('top');
-    }
-    if (this._rootHeight - (y - _terOffsetY) <= _autoMovePadding[2]) {
-      this._autoMoveDir.push('bottom');
-    }
-
-    if (this._autoMoveDir.length === 0) {
-      clearInterval(this._autoMoveTimer);
-      return;
-    }
-
-    if (!this._autoMoveTimer) {
-      let MOVE_GAP = 5;
-      this._autoMoveTimer = setInterval(() => {
-        if (this._autoMoveDir.includes('left')) {
-          this.move([this._moveData[0] + MOVE_GAP, this._moveData[1]]);
-          _moveTarget([-MOVE_GAP, 0]);
-        }
-        if (this._autoMoveDir.includes('right')) {
-          this.move([this._moveData[0] - MOVE_GAP, this._moveData[1]]);
-          _moveTarget([+MOVE_GAP, 0]);
-        }
-        if (this._autoMoveDir.includes('top')) {
-          this.move([this._moveData[0], this._moveData[1] + MOVE_GAP]);
-          _moveTarget([0, -MOVE_GAP]);
-        }
-        if (this._autoMoveDir.includes('bottom')) {
-          this.move([this._moveData[0], this._moveData[1] - MOVE_GAP]);
-          _moveTarget([0, +MOVE_GAP]);
-        }
-      }, 70);
-    }
-
-    // 同时需要移动target
-    let _moveTarget = (gap) => {
-      if (data.type === 'node:drag') {
-        data.nodes.forEach((item) => {
-          item.moveTo(item.left + gap[0], item.top + gap[1]);
-        })
-      } else if (data.type === 'group:drag') {
-        let group = data.group;
-        group.moveTo(group.left + gap[0], group.top + gap[1]);
+    this.root.addEventListener('mouseleave', (e) => {
+      let toDom = e.toElement;
+      if (!toDom) {
+        return;
       }
-      cb && cb(gap);
+      let toDomClassName = toDom.className;
+      if (toDomClassName.indexOf('butterfly-tooltip') === -1) {
+        mouseLeaveEvent();
+      }
+    });
+  }
+
+
+
+  //===============================
+  //[ 节点渲染 ]
+  //===============================
+  getNode(id) {
+    return _.find(this.nodes, item => item.id === id);
+  }
+  addNodes(nodes, isNotEventEmit) {
+    const _canvasFragment = document.createDocumentFragment();
+    const container = $(this.wrapper);
+    const result = nodes.filter((node) => {
+      if (node.group) {
+        let _existGroup = this.getGroup(node.group);
+        if (!_existGroup) {
+          console.warn(`nodeId为${node.id}的节点找不到groupId为${node.group}的节点组，因此无法渲染`);
+          return false;
+        }
+      }
+      return true;
+    }).map((node) => {
+      let _nodeObj = null;
+      if (node instanceof Node || node.__type === 'node') {
+        _nodeObj = node;
+      } else {
+        const _NodeClass = node.Class || this._NodeClass;
+        _nodeObj = new _NodeClass(_.assign(_.cloneDeep(node), {
+          _global: this.global,
+          _on: this.on.bind(this),
+          _emit: this.emit.bind(this),
+          _endpointLimitNum: this.theme.endpoint.limitNum,
+          draggable: node.draggable !== undefined ? node.draggable : this.draggable
+        }));
+      }
+
+      if (this._isExistNode(_nodeObj)) {
+        // 后续用新的node代码旧的node
+        console.warn(`node:${_nodeObj.id} has existed`);
+        return;
+      }
+
+      // 节点初始化，假如已经存在过的节点就不需要重绘了
+      let initObj = {};
+      if (_nodeObj.dom) {
+        initObj['dom'] = _nodeObj.dom
+      }
+      _nodeObj._init(initObj);
+      // 一定要比group的addNode执行的之前，不然会重复把node加到this.nodes里面
+      this.nodes.push(_nodeObj);
+
+      // 假如节点存在group，即放进对应的节点组里
+      const existGroup = _nodeObj.group ? this.getGroup(_nodeObj.group) : null;
+      if (existGroup) {
+        if (ScopeCompare(_nodeObj.scope, existGroup.scope, _.get(this, 'global.isScopeStrict'))) {
+          existGroup._appendNodes([_nodeObj]);
+        } else {
+          console.warn(`nodeId为${_nodeObj.id}的节点和groupId${existGroup.id}的节点组scope值不符，无法加入`);
+        }
+      } else {
+        _canvasFragment.appendChild(_nodeObj.dom);
+      }
+      return _nodeObj;
+    }).filter((item) => {
+      return !!item;
+    });
+
+    // 批量插入dom，性能优化
+    container.append(_canvasFragment);
+
+    result.forEach((item) => {
+      // 渲染endpoint
+      item._createEndpoint(isNotEventEmit);
+
+      // 节点挂载
+      !isNotEventEmit && item.mounted && item.mounted();
+    });
+
+    if (result && result.length > 0 && !isNotEventEmit) {
+      this.pushActionQueue({
+        type: 'system:addNodes',
+        data: result
+      });
+      this.emit('system.nodes.add', {
+        nodes: result
+      });
+      this.emit('events', {
+        type: 'nodes:add',
+        nodes: result
+      });
     }
+    return result;
+  }
+  addNode(node, isNotEventEmit) {
+    return this.addNodes([node], isNotEventEmit)[0];
+  }
+  removeNode(nodeId, isNotDelEdge, isNotEventEmit) {
+    return this.removeNodes([nodeId], isNotDelEdge, isNotEventEmit);
+  }
+  removeNodes(nodes, isNotDelEdge, isNotEventEmit) {
+
+    let nodeIds = [];
+    nodeIds = nodes.map((item) => {
+      if (item instanceof Node) {
+        return item.id
+      } else {
+        return item;
+      }
+    });
+
+    let rmNodes = [];
+    let rmEdges = [];
+    nodeIds.forEach((nodeId) => {
+      const index = _.findIndex(this.nodes, _node => _node.id === nodeId);
+      if (index === -1) {
+        console.warn(`找不到id为：${nodeId}的节点`);
+        return;
+      }
+
+      // 删除邻近的线条
+      const neighborEdges = this.getNeighborEdges(nodeId);
+      if (!isNotDelEdge) {
+        this.removeEdges(neighborEdges, true, true);
+      }
+
+      // 删除节点
+      const node = this.nodes[index];
+      node.destroy(isNotEventEmit);
+
+      const _rmNodes = this.nodes.splice(index, 1);
+      // 假如在group里面
+      if (node.group) {
+        const group = this.getGroup(node.group);
+        if (group) {
+          group.nodes = group.nodes.filter(item => item.id !== node.id);
+        }
+      }
+
+      if (_rmNodes.length > 0) {
+        rmNodes = rmNodes.concat(_rmNodes);
+        rmEdges = rmEdges.concat(neighborEdges);
+      }
+
+    });
+
+    if (rmNodes.length > 0) {
+      if (!isNotEventEmit) {
+        this.pushActionQueue({
+          type: 'system:removeNodes',
+          data: {
+            nodes: rmNodes,
+            edges: rmEdges
+          }
+        });
+        this.emit('system.nodes.delete', {
+          nodes: rmNodes,
+          edges: rmEdges
+        });
+        this.emit('events', {
+          type: 'nodes:delete',
+          nodes: rmNodes,
+          edges: rmEdges
+        });
+      }
+    }
+
+    return {
+      nodes: rmNodes,
+      edges: rmEdges
+    };
+  }
+  getNeighborNodes(nodeId) {
+    const result = [];
+    const node = _.find(this.nodes, item => nodeId === item.id);
+    if (!node) {
+      console.warn(`找不到id为${nodeId}的节点`);
+    }
+    this.edges.forEach((item) => {
+      if (item.sourceNode && item.sourceNode.id === nodeId) {
+        result.push(item.targetNode.id);
+      } else if (item.targetNode && item.targetNode.id === nodeId) {
+        result.push(item.sourceNode.id);
+      }
+    });
+
+    return result.map(id => this.getNode(id));
+  }
+  /**
+   * 查找 N 层节点
+   * 
+   * @param {Object} options 
+   * @param {Node} options.node
+   * @param {Endpoint} options.endpoint
+   * @param {String} options.type
+   * @param {Number} options.level
+   * @param {Function} options.iteratee
+   * @returns {Object} filteredGraph
+   */
+  getNeighborNodesAndEdgesByLevel({node, endpoint, type = 'out', level = Infinity, iteratee = () => true}) {
+    // 先求source-target level 层
+    if (!node || !this.nodes.length) return {nodes: [], edges: []};
+    if (level == 0 || !this.edges.length) return {nodes: [node], edges: []};
+    let quene = [];
+    let neighbors = [];
+    const visited = new Set();
+
+    // 1. 生成邻接表
+    // adjTable = {[nodeId]: {[endpointId]: [[targetNode, targetEndpoint]]}}
+    const adjTable = this._getAdjcentTable(type);
+
+    if (endpoint) {
+      quene = _.get(adjTable, [node.id, endpoint.id], []).map(d => [...d, 1]);
+    } else {
+      quene = (Object.values(_.get(adjTable, node.id, {})) || []).flatMap(d => d.map(n => n.concat(1)));
+    }
+
+    visited.add(node.id);
+
+    if (!quene.length) return {nodes: [node], edges: []};
+    // 2. BFS,得到 nodes 集合
+    while (quene.length) {
+      const [$node, $endpoint, $level] = quene.shift();
+      if (
+        visited.has($node.id) ||
+        $level > level ||
+        !iteratee($node, $endpoint, $level)
+      ) continue;
+
+      // TODO: 锚点向后传递？节点向后传递？
+      neighbors = (Object.values(_.get(adjTable, $node.id, {})) || []).forEach((neighborsWithEndpoint) => {
+        neighborsWithEndpoint.forEach(neighbor => {
+          const [$nNode, $nEndpoint] = neighbor;
+          if (visited.has($nNode.id)) return;
+          quene.push([...neighbor, $level + 1]);
+        });
+      });
+      visited.add($node.id);
+    }
+    const nodes = new Set();
+    const edges = new Set();
+    // 4. 获取 edges，1. 只考虑点集 2. 考虑边
+    // 目前只考虑点集内的全部边
+    this.edges.forEach(edge => {
+      const {sourceNode, sourceEndpoint, targetNode, targetEndpoint} = edge;
+      if (visited.has(sourceNode.id) && visited.has(targetNode.id)) {
+        nodes.add(sourceNode);
+        nodes.add(targetNode);
+        edges.add(edge);
+      }
+    });
+
+    return {
+      nodes: [...nodes],
+      edges: [...edges]
+    }
+  }
+  _getAdjcentTable(type) {
+    // 包含正逆的邻接表
+    // {[nodeId]: {[endpointId]: [[targetNode, targetEndpoint]]}}
+    const adjTable = {};
+    this.edges.forEach(edge => {
+      const {sourceNode, sourceEndpoint, targetNode, targetEndpoint} = edge;
+      const sourceNodeId = sourceNode.id;
+      const sourceEndpointId = sourceEndpoint.id;
+      const targetNodeId = targetNode.id;
+      const targetEndpointId = targetEndpoint.id;
+      // in and all
+      if (type !== 'out') {
+        if (!adjTable[targetNodeId]) adjTable[targetNodeId] = {};
+        if (!adjTable[targetNodeId][targetEndpointId]) adjTable[targetNodeId][targetEndpointId] = [];
+
+        adjTable[targetNodeId][targetEndpointId].push([sourceNode, sourceEndpoint]);
+      }
+      // out and all
+      if (type !== 'in') {
+        if (!adjTable[sourceNodeId]) adjTable[sourceNodeId] = {};
+        if (!adjTable[sourceNodeId][sourceEndpointId]) adjTable[sourceNodeId][sourceEndpointId] = [];
+
+        adjTable[sourceNodeId][sourceEndpointId].push([targetNode, targetEndpoint]);
+      }
+
+    });
+    this.nodes.forEach(node => {
+      if (!adjTable[node.id]) adjTable[node.id] = {};
+    });
+    return adjTable;
+  }
+  _isExistNode(node) {
+    const hasNodes = this.nodes.filter(item => item.id === node.id);
+    return hasNodes.length > 0;
   }
   _moveNode(node, x, y, isNotEventEmit) {
     
@@ -3134,7 +1770,12 @@ class BaseCanvas extends Canvas {
         }
       });
     }
+
+    // todo 防抖
     node._moveTo(x, y);
+    node.endpoints && node.endpoints.forEach((item) => {
+      item.updatePos();
+    });
     this.edges.forEach((edge) => {
       if (edge.type === 'endpoint') {
         const isLink = _.find(node.endpoints, (point) => {
@@ -3146,6 +1787,237 @@ class BaseCanvas extends Canvas {
         isLink && edge.redraw();
       }
     });
+  }
+  _addEndpoint(endpoint, type, isInited) {
+    let initOtps = {
+      nodeType: type,
+      _coordinateService: this._coordinateService
+    };
+    endpoint._init(initOtps);
+
+    // 非自定义dom，自定义dom不需要定位
+    if (!endpoint._isInitedDom) {
+      const endpointDom = endpoint.dom;
+      if (_.get(endpoint, '_node.group')) {
+        const group = this.getGroup(endpoint._node.group);
+        $(group.dom).append(endpointDom);
+      } else {
+        $(this.wrapper).prepend(endpointDom);
+      }
+      endpoint.updatePos();
+    }
+    endpoint.mounted && endpoint.mounted();
+  }
+  _getAllEndpoints() {
+    let points = [];
+    points = points.concat(this.nodes.map((_node) => {
+      return _node.endpoints;
+    }));
+    points = points.concat(this.groups.map((_node) => {
+      return _node.endpoints;
+    }));
+    points = points.filter((item) => {
+      return !!item;
+    });
+    return _.flatten(points);
+  }
+  
+
+  //===============================
+  //[ 节点组渲染 ]
+  //===============================
+  getGroup(id) {
+    return _.find(this.groups, item => item.id === id);
+  }
+  addGroup(group, nodes, options, isNotEventEmit) {
+    const container = $(this.wrapper);
+    const GroupClass = group.Class || Group;
+    let _newNodes = [];
+    const _groupObj = new GroupClass(_.assign(_.cloneDeep(group), {
+      _global: this.global,
+      _emit: this.emit.bind(this),
+      _on: this.on.bind(this),
+      draggable: group.draggable !== undefined ? group.draggable : this.draggable
+    }));
+    if (this._isExistGroup(_groupObj)) {
+      // 后续用新的group代码旧的group
+      console.warn(`group:${_groupObj.id} has existed`);
+      return;
+    }
+    _groupObj.init();
+    container.prepend(_groupObj.dom);
+    this.groups.push(_groupObj);
+
+    _groupObj._createEndpoint();
+
+    _groupObj.mounted && _groupObj.mounted();
+
+    if (nodes && nodes.length > 0) {
+      // 过滤掉scope不匹配的节点 和 已存在其他组的node
+      nodes = nodes.filter((_node) => {
+        return ScopeCompare(_node.scope, _groupObj.scope, _.get(this, 'global.isScopeStrict')) && (_node.group === _groupObj.id || _node.group == undefined);
+      });
+
+      let _isAbsolutePos = _.get(options, 'posType', 'absolute') === 'absolute';
+      // 重新计算group的位置
+      let _groupLeft = Infinity;
+      let _groupTop = Infinity;
+      nodes.forEach((_node) => {
+        if (_isAbsolutePos) {
+          if (_node.left < _groupLeft) {
+            _groupLeft = _node.left;
+          }
+          if (_node.top < _groupTop) {
+            _groupTop = _node.top;
+          }
+        }
+      });
+      _groupObj._moveTo(_groupLeft - _.get(options, 'padding', 5), _groupTop - _.get(options, 'padding', 5));
+
+      // 添加节点
+      _newNodes = nodes.map((_node) => {
+        let newNode = null;
+        // 已存在节点
+        let _existNode = _.find(this.nodes, (__node) => {
+          return __node.id === _node.id;
+        });
+        if (_existNode) {
+          this.removeNode(_existNode.id, true, true);
+          _existNode._init({
+            dom: _existNode.dom,
+            top: _existNode.top - _groupObj.top,
+            left: _existNode.left - _groupObj.left,
+            group: _groupObj.id
+          })
+          newNode = this.addNode(_existNode, true);
+        } else {
+          let _nodeObj = null;
+          if (_node instanceof Node || _node.__type === 'node') {
+            _nodeObj = _node;
+          } else {
+            const _NodeClass = _node.Class || this._NodeClass;
+            _nodeObj = new _NodeClass(_.assign(_.cloneDeep(_node), {
+              _global: this.global,
+              _on: this.on.bind(this),
+              _emit: this.emit.bind(this),
+              _endpointLimitNum: this.theme.endpoint.limitNum,
+              draggable: _node.draggable !== undefined ? _node.draggable : this.draggable
+            }));
+          }
+          if (_isAbsolutePos) {
+            _nodeObj.top = _nodeObj.top - _groupObj.top;
+            _nodeObj.left = _nodeObj.left - _groupObj.left;
+          }
+          _nodeObj.group = _groupObj.id;
+          newNode = this.addNode(_nodeObj);
+        }
+        return newNode;
+      });
+
+      // 重新计算group的大小
+      let _groupWidth = -Infinity;
+      let _groupHeight = -Infinity;
+      _newNodes.forEach((_node) => {
+        let _w = $(_node.dom).width();
+        let _h = $(_node.dom).height();
+        if (_groupWidth < _node.left + _w) {
+          _groupWidth = _node.left + _w;
+        }
+        if (_groupHeight < _node.top + _h) {
+          _groupHeight = _node.top + _h;
+        }
+      });
+      _groupObj.setSize(_groupWidth + _.get(options, 'padding', 5) * 2, _groupHeight + _.get(options, 'padding', 5) * 2);
+    }
+
+    if (!isNotEventEmit) {
+      this.pushActionQueue({
+        type: 'system:addGroups',
+        data: [{
+          group: _groupObj,
+          nodes: _newNodes
+        }]
+      });
+      this.emit('events', {
+        type: 'group:add',
+        group: _groupObj
+      });
+    }
+
+    return _groupObj;
+  }
+  addGroups(datas) {
+    return datas.map(item => this.addGroup(item)).filter(item => item);
+  }
+  removeGroup(data, isNotEventEmit) {
+    let groupId = undefined;
+    if (data instanceof Group) {
+      groupId = data.id;
+    } else {
+      groupId = data;
+    }
+
+    const group = this.getGroup(groupId);
+    if (!group) {
+      console.warn(`未找到id为${groupId}的节点组`);
+    }
+    group._isDeleting = true;
+    let insideNodes = group.nodes.map((_node) => {
+      let rmItem = this.removeNode(_node.id, true, true);
+      let rmNode = rmItem.nodes[0];
+      let neighborEdges = rmItem.edges;
+      rmNode._init({
+        top: _node.top + group.top,
+        left: _node.left + group.left,
+        dom: _node.dom,
+        _isDeleteGroup: true
+      });
+      this.addNode(rmNode, true);
+      neighborEdges.forEach((item) => {
+        item.redraw();
+      });
+      return rmNode;
+    });
+    // 删除邻近的线条
+    const neighborEdges = this.getNeighborEdges(group.id, 'group');
+    this.removeEdges(neighborEdges, isNotEventEmit);
+    // 删除group
+    const index = _.findIndex(this.groups, _group => _group.id === groupId);
+    this.groups.splice(index, 1)[0];
+    group.destroy(isNotEventEmit);
+
+    if (isNotEventEmit) {
+      this.pushActionQueue({
+        type: 'system:removeGroup',
+        data: {
+          group: group,
+          nodes: insideNodes
+        }
+      });
+    }
+    return group;
+  }
+  removeGroups(groups = [], isNotEventEmit) {
+    let groupIds = [];
+    groupIds = groups.map((item) => {
+      if (item instanceof Group) {
+        return item.id
+      } else {
+        return item;
+      }
+    });
+
+    let rmGroups = groupIds.map((item) => {
+      return this.removeGroup(item, isNotEventEmit);
+    });
+
+    return {
+      groups: rmGroups
+    }
+  }
+  _isExistGroup(group) {
+    const hasGroups = this.groups.filter(item => item.id === group.id);
+    return hasGroups.length > 0;
   }
   _moveGroup(group, x, y, isNotEventEmit) {
     if (!isNotEventEmit) {
@@ -3168,6 +2040,518 @@ class BaseCanvas extends Canvas {
       hasUpdate && (edge.redraw());
     });
   }
+  // 拖动节点判断是否在节点组内
+  _findGroupByCoordinates(node, lx, ty, rx, by) {
+    for (let i = 0; i < this.groups.length; i++) {
+      const _group = this.groups[i];
+      const _groupLeft = _group.left;
+      const _groupRight = _group.left + _group.getWidth();
+      const _groupTop = _group.top;
+      const _groupBottom = _group.top + _group.getHeight();
+      let isInGroup = false;
+      if (rx !== undefined && by !== undefined) {
+        isInGroup = _groupLeft <= lx && _groupRight >= rx && _groupTop <= ty && _groupBottom >= by;
+      } else {
+        isInGroup = lx >= _groupLeft && lx <= _groupRight && ty >= _groupTop && ty <= _groupBottom;
+      }
+      if (isInGroup && _group.id !== node.group) {
+        return _group;
+      }
+    }
+  }
+  // 拖动节点移动节点组高亮, 节流500ms检测一次
+  _hoverGroup(node) {
+    this._hoverGroupQueue.push(node);
+    if (!this._hoverGroupTimer) {
+      this._hoverGroupTimer = setInterval(() => {
+        if (this._hoverGroupQueue.length === 0) {
+          clearInterval(this._hoverGroupTimer);
+          this._hoverGroupTimer = undefined;
+          return;
+        }
+        let targetNode = this._hoverGroupQueue.pop();
+        let targetGroup = this._findGroupByCoordinates(targetNode, targetNode.left, targetNode.top);
+        if (targetGroup && targetGroup.scope && targetGroup.scope !== targetNode.scope) {
+          return;
+        }
+        if (targetGroup) {
+          if (!this._hoverGroupObj || targetGroup.id !== this._hoverGroupObj.id) {
+            this._hoverGroupObj && $(this._hoverGroupObj.dom).removeClass('butterfly-group-hover');
+            $(targetGroup.dom).addClass('butterfly-group-hover');
+            this._hoverGroupObj = targetGroup;
+          }
+        } else {
+          this._hoverGroupObj && $(this._hoverGroupObj.dom).removeClass('butterfly-group-hover');
+          this._hoverGroupObj = undefined;
+        }
+        this._hoverGroupQueue = [];
+      }, 200);
+    }
+  }
+  _clearHoverGroup(group) {
+    this._hoverGroupObj && $(this._hoverGroupObj.dom).removeClass('butterfly-group-hover');
+    this._hoverGroupTimer = undefined;
+    this._hoverGroupObj = undefined;
+    this._hoverGroupQueue = [];
+  }
+
+
+  //===============================
+  //[ 线段渲染 ]
+  //===============================
+  getEdge(id) {
+    return _.find(this.edges, item => item.id === id);
+  }
+  addEdges(links, isNotEventEmit) {
+    $(this.svg).css('visibility', 'hidden');
+
+    const _edgeFragment = document.createDocumentFragment();
+    const _labelFragment = document.createDocumentFragment();
+    const result = links.map((link) => {
+
+      // link已经存在
+      if (link instanceof Edge) {
+        link._init();
+
+        _edgeFragment.appendChild(link.dom);
+
+        if (link.labelDom) {
+          _labelFragment.appendChild(link.labelDom);
+        }
+
+        if (link.arrowDom) {
+          _edgeFragment.appendChild(link.arrowDom);
+        }
+
+        this.edges.push(link);
+
+        link.mounted && link.mounted();
+        return link;
+      }
+
+      // link不存在的话
+      const EdgeClass = link.Class || this.theme.edge.Class;
+      if (link.type === 'endpoint') {
+        let sourceNode = null;
+        let targetNode = null;
+        let _sourceType = link._sourceType;
+        let _targetType = link._targetType;
+
+        if (link.sourceNode instanceof Node || link.sourceNode.__type === 'node') {
+          _sourceType = 'node';
+          sourceNode = link.sourceNode;
+        } else if (link.sourceNode instanceof Group || link.sourceNode.__type === 'group') {
+          _sourceType = 'group';
+          sourceNode = link.sourceNode;
+        } else {
+          if (link._sourceType) {
+            sourceNode = _sourceType === 'node' ? this.getNode(link.sourceNode) : this.getGroup(link.sourceNode);
+          } else {
+            let _node = this.getNode(link.sourceNode);
+            if (_node) {
+              _sourceType = 'node';
+              sourceNode = _node;
+            } else {
+              _sourceType = 'group';
+              sourceNode = this.getGroup(link.sourceNode);
+            }
+          }
+        }
+
+        if (link.targetNode instanceof Node || link.targetNode.__type === 'node') {
+          _targetType = 'node';
+          targetNode = link.targetNode;
+        } else if (link.targetNode instanceof Group || link.targetNode.__type === 'group') {
+          _targetType = 'group';
+          targetNode = link.targetNode;
+        } else {
+          if (link._targetType) {
+            targetNode = _targetType === 'node' ? this.getNode(link.targetNode) : this.getGroup(link.targetNode);
+          } else {
+            let _node = this.getNode(link.targetNode);
+            if (_node) {
+              _targetType = 'node';
+              targetNode = _node;
+            } else {
+              _targetType = 'group';
+              targetNode = this.getGroup(link.targetNode);
+            }
+          }
+        }
+
+        if (!sourceNode || !targetNode) {
+          console.warn(`butterflies error: can not connect edge. link sourceNodeId:${link.sourceNode};link targetNodeId:${link.targetNode}`);
+          return;
+        }
+
+        let sourceEndpoint = null;
+        let targetEndpoint = null;
+
+        if (link.sourceEndpoint && (link.sourceEndpoint instanceof Endpoint || link.sourceEndpoint.__type === 'endpoint')) {
+          sourceEndpoint = link.sourceEndpoint;
+        } else {
+          sourceEndpoint = sourceNode.getEndpoint(link.source, 'source');
+        }
+
+        if (link.targetEndpoint && (link.targetEndpoint instanceof Endpoint || link.targetEndpoint.__type === 'endpoint')) {
+          targetEndpoint = link.targetEndpoint;
+        } else {
+          targetEndpoint = targetNode.getEndpoint(link.target, 'target');
+        }
+
+        if (!sourceEndpoint || !targetEndpoint) {
+          console.warn(`butterflies error: can not connect edge. link sourceId:${link.source};link targetId:${link.target}`);
+          return;
+        }
+
+        // 线条去重
+        if (!this.theme.edge.isRepeat) {
+          let _isRepeat = _.some(this.edges, (_edge) => {
+            let _result = false;
+            if (sourceNode) {
+              _result = sourceNode.id === _edge.sourceNode.id && sourceEndpoint.id === _edge.sourceEndpoint.id && _sourceType === _edge.sourceEndpoint.nodeType;
+            }
+
+            if (targetNode) {
+              _result = _result && (targetNode.id === _edge.targetNode.id && targetEndpoint.id === _edge.targetEndpoint.id && _targetType === _edge.targetEndpoint.nodeType);
+            }
+
+            return _result;
+          });
+          if (_isRepeat) {
+            console.warn(`id为${sourceEndpoint.id}-${targetEndpoint.id}的线条连接重复，请检查`);
+            return;
+          }
+        }
+        let edge = new EdgeClass({
+          type: 'endpoint',
+          id: link.id,
+          label: link.label,
+          shapeType: link.shapeType || this.theme.edge.type,
+          orientationLimit: this.theme.endpoint.position,
+          isExpandWidth: this.theme.edge.isExpandWidth,
+          defaultAnimate: this.theme.edge.defaultAnimate,
+          sourceNode,
+          targetNode,
+          sourceEndpoint,
+          targetEndpoint,
+          arrow: link.arrow === undefined ? _.get(this, 'theme.edge.arrow') : link.arrow,
+          arrowPosition: link.arrowPosition === undefined ? _.get(this, 'theme.edge.arrowPosition') : link.arrowPosition,
+          arrowOffset: link.arrowOffset === undefined ? _.get(this, 'theme.edge.arrowOffset') : link.arrowOffset,
+          options: link,
+          _sourceType,
+          _targetType,
+          _global: this.global,
+          _on: this.on.bind(this),
+          _emit: this.emit.bind(this),
+        });
+
+        edge._init();
+
+        _edgeFragment.appendChild(edge.dom);
+
+        if (edge.labelDom) {
+          _labelFragment.appendChild(edge.labelDom);
+        }
+
+        if (edge.arrowDom) {
+          _edgeFragment.appendChild(edge.arrowDom);
+        }
+
+        this.edges.push(edge);
+
+        sourceEndpoint.connectedNum += 1;
+        targetEndpoint.connectedNum += 1;
+
+        edge.mounted && edge.mounted();
+
+        // 假如sourceEndpoint和targetEndpoint没属性，则自动添加上
+        if (sourceEndpoint.type === undefined) {
+          sourceEndpoint._tmpType = 'source';
+        }
+        if (targetEndpoint.type === undefined) {
+          targetEndpoint._tmpType = 'target';
+        }
+
+        return edge;
+      } else {
+        const sourceNode = this.getNode(link.source);
+        const targetNode = this.getNode(link.target);
+
+        if (!sourceNode || !targetNode) {
+          console.warn(`butterflies error: can not connect edge. link sourceId:${link.source};link targetId:${link.target}`);
+          return;
+        }
+
+        let edge = new EdgeClass({
+          type: 'node',
+          id: link.id,
+          label: link.label,
+          sourceNode,
+          targetNode,
+          shapeType: link.shapeType || this.theme.edge.type,
+          orientationLimit: this.theme.endpoint.position,
+          arrow: link.arrow === undefined ? _.get(this, 'theme.edge.arrow') : link.arrow,
+          arrowPosition: link.arrowPosition === undefined ? _.get(this, 'theme.edge.arrowPosition') : link.arrowPosition,
+          arrowOffset: link.arrowOffset === undefined ? _.get(this, 'theme.edge.arrowOffset') : link.arrowOffset,
+          isExpandWidth: this.theme.edge.isExpandWidth,
+          defaultAnimate: this.theme.edge.defaultAnimate,
+          _global: this.global,
+          _on: this.on.bind(this),
+          _emit: this.emit.bind(this),
+        });
+
+        edge._init();
+
+        _edgeFragment.appendChild(edge.dom);
+
+        if (edge.labelDom) {
+          _labelFragment.appendChild(edge.labelDom);
+        }
+
+        if (edge.arrowDom) {
+          _edgeFragment.appendChild(edge.arrowDom);
+        }
+
+        this.edges.push(edge);
+
+        edge.mounted && edge.mounted();
+
+        return edge;
+      }
+    }).filter(item => item);
+
+    $(this.svg).append(_edgeFragment);
+
+    $(this.wrapper).append(_labelFragment);
+
+    result.forEach((link) => {
+      let _soucePoint = {};
+      let _targetPoint = {};
+      if (link.type === 'endpoint') {
+        _soucePoint = {
+          pos: [link.sourceEndpoint._posLeft + link.sourceEndpoint._width / 2, link.sourceEndpoint._posTop + link.sourceEndpoint._height / 2],
+          orientation: link.sourceEndpoint.orientation ? link.sourceEndpoint.orientation : undefined
+        };
+        _targetPoint = {
+          pos: [link.targetEndpoint._posLeft + link.targetEndpoint._width / 2, link.targetEndpoint._posTop + link.targetEndpoint._height / 2],
+          orientation: link.targetEndpoint.orientation ? link.targetEndpoint.orientation : undefined
+        };
+      } else if (link.type === 'node') {
+        _soucePoint = {
+          pos: [link.sourceNode.left + link.sourceNode.getWidth() / 2, link.sourceNode.top + link.sourceNode.getHeight() / 2]
+        };
+
+        _targetPoint = {
+          pos: [link.targetNode.left + link.targetNode.getWidth() / 2, link.targetNode.top + link.targetNode.getHeight() / 2]
+        };
+      }
+      link.redraw(_soucePoint, _targetPoint);
+    });
+
+    if (!isNotEventEmit) {
+      this.pushActionQueue({
+        type: 'system:addEdges',
+        data: result
+      });
+      this.emit('system.link.connect', {
+        links: result
+      });
+      this.emit('events', {
+        type: 'link:connect',
+        links: result
+      });
+    }
+
+    $(this.svg).css('visibility', 'visible');
+
+    return result;
+  }
+  addEdge(link, isNotEventEmit) {
+    return this.addEdges([link], isNotEventEmit)[0];
+  }
+  removeEdges(edges, isNotEventEmit, isNotPushActionQueue) {
+    let result = [];
+    edges.forEach((_edge) => {
+      let edgeIndex = -1;
+      if (_edge instanceof Edge || _edge.__type === 'edge') {
+        if (_edge.sourceEndpoint) {
+          _edge.sourceEndpoint.connectedNum -= 1;
+        }
+        if (_edge.targetEndpoint) {
+          _edge.targetEndpoint.connectedNum -= 1;
+        }
+        edgeIndex = _.findIndex(this.edges, (item) => {
+          if (item.type === 'node') {
+            return _edge.sourceNode.id === item.sourceNode.id && _edge.targetNode.id === item.targetNode.id;
+          } else {
+            return (
+              _.get(_edge, 'sourceNode.id') === _.get(item, 'sourceNode.id') &&
+              _.get(_edge, 'sourceEndpoint.id') === _.get(item, 'sourceEndpoint.id') &&
+              _.get(_edge, 'sourceEndpoint.nodeType') === _.get(item, 'sourceEndpoint.nodeType')
+            ) && (
+                _.get(_edge, 'targetNode.id') === _.get(item, 'targetNode.id') &&
+                _.get(_edge, 'targetEndpoint.id') === _.get(item, 'targetEndpoint.id') &&
+                _.get(_edge, 'targetEndpoint.nodeType') === _.get(item, 'targetEndpoint.nodeType')
+              );
+          }
+        });
+      } else if (_.isString(_edge)) {
+        edgeIndex = _.findIndex(this.edges, (item) => {
+          return _edge === item.id;
+        });
+      } else {
+        console.warn(`删除线条错误，传入参数有误，请检查`);
+        return;
+      }
+      if (edgeIndex !== -1) {
+        result = result.concat(this.edges.splice(edgeIndex, 1));
+      } else {
+        console.warn(`删除线条错误，不存在值为${_edge.id}的线`);
+      }
+    });
+
+    if (!isNotPushActionQueue) {
+      this.pushActionQueue({
+        type: 'system:removeEdges',
+        data: result
+      });
+    }
+
+    if (!isNotEventEmit) {
+      this.emit('system.links.delete', {
+        links: result
+      });
+      this.emit('events', {
+        type: 'links:delete',
+        links: result
+      });
+    }
+
+
+    result.forEach((item) => {
+      item.destroy(isNotEventEmit);
+    });
+
+    // 把endpoint重新赋值
+    result.forEach((_rmEdge) => {
+      if (_.get(_rmEdge, 'sourceEndpoint._tmpType') === 'source') {
+        let isExistEdge = _.some(this.edges, (edge) => {
+          return _rmEdge.sourceNode.id === edge.sourceNode.id && _rmEdge.sourceEndpoint.id === edge.sourceEndpoint.id;
+        });
+        !isExistEdge && (_rmEdge.sourceEndpoint._tmpType = undefined);
+      }
+      if (_.get(_rmEdge, 'targetEndpoint._tmpType') === 'target') {
+        let isExistEdge = _.some(this.edges, (edge) => {
+          return _rmEdge.targetNode.id === edge.targetNode.id && _rmEdge.targetEndpoint.id === edge.targetEndpoint.id;
+        });
+        !isExistEdge && (_rmEdge.targetEndpoint._tmpType = undefined);
+      }
+    });
+    return result;
+  }
+  removeEdge(edge, isNotEventEmit, isNotPushActionQueue) {
+    return this.removeEdges([edge], isNotEventEmit, isNotPushActionQueue)[0];
+  }
+  getNeighborEdges(id, type) {
+
+    let node = undefined;
+    let group = undefined;
+    if (type === 'node') {
+      node = _.find(this.nodes, item => id === item.id);
+    } else if (type === 'group') {
+      group = _.find(this.groups, item => id === item.id);
+    } else {
+      node = _.find(this.nodes, item => id === item.id);
+      node && !type && (type = 'node');
+      group = _.find(this.groups, item => id === item.id);
+      group && !type && (type = 'group');
+    }
+
+    return this.edges.filter((item) => {
+      if (type === 'node') {
+        return _.get(item, 'sourceNode.id') === node.id || _.get(item, 'targetNode.id') === node.id;
+      } else {
+        return _.get(item, 'sourceNode.id') === group.id || _.get(item, 'targetNode.id') === group.id;
+      }
+    });
+  }
+  getNeighborEdgesByEndpoint(id, pointId) {
+    let edges = this.getNeighborEdges(id);
+    return edges.filter((item) => {
+      if (item.type === 'node') {
+        return false;
+      } else {
+        return (
+          (item.sourceNode.id === id && item.sourceEndpoint.id === pointId) || 
+          (item.targetNode.id === id && item.targetEndpoint.id === pointId)
+        );
+      }
+    });
+  }
+  // 设置线段的z-index
+  setEdgeZIndex(edges = [], zIndex = 0) {
+    if (edges.length === 0) {
+      return;
+    }
+    edges.forEach((edge) => {
+      edge._zIndex = zIndex;
+      let index = _.findIndex(this.edges, (item) => {
+        return item === edge;
+      });
+      if (index !== -1) {
+        let delEdge = this.edges.splice(index, 1);
+        $(delEdge.dom).detach();
+        delEdge.eventHandlerDom && $(delEdge.eventHandlerDom).detach();
+        delEdge.arrowDom && $(delEdge.arrowDom).detach();
+      } else {
+        return;
+      }
+    });
+    let addIndex = this._findEdgeIndex(edges[0]);
+    let addEdgesDom = [];
+    edges.forEach((item) => {
+      addEdgesDom.push(item.dom);
+      item.eventHandlerDom && addEdgesDom.push(item.eventHandlerDom);
+      item.arrowDom && addEdgesDom.push(item.arrowDom);
+    });
+
+    // 插入dom
+    let beforeEdge = this.edges[addIndex];
+    let afterEdge = this.edges[addIndex + 1];
+    
+    if (beforeEdge) {
+      let targetDom = beforeEdge.dom;
+      beforeEdge.eventHandlerDom && (targetDom = beforeEdge.eventHandlerDom);
+      beforeEdge.arrowDom && (targetDom = beforeEdge.arrowDom);
+      $(targetDom).after(addEdgesDom);
+    } else if (afterEdge) {
+      $(afterEdge.dom).before(addEdgesDom);
+    } else {
+      $(this.svg).append(addEdgesDom);
+    }
+
+    this.edges.splice(addIndex + 1, 0 , ...edges);
+  }
+  _findEdgeIndex(edge) {
+    let index = 0;
+    let currentZIndex = edge._zIndex || 0;
+    this.edges.forEach((item, i) => {
+      if (currentZIndex < (item._zIndex || 0)) {
+        index = i;
+        return;
+      }
+      if (i === this.edges.length - 1) {
+        index = i;
+      }
+    });
+    return index;
+  }
+
+
+  //===============================
+  //[ 布局配置 ]
+  //===============================
   _autoLayout(data) {
     const width = this._rootWidth;
     const height = this._rootHeight;
@@ -3218,8 +2602,8 @@ class BaseCanvas extends Canvas {
             }
           });
         }
-      } else if (_.get(this.layout, 'type') === 'drageLayout') {
-        Layout.drageLayout({
+      } else if (_.get(this.layout, 'type') === 'dagreLayout') {
+        Layout.dagreLayout({
           //  /** layout 方向, 可选 TB, BT, LR, RL */
           // public rankdir: 'TB' | 'BT' | 'LR' | 'RL' = 'TB';
           rankdir: _.get(this.layout, 'options.rankdir') || 'TB',
@@ -3314,22 +2698,23 @@ class BaseCanvas extends Canvas {
       } else if(_.get(this.layout, 'type') === 'gridLayout') {
         const _opts = $.extend({
           // 布局画布总宽度
-          width: 150,
+          width:  _.get(this.layout, 'width') || 150,
           // 布局画布总长度
-          height: 100,
+          height: _.get(this.layout, 'height') || 100,
           // 布局相对起始点
-          begin: [0, 0],
-          preventOverlap: true,
-          preventOverlapPadding: 10,
-          condense: false,
+          begin: _.get(this.layout, 'begin') || [0, 0],
+          center:  _.get(this.layout, 'center') || [width / 2, height / 2],
+          preventOverlap: _.get(this.layout, 'preventOverlap') || true,
+          preventOverlapPadding: _.get(this.layout, 'preventOverlapPadding') || 10,
+          condense: _.get(this.layout, 'condense') || false,
           //宽高
-          rows: undefined,
-          cols: undefined,
+          rows: _.get(this.layout, 'rows'),
+          cols: _.get(this.layout, 'cols'),
           //位置
-          position: undefined,
+          position: _.get(this.layout, 'position'),
           // 排序方式
-          sortBy: 'degree',
-          nodeSize: 30,
+          sortBy: _.get(this.layout, 'sortBy') || 'degree',
+          nodeSize: _.get(this.layout, 'nodeSize') || 30,
           link: {
             // 以node的什么字段为寻找id，跟d3原理一样
             id: 'id',
@@ -3341,7 +2726,6 @@ class BaseCanvas extends Canvas {
         }, _.get(this.layout, 'options'), true);
         // 自动布局
         if (_.get(this.layout, 'type') === 'gridLayout') {
-
           Layout.gridLayout({
             opts: _opts,
             data: {
@@ -3452,6 +2836,435 @@ class BaseCanvas extends Canvas {
        }
       }
     }
+  }
+
+
+  // minmap
+  setMinimap(flat = true, options = {}) {
+    if (!options.events) {
+      options.events = [];
+    }
+
+    const updateEvts = [
+      'system.canvas.zoom',
+      'system.node.delete',
+      'system.node.move',
+      'system.nodes.add',
+      'system.group.delete',
+      'system.group.move',
+      'system.drag.move',
+      'system.canvas.move',
+      ...options.events
+    ];
+
+    const getNodes = () => {
+      return this.nodes.map(node => {
+        return {
+          id: node.id,
+          left: node.left,
+          top: node.top,
+          width: node.getWidth(),
+          height: node.getHeight(),
+          group: node.group,
+          minimapActive: _.get(node, 'options.minimapActive')
+        }
+      });
+    }
+
+    const getGroups = () => {
+      return this.groups.map(group => {
+        return {
+          id: group.id,
+          left: group.left,
+          top: group.top,
+          width: group.getWidth(),
+          height: group.getHeight(),
+          minimapActive: _.get(group, 'options.minimapActive')
+        }
+      });
+    }
+
+    if (flat && !this.minimap) {
+      this.minimap = new Minimap({
+        root: this.root,
+        move: this.move.bind(this),
+        terminal2canvas: this.terminal2canvas.bind(this),
+        canvas2terminal: this.canvas2terminal.bind(this),
+        nodes: getNodes(),
+        groups: getGroups(),
+        zoom: this.getZoom(),
+        offset: this.getOffset(),
+        ...options
+      });
+      this.updateFn = () => {
+        this.minimap.update({
+          nodes: getNodes(),
+          groups: getGroups(),
+          zoom: this.getZoom(),
+          offset: this.getOffset()
+        });
+      };
+      for (let ev of updateEvts) {
+        this.on(ev, this.updateFn);
+      }
+      return;
+    }
+
+    if (!this.minimap) {
+      return;
+    }
+
+    this.minimap.destroy();
+    for (let ev of updateEvts) {
+      this.off(ev, this.updateFn);
+    }
+
+    delete this.minimap;
+    delete this.updateFn;
+  }
+
+
+  //===============================
+  //[ 聚焦处理 ]
+  //===============================
+  focusNodesWithAnimate(param, type = ['node'], options, callback) {
+    // 画布里的可视区域
+    let canLeft = Infinity;
+    let canRight = -Infinity;
+    let canTop = Infinity;
+    let canBottom = -Infinity;
+    if (_.includes(type, 'node')) {
+      let nodeIds = param.nodes;
+      this.nodes.filter((_node) => {
+        return _.find(nodeIds, (id) => {
+          return _node.id === id;
+        }) !== undefined;
+      }).forEach((_node) => {
+        let _nodeLeft = _node.left;
+        let _nodeRight = _node.left + _node.getWidth();
+        let _nodeTop = _node.top;
+        let _nodeBottom = _node.top + _node.getHeight();
+        if (_node.group) {
+          let group = this.getGroup(_node.group);
+          if (group) {
+            _nodeLeft += group.left;
+            _nodeRight += group.left;
+            _nodeTop += group.top;
+            _nodeBottom += group.top;
+          }
+        }
+        if (_nodeLeft < canLeft) {
+          canLeft = _nodeLeft;
+        }
+        if (_nodeRight > canRight) {
+          canRight = _nodeRight;
+        }
+        if (_nodeTop < canTop) {
+          canTop = _nodeTop;
+        }
+        if (_nodeBottom > canBottom) {
+          canBottom = _nodeBottom;
+        }
+      });
+    }
+
+    if (_.includes(type, 'group')) {
+      let groupIds = param.groups;
+      this.groups.filter((_group) => {
+        return _.find(groupIds, (id) => {
+          return id === _group.id;
+        });
+      }).forEach((_group) => {
+        let _groupLeft = _group.left;
+        let _groupRight = _group.left + _group.getWidth();
+        let _groupTop = _group.top;
+        let _groupBottom = _group.top + _group.getHeight();
+        if (_groupLeft < canLeft) {
+          canLeft = _groupLeft;
+        }
+        if (_groupRight > canRight) {
+          canRight = _groupRight;
+        }
+        if (_groupTop < canTop) {
+          canTop = _groupTop;
+        }
+        if (_groupBottom > canBottom) {
+          canBottom = _groupBottom;
+        }
+      });
+    }
+    let customOffset = _.get(options, 'offset') || [0, 0];
+    let canDisX = canRight - canLeft;
+    let terDisX = this._rootWidth - customOffset[0];
+    let canDisY = canBottom - canTop;
+    let terDisY = this._rootHeight - customOffset[1];
+    let scaleX = terDisX / canDisX;
+    let scaleY = terDisY / canDisY;
+    // 这里要根据scale来判断
+    let scale = scaleX < scaleY ? scaleX : scaleY;
+    if (_.get(options, 'keepPreZoom')) {
+      scale = this._zoomData < scale ? this._zoomData : scale;
+    } else {
+      scale = 1 < scale ? 1 : scale;
+    }
+    let terLeft = this._coordinateService._canvas2terminal('x', canLeft, {
+      scale: scale,
+      canOffsetX: 0,
+      canOffsetY: 0,
+      terOffsetX: 0,
+      terOffsetY: 0,
+      originX: 50,
+      originY: 50
+    });
+    let terRight = this._coordinateService._canvas2terminal('x', canRight, {
+      scale: scale,
+      canOffsetX: 0,
+      canOffsetY: 0,
+      terOffsetX: 0,
+      terOffsetY: 0,
+      originX: 50,
+      originY: 50
+    });
+    let terTop = this._coordinateService._canvas2terminal('y', canTop, {
+      scale: scale,
+      canOffsetX: 0,
+      canOffsetY: 0,
+      terOffsetX: 0,
+      terOffsetY: 0,
+      originX: 50,
+      originY: 50
+    });
+    let terBottom = this._coordinateService._canvas2terminal('y', canBottom, {
+      scale: scale,
+      canOffsetX: 0,
+      canOffsetY: 0,
+      terOffsetX: 0,
+      terOffsetY: 0,
+      originX: 50,
+      originY: 50
+    });
+
+    let offsetX = (terLeft + terRight - this._rootWidth) / 2;
+    let offsetY = (terTop + terBottom - this._rootHeight) / 2;
+
+    offsetX = -offsetX + customOffset[0];
+    offsetY = -offsetY + customOffset[1];
+
+    const time = 500;
+    $(this.wrapper).animate({
+      top: offsetY,
+      left: offsetX,
+    }, time);
+    this._moveData = [offsetX, offsetY];
+
+    this._coordinateService._changeCanvasInfo({
+      canOffsetX: offsetX,
+      canOffsetY: offsetY,
+      scale: scale,
+      originX: 50,
+      originY: 50
+    });
+
+    this.zoom(scale, callback);
+  }
+  focusCenterWithAnimate(options, callback) {
+    let nodeIds = this.nodes.map((item) => {
+      return item.id;
+    });
+    let groupIds = this.groups.map((item) => {
+      return item.id;
+    });
+
+    this.focusNodesWithAnimate({
+      nodes: nodeIds,
+      groups: groupIds
+    }, ['node', 'group'], options, callback);
+  }
+  focusNodeWithAnimate(param, type = 'node', options, callback) {
+    let node = null;
+
+    if (_.isFunction(param)) { // 假如传入的是filter，则按照用户自定义的规则来寻找
+      node = type === 'node' ? _.find(this.nodes, param) : _.find(this.groups, param);
+    } else { // 假如传入的是id，则按照默认规则寻找
+      node = type === 'node' ? _.find(this.nodes, item => item.id === param) : _.find(this.groups, item => item.id === param);
+    }
+
+    let top = 0;
+    let left = 0;
+    if (!node) {
+      return;
+    }
+    top = node.top || node.y;
+    left = node.left || node.x;
+    if (node.height) {
+      top += node.height / 2;
+    }
+    if (node.width) {
+      left += node.width / 2;
+    }
+
+    if (node.group) {
+      const group = _.find(this.groups, _group => _group.id === node.group);
+      if (!group) return;
+      top += group.top || group.y;
+      left += group.left || group.x;
+      if (group.height) {
+        top += group.height / 2;
+      }
+      if (group.width) {
+        left += group.width / 2;
+      }
+    }
+
+    let customOffset = _.get(options, 'offset') || [0, 0];
+
+    const containerW = this._rootWidth;
+    const containerH = this._rootHeight;
+
+    const targetY = containerH / 2 - top + customOffset[1];
+    const targetX = containerW / 2 - left + customOffset[0];
+
+    const time = 500;
+
+    // animate不支持scale，使用setInterval自己实现
+    $(this.wrapper).animate({
+      top: targetY,
+      left: targetX,
+    }, time);
+    this._moveData = [targetX, targetY];
+
+    this._coordinateService._changeCanvasInfo({
+      canOffsetX: targetX,
+      canOffsetY: targetY,
+      originX: 50,
+      originY: 50,
+      scale: 1
+    });
+
+    this.zoom(1, callback);
+
+    this._guidelineService.isActive && this._guidelineService.clearCanvas();
+  }
+
+  //===============================
+  //[ 框选处理 ]
+  //===============================
+  setSelectMode(flat = true, contents = ['node'], selecMode = 'include') {
+    if (flat) {
+      this.isSelectMode = true;
+      this._rmSystemUnion();
+      this.selecContents = contents;
+      this.selecMode = selecMode;
+      this.canvasWrapper.active();
+      this._remarkMove = this.moveable;
+      this._remarkZoom = this.zoomable;
+      this.setZoomable(false);
+      this.setMoveable(false);
+    } else {
+      this.isSelectMode = false;
+      this.canvasWrapper.unActive();
+      if (this._remarkMove) {
+        this.setMoveable(true);
+      }
+      if (this._remarkZoom) {
+        this.setZoomable(true);
+      }
+    }
+  }
+  getUnion(name) {
+    if (!name) {
+      console.error('传入正确的name');
+      return;
+    }
+    return this._unionData[name];
+  }
+
+  getAllUnion() {
+    return this._unionData;
+  }
+
+  add2Union(name, obj) {
+    if (!name || !obj) {
+      return;
+    }
+
+    if (!this._unionData[name]) {
+      this._unionData[name] = {
+        nodes: [],
+        groups: [],
+        edges: [],
+        endpoints: []
+      }
+    }
+
+    let _data = this._unionData[name];
+    if (obj.nodes) {
+      obj.nodes.forEach((item) => {
+        let isId = _.isString(item);
+        let node = isId ? this.getNode(item) : item;
+        _data.nodes.push(node);
+      });
+      _data.nodes = _.uniqBy(_data.nodes, 'id');
+    }
+
+    if (obj.groups) {
+      obj.groups.forEach((item) => {
+        let isId = _.isString(item);
+        let group = isId ? this.getGroup(item) : item;
+        _data.groups.push(group);
+      });
+      _data.groups = _.uniqBy(_data.groups, 'id');
+    }
+
+    if (obj.edges) {
+      obj.edges.forEach((item) => {
+        let isId = _.isString(item);
+        let edge = isId ? this.getEdge(item) : item;
+        _data.edges.push(edge);
+      });
+      _data.edges = _.uniqBy(_data.edges, 'id');
+    }
+
+    if (obj.endpoints) {
+      _data.endpoints = _data.endpoints.concat(obj.endpoints);
+    }
+  }
+  removeUnion(name) {
+    this._unionData[name] = {
+      nodes: [],
+      edges: [],
+      groups: [],
+      endpoints: []
+    };
+  }
+  removeAllUnion() {
+    this._unionData = {
+      __system: {
+        nodes: [],
+        edges: [],
+        groups: [],
+        endpoints: []
+      }
+    };
+  }
+  _rmSystemUnion() {
+    this._unionData['__system'].nodes = [];
+    this._unionData['__system'].edges = [];
+    this._unionData['__system'].groups = [];
+    this._unionData['__system'].endpoints = [];
+  }
+
+  _findUnion(type, item) {
+    let result = [];
+    for (let key in this._unionData) {
+      let isExist = _.find(_.get(this._unionData, [key, type], []), (_item) => {
+        return _.toString(_item.id) === _.toString(item.id);
+      });
+      if (isExist) {
+        result.push(key);
+      }
+    }
+    return result;
   }
   _selectMultiplyItem(range, toDirection) {
 
@@ -3565,18 +3378,324 @@ class BaseCanvas extends Canvas {
 
     return this.selectItem;
   }
-  _getAllEndpoints() {
-    let points = [];
-    points = points.concat(this.nodes.map((_node) => {
-      return _node.endpoints;
-    }));
-    points = points.concat(this.groups.map((_node) => {
-      return _node.endpoints;
-    }));
-    points = points.filter((item) => {
-      return !!item;
+
+
+  //===============================
+  //[ 辅助方法 ]
+  //===============================
+  updateRootResize(opts = {}) {
+    this._coordinateService._changeCanvasInfo({
+      terOffsetX: opts.terOffsetX || $(this.root).offset().left,
+      terOffsetY: opts.terOffsetY || $(this.root).offset().top,
+      terWidth: opts.terWidth || $(this.root).width(),
+      terHeight: opts.terHeight || $(this.root).height()
     });
-    return _.flatten(points);
+    this.canvasWrapper._changeCanvasInfo({
+      terScrollX: opts.terScrollX || 0,
+      terScrollY: opts.terScrollY || 0
+    });
+    this.canvasWrapper.resize({
+      root: this.root
+    });
+    this._gridService._resize();
+    this._guidelineService._resize();
+  }
+  setZoomable(flat, zoomDirection = this._zoomDirection) {
+    if (zoomDirection !== undefined) {
+      this._zoomDirection = zoomDirection;
+    }
+    if (!this._zoomCb) {
+      this._zoomCb = (event) => {
+        event.preventDefault();
+        const deltaY = event.deltaY;
+        if (this._zoomDirection) {
+          this._zoomData -= deltaY * this.theme.zoomGap;
+        } else {
+          this._zoomData += deltaY * this.theme.zoomGap;
+        }
+
+        if (this._zoomData < 0.25) {
+          this._zoomData = 0.25;
+          return;
+        } if (this._zoomData > 5) {
+          this._zoomData = 5;
+          return;
+        }
+
+        const platform = ['webkit', 'moz', 'ms', 'o'];
+        const scale = `scale(${this._zoomData})`;
+        for (let i = 0; i < platform.length; i++) {
+          this.wrapper.style[`${platform[i]}Transform`] = scale;
+        }
+        this.wrapper.style.transform = scale;
+        this._coordinateService._changeCanvasInfo({
+          wrapper: this.wrapper,
+          girdWrapper: this._guidelineService.dom,
+          mouseX: event.clientX,
+          mouseY: event.clientY,
+          scale: this._zoomData
+        });
+        this._guidelineService.zoom(this._zoomData);
+        this.emit('system.canvas.zoom', {
+          zoom: this._zoomData
+        });
+        this.emit('events', {
+          type: 'canvas.zoom',
+          zoom: this._zoomData
+        });
+      };
+    }
+
+    if (flat) {
+      // 双指Mac下缩放正常，Window鼠标滑轮方向相反
+      this.root.addEventListener('wheel', this._zoomCb);
+    } else {
+      this.root.removeEventListener('wheel', this._zoomCb);
+    }
+  }
+  setMoveable(flat) {
+    if (flat) {
+      this.moveable = true;
+      if (this._dragType === 'canvas:drag') {
+        this.moveable = false;
+      }
+    } else {
+      this.moveable = false;
+    }
+  }
+  setLinkable(flat) {
+    this.linkable = !!flat;
+  }
+  setDisLinkable(flat) {
+    this.disLinkable = !!flat;
+  }
+  setDraggable(flat) {
+    this.nodes.forEach((node) => {
+      node.setDraggable(flat);
+    });
+    this.draggable = flat;
+  }
+  setOrigin(data) {
+    let originX = (data[0] || '0').toString().replace('%', '');
+    let originY = (data[1] || '0').toString().replace('%', '');
+    this._coordinateService._changeCanvasInfo({
+      originX: parseFloat(originX),
+      originY: parseFloat(originY)
+    });
+  }
+  getZoom() {
+    return this._zoomData;
+  }
+  getOffset() {
+    return this._moveData;
+  }
+  getOrigin() {
+    return [this._coordinateService.originX + '%', this._coordinateService.originY + '%']
+  }
+  zoom(param, callback) {
+    if (param < 0.25) {
+      param = 0.25;
+    } if (param > 5) {
+      param = 5;
+    }
+    const time = 50;
+    let frame = 1;
+    const gap = param - this._zoomData;
+    const interval = gap / 20;
+    clearInterval(this._zoomTimer);
+    this._zoomTimer = null;
+    if (gap !== 0) {
+      this._zoomTimer = setInterval(() => {
+        this._zoomData += interval;
+        let _canvasInfo = {
+          scale: this._zoomData
+        };
+        if (this._coordinateService.originX === undefined || this._coordinateService.originY === undefined) {
+          _canvasInfo['originX'] = 50;
+          _canvasInfo['originY'] = 50;
+        }
+        this._coordinateService._changeCanvasInfo(_canvasInfo);
+        this._guidelineService.zoom(this._zoomData);
+        $(this.wrapper).css({
+          transform: `scale(${this._zoomData})`
+        });
+        if (frame === 20) {
+          clearInterval(this._zoomTimer);
+          this.emit('system.canvas.zoom', {
+            zoom: this._zoomData
+          });
+          this.emit('events', {
+            type: 'canvas.zoom',
+            zoom: this._zoomData
+          });
+          callback && callback();
+        }
+        frame++;
+      }, time / 20);
+    } else {
+      callback && callback();
+    }
+  }
+  move(position) {
+    $(this.wrapper)
+      .css('left', position[0])
+      .css('top', position[1]);
+    this._coordinateService._changeCanvasInfo({
+      canOffsetX: position[0],
+      canOffsetY: position[1]
+    });
+    this._guidelineService.isActive && this._guidelineService.move(position[0], position[1]);
+    this._moveData = position;
+    this.emit('system.canvas.move');
+    this.emit('events', {type: 'system.canvas.move'});
+  }
+  setGirdMode(flat = true, options = this._bgObj, _isResize) {
+    if (flat) {
+      this._bgObjQueue.push(options);
+      if (this._bgTimer) {
+        return;
+      }
+      this._bgTimer = setInterval(() => {
+        if (this._bgObjQueue.length === 0) {
+          clearInterval(this._bgTimer);
+          this._bgTimer = null;
+          return;
+        }
+        this._bgObj = this._bgObjQueue.pop();
+        _isResize && this._gridService._resize();
+        this._gridService.create(this._bgObj);
+        this._bgObjQueue = [];
+      }, 1000);
+    } else {
+      this._gridService.destroy();
+      this._bgObjQueue = [];
+    }
+  }
+  setGuideLine(flat = true, options = this._bgObj) {
+    if (flat) {
+      this._bgObjQueue.push(options);
+      if (this._bgTimer) {
+        return;
+      }
+      this._bgTimer = setInterval(() => {
+        if (this._bgObjQueue.length === 0) {
+          clearInterval(this._bgTimer);
+          this._bgTimer = null;
+          return;
+        }
+        this._bgObj = this._bgObjQueue.pop();
+        this._guidelineService.create(this._bgObj);
+        this._bgObjQueue = [];
+      }, 200);
+    } else {
+      this._guidelineService.destroy();
+      this._bgObjQueue = [];
+    }
+  }
+  canvas2terminal(coordinates, options) {
+    return this._coordinateService.canvas2terminal(coordinates, options);
+  }
+  terminal2canvas(coordinates, options) {
+    return this._coordinateService.terminal2canvas(coordinates, options);
+  }
+  save2img(options) {
+    let method = 'toPng';
+
+    switch (options.type) {
+      case 'jpeg':
+      case '.jpeg':
+        method = 'toJpeg';
+        break;
+      case 'png':
+      case '.png':
+        method = 'toPng';
+        break;
+      case 'svg':
+      case '.svg':
+        method = 'toSvg';
+        break;
+    }
+
+    return domtoimage[method](this.root, options)
+      .then(function (dataUrl) {
+        return dataUrl;
+      })
+      .catch(function (error) {
+        console.error('oops, something went wrong!', error);
+      });
+  }
+  justifyCoordinate() {
+    this._gridService.justifyAllCoordinate();
+  }
+  _autoMoveCanvas(x, y, data, cb) {
+
+    if (!this.theme.autoFixCanvas.enable) {
+      return;
+    }
+
+    this._autoMoveDir = [];
+    let _terOffsetX = this._coordinateService.terOffsetX;
+    let _terOffsetY = this._coordinateService.terOffsetY;
+
+    clearInterval(this._autoMoveTimer);
+    this._autoMoveTimer = null;
+
+    if (this._autoMoveTimer && this._autoMoveDir.length > 0) {
+      return;
+    }
+    let _autoMovePadding = this.theme.autoFixCanvas.autoMovePadding;
+    if (x - _terOffsetX <= _autoMovePadding[3]) {
+      this._autoMoveDir.push('left');
+    }
+    if (this._rootWidth - (x - _terOffsetX) <= _autoMovePadding[1]) {
+      this._autoMoveDir.push('right');
+    }
+    if (y - _terOffsetY <= _autoMovePadding[0]) {
+      this._autoMoveDir.push('top');
+    }
+    if (this._rootHeight - (y - _terOffsetY) <= _autoMovePadding[2]) {
+      this._autoMoveDir.push('bottom');
+    }
+
+    if (this._autoMoveDir.length === 0) {
+      clearInterval(this._autoMoveTimer);
+      return;
+    }
+
+    if (!this._autoMoveTimer) {
+      let MOVE_GAP = 5;
+      this._autoMoveTimer = setInterval(() => {
+        if (this._autoMoveDir.includes('left')) {
+          this.move([this._moveData[0] + MOVE_GAP, this._moveData[1]]);
+          _moveTarget([-MOVE_GAP, 0]);
+        }
+        if (this._autoMoveDir.includes('right')) {
+          this.move([this._moveData[0] - MOVE_GAP, this._moveData[1]]);
+          _moveTarget([+MOVE_GAP, 0]);
+        }
+        if (this._autoMoveDir.includes('top')) {
+          this.move([this._moveData[0], this._moveData[1] + MOVE_GAP]);
+          _moveTarget([0, -MOVE_GAP]);
+        }
+        if (this._autoMoveDir.includes('bottom')) {
+          this.move([this._moveData[0], this._moveData[1] - MOVE_GAP]);
+          _moveTarget([0, +MOVE_GAP]);
+        }
+      }, 70);
+    }
+
+    // 同时需要移动target
+    let _moveTarget = (gap) => {
+      if (data.type === 'node:drag') {
+        data.nodes.forEach((item) => {
+          item.moveTo(item.left + gap[0], item.top + gap[1]);
+        })
+      } else if (data.type === 'group:drag') {
+        let group = data.group;
+        group.moveTo(group.left + gap[0], group.top + gap[1]);
+      }
+      cb && cb(gap);
+    }
   }
   undo() {
     let result = [];

@@ -31,7 +31,7 @@ import Grid from './demo/grid/index.jsx';
 import Fruchterman from './demo/fruchterman/index.jsx';
 import ReactSample from './demo/react/sample/index.jsx';
 
-import DrageLayout from './demo/drageLayout/index.jsx';
+import DagreLayout from './demo/dagreLayout/index.jsx';
 import ConcentLayout from './demo/concent-layout/index.jsx';
 
 import Radial from './demo/radial/index.jsx';
@@ -66,8 +66,8 @@ ReactDOM.render((
             <Menu.Item key="diodes">
               <Link to="/diodes">Diodes</Link>
             </Menu.Item>
-            <Menu.Item key="drage">
-              <Link to="/drageLayout">Drage</Link>
+            <Menu.Item key="dagre">
+              <Link to="/dagreLayout">Dagre</Link>
             </Menu.Item>
             <Menu.Item key="decision">
               <Link to="/decision">Decision</Link>
@@ -146,7 +146,7 @@ ReactDOM.render((
           <Route path="/lite_graph" component={liteGraph} />
           <Route path="/relational_books" component={RelationalBooks} />
           <Route path="/mind_map" component={MindMap} />
-          <Route path="/drageLayout" component={DrageLayout} />
+          <Route path="/dagreLayout" component={DagreLayout} />
           <Route path="/compactBoxTree" component={CompactBoxTree} />
           <Route path="/entity-relationship" component={EntityRelationship} />
           <Route path="/emergency2" component={Emergency2} />
