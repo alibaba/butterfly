@@ -2,7 +2,7 @@
 
 ## Usage
 
-```
+```js
 const Group = require('butterfly-dag').Group;
 class AGroup extends Group {
   draw(obj) {
@@ -10,6 +10,7 @@ class AGroup extends Group {
   }
 }
 
+// Initialize draw
 canvas.draw({
   groups: [{
     id: 'xxxx',
@@ -20,6 +21,12 @@ canvas.draw({
   nodes: ...
   edges: ...
 })
+
+// Dynamic addition
+canvas.addGroup({
+  ...
+  // the attribute below
+});
 ```
 
 ## attribute<a name='group-attr'></a>：

@@ -18,7 +18,7 @@ class BaseNode extends Node {
       .addClass(opts.options.className)
       // .css('background-color', opts.options.color);
 
-    let logoContainer = $(`<div class="logo-container">${opts.options.name}</div>`);
+    let logoContainer = $(`<div class="logo-container">${opts.options.name || opts.id}</div>`);
     logoContainer.addClass(opts.options.className);
     // logoContainer.css('background-color', opts.options.color);
 

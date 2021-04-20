@@ -1,7 +1,8 @@
 # Edge
 
 ## Usage
-```
+```js
+// Initialize draw
 canvas.draw({
   edges: [{
     source: 'point_1',
@@ -9,13 +10,18 @@ canvas.draw({
     sourceNode: 'node_1',
     targetNode: 'node_2',
     type: 'endpoint',
-    arrow: ture,
+    arrow: true,
     arrowPosition: 0.5,
     arrowOffset: 0,  // final position of the arrow：lineLength * arrowPosition + arrowOffset
     label: 'I am label'   //Here you can also pass dom, of course, you can also extend the parent class's drawLabel to customize the label.
   }],
   groups: ...
   nodes: ...
+})
+// Dynamic addition
+canvas.addEdge({
+  // the attribute below
+  ...
 })
 ```
 
@@ -64,6 +70,12 @@ mounted = () => {}
   * callback after line updated
   */
 updated = () => {}
+
+/**
+  * set z-index
+  * @param {number} zIndex -  zIndex value
+  */
+setZIndex = (index) => {}
 ```
 
 ### <a name='edge-custom-arrow'>custom arrow</a>：

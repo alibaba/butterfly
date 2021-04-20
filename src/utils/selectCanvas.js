@@ -24,16 +24,10 @@ class SelectCanvas {
 
   init(opts) {
     const root = opts.root;
-    const offset = $(root).offset();
-    this.canvasTop = offset.top;
-    this.canvasLeft = offset.left;
-    this.canvasHeight = $(root).height();
-    this.canvasWidth = $(root).width();
+    this.resize(opts);
+    this.addEventListener();
     this._on = opts._on;
     this._emit = opts._emit;
-    $(this.dom).attr('width', this.canvasWidth);
-    $(this.dom).attr('height', this.canvasHeight);
-    this.addEventListener();
     $(this.dom).appendTo(root);
   }
 
