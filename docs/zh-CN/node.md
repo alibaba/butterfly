@@ -34,21 +34,21 @@ canvas.addNode({
 
 ## 属性
 
-### id <string>(必填)
+### id  _`<String>`_    (必填)
   节点唯一标识
-### top <number>(必填)
+### top  _`<Number>`_    (必填)
    y轴坐标
-### left <number>(必填)
+### left _`<Number>`_   (必填)
   x轴坐标
-### draggable <boolean>(选填)
+### draggable _`<Boolean>`_   (选填)
   可以设置该节点是否能拖动：为可覆盖全局的draggable属性
-### group <string> (选填)
+### group _`<String>`_    (选填)
   group的唯一标识
-### endpoints <array> (选填)
+### endpoints _`<Array>`_    (选填)
   锚点信息: 当有此配置会加上系统的锚点
-### Class <Class> (选填)
+### Class _`<Class>`_    (选填)
   拓展类：当传入拓展类的时候，该节点组则会按拓展类的draw方法进行渲染，拓展类的相关方法也会覆盖父类的方法
-### scope <boolean> (选填)
+### scope _`<Boolean>`_    (选填)
   作用域：当scope一致的节点才能拖动进入节点组
 
 ```js

@@ -29,31 +29,31 @@ canvas.addEdge({
 
 ## 属性
 
-### id <string>(必填)
+### id  _`<String>`_    (必填)
   节点唯一标识
-###  targetNode  <string>(必填)
+###  targetNode  _`<String>`_   (必填)
   连接目标节点id
-### target <string>(必填)
+### target  _`<String>`_    (必填)
   连接目标锚点id
-### sourceNode <string>(必填)
+### sourceNode  _`<String>`_   (必填)
   连接源节点id
-### source <string>(必填)
+### source  _`<String>`_   (必填)
   连接源锚点id
-### type <string> (选填)
+### type  _`<String>`_    (选填)
   标志线条连接到节点还是连接到锚点。默认值为endpoint/node
-### orientationLimit <array> (选填)
+### orientationLimit  _`<Array>`_    (选填)
   线条出口的位置
-### shapeType <string> (选填)
+### shapeType  _`<String>`_    (选填)
   线条的类型。默认值为Bezier/Flow/Straight
-### label <string/dom>(选填)
+### label  _`<String/Dom>`_   (选填)
   线条上加注释
-### arrow <boolean> (选填)
+### arrow  _`<Boolean>`_    (选填)
   线条上加箭头。默认false
-### Class <Class> (选填)
+### Class  _`<Class>`_    (选填)
   拓展类：一般来说已经满足需要了，因为逻辑较为复杂，不建议拓展线的基类。当传入拓展类的时候，该节点组则会按拓展类的draw方法进行渲染，拓展类的相关方法也会覆盖父类的方法
-### arrowPosition <float> (选填)
+### arrowPosition  _`<Float>`_    (选填)
   箭头在线条上的位置。默认值在0-1之间，默认0.5
-### arrowOffset <float> (选填)
+### arrowOffset  _`<Float>`_     (选填)
   箭头相对于arrowPosition的偏移量。默认值为0，单位是像素
 
 `* 设置 isExpandWidth 为 true 时，获取 eventHandlerDom 用于挂载事件`
