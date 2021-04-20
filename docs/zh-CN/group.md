@@ -61,8 +61,15 @@ group.scope = 'xxx';
 group.scope = 'xxx1 xxx2 xxx3';
 ```
 
+### draggable _`<Boolean>`_ (选填)
+&nbsp;&nbsp;节点组可拖动标识。默认可拖动
+### resize _`<Boolean>`_ (选填)
+&nbsp;&nbsp;节点组大小可变标识。默认可变
+
+<img width="400" src="https://img.alicdn.com/imgextra/i4/O1CN01nb2APF1ZM1lbFNKM1_!!6000000003179-1-tps-400-300.gif">
+
 ### group _`<String>`_ (选填)
-  父级group的id: 需要开启canvas.theme.group.includeGroups的属性才能支持group嵌套
+&nbsp;&nbsp;父级group的id: 需要开启canvas.theme.group.includeGroups的属性才能支持group嵌套
   
 <img width="400" src="https://img.alicdn.com/imgextra/i4/O1CN01qmOWWj1CKtcvZZJ7Q_!!6000000000063-2-tps-842-536.png">
 
