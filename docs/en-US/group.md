@@ -39,11 +39,11 @@ canvas.addGroup({
 
 ## attribute
 
-### id _`<String>`_ （Require）
+### id _`<String>`_ (Require)
 &nbsp;&nbsp;unique id of node
-### top _`<Number>`_ （Require）
+### top _`<Number>`_ (Require)
 &nbsp;&nbsp;y coordinate
-### left _`<Number>`_ （Require）
+### left _`<Number>`_ (Require)
 &nbsp;&nbsp;x coordinate
 ### width _`<Number>`_ (Option)
 &nbsp;&nbsp;group width
@@ -78,7 +78,7 @@ group.scope = 'xxx1 xxx2 xxx3';
 <br>
 <br>
 
-## Class extend API：
+## Extented Class  API：
 
 ```js
 import {Group} from 'butterfly-dag';
@@ -110,7 +110,7 @@ Class YourGroup extends Group {
 
 *return*
 
-* `number` the width of group
+* `number` the width of the group
 
 ```js
 getWidth = () => {}
@@ -122,7 +122,7 @@ getWidth = () => {}
 
 *return*
 
-* `number` the height of group
+* `number` the height of the group
 
 ```js
 getHeight = () => {}
@@ -130,7 +130,7 @@ getHeight = () => {}
 
 ### group.addNode (node)
 
-*function*：  add node to group
+*function*：  add node to the group
 
 *param*
 
@@ -142,7 +142,7 @@ addNode = (node) => {}
 
 ### group.addNodes (nodes)
 
-*function*： add multiple nodes to group
+*function*： add multiple nodes to the group
 
 *param*
 
@@ -154,7 +154,7 @@ addNodes = (nodes) => {}
 
 ### group.removeNode (node)
 
-*function*： delete node from group
+*function*： delete node from the group
 
 *param*
 
@@ -166,7 +166,7 @@ removeNode = (node) => {}
 
 ### group.removeNodes (nodes)
 
-*function*： delete  nodes from group
+*function*： delete  nodes from the group
 
 *param*
 
@@ -178,7 +178,7 @@ removeNodes = (nodes) => {}
 
 ### group.addEndpoint (obj)
 
-*function*： add endpoint to group
+*function*： add endpoint to the group
 
 *params*
 
