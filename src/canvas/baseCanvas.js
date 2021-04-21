@@ -44,7 +44,8 @@ class BaseCanvas extends Canvas {
         includeGroups: _.get(options, 'theme.group.includeGroups', false)
       },
       edge: {
-        type: _.get(options, 'theme.edge.type') || 'Bezier',
+        type: _.get(options, 'theme.edge.type') || 'endpoint',
+        shapeType: _.get(options, 'theme.edge.shapeType') || 'Straight',
         Class: _.get(options, 'theme.edge.Class') || Edge,
         arrow: _.get(options, 'theme.edge.arrow'),
         arrowShapeType: _.get(options, 'theme.edge.arrowShapeType', 'default'),
@@ -862,7 +863,8 @@ class BaseCanvas extends Canvas {
                 let _sourceEndpoint = point;
                 let pointObj = {
                   type: 'endpoint',
-                  shapeType: this.theme.edge.type,
+                  type: this.theme.edge.type,
+                  shapeType: this.theme.edge.shapeType,
                   orientationLimit: this.theme.endpoint.position,
                   _sourceType: point.nodeType,
                   sourceNode: _sourceNode,
@@ -2502,7 +2504,8 @@ class BaseCanvas extends Canvas {
           type: 'endpoint',
           id: link.id,
           label: link.label,
-          shapeType: link.shapeType || this.theme.edge.type,
+          type: link.type || this.theme.edge.type,
+          shapeType: link.shapeType || this.theme.edge.shapeType,
           orientationLimit: this.theme.endpoint.position,
           isExpandWidth: this.theme.edge.isExpandWidth,
           defaultAnimate: this.theme.edge.defaultAnimate,
@@ -2570,7 +2573,8 @@ class BaseCanvas extends Canvas {
           label: link.label,
           sourceNode,
           targetNode,
-          shapeType: link.shapeType || this.theme.edge.type,
+          type: link.type || this.theme.edge.type,
+          shapeType: link.shapeType || this.theme.edge.shapeType,
           orientationLimit: this.theme.endpoint.position,
           arrow: link.arrow === undefined ? _.get(this, 'theme.edge.arrow') : link.arrow,
           arrowShapeType: link.arrowShapeType === undefined ? _.get(this, 'theme.edge.arrowShapeType') : link.arrowShapeType,

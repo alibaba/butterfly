@@ -36,7 +36,7 @@ class DagreLayout extends Component {
       },
       theme: {
         edge: {
-          type: 'AdvancedBezier',
+          shapeType: 'AdvancedBezier',
           arrow: true,
           arrowPosition: 0.5,
           Class: RelationEdge

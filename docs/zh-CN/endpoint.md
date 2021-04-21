@@ -182,6 +182,15 @@ Class YourEndpoint extends Endpoint {
 }
 ```
 
+### linkable & unLinkable
+
+
+<img width="400" src="https://img.alicdn.com/imgextra/i2/O1CN01VNQ3v621www2JIRhN_!!6000000007050-1-tps-400-300.gif">
+
+### hoverLinkable & unHoverLinkable
+
+<img width="400" src="https://img.alicdn.com/imgextra/i4/O1CN01428w4x27Z1weiMNVy_!!6000000007810-1-tps-400-300.gif">
+
 <br>
 <br>
 

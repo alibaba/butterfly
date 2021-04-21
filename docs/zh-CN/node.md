@@ -32,24 +32,27 @@ canvas.addNode({
 });
 ```
 
+<br>
+<br>
+
 ## 属性
 
 ### id  _`<String>`_    (必填)
-  节点唯一标识
+&nbsp;&nbsp;节点唯一标识
 ### top  _`<Number>`_    (必填)
-   y轴坐标
+&nbsp;&nbsp;y轴坐标: 节点所在画布的坐标；若在节点组中，则是相对于节点组内部的坐标
 ### left _`<Number>`_   (必填)
-  x轴坐标
+&nbsp;&nbsp;x轴坐标: 节点所在画布的坐标；若在节点组中，则是相对于节点组内部的坐标
 ### draggable _`<Boolean>`_   (选填)
-  可以设置该节点是否能拖动：为可覆盖全局的draggable属性
+&nbsp;&nbsp;可以设置该节点是否能拖动：为可覆盖全局的draggable属性
 ### group _`<String>`_    (选填)
-  group的唯一标识
+&nbsp;&nbsp;父级group的id: 设置后该节点会添加到节点组中
 ### endpoints _`<Array>`_    (选填)
-  锚点信息: 当有此配置会加上系统的锚点
+&nbsp;&nbsp;锚点信息: 当有此配置会加上系统的锚点
 ### Class _`<Class>`_    (选填)
-  拓展类：当传入拓展类的时候，该节点组则会按拓展类的draw方法进行渲染，拓展类的相关方法也会覆盖父类的方法
+&nbsp;&nbsp;拓展类：当传入拓展类的时候，该节点组则会按拓展类的draw方法进行渲染，拓展类的相关方法也会覆盖父类的方法
 ### scope _`<Boolean>`_    (选填)
-  作用域：当scope一致的节点才能拖动进入节点组
+&nbsp;&nbsp;作用域：当scope一致的节点才能拖动进入节点组
 
 ```js
 // 单scope
@@ -59,6 +62,9 @@ node.scope = 'xxx1 xxx2 xxx3';
 ```
 
 `* 节点的返回的dom必须设置position: absolute;`
+
+<br>
+<br>
 
 ## 类重写API：
 
@@ -78,23 +84,20 @@ Class YourNode extends Node {
     * @return {dom} - 返回渲染dom的根节点
     */
   draw(obj) {}
-  
-  /**
-    * 节点更新后的回调
-    */
-  updated() {}
-  /**
-    * 删除节点
-    */
-  remove() {}
+
 }
 ```
+
+<br>
+<br>
 
 ## 外部调用API：
 
 ### node.getWidth ()
 
-返回
+*作用*： 获取节点宽度
+
+*返回*
 
 * `number`节点宽度
 
@@ -104,7 +107,9 @@ getWidth = () => {}
 
 ### node.getHeight ()
 
-返回
+*作用*： 获取节点宽度
+
+*返回*
 
 * `number`节点高度
 
@@ -114,7 +119,9 @@ getHeight = () => {}
 
 ### node.setDraggable (boolean)
 
-参数
+*作用*： 获取节点是否可移动的状态
+
+*参数*
 
 * `boolean`设置节点是否可移动
 
@@ -122,55 +129,49 @@ getHeight = () => {}
 setDraggable = (boolean) => {}
 ```
 
-### node.focus()
-
-```js
-focus = () => {}
-```
-
-### node.unFocus()
-
-```js
-unFocus = () => {}
-```
-
 ### node.addEndpoint (obj)
 
-参数
+*作用*： 节点中添加锚点。可添加系统锚点；也可添加节点中的某个dom作为锚点。*注意:*此方法必须在节点挂载后执行才有效
 
-* `{obj} param`锚点基本信息(此方法必须在节点挂载后执行才有效)
-* `{string} param.id`锚点id
-* `{string} param.orientation`锚点方向(可控制线段的进行和外出方向)
-* `{string} param.scope`作用域
-* `{string} param.type` 'source' / 'target' / undefined / 'onlyConnect'。 当undefined的时候锚点既是source又是target，但不能为同是为'source'和'target'，先来先到 ; 'onlyConnect'，锚点既是source又是target，可同时存在
-* `{string} param.dom`可以把分组内的任意一个子dom作为自定义锚点
+*参数*
+
+* `{obj} param` 锚点基本信息(此方法必须在节点挂载后执行才有效)
+* `{string} param.id` 锚点id
+* `{string} param.orientation` 锚点方向(可控制线段的进入和外出方向)
+* `{string} param.scope` 连接作用域
+* `{string} param.type` 'source' / 'target' / undefined / 'onlyConnect'，可看锚点的type文档
+* `{string} param.dom`可以把节点内的任意一个子dom作为自定义锚点
 
 ```js
 addEndpoint = (obj) => {}
 ```
 
-### node.removeEndpoint(obj)
+### node.removeEndpoint(string)
 
-参数
+*作用*：节点中删除锚点
+
+*参数*
 
 * `{string} pointId`锚点的Id(此方法必须在节点挂载后执行才有效)
 
-返回
+*返回*
 
 * ` {Endpoint}`Endpoint的对象
 
 ```js
-removeEndpoint = (obj) => {}
+removeEndpoint = (string) => {}
 ```
 
 ### node.getEndpoint (id, type)
 
-参数
+*作用*：获取节点中的锚点
+
+*参数*
 
 * `{string(必填)} pointId`锚点的信息
-* `{string(选填)} type`锚点的信息
+* `{string(选填)} type`锚点的信息。若传入type，则会根据锚点id和type完全匹配才能获取到。
 
-返回
+*返回*
 
 * `{Endpoint}`Endpoint的对象
 
@@ -180,7 +181,9 @@ getEndpoint = (id, type) => {}
 
 ### node.moveTo (obj)
 
-参数
+*作用*： 节点移动坐标的方法
+
+*参数*
 
 * `{number} x `移动位置的x坐标
 * `{number} y `移动位置的y坐标
@@ -189,10 +192,22 @@ getEndpoint = (id, type) => {}
 moveTo = (obj) => {}
 ```
 
+### node.remove ()
+
+*作用*： 节点删除的方法。与canvas.removeNode的方法作用一致。
+
+```js
+remove = () => {}
+```
+
 ### node.emit (event, data)
 
-* `{string} event` 发送事件名称
-* `{obj}data` 发送事件数据
+*作用*： 节点发送事件的方法，画布及任何一个元素都可接收。
+
+*参数*
+
+* `{string} event `发送事件名称
+* `{number} data `发送事件数据
 
 ```js
 emit = (string, obj) => {}
@@ -200,16 +215,22 @@ emit = (string, obj) => {}
 
 ### node.on (string, callback)
 
-* `{string} event` 接收事件名称
-* `{function}data` 接收事件数据
+*作用*： 节点接收事件的方法，能接收画布及任何一个元素的事件。
+
+*参数*
+
+* `{string} event `接收事件名称
+* `{function} data `接收事件回调
 
 ```js
 on = (string, callback) => {}
 ```
 
-### node.collapseNode (string)
+### [树状布局]treeNode.collapseNode (string)
 
-参数
+*作用*： 树状节点的节点收缩功能
+
+*参数*
 
 * `{string} nodeId`节点id
 
@@ -217,9 +238,11 @@ on = (string, callback) => {}
 collapseNode = (string) => {}
 ```
 
-### node.expandNode (string)
+### [树状布局]treeNode.expandNode (string)
 
-参数
+*作用*： 树状节点的节点展开功能
+
+*参数*
 
 * `{string} nodeId`节点id
 
