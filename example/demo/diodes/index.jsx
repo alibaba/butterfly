@@ -2,8 +2,8 @@
 import React, {Component} from 'react';
 require('./index.less');
 
-// const Canvas = require('../../../index.js').Canvas;
-import { Canvas } from 'butterfly-dag';
+const Canvas = require('../../../index.js').Canvas;
+// import { Canvas } from 'butterfly-dag';
 const mockData = require('./data');
 
 class Diodes extends Component {
@@ -21,7 +21,7 @@ class Diodes extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'Manhattan',
+          shapeType: 'Manhattan',
           defaultAnimate: true,
           draggable: true // 只有曼哈顿线段可拖动
         }

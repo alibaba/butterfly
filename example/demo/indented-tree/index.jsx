@@ -86,7 +86,7 @@ class IndentedTree extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'Manhattan'
+          shapeType: 'Manhattan'
         }
       },
       layout: {

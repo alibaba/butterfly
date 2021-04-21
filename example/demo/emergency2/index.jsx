@@ -22,7 +22,7 @@ class Emergency2 extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'Manhattan',
+          shapeType: 'Manhattan',
           arrow: true
         },
         // 拖动边缘处自动适应画布

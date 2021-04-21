@@ -19,9 +19,9 @@ class BaseEdge extends Edge {
     this.sourceNode = _.get(opts, 'sourceNode');
     this._sourceType = _.get(opts, '_sourceType');
     this.sourceEndpoint = _.get(opts, 'sourceEndpoint');
-    this.type = _.get(opts, 'type') || 'endpoint';
+    this.type = _.get(opts, 'type', 'endpoint');
     this.orientationLimit = _.get(opts, 'orientationLimit');
-    this.shapeType = _.get(opts, 'shapeType');
+    this.shapeType = _.get(opts, 'shapeType', 'Straight');
     this.label = _.get(opts, 'label');
     this.arrow = _.get(opts, 'arrow');
     this.arrowShapeType = _.get(opts, 'arrowShapeType', 'default');
@@ -389,16 +389,14 @@ class BaseEdge extends Edge {
     
     if (this.isExpandWidth) {
       $(this.eventHandlerDom).on('click', _clickEvent);
-      // if (this.type === 'Manhattan' && this.draggable) {
-      //   $(this.eventHandlerDom).on('mousedown', _mouseDownEvent);
-      // }
-      $(this.eventHandlerDom).on('mousedown', _mouseDownEvent);
+      if (this.shapeType === 'Manhattan' && this.draggable) {
+        $(this.eventHandlerDom).on('mousedown', _mouseDownEvent);
+      }
     } else {
       $(this.dom).on('click', _clickEvent);
-      // if (this.type === 'Manhattan' && this.draggable) {
-      //   $(this.dom).on('mousedown', _mouseDownEvent);
-      // }
-      $(this.dom).on('mousedown', _mouseDownEvent);
+      if (this.shapeType === 'Manhattan' && this.draggable) {
+        $(this.dom).on('mousedown', _mouseDownEvent);
+      }
     }
   }
   _create(opts) {
