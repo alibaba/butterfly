@@ -61,7 +61,8 @@ class BaseCanvas extends Canvas {
         defaultAnimate: _.get(options, 'theme.edge.defaultAnimate') || false,
       },
       endpoint: {
-        position: _.get(options, 'theme.endpoint.position'),
+        // 暂时不支持position
+        // position: _.get(options, 'theme.endpoint.position'),
         linkableHighlight: _.get(options, 'theme.endpoint.linkableHighlight') || false,
         limitNum: _.get(options, 'theme.endpoint.limitNum'),
         expandArea: {
