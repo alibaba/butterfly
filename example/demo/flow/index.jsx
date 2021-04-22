@@ -23,7 +23,7 @@ class Flow extends React.Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'AdvancedBezier',
+          shapeType: 'AdvancedBezier',
         }
       }
     });

@@ -78,6 +78,13 @@ remove = () => {}
   * @return {number} - 节点宽度
   */
 getWidth = () => {}
+```
+
+### node.getHeight ()
+
+*作用*： 获取节点宽度
+
+*返回*
 
 /**
   * @return {number} - 节点高度

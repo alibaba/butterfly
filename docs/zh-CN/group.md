@@ -15,6 +15,8 @@ canvas.draw({
     top: 100,
     left: 100,
     Class: AGroup //设置基类之后，画布会根据自定义的类来渲染
+    ...
+    // 参考下面属性
   }],
   nodes: ...
   edges: ...
@@ -26,6 +28,7 @@ canvas.addGroup({
   // 参考下面属性
 });
 ```
+<br>
 
 ## 属性<a name='group-attr'></a>：
 
@@ -41,9 +44,29 @@ canvas.addGroup({
 | Class | 拓展类 | Class (Option) | 当传入拓展类的时候，该节点组则会按拓展类的draw方法进行渲染，拓展类的相关方法也会覆盖父类的方法
 | scope | 作用域 | boolean (Option) | 当node的scope和group的scope一致才能加入到节点组。默认不设置即可随意加入
 
-`* 节点的返回的dom必须设置position: absolute;`
+### id _`<String>`_ （必填）
+&nbsp;&nbsp;节点唯一标识
+### top _`<Number>`_ （必填）
+&nbsp;&nbsp;y轴坐标
+### left _`<Number>`_ （必填）
+&nbsp;&nbsp;x轴坐标
+### width _`<Number>`_ (选填)
+&nbsp;&nbsp;宽度
+### height _`<Number>`_ (选填)
+&nbsp;&nbsp;高度
+### endpoints _`<Array>`_ (选填)
+&nbsp;&nbsp;系统锚点配置: 当有此配置会加上系统的锚点
+### Class _`<Class>`_ (选填)
+&nbsp;&nbsp;拓展类
+### scope _`<String>`_ (选填)
+&nbsp;&nbsp;作用域: 当scope一致的节点才能拖动进入节点组
 
-## API：
+```js
+// 单scope
+group.scope = 'xxx';
+// 多scope，任意一个匹配中都能连接
+group.scope = 'xxx1 xxx2 xxx3';
+```
 
 ### <a name='group-custom'>自定义节点组</a>：
 
@@ -139,3 +162,4 @@ emit = (string, obj) => {}
   */
 on = (string, callback) => {}
 ```
+

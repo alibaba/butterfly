@@ -23,7 +23,7 @@ class System extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'Straight'
+          shapeType: 'Straight'
         }
       }
     });

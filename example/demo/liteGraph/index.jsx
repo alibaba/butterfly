@@ -20,7 +20,7 @@ class LiteGraph extends Component{
         moveable: true,    // 可平移
         theme: {
           edge: {
-            type: 'AdvancedBezier'
+            shapeType: 'AdvancedBezier'
           }
         }
     })
