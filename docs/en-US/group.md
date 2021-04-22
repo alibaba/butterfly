@@ -54,7 +54,7 @@ canvas.addGroup({
 ### Class _`<Class>`_ (Option)
 &nbsp;&nbsp;extended class
 ### scope _`<String>`_ (Option)
-&nbsp;&nbsp;scope: When the scope of the node is consistent with the scope of the group, it can be added to the group. You can join as you like without setting it by default
+&nbsp;&nbsp;scope: When the scope of the node is the same as the scope of the group, it can be added to the group. You can join as you like without setting it by default
 
 ```js
 // single scope
@@ -64,14 +64,14 @@ group.scope = 'xxx1 xxx2 xxx3';
 ```
 
 ### draggable _`<Boolean>`_ (Option)
-&nbsp;&nbsp;the node group is draggable. the default value is true
+&nbsp;&nbsp;the group is draggable. the default value is true
 ### resize _`<Boolean>`_ (Option)
-&nbsp;&nbsp;the size of the node group is resizable.  the default value is true
+&nbsp;&nbsp;the size of the group is resizable.  the default value is true
 
 <img width="400" src="https://img.alicdn.com/imgextra/i4/O1CN01nb2APF1ZM1lbFNKM1_!!6000000003179-1-tps-400-300.gif">
 
 ### group _`<String>`_ (Option)
-&nbsp;&nbsp;the id of the parent group: For supporting group nesting, you need to set canvas.theme.group.includeGroups open
+&nbsp;&nbsp;the id of the parent group: For supporting group nesting, you need to set 'canvas.theme.group.includeGroups' open
   
 <img width="400" src="https://img.alicdn.com/imgextra/i4/O1CN01qmOWWj1CKtcvZZJ7Q_!!6000000000063-2-tps-842-536.png">
 
@@ -106,7 +106,7 @@ Class YourGroup extends Group {
 
 ### group.getWidth()
 
-*function*： get group width
+*description*： get group width
 
 *return*
 
@@ -118,7 +118,7 @@ getWidth = () => {}
 
 ### group.getHeight ()
 
-*function*： get group height
+*description*： get group height
 
 *return*
 
@@ -130,7 +130,7 @@ getHeight = () => {}
 
 ### group.addNode (node)
 
-*function*：  add node to the group
+*description*：  add node to the group
 
 *param*
 
@@ -142,7 +142,7 @@ addNode = (node) => {}
 
 ### group.addNodes (nodes)
 
-*function*： add multiple nodes to the group
+*description*： add multiple nodes to the group
 
 *param*
 
@@ -154,7 +154,7 @@ addNodes = (nodes) => {}
 
 ### group.removeNode (node)
 
-*function*： delete node from the group
+*description*： delete node from the group
 
 *param*
 
@@ -166,7 +166,7 @@ removeNode = (node) => {}
 
 ### group.removeNodes (nodes)
 
-*function*： delete  nodes from the group
+*description*： delete  nodes from the group
 
 *param*
 
@@ -178,7 +178,7 @@ removeNodes = (nodes) => {}
 
 ### group.addEndpoint (obj)
 
-*function*： add endpoint to the group
+*description*： add endpoint to the group
 
 *params*
 
@@ -195,7 +195,7 @@ addEndpoint = (obj) => {}
 
 ### group.getEndpoint (id)
 
-*function*： get endpoint by id
+*description*： get endpoint by id
 
 *param*
 
@@ -211,7 +211,7 @@ getEndpoint = (id) => {}
 
 ### group.moveTo (obj)
 
-*function*： move coordinates of the node group
+*description*： move coordinates of the group
 
 *params*
 
@@ -224,7 +224,7 @@ moveTo = (obj) => {}
 
 ### group.emit (event, data)
 
-*function*： emit events,canvas or any elements can receive event from the node group 
+*description*： emit events,canvas or any elements can receive event from the group 
 
 *params*
 
@@ -237,12 +237,12 @@ emit = (string, obj) => {}
 
 ### group.on (string, callback)
 
-*function*： accept events, the group can accept events from canvas or any elements
+*description*： receive events, the group can receive events from canvas or any elements
 
 *params*
 
-* `{string} event ` accept event name
-* `{function} data `accept event callback
+* `{string} event ` receive event name
+* `{function} data `receive event callback
 
 ```js
 on = (string, callback) => {}
