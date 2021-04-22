@@ -30,19 +30,12 @@ canvas.addGroup({
 ```
 <br>
 
-## 属性<a name='group-attr'></a>：
+**`节点的返回的dom必须设置position: absolute;`**
 
-| key | 说明 | 类型 | 默认值 
-| :------ | :------ | :------ | :------ 
-| id | 节点唯一标识 | string (Require) | - 
-| top | y轴坐标 | number (Require) | - 
-| left | x轴坐标 | number (Require) | - 
-| width | 宽度 | number (Option) | - 
-| height | 高度 | number (Option) | - 
-| type | 类型 | string (Option) | normal(随意拖入拖出),inner(只能拖入不能拖出)
-| endpoints | 锚点信息 | array (Option) | - 
-| Class | 拓展类 | Class (Option) | 当传入拓展类的时候，该节点组则会按拓展类的draw方法进行渲染，拓展类的相关方法也会覆盖父类的方法
-| scope | 作用域 | boolean (Option) | 当node的scope和group的scope一致才能加入到节点组。默认不设置即可随意加入
+<br>
+<br>
+
+## 属性
 
 ### id _`<String>`_ （必填）
 &nbsp;&nbsp;节点唯一标识
@@ -68,98 +61,188 @@ group.scope = 'xxx';
 group.scope = 'xxx1 xxx2 xxx3';
 ```
 
-### <a name='group-custom'>自定义节点组</a>：
+### draggable _`<Boolean>`_ (选填)
+&nbsp;&nbsp;节点组可拖动标识。默认可拖动
+### resize _`<Boolean>`_ (选填)
+&nbsp;&nbsp;节点组大小可变标识。默认可变
+
+<img width="400" src="https://img.alicdn.com/imgextra/i4/O1CN01nb2APF1ZM1lbFNKM1_!!6000000003179-1-tps-400-300.gif">
+
+### group _`<String>`_ (选填)
+&nbsp;&nbsp;父级group的id: 需要开启canvas.theme.group.includeGroups的属性才能支持group嵌套
+  
+<img width="400" src="https://img.alicdn.com/imgextra/i4/O1CN01qmOWWj1CKtcvZZJ7Q_!!6000000000063-2-tps-842-536.png">
+
+<br>
+<br>
+
+## 类重写API：
 
 ```js
-/**
-  * group的渲染方法
-  * @param {obj} data - 节点基本信息 
-  * @return {dom} - 返回渲染dom的根节点
-  */
-draw = (obj) => {}
+import {Group} from 'butterfly-dag';
 
-/**
-  * 节点组挂载后的回调
-  */
-mounted = () => {}
-/**
-  * @return {number} - 节点组宽度
-  */
+Class YourGroup extends Group {
+  
+  /**
+    * 节点组挂载后的回调
+    */
+  mount() {}
+
+  /**
+    * group的渲染方法
+    * @param {obj} data - 节点基本信息 
+    * @return {dom} - 返回渲染dom的根节点
+    */
+  draw(obj) {}
+}
+```
+
+<br>
+<br>
+
+## 外部调用API：
+
+### group.getWidth()
+
+*作用*： 获取节点组宽度
+
+*返回*
+
+* `number`节点组宽度
+
+```js
 getWidth = () => {}
+```
 
-/**
-  * @return {number} - 节点组高度
-  */
+### group.getHeight ()
+
+*作用*： 获取节点组高度
+
+*返回*
+
+* `number`节点组高度
+
+```js
 getHeight = () => {}
 ```
 
-### <a name='group-member'>新增，删除成员节点</a>：
+### group.addNode (node)
+
+*作用*： 节点组添加单个节点的方法
+
+*参数*
+
+* `{obj} node`节点数据
 
 ```js
-/**
-  * group添加节点
-  * @param {obj} node - 节点数据
-  */
 addNode = (node) => {}
-
-/**
-  * group批量添加节点
-  * @param {array} nodes - 节点数组
-  */
-addNodes = (nodes) => {}
-
-/**
-  * group删除节点
-  * @param {obj} node - 节点数据
-  */
-removeNode = (node) => {}
-
-/**
-  * group删除节点
-  * @param {array} nodes - 节点数组
-  */
-removeNodes = (nodes) => {}
 ```
 
-### <a name='group-endpoint'>自定义锚点</a>：
+### group.addNodes (nodes)
+
+*作用*： 节点组添加多个节点的方法
+
+*参数*
+
+* `{array} nodes`节点数组
 
 ```js
-/**
-  * @param {obj} param - 锚点基本信息(此方法必须在节点挂载后执行才有效)
-  * @param {string} param.id - 锚点id
-  * @param {string} param.orientation - 锚点方向(可控制线段的进行和外出方向)
-  * @param {string} param.scope - 作用域
-  * @param {string} param.type - 'source' / 'target' / undefined，当undefined的时候锚点既是source又是target
-  * @param {string} param.dom - 可以把分组内的任意一个子dom作为自定义锚点
-  */
-addEndpoint = (obj) => {}
+addNodes = (nodes) => {}
+```
 
-/**
-  * @param {string} pointId - 锚点的信息 
-  * @return {Endpoint} - Endpoint的对象
-  */
+### group.removeNode (node)
+
+*作用*： 节点组删除单个节点的方法
+
+*参数*
+
+* `{obj} node`节点数据
+
+```js
+removeNode = (node) => {}
+```
+
+### group.removeNodes (nodes)
+
+*作用*： 节点组删除多个节点的方法
+
+*参数*
+
+* `{obj} node`节点数据
+
+```js
+removeNode = (node) => {}
+```
+
+### group.addEndpoint (obj)
+
+*作用*： 节点组添加锚点的方法
+
+*参数*
+
+* `{obj} param`锚点基本信息(此方法必须在节点挂载后执行才有效)
+* `{string} param.id`锚点id
+* `{string} param.orientation`锚点方向(可控制线段的进行和外出方向)
+* `{string} param.scope`作用域
+* `{string} param.type`'source' / 'target' / undefined / 'onlyConnect'，可看锚点的type文档
+* `{string} param.dom`可以把分组内的任意一个子dom作为自定义锚点
+
+```js
+addEndpoint = (obj) => {}
+```
+
+### group.getEndpoint (id)
+
+*作用*： 节点组获取锚点的方法
+
+*参数*
+
+* `{string} pointId`锚点的信息 
+
+*返回*
+
+* `{Endpoint}`Endpoint的对象
+
+```js
 getEndpoint = (id) => {}
 ```
 
-### <a name='group-move'>移动</a>：
+### group.moveTo (obj)
+
+*作用*： 节点组移动坐标的方法
+
+*参数*
+
+* `{number} obj.x `移动位置的x坐标
+* `{number} obj.y `移动位置的y坐标
+
 ```js
-/**
-  * @param {number} x - 移动位置的x坐标 
-  * @param {number} y - 移动位置的y坐标 
-  */
 moveTo = (obj) => {}
 ```
 
-### <a name='group-event'>事件</a>：
-```js
-/**
-  * 发送事件
-  */
-emit = (string, obj) => {}
+### group.emit (event, data)
 
-/**
-  * 接受事件
-  */
+*作用*： 节点组发送事件的方法，画布及任何一个元素都可接收。
+
+*参数*
+
+* `{string} event `发送事件名称
+* `{number} data `发送事件数据
+
+```js
+emit = (string, obj) => {}
+```
+
+### group.on (string, callback)
+
+*作用*： 节点组接收事件的方法，能接收画布及任何一个元素的事件。
+
+*参数*
+
+* `{string} event `接收事件名称
+* `{function} data `接收事件回调
+
+```js
 on = (string, callback) => {}
 ```
 
