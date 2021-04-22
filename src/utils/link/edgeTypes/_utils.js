@@ -1,4 +1,5 @@
 'use strict';
+<<<<<<< HEAD
 import _ from 'lodash';
 
 const MINDIST = 20;
@@ -312,3 +313,6 @@ export function _findManhattanPoint (points, pos) {
   }
   return result;
 }
+=======
+
+>>>>>>> 44fc7b5... chore: optimize link code

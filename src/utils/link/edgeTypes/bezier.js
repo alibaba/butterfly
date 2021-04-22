@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 'use strict';
 import {_findControlPoint, _calcOrientation} from './_utils.js';
 
@@ -44,3 +45,6 @@ function drawBezier(sourcePoint, targetPoint) {
 }
 
 export default drawBezier;
+=======
+'use strict';
+>>>>>>> 44fc7b5... chore: optimize link code
