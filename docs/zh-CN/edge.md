@@ -97,7 +97,7 @@ canvas.addEdge({
 ```
 
 ### arrowShapeType _`<String>`_   (选填)
-&nbsp;&nbsp;箭头的类型: 可使用系统集成的和可使用自己注册的，只需要保证类型对应即可。
+&nbsp;&nbsp;箭头样式类型: 可使用系统集成的和可使用自己注册的，只需要保证类型对应即可。
 
 ```js
 // 自行注册的
@@ -179,15 +179,15 @@ Class YourEdge extends Endpoint {
 
 ## 外部调用API
 
-###edge.redraw ()
+### edge.redraw ()
 
-*作用*： 更细线段位置: 但线段所在的节点或者锚点位置发生变化先, 需要调用下redraw更新其对应的线。
+*作用*： 更新线段位置: 但线段所在的节点或者锚点位置发生变化先, 需要调用下redraw更新其对应的线。
 
 ```js
 redraw = () => {}
 ```
 
-###edge.setZIndex (index)
+### edge.setZIndex (index)
 
 *作用*： 设置线段的z-index值
 

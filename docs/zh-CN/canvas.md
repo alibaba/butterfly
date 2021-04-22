@@ -2,50 +2,161 @@
 
 ```js
 let canvas = new Canvas({
-  root: dom,               //canvas的根节点(必传)
-  layout: 'ForceLayout',   //布局设置(可传)，可使用集成的，也可自定义布局
-  zoomable: true,          //可缩放(可传)
-  moveable: true,          //可平移(可传)
-  draggable: true,         //节点可拖动(可传)
-  linkable: true,          //节点可连接(可传)
-  disLinkable: true,       //节点可取消连接(可传)
-  theme: {                 //主题定制(可传) 
-    group: {
-      type: 'normal'       //节点组类型(可传): normal(随意拖入拖出),inner(只能拖入不能拖出)
-    },
-    edge: {
-      type: 'Bezier',      //线条默认类型：贝塞尔曲线，折线，直线，曼哈顿路由线，更美丽的贝塞尔曲线。分别为Bezier/Flow/Straight/Manhattan/AdvancedBezier
-      label: 'test',       //线条默认label
-      arrow: true,         //线条默认是否带箭头
-      arrowPosition: 0.5,  //箭头位置(0 ~ 1)
-      arrowOffset: 0.0,    //箭头偏移
-      Class: XXClass,      //自己拓展的class,拖动连线的时候会采用该拓展类
-      isExpandWidth: false,//增加线条交互区域
-      defaultAnimate: false//默认开启线条动画
-    },
-    endpoint: {
-      position: [],        //限制锚点位置['Top', 'Bottom', 'Left', 'Right'],
-      linkableHighlight: true,//连线时会触发point.linkable的方法，可做高亮
-      limitNum: 10,        //限制锚点的连接数目
-      expandArea: {        //锚点过小时，可扩大连线热区
-        left: 10,
-        right: 10,
-        top: 10,
-        botton: 10
-      }
-    },
-    zoomGap: 0.001,         //鼠标放大缩小间隙设置
-    autoFixCanvas: {     //节点拖动或连线拖动到画布边缘时，画布自动延展
-      enable: false,
-      autoMovePadding: [20, 20, 20, 20] //触发自动延展的画布内边距
-    },
-    autoResizeRootSize: true // 自动适配root大小，默认为true
-  },
-  global: {                //自定义配置，会贯穿所有canvas，group，node，edge，endpoint对象
-    isScopeStrict: false   //scope是否为严格模式(默认为false)
-  }
+  root: dom,
+  theme: {},
+  ...
+  // 如下属性
 });
+canvas.draw({
+	// 数据
+})
 ```
+
+<br>
+<br>
+
+## 属性
+
+### root _`<dom>`_ (必填)
+
+&nbsp;&nbsp;实例容器，一般是一个具有宽高的dom元素, canvas 根节点(必传)
+  
+### zoomable _`<Boolean>`_   (选填)
+
+&nbsp;&nbsp;画布是否可缩放；值类型 `boolean`，默认 `false`
+
+### moveable _`<Boolean>`_   (选填)
+
+&nbsp;&nbsp;画布是否可移动；值类型 `boolean`，默认 `false`
+
+### draggable _`<Boolean>`_   (选填)
+
+&nbsp;&nbsp;画布节点是否可拖动；值类型 `boolean`，默认 `false`
+
+### linkable _`<Boolean>`_   (选填)
+
+&nbsp;&nbsp;画布节点是否可拖动；值类型 `boolean`，默认 `false`
+
+### disLinkable _`<Boolean>`_   (选填)
+
+&nbsp;&nbsp;画布节点是否可拖动；值类型 `boolean`，默认 `false`
+
+### theme
+
+&nbsp;&nbsp;画布主题配置，默认初始化样式和交互，主要分为：
+
+* edge 连线配置: 默认所有线段的样式和交互
+
+  *参数*：
+
+  * type _`<String>`_ 标志线条连接到节点还是连接到锚点。默认为`endpoint`
+
+  * shapeType _`<String>`_  线条类型可以是：Bezier(贝塞尔曲线)，Flow(折线)，Straight(直线)，Manhattan(曼哈顿路由线)，AdvancedBezier(更美丽的贝塞尔曲线)；默认为`Straight`
+
+  * label _`<String/Dom>`_ 线条注释
+
+  * labelPosition _`<Number>`_ 线条上注释位置: 取值0-1之间, 0代表代表在线段开始处，1代表在线段结束处。 默认值`0.5`
+
+  * labelOffset _`<Number>`_ 线条上注释的位置的偏移值: 距离线段注释位置的偏移值。 默认值为`0`，单位是像素
+
+  ```js
+  // labelPosition & labelOffset: 注释位置在线段中间处，再往结束方向偏移20px
+  {
+    labelPosition: 0.5,
+    labelOffset: 20
+  }
+  ```
+
+  * arrow _`<Boolean>`_ 线条箭头; 默认为`true`
+
+  * arrowPosition _`<Number>`_ 箭头位置: 取值0-1之间, 0代表代表在线段开始处，1代表在线段结束处。 默认值`0.5`
+
+  * arrowOffset _`<Number>`_ 箭头位置的偏移值: 距离线段箭头位置的偏移值。 默认值为`0`，单位是像素
+
+  * isExpandWidth _`<Boolean>`_ 增加线条交互区域, 默认为`false`。若true时，获取`eventHandlerDom`用于挂载事件
+
+  * defaultAnimate `<Boolean>`_ 默认开启线条动画; 默认为`false`
+
+  * Class _`<Class>`_ 自定义拓展的Class
+
+* endpoint 锚点配置: 默认所有锚点的样式和交互
+
+  *参数*：默认所有节点组的样式和交互
+
+  * linkableHighlight _`<Boolean>`_ 连线时会触发point.linkable的方法，可做线条高亮展示；默认为 `true`
+
+  * limitNum _`<Number>`_ 限制锚点的连接数目；默认为 `10`
+
+  * expandArea _`<Object>`_ 锚点连接的热区: 由于锚点区域有可能过小，所以提供了热区扩大的属性；默认 `{left: 10, top: 10, right: 10, bottom: 10}`
+
+* group 节点组配置
+
+  *参数*：
+
+  * type _`<String>`_ 节点组类型: `normal`(随意拖入拖出), `inner`(只能拖入不能拖出);默认为 `normal`
+
+  * includeGroups _`<Boolean>`_ 节点组是否允许嵌套节点组
+
+* zoomGap _`<Number>`_ 鼠标放大缩小间隙设置；取值[0-1]之间，默认 `0.001`
+
+* autoFixCanvas 节点拖动或连线拖动到画布边缘时，画布自动延展
+
+  *参数*：
+
+  * enable _`<Boolean>`_ 画布是否自动延展；默认 `false`
+
+  * autoMovePadding _`<Array>`_ 触发自动延展的画布内边距；默认 `[20,20,20,20]`
+  
+* autoResizeRootSize _`<Boolean>`_ 自动适配Root容器大小；默认 `true`
+
+<br>
+<br>
+
+## API
+
+### canvas.draw (data, calllback)
+
+*作用*：画布的渲染方法, `注意画布渲染是异步渲染`
+
+*参数*
+
+* `{object} data` 里面包含分组，节点，连线
+* `{function} calllback` `*渲染过程是异步的过程，需要的用户请留意回调`
+
+```js
+draw = (data, calllback) => {}
+```
+
+### canvas.redraw (data, calllback)
+
+*作用*：重新渲染方法，会将之前的所有元素删除重新渲染, `注意画布渲染是异步渲染`
+
+*参数*
+
+* `{object} data` 重绘时新的分组，节点，连线
+* `{function} calllback` `*渲染过程是异步的过程，需要的用户请留意回调`
+
+```js
+redraw = (data, calllback) => {}
+```
+
+### canvas.getDataMap (data, calllback)
+
+*作用*：获取画布的所有数据：节点，线段，分组
+
+*返回*
+
+* `{object} data` 分组，节点，连线的数据
+
+```js
+getDataMap = () => {}
+```
+
+
+
+
+
+
 
 ## 属性<a name='canvas-attr'></a>：
 
@@ -91,25 +202,7 @@ let canvas = new Canvas({
 
 ### <a name='canvas-other'>画布API</a>：
 ```js
-/**
-  * 渲染方法
-  * @param {data} data  - 里面包含分组，节点，连线
-  * @param {function} callback  - `*渲染过程是异步的过程，需要的用户请留意回调`
-  */
-draw = (data, calllback) => {}
 
-/**
-  * 重新渲染方法，会将之前的所有元素删除重新渲染
-  * @param {data} data  - 重绘时新的分组，节点，连线
-  * @param {function} callback  - `*渲染过程是异步的过程，需要的用户请留意回调`
-  */
-redraw = (data, calllback) => {}
-
-/**
-  * 获取画布的数据模型
-  * @return {data} - 画布的数据
-  */
-getDataMap = () => {}
 
 /**
   * 设置画布所有节点是否可拉线
