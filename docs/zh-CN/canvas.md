@@ -109,6 +109,10 @@ canvas.draw({
   
 * autoResizeRootSize _`<Boolean>`_ 自动适配Root容器大小；默认 `true`
 
+### global   (选填)
+
+&nbsp;&nbsp;global	全局属性； `object (Option)，默认 `undefined`
+
 <br>
 <br>
 
@@ -152,372 +156,422 @@ redraw = (data, calllback) => {}
 getDataMap = () => {}
 ```
 
+### canvas.setLinkable (boolean)
 
+*作用*：设置画布所有节点是否可拉线
 
-
-
-
-
-## 属性<a name='canvas-attr'></a>：
-
-| key | 说明 | 类型 | 默认值 
-| :------ | :------ | :------ | :------ 
-| root | 渲染画布的跟节点 | Dom (Require) | `*这个dom必须设置position:relative`
-| layout | 自动布局 | string/function (Option) | null 
-| zoomable | 画布是否可缩放 | boolean (Option) | false 
-| moveable | 画布是否可移动 | boolean (Option) | false 
-| draggable | 画布节点是否可拖动 | boolean (Option) | false 
-| linkable | 画布节点是否可连接 | boolean (Option) | false 
-| disLinkable | 画布节点是否可取消连接 | boolean (Option) | false 
-| theme | 画布主题 | object (Option) | undefined
-| global| 全局属性 | object (Option) | undefined
-
-* **layout布局**，把string/function传入layout的属性即可
- * forceLayout
- * dagreLayout
- * concentricLayout
- * circleLayout
- * fruchterman
- * radial
- * 自定义布局，传入自定义方法，里面可以按照用户需求进行布局。注:`除此之外，记得把Edge的calcPath的方法复写掉，不然会由小蝴蝶的内置计算线段的方法代替，无法实现所得的线段`
-* **autoFixCanvas**，自动延展画布，适用于画布内节点与画布外节点有互动的场景。效果如下：![自动延展画布](https://img.alicdn.com/tfs/TB16lUNBG61gK0jSZFlXXXDKFXa-1665-801.gif)
-* **isScopeStrict**，用于设置全局scope严格模式
-  * 默认为false。假如该值设置为true，当scope必须完全一致才能匹配；假如该值为false，当scope为undefined时，都能匹配所有值。
-
+*参数*
+* `{true|false} boolean` 是否支持所有节点可拉线
 ```js
-let canvas = new Canvas({
-  layout: (opts) => {
-    // 画布长宽
-    let width = opts.width;
-    let height = opts. height;
-    // 即将渲染的节点，节点组，以及线段数据
-    let data = opts.data;
-    // 布局逻辑，把节点，节点组的left和top值赋值即可
-    ......
-  }
-})
+setLinkable = (boolean) => {}
 ```
 
-## API：
+### canvas.setDisLinkable (boolean)
 
-### <a name='canvas-other'>画布API</a>：
+*作用*：设置画布所有节点是否可断线
+
+*参数*
+* `{true|false} boolean` 是否支持所有节点可断线
 ```js
-
-
-/**
-  * 设置画布所有节点是否可拉线
-  * @param {true|false} boolean  - 是否支持所有节点可拉线
-  */
-setLinkable = (boolean) => {}
-
-/**
-  * 设置画布所有节点是否可断线
-  * @param {true|false} boolean  - 是否支持所有节点可断线
-  */
 setDisLinkable = (boolean) => {}
+```
 
-/**
-  * 设置画布所有节点是否可拖动
-  * @param {true|false} boolean  - 是否支持所有节点可拖动
-  */
+### canvas.setDraggable (boolean)
+
+*作用*：设置画布所有节点是否可拖动
+
+*参数*
+* `{true|false} boolean` 是否支持所有节点可拖动
+```js
 setDraggable = (boolean) => {}
 ```
 
-### <a name='canvas-api-crud'>节点，线段，节点组的查询，新增和删除</a>：
+### canvas.getGroup (string)
+
+*作用*：根据id获取group
+
+*参数*
+* `{string} id` group id
+
+*返回*
+* `{Group}` 分组对象
+```js
+getGroup = (string) => {}
+```
+
+### canvas.addGroup (object|Group, nodes, options)
+
+*作用*：添加分组
+
+*参数*
+* `{object|Group} object` 分组的信息；Group － 分组的基类
+* `{array[object|Node]} object` (选填)节点信息，如果有值，则会自动将节点加进去节点组内部。允许假如已存在画布的节点
+* `{object} options` 参数
+* `{string} options.posType` 'absolute or relative' , 标识节点的坐标是相对画布的绝对定位还是相对于节点组
+* `{number} options.padding` 添加节点组padding
 
 ```js
-/**
-  * 根据id获取group
-  * @param {string} id  - group id
-  * @return {Group} - 分组对象
-  */
-getGroup = (string) => {}
-/**
-  * 添加分组
-  * @param {object|Group} object  - 分组的信息；Group － 分组的基类
-  * @param {array[object|Node]} object  - (选填)节点信息，如果有值，则会自动将节点加进去节点组内部。允许假如已存在画布的节点
-  * @param {object} options - 参数
-  * @param {string} options.posType - 'absolute or relative' , 标识节点的坐标是相对画布的绝对定位还是相对于节点组
-  * @param {number} options.padding - 添加节点组padding
-  */
 addGroup = (object|Group, nodes, options) => {}
-/**
-  * 根据id删除节点组
-  * @param {string} id  - node id
-  * @return {Group} - 删除的对象
-  */
+```
+
+### canvas.removeGroup (string)
+
+*作用*：根据id删除节点组
+
+*参数*
+* `{string} id` node id
+
+*返回*
+* `{Group}` 删除的对象
+```js
 removeGroup = (string) => {}
-/**
-  * 根据id获取node
-  * @param {string} id  - node id
-  * @return {Node} - 节点对象
-  */
+```
+
+### canvas.getNode (string)
+
+*作用*：根据id获取node
+
+*参数*
+* `{string} id` node id
+
+*返回*
+* `{Node}` 节点对象
+```js
 getNode = (string) => {}
-/**
-  * 添加节点
-  * @param {object|Node} object  - 节点的信息；Node － 节点的基类
-  */
+```
+
+### canvas.addNode (object|Node)
+
+*作用*：添加节点
+
+*参数*
+* `{object|Node} object` 节点的信息；Node － 节点的基类
+
+```js
 addNode = (object|Node) => {}
-/**
-  * 批量添加节点
-  * @param {array<object|Node>}  - 节点的信息；Node － 节点的基类
-  */
+```
+
+### canvas.addNodes (array<object|Node>)
+*作用*：批量添加节点
+*参数*
+* `{array<object|Node>}` 节点的信息；Node － 节点的基类
+```js
 addNodes = (array<object|Node>) => {}
-/**
-  * 删除节点
-  * @param nodeId string  - 节点id
-  */
+```
+
+### canvas.removeNode (string)
+*作用*：批量添加节点
+*参数*
+* `nodeId string`  - 节点id
+```js
 removeNode = (string) => {}
+```
 
-/**
-  * 批量删除节点
-  * @param nodeIds array  - 批量节点id
-  */
+### canvas.removeNodes (array)
+*作用*：批量删除节点
+*参数*
+* `nodeIds array`  - 批量节点id
+```js
 removeNodes = (array) => {}
-/**
-  * 添加连线
-  * @param {object|Edge} object  - 连线的信息；Edge － 连线的基类
-  */
+```
+
+### canvas.addEdge (object|Edge)
+*作用*：添加连线
+*参数*
+* `{object|Edge} object`  - 连线的信息；Edge － 连线的基类
+```js
 addEdge = (object|Edge) => {}
-/**
-  * 批量添加连线
-  * @param {array<object|Edge>}   - 连线的信息；Edge － 连线的基类
-  */
+```
+
+### canvas.addEdges (array<object|Edge>)
+*作用*：批量添加连线
+*参数*
+* `{array<object|Edge>}`   - 连线的信息；Edge － 连线的基类
+```js
 addEdges = (array<object|Edge>) => {}
+```
 
-/**
-  * 根据id或者Edge对象来删除线
-  * @param {string or Edge} id or Edge  - 线的id或者Edge对象
-  * @return {Edge} - 删除的线
-  */
+### canvas.removeEdge (param)
+*作用*：根据id或者Edge对象来删除线
+*参数*
+* `{string or Edge} id or Edge`  - 线的id或者Edge对象
+
+*返回*
+* `{Edge}` - 删除的线
+```js
 removeEdge = (param) => {}
+```
 
-/**
-  * 根据id或者Edge对象来批量删除线
-  * @param {array} string or Edge  - 线的id或者Edge对象的数组
-  * @return {array} Edge - 删除的线
-  */
+### canvas.removeEdges (param)
+*作用*：根据id或者Edge对象来批量删除线
+*参数*
+* `{array} string or Edge`  - 线的id或者Edge对象的数组
+
+*返回*
+* `{array} Edge` - 删除的线
+```js
 removeEdges = (param) => {}
-/**
-  * 根据node id获取相邻的edge
-  * @param {string} nodeId  - node id
-  * @return {Edges} - 相邻的连线
-  */
+```
+
+### canvas.getNeighborEdges (string)
+*作用*：根据node id获取相邻的edge
+*参数*
+* `{string} nodeId`  - node id
+
+*返回*
+* `{Edges}` - 相邻的连线
+```js
 getNeighborEdges = (string) => {}
+```
 
-/**
-  * 根据endpoint id获取相邻的edge
-  * @param {string} nodeId  - node id
-  * @param {string} endpointId  - endpoint id
-  * @return {Edges} - 相邻的连线
-  */
+### canvas.getNeighborEdgesByEndpoint (string, string)
+*作用*：根据endpoint id获取相邻的edge
+*参数*
+* `{string} nodeId`  - node id
+* `{string} endpointId`  - endpoint id
+
+*返回*
+* `{Edges}` - 相邻的连线
+```js
 getNeighborEdgesByEndpoint = (string, string) => {}
+```
 
-/**
-  * 查找 N 层关联节点和边
-  * @param {Object} options - 参数
-  * @param {Node} options.node - 起始节点
-  * @param {Endpoint} options.endpoint - 起始锚点，可选
-  * @param {String} options.type - 查找方向，可选值为 all\in\out，默认all，可选
-  * @param {Number} options.level - 层数，起始节点为第 0 层，默认 Infinity
-  * @param {Function} options.iteratee - 是否继续遍历判定函数，返回 boolean 值
-  * @returns {Object<nodes: Node, edges: Edge>} filteredGraph - 查找结果
-  */
+### canvas.getNeighborNodesAndEdgesByLevel (options)
+*作用*：查找 N 层关联节点和边
+*参数*
+  * `{Object} options` - 参数
+  * `{Node} options.node` - 起始节点
+  * `{Endpoint} options.endpoint` - 起始锚点，可选
+  * `{String} options.type` - 查找方向，可选值为 all\in\out，默认all，可选
+  * `{Number} options.level` - 层数，起始节点为第 0 层，默认 Infinity
+  * `{Function} options.iteratee` - 是否继续遍历判定函数，返回 boolean 值
+
+*返回*
+* `{Object<nodes: Node, edges: Edge>} filteredGraph` - 查找结果
+```js
 getNeighborNodesAndEdgesByLevel = (options) => {}
+```
 
-/**
-  * 设置线段z-index属性
-  * @param {Array<Edge>} edges - 线段
-  * @param {number} zIndex - z-index的值
-  */
+### canvas.setEdgeZIndex (edges, zIndex)
+*作用*：设置线段z-index属性
+*参数*
+* `{Array<Edge>} edges` - 线段
+* `{number} zIndex` - z-index的值
+
+```js
 setEdgeZIndex = (edges, zIndex) => {}
 ```
 
-### <a name='canvas-api-zoom-move'>缩放，平移</a>：
+### canvas.setZoomable (boolean, boolean)
+*作用*：设置画布缩放
+*参数*
+* `{true|false} boolean`  - 是否支持画布缩放
+* `{true|false} boolean`  - 放大缩小方向。现在默认为MAC的双指方向，却于Window的鼠标滑轮方向相反。默认值：false。若true，则方向相反
 
 ```js
-/**
-  * 设置画布缩放
-  * @param {true|false} boolean  - 是否支持画布缩放
-  * @param {true|false} boolean  - 放大缩小方向。现在默认为MAC的双指方向，却于Window的鼠标滑轮方向相反。默认值：false。若true，则方向相反
-  */
-setZoomable = (boolean, boolean) => {}
+setZoomable = (boolean, boolean) => {}}
+```
 
-/**
-  * 设置画布平移
-  * @param {true|false} boolean  - 是否支持画布平移
-  */
+### canvas.setMoveable (boolean)
+*作用*：设置画布平移
+*参数*
+* `{true|false} boolean`  - 是否支持画布平移
+
+```js
 setMoveable = (boolean) => {}
+```
 
-/**
-  * 手动设置画布偏移
-  * @param {[x, y]} array  - x,y坐标
-  */
+### canvas.move  (postion)
+*作用*：手动设置画布偏移
+*参数*
+* `{[x, y]} array`  - x,y坐标
+
+```js
 move = (postion) => {}
+```
 
-/**
-  * 手动设置画布缩放
-  * @param {float} scale - 0-1之间的缩放值
-  * @param {function} callback  - 缩放后的回调
-  */
+### canvas.zoom (scale)
+*作用*：手动设置画布缩放
+*参数*
+* `{float} scale` - 0-1之间的缩放值
+* `{function} callback`  - 缩放后的回调
+
+```js
 zoom = (scale) => {}
+```
 
-/**
-  * 获取画布的缩放
-  * @return {float} - 画布的缩放(0-1)
-  */
+### canvas.getZoom ()
+*作用*：获取画布的缩放
+*返回*
+* `{float}` - 画布的缩放(0-1)
+
+```js
 getZoom = () => {}
+```
 
-/**
-  * 获取画布的偏移值
-  * @return {[x, y]} - 画布的偏移值
-  */
+### canvas.getOffset ()
+*作用*：获取画布的偏移值
+*返回*
+* `{[x, y]}` - 画布的偏移值
+
+```js
 getOffset = () => {}
+```
 
-/**
-  * 获取画布的偏移值的中心点
-  * @return {[x, y]} - 画布的偏移值的中心点(百分比)
-  */
+### canvas.getOrigin ()
+*作用*：获取画布的偏移值的中心点
+*返回*
+* `{[x, y]}` - 画布的偏移值的中心点(百分比)
+
+```js
 getOrigin = () => {}
+```
 
-/**
-  * 手动设置画布缩放的中心点
-  * @param {[x, y]} array  - x,y的中心点坐标
-  */
+### canvas.setOrigin ([x ,y])
+*作用*：手动设置画布缩放的中心点
+*参数*
+* `{[x, y]} array` - x,y的中心点坐标
+
+```js
 setOrigin = ([x ,y]) => {}
 ```
 
-### <a name='canvas-api-focus'>适配画布和聚焦局部节点</a>：
+### canvas.focusNodeWithAnimate (string, type, options, callback)
+*作用*：聚焦某个节点/节点组
+*参数*
+* `{string/function} nodeId/groupId or filter`  - 节点的id或者过滤器
+* `{string} type`  - 节点的类型(node or group)
+* `{object} options {offset: [0,0]}`  - 聚焦配置属性，如偏移值
+* `{function} callback`  - 聚焦后的回调
 
 ```js
-/**
-  * 聚焦某个节点/节点组
-  * @param {string/function} nodeId/groupId or filter  - 节点的id或者过滤器
-  * @param {string} type  - 节点的类型(node or group)
-  * @param {object} options {offset: [0,0]}  - 聚焦配置属性，如偏移值
-  * @param {function} callback  - 聚焦后的回调
-  */
 focusNodeWithAnimate = (string, type, options, callback) => {}
+```
 
-/**
-  * 聚焦某多个节点/节点组
-  * @param {object} {nodes: [], groups: []}  - 节点和节点组的id数组
-  * @param {array} type  - 节点的类型(node or group)
-  * @param {object} options {offset: [0,0]}  - 聚焦配置属性，如偏移值
-  * @param {function} callback  - 聚焦后的回调
-  */
+### canvas.focusNodesWithAnimate (objs, type, options, callback)
+*作用*：聚焦某多个节点/节点组
+*参数*
+* `{object} {nodes: [], groups: []}`  - 节点和节点组的id数组
+* `{array} type`  - 节点的类型(node or group)
+* `{object} options {offset: [0,0]}`  - 聚焦配置属性，如偏移值
+* `{function} callback`  - 聚焦后的回调
+
+```js
 focusNodesWithAnimate = (objs, type, options, callback) => {}
+```
 
-/**
-  * 聚焦整个画布，会自动调整画布位置和缩放
-  * @param {object} options {offset: [0,0]}  - 聚焦配置属性，如偏移值
-  * @param {function} callback  - 聚焦后的回调
-  */
+### canvas.focusCenterWithAnimate (options, callback)
+*作用*：聚焦整个画布，会自动调整画布位置和缩放
+*参数*
+* `{object} options {offset: [0,0]}`  - 聚焦配置属性，如偏移值
+* `{function} callback`  - 聚焦后的回调
+
+```js
 focusCenterWithAnimate = (options, callback) => {}
 ```
 
-### <a name='canvas-api-redo-undo'>重做和撤销</a>：
+### canvas.redo (options)
+*作用*：重做操作
 
 ```js
-/**
-  * 重做操作
-  */
 redo = (options) => {}
+```
 
-/**
-  * 回退操作
-  */
+### canvas.undo (options)
+*作用*：回退操作
+
+```js
 undo = (options) => {}
+```
 
-/**
-  * 给操作队列新增最顶部元素
-  * @param {Object} options - 参数
-  * @param {String} options.type - 队列类型
-  * @param {Object} options.data - 队列数据
-  */
+### canvas.pushActionQueue (options)
+*作用*：给操作队列新增最顶部元素
+*参数*
+* `{Object} options` - 参数
+* `{String} options.type` - 队列类型
+* `{Object} options.data` - 队列数据
+
+```js
 pushActionQueue = (options) => {}
+```
 
-/**
-  * 给操作队列删除最顶部元素
-  */
+### canvas.popActionQueue (options)
+*作用*：给操作队列删除最顶部元素
+
+```js
 popActionQueue = (options) => {}
+```
 
-/**
-  * 清除操作队列
-  */
+### canvas.clearActionQueue (options)
+*作用*：清除操作队列
+
+```js
 clearActionQueue = (options) => {}
 ```
 
-### <a name='canvas-api-coordinate'>坐标转换和坐标偏移</a>：
+### canvas.terminal2canvas (coordinates)
+*作用*：屏幕转换为画布的坐标
+*参数*
+* `{array[number]} coordinates` - 需要换算的坐标([x,y])
+
+*返回*
+* `{number}` - 转换后的坐标
 
 ```js
-/**
-  * 屏幕转换为画布的坐标
-  * @param {array[number]} coordinates - 需要换算的坐标([x,y])
-  * @return {number} - 转换后的坐标
-  */
 terminal2canvas = (coordinates) => {}
+```
 
-/**
-  * 画布转换为屏幕的坐标
-  * @param {array[number]} coordinates - 需要换算的坐标([x,y])
-  * @return {number} - 转换后的坐标
-  */
-canvas2terminal = (coordinates) => {}
-``` 
-* **canvas2terminal**，屏幕转换为画布的坐标
+### canvas.canvas2terminal (coordinates)
+*作用*：画布转换为屏幕的坐标
   * 如图所示，画布缩放，移动后的坐标和原来画布的坐标并不匹配，需要此方法来转换。特别注意：有拖动添加节点的用户们注意这两个`e.clientX`和`e.clientY`，需要调用此方法进行转换。
 <img width="400" src="http://img.alicdn.com/tfs/TB1lWIAFHvpK1RjSZPiXXbmwXXa-973-850.jpg">
 
-* **terminal2canvas**，画布转换为屏幕的坐标
-  * `canvas2terminal`的逆转转换
+*参数*
+* `{array[number]} coordinates` - 需要换算的坐标([x,y])
 
-### <a name='canvas-api-selected'>框选</a>：
+*返回*
+* `{number}` - 转换后的坐标
+
 
 ```js
-/**
-  * 设置框选模式
-  * @param {true|false} boolean  - 是否开启框选功能
-  * @param {array} contents - 可接受框选的内容(node|endpoint|edge),默认'node')
-  * @param {string} selecMode - 可接受框选的内容(include|touch|senior),默认'include',include:全部包含才可选中，touch:触碰就选中，senior:从左到右需要全部包含，从右到左只需触碰就能选中)
-  */
+canvas2terminal = (coordinates) => {}
+```
+
+
+### canvas.setSelectMode (boolean, contents , selecMode)
+*作用*：设置框选模式
+*参数*
+* `{true|false} boolean`  - 是否开启框选功能
+* `{array} contents` - 可接受框选的内容(node|endpoint|edge),默认'node')
+* `{string} selecMode` - 可接受框选的内容(include|touch|senior),默认'include',include:全部包含才可选中，touch:触碰就选中，senior:从左到右需要全部包含，从右到左只需触碰就能选中)
+
+```js
 setSelectMode = (boolean, contents , selecMode) => {}
-/**
-  * 获取聚合组
-  * @param {name} string  - 聚合组的名称
-  */
+```
+
+### canvas.getUnion (name)
+*作用*：获取聚合组
+*参数*
+* `{name} string`  - 聚合组的名称
+```js
 getUnion = (name) => {}
+```
 
-/**
-  * 获取所有聚合组
-  */
+### canvas.getAllUnion ()
+*作用*：获取所有聚合组
+
+```js
 getAllUnion = () => {}
+```
 
-/**
-  * 添加聚合组 || 添加聚合组元素
-  * @param {name} string  - 聚合组的名称
-  * @param {obj} object  - 聚合组的元素
-  */
+### canvas.add2Union (name, obj)
+*作用*：添加聚合组 || 添加聚合组元素
+*参数*
+* `{name} string`  - 聚合组名称。假如不存在，则添加聚合组；假如已存在，则添加聚合组元素
+* `{obj} object`  - 聚合组的元素
+```js
 add2Union = (name, obj) => {}
 
-/**
-  * 去除聚合组
-  * @param {name} string  - 聚合组的名称
-  */
-removeUnion = (name) => {}
-
-/**
-  * 去除所有聚合组
-  */
-removeAllUnion = () => {}
-```
-* **union**，聚合组
-  * 可以随意根据自己的业务组可以做聚合组进行批量才做
-* **add2Union**
-  * `name`，聚合组名称。假如不存在，则添加聚合组；假如已存在，则添加聚合组元素
-  * `object`，聚合组的元素
-
-```js
 this.canvas.add2Union('我的聚合组', {
   nodes: []     // Node对象或者nodeId
   groups: []    // Group对象或者groupId
@@ -526,35 +580,46 @@ this.canvas.add2Union('我的聚合组', {
 });
 ```
 
-### <a name='canvas-api-events'>事件</a>：
+### canvas.removeUnion (name)
+*作用*：去除聚合组
+*参数*
+* `{name} string`  - 聚合组的名称
+```js
+removeUnion = (name) => {}
+```
 
+### canvas.removeAllUnion ()
+*作用*：去除所有聚合组
+
+```js
+removeAllUnion = () => {}
+```
+
+## 事件
 ```js
 let canvas = new Canvas({...});
 canvas.on('type key', (data) => {
   //data 数据
 });
 ```
-| key | 说明 | 返回 
-| :------ | :------ | :------
-| system.canvas.click | 点击画布空白处 | -
-| system.canvas.zoom | 画布缩放 | -
-| system.nodes.delete | 删除节点 | -
-| system.node.move | 移动节点 | -
-| system.nodes.add | 批量节点添加 | -
-| system.links.delete | 删除连线 | -
-| system.link.connect | 连线成功 | -
-| system.link.reconnect | 线段重连 | -
-| system.link.click | 点击事件 | -
-| system.group.add | 节点组添加 | -
-| system.group.delete | 删除节点组 | -
-| system.group.move | 移动节点组 | -
-| system.group.addMembers | 节点组添加节点 | -
-| system.group.removeMembers | 节点组删除节点 | -
-| system.multiple.select | 框选结果 | -
-| system.drag.start | 拖动开始 | -
-| system.drag.move | 拖动 | -
-| system.drag.end | 拖动结束 | -
-
+*参数key值*
+* `system.canvas.click` 点击画布空白处
+* `system.canvas.zoom`	画布缩放
+* `system.nodes.delete`	删除节点
+* `system.node.move`	移动节点
+* `system.nodes.add`	批量节点添加
+* `system.links.delete`	删除连线
+* `system.link.connect`	连线成功
+* `system.link.reconnect`	线段重连
+* `system.link.click`	点击事件
+* `system.group.delete`	删除节点组
+* `system.group.move`	移动节点组
+* `system.group.addMembers`	节点组添加节点
+* `system.group.removeMembers`	节点组删除节点
+* `system.multiple.select`	框选结果
+* `system.drag.start`	拖动开始
+* `system.drag.move`	拖动
+* `system.drag.end`	拖动结束
 ```js
 /**
   * 发送事件
@@ -566,59 +631,17 @@ emit = (string, obj) => {}
   */
 on = (string, callback) => {}
 ```
-### <a name='canvas-api-other'>其他辅助方法</a>：
 
+## 其他辅助方法
+
+### canvas.setGirdMode (show, options)
+*作用*：设置网格布局
+*参数*
+* `{true|false} boolean`  - 是否开启网格布局功能
+* `{array} options` - 网格布局的定制化参数
 ```js
-/**
-  * 设置网格布局
-  * @param {true|false} boolean  - 是否开启网格布局功能
-  * @param {array} options - 网格布局的定制化参数
-  */
 setGirdMode = (show, options) => {}
 
-/**
-  * 把画布上的节点，节点组自动对齐(必须在网格布局下才生效)
-  */
-justifyCoordinate = () => {}
-
-
-/**
-  * 设置辅助线
-  * @param {true|false} boolean  - 是否开启辅助线功能
-  * @param {array} options - 辅助线的定制化参数
-  */
-setGuideLine = (show, options) => {}
-
-/**
-  * 设置缩略图
-  * @param {true|false} boolean  - 是否开启缩略图功能
-  * @param {Object} 具体请参考缩略图章节
-  */
-setMinimap = (show, options) => {}
-
-/**
-  * 画布保存为图片
-  * @param {object=} options - 保存的图片参数，可选
-  * @param {string=} options.type - 图片格式(png/jpeg/svg,默认png)，可选
-  * @param {number=} options.quality - 图片质量(0~1，默认为1)，可选
-  * @param {number=} options.width - 图片宽度(默认为画布宽度)，可选
-  * @param {number=} options.height - 图片高度(默认为画布高度)，可选
-  * @return {Promise}
-  */
-save2img = (options) => {}
-
-/**
-  * 当root移动或者大小发生变化时需要更新位置
-  */
-updateRootResize = () => {}
-
-```
-
-* **setGirdMode**，设置网格布局
-  * `show`，设置是否开启网格布局
-  * `options`，设置网格布局的参数，如下注释所示
-
-```js
 this.canvas.setGirdMode(true, {
   isAdsorb: false,         // 是否自动吸附,默认关闭
   theme: {
@@ -634,11 +657,21 @@ this.canvas.setGirdMode(true, {
 });
 ```
 
-* **setGuideLine**
-  * `show`，设置是否开启辅助线
-  * `options`，设置辅助线的参数，如下注释所示
+### canvas.justifyCoordinate ()
+*作用*：把画布上的节点，节点组自动对齐(必须在网格布局下才生效)
 
 ```js
+justifyCoordinate = () => {}
+```
+
+### canvas.setGuideLine (show, options)
+*作用*：设置辅助线
+*参数*
+* `{true|false} boolean`  - 是否开启辅助线功能
+* `{array} options` - 辅助线的定制化参数
+```js
+setGuideLine = (show, options) => {}
+
 this.canvas.setGuideLine(true, {
   limit: 1,             // 限制辅助线条数
   theme: {
@@ -648,14 +681,29 @@ this.canvas.setGuideLine(true, {
 });
 ```
 
-* **save2img**，画布保存为图片
-  * `options`，图片参数
-  * `options.type`，图片类型
-  * `options.quality`，图片质量
-  * `options.width`，图片宽度
-  * `options.height`，图片高度
-
+### canvas.setMinimap = (show, options)
+*作用*：设置缩略图
+*参数*
+* `{true|false} boolean`  - 是否开启缩略图功能
+* `{Object}` 具体请参考缩略图章节
 ```js
+setMinimap = (show, options) => {}
+```
+
+### canvas.save2img (options)
+*作用*：画布保存为图片
+*参数*
+* `{object=} options` - 保存的图片参数，可选
+* `{string=} options.type` - 图片格式(png/jpeg/svg,默认png)，可选
+* `{number=} options.quality` - 图片质量(0~1，默认为1)，可选
+* `{number=} options.width` - 图片宽度(默认为画布宽度)，可选
+* `{number=} options.height` - 图片高度(默认为画布高度)，可选\
+
+*返回*
+* `{Promise}`
+```js
+save2img = (options) => {}
+
 this.canvas.save2img({type: 'png', width: 1920, height: 1080, quality: 1})
   .then(dataUrl => {
     var link = document.createElement('a');
@@ -663,4 +711,11 @@ this.canvas.save2img({type: 'png', width: 1920, height: 1080, quality: 1})
     link.href = dataUrl;
     link.click();
   });
+```
+
+### canvas.updateRootResize ()
+*作用*：当root移动或者大小发生变化时需要更新位置
+
+```js
+updateRootResize = () => {}
 ```
