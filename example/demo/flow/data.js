@@ -1,7 +1,7 @@
-const Node = require('./node');
-const Edge = require('./edge');
 
-export const mockData = {
+import Node from './node';
+import Edge from './edge';
+const mockData = {
   nodes: [
     {
       id: '1',
@@ -297,3 +297,5 @@ export const mockData = {
     },
   ]
 };
+
+export default mockData;

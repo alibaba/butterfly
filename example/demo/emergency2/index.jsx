@@ -1,12 +1,9 @@
 'use strict';
 import React, {Component} from 'react';
-require('./index.less');
-require('butterfly-dag/dist/index.css');
-
-// const Canvas = require('../../../index.js').Canvas;
+import './index.less';
+import 'butterfly-dag/dist/index.css';
 import { Canvas } from 'butterfly-dag';
-const mockData = require('./data.js');
-
+import mockData from './data';
 class Emergency2 extends Component {
   constructor() {
     super();
@@ -46,4 +43,4 @@ class Emergency2 extends Component {
   }
 }
 
-module.exports = Emergency2;
+export default Emergency2;

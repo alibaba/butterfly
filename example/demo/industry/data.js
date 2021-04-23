@@ -1,9 +1,8 @@
 'use strict';
 
-const BaseNode = require('./node');
-const BaseEdge = require('./edge');
-
-module.exports = {
+import BaseNode from './node';
+import BaseEdge from './edge';
+const data = {
   nodes: [{
     id: 0,
     name: '乙二醇MEG(液体)',
@@ -249,3 +248,4 @@ module.exports = {
   },],
   groupd: []
 }
+export default data;

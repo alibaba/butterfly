@@ -1,4 +1,3 @@
-// const Canvas = require('../../../index.js').Canvas;
 import { Canvas } from 'butterfly-dag';
 
 class RelationalBooksCanvas extends Canvas {
@@ -15,4 +14,4 @@ class RelationalBooksCanvas extends Canvas {
   }
 }
 
-module.exports = RelationalBooksCanvas;
+export default RelationalBooksCanvas;

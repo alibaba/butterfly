@@ -1,9 +1,8 @@
 
 'use strict';
 
-const Node = require('./base_node.jsx');
-const $ = require('jquery');
-
+import Node from './base_node';
+import $ from 'jquery';
 class Phone extends Node {
   constructor(...args) {
     super(...args);
@@ -13,4 +12,4 @@ class Phone extends Node {
   }
 }
 
-module.exports = Phone;
+export default Phone;

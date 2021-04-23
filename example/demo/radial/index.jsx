@@ -1,12 +1,10 @@
 'use strict';
 import React, {Component} from 'react';
 
-const Canvas = require('../../../index.js').Canvas;
-// import {Canvas} from 'butterfly-dag';
-const {data} = require('./data');
-require('./index.less');
-require('butterfly-dag/dist/index.css');
-
+import { Canvas } from '../../../index';
+import data from './data';
+import './index.less';
+import 'butterfly-dag/dist/index.css';
 class Radial extends Component {
     constructor() {
         super();
@@ -78,4 +76,4 @@ class Radial extends Component {
       }
 }
 
-module.exports = Radial;
+export default Radial;

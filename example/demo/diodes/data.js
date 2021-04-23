@@ -1,10 +1,10 @@
 'use strict';
 
-const Info = require('./node_info');
-const Semiconductor = require('./node_semiconductor');
-const Edge = require('./edge');
+import Info from './node_info';
+import Semiconductor from './node_semiconductor';
+import Edge from './edge';
 
-module.exports = {
+const data = {
   nodes: [{
     id: '0',
     top: 50,
@@ -165,3 +165,5 @@ module.exports = {
     Class: Edge
   }]
 }
+
+export default data;

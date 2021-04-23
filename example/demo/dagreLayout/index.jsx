@@ -2,11 +2,12 @@
 import React, {Component} from 'react';
 import DagreCanvas from './dagreCanvas';
 import {Button, Select, Slider} from 'antd';
-require('./index.less');
-require('butterfly-dag/dist/index.css');
-const mockData = require('./data.js');
-const node = require('./base_node.jsx');
-const RelationEdge = require('./edge_relation.jsx');
+
+import './index.less';
+import 'butterfly-dag/dist/index.css';
+import mockData from './data';
+import node from './base_node';
+import RelationEdge from './edge_relation';
 
 class DagreLayout extends Component {
   constructor() {
@@ -148,4 +149,4 @@ class DagreLayout extends Component {
   }
 }
 
-module.exports = DagreLayout;
+export default DagreLayout;
