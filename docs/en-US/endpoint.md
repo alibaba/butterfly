@@ -1,7 +1,7 @@
 # Endpoint
 
 ## Usage
-```
+```js
 // Usage One:
 canvas.draw({
   nodes: [{
@@ -42,7 +42,7 @@ node.addEndpoint({
 
 ## <a name='endpoint-api'> API：
 
-```
+```js
 /**
   * @return {dom} - custom endpoint dom
   */
