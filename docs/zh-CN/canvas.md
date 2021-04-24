@@ -223,7 +223,7 @@ addGroup = (object|Group, nodes, options) => {}
 
 此API除了可以新建节点组以外, 还可以做多选成组:
 
-<img width="400" src="https://img.alicdn.com/imgextra/i1/O1CN01S2n8Sy1aayJ8euH7n_!!6000000003347-1-tps-600-400.gif">
+<img width="600" src="https://img.alicdn.com/imgextra/i1/O1CN01S2n8Sy1aayJ8euH7n_!!6000000003347-1-tps-600-400.gif">
 
 ### canvas.removeGroup (string | Group)
 
@@ -399,6 +399,7 @@ getNeighborEdgesByEndpoint = (string, string) => {}
 *作用*：查找 N 层关联节点和边
 
 *参数*
+
   * `{Object} options` - 参数
   * `{Node} options.node` - 起始节点
   * `{Endpoint} options.endpoint` - 起始锚点，可选
@@ -568,22 +569,22 @@ focusNodesWithAnimate = (objs, type, options, callback) => {}
 focusCenterWithAnimate = (options, callback) => {}
 ```
 
-<img width="400" src="https://img.alicdn.com/imgextra/i2/O1CN01zrkUqk1SP34Sup0vt_!!6000000002238-1-tps-1661-824.gif">
+<img width="600" src="https://img.alicdn.com/imgextra/i2/O1CN01zrkUqk1SP34Sup0vt_!!6000000002238-1-tps-1661-824.gif">
 
-### canvas.redo (options)
+### canvas.redo ()
 
 *作用*：重做操作
 
 ```js
-redo = (options) => {}
+redo = () => {}
 ```
 
-### canvas.undo (options)
+### canvas.undo ()
 
 *作用*：回退操作
 
 ```js
-undo = (options) => {}
+undo = () => {}
 ```
 
 ### canvas.pushActionQueue (options)
@@ -652,7 +653,7 @@ canvas2terminal = (coordinates) => {}
 
 * 如图所示，画布缩放，移动后的坐标和原来画布的坐标并不匹配，需要此方法来转换。特别注意：有拖动添加节点的用户们注意这两个`e.clientX`和`e.clientY`，需要调用此方法进行转换。
 
-<img width="400" src="http://img.alicdn.com/tfs/TB1lWIAFHvpK1RjSZPiXXbmwXXa-973-850.jpg">
+<img width="600" src="http://img.alicdn.com/tfs/TB1lWIAFHvpK1RjSZPiXXbmwXXa-973-850.jpg">
 
 
 ### canvas.setSelectMode (boolean, contents , selecMode)
@@ -660,6 +661,7 @@ canvas2terminal = (coordinates) => {}
 *作用*：设置框选模式: 注意, 注意框选模式和普通拖动画布模式是互斥的, 没办法同时设置
 
 *参数*
+
 * `{true|false} boolean`  - 是否开启框选功能
 * `{array} contents` - 可接受框选的内容(node|endpoint|edge),默认'node')
 * `{string} selecMode` - 可接受框选的内容(include|touch|senior),默认'include',include:全部包含才可选中，touch:触碰就选中，senior:从左到右需要全部包含，从右到左只需触碰就能选中)

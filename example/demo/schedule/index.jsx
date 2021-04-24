@@ -4,8 +4,8 @@ require('./index.less');
 require('butterfly-dag/dist/index.css');
 
 // const Canvas = require('../../../index.js').Canvas;
-// import { Canvas } from 'butterfly-dag';
-import { Canvas } from '../../../index';
+import { Canvas } from 'butterfly-dag';
+// import { Canvas } from '../../../index';
 const mockData = require('./data.js');
 
 class Scene4New extends Component {
@@ -36,6 +36,7 @@ class Scene4New extends Component {
       //   this.canvas.removeGroup('group');
       //   this.canvas.removeNode('1');
       // }, 3000);
+
     });
     this.canvas.on('events', (data) => {
       // console.log(data);

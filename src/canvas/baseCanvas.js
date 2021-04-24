@@ -1183,8 +1183,14 @@ class BaseCanvas extends Canvas {
               edge.targetEndpoint._tmpType = 'target';
             }
 
+            // reconnect没前后变更
+            if (_preTargetNodeId && _preTargetPointId && `${_preTargetNodeId}||${_preTargetPointId}` === `${_currentTargetNode.id}||${_currentTargetEndpoint.id}`) {
+              return false;
+            }
+
             return edge;
           });
+          
           if (_delEdges.length !== 0 && _emitEdges.length !== 0) {
             this.pushActionQueue({
               type: 'system:reconnectEdges',
