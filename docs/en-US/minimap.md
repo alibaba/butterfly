@@ -34,7 +34,7 @@ minimap.update({
   offset: this.getOffset()
 });
 
-// destroy minmap
+// destroy minimap
 minimap.destroy();
 
 ```
@@ -51,7 +51,7 @@ minimap.destroy();
 | className | minimap container class name | `butterfly-minimap-container` |
 | containerStyle | minimap container css | |
 | viewportStyle | minimap view css | |
-| backgroudStyle  | minimap backgroud css | |
+| backgroundStyle  | minimap background css | |
 | nodeColor | node color | `rgba(255, 103, 101, 1)` |
 | groupColor | group color | `rgba(0, 193, 222, 1)` |
 | nodes | node data, refer specifically to the description below. | [] |
