@@ -44,7 +44,7 @@ node.addEndpoint({
 * 右: [1,0]
 * 左: [-1,0]
 
-<img width="400" src="https://img.alicdn.com/imgextra/i2/O1CN01UcRB7j1nQWGvFm1jM_!!6000000005084-0-tps-800-460.jpg">
+<img width="600" src="https://img.alicdn.com/imgextra/i2/O1CN01UcRB7j1nQWGvFm1jM_!!6000000005084-0-tps-800-460.jpg">
 
 ### pos _`<Array>`_ (选填)
 
@@ -52,7 +52,7 @@ node.addEndpoint({
 
 &nbsp;&nbsp;取值: [0-1之间 , 0-1之间]，0代表最左/上侧，1代表最右/下侧
 
-<img width="400" src="https://img.alicdn.com/imgextra/i3/O1CN012Z29af27tdlsRTaiC_!!6000000007855-0-tps-800-460.jpg">
+<img width="600" src="https://img.alicdn.com/imgextra/i3/O1CN012Z29af27tdlsRTaiC_!!6000000007855-0-tps-800-460.jpg">
 
 ### type _`<String>`_ (选填)
 
@@ -185,11 +185,11 @@ Class YourEndpoint extends Endpoint {
 ### linkable & unLinkable
 
 
-<img width="400" src="https://img.alicdn.com/imgextra/i2/O1CN01VNQ3v621www2JIRhN_!!6000000007050-1-tps-400-300.gif">
+<img width="600" src="https://img.alicdn.com/imgextra/i2/O1CN01VNQ3v621www2JIRhN_!!6000000007050-1-tps-400-300.gif">
 
 ### hoverLinkable & unHoverLinkable
 
-<img width="400" src="https://img.alicdn.com/imgextra/i4/O1CN01428w4x27Z1weiMNVy_!!6000000007810-1-tps-400-300.gif">
+<img width="600" src="https://img.alicdn.com/imgextra/i4/O1CN01428w4x27Z1weiMNVy_!!6000000007810-1-tps-400-300.gif">
 
 <br>
 <br>

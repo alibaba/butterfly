@@ -280,6 +280,18 @@ class BaseGroup extends Group {
   getEndpoint(pointId) {
     return _.find(this.endpoints, point => pointId === point.id);
   }
+  removeEndpoint(pointId) {
+    const rmEndpointIndex = _.findIndex(this.endpoints, point => point.id === pointId);
+    if (rmEndpointIndex !== -1) {
+      const rmEndpoint = this.endpoints.splice(rmEndpointIndex, 1)[0];
+      this.emit('InnerEvents', {
+        type: 'node:removeEndpoint',
+        data: rmEndpoint
+      });
+      rmEndpoint.destroy();
+      return rmEndpoint;
+    }
+  }
   _appendChildren(children = []) {
     children.forEach((item) => {
       item._group = this;

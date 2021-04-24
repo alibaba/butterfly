@@ -116,7 +116,7 @@ Arrow.registerArrow([{
 ### [Manhattan]draggable  _`<Number>`_   (选填)
 &nbsp;&nbsp;设置类型为Manhattan线段是否能拖动
 
-<img width="400" src="https://img.alicdn.com/imgextra/i3/O1CN01OnHABO1VPSGb0PBbW_!!6000000002645-1-tps-400-300.gif">
+<img width="600" src="https://img.alicdn.com/imgextra/i3/O1CN01OnHABO1VPSGb0PBbW_!!6000000002645-1-tps-400-300.gif">
 
 ### Class  _`<Class>`_    (选填)
 &nbsp;&nbsp;拓展类：一般来说已经满足需要了，因为逻辑较为复杂，不建议拓展线的基类。当传入拓展类的时候，该节点组则会按拓展类的draw方法进行渲染，拓展类的相关方法也会覆盖父类的方法
