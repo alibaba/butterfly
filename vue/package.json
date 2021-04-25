@@ -1,10 +1,13 @@
 {
   "name": "butterfly-vue",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "description": "vue version for butterfly",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "unpkg": "dist/index.unpkg.js",
+  "files": [
+    "dist"
+  ],
   "keywords": [
     "节点式编程，数据图，流程图，连通图"
   ],

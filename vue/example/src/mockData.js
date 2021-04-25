@@ -39,7 +39,7 @@ nodes: [{
   }
 ],
 edges: [{
-  id: '1-2',
+  id: '1.right-2.left',
   sourceNode: '1',
   targetNode: '2',
   source: 'right',

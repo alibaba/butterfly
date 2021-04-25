@@ -7,8 +7,8 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
-    "butterfly-dag": "^3.1.2",
-    "butterfly-vue": "0.0.4",
+    "butterfly-dag": "4.0.0-beta.7",
+    "butterfly-vue": "~0.0.4",
     "core-js": "^3.6.5",
     "element-ui": "^2.15.0",
     "vue": "^2.6.11"

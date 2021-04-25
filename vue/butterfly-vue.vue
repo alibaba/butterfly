@@ -50,7 +50,7 @@ export default {
     };
   },
   methods: {
-    //初始化
+    // 初始化
     initCanvas() {
       const root = this.$refs["canvas-dag"];
       if (!root) {
@@ -62,7 +62,7 @@ export default {
       }
     },
 
-    //更新画布信息
+    // 更新画布信息
     updateCavans() {
       if (!this.canvas) {
         console.warn("当前canvas为null，初始化存在问题");
@@ -78,7 +78,7 @@ export default {
       processEdge(this.canvas, this.edges, oldEdges);
     },
 
-    //重新计算节点和边的位置
+    // 重新计算节点和边的位置
     re() {
       if (!this.canvas) {
         console.warn("当前canvas为null，初始化存在问题");
@@ -89,44 +89,96 @@ export default {
       relayout(this.canvas);
     },
 
+    // 重绘所有节点
+    redraw() {
+      const oldNodes = this.canvas.nodes;
+      const oldEdges = this.canvas.edges;
+      const oldGroups = this.canvas.groups;
+
+      processEdge(this.canvas, [], oldEdges);
+      processNodes(this.canvas ,[] , oldNodes);
+      processGroups(this.canvas, [], oldGroups);
+
+      processGroups(this.canvas, this.groups, oldGroups);
+      processNodes(this.canvas, this.nodes, oldNodes);
+      processEdge(this.canvas, this.edges, oldEdges);
+      this.re();
+    },
+
     onCreateEdge(data) {
+      let link = data.links[0];
+
       let edgeInfo = {
-        sourceEndpointId: data.links[0].sourceEndpoint.id,
-        sourceNodeId: data.links[0].sourceNode.id,
-        targetEndpointId: data.links[0].targetEndpoint.id,
-        targetNodeId: data.links[0].targetNode.id,
+        id: `${link.sourceNode.id}.${link.sourceEndpoint.id}-${link.targetNode.id}.${link.targetEndpoint.id}`,
+        sourceEndpointId: link.sourceEndpoint.id,
+        sourceNodeId: link.sourceNode.id,
+        targetEndpointId: link.targetEndpoint.id,
+        targetNodeId: link.targetNode.id,
       };
+      this.edges.push({
+        id: `${edgeInfo.sourceNodeId}.${edgeInfo.sourceEndpointId}-${edgeInfo.targetNodeId}.${edgeInfo.targetEndpointId}`,
+        sourceNode: edgeInfo.sourceNodeId,
+        targetNode: edgeInfo.targetNodeId,
+        source: edgeInfo.sourceEndpointId,
+        target: edgeInfo.targetEndpointId,
+      });
       this.$emit("onCreateEdge", edgeInfo);
     },
 
     onDeleteEdge(data) {
+      let link = data.links[0];
       let edgeInfo = {
-        sourceEndpointId: data.links[0].sourceEndpoint.id,
-        sourceNodeId: data.links[0].sourceNode.id,
-        targetEndpointId: data.links[0].targetEndpoint.id,
-        targetNodeId: data.links[0].targetNode.id,
+        id: link.id,
+        sourceEndpointId: link.sourceEndpoint.id,
+        sourceNodeId: link.sourceNode.id,
+        targetEndpointId: link.targetEndpoint.id,
+        targetNodeId: link.targetNode.id,
       };
+      let index = this.edges.findIndex((item) => {
+        return item.id === link.id;
+      });
+      this.edges.splice(index,1);
       this.$emit("onDeleteEdge", edgeInfo);
     },
 
     onChangeEdges(data) {
+      let addLinkData = data.addLinks[0];
+      let delLinkData = data.delLinks[0];
+
       let edgeInfo = {
         addLink: {
-          sourceEndpointId: data.addLinks[0].sourceEndpoint.id,
-          sourceNodeId: data.addLinks[0].sourceNode.id,
-          targetEndpointId: data.addLinks[0].targetEndpoint.id,
-          targetNodeId: data.addLinks[0].targetNode.id,
+          id: `${addLinkData.sourceNode.id}.${addLinkData.sourceEndpoint.id}-${addLinkData.targetNode.id}.${addLinkData.targetEndpoint.id}`,
+          sourceEndpointId: addLinkData.sourceEndpoint.id,
+          sourceNodeId: addLinkData.sourceNode.id,
+          targetEndpointId: addLinkData.targetEndpoint.id,
+          targetNodeId: addLinkData.targetNode.id,
         },
         delLinks: {
-          sourceEndpointId: data.delLinks[0].sourceEndpoint.id,
-          sourceNodeId: data.delLinks[0].sourceNode.id,
-          targetEndpointId: data.delLinks[0].targetEndpoint.id,
-          targetNodeId: data.delLinks[0].targetNode.id,
+          id: `${delLinkData.sourceNode.id}.${delLinkData.sourceEndpoint.id}-${delLinkData.targetNode.id}.${delLinkData.targetEndpoint.id}`,
+          sourceEndpointId: delLinkData.sourceEndpoint.id,
+          sourceNodeId: delLinkData.sourceNode.id,
+          targetEndpointId: delLinkData.targetEndpoint.id,
+          targetNodeId: delLinkData.targetNode.id,
         },
         info: data.info,
       };
+      
+      let index = this.edges.findIndex((item) => {
+        return item.id === edgeInfo.delLinks.id;
+      });
+      this.edges.splice(index,1);
+
+      this.edges.push({
+        id: `${addLinkData.sourceNode.id}.${addLinkData.sourceEndpoint.id}-${addLinkData.targetNode.id}.${addLinkData.targetEndpoint.id}`,
+        sourceNode: edgeInfo.addLink.sourceNodeId,
+        targetNode: edgeInfo.addLink.targetNodeId,
+        source: edgeInfo.addLink.sourceEndpointId,
+        target: edgeInfo.addLink.targetEndpointId,
+      });
+
       this.$emit("onChangeEdges", edgeInfo);
     },
+
     onOtherEvent(data) {
       this.$emit("onOtherEvent", data);
     },
@@ -156,7 +208,7 @@ export default {
 
     this.re();
 
-    this.$emit("onLoaded", this.canvas);
+    this.$emit("onLoaded", this);
 
     this.canvas.on("events", (data) => {
       if (data.type === "link:connect") {
