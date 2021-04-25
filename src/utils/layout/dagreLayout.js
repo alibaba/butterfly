@@ -83,6 +83,8 @@ function dagreLayout(param) {
       curnode[index].top = item.top;
       curnode[index].posInfo = item.posInfo;
     });
+
+    return param;
 }
   
 function getFunc(func, value, defaultValue) {
