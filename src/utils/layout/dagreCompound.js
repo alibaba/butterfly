@@ -3,7 +3,7 @@ const dagreLayout = require("./dagreLayout");
 // STEP1: 找出单独节点&group节点， 单独布局
 // STEP2: group内的节点单独布局
 function dagreCompound (params) {
-  console.log('params: ', params);
+  console.log('init params: ', params);
   // 拿到坐标， 重组data
   const initData = params.data;
 
@@ -13,7 +13,6 @@ function dagreCompound (params) {
   }
 
   // group存在的情况
-  // new groups
   // step1: 找出单独节点&group节点， 单独布局
   const {data} = params;
   const aloneNodes = data.nodes.filter(v => !v.group);
@@ -61,17 +60,17 @@ function dagreCompound (params) {
 
   });
 
-  // group内节点的坐标
+  // STEP2: group内节点布局
   (params.data.groups || []).forEach((group, idx) => {
     const inGroupNodes = data.nodes.filter(v => v.group === group.id);
-    const nodeEdges = getInGroupNodesEdges(group.id);
-    console.log('nodeEdges: ', nodeEdges);
+    const inGroupNodeEdges = getInGroupNodesEdges(group.id);
+    console.log('inGroupNodeEdges: ', inGroupNodeEdges);
     const inGroupDatas = {
       ...params,
       nodesep: 28,
       data: {
         nodes: inGroupNodes,
-        edges: nodeEdges
+        edges: inGroupNodeEdges
       }
     };
     dagreLayout(inGroupDatas);
@@ -87,7 +86,8 @@ function dagreCompound (params) {
       params.data.nodes[nodeIndex].left = node.left;
     });
   });
-}
+};
+
 /**
  * 获取group以及单节点之间的连线关系
  * @param {Object} data 
@@ -147,6 +147,6 @@ const getInGroupNodesEdges = (data, groupId) => {
   })
 
   return _.uniqWith(nodeEdges, _.isEqual);
-}
+};
 
 module.exports = dagreCompound;
