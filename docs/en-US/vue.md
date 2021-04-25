@@ -127,7 +127,7 @@ module.exports = {
 | onChangeEdges | (data) => void; | edge reconnect event(system.link.reconnect)                                                                                       |                                         |   false  |
 |  onCreateEdge | (data) => void; | connect edge event(system.link.connect)                                                                                           |                                         |   false  |
 |  onDeleteEdge | (data) => void; | delete edge event(system.links.delete)                                                                                            |                                         |   false  |
-|  onOtherEvent | (data) => void; | [butterfly-dag event](https://github.com/alibaba/butterfly/blob/master/docs/zh-CN/canvas.md#canvas-api-events) exlude above three |                                         |   false  |
+|  onOtherEvent | (data) => void; | [butterfly-dag event](https://github.com/alibaba/butterfly/blob/master/docs/zh-CN/canvas.md#canvas-api-events) exclude above three |                                         |   false  |
 |    onLoaded   | (canvas) => void; | Canvans onLoaded event                                                                                                            |                                         |   false  |
 
 ### canvasConf
