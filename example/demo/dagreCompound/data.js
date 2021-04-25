@@ -3,7 +3,7 @@
 const Node = require('./node.js');
 const Edge = require('./edge');
 
-const nodesData = {
+const nodesAndGroupData = {
   nodes: [
     {
       id: '1',
@@ -73,66 +73,6 @@ const nodesData = {
     }
   ],
   edges: [
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '1',
-      targetNode: '7',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.5,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '2',
-      targetNode: '7',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.5,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '3',
-      targetNode: '8',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.5,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '3',
-      targetNode: '9',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.2,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '4',
-      targetNode: '8',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.2,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '4',
-      targetNode: '9',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.5,
-      Class: Edge
-    },
     {
       source: 'bottom',
       target: 'top',
@@ -259,66 +199,6 @@ const groupsData = {
     }
   ],
   edges: [
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '1',
-      targetNode: '7',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.5,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '2',
-      targetNode: '7',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.5,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '3',
-      targetNode: '8',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.5,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '3',
-      targetNode: '9',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.2,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '4',
-      targetNode: '8',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.2,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '4',
-      targetNode: '9',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.5,
-      Class: Edge
-    },
     {
       source: 'bottom',
       target: 'top',
@@ -454,66 +334,6 @@ const unGroupData = {
       source: 'bottom',
       target: 'top',
       sourceNode: '1',
-      targetNode: '7',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.5,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '2',
-      targetNode: '7',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.5,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '3',
-      targetNode: '8',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.5,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '3',
-      targetNode: '9',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.2,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '4',
-      targetNode: '8',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.2,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '4',
-      targetNode: '9',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.5,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '1',
       targetNode: '3',
       arrow: true,
       type: 'endpoint',
@@ -554,4 +374,4 @@ const unGroupData = {
   ]
 };
 
-module.exports = unGroupData;
+module.exports = nodesAndGroupData;

@@ -30,7 +30,8 @@ class Group extends Component {
       layout: {
         type: 'dagreCompound',
         options: {
-          rankdir: 'TB'
+          rankdir: 'TB',
+          align: 'UL'
         }
       }
     });
