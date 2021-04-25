@@ -14,7 +14,9 @@
 </template>
 
 <script>
-import ButterflyVue from '../../butterfly-vue';
+// import ButterflyVue from '../../butterfly-vue';
+import ButterflyVue from 'butterfly-vue';
+import 'butterfly-vue/dist/index.css';
 
 const endpoints = [
   {

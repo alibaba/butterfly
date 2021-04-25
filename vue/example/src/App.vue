@@ -12,9 +12,9 @@
 </template>
 
 <script>
-// import ButterflyVue from 'butterfly-vue';
-// import 'butterfly-vue/index.css';
-import ButterflyVue from '../../butterfly-vue';
+import ButterflyVue from 'butterfly-vue';
+import 'butterfly-vue/dist/index.css';
+// import ButterflyVue from '../../butterfly-vue';
 // import ButterflyVue from '../../dist/index';
 // import '../../dist/index.css';
 import mockData from "./mockData";
