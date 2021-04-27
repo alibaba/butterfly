@@ -1,6 +1,7 @@
 
-const Node = require('./node.jsx');
-export const mockData = {
+import Node from './node';
+
+const mockData = {
     nodes: [
       {
         id: '0',
@@ -440,4 +441,6 @@ export const mockData = {
       }
     ],
   };
+  
+  export default mockData;
 

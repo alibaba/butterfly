@@ -1,9 +1,7 @@
 'use strict';
 
-// const Node = require('../../../index.js').Node;
 import { Node } from 'butterfly-dag';
-const $ = require('jquery');
-
+import $ from 'jquery';
 class Semiconductor extends Node {
   constructor(opts) {
     super(opts);
@@ -76,4 +74,4 @@ class Semiconductor extends Node {
   }
 }
 
-module.exports = Semiconductor;
+export default Semiconductor;

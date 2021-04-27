@@ -1,12 +1,10 @@
 'use strict';
 import React, {Component} from 'react';
 
-// const Canvas = require('../../../index.js').Canvas;
 import { Canvas } from 'butterfly-dag';
-const {data} = require('./data');
-require('./index.less');
-require('butterfly-dag/dist/index.css');
-
+import data from './data';
+import './index.less';
+import 'butterfly-dag/dist/index.css';
 class Grid extends Component {
   constructor() {
     super();
@@ -75,4 +73,4 @@ class Grid extends Component {
   }
 }
 
-module.exports = Grid;
+export default Grid;

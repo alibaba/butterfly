@@ -98,14 +98,14 @@ let canvas = new Canvas({
   * @param {data} data  - include groups, nodes, edges
   * @param {function} callback  - `*the rendering process is an asynchronous process, please pay attention to the callback.`
   */
-draw = (data, calllback) => {}
+draw = (data, callback) => {}
 
 /**
   * Re-rendering method, it will delete all previous elements and re-render
   * @param {data} data  - new groups, nodes, and connections when redrawing
   * @param {function} callback  - `*the rendering process is an asynchronous process, please pay attention to the callback.`
   */
-redraw = (data, calllback) => {}
+redraw = (data, callback) => {}
 
 /**
   * get all data from canvas
@@ -155,7 +155,7 @@ addGroup = (object|Group, nodes, options) => {}
 /**
   * delete group by id
   * @param {string} id  - node id
-  * @return {Group} - Group Obejct
+  * @return {Group} - Group Object
   */
 removeGroup = (string) => {}
 /**
@@ -270,14 +270,14 @@ setMoveable = (boolean) => {}
   * set canvas offset
   * @param {[x, y]} array
   */
-move = (postion) => {}
+move = (position) => {}
 
 /**
   * set canvas zoom
   * @param {scale} float  - zoom value between 0-1
   * @param {function} callback  - zoom callback
   */
-zoom = (postion) => {}
+zoom = (position) => {}
 
 /**
   * get canvas zoom value

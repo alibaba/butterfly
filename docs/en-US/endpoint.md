@@ -1,7 +1,7 @@
 # Endpoint
 
 ## Usage
-```
+```js
 // Usage One:
 canvas.draw({
   nodes: [{

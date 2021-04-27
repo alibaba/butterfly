@@ -102,7 +102,9 @@ Class YourNode extends Node {
 
 * `number`节点宽度
 
-```js
+/**
+  * @return {number} - 节点宽度
+  */
 getWidth = () => {}
 ```
 
@@ -112,13 +114,10 @@ getWidth = () => {}
 
 *返回*
 
-* `number`节点高度
-
-```js
+/**
+  * @return {number} - 节点高度
+  */
 getHeight = () => {}
-```
-
-### node.setDraggable (boolean)
 
 *作用*： 获取节点是否可移动的状态
 
@@ -128,7 +127,6 @@ getHeight = () => {}
 
 ```js
 setDraggable = (boolean) => {}
-```
 
 ### node.addEndpoint (obj)
 
@@ -144,6 +142,14 @@ setDraggable = (boolean) => {}
 * `{string} param.dom`可以把节点内的任意一个子dom作为自定义锚点
 
 ```js
+/**
+  * @param {obj} param - 锚点基本信息(此方法必须在节点挂载后执行才有效)
+  * @param {string} param.id - 锚点id
+  * @param {string} param.orientation - 锚点方向(可控制线段的进行和外出方向)
+  * @param {string} param.scope - 作用域
+  * @param {string} param.type - 'source' / 'target' / undefined / 'onlyConnect'。 当undefined的时候锚点既是source又是target，但不能为同是为'source'和'target'，先来先到 ; 'onlyConnect'，锚点既是source又是target，可同时存在
+  * @param {string} param.dom - 可以把节点内的任意一个子dom作为自定义锚点
+  */
 addEndpoint = (obj) => {}
 ```
 
@@ -190,6 +196,10 @@ getEndpoint = (id, type) => {}
 * `{number} y `移动位置的y坐标
 
 ```js
+/**
+  * @param {number} x - 移动位置的x坐标 
+  * @param {number} y - 移动位置的y坐标 
+  */
 moveTo = (obj) => {}
 ```
 
@@ -211,8 +221,10 @@ remove = () => {}
 * `{number} data `发送事件数据
 
 ```js
+/**
+  * 发送事件
+  */
 emit = (string, obj) => {}
-```
 
 ### node.on (string, callback)
 
@@ -236,6 +248,10 @@ on = (string, callback) => {}
 * `{string} nodeId`节点id
 
 ```js
+/**
+  * [树状布局] 收缩节点
+  * @param {string} nodeId - 节点id 
+  */
 collapseNode = (string) => {}
 ```
 

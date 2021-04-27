@@ -1,6 +1,5 @@
 'use strict';
 
-// import {Node} from '../../../index.js';
 import { Node } from 'butterfly-dag';
 import $ from 'jquery';
 

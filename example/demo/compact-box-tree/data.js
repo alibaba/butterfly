@@ -1,6 +1,6 @@
-const Node = require('./node.js');
+import Node from './node';
 
-export const mockData = {
+const mockData = {
   nodes: {
     isRoot: true,
     id: 'Root',
@@ -183,3 +183,4 @@ export const mockData = {
     type: 'endpoint'
   }]
 };
+ export default mockData;

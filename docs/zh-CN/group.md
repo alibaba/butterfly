@@ -120,9 +120,9 @@ getWidth = () => {}
 
 *返回*
 
-* `number`节点组高度
-
-```js
+/**
+  * @return {number} - 节点组高度
+  */
 getHeight = () => {}
 ```
 
@@ -132,9 +132,13 @@ getHeight = () => {}
 
 *参数*
 
-* `{obj} node`节点数据
+### <a name='group-member'>新增，删除成员节点</a>：
 
 ```js
+/**
+  * group添加节点
+  * @param {obj} node - 节点数据
+  */
 addNode = (node) => {}
 ```
 
@@ -146,11 +150,11 @@ addNode = (node) => {}
 
 * `{array} nodes`节点数组
 
-```js
+/**
+  * group批量添加节点
+  * @param {array} nodes - 节点数组
+  */
 addNodes = (nodes) => {}
-```
-
-### group.removeNode (node)
 
 *作用*： 节点组删除单个节点的方法
 
@@ -168,10 +172,11 @@ removeNode = (node) => {}
 
 *参数*
 
-* `{obj} node`节点数据
-
-```js
-removeNode = (node) => {}
+/**
+  * group删除节点
+  * @param {array} nodes - 节点数组
+  */
+removeNodes = (nodes) => {}
 ```
 
 ### group.addEndpoint (obj)
@@ -188,8 +193,15 @@ removeNode = (node) => {}
 * `{string} param.dom`可以把分组内的任意一个子dom作为自定义锚点
 
 ```js
+/**
+  * @param {obj} param - 锚点基本信息(此方法必须在节点挂载后执行才有效)
+  * @param {string} param.id - 锚点id
+  * @param {string} param.orientation - 锚点方向(可控制线段的进行和外出方向)
+  * @param {string} param.scope - 作用域
+  * @param {string} param.type - 'source' / 'target' / undefined，当undefined的时候锚点既是source又是target
+  * @param {string} param.dom - 可以把分组内的任意一个子dom作为自定义锚点
+  */
 addEndpoint = (obj) => {}
-```
 
 ### group.getEndpoint (id)
 
@@ -217,6 +229,10 @@ getEndpoint = (id) => {}
 * `{number} obj.y `移动位置的y坐标
 
 ```js
+/**
+  * @param {number} x - 移动位置的x坐标 
+  * @param {number} y - 移动位置的y坐标 
+  */
 moveTo = (obj) => {}
 ```
 
@@ -229,11 +245,12 @@ moveTo = (obj) => {}
 * `{string} event `发送事件名称
 * `{number} data `发送事件数据
 
+### <a name='group-event'>事件</a>：
 ```js
+/**
+  * 发送事件
+  */
 emit = (string, obj) => {}
-```
-
-### group.on (string, callback)
 
 *作用*： 节点组接收事件的方法，能接收画布及任何一个元素的事件。
 

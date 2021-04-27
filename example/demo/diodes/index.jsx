@@ -1,11 +1,9 @@
 'use strict';
 import React, {Component} from 'react';
-require('./index.less');
-
-const Canvas = require('../../../index.js').Canvas;
+import './index.less';
 // import { Canvas } from 'butterfly-dag';
-const mockData = require('./data');
-
+import { Canvas } from 'butterfly-dag';
+import mockData from './data';
 class Diodes extends Component {
   constructor() {
     super();
@@ -42,4 +40,4 @@ class Diodes extends Component {
   }
 }
 
-module.exports = Diodes;
+export default Diodes;
