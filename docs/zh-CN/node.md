@@ -1,6 +1,7 @@
 # 节点(Node)
 
 ## 用法
+
 ``` js
 const Node = require('butterfly-dag').Node;
 class ANode extends Node {
@@ -44,7 +45,7 @@ canvas.addNode({
 ### left _`<Number>`_   (必填)
 &nbsp;&nbsp;x轴坐标: 节点所在画布的坐标；若在节点组中，则是相对于节点组内部的坐标
 ### draggable _`<Boolean>`_   (选填)
-&nbsp;&nbsp;可以设置该节点是否能拖动：为可覆盖全局的draggable属性
+&nbsp;&nbsp;设置该节点是否能拖动：为可覆盖全局的draggable属性
 ### group _`<String>`_    (选填)
 &nbsp;&nbsp;父级group的id: 设置后该节点会添加到节点组中
 ### endpoints _`<Array>`_    (选填)
