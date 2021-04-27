@@ -1,12 +1,10 @@
 'use strict';
 
-// const Canvas = require('../../../index.js').Canvas;
 import { Canvas } from 'butterfly-dag';
-const Group = require('./group');
-const NoteSourceNode = require('./noteSourceNode.js');
-const NoteTargetNode = require('./noteTargetNode.js');
-const $ = require('jquery');
-
+import Group from './group';
+import NoteSourceNode from './noteSourceNode';
+import NoteTargetNode from './noteTargetNode';
+import $ from 'jquery';
 class CircleCanvas extends Canvas {
   draw(opts, callback) {
     let _groups = opts.groups;
@@ -115,4 +113,4 @@ class CircleCanvas extends Canvas {
   }
 }
 
-module.exports = CircleCanvas;
+export default CircleCanvas;

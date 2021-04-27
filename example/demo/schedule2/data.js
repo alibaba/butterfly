@@ -1,9 +1,8 @@
 'use strict';
 
-const Node = require('./node.js');
-const Edge = require('./edge');
-
-module.exports = {
+import Node from './node';
+import Edge from './edge';
+const data = {
   nodes: [
     {
       id: '1',
@@ -230,3 +229,4 @@ module.exports = {
     },
   ],
 };
+export default data;

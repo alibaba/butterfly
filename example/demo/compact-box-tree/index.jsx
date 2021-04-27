@@ -1,12 +1,8 @@
 'use strict';
 import React, {Component} from 'react';
-require('./index.less');
-
-// const Canvas = require('../../../index.js').TreeCanvas;
+import './index.less';
 import { TreeCanvas } from 'butterfly-dag';
-// import { TreeCanvas } from '../../../index';
-const {mockData} = require('./data');
-
+import mockData from './data';
 class CompactBoxTree extends Component {
   constructor() {
     super();
@@ -62,5 +58,4 @@ class CompactBoxTree extends Component {
     );
   }
 }
-
-module.exports = CompactBoxTree;
+export default CompactBoxTree;

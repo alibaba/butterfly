@@ -1,12 +1,10 @@
 'use strict';
 import React, {Component} from 'react';
 
-// const Canvas = require('../../../index.js').Canvas;
 import { Canvas } from 'butterfly-dag';
-const mockData = require('./data');
-
-require('./index.less');
-require('butterfly-dag/dist/index.css');
+import mockData from './data';
+import './index.less';
+import 'butterfly-dag/dist/index.css';
 
 class ForceTree extends Component {
   constructor() {
@@ -58,4 +56,5 @@ class ForceTree extends Component {
   }
 }
 
-module.exports = ForceTree;
+
+export default ForceTree;

@@ -1,9 +1,7 @@
 'use strict';
 
-// let Edge = require('../../../index.js').Edge;
 import { Edge } from 'butterfly-dag';
-let $ = require('jquery');
-
+import $ from 'jquery';
 class RelationEdge extends Edge {
   draw(obj) {
     let path = super.draw(obj);
@@ -27,4 +25,4 @@ class RelationEdge extends Edge {
     return dom;
   }
 };
-module.exports = RelationEdge;
+export default RelationEdge;

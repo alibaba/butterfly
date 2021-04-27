@@ -1,8 +1,7 @@
 'use strict';
 
-const Node = require('./base_node.jsx');
-const $ = require('jquery');
-
+import Node from './base_node';
+import $ from 'jquery';
 class Train extends Node {
   constructor(...args) {
     super(...args);
@@ -12,4 +11,4 @@ class Train extends Node {
   }
 }
 
-module.exports = Train;
+export default Train;
