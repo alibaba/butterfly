@@ -7,8 +7,8 @@ import props from './props';
 import diff from './util/diff.js';
 import recalc from './util/re-calc.js';
 import CEndpoint from './coms/endpoint';
-import process from './util/process.js';
 import relayout from './util/re-layout.js';
+import processFactory from './util/process.js';
 import NodeRender from './coms/node-render.jsx';
 import CommonRender from './coms/common-render.jsx';
 import defaultOptions from './util/default-options';
@@ -42,6 +42,10 @@ class ButterflyReact extends React.Component {
     super(props);
 
     this.savePropsHash();
+
+    // 画布唯一ID
+    this.uniqId = `${new Date().getTime()}${Math.floor(Math.random() * 100)}`;
+    this.process = processFactory(this.uniqId);
 
     // 画布实例
     this.canvas = null;
@@ -98,10 +102,10 @@ class ButterflyReact extends React.Component {
     recalc(this.canvas);
     relayout(this.canvas);
 
-    const data = process({
+    const data = this.process({
       nodes,
       edges,
-      groups
+      groups,
     });
 
     await new Promise((res, rej) => {
@@ -280,9 +284,9 @@ class ButterflyReact extends React.Component {
     const processNodes = () => {
       const {created, deleted} = diff(nodes, oldNodes);
 
-      canvas.addNodes(process({nodes: created}).nodes);
+      canvas.addNodes(this.process({nodes: created}).nodes);
 
-      let deleteNodes = process({nodes: deleted}).nodes;
+      let deleteNodes = this.process({nodes: deleted}).nodes;
       let deleteNodesIds = [];
       try {
         deleteNodesIds = deleteNodes.map(n => n.id);
@@ -296,11 +300,11 @@ class ButterflyReact extends React.Component {
     const processGroups = () => {
       const {created, deleted} = diff(groups, oldGroups);
 
-      process({groups: created}).groups.forEach(group => {
+      this.process({groups: created}).groups.forEach(group => {
         canvas.addGroup(group);
       });
 
-      process({groups: deleted}).groups.forEach(group => {
+      this.process({groups: deleted}).groups.forEach(group => {
         canvas.removeGroup(group.id);
       });
     };
@@ -327,8 +331,8 @@ class ButterflyReact extends React.Component {
     const processEdge = () => {
       const {created, deleted} = diff(edges, oldEdges);
 
-      canvas.addEdges(process({edges: created}).edges, true);
-      canvas.removeEdges(process({edges: deleted}).edges.map(e => e.id));
+      canvas.addEdges(this.process({edges: created}).edges, true);
+      canvas.removeEdges(this.process({edges: deleted}).edges.map(e => e.id));
     };
 
     processEdge();
@@ -352,7 +356,7 @@ class ButterflyReact extends React.Component {
             <React.Fragment>
               <NodeRender
                 nodes={nodes}
-                idPrefix="bf_node_"
+                idPrefix={this.uniqId + 'bf_node_'}
                 canvas={this.canvas}
                 onRenderFinish={() => {
                   debug('node has rended finish, render edges');
@@ -365,14 +369,14 @@ class ButterflyReact extends React.Component {
                 <CommonRender
                   data={edges}
                   renderKey="labelRender"
-                  idPrefix="edge_label_"
+                  idPrefix={this.uniqId + 'bf_node_'}
                   type="edge"
                 />
               }
               <CommonRender
                 data={groups}
                 type="group"
-                idPrefix="bf_group_"
+                idPrefix={this.uniqId + 'bf_node_'}
               />
             </React.Fragment>
           )
