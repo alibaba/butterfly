@@ -131,6 +131,8 @@ getEndpoint = (id, type) => {}
 
 ```js
 /**
+  * 移动节点
+  * @param {Array} obj 坐标，例如 [0, 1]
   * @param {number} x - 移动位置的x坐标 
   * @param {number} y - 移动位置的y坐标 
   */
