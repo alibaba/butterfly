@@ -185,9 +185,16 @@ class ButterflyReact extends React.Component {
       onDeleteEdge
     } = this.props;
 
-    console.log(canvas);
+    // 由于 hooks 组件每次会重新生成 event，所以需要更新 event
+    if (this._onCreateEdge) {
+      canvas.off('system.link.connect', this._onCreateEdge);
+    }
 
-    canvas.on('system.link.connect', ({links}) => {
+    if (this._onDeleteEdge) {
+      canvas.off('system.link.delete', this._onDeleteEdge);
+    }
+
+    this._onCreateEdge = ({links}) => {
       const link = links[0];
 
       if (!link) {
@@ -215,9 +222,11 @@ class ButterflyReact extends React.Component {
       });
 
       call(onEdgesChange)(canvas.edges);
-    });
+    };
 
-    canvas.on('system.link.delete', ({links}) => {
+    canvas.on('system.link.connect', this._onCreateEdge);
+
+    this._onDeleteEdge = ({links}) => {
       const link = links[0];
       // 直接取消当前连线，然后重新绘制一条
       const {
@@ -240,13 +249,17 @@ class ButterflyReact extends React.Component {
       });
 
       call(onEdgesChange)(canvas.edges);
-    });
+    };
+
+    canvas.on('system.link.delete', this._onDeleteEdge);
   }
 
   async componentDidUpdate(preProps) {
     if (!this.canvas) {
       return;
     }
+
+    this.onLinkEvent();
 
     const hasCanvasChanged = this.props.nodes !== preProps.nodes ||
     this.props.edges !== preProps.edges ||
@@ -369,14 +382,14 @@ class ButterflyReact extends React.Component {
                 <CommonRender
                   data={edges}
                   renderKey="labelRender"
-                  idPrefix={this.uniqId + 'bf_node_'}
+                  idPrefix={this.uniqId + 'edge_label_'}
                   type="edge"
                 />
               }
               <CommonRender
                 data={groups}
                 type="group"
-                idPrefix={this.uniqId + 'bf_node_'}
+                idPrefix={this.uniqId + 'bf_group_'}
               />
             </React.Fragment>
           )
