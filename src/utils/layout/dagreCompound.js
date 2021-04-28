@@ -5,7 +5,7 @@ const dagreLayout = require("./dagreLayout");
 function dagreCompound (params) {
   console.log('init params: ', params);
   // 拿到坐标， 重组data
-  const initData = params.data;
+  const {data: initData, ranksep, nodesep} = params;
 
   if (_.isEmpty(initData.groups)) {
     dagreLayout(params);
@@ -13,20 +13,29 @@ function dagreCompound (params) {
   }
 
   // group存在的情况
+  // 判断是不是嵌套布局
+  // const groupInGroups = initData.groups.filter(v => v.group);
+
+  // if (!_.isEmpty(groupInGroups)) {
+  //   groupInGroups.forEach(inGroup => {
+  //     // 找出嵌套在外层的group
+  //     const outGroup = initData.groups.find(initG => initG.id === inGroup.group);
+
+  //   });
+  // }
   // step1: 找出单独节点&group节点， 单独布局
-  const {data} = params;
-  const aloneNodes = data.nodes.filter(v => !v.group);
+  const aloneNodes = initData.nodes.filter(v => !v.group);
 
   // 获取group和单节点之间的连线关系
-  const groupAloneNodesEdges = getGroupAndAloneNodesEdges(data);
+  const groupAloneNodesEdges = getGroupAndAloneNodesEdges(initData);
   console.log('groupAloneNodesEdges: ', groupAloneNodesEdges);
 
   const groupData = {
     ...params,
-    ranksep: 60,
-    nodesep: 90,
+    ranksep,
+    nodesep,
     data: {
-      nodes: [...aloneNodes, ...data.groups],
+      nodes: [...aloneNodes, ...initData.groups],
       edges: groupAloneNodesEdges
     }
   };
@@ -62,12 +71,12 @@ function dagreCompound (params) {
 
   // STEP2: group内节点布局
   (params.data.groups || []).forEach((group, idx) => {
-    const inGroupNodes = data.nodes.filter(v => v.group === group.id);
+    const inGroupNodes = initData.nodes.filter(v => v.group === group.id);
     const inGroupNodeEdges = getInGroupNodesEdges(group.id);
     console.log('inGroupNodeEdges: ', inGroupNodeEdges);
     const inGroupDatas = {
       ...params,
-      nodesep: 28,
+      nodesep,
       data: {
         nodes: inGroupNodes,
         edges: inGroupNodeEdges

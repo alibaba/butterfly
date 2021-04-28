@@ -31,8 +31,10 @@ class Group extends Component {
         type: 'dagreCompound',
         options: {
           rankdir: 'TB',
-          align: 'UL'
-        }
+          nodesep: 50,
+          ranksep: 50,
+          controlPoints: false,
+        },
       }
     });
     this.canvas.draw(mockData);
