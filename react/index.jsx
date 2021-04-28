@@ -281,7 +281,16 @@ class ButterflyReact extends React.Component {
       const {created, deleted} = diff(nodes, oldNodes);
 
       canvas.addNodes(process({nodes: created}).nodes);
-      canvas.removeNodes(process({nodes: deleted}).nodes);
+
+      let deleteNodes = process({nodes: deleted}).nodes;
+      let deleteNodesIds = [];
+      try {
+        deleteNodesIds = deleteNodes.map(n => n.id);
+      } catch (e) {
+        deleteNodesIds = deleteNodes;
+      }
+
+      canvas.removeNodes(deleteNodesIds);
     };
 
     const processGroups = () => {
