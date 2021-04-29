@@ -23,7 +23,7 @@ class panelPlugins {
     canvas.addNode(node);
   }
 
-  register = (registerArray) => {
+  register = (registerArray, callback) => {
     if (!_.isArray(registerArray)) {
       console.warn('register数据必须是数组',registerArray);
       return ;
@@ -97,60 +97,6 @@ class panelPlugins {
           top: coordinates[1],
           Class: Node,
           content,
-          endpoints: [
-            {
-              id: 'n',
-              orientation: [0, -1],
-              pos: [0.5, 0]
-            },
-            {
-              id: 's',
-              orientation: [0, 1],
-              pos: [0.5, 0]
-            },
-            {
-              id: 'w',
-              orientation: [-1, 0],
-              pos: [0, 0.5]
-            },
-            {
-              id: 'e',
-              orientation: [1, 0],
-              pos: [0, 0.5]
-            },
-            {
-              id: 'n-e',
-              orientation: [1, 0],
-              pos: [0, 0],
-              Class: controlEndPoint,
-            },
-            {
-              id: 's-e',
-              orientation: [1, 0],
-              pos: [0, 1],
-              Class: controlEndPoint,
-            },
-            {
-              id: 's-w',
-              orientation: [-1, 0],
-              pos: [0, 1],
-              Class: controlEndPoint,
-            },
-            {
-              id: 'n-w',
-              orientation: [-1, 0],
-              pos: [0, 0],
-              Class: controlEndPoint,
-            },
-            {
-              id: 'rotator',
-              orientation: [0, 1],
-              pos: [0.8, 0],
-              rotator: true,
-              dom: `<div class="rotator" />`,
-              Class: controlEndPoint,
-            },
-          ]
         }
 
         this.addNode(registerData.canvas, node);
@@ -158,6 +104,10 @@ class panelPlugins {
       });
 
     };
+
+    if (_.isFunction(callback)) {
+     callback();
+    }
 
   }
 

@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import BaseCanvas from '../../../../src/canvas/baseCanvas.js';
 
+// import panelPlugins from '../../dist/index.js';
 import panelPlugins from '../../src/index.js';
-import pika1 from '../../src/uml/img/pika1.jpg';
 
+import pika from '../img/pikatest.jpg';
+
+// import '../../dist/index.css';
 import 'butterfly-dag/dist/index.css';
-
 import './index.less';
 
 class Test extends Component {
@@ -27,22 +29,23 @@ class Test extends Component {
     });
     this.canvas.on('events', (data) => {
       // console.log(data);
-      // console.log(this.canvas.get);
     });
     panelPlugins.register([{
       root: document.getElementById('dnd'),
       canvas: this.canvas,
       type: 'uml',
-      width: 36,
-      height: 36,
+      width: 40,
+      height: 40,
       data: [
         {
           id: 'user-1',
           type: 'png',
-          content: pika1,
+          content: pika,
+          with: 40,
+          height: 40,
         }
       ]
-    }]);
+    }],()=>{console.log('finish');});
   }
   render() {
     return (

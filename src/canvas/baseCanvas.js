@@ -1010,7 +1010,6 @@ class BaseCanvas extends Canvas {
           });
         } else if (this._dragType === 'node:resize') {
           this._dragNode.resize(canvasX, canvasY);
-
         } else if (this._dragType === 'group:resize') {
           let pos = this._getGroupPos(this._dragGroup);
           let _newWidth = canvasX - pos.left;
