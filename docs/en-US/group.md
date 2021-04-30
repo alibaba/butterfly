@@ -32,7 +32,7 @@ canvas.addGroup({
 ```
 <br>
 
-**`The returned dom of the node must be set to position: absolute;`**
+**`The returned dom of the group must be set to position: absolute;`**
 
 <br>
 <br>
@@ -52,7 +52,7 @@ canvas.addGroup({
 ### endpoints _`<Array>`_ (Optional)
 &nbsp;&nbsp;system endpoints configuration: system endpoints  will be added when this configuration is present
 ### Class _`<Class>`_ (Optional)
-&nbsp;&nbsp;extended class
+&nbsp;&nbsp;extended class: when the extended class is passed in, the group will be rendered according to the draw method of the extended class, and the related methods of the extended class will also override the methods of the parent class
 ### scope _`<String>`_ (Optional)
 &nbsp;&nbsp;scope: When the scope of the node is the same as the scope of the group, it can be added to the group. You can join as you like without setting it by default
 
@@ -224,7 +224,7 @@ moveTo = (obj) => {}
 
 ### group.emit (event, data)
 
-*description*： emit events,canvas or any elements can receive event from the group 
+*description*： emit events, canvas or any elements can receive event from the group 
 
 *params*
 
@@ -241,7 +241,7 @@ emit = (string, obj) => {}
 
 *params*
 
-* `{string} event ` receive event name
+* `{string} event `receive event name
 * `{function} data `receive event callback
 
 ```js

@@ -15,7 +15,7 @@ canvas.draw({
   }]
 })
 
-// Usage Two:
+// Usage Two: This method must be used after the node is mounted
 let node = this.canvas.getNode('xxx');
 node.addEndpoint({
   id: 'xxxx',

@@ -80,11 +80,11 @@ canvas.addEdge({
 ```
 
 ### arrow  _`<Boolean>`_    (Optional)
-&nbsp;&nbsp;whether to add arrow configuration: default false
+&nbsp;&nbsp;whether to add arrow configuration: Default value `false`
 ### arrowPosition  _`<Number>`_   (Optional)
-&nbsp;&nbsp;arrow position: value between 0-1, 0 represents the beginning of the edge, and 1 represents the end of the edge. Default value 0.5
+&nbsp;&nbsp;arrow position: value between 0-1, 0 represents the beginning of the edge, and 1 represents the end of the edge. Default value `0.5`
 ### arrowOffset  _`<Number>`_   (Optional)
-&nbsp;&nbsp;the position offset of arrow label: the offset value from the arrow position of edge. The default value is 0, and the unit is `px`
+&nbsp;&nbsp;the position offset of arrow: the offset value from the arrow position of edge. The default value is 0, and the unit is `px`
 
 ```js
 // arrowPosition & arrowOffset: the arrow position is in the middle of edge，offset 20px to the end

@@ -2,578 +2,845 @@
 
 ```js
 let canvas = new Canvas({
-  root: dom,               // canvas root dom (require)
-  layout: 'ForceLayout',   // layout setting , integrated or custom , (optional)
-  zoomable: true,          // enable zoom canvas (optional)
-  moveable: true,          // enable move canvas (optional)
-  draggable: true,         // enable drag nodes (optional)
-  linkable: true,          // enable connect edges (optional)
-  disLinkable: true,       // enable disConnect edges (optional)
-  theme: {                 // theme (optional) 
-    group: {
-      type: 'normal'       // Node group type: normal (drag in and drag out), inner (can only be dragged in and not out)
-    },
-    edge: {
-      type: 'Bezier',      // edge type：Bezier curve，Polyline ，Straight，Manhattan line，Improved Bezier curve。values ： Bezier/Flow/Straight/Manhattan/AdvancedBezier
-      label: 'test',       // edge label
-      arrow: true,         // whether to show arrow
-      arrowPosition: 0.5,  // arrow position (0 ~ 1)
-      arrowOffset: 0.0,    // arrow offset
-      Class: XXClass,      // custom Class
-      isExpandWidth: false,// expand line interaction area
-      defaultAnimate: false// turn on line animation by default
-    },
-    endpoint: {
-      position: [],        // limit endpoint position ['Top', 'Bottom', 'Left', 'Right'],
-      linkableHighlight: true,// point.linkable method is triggered when connecting, can be highlighted
-      limitNum: 10,        // limit the number of anchor connections
-      expandArea: {        // when the anchor point is too small, the connection hot zone can be expanded.
-        left: 10,
-        right: 10,
-        top: 10,
-        botton: 10
-      }
-    },
-    zoomGap: 0.001,       // mouse zoom in and out gap settings
-    autoFixCanvas: {     // auto expand canvas when drag nodes or edges near the edge of canvas.
-      enable: false,
-      autoMovePadding: [20, 20, 20, 20]
-    },
-    autoResizeRootSize: true // automatically adapt to the root size, the default is true
-  },
-  global: {                // custom configuration, will run through all canvas, group, node, edge, endpoint objects
-    isScopeStrict: false   // whether scope is strict mode (default is false)
-  }
+  root: dom,
+  theme: {},
+  ...
+  // the attribute below
 });
-```
-
-## attribute<a name='canvas-attr'></a>：
-
-| key | describe | type | default 
-| :------ | :------ | :------ | :------ 
-| root | canvas root dom | Dom (Require) | `*this dom must set 'position:relative'`
-| layout | auto layout | string/function (optional) | null 
-| zoomable | enable zoom canvas | boolean (optional) | false 
-| moveable | enable move canvas | boolean (optional) | false 
-| draggable | enable drag nodes | boolean (optional) | false 
-| linkable | enable connect edges | boolean (optional) | false 
-| disLinkable | enable disConnect edges | boolean (optional) | false 
-| theme | canvas theme setting | object (optional) | undefined
-| global | global attribute | object (optional) | undefined
-
-
-* **layout**，pass string / function into the property of layout
- * forceLayout
- * dagreLayout
- * concentricLayout
- * circleLayout
- * fruchterman
- * radial
- * custom layout，pass in custom method, which can be layout according to user needs. Note:`In addition, remember to overwrite the Edge calcPath method, otherwise it will be replaced by butterfly's built-in calculation edge  method, and the resulting edge cannot be realized.`
-* **autoFixCanvas**, auto expand canvas when drag nodes or edges near the margin of canvas, set autoMovePadding to adjust the area of hotspots. See: ![autoFixCanvas](https://img.alicdn.com/tfs/TB16lUNBG61gK0jSZFlXXXDKFXa-1665-801.gif)
-* **isScopeStrict**，used to set the global scope strict mode
-  * The default is false. If the value is set to true, the scope must match when the scope must be identical; if the value is false, all values are matched when the scope is undefined.
-
-```
-let canvas = new Canvas({
-  layout: (opts) => {
-    // canvas width and height
-    let width = opts.width;
-    let height = opts. height;
-    // nodes, groups, and edges data to be rendered
-    let data = opts.data;
-    // assign the left and top values of nodes and groups
-    ......
-  }
+canvas.draw({
+  // data
 })
 ```
 
-## API：
+<br>
+<br>
 
-### <a name='canvas-other'>Canvas API</a>：
+## attribute
+
+### root _`<dom>`_ (Require)
+
+&nbsp;&nbsp;container: a dom element with width and height, canvas root node
+  
+### zoomable _`<Boolean>`_   (Optional)
+
+&nbsp;&nbsp;whether the canvas is scalable; value type `boolean`, Default value `false`
+
+### moveable _`<Boolean>`_   (Optional)
+
+&nbsp;&nbsp;whether the canvas is movable; value type `boolean`, Default value `false`
+
+### draggable _`<Boolean>`_   (Optional)
+
+&nbsp;&nbsp;whether the canvas is draggable; value type `boolean`, Default value `false`
+
+### linkable _`<Boolean>`_   (Optional)
+
+&nbsp;&nbsp;whether the nodes in canvas can be dragged to add connection; value type `boolean`, Default value `false`
+
+### disLinkable _`<Boolean>`_   (Optional)
+
+&nbsp;&nbsp;whether the nodes in canvas can be dragged to delete connection; value type `boolean`, Default value `false`
+
+### theme
+
+&nbsp;&nbsp;canvas theme configuration, default initialization style and interaction, mainly:
+
+* edge &nbsp;&nbsp; connection configuration: Default style and interaction of all edges. The dragged edge will also use this configuration.
+
+  *params*：
+
+  * type _`<String>`_ whether the edge is connected to a node or to an endpoint. Default value `endpoint`
+
+  * shapeType _`<String>`_  edge type: Bezier, AdvancedBezier, Flow, Straight, Manhattan; Default value `Straight`
+
+  * label _`<String/Dom>`_ edge label
+
+  * labelPosition _`<Number>`_ edge label position: the value is between 0-1, 0 represents the beginning of the egde, and 1 represents the end of the egde. Default value `0.5`
+
+  * labelOffset _`<Number>`_ the position offset of edge label: the offset value from the label position of edge. The default value is 0, and the unit is `px`
+
+  ```js
+  // labelPosition & labelOffset: the label position is in the middle of edge，offset 20px to the end
+  {
+    labelPosition: 0.5,
+    labelOffset: 20
+  }
+  ```
+
+  * arrow _`<Boolean>`_ whether to add arrow configuration: Default value `true`
+
+  * arrowPosition _`<Number>`_ arrow position: value between 0-1, 0 represents the beginning of the edge, and 1 represents the end of the edge. Default value `0.5`
+
+  * arrowOffset _`<Number>`_ the position offset of arrow: the offset value from the arrow position of edge. The default value is 0, and the unit is `px`
+
+  * isExpandWidth _`<Boolean>`_ expand the edge interaction area, default value `false`. If `true`, get `eventHandlerDom` for attach events
+
+  * defaultAnimate `<Boolean>`_ turn on line animation; Default value `false`
+
+  * Class _`<Class>`_ custom extend class
+
+* endpoint &nbsp;&nbsp; endpoint config: default style and interaction of all endpoints
+
+  *params*：
+
+  * linkableHighlight _`<Boolean>`_  `point.linkable` method will be triggered when connecting, which can be used for line highlighting; Defualt value `true`
+
+  * limitNum _`<Number>`_ limit the number of endpoing connections; Default value `10`
+
+  * expandArea _`<Object>`_ the hot zone connected of endpoint: Since the endpoint area may be too small, it provides the property of expanding the hot zone;Default value `{left: 10, top: 10, right: 10, bottom: 10}`
+
+* group &nbsp;&nbsp; group config
+
+  *params*：
+
+  * type _`<String>`_ group type: `normal`(can be dragged in and out), `inner`(can only be dragged in but not out);Default value `normal`
+
+  * includeGroups _`<Boolean>`_ whether the node group allows included node groups
+
+* zoomGap _`<Number>`_ mouse zoom in and out gap setting; Value between[0-1], Defualt `0.001`
+
+* autoFixCanvas When the node is dragged or the edge is dragged to around the edge of the canvas, the canvas is automatically extended
+
+  *params*：
+
+  * enable _`<Boolean>`_ whether the canvas is automatically extended; Default value `false`
+
+  * autoMovePadding _`<Array>`_ inner margin of the canvas that triggers automatic extension; Default value `[20,20,20,20]`
+
+<img width="600" src="https://img.alicdn.com/tfs/TB16lUNBG61gK0jSZFlXXXDKFXa-1665-801.gif">
+  
+* autoResizeRootSize _`<Boolean>`_ Automatically adapt to the Root container size; Default value `true`
+
+### global   (Optional)
+
+&nbsp;&nbsp;global	Global attributes; _`object (Option)`_, Default value `undefined`
+
+<br>
+<br>
+
+## API
+
+### canvas.draw (data, calllback)
+
+*descripition*：the rendering method of the canvas, `please note that the canvas rendering is asynchronous rendering`
+
+*params*
+
+* `{object} data` include: groups, nodes, edges
+* `{function} calllback` `*The rendering process is asynchronous, please pay attention to the callback if you need it`
 
 ```js
-/**
-  * draw function
-  * @param {data} data  - include groups, nodes, edges
-  * @param {function} callback  - `*the rendering process is an asynchronous process, please pay attention to the callback.`
-  */
-draw = (data, callback) => {}
+draw = (data, calllback) => {}
+```
 
-/**
-  * Re-rendering method, it will delete all previous elements and re-render
-  * @param {data} data  - new groups, nodes, and connections when redrawing
-  * @param {function} callback  - `*the rendering process is an asynchronous process, please pay attention to the callback.`
-  */
-redraw = (data, callback) => {}
+### canvas.redraw (data, calllback)
 
-/**
-  * get all data from canvas
-  * @return {data} - canvas data
-  */
+*descripition*：the re-rendering method will delete all previous elements and re-render, `note that the canvas rendering is asynchronous rendering`
+
+*params*
+
+* `{object} data` new groups, new nodes and new edges
+* `{function} calllback` `*The rendering process is asynchronous, please pay attention to the callback if you need it`
+
+```js
+redraw = (data, calllback) => {}
+```
+
+### canvas.getDataMap (data, calllback)
+
+*descripition*：get all the data of the canvas: nodes, edges, groups
+
+*return*
+
+* `{object} data` groups, nodes, and edges data
+
+```js
 getDataMap = () => {}
+```
 
-/**
-  * Set whether all nodes of the canvas can linkable
-  * @param {true|false} boolean  - whether to support all nodes can link
-  */
+### canvas.setLinkable (boolean)
+
+*descripition*：set whether all nodes of the canvas can be dragged to connect edge
+
+*params*
+
+* `{true|false} boolean` whether to support all nodes can be dragged to connect edge
+```js
 setLinkable = (boolean) => {}
+```
 
-/**
-  * Set whether all nodes of the canvas can dislinkable
-  * @param {true|false} boolean  - whether to support all nodes can dislink
-  */
+### canvas.setDisLinkable (boolean)
+
+*descripition*：set whether all nodes of the canvas can be disconnected connecttion
+
+*params*
+
+* `{true|false} boolean` whether all nodes of the canvas can be disconnected connecttion
+
+```js
 setDisLinkable = (boolean) => {}
+```
 
-/**
-  * Set whether all nodes of the canvas are draggable
-  * @param {true|false} boolean  - whether to support all nodes can drag
-  */
+### canvas.setDraggable (boolean)
+
+*descripition*：set whether all nodes of the canvas can be dragged
+
+*params*
+
+* `{true|false} boolean` whether to support all nodes can be dragged
+
+```js
 setDraggable = (boolean) => {}
 ```
 
-### <a name='canvas-api-crud'>query,add,delete node，edge，group</a>：
+### canvas.getGroup (string)
+
+*descripition*：get group by id
+
+*params*
+
+* `{string} id` group id
+
+*return*
+
+* `{Group}` Group instance
 
 ```js
-/**
-  * get group by id
-  * @param {string} id  - group id
-  * @return {Group} - Group Object
-  */
 getGroup = (string) => {}
+```
 
-/**
-  * add group function
-  * @param {object|Group} object  - group data or Group instance
-  * @param {array[object|Node]} object  - (Optional) Node information. If there is a value, the node is automatically added to the node group. Allow adding existing nodes in the canvas.
-  * @param {object} options - 参数
-  * @param {string} options.posType - 'absolute or relative' , Identifies whether the coordinates of the node are absolute relative to the canvas or relative to the node group
-  * @param {number} options.padding - add group padding
-  */
+### canvas.addGroup (object|Group, nodes, options)
+
+*descripition*：添加分组。若分组不存在，则创建分组并把nodes放进分组内；若分组存在，则会把nodes放进当前分组内。
+
+*params*
+
+* `{object | Group} object` 分组: 新建分组信息或Group分组实例
+* `{array< object | Node >} object` (Optional)节点信息: 会把这些节点加入到分组内, 若节点不存在会新建节点
+* `{object} options` 参数
+* `{string} options.posType` 'absolute or relative' , 标识节点的坐标是相对画布的绝对定位还是相对于节点组
+* `{number} options.padding` 添加节点组padding
+
+```js
 addGroup = (object|Group, nodes, options) => {}
+```
 
-/**
-  * delete group by id
-  * @param {string} id  - node id
-  * @return {Group} - Group Object
-  */
-removeGroup = (string) => {}
-/**
-  * get node by id
-  * @param {string} id  - node id
-  * @return {Node} - Node Object
-  */
+此API除了可以新建节点组以外, 还可以做多选成组:
+
+<img width="600" src="https://img.alicdn.com/imgextra/i1/O1CN01S2n8Sy1aayJ8euH7n_!!6000000003347-1-tps-600-400.gif">
+
+### canvas.removeGroup (string | Group)
+
+*descripition* 删除节点组, 但不会删除里面的节点
+
+*params*
+
+* `{string | Group} id` group id / Group实例
+
+*return*
+
+* `{Group}` 删除的对象
+
+```js
+removeGroup = (string | Group) => {}
+```
+
+### canvas.getNode (string)
+
+*descripition*：根据id获取node
+
+*params*
+
+* `{string} id` node id
+
+*return*
+
+* `{Node}` 节点对象
+
+```js
 getNode = (string) => {}
+```
 
-/**
-  * add node function
-  * @param {object|Node} object  - node data or Node instance
-  */
+### canvas.addNode (object|Node)
+
+*descripition*：添加节点
+
+*params*
+
+* `{object|Node} object` 节点的信息；Node － 节点的基类
+
+```js
 addNode = (object|Node) => {}
+```
 
-/**
-  * add multiple nodes
-  * @param {array<object|Node>}  - node data or Node instance
-  */
+### canvas.addNodes (array<object|Node>)
+
+*descripition*：批量添加节点
+
+*params*
+
+* `{array<object|Node>}` 节点的信息；Node － 节点的基类
+
+```js
 addNodes = (array<object|Node>) => {}
+```
 
-/**
-  * delete node by id
-  * @param nodeId string  - node id
-  */
+### canvas.removeNode (string)
+
+*descripition*：删除节点
+
+*params*
+
+* `nodeId string`  - 节点id
+
+```js
 removeNode = (string) => {}
+```
 
-/**
-  * delete multiple nodes by ids
-  * @param nodeIds array  - node ids array
-  */
+### canvas.removeNodes (array)
+
+*descripition*：批量删除节点
+
+*params*
+
+* `nodeIds array`  - 批量节点id
+
+```js
 removeNodes = (array) => {}
+```
 
-/**
-  * add edge function
-  * @param {object|Edge} object  - edge data or Edge instance
-  */
+### canvas.addEdge (object|Edge)
+
+*descripition*：添加连线
+
+*params*
+
+* `{object|Edge} object`  - 连线的信息；Edge － 连线的基类
+
+```js
 addEdge = (object|Edge) => {}
+```
 
-/**
-  * add multiple edges
-  * @param {array<object|Edge>}   - edge data or Edge instance
-  */
+### canvas.addEdges (array<object|Edge>)
+
+*descripition*：批量添加连线
+
+*params*
+
+* `{array<object | Edge>}`   - 连线的信息；Edge － 连线的基类
+
+```js
 addEdges = (array<object|Edge>) => {}
+```
 
-/**
-  * delete Edge by id or Edge Object
-  * @param {string or Edge} id or Edge  - Edge id or Edge Object
-  * @return {Edge} - Edge Object
-  */
+### canvas.removeEdge (param)
+
+*descripition*：根据id或者Edge对象来删除线
+
+*params*
+
+* `{string | Edge} id or Edge`  - 线的id或者Edge对象
+
+*return*
+
+* `{Edge}` - 删除的线
+
+```js
 removeEdge = (param) => {}
+```
 
-/**
-  * delete multiple Edges by ids or Edge Objects
-  * @param {array} string or Edge  - Edge ids array or Edge Objects array
-  * @return {array} Edge - Edge array
-  */
+### canvas.removeEdges (param)
+
+*descripition*：根据id或者Edge对象来批量删除线
+
+*params*
+
+* `{array} string or Edge`  - 线的id或者Edge对象的数组
+
+*return*
+
+* `{array} Edge` - 删除的线
+
+```js
 removeEdges = (param) => {}
+```
 
-/**
-  * get neighbor edges by node id 
-  * @param {string} id  - node id
-  * @return {Edges} - neighbor Edges Object
-  */
+### canvas.getNeighborEdges (string)
+
+*descripition*：根据node id获取相邻的edge
+
+*params*
+
+* `{string} nodeId`  - node id
+
+*return*
+
+* `{Edges}` - 相邻的连线
+
+```js
 getNeighborEdges = (string) => {}
+```
 
-/**
-  * get neighbor edges by endpoint id 
-  * @param {string} nodeId  - node id
-  * @param {string} endpointId  - endpoint id
-  * @return {Edges} - neighbor Edges Object
-  */
+### canvas.getNeighborEdgesByEndpoint (string, string)
+
+*descripition*：根据endpoint id获取相邻的edge
+
+*params*
+
+* `{string} nodeId`  - node id
+* `{string} endpointId`  - endpoint id
+
+*return*
+
+* `{Edges}` - 相邻的连线
+
+```js
 getNeighborEdgesByEndpoint = (string, string) => {}
+```
 
-/**
-  * find N-level association nodes and edges
-  * @param {Object} options - parameters
-  * @param {Node} options.node - starting node
-  * @param {Endpoint} options.endpoint - starting endpoint, optional
-  * @param {String} options.type - find direction , optional value all\in\out，default value all , optional
-  * @param {Number} options.level - level，starting level is 0 level , default value Infinity
-  * @param {Function} options.iteratee - whether to continue traversing the decision function, return boolean value
-  * @returns {Object<nodes: Node, edges: Edge>} filteredGraph - lookup result
-  */
+### canvas.getNeighborNodesAndEdgesByLevel (options)
+
+*descripition*：查找 N 层关联节点和边
+
+*params*
+
+  * `{Object} options` - 参数
+  * `{Node} options.node` - 起始节点
+  * `{Endpoint} options.endpoint` - 起始锚点，可选
+  * `{String} options.type` - 查找方向，可选值为 all\in\out，默认all，可选
+  * `{Number} options.level` - 层数，起始节点为第 0 层，默认 Infinity
+  * `{Function} options.iteratee` - 是否继续遍历判定函数，返回 boolean 值
+
+*return*
+
+* `{Object<nodes: Node, edges: Edge>} filteredGraph` - 查找结果
+
+```js
 getNeighborNodesAndEdgesByLevel = (options) => {}
+```
 
-/**
-  * set z-index attribute to edge
-  * @param {Array<Edge>} edges - edges
-  * @param {number} zIndex - z-index value
-  */
+### canvas.setEdgeZIndex (edges, zIndex)
+
+*descripition*：设置线段z-index属性
+
+*params*
+
+* `{Array<Edge>} edges` - 线段
+* `{number} zIndex` - z-index的值
+
+```js
 setEdgeZIndex = (edges, zIndex) => {}
 ```
 
-### <a name='canvas-api-zoom-move'>缩放，平移</a>：
+### canvas.setZoomable (boolean, boolean)
+
+*descripition*：设置画布缩放
+
+*params*
+
+* `{true|false} boolean`  - 是否支持画布缩放
+* `{true|false} boolean`  - 放大缩小方向。现在默认为MAC的双指方向，却于Window的鼠标滑轮方向相反。默认值：false。若true，则方向相反
 
 ```js
-/**
-  * set canvas zoomable
-  * @param {true|false} boolean 
-  * @param {true|false} boolean  - the direction of zoom。Now it defaults to the two finger direction of MAC, but it is opposite to the mouse wheel direction of Window. Default value: false. If true, the direction is opposite
-  */
-setZoomable = (boolean) => {}
+setZoomable = (boolean, boolean) => {}}
+```
 
-/**
-  * set canvas moveable
-  * @param {true|false} boolean
-  */
+### canvas.setMoveable (boolean)
+
+*descripition*：设置画布平移
+
+*params*
+
+* `{true|false} boolean`  - 是否支持画布平移
+
+```js
 setMoveable = (boolean) => {}
+```
 
-/**
-  * set canvas offset
-  * @param {[x, y]} array
-  */
-move = (position) => {}
+### canvas.move  (postion)
 
-/**
-  * set canvas zoom
-  * @param {scale} float  - zoom value between 0-1
-  * @param {function} callback  - zoom callback
-  */
-zoom = (position) => {}
+*descripition*：手动设置画布偏移
 
-/**
-  * get canvas zoom value
-  * @return {float} - zoom value (0-1)
-  */
+*params*
+
+* `{[x, y]} array`  - x,y坐标
+
+```js
+move = (postion) => {}
+```
+
+### canvas.zoom (scale)
+
+*descripition*：手动设置画布缩放
+
+*params*
+
+* `{float} scale` - 0-1之间的缩放值
+* `{function} callback`  - 缩放后的回调
+
+```js
+zoom = (scale) => {}
+```
+
+### canvas.getZoom ()
+
+*descripition*：获取画布的缩放
+
+*return*
+
+* `{float}` - 画布的缩放(0-1)
+
+```js
 getZoom = () => {}
+```
 
-/**
-  * get canvas offset value
-  * @return {[x, y]} - offset value
-  */
+### canvas.getOffset ()
+
+*descripition*：获取画布的偏移值
+
+*return*
+
+* `{[x, y]}` - 画布的偏移值
+
+```js
 getOffset = () => {}
+```
 
-/**
-  * get canvas origin reference point
-  * @return {[x, y]} - canvas origin reference point (percentage)
-  */
+### canvas.getOrigin ()
+
+*descripition*：获取画布的偏移值的中心点
+
+*return*
+
+* `{[x, y]}` - 画布的偏移值的中心点(百分比)
+
+```js
 getOrigin = () => {}
+```
 
-/**
-  * set canvas origin reference point
-  * @param {[x, y]} array  - canvas origin reference point (percentage)
-  */
+### canvas.setOrigin ([x ,y])
+
+*descripition*：手动设置画布缩放的中心点
+
+*params*
+
+* `{[x, y]} array` - x,y的中心点坐标
+
+```js
 setOrigin = ([x ,y]) => {}
 ```
 
-### <a name='canvas-api-focus'>fit canvas and focus part nodes</a>：
+### canvas.focusNodeWithAnimate (string, type, options, callback)
+
+*descripition*：聚焦某个节点/节点组
+
+*params*
+
+* `{string/function} nodeId/groupId or filter`  - 节点的id或者过滤器
+* `{string} type`  - 节点的类型(node or group)
+* `{object} options {offset: [0,0]}`  - 聚焦配置属性，如偏移值
+* `{function} callback`  - 聚焦后的回调
 
 ```js
-/**
-  * focus on some node/ group
-  * @param {string/function} nodeId/groupId or filter  - node/group id or filter
-  * @param {string} type  - type (node or group)
-  * @param {object} options {offset: [0,0]}  - focus attribute , such as offset
-  * @param {function} callback  - Focused callback
-  */
 focusNodeWithAnimate = (string, type, options, callback) => {}
+```
 
-/**
-  * focus on multiple node/ group
-  * @param {object} {nodes: [], groups: []}  - node and group ids array
-  * @param {array} type  - type array (node or group)
-  * @param {object} options {offset: [0,0]}  - focus attribute , such as offset
-  * @param {function} callback  - Focused callback
-  */
+### canvas.focusNodesWithAnimate (objs, type, options, callback)
+
+*descripition*：聚焦某多个节点/节点组
+
+*params*
+
+* `{object} {nodes: [], groups: []}`  - 节点和节点组的id数组
+* `{array} type`  - 节点的类型(node or group)
+* `{object} options {offset: [0,0]}`  - 聚焦配置属性，如偏移值
+* `{function} callback`  - 聚焦后的回调
+
+```js
 focusNodesWithAnimate = (objs, type, options, callback) => {}
+```
 
-/**
-  * centered canvas, show all nodes and groups in canvas, it will automatically adjust the canvas position and zoom
-  * @param {object} options {offset: [0,0]}  - focus attribute , such as offset
-  * @param {function} callback  - Focused callback
-  */
+### canvas.focusCenterWithAnimate (options, callback)
+
+*descripition*：聚焦整个画布，会自动调整画布位置和缩放
+
+*params*
+
+* `{object} options {offset: [0,0]}`  - 聚焦配置属性，如偏移值
+* `{function} callback`  - 聚焦后的回调
+
+```js
 focusCenterWithAnimate = (options, callback) => {}
 ```
 
-### <a name='canvas-api-redo-undo'>redo & undo</a>：
+<img width="600" src="https://img.alicdn.com/imgextra/i2/O1CN01zrkUqk1SP34Sup0vt_!!6000000002238-1-tps-1661-824.gif">
+
+### canvas.redo ()
+
+*descripition*：重做操作
 
 ```js
-/**
-  * redo action
-  */
-redo = (options) => {}
+redo = () => {}
+```
 
-/**
-  * rollback action
-  */
-undo = (options) => {}
+### canvas.undo ()
 
-/**
-  * add the topmost element to the action queue
-  * @param {Object} options - params
-  * @param {String} options.type - element type
-  * @param {Object} options.data - element data
-  */
+*descripition*：回退操作
+
+```js
+undo = () => {}
+```
+
+### canvas.pushActionQueue (options)
+
+*descripition*：给操作队列(undo/redo的队列)新增最顶部元素
+
+*params*
+* `{Object} options` - 参数
+* `{String} options.type` - 队列类型
+* `{Object} options.data` - 队列数据
+
+```js
 pushActionQueue = (options) => {}
+```
 
-/**
-  * remove topmost element from action queue
-  */
+### canvas.popActionQueue (options)
+
+*descripition*：给操作队列(undo/redo的队列)删除最顶部元素
+
+```js
 popActionQueue = (options) => {}
+```
 
-/**
-  * clear action queue
-  */
+### canvas.clearActionQueue (options)
+
+*descripition*：清除操作队列(undo/redo的队列)
+
+```js
 clearActionQueue = (options) => {}
 ```
 
-### <a name='canvas-api-coordinate'>coordinate conversion and offset</a>：
-``` js
-/**
-  * convert the coordinates from screen to canvas
-  * @param {array[number]} coordinates - origin coordinates([x,y])
-  * @return {number} - converted coordinates
-  */
-terminal2canvas = (coordinates) => {}
+### canvas.terminal2canvas (coordinates)
 
-/**
-  * convert the coordinates from canvas to screen
-  * @param {array[number]} coordinates - origin coordinates([x,y])
-  * @return {number} - converted coordinates
-  */
+*descripition*：屏幕转换为画布的坐标
+
+*params*
+
+* `{array<number>} coordinates` - 需要换算的坐标([x,y])
+
+*return*
+
+* `{number}` - 转换后的坐标
+
+```js
+terminal2canvas = (coordinates) => {}
+```
+
+### canvas.canvas2terminal (coordinates)
+
+*descripition*：画布转换为屏幕的坐标
+
+*params*
+
+* `{array<number>} coordinates` - 需要换算的坐标([x,y])
+
+*return*
+
+* `{number}` - 转换后的坐标
+
+
+```js
 canvas2terminal = (coordinates) => {}
 ```
 
-* **canvas2terminal**，convert the coordinates from canvas to screen
-  * As shown in the figure, the canvas is scaled, and the coordinates after the movement do not match the coordinates of the original canvas. This method is needed to convert. Special Note: Users who drag and drop nodes pay attention to these two `e.clientX` and `e.clientY`, and need to call this method to convert.
-<img width="400" src="http://img.alicdn.com/tfs/TB1lWIAFHvpK1RjSZPiXXbmwXXa-973-850.jpg">
+*描述*
 
-* **terminal2canvas**，convert the coordinates from screen to canvas
-  * `canvas2terminal` in contrast
+* 如图所示，画布缩放，移动后的坐标和原来画布的坐标并不匹配，需要此方法来转换。特别注意：有拖动添加节点的用户们注意这两个`e.clientX`和`e.clientY`，需要调用此方法进行转换。
 
-### <a name='canvas-api-selected'>mutiply selection</a>：
+<img width="600" src="http://img.alicdn.com/tfs/TB1lWIAFHvpK1RjSZPiXXbmwXXa-973-850.jpg">
+
+
+### canvas.setSelectMode (boolean, contents , selecMode)
+
+*descripition*：设置框选模式: 注意, 注意框选模式和普通拖动画布模式是互斥的, 没办法同时设置
+
+*params*
+
+* `{true|false} boolean`  - 是否开启框选功能
+* `{array} contents` - 可接受框选的内容(node|endpoint|edge),默认'node')
+* `{string} selecMode` - 可接受框选的内容(include|touch|senior),默认'include',include:全部包含才可选中，touch:触碰就选中，senior:从左到右需要全部包含，从右到左只需触碰就能选中)
 
 ```js
-/**
-  * set select mode
-  * @param {true|false} boolean enable multiple select
-  * @param {array} contents - accept select contents(node/endpoint/edge, default node)
-  * @param {string} selecMode - accept selec mode(include|touch|senior),default 'include',include:You can select only if the element all included; touch: You can select only if you touch the element; senior: needs to include all from left to right,select only touch from right to left)
-  */
-setSelectMode = (boolean, contents, selecMode) => {}
-
-/**
-  * get union by name
-  * @param {name} string  - union name
-  */
-getUnion = (name) => {}
-
-/**
-  * get all unions
-  */
-getAllUnion = () => {}
-
-/**
-  * add some union or add union item , used in multiple selection mode
-  * @param {name} string  - union name
-  * @param {obj} object  - union item
-  */
-add2Union = (name, obj) => {}
-
-/**
-  * remove union by name
-  * @param {name} string  - union name
-  */
-removeUnion = (name) => {}
-
-/**
-  * remove all union
-  */
-removeAllUnion = () => {}
+setSelectMode = (boolean, contents , selecMode) => {}
 ```
 
-* **add2Union**
-  * `name`，union name。add union if it does not exist , add union item if it exists.
-  * `object`，union item
+### canvas.getUnion (name)
+
+*descripition*：获取聚合组
+
+*params*
+
+* `{name} string`  - 聚合组的名称
 
 ```js
-this.canvas.add2Union('my union name', {
-  nodes: []     // Node object or nodeId
-  groups: []    // Group object or groupId
-  edges: []     // Edge object or edgeId
-  endpoints: [] // Endpoint object
+getUnion = (name) => {}
+```
+
+### canvas.getAllUnion ()
+
+*descripition*：获取所有聚合组
+
+```js
+getAllUnion = () => {}
+```
+
+### canvas.add2Union (name, obj)
+
+*descripition*：添加聚合组 || 添加聚合组元素
+
+*params*
+
+* `{name} string`  - 聚合组名称。假如不存在，则添加聚合组；假如已存在，则添加聚合组元素
+* `{obj} object`  - 聚合组的元素
+
+```js
+add2Union = (name, obj) => {}
+
+this.canvas.add2Union('我的聚合组', {
+  nodes: []     // Node对象或者nodeId
+  groups: []    // Group对象或者groupId
+  edges: []     // Edge对象或者edgeId
+  endpoints: [] // Endpoint对象
 });
 ```
 
-### <a name='canvas-api-events'>events</a>：
+### canvas.removeUnion (name)
+
+*descripition*：去除聚合组
+
+*params*
+
+* `{name} string`  - 聚合组的名称
+
+```js
+removeUnion = (name) => {}
+```
+
+### canvas.removeAllUnion ()
+
+*descripition*：去除所有聚合组
+
+```js
+removeAllUnion = () => {}
+```
+
+<br>
+<br>
+
+## 事件
 
 ```js
 let canvas = new Canvas({...});
 canvas.on('type key', (data) => {
-  //data 
+  //data 数据
 });
 ```
+*参数key值*
 
-| key | describe | return 
-| :------ | :------ | :------
-| system.canvas.click | click on the blank space of the canvas event | -
-| system.canvas.zoom | canvas zoom event | -
-| system.nodes.delete | delete node event | -
-| system.node.move | move node event | -
-| system.nodes.add | add multiple nodes event | -
-| system.links.delete | delete edge event | -
-| system.link.connect | connect edge event | -
-| system.link.reconnect | edge reconnect event | -
-| system.link.click | click edge event | -
-| system.group.add | add group event | -
-| system.group.delete | delete group event | -
-| system.group.move | move group event | -
-| system.group.addMembers | add node to group event | -
-| system.group.removeMembers | delete node from group event | -
-| system.multiple.select | multiple select callback event | -
-| system.drag.start | drag start event | -
-| system.drag.move | drag move event | -
-| system.drag.end | drag end event | -
+* `system.canvas.click` 点击画布空白处
+* `system.canvas.zoom`	画布缩放
+* `system.nodes.delete`	删除节点
+* `system.node.move`	移动节点
+* `system.nodes.add`	批量节点添加
+* `system.links.delete`	删除连线
+* `system.link.connect`	连线成功
+* `system.link.reconnect`	线段重连
+* `system.link.click`	点击事件
+* `system.group.delete`	删除节点组
+* `system.group.move`	移动节点组
+* `system.group.addMembers`	节点组添加节点
+* `system.group.removeMembers`	节点组删除节点
+* `system.multiple.select`	框选结果
+* `system.drag.start`	拖动开始
+* `system.drag.move`	拖动
+* `system.drag.end`	拖动结束
 
 ```js
 /**
-  * emit events
+  * 发送事件
   */
 emit = (string, obj) => {}
 
 /**
-  * accept events
+  * 接受事件
   */
 on = (string, callback) => {}
 ```
 
-### <a name='canvas-api-other'>other api</a>：
+<br>
+<br>
+
+## 其他辅助方法
+
+### canvas.setGirdMode (show, options)
+
+*descripition*：设置网格布局
+
+*params*
+
+* `{true|false} boolean`  - 是否开启网格布局功能
+* `{array} options` - 网格布局的定制化参数
 
 ```js
-/**
-  * set the grid layout
-  * @param {true|false} boolean  - whether to open
-  * @param {array} options - parameters for grid layout
-  */
 setGirdMode = (show, options) => {}
 
-/**
-  * automatically align nodes / groups on the canvas(must be effective under the grid layout)
-  */
-justifyCoordinate = () => {}
+this.canvas.setGirdMode(true, {
+  isAdsorb: false,         // 是否自动吸附,默认关闭
+  theme: {
+    shapeType: 'line',     // 展示的类型，支持line & circle
+    gap: 23,               // 网格间隙
+    adsorbGap: 8,          // 吸附间距
+    backgroud: '#fff',     // 网格背景颜色
+    lineColor: '#000',     // 网格线条颜色
+    lineWidth: 1,          // 网格粗细
+    circleRadiu: 1,        // 圆点半径
+    circleColor: '#000'    // 圆点颜色
+  }
+});
+```
 
+### canvas.setMinimap = (show, options)
 
-/**
-  * set guide line
-  * @param {true|false} boolean  - whether to open
-  * @param {array} options - parameters for guide line
-  */
-setGuideLine = (show, options) => {}
+*descripition*：设置缩略图
 
-/**
-  * set minimap
-  * @param {true|false} boolean  - whether to open
-  * @param {Object} please  refer to the minimap section for details
-  */
+*params*
+
+* `{true|false} boolean`  - 是否开启缩略图功能
+* `{Object}` 具体请参考缩略图章节
+
+```js
 setMinimap = (show, options) => {}
+```
 
-/**
-  * save canvas to iamge
-  * @param {object=} options - saved image parameters
-  * @param {string=} options.type - image type (png/jpeg/svg , default png) , optional
-  * @param {number=} options.quality - image quality (0~1 , default 1) , optional
-  * @param {number=} options.width - image width (default canvas width) , optional
-  * @param {number=} options.height - image height (default canvas height) , optional
-  * @return {Promise}
-  */
+### canvas.save2img (options)
+
+*descripition*：画布保存为图片
+
+*params*
+
+* `{object=} options` - 保存的图片参数，可选
+* `{string=} options.type` - 图片格式(png/jpeg/svg,默认png)，可选
+* `{number=} options.quality` - 图片质量(0~1，默认为1)，可选
+* `{number=} options.width` - 图片宽度(默认为画布宽度)，可选
+* `{number=} options.height` - 图片高度(默认为画布高度)，可选\
+
+*return*
+
+* `{Promise}`
+
+```js
 save2img = (options) => {}
 
-/**
-  * need to update location when root canvas moves or size changes
-  */
-updateRootResize = () => {}
-```
-
-* **setGirdMode**, Set the grid layout
-  * `show`，whether to open
-  * `options`，set the parameters of the grid layout ,  please look at the following comment
-
-```js
-this.canvas.setGirdMode(true, {
-  isAdsorb: false,         // Whether to automatically adsorb, default value is false
-  theme: {
-    shapeType: 'line',     // show type，support line & circle
-    gap: 23,               // grid gap
-    adsorbGap: 8,          // adsorb gap
-    backgroud: '#fff',     // grid backgroud
-    lineColor: '#000',     // grid line color
-    lineWidth: 1,          // grid line thickness
-    circleRadiu: 1,        // grid circle radiu
-    circleColor: '#000'    // grid circle color
-  }
-});
-```
-
-* **setGuideLine**, Set the guide line
-  * `show`, whether to open
-  * `options`, the parameters of the guide line, please lookup the following comment
-
-```js
-this.canvas.setGuideLine(true, {
-  limit: 1,             // limit guide line number
-  theme: {
-    lineColor: 'red',   // guide line color
-    lineWidth: 1,       // guide line thickness
-  }
-});
-```
- 
-* **save2img**，save canvas to image
-  * `options`，parameter
-  * `options.type`，image type 
-  * `options.quality`，image quality
-  * `options.width`，image width
-  * `options.height`，image height
-
-```js
 this.canvas.save2img({type: 'png', width: 1920, height: 1080, quality: 1})
   .then(dataUrl => {
     var link = document.createElement('a');
@@ -581,4 +848,41 @@ this.canvas.save2img({type: 'png', width: 1920, height: 1080, quality: 1})
     link.href = dataUrl;
     link.click();
   });
+```
+
+### canvas.justifyCoordinate ()
+
+*descripition*：把画布上的节点，节点组自动对齐(必须在网格布局下才生效)
+
+```js
+justifyCoordinate = () => {}
+```
+
+### canvas.setGuideLine (show, options)
+
+*descripition*：设置辅助线
+
+*params*
+
+* `{true|false} boolean`  - 是否开启辅助线功能
+* `{array} options` - 辅助线的定制化参数
+
+```js
+setGuideLine = (show, options) => {}
+
+this.canvas.setGuideLine(true, {
+  limit: 1,             // 限制辅助线条数
+  theme: {
+    lineColor: 'red',   // 网格线条颜色
+    lineWidth: 1,       // 网格粗细
+  }
+});
+```
+
+### canvas.updateRootResize ()
+
+*descripition*：当root移动或者大小发生变化时需要更新位置
+
+```js
+updateRootResize = () => {}
 ```

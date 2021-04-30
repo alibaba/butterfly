@@ -30,7 +30,7 @@ canvas.addGroup({
 ```
 <br>
 
-**`节点的返回的dom必须设置position: absolute;`**
+**`节点组的返回的dom必须设置position: absolute;`**
 
 <br>
 <br>
@@ -50,7 +50,7 @@ canvas.addGroup({
 ### endpoints _`<Array>`_ (选填)
 &nbsp;&nbsp;系统锚点配置: 当有此配置会加上系统的锚点
 ### Class _`<Class>`_ (选填)
-&nbsp;&nbsp;拓展类
+&nbsp;&nbsp;拓展类：当传入拓展类的时候，该节点组则会按拓展类的draw方法进行渲染，拓展类的相关方法也会覆盖父类的方法
 ### scope _`<String>`_ (选填)
 &nbsp;&nbsp;作用域: 当scope一致的节点才能拖动进入节点组
 

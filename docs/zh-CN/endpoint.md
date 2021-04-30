@@ -16,7 +16,7 @@ canvas.draw({
   }]
 })
 
-// 用法二:
+// 用法二: 此方法必须在node的mount挂载后才能使用
 let node = this.canvas.getNode('xxx');
 node.addEndpoint({
   id: 'xxxx',

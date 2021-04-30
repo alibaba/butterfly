@@ -49,9 +49,9 @@ canvas.addNode({
 ### group _`<String>`_    (选填)
 &nbsp;&nbsp;父级group的id: 设置后该节点会添加到节点组中
 ### endpoints _`<Array>`_    (选填)
-&nbsp;&nbsp;锚点信息: 当有此配置会加上系统的锚点
+&nbsp;&nbsp;系统锚点配置: 当有此配置会加上系统的锚点
 ### Class _`<Class>`_    (选填)
-&nbsp;&nbsp;拓展类：当传入拓展类的时候，该节点组则会按拓展类的draw方法进行渲染，拓展类的相关方法也会覆盖父类的方法
+&nbsp;&nbsp;拓展类：当传入拓展类的时候，该节点则会按拓展类的draw方法进行渲染，拓展类的相关方法也会覆盖父类的方法
 ### scope _`<Boolean>`_    (选填)
 &nbsp;&nbsp;作用域：当scope一致的节点才能拖动进入节点组
 
@@ -186,7 +186,7 @@ removeEndpoint = (string) => {}
 getEndpoint = (id, type) => {}
 ```
 
-### node.moveTo (obj)
+### node.moveTo (x, y)
 
 *作用*： 节点移动坐标的方法
 
@@ -200,7 +200,7 @@ getEndpoint = (id, type) => {}
   * @param {number} x - 移动位置的x坐标 
   * @param {number} y - 移动位置的y坐标 
   */
-moveTo = (obj) => {}
+moveTo = (x, y) => {}
 ```
 
 ### node.remove ()

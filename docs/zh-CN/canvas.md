@@ -106,6 +106,8 @@ canvas.draw({
   * enable _`<Boolean>`_ 画布是否自动延展；默认 `false`
 
   * autoMovePadding _`<Array>`_ 触发自动延展的画布内边距；默认 `[20,20,20,20]`
+
+<img width="600" src="https://img.alicdn.com/tfs/TB16lUNBG61gK0jSZFlXXXDKFXa-1665-801.gif">
   
 * autoResizeRootSize _`<Boolean>`_ 自动适配Root容器大小；默认 `true`
 
@@ -174,6 +176,7 @@ setLinkable = (boolean) => {}
 *参数*
 
 * `{true|false} boolean` 是否支持所有节点可断线
+
 ```js
 setDisLinkable = (boolean) => {}
 ```
@@ -185,6 +188,7 @@ setDisLinkable = (boolean) => {}
 *参数*
 
 * `{true|false} boolean` 是否支持所有节点可拖动
+
 ```js
 setDraggable = (boolean) => {}
 ```

@@ -47,13 +47,13 @@ canvas.addNode({
 ### draggable _`<Boolean>`_   (Optional)
 &nbsp;&nbsp;set whether the node can be dragged: can override the global draggable attribute
 ### group _`<String>`_    (Optional)
-&nbsp;&nbsp;父级group的id: 设置后该节点会添加到节点组中
+&nbsp;&nbsp;group id: after setting, the node will be added to the group
 ### endpoints _`<Array>`_    (Optional)
-&nbsp;&nbsp;锚点信息: 当有此配置会加上系统的锚点
+&nbsp;&nbsp;system endpoints configuration: system endpoints  will be added when this configuration is present
 ### Class _`<Class>`_    (Optional)
-&nbsp;&nbsp;拓展类：当传入拓展类的时候，该节点组则会按拓展类的draw方法进行渲染，拓展类的相关方法也会覆盖父类的方法
+&nbsp;&nbsp;Extended class: when the extended class is passed in, the node will be rendered according to the draw method of the extended class, and the related methods of the extended class will also override the methods of the parent class
 ### scope _`<Boolean>`_    (Optional)
-&nbsp;&nbsp;作用域：当scope一致的节点才能拖动进入节点组
+&nbsp;&nbsp;scope: only nodes with the same scope can be dragged into the group
 
 ```js
 // single scope
@@ -62,12 +62,12 @@ node.scope = 'xxx';
 node.scope = 'xxx1 xxx2 xxx3';
 ```
 
-`* 节点的返回的dom必须设置position: absolute;`
+**`The returned dom of the node must be set to position: absolute;`**
 
 <br>
 <br>
 
-## 类重写API：
+## Extented Class API：
 
 ```js
 import {Node} from 'butterfly-dag';
@@ -75,14 +75,14 @@ import {Node} from 'butterfly-dag';
 Class YourNode extends Node {
   
   /**
-    * 节点挂载后的回调
+    * callback after node mount
     */
   mounted() {}
 
   /**
-    * node的渲染方法
-    * @param {obj} data - 节点基本信息 
-    * @return {dom} - 返回渲染dom的根节点
+    * node draw function
+    * @param {obj} data - node data 
+    * @return {dom} - node dom 
     */
   draw(obj) {}
 
@@ -92,15 +92,15 @@ Class YourNode extends Node {
 <br>
 <br>
 
-## 外部调用API：
+## External Call API：
 
 ### node.getWidth ()
 
-*description*： 获取节点宽度
+*description*： get group width
 
 *return*
 
-* `number`节点宽度
+* `number`the width of the node
 
 ```js
 getWidth = () => {}
@@ -108,11 +108,11 @@ getWidth = () => {}
 
 ### node.getHeight ()
 
-*description*： 获取节点宽度
+*description*： get group height
 
 *return*
 
-* `number`节点高度
+* `number`the height of the node
 
 ```js
 getHeight = () => {}
@@ -120,11 +120,11 @@ getHeight = () => {}
 
 ### node.setDraggable (boolean)
 
-*description*： 获取节点是否可移动的状态
+*description*： set whether the node is movable
 
 *params*
 
-* `boolean`设置节点是否可移动
+* `boolean`set whether the node can be moved
 
 ```js
 setDraggable = (boolean) => {}
@@ -132,16 +132,16 @@ setDraggable = (boolean) => {}
 
 ### node.addEndpoint (obj)
 
-*description*： 节点中添加锚点。可添加系统锚点；也可添加节点中的某个dom作为锚点。*注意:*此方法必须在节点挂载后执行才有效
+*description*： add an endpoint point to the node。can add system endpoint or custom endpoint which is a sub dom in node. *Note: *This method must be executed after the node is mounted .
 
 *params*
 
-* `{obj} param` 锚点基本信息(此方法必须在节点挂载后执行才有效)
-* `{string} param.id` 锚点id
-* `{string} param.orientation` 锚点方向(可控制线段的进入和外出方向)
-* `{string} param.scope` 连接作用域
-* `{string} param.type` 'source' / 'target' / undefined / 'onlyConnect'，可看锚点的type文档
-* `{string} param.dom`可以把节点内的任意一个子dom作为自定义锚点
+* `{obj} param` endpoint info (This method must be executed after the node is mounted )
+* `{string} param.id` endpoint id
+* `{string} param.orientation` endpoint direction (can control the direction of entry and exit of edges)
+* `{string} param.scope` connection scope
+* `{string} param.type` 'source' / 'target' / undefined / 'onlyConnect'，please check endpoint document.
+* `{string} param.dom`any sub DOM in the node can be used as a custom endpoint
 
 ```js
 addEndpoint = (obj) => {}
@@ -149,15 +149,15 @@ addEndpoint = (obj) => {}
 
 ### node.removeEndpoint(string)
 
-*description*：节点中删除锚点
+*description*：remove an endpoint point from the node
 
 *params*
 
-* `{string} pointId`锚点的Id(此方法必须在节点挂载后执行才有效)
+* `{string} pointId`endpoint id(This method must be executed after the node is mounted)
 
 *return*
 
-* ` {Endpoint}`Endpoint的对象
+* ` {Endpoint}`Endpoint instance
 
 ```js
 removeEndpoint = (string) => {}
@@ -165,37 +165,37 @@ removeEndpoint = (string) => {}
 
 ### node.getEndpoint (id, type)
 
-*description*：获取节点中的锚点
+*description*：get an endpoint point from the node
 
 *params*
 
-* `{string(Require)} pointId`锚点的信息
-* `{string(Optional)} type`锚点的信息。若传入type，则会根据锚点id和type完全匹配才能获取到。
+* `{string(Require)} pointId`endpoint id
+* `{string(Optional)} type`endpoint type . If the type is passed, both id and type of endpoint are exactly the same to match
 
 *return*
 
-* `{Endpoint}`Endpoint的对象
+* `{Endpoint}`Endpoint instance
 
 ```
 getEndpoint = (id, type) => {}
 ```
 
-### node.moveTo (obj)
+### node.moveTo (x, y)
 
-*description*： 节点移动坐标的方法
+*description*： the method of node moving coordinates
 
 *params*
 
-* `{number} x `移动位置的x坐标
-* `{number} y `移动位置的y坐标
+* `{number} x `x coordinate
+* `{number} y `y coordinate
 
 ```js
-moveTo = (obj) => {}
+moveTo = (x, y) => {}
 ```
 
 ### node.remove ()
 
-*description*： 节点删除的方法。与canvas.removeNode的方法作用一致。
+*description*： the method of node deletion. Consistent with the method `canvas.removeNode`
 
 ```js
 remove = () => {}
@@ -203,12 +203,12 @@ remove = () => {}
 
 ### node.emit (event, data)
 
-*description*： 节点发送事件的方法，画布及任何一个元素都可接收。
+*description*： emit events, canvas or any elements can receive event from the node 
 
 *params*
 
-* `{string} event `发送事件名称
-* `{number} data `发送事件数据
+* `{string} event `emit event name
+* `{number} data `emit event data
 
 ```js
 emit = (string, obj) => {}
@@ -216,36 +216,36 @@ emit = (string, obj) => {}
 
 ### node.on (string, callback)
 
-*description*： 节点接收事件的方法，能接收画布及任何一个元素的事件。
+*description*： receive events, the node can receive events from canvas or any elements
 
 *params*
 
-* `{string} event `接收事件名称
-* `{function} data `接收事件回调
+* `{string} event `receive event name
+* `{function} data `receive event callback
 
 ```js
 on = (string, callback) => {}
 ```
 
-### [树状布局]treeNode.collapseNode (string)
+### [Tree Layout]treeNode.collapseNode (string)
 
-*description*： 树状节点的节点收缩功能
+*description*： the method of node shrinkage
 
 *params*
 
-* `{string} nodeId`节点id
+* `{string} nodeId`node id
 
 ```js
 collapseNode = (string) => {}
 ```
 
-### [树状布局]treeNode.expandNode (string)
+### [Tree Layout]treeNode.expandNode (string)
 
-*description*： 树状节点的节点展开功能
+*description*： the method of node expansion
 
 *params*
 
-* `{string} nodeId`节点id
+* `{string} nodeId`node id
 
 ```js
 expandNode = (string) => {}
