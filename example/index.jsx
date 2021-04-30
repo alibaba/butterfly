@@ -10,9 +10,11 @@ import Diodes from './demo/diodes/index.jsx';
 import Force from './demo/force/index.jsx';
 import RelationalNetwork from './demo/relationalNetwork/index.jsx';
 import RelationalBooks from './demo/relationalBooks/index.jsx';
+import RelationalBooksNew from './demo/relationalBooks-new/index.jsx';
 import System from './demo/system/index.jsx';
 import liteGraph from './demo/liteGraph/index.jsx';
 import MindMap from './demo/mindMap/index.jsx';
+import MindMapNew from './demo/mindMap-new/index.jsx';
 import CompactBoxTree from './demo/compact-box-tree/index.jsx';
 import EntityRelationship from './demo/entity-relationship/index.jsx';
 import Emergency2 from './demo/emergency2/index.jsx';
@@ -108,6 +110,9 @@ ReactDOM.render((
             <Menu.Item key="mindMap">
               <Link to="/mind_map">MindMap</Link>
             </Menu.Item>
+            <Menu.Item key="midMap-new">
+              <Link to="/mind_map_new">MindMapNew</Link>
+            </Menu.Item>
             <Menu.Item key="policy">
               <Link to="/policy">Policy</Link>
             </Menu.Item>
@@ -116,6 +121,9 @@ ReactDOM.render((
             </Menu.Item>
             <Menu.Item key="relationalNetwork">
               <Link to="/relational_network">Relational Network</Link>
+            </Menu.Item>
+            <Menu.Item key="relationarBooks-new">
+              <Link to="/relational_books_new">RelationalBooks-new</Link>
             </Menu.Item>
             <Menu.Item key="rule-tree">
               <Link to="/rule-tree">RuleTree</Link>
@@ -155,6 +163,9 @@ ReactDOM.render((
           <Route path="/flow" component={Flow} />
           <Route path="/analysis" component={Analysis} />
           <Route path="/schedule" component={Schedule} />
+          <Route path="/decision-new" component={DecisionNew} />
+          <Route path="/relational_books_new" component={RelationalBooksNew} />
+          <Route path="/mind_map_new" component={MindMapNew} />
           <Route path="/schedule2" component={Schedule2} />
           <Route path="/decision" component={Decision} />
           <Route path="/login" component={Login} />
