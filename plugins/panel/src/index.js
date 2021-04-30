@@ -3,13 +3,13 @@ import _ from 'lodash';
 import $ from 'jquery';
 
 import Node from './node/panel-node.js';
-import controlEndPoint from './endpoint/panel-endpoint.js';
 
 import './index.less';
 
 class panelPlugins {
   constructor() {
     this.imgData = [];
+    this.addCanvas = [];
   }
 
   guid = () => {
@@ -80,28 +80,33 @@ class panelPlugins {
         $(registerData.root).append(nodeItem);
       }
 
-      $(registerData.canvas.root).on('dragover', (e) => {
-        e.preventDefault();
-      });
+      if (!this.addCanvas.includes(registerData.canvas.root)) {
+        this.addCanvas.push(registerData.canvas.root);
 
-      $(registerData.canvas.root).on('drop', (e) => {
-        let {clientX, clientY} = e;
-        let coordinates = registerData.canvas.terminal2canvas([clientX, clientY]);
-        let id = e.originalEvent.dataTransfer.getData('id');
-        let content = e.originalEvent.dataTransfer.getData('content');
+        $(registerData.canvas.root).on('dragover', (e) => {
+          e.preventDefault();
+        });
+  
+        $(registerData.canvas.root).on('drop', (e) => {
+          let {clientX, clientY} = e;
+          let coordinates = registerData.canvas.terminal2canvas([clientX, clientY]);
+          let id = e.originalEvent.dataTransfer.getData('id');
+          let content = e.originalEvent.dataTransfer.getData('content');
+  
+          let node = {
+            id,
+            left: coordinates[0],
+            top: coordinates[1],
+            Class: Node,
+            content,
+          }
+  
+          this.addNode(registerData.canvas, node);
+  
+        });
+      }
 
-
-        let node = {
-          id,
-          left: coordinates[0],
-          top: coordinates[1],
-          Class: Node,
-          content,
-        }
-
-        this.addNode(registerData.canvas, node);
-
-      });
+      this.imgData = [];
 
     };
 

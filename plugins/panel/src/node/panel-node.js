@@ -42,7 +42,7 @@ class PanelNode extends Node {
     this.moveDirection = null;
   }
 
-  mounted() {
+  mounted = () => {
     this.addEndpoint({
       id: 'n',
       dom: this.endPointN,
@@ -262,10 +262,17 @@ class PanelNode extends Node {
         endPoint.updatePos();
       }
 
-      // console.log(this.rotatorPos);
-
     }
     
+  }
+
+  updata = () => {
+    this.isActived();
+    $(this.dom)
+      .css('transform', `rotate(${this.rotatorDeg}deg)`);
+    for (let endPoint of this.endpoints) {
+      endPoint.updatePos();
+    }
   }
 
 }

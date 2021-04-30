@@ -68,7 +68,7 @@ export default {
     ),
     image({
       output: 'dist/images',
-      limit: 819200,  // default 8192(8k)
+      limit: 8192,  // default 8192(8k)
       exclude: 'node_modules/**'
     }),
     url(

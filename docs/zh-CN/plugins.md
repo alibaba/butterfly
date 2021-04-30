@@ -2,12 +2,19 @@
 
 ## panel
 
+### 安装
+
+```
+npm install butterfly-dag butterfly-plugins-panel
+```
+
 ### 用法
 
 ``` js
-import panelPlugins from '../../dist/index.js';
+import panelPlugins from 'butterfly-plugins-panel';
+import 'butterfly-plugins-panel/dist/index.css';
+
 import pika from '../img/pikatest.jpg';
-import '../../dist/index.css';
 
 panelPlugins.register(
   [
@@ -76,6 +83,8 @@ panelPlugins.register(
 * `{function} calllback`（可选） 注册完毕后的回调
 
 ``` js
+// 无自定义
+
 panelPlugins.register(
   [
     {
@@ -83,6 +92,81 @@ panelPlugins.register(
       canvas: this.canvas,
       type: 'uml',
     }
+  ],()=>{
+    console.log('finish');
+  }
+);
+
+// 有自定义
+
+panelPlugins.register(
+  [
+    {
+      root: document.getElementById('dnd'),
+      canvas: this.canvas,
+      type: 'uml',
+      data: [
+        {
+          id: 'user-1',
+          type: 'png',
+          content: pika,
+          with: 40,
+          height: 40,
+        }
+      ]
+    }
+  ]
+);
+
+// 多组
+
+panelPlugins.register(
+  [
+    {
+      root: document.getElementById('dnd'),
+      canvas: this.canvas,
+      type: 'uml',
+    },
+    {
+      root: document.getElementById('dnd1'),
+      canvas: this.canvas,
+      type: 'uml',
+      data: [
+        {
+          id: 'user-1',
+          type: 'png',
+          content: pika,
+          with: 40,
+          height: 40,
+        }
+      ]
+    }
   ]
 );
 ```
+
+### 节点（PanelNode）
+
+* 继承自`butterfly-dag`的`Node`
+
+#### 属性
+
+##### actived  _`<Boolean>`_ 
+&nbsp;&nbsp; 控制是否激活状态（激活显示node的控制点）
+
+##### rotatorDeg _`<Number>`_ 
+&nbsp;&nbsp; 当前节点的旋转角度
+
+#### API
+
+##### panelNode.updata ()
+
+*作用*： 更新节点状态
+
+```js
+panelNode.actived = true;
+panelNode.rotatorDeg = 45;
+panelNode.updata();
+```
+
+
