@@ -2,7 +2,7 @@ import {Node} from 'butterfly-dag';
 import $ from 'jquery';
 import _ from 'lodash';
 
-import controlEndPoint from '../endpoint/panel-endpoint.js';
+import UML from '../uml/index.js';
 import './panel-node.less';
 
 class PanelNode extends Node {
@@ -21,12 +21,12 @@ class PanelNode extends Node {
     this.controlEndPointSW = null;
     this.controlEndPointNW = null;
 
-    this.content = opts.content;
+    this.content = opts.content || null;
     
-    this.width = 36;
-    this.height = 36;
+    this.width = opts.width || 36;
+    this.height = opts.height || 36;
 
-    this.rotatorDeg = 0;
+    this.rotatorDeg = opts.rotate || 0;
     this.rotatorPosBefore = {
       NW: {X: this.left, Y: this.top},
       NE: {X: this.left + this.width, Y: this.top},
@@ -60,33 +60,7 @@ class PanelNode extends Node {
       dom: this.endPointW,
     });
 
-    this.addEndpoint({
-      id: 'rotator',
-      dom: this.controlEndPointR,
-      Class: controlEndPoint,
-    });
-
-    this.addEndpoint({
-      id: 'n-e',
-      dom: this.controlEndPointNE,
-      Class: controlEndPoint,
-    });
-    this.addEndpoint({
-      id: 's-e',
-      dom: this.controlEndPointSE,
-      Class: controlEndPoint,
-    });
-    this.addEndpoint({
-      id: 's-w',
-      dom: this.controlEndPointSW,
-      Class: controlEndPoint,
-    });
-    this.addEndpoint({
-      id: 'n-w',
-      dom: this.controlEndPointNW,
-      Class: controlEndPoint,
-    });
-
+    this.update();
   }
 
   draw = (opts) => {
@@ -99,7 +73,23 @@ class PanelNode extends Node {
 
     let content = $('<div class="panel-content"></div>')
 
-    let img = $(`<img src='${this.content}' class="panel-img"/>`);
+    let img = null;
+
+    if (!_.isNull(this.content)) {
+      if (this.content.substring(0,3) === 'UML') {
+        for (let item of UML) {
+          if (this.content === item.id) {
+            img = $(`<img src='${item.content}' class="panel-img"/>`);
+            break;
+          }
+        }
+        if (_.isNull(img)) {
+          console.warn('请输入正确的内置UML图片ID');
+        }
+      } else {
+        img = $(`<img src='${this.content}' class="panel-img"/>`);
+      }
+    }
 
     this.endPointN = $('<div class="point n"></div>')
       .attr('id', 'n');
@@ -129,6 +119,32 @@ class PanelNode extends Node {
     container.append(this.endPointE);
     container.append(this.endPointS);
     container.append(this.endPointW);
+
+    this.controlEndPointR.on('mousedown', (e) => {
+      this.moveDirection = 'rotator';
+      this._resizeEmit(e);
+    });
+
+    this.controlEndPointNE.on('mousedown', (e) => {
+      this.moveDirection = 'n-e';
+      this._resizeEmit(e);
+    });
+
+    this.controlEndPointSE.on('mousedown', (e) => {
+      this.moveDirection = 's-e';
+      this._resizeEmit(e);
+    });
+
+    this.controlEndPointSW.on('mousedown', (e) => {
+      this.moveDirection = 's-w';
+      this._resizeEmit(e);
+    });
+
+    this.controlEndPointNW.on('mousedown', (e) => {
+      this.moveDirection = 'n-w';
+      this._resizeEmit(e);
+    });
+
     container.append(this.controlEndPointR);
     container.append(this.controlEndPointNE);
     container.append(this.controlEndPointSE);
@@ -139,14 +155,14 @@ class PanelNode extends Node {
       this.actived = !this.actived;
 
       // 隐藏展示锚点
-      this.isActived();
+      this._isActived();
       
     })
 
     return container[0];
   }
 
-  isActived = () => {
+  _isActived = () => {
     if(this.actived){
       $(this.controlEndPointNE).removeClass('unactived');
       $(this.controlEndPointSE).removeClass('unactived');
@@ -162,13 +178,26 @@ class PanelNode extends Node {
     }
   }
 
-  calculatePos = ({X,Y},centerX,centerY) => {
+  _calculatePos = ({X,Y},centerX,centerY) => {
     let angle = Math.atan2((Y-centerY), (X-centerX)) + this.rotatorDeg * (Math.PI / 180);
     let R = Math.sqrt((X-centerX)*(X-centerX) + (Y-centerY)*(Y-centerY));
     return {
       X: Math.cos(angle) * R + centerX,
       Y: Math.sin(angle) * R + centerY,
     }
+  }
+
+  _resizeEmit = (e) => {
+    const LEFT_KEY = 0;
+      if (e.button !== LEFT_KEY) {
+        return;
+      }
+      e.preventDefault();
+      e.stopPropagation();
+      this.emit('InnerEvents', {
+        type: 'node:resize',
+        node: this,
+      });
   }
 
   resize = (canvasX, canvasY) => {
@@ -184,10 +213,10 @@ class PanelNode extends Node {
     }
 
     this.rotatorPosAfter = {
-      NW: this.calculatePos(this.rotatorPosBefore.NW, centerX, centerY),
-      NE: this.calculatePos(this.rotatorPosBefore.NE, centerX, centerY),
-      SE: this.calculatePos(this.rotatorPosBefore.SE, centerX, centerY),
-      SW: this.calculatePos(this.rotatorPosBefore.SW, centerX, centerY),
+      NW: this._calculatePos(this.rotatorPosBefore.NW, centerX, centerY),
+      NE: this._calculatePos(this.rotatorPosBefore.NE, centerX, centerY),
+      SE: this._calculatePos(this.rotatorPosBefore.SE, centerX, centerY),
+      SW: this._calculatePos(this.rotatorPosBefore.SW, centerX, centerY),
     }
 
     let moveCenterX,moveCenterY;
@@ -266,13 +295,25 @@ class PanelNode extends Node {
     
   }
 
-  updata = () => {
-    this.isActived();
+  update = () => {
+    this._isActived();
     $(this.dom)
       .css('transform', `rotate(${this.rotatorDeg}deg)`);
     for (let endPoint of this.endpoints) {
       endPoint.updatePos();
     }
+  }
+
+  focus = () => {
+    this.actived = true;
+  }
+
+  unfocus = () => {
+    this.actived = false;
+  }
+
+  rotate = (angle) => {
+    this.rotatorDeg = angle;
   }
 
 }

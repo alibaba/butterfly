@@ -11,8 +11,8 @@ npm install butterfly-dag butterfly-plugins-panel
 ### 用法
 
 ``` js
-import panelPlugins from 'butterfly-plugins-panel';
-import 'butterfly-plugins-panel/dist/index.css';
+import panelPlugins from 'butterfly-dag/plugins';
+import 'butterfly-dag/plugins/dist/index.css';
 
 import pika from '../img/pikatest.jpg';
 
@@ -41,6 +41,46 @@ panelPlugins.register(
 
 ```
 
+### 初始化
+
+``` JS
+import panelPlugins from 'butterfly-dag/plugins';
+import {Canvas} from 'butterfly-dag';
+
+import pika from '../img/pikatest.jpg';
+
+let PanelNode = panelPlugins.PanelNode;
+
+let root = document.getElementById('dag-canvas');
+
+this.canvas = new BaseCanvas({
+  root: root,
+  disLinkable: true, // 可删除连线
+  linkable: true,    // 可连线
+  draggable: true,   // 可拖动
+  zoomable: true,    // 可放大
+  moveable: true,    // 可平移
+});
+
+this.canvas.draw(
+  {
+    nodes: [{
+      id: '1',
+      top: 10,
+      left: 20,
+      width: 40,
+      height: 50,
+      roate: 45,
+      content: pika,
+      Class: PanelNode,
+    }]
+  },
+  () => {
+    console.log(this.canvas.getDataMap());
+});
+
+```
+
 ### 属性
 
 #### root  _`<dom>`_    (必填)
@@ -63,7 +103,58 @@ panelPlugins.register(
 
 * id _`<String>`_ (必填)用于添加进画布是的id前缀
 
-* content _`<img>`_ (必填)`panel`中填充的图片
+* content _`<String>`_ (必填)`PanelNode`中填充的图片(`<img src="content" />` | 内置`UML`图片`ID`)
+
+``` JS
+// 使用内置UML图(内置`UML`图片`ID`)
+
+this.canvas.draw(
+  {
+    nodes: [{
+      id: '1',
+      top: 10,
+      left: 20,
+      content: 'UML-ClassDiagram-1',
+      Class: PanelNode,
+    }]
+  }
+);
+
+// 使用自定义(方式一)
+
+this.canvas.draw(
+  {
+    nodes: [{
+      id: '1',
+      top: 10,
+      left: 20,
+      content: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png',
+      Class: PanelNode,
+    }]
+  }
+);
+
+// 使用自定义(方式二)
+
+import pika from '../img/pikatest.jpg';
+
+this.canvas.draw(
+  {
+    nodes: [{
+      id: '1',
+      top: 10,
+      left: 20,
+      content: pika,
+      Class: PanelNode,
+    }]
+  }
+);
+
+```
+
+![plugins-panel-content](./plugins-panel-content.jpg)
+
+*文件名即为id*：如： `UML-ClassDiagram-1`
 
 * type _`<String>`_ (选填)后续内容，用于标示图片的类型
 
@@ -159,14 +250,45 @@ panelPlugins.register(
 
 #### API
 
-##### panelNode.updata ()
+##### panelNode.focus ()
+
+*作用*： 节点变为未选中状态
+
+```js
+panelNode.focus();
+panelNode.update();
+```
+
+##### panelNode.unfocus ()
+
+*作用*： 节点变为选中状态
+
+```js
+panelNode.unfocus();
+panelNode.update();
+```
+
+##### panelNode.rotate (angle)
+
+*作用*： 节点旋转
+
+*参数*
+
+* `angle `_`<Number>`_ 设置节点的旋转角度（顺时针）
+
+```js
+panelNode.rotate(45);
+panelNode.update();
+```
+
+##### panelNode.update ()
 
 *作用*： 更新节点状态
 
 ```js
-panelNode.actived = true;
-panelNode.rotatorDeg = 45;
-panelNode.updata();
+panelNode.focus();
+panelNode.rotate(45);
+panelNode.update();
 ```
 
 

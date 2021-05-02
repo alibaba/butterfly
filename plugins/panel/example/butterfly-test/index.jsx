@@ -17,6 +17,8 @@ import '../../dist/index.css';
 import 'butterfly-dag/dist/index.css';
 import './index.less';
 
+let PanelNode = panelPlugins.PanelNode;
+
 class Test extends Component {
   constructor() {
     super();
@@ -32,7 +34,29 @@ class Test extends Component {
       moveable: true,    // 可平移
     });
 
-    this.canvas.draw({}, () => {
+    this.canvas.draw(
+      {
+        nodes: [{
+          id: '1',
+          top: 10,
+          left: 20,
+          width: 200,
+          height: 40,
+          rotate: 45,
+          content: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png',
+          Class: PanelNode,
+        },{
+          id: '2',
+          top: 10,
+          left: 20,
+          width: 40,
+          height: 40,
+          rotate: 30,
+          content: 'UML-ClassDiagram-1',
+          Class: PanelNode,
+        }]
+      }, () => {
+        console.log(this.canvas.getDataMap());
     });
     this.canvas.on('events', (data) => {
       // console.log(data);
@@ -102,10 +126,11 @@ class Test extends Component {
   test = () => {
     let data = this.canvas.getDataMap();
     let node = data.nodes[0];
-    node.actived = true;
-    node.rotatorDeg = 45;
-    node.updata();
+    node.focus();
+    node.rotate(45);
+    node.update();
     console.log(node);
+    console.log(this.canvas.getDataMap());
   }
   render() {
     return (
