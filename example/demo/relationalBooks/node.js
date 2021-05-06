@@ -1,11 +1,9 @@
 'use strict';
 
-// const Node = require('../../../index.js').Node;
 import { Node } from 'butterfly-dag';
-const $ = require('jquery');
 import { uniqueId } from 'lodash';
 import '../../static/iconfont.css';
-
+import $ from 'jquery';
 let getAttrObj = (namedNodeMap) => {
   return Array.prototype.reduce.call(namedNodeMap,function (pre, item,index,arr) {            
     pre[item.nodeName] = item.value;
@@ -134,4 +132,4 @@ class BaseNode extends Node {
     });
   }
 }
-module.exports = BaseNode;
+export default BaseNode;

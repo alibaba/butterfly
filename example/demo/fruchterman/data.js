@@ -1,5 +1,6 @@
-const Node = require('./node.jsx');
-export const data = {
+import Node from './node';
+
+const data = {
     nodes: [
       {
         id: '0',
@@ -449,4 +450,6 @@ export const data = {
       },
     ],
   };
+
+  export default data;
   

@@ -1,10 +1,8 @@
 'use strict';
 
-// const Node = require('../../../index.js').Node;
 import { Node } from 'butterfly-dag';
-const $ = require('jquery');
-require('./center.less');
-
+import $ from 'jquery';
+import './center.less';
 class CenterNode extends Node {
   constructor(opts) {
     super(opts);
@@ -33,4 +31,4 @@ class CenterNode extends Node {
   }
 }
 
-module.exports = CenterNode;
+export default CenterNode;

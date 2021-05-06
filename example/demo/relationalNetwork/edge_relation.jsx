@@ -1,9 +1,7 @@
 'use strict';
 
-// let Edge = require('../../../index.js').Edge;
 import { Edge } from 'butterfly-dag';
-let $ = require('jquery');
-
+import $ from 'jquery';
 class RelationEdge extends Edge {
   draw = (obj) => {
     let path = document.createElementNS('http://www.w3.org/2000/svg', 'path')
@@ -25,4 +23,5 @@ class RelationEdge extends Edge {
     return $('<span class="butterflies-label">乘火车</span>')[0];
   }
 };
-module.exports = RelationEdge;
+
+export default RelationEdge;

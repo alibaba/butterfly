@@ -36,4 +36,4 @@ Tips.createMenu({
 | y | y coordinate  | string | no | empty
 | closable | click other blank space to close | string | no | empty |
 | targetDom | the dom of tips or menu appears | HTML DOM | yes | empty |
-| genTipDom | this method returns a DOM to display the contents of the tips or menu | funtion | yes | empty |
+| genTipDom | this method returns a DOM to display the contents of the tips or menu | function | yes | empty |

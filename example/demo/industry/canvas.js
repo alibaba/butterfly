@@ -1,6 +1,5 @@
 import './canvas.less';
 
-// const Canvas = require('../../../index.js').Canvas;
 import { Canvas } from 'butterfly-dag';
 const EVENTTYPE  = {
   NODECLICK: 'node:click',
@@ -65,4 +64,4 @@ class IndustryCanvas extends Canvas {
   }
 }
 
-module.exports = IndustryCanvas;
+export default IndustryCanvas;

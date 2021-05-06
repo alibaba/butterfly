@@ -1,11 +1,8 @@
 'use strict';
 
-// const Node = require('../../../index.js').Node;
 import { Node } from 'butterfly-dag';
-// const Node = require('../../../services/butterflies/src/node/baseNode');
-const $ = require('jquery');
-require('./node.less');
-
+import $ from 'jquery';
+import './node.less';
 class BaseNode extends Node {
   constructor(opts) {
     super(opts);
@@ -26,4 +23,4 @@ class BaseNode extends Node {
   }
 }
 
-module.exports = BaseNode;
+export default BaseNode;

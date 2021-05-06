@@ -1,9 +1,8 @@
 import React from 'react';
 import './index.less';
-import {mockData} from './data';
+import  mockData  from './data';
 
-require('butterfly-dag/dist/index.css');
-// const Canvas = require('../../../index.js').Canvas;
+import 'butterfly-dag/dist/index.css';
 import { Canvas } from 'butterfly-dag';
 
 class Flow extends React.Component {

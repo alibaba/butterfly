@@ -1,11 +1,11 @@
 'use strict';
 
-const Edge = require('./edge');
-const BaseEndpoint = require('./endpoint');
 import Node from './node';
 import BaseGroup from './group';
+import Edge from './edge';
+import BaseEndpoint from './endpoint';
 
-export default {
+const data={
   nodes: [{
     id: '0',
     top: 100,
@@ -258,3 +258,5 @@ export default {
     Class: Edge
   }]
 }
+
+export default data;
