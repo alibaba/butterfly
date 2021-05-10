@@ -1,9 +1,12 @@
-'use strict';
 import React, {Component} from 'react';
-import './index.less';
+import ReactDOM from 'react-dom';
+import {Canvas} from 'butterfly-dag';
+import mockData from './data.js';
+
 import 'butterfly-dag/dist/index.css';
-import { Canvas } from 'butterfly-dag';
-import mockData from './data';
+import './iconfont.css';
+import './index.less';
+
 class LoginNew extends Component {
   constructor() {
     super();
@@ -24,9 +27,6 @@ class LoginNew extends Component {
       }
     });
     this.canvas.draw(mockData);
-    this.canvas.on('events', (data) => {
-      console.log(data);
-    });
   }
   render() {
     return (
@@ -38,4 +38,4 @@ class LoginNew extends Component {
   }
 }
 
-export default LoginNew;
+ReactDOM.render(<LoginNew />, document.getElementById('root'));

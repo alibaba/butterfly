@@ -1,13 +1,12 @@
-'use strict';
 import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
+import {Canvas} from 'butterfly-dag';
+import mockData from './data.js';
+
 import './index.less';
 import 'butterfly-dag/dist/index.css';
-import { Canvas } from 'butterfly-dag';
-import mockData from './data';
+
 class Scene4New extends Component {
-  constructor() {
-    super();
-  }
   componentDidMount() {
     let root = document.getElementById('dag-canvas');
     this.canvas = new Canvas({
@@ -23,13 +22,13 @@ class Scene4New extends Component {
         }
       }
     });
-    this.canvas.draw(mockData, () => {
-
-    });
+    this.canvas.draw(mockData);
     this.canvas.on('events', (data) => {
+      // eslint-disable-next-line
       console.log(data);
     });
   }
+
   render() {
     return (
       <div className='analysis'>
@@ -39,4 +38,5 @@ class Scene4New extends Component {
     );
   }
 }
-export default Scene4New;
+
+ReactDOM.render(<Scene4New />, document.getElementById('root'));

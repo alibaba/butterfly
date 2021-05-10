@@ -1,0 +1,13 @@
+{
+  "name": "concent-layout",
+  "cn_name": "中心布局",
+  "description": "a dag which is layout by concent layout",
+  "cn_description": "使用中心布局的DAG图",
+  "dependencies": {
+    "butterfly-dag": "*",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "jquery": "*",
+    "lodash": "*"
+  }
+}

@@ -1,8 +1,7 @@
-'use strict';
-
 import Node from './node';
 import Edge from './edge';
-const data = {
+
+export default {
   nodes: [
     {
       id: '1',
@@ -351,7 +350,7 @@ const data = {
     options: {
       title: '测试'
     },
-    draggable:false,
+    draggable: false,
     top: 310,
     left: 185,
     width: 500,
@@ -359,4 +358,4 @@ const data = {
     resize: true
   }],
 };
-export default data;
+

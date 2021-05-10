@@ -1,0 +1,14 @@
+{
+  "name": "rule-tree",
+  "cn_name": "规则树",
+  "description": "a dag to show to how to make a rule-tree",
+  "cn_description": "一个规则树",
+  "dependencies": {
+    "butterfly-dag": "*",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "jquery": "*",
+    "lodash": "*",
+    "antd": "^3.0.0"
+  }
+}

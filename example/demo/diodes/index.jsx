@@ -1,12 +1,13 @@
-'use strict';
 import React, {Component} from 'react';
-import './index.less';
-import { Canvas } from 'butterfly-dag';
+import ReactDOM from 'react-dom';
+import {Canvas} from 'butterfly-dag';
+
 import mockData from './data';
+
+import 'butterfly-dag/dist/index.css';
+import './index.less';
+
 class Diodes extends Component {
-  constructor() {
-    super();
-  }
   componentDidMount() {
     let root = document.getElementById('dag-canvas');
     this.canvas = new Canvas({
@@ -24,10 +25,8 @@ class Diodes extends Component {
       }
     });
     this.canvas.draw(mockData);
-    this.canvas.on('events', (data) => {
-      console.log(data);
-    });
   }
+
   render() {
     return (
       <div className='diodes-page'>
@@ -38,4 +37,4 @@ class Diodes extends Component {
   }
 }
 
-export default Diodes;
+ReactDOM.render(<Diodes />, document.getElementById('root'));
