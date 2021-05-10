@@ -1938,9 +1938,14 @@ class BaseCanvas extends Canvas {
           nodes: _newNodes
         }]
       });
+      this.emit('system.group.add', {
+        group: _groupObj,
+        nodes: _newNodes
+      });
       this.emit('events', {
         type: 'group:add',
-        group: _groupObj
+        group: _groupObj,
+        nodes: _newNodes
       });
     }
 
