@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import {TreeCanvas} from 'butterfly-dag';
 
-import {mockData} from './data';
+import mockData from './data';
 
 import 'butterfly-dag/dist/index.css';
 import './index.less';

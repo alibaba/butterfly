@@ -3,6 +3,9 @@ import path from 'path';
 import * as Babel from '@babel/standalone';
 
 // ================= 执行依赖 =================
+// 如果 demo 内有新的依赖，需要在这里提前注入
+// 当前实现版本没有自动注入依赖功能，需要手动注入
+// ===========================================
 import _ from 'lodash';
 import * as Antd from 'antd';
 import React from 'react';
@@ -16,8 +19,13 @@ import 'butterfly-dag/dist/index.css';
 
 import LocalFileManagerPlugin from './less-local-plugin';
 
+/**
+ * css -> js
+ * @param {String} code
+ * @returns String
+ */
 const wrapCss = (code) => {
-  // 转移
+  // 转义
   const encode = code.replace(/\\/g, '\\\\');
 
   return `
@@ -42,6 +50,13 @@ const tryFindFile = (basename, files) => {
   return tryFindFile(basename + '.jsx', files) || tryFindFile(basename + '.js', files);
 };
 
+/**
+ * 执行代码
+ * @param {File} entry {filename: string, code: string} 入口文件
+ * @param {Object} cache module cache
+ * @param {File[]} files
+ * @returns
+ */
 const runModule = (entry, cache, files) => {
   const module = {
     exports: {
@@ -70,7 +85,7 @@ const runModule = (entry, cache, files) => {
       const file = tryFindFile(basename, files);
 
       if (!file) {
-        return;
+        throw Error(`cant not find file ${filename} in conext`);
       }
 
       return runModule(file, module.cache, files);
@@ -88,6 +103,10 @@ const runModule = (entry, cache, files) => {
   return module.exports;
 };
 
+/**
+ * 执行一系列文件
+ * @param {Array} files {code: string, filename: string}[]
+ */
 const evalCode = async (files) => {
   if (files.length === 0) {
     return;

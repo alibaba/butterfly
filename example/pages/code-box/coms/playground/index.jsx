@@ -43,6 +43,8 @@ const Playground = (props) => {
   if (error) {
     return (
       <div className="playground-error">
+        compile failed!
+        <br />
         {error.message}
       </div>
     );
