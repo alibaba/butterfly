@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import _ from 'lodash';
 import request from 'axios';
 import i18next from 'i18next';
-import sdk from '@stackblitz/sdk';
 import PropTypes from 'prop-types';
 import {Icon, Tooltip} from 'antd';
 import classnames from 'classnames';
@@ -10,6 +9,7 @@ import {withRouter} from 'react-router-dom';
 
 import html from './coms/html';
 import Editor from './coms/editor';
+import Playground from './coms/playground';
 import Sider from '../../components/sider';
 
 import './index.less';
@@ -55,32 +55,6 @@ const CodeBox = (props) => {
   });
 
   codesandboxFiles['index.html'] = html;
-
-  useEffect(() => {
-    const project = {
-      files: codesandboxFiles,
-      title: `Butterfly-Dag Demos - ${demo}`,
-      description: 'butterfly demos',
-      template: 'javascript',
-      tags: ['butterfly-dag', 'react'],
-      dependencies: deps
-    };
-
-    const options = {
-      view: 'preview',
-      hideExplorer: true,
-      hideNavigation: true,
-      hideDevTools: true,
-      height: '100%',
-      width: '100%',
-    };
-
-    sdk.embedProject(
-      'demo-div',
-      project,
-      options
-    );
-  }, [files]);
 
   const onFold = (isFold) => {
     setIsFold(isFold);
@@ -129,9 +103,7 @@ const CodeBox = (props) => {
           )
         }
         <div className="demo">
-          <div id="demo-div">
-            {i18next.t('codebox_loading')}
-          </div>
+          <Playground files={files} />
         </div>
       </div>
     </div>
