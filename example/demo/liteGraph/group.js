@@ -32,4 +32,5 @@ class BaseGroup extends Group {
     return $(this.dom).height();
   }
 }
+
 export default BaseGroup;

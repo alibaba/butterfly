@@ -23,6 +23,10 @@ class Scene4New extends Component {
       }
     });
     this.canvas.draw(mockData);
+    this.canvas.on('events', (data) => {
+      // eslint-disable-next-line
+      console.log(data);
+    });
   }
 
   render() {

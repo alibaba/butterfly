@@ -6,7 +6,6 @@ import mockData from './data.js';
 import 'butterfly-dag/dist/index.css';
 import './index.less';
 import './iconfont.css';
-
 class Industry extends Component {
   componentDidMount() {
     let root = document.getElementById('dag-canvas');

@@ -1,4 +1,5 @@
 import node from './base_node';
+
 export default {
   nodes: [{
     id: 'test1',
@@ -64,3 +65,4 @@ export default {
   }
   ]
 };
+

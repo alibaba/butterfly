@@ -109,7 +109,7 @@ removeNodes = (nodes) => {}
   * @param {string} param.id - endpoint id
   * @param {string} param.orientation - endpoint direction (it can control the direction of the edge linkin or linkout)
   * @param {string} param.scope - scope
-  * @param {string} param.type - 'source' / 'target' / undefined，ednpoint is both source and target when undefined
+  * @param {string} param.type - 'source' / 'target' / undefined，endpoint is both source and target when undefined
   * @param {string} param.dom - any sub DOM in the node can be used as a custom endpoint
   */
 addEndpoint = (obj) => {}

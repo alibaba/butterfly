@@ -6,6 +6,7 @@ import {mockData} from './data';
 
 import 'butterfly-dag/dist/index.css';
 import './index.less';
+
 class CompactBoxTree extends Component {
   componentDidMount() {
     let root = document.getElementById('dag-canvas');

@@ -1,7 +1,7 @@
 import Node from './node';
 import Edge from './edge';
 
-export const mockData = {
+const mockData = {
   nodes: [
     {
       id: '1',
@@ -115,7 +115,7 @@ export const mockData = {
         id: 'bottom2',
         orientation: [0, 1],
         pos: [0.7, 0]
-      },]
+      }]
     },
     {
       id: '7',
@@ -297,3 +297,5 @@ export const mockData = {
     },
   ]
 };
+
+export default mockData;

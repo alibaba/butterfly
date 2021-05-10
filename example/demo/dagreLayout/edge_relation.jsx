@@ -23,5 +23,6 @@ class RelationEdge extends Edge {
     }
     return dom;
   }
-}
-module.exports = RelationEdge;
+};
+
+export default RelationEdge;

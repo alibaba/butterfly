@@ -22,4 +22,5 @@ class RelationEdge extends Edge {
     return $('<span class="butterflies-label">乘火车</span>')[0];
   }
 }
+
 export default RelationEdge;

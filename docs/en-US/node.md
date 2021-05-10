@@ -107,7 +107,7 @@ unFocus = () => {}
   * @param {string} param.id - endpoint id
   * @param {string} param.orientation - endpoint direction (it can control the direction of the edge linkin or linkout)
   * @param {string} param.scope - scope
-  * @param {string} param.type - 'source' / 'target' / undefined / 'onlyConnect'. If value is undefine, endpoint is both source and target, but it can't be the same as 'source' and 'target', first come first setting; If value is 'onlyConnect', endpoint is both source and target, it can be the same as 'source' and 'target'
+  * @param {string} param.type - 'source' / 'target' / undefined / 'onlyConnect'. If value is undefined, endpoint is both source and target, but it can't be the same as 'source' and 'target', first come first setting; If value is 'onlyConnect', endpoint is both source and target, it can be the same as 'source' and 'target'
   * @param {string} param.dom - any sub DOM in the node can be used as a custom endpoint
   */
 addEndpoint = (obj) => {}

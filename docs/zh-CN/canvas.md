@@ -100,7 +100,7 @@ draw = (data, calllback) => {}
 
 /**
   * 重新渲染方法，会将之前的所有元素删除重新渲染
-  * @param {data} data  - 里面包含分组，节点，连线
+  * @param {data} data  - 重绘时新的分组，节点，连线
   * @param {function} callback  - `*渲染过程是异步的过程，需要的用户请留意回调`
   */
 redraw = (data, calllback) => {}

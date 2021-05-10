@@ -1,4 +1,5 @@
 import Node from './node';
+
 export default {
   nodes: [
     {

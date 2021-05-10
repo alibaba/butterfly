@@ -10,4 +10,5 @@ class BaseEdge extends Edge {
   drawLabel(texts) {
   }
 }
+
 export default BaseEdge;

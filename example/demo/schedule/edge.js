@@ -17,4 +17,5 @@ class BaseEdge extends Edge {
     return dom;
   }
 }
+
 export default BaseEdge;

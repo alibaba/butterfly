@@ -282,3 +282,5 @@ export default {
     Class: Edge,
   }]
 };
+
+export default data;

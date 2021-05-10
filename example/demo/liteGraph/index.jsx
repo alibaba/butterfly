@@ -5,7 +5,6 @@ import mockData from './data.js';
 
 import 'butterfly-dag/dist/index.css';
 import './index.less';
-
 class LiteGraph extends Component {
   constructor() {
     super();

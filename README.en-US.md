@@ -21,7 +21,7 @@
 English | [简体中文](./README.md)
 
 ## ✨ Features
-* Simple & Poweful & Rich DEMO
+* Simple & Powerful & Rich DEMO
 * Manage the canvas in all aspects, developers only need to focus more on customized needs
 * Use DOM/REACT/VUE to customize elements: flexibility and excellent expandability
 
@@ -29,7 +29,7 @@ English | [简体中文](./README.md)
   <img width="900" src="https://img.alicdn.com/imgextra/i4/O1CN01d7WHVs1vkEDzWRRlW_!!6000000006210-2-tps-2400-8172.png">
 </p>
 
-## 🚀QUCIK DEMO LOCAL
+## 🚀QUICK DEMO LOCAL
 ```
 git clone git@github.com:alibaba/butterfly.git
 npm install
@@ -63,7 +63,7 @@ let canvas = new Canvas({
   root: dom,              //canvas root dom (require)
   zoomable: true,         //enable zoom canvas (option)
   moveable: true,         //enable move canvas (option)
-  draggable: true,        //enbale drag nodes (options)
+  draggable: true,        //enable drag nodes (options)
 });
 canvas.draw({
   groups: [],  // group  data
@@ -142,5 +142,5 @@ canvas.draw({
 ## 🤝 How to contribute
 We welcome all contributors, please read the [Contribution Guide](./docs/en-US/CONTRIBUTING.md) before becoming a Contributor.
 
-If you already know, come to [Issus](https://github.com/alibaba/butterfly/issues) or [Pull requests](https://github.com/alibaba/butterfly/pulls) to become contributors, and let's grow and be better and better together.
+If you already know, come to [Issues](https://github.com/alibaba/butterfly/issues) or [Pull requests](https://github.com/alibaba/butterfly/pulls) to become contributors, and let's grow and be better and better together.
 
