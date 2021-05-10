@@ -24,6 +24,7 @@ class Test extends Component {
     super();
   }
   componentDidMount() {
+
     let root = document.getElementById('dag-canvas');
     this.canvas = new BaseCanvas({
       root: root,
@@ -34,33 +35,6 @@ class Test extends Component {
       moveable: true,    // 可平移
     });
 
-    this.canvas.draw(
-      {
-        nodes: [{
-          id: '1',
-          top: 10,
-          left: 20,
-          width: 200,
-          height: 40,
-          rotate: 45,
-          content: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png',
-          Class: PanelNode,
-        },{
-          id: '2',
-          top: 10,
-          left: 20,
-          width: 40,
-          height: 40,
-          rotate: 30,
-          content: 'UML-ClassDiagram-1',
-          Class: PanelNode,
-        }]
-      }, () => {
-        console.log(this.canvas.getDataMap());
-    });
-    this.canvas.on('events', (data) => {
-      // console.log(data);
-    });
     panelPlugins.register(
       [
         {
@@ -74,7 +48,7 @@ class Test extends Component {
               id: 'pika',
               type: 'jpg',
               content: pika,
-              with: 40,
+              width: 40,
               height: 40,
             }
           ]
@@ -87,48 +61,102 @@ class Test extends Component {
               id: 'pika0',
               type: 'jpg',
               content: pika0,
-              with: 40,
+              width: 40,
               height: 40,
             },
             {
               id: 'pika1',
               type: 'jpg',
               content: pika1,
-              with: 40,
+              width: 40,
               height: 40,
             },
             {
               id: 'pika2',
               type: 'jpg',
               content: pika2,
-              with: 40,
+              width: 40,
               height: 40,
             },
             {
               id: 'pika3',
               type: 'jpg',
               content: pika3,
-              with: 40,
+              width: 40,
               height: 40,
             },
             {
               id: 'pika4',
               type: 'jpg',
               content: pika4,
-              with: 40,
+              width: 40,
+              height: 40,
+            },
+            {
+              id: 'baidu',
+              type: 'png',
+              content: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png',
+              width: 100,
               height: 40,
             },
           ]
         }
       ],
-      ()=>{console.log('finish');});
+      ()=>{console.log('finish')}
+    );
+
+    this.canvas.draw(
+      {
+        nodes: [{
+          id: '1',
+          top: 10,
+          left: 100,
+          width: 40,
+          height: 40,
+          rotate: 45,
+          content: 'UML-ClassDiagram-1',
+          Class: PanelNode,
+        },{
+          id: '2',
+          top: 10,
+          left: 20,
+          width: 40,
+          height: 40,
+          rotate: 30,
+          content: 'pika0',
+          Class: PanelNode,
+        },{
+          id: '3',
+          top: 100,
+          left: 20,
+          width: 100,
+          height: 40,
+          rotate: 30,
+          content: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png',
+          Class: PanelNode,
+        },{
+          id: '4',
+          top: 100,
+          left: 200,
+          width: 40,
+          height: 40,
+          rotate: 30,
+          content: pika4,
+          Class: PanelNode,
+        }]
+      }, () => {
+        console.log(this.canvas.getDataMap());
+    });
+    this.canvas.on('events', (data) => {
+      // console.log(data);
+    });
+
   }
   test = () => {
     let data = this.canvas.getDataMap();
     let node = data.nodes[0];
     node.focus();
-    node.rotate(45);
-    node.update();
+    node.rotate(-45);
     console.log(node);
     console.log(this.canvas.getDataMap());
   }

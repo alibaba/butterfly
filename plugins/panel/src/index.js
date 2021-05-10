@@ -9,6 +9,7 @@ import './index.less';
 class panelPlugins {
   constructor() {
     this.imgData = [];
+    this.userImgData = [];
     this.addCanvas = [];
   }
 
@@ -57,6 +58,7 @@ class panelPlugins {
           item.width = item.width || 36;
           item.height = item.height || 36;
           this.imgData.push(item);
+          this.userImgData.push(item);
         }
       }
 
@@ -71,7 +73,7 @@ class panelPlugins {
         let jqImg = $(img).addClass('panel-img');
         jqImg.on('dragstart', (e)=>{
           e.originalEvent.dataTransfer.setData('id', item.id + '-' + this.guid());
-
+          e.originalEvent.dataTransfer.setData('originId', item.id);
           e.originalEvent.dataTransfer.setDragImage(img,0,0);
         })
 
@@ -90,13 +92,14 @@ class panelPlugins {
           let {clientX, clientY} = e;
           let coordinates = registerData.canvas.terminal2canvas([clientX, clientY]);
           let id = e.originalEvent.dataTransfer.getData('id');
+          let content = e.originalEvent.dataTransfer.getData('originId');
   
           let node = {
             id,
             left: coordinates[0],
             top: coordinates[1],
             Class: Node,
-            content: id,
+            content,
           }
   
           this.addNode(registerData.canvas, node);

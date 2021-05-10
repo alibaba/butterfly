@@ -3,6 +3,7 @@ import $ from 'jquery';
 import _ from 'lodash';
 
 import UML from '../uml/index.js';
+import panelPlugins from '../index.js';
 import './panel-node.less';
 
 class PanelNode extends Node {
@@ -60,7 +61,7 @@ class PanelNode extends Node {
       dom: this.endPointW,
     });
 
-    this.update();
+    this._update();
   }
 
   draw = (opts) => {
@@ -87,8 +88,17 @@ class PanelNode extends Node {
           console.warn('请输入正确的内置UML图片ID');
         }
       } else {
-        img = $(`<img src='${this.content}' class="panel-img"/>`);
+        for (let item of panelPlugins.userImgData) {
+          if (this.content === item.id) {
+            img = $(`<img src='${item.content}' class="panel-img"/>`);
+            break;
+          }
+        }
       }
+    }
+
+    if (_.isNull(img)) {
+      img = $(`<img src='${this.content}' class="panel-img"/>`);
     }
 
     this.endPointN = $('<div class="point n"></div>')
@@ -295,7 +305,7 @@ class PanelNode extends Node {
     
   }
 
-  update = () => {
+  _update = () => {
     this._isActived();
     $(this.dom)
       .css('transform', `rotate(${this.rotatorDeg}deg)`);
@@ -306,14 +316,17 @@ class PanelNode extends Node {
 
   focus = () => {
     this.actived = true;
+    this._update();
   }
 
   unfocus = () => {
     this.actived = false;
+    this._update();
   }
 
   rotate = (angle) => {
     this.rotatorDeg = angle;
+    this._update();
   }
 
 }
