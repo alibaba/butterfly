@@ -1,0 +1,50 @@
+.code-editor {
+  .tool-bar {
+    height: 36px;
+    display: flex;
+    background: #f8f9fc;
+    border-bottom: #ebedf0 1px solid;
+    box-shadow: 0 5px 5px #f8f9fc;
+    ::-webkit-scrollbar {
+      display: none; /* Chrome Safari */
+    }
+
+    .files {
+      display: flex;
+      width: 80%;
+      overflow: auto;
+      scrollbar-width: none; /* Firefox */
+
+      div {
+        height: 100%;
+        line-height: 35px;
+        padding: 0 10px;
+        border-right: 1px solid #ebedf0;
+        cursor: pointer;
+
+        &.active {
+          background: white;
+          border-bottom: 1px solid #f66902;
+        }
+      }
+    }
+
+    .op {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 20%;
+
+      .op-item {
+        display: inline-block;
+        width: 33%;
+        text-align: center;
+        cursor: pointer;
+      }
+    }
+  } 
+
+  .ace-editor {
+    height: calc(100% - 36px);
+  }
+}

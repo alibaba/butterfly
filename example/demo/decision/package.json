@@ -1,0 +1,13 @@
+{
+  "name": "decision",
+  "cn_name": "决策树",
+  "description": "a decision tree",
+  "cn_description": "决策树场景DAG",
+  "dependencies": {
+    "butterfly-dag": "*",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "jquery": "*",
+    "lodash": "*"
+  }
+}

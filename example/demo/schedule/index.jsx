@@ -1,9 +1,11 @@
-'use strict';
 import React, {Component} from 'react';
-import './index.less';
+import ReactDOM from 'react-dom';
+import {Canvas} from 'butterfly-dag';
+import mockData from './data.js';
 import 'butterfly-dag/dist/index.css';
-import { Canvas } from 'butterfly-dag';
-import mockData from './data';
+import './iconfont.css';
+import './index.less';
+
 class Scene4New extends Component {
   constructor() {
     super();
@@ -37,4 +39,5 @@ class Scene4New extends Component {
     );
   }
 }
-export default Scene4New;
+
+ReactDOM.render(<Scene4New />, document.getElementById('root'));

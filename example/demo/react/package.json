@@ -1,0 +1,16 @@
+{
+  "name": "react",
+  "cn_name": "react版本模板",
+  "description": "a demo of butterfly-react",
+  "cn_description": "react版本使用样例",
+  "dependencies": {
+    "butterfly-dag": "*",
+    "butterfly-react": "*",
+    "prop-types": "*",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "jquery": "*",
+    "lodash": "*",
+    "antd": "*"
+  }
+}

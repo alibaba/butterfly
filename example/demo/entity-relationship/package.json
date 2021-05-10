@@ -1,0 +1,14 @@
+{
+  "name": "entity-relationship",
+  "cn_name": "实体关系图",
+  "description": "a dag to show relationship between entities",
+  "cn_description": "用于描述实体关系之间的DAG图",
+  "dependencies": {
+    "butterfly-dag": "*",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "jquery": "*",
+    "lodash": "*",
+    "antd": "^3.0.0"
+  }
+}

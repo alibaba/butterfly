@@ -1,0 +1,13 @@
+{
+  "name": "compact-box-tree",
+  "cn_name": "紧凑盒树",
+  "description": "a tree which is layout by compact box tree",
+  "cn_description": "一种利用紧凑盒树进行布局的DAG图",
+  "dependencies": {
+    "butterfly-dag": "*",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "jquery": "*",
+    "lodash": "*"
+  }
+}

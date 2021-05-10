@@ -1,7 +1,6 @@
-'use strict';
-
-import { Edge } from 'butterfly-dag';
 import $ from 'jquery';
+import {Edge} from 'butterfly-dag';
+
 class BaseEdge extends Edge {
   draw(obj) {
     let path = super.draw(obj);
@@ -10,6 +9,7 @@ class BaseEdge extends Edge {
     }
     return path;
   }
+
   drawArrow(isShow) {
     let dom = super.drawArrow(isShow);
     if (this.options.color) {
@@ -17,13 +17,14 @@ class BaseEdge extends Edge {
     }
     return dom;
   }
+
   drawLabel(text) {
     let dom = null;
-    if (!!text) {
+    if (text) {
       dom = $(`<i class="newIconfont iconjiandao-tianchong label ${text}"></i>`)[0];
     }
     return dom;
   }
-};
+}
 
 export default BaseEdge;

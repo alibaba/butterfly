@@ -1,0 +1,13 @@
+{
+  "name": "relational-books",
+  "cn_name": "书本关系图",
+  "description": "a dag to show to how to make a relational diagram of Book",
+  "cn_description": "一个书本关系图",
+  "dependencies": {
+    "butterfly-dag": "*",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "jquery": "*",
+    "lodash": "*"
+  }
+}

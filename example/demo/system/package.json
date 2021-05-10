@@ -1,0 +1,13 @@
+{
+  "name": "system",
+  "cn_name": "系统数据流图",
+  "description": "a dag to show system data flow",
+  "cn_description": "用于描述系统数据流的DAG图",
+  "dependencies": {
+    "butterfly-dag": "*",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "jquery": "*",
+    "lodash": "*"
+  }
+}

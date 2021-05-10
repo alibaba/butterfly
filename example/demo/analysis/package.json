@@ -1,0 +1,13 @@
+{
+  "name": "sql analysis",
+  "cn_name": "SQL分析模板",
+  "description": "a sql analysis dag, to show the relation between sql",
+  "cn_description": "用图形表示不同SQL之间，变量的分析模板",
+  "dependencies": {
+    "butterfly-dag": "*",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "jquery": "*",
+    "lodash": "*"
+  }
+}
