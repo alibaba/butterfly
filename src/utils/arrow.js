@@ -81,7 +81,9 @@ const registerArrow = (arrows) => {
   arrows.forEach((item) => {
     ARROW_TYPE[item.key] = {
       type: item.type,
-      content: item.content
+      content: item.content,
+      width: item.width,
+      height: item.height
     }
   });
 }

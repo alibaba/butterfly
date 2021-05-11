@@ -103,6 +103,8 @@ import {Arrow} from 'butterfly-dag';
 Arrow.registerArrow([{
   key: 'yourArrow1',
   type: 'svg',
+  width: 10,   // Optional, default 8px
+  height: 10,  // Optional, default 8px
   content: require('/your_fold/your_arrow.svg') // Reference external svg
 }, {
   key: 'yourArrow1',

@@ -756,6 +756,7 @@ canvas.on('type key', (data) => {
 * `system.link.connect`	connect edge event
 * `system.link.reconnect`	edge reconnect event
 * `system.link.click`	click edge event
+* `system.group.add`	add group event
 * `system.group.delete`	delete group event
 * `system.group.move`	move group event
 * `system.group.addMembers`	add node to group event

@@ -2385,6 +2385,7 @@ class BaseCanvas extends Canvas {
     return _.find(this.edges, item => item.id === id);
   }
   addEdges(links, isNotEventEmit) {
+
     $(this.svg).css('visibility', 'hidden');
 
     const _edgeFragment = document.createDocumentFragment();

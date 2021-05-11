@@ -105,6 +105,8 @@ import {Arrow} from 'butterfly-dag';
 Arrow.registerArrow([{
   key: 'yourArrow1',
   type: 'svg',
+  width: 10,   // 选填，默认8px
+  height: 10,  // 选填，默认8px
   content: require('/your_fold/your_arrow.svg') // 引用外部svg
 }, {
   key: 'yourArrow1',

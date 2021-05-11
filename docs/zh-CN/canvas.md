@@ -756,6 +756,7 @@ canvas.on('type key', (data) => {
 * `system.link.connect`	连线成功
 * `system.link.reconnect`	线段重连
 * `system.link.click`	线段点击事件
+* `system.group.add`	新增节点组
 * `system.group.delete`	删除节点组
 * `system.group.move`	移动节点组
 * `system.group.addMembers`	节点组添加节点
