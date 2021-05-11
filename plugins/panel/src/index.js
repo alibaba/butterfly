@@ -8,8 +8,11 @@ import './index.less';
 
 class panelPlugins {
   constructor() {
+    // 渲染的一次的img数组（包括内置的和用户注册的）
     this.imgData = [];
+    // 用户注册内容的数组
     this.userImgData = [];
+    // 绑定过的canvas，用于防止重复绑定
     this.addCanvas = [];
   }
 

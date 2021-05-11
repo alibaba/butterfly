@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import BaseCanvas from '../../../../src/canvas/baseCanvas.js';
 // import {Canvas as BaseCanvas} from 'butterfly-dag';
 
-import panelPlugins from '../../dist/index.js';
-// import panelPlugins from '../../src/index.js';
+// import panelPlugins from '../../dist/index.js';
+import panelPlugins from '../../src/index.js';
 
 import pika from '../img/pikatest.jpg';
 
@@ -13,7 +13,7 @@ import pika2 from '../img/pika2.jpg';
 import pika3 from '../img/pika3.jpg';
 import pika4 from '../img/pika4.jpg';
 
-import '../../dist/index.css';
+// import '../../dist/index.css';
 import 'butterfly-dag/dist/index.css';
 import './index.less';
 

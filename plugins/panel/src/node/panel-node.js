@@ -10,12 +10,16 @@ class PanelNode extends Node {
   constructor(opts) {
     super(opts);
     this.options = opts;
+    // 是否选中状态 
     this.actived = false;
 
+    // 连线锚点
     this.endPointN = null;
     this.endPointE = null;
     this.endPointS = null;
     this.endPointW = null;
+
+    // 控制点
     this.controlEndPointR = null;
     this.controlEndPointNE = null;
     this.controlEndPointSE = null;
@@ -27,19 +31,23 @@ class PanelNode extends Node {
     this.width = opts.width || 36;
     this.height = opts.height || 36;
 
+    // 旋转角度
     this.rotatorDeg = opts.rotate || 0;
+    // 旋转前的4个控制点的位置
     this.rotatorPosBefore = {
       NW: {X: this.left, Y: this.top},
       NE: {X: this.left + this.width, Y: this.top},
       SE: {X: this.left + this.width, Y: this.top + this.height},
       SW: {X: this.left, Y: this.top + this.height},
     }
+    // 旋转后的4个控制点的位置
     this.rotatorPosAfter = {
       NW: {X: this.left, Y: this.top},
       NE: {X: this.left + this.width, Y: this.top},
       SE: {X: this.left + this.width, Y: this.top + this.height},
       SW: {X: this.left, Y: this.top + this.height},
     }
+    // 标识是那个控制点在移动
     this.moveDirection = null;
   }
 
@@ -72,10 +80,11 @@ class PanelNode extends Node {
       .css('width', this.width + 'px')
       .css('height', this.height +'px');
 
-    let content = $('<div class="panel-content"></div>')
+    let content = $('<div class="panel-content"></div>');
 
     let img = null;
 
+    // 根据content内容渲染，先匹配内置的ID，在匹配注册的ID，都没有对应的就直接为src插入
     if (!_.isNull(this.content)) {
       if (this.content.substring(0,3) === 'UML') {
         for (let item of UML) {
@@ -188,6 +197,7 @@ class PanelNode extends Node {
     }
   }
 
+  // 计算旋转后的控制点的位置
   _calculatePos = ({X,Y},centerX,centerY) => {
     let angle = Math.atan2((Y-centerY), (X-centerX)) + this.rotatorDeg * (Math.PI / 180);
     let R = Math.sqrt((X-centerX)*(X-centerX) + (Y-centerY)*(Y-centerY));
@@ -229,73 +239,58 @@ class PanelNode extends Node {
       SW: this._calculatePos(this.rotatorPosBefore.SW, centerX, centerY),
     }
 
-    let moveCenterX,moveCenterY;
-
     if (!_.isNull(this.moveDirection)) {
 
       switch (this.moveDirection) {
         case 'n-e' :
-          moveCenterX = (canvasX + this.rotatorPosAfter.SW.X)/2;
-          moveCenterY = (canvasY + this.rotatorPosAfter.SW.Y)/2;
+          centerX = (canvasX + this.rotatorPosAfter.SW.X)/2;
+          centerY = (canvasY + this.rotatorPosAfter.SW.Y)/2;
 
-          this.width = (moveCenterX - this.rotatorPosBefore.SW.X)*2;
-          this.height = (this.rotatorPosBefore.SW.Y - moveCenterY)*2;
-          this.top = moveCenterY - this.height/2;
-
-          $(this.dom)
-            .css('top', this.top + 'px')
-            .css('width', this.width + 'px')
-            .css('height', this.height +'px');
-
+          this.width = (centerX - this.rotatorPosBefore.SW.X)*2;
+          this.height = (this.rotatorPosBefore.SW.Y - centerY)*2;
           break;
+
         case 's-e' :
-          moveCenterX = (canvasX + this.rotatorPosAfter.NW.X)/2;
-          moveCenterY = (canvasY + this.rotatorPosAfter.NW.Y)/2;
-          this.width = (moveCenterX - this.rotatorPosBefore.NW.X)*2;
-          this.height = (moveCenterY - this.rotatorPosBefore.NW.Y)*2;
+          centerX = (canvasX + this.rotatorPosAfter.NW.X)/2;
+          centerY = (canvasY + this.rotatorPosAfter.NW.Y)/2;
 
-          $(this.dom)
-            .css('width', this.width + 'px')
-            .css('height', this.height +'px');
+          this.width = (centerX - this.rotatorPosBefore.NW.X)*2;
+          this.height = (centerY - this.rotatorPosBefore.NW.Y)*2;
           break;
+
         case 's-w' :
-          moveCenterX = (canvasX + this.rotatorPosAfter.NE.X)/2;
-          moveCenterY = (canvasY + this.rotatorPosAfter.NE.Y)/2;
+          centerX = (canvasX + this.rotatorPosAfter.NE.X)/2;
+          centerY = (canvasY + this.rotatorPosAfter.NE.Y)/2;
 
-          this.width = (this.rotatorPosBefore.NE.X - moveCenterX)*2;
-          this.height = (moveCenterY - this.rotatorPosBefore.NE.Y)*2;
-          this.left = moveCenterX - this.width/2;
-
-          $(this.dom)
-            .css('left', this.left + 'px')
-            .css('width', this.width + 'px')
-            .css('height', this.height +'px');
+          this.width = (this.rotatorPosBefore.NE.X - centerX)*2;
+          this.height = (centerY - this.rotatorPosBefore.NE.Y)*2;
           break;
+
         case 'n-w' :
-          moveCenterX = (canvasX + this.rotatorPosAfter.SE.X)/2;
-          moveCenterY = (canvasY + this.rotatorPosAfter.SE.Y)/2;
+          centerX = (canvasX + this.rotatorPosAfter.SE.X)/2;
+          centerY = (canvasY + this.rotatorPosAfter.SE.Y)/2;
         
-          this.width = (this.rotatorPosBefore.SE.X - moveCenterX)*2;
-          this.height = (this.rotatorPosBefore.SE.Y - moveCenterY)*2;
-          this.left = moveCenterX - this.width/2;
-          this.top = moveCenterY - this.height/2;
-
-          $(this.dom)
-          .css('top', this.top + 'px')
-          .css('left', this.left + 'px')
-          .css('width', this.width + 'px')
-          .css('height', this.height +'px');
+          this.width = (this.rotatorPosBefore.SE.X - centerX)*2;
+          this.height = (this.rotatorPosBefore.SE.Y - centerY)*2;
           break;
+
         case 'rotator' :
-          
-          this.rotatorDeg = (Math.atan2((canvasY - centerY), (canvasX - centerX))) * (180 / Math.PI) + 90;
-          $(this.dom)
-            .css('transform', `rotate(${this.rotatorDeg}deg)`);
-
+          this.rotatorDeg = (Math.atan2((canvasY - centerY), (canvasX - centerX))) * (180 / Math.PI) + 90;   
           break;
+
         default :
           break;
       };
+      
+      this.top = centerY - this.height/2;
+      this.left = centerX - this.width/2;
+
+      $(this.dom)
+      .css('top', this.top + 'px')
+      .css('left', this.left + 'px')
+      .css('width', this.width + 'px')
+      .css('height', this.height +'px')
+      .css('transform', `rotate(${this.rotatorDeg}deg)`);
 
       for (let endPoint of this.endpoints) {
         endPoint.updatePos();
