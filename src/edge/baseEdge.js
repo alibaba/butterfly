@@ -124,6 +124,12 @@ class BaseEdge extends Edge {
       path = DrawUtil.drawManhattan(sourcePoint, targetPoint);
     } else if (this.shapeType === 'AdvancedBezier') {
       path = DrawUtil.drawAdvancedBezier(sourcePoint, targetPoint);
+    } else if (this.shapeType === 'Bezier2-1') {
+      path = DrawUtil.drawSecondBezier(sourcePoint, targetPoint, this.shapeType);
+    } else if (this.shapeType === 'Bezier2-2') {
+      path = DrawUtil.drawSecondBezier(sourcePoint, targetPoint, this.shapeType);
+    } else if (this.shapeType === 'Bezier2-3') {
+      path = DrawUtil.drawSecondBezier(sourcePoint, targetPoint, this.shapeType);
     }
     this._path = path;
     return path;
