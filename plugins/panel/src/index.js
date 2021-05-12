@@ -1,6 +1,8 @@
-import uml from './uml/index.js';
 import _ from 'lodash';
 import $ from 'jquery';
+
+import uml from './uml/index.js';
+import routine from './routine/index.js';
 
 import Node from './node/panel-node.js';
 
@@ -14,6 +16,11 @@ class panelPlugins {
     this.userImgData = [];
     // 绑定过的canvas，用于防止重复绑定
     this.addCanvas = [];
+    // 内置主题
+    this.systemData = [
+      ...uml,
+      ...routine
+    ];
   }
 
   guid = () => {
@@ -46,6 +53,13 @@ class panelPlugins {
         switch (registerData.type) {
           case 'uml' :
             for (let item of uml) {
+              item.width = registerData.width || 36;
+              item.height = registerData.height || 36;
+              this.imgData.push(item);
+            }
+            break;
+          case 'routine' :
+            for (let item of routine) {
               item.width = registerData.width || 36;
               item.height = registerData.height || 36;
               this.imgData.push(item);

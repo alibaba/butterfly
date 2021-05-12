@@ -110,7 +110,7 @@ this.canvas.draw(
       width: 40,
       height: 40,
       rotate: 45,
-      content: 'UML-ClassDiagram-1',
+      content: 'System-Uml-ClassDiagram-1',
       Class: PanelNode,
     },{
       id: '2',
@@ -138,7 +138,7 @@ this.canvas.draw(
       id: '1',
       top: 10,
       left: 20,
-      content: 'UML-ClassDiagram-1',
+      content: 'System-Uml-ClassDiagram-1',
       Class: PanelNode,
     }]
   }
@@ -214,14 +214,19 @@ this.canvas.draw(
 
 ```
 
-### UML
+### 内置模块
 
-* 内置的UML模块
+#### 内置UML模块
 
-![plugins-panel-content](./plugins-panel-content.jpg)
+![uml-detail](./uml-detail.png)
 
-*文件名即为id*：如： `UML-ClassDiagram-1`
+*文件名即为id*：如： `System-Uml-ClassDiagram-1`
 
+#### 内置常规模块
+
+![routine-detail](./routine-detail.png)
+
+*文件名即为id*：如： `System-routine-1`
 ### 属性
 
 #### root  _`<dom>`_    (必填)
@@ -244,7 +249,7 @@ this.canvas.draw(
 
 * id _`<String>`_ (必填)用于添加进画布是的id前缀、唯一标识（不要和系统自带的重复）
 
-* content _`<String>`_ (必填)`PanelNode`中填充的图片(`<img src="content" />` | 内置`UML`图片`ID`)
+* content _`<String>`_ (必填)`PanelNode`中填充的图片(`<img src="content" />` | 内置主题图片`ID`)
 
 * type _`<String>`_ (选填)后续内容，用于标示图片的类型
 
