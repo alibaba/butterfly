@@ -27,131 +27,252 @@ canvas.addEdge({
 })
 ```
 
-## 属性<a name='edge-attr'></a>：
+<br>
+<br>
 
-| key | 说明 | 类型 | 默认值 
-| :------ | :------ | :------ | :------ 
-| id | 节点唯一标识 | string (Require) | - 
-| targetNode | 连接目标节点id | string (Require) | - 
-| target | 连接目标锚点id | string (Require) | - 
-| sourceNode | 连接源节点id | string (Require) | - 
-| source | 连接源锚点id | string (Require) | - 
-| type | 标志线条连接到节点还是连接到锚点 | string (Option) | endpoint/node
-| orientationLimit | 线条出口的位置 | array (Option) | - 
-| shapeType | 线条的类型 | string (Option) | Bezier/Flow/Straight
-| label | 线条上加注释 | string/dom (Option) | -
-| arrow | 线条上加箭头 | boolean (Option) | 默认false
-| Class | 拓展类 | Class (Option) | `一般来说已经满足需要了，因为逻辑较为复杂，不建议拓展线的基类。`当传入拓展类的时候，该节点组则会按拓展类的draw方法进行渲染，拓展类的相关方法也会覆盖父类的方法
-| arrowPosition | 箭头在线条上的位置 | float (Option) | 0-1之间，默认0.5
-| arrowOffset | 箭头相对于arrowPosition的偏移量 | float (Option) | 默认0，单位：像素
+## 属性
+
+### id  _`<String>`_    (必填)
+&nbsp;&nbsp;节点唯一标识
+### type  _`<String>`_    (选填)
+&nbsp;&nbsp;标志线条连接到节点还是连接到锚点。默认值为endpoint
+
+```js
+// endpoint类型线段: 锚点连接锚点的线段
+{
+  type: 'endpoint',
+  sourceNode: '', //连接源节点id
+  source: '',     //连接源锚点id
+  targetNode: '', //连接目标节点id
+  target: ''      //连接目标锚点id
+}
+// node类型线段: 节点连接节点的线段
+{
+  type: 'node',
+  source: '',     //连接源节点id
+  target: ''      //连接目标节点id
+}
+```
+
+###  targetNode  _`<String>`_   (必填)
+&nbsp;&nbsp;连接目标节点id (只有endpoint类型的线段才有)
+### target  _`<String>`_    (必填)
+&nbsp;&nbsp;连接目标锚点id (endpoint线段: 连接目标锚点id; node线段: 连接目标节点id)
+### sourceNode  _`<String>`_   (必填)
+&nbsp;&nbsp;连接源节点id (只有endpoint类型的线段才有)
+### source  _`<String>`_   (必填)
+&nbsp;&nbsp;连接源锚点id (endpoint线段: 连接源锚点id; node线段: 连接源节点id)
+### orientationLimit  _`<Array>`_    (选填)
+&nbsp;&nbsp;线条进出口的位置限制: Left / Right / Top / Bottom
+### shapeType  _`<String>`_    (选填)
+&nbsp;&nbsp;线条的类型: Bezier/Flow/Straight/Manhattan/AdvancedBezier
+### label  _`<String/Dom>`_   (选填)
+&nbsp;&nbsp;线条上注释: 可传字符串和dom
+### labelPosition  _`<Number>`_   (选填)
+&nbsp;&nbsp;线条上注释的位置: 取值0-1之间, 0代表代表在线段开始处，1代表在线段结束处。 默认值0.5
+### labelOffset  _`<Number>`_   (选填)
+&nbsp;&nbsp;线条上注释的位置的偏移值: 距离线段注释位置的偏移值。 默认值为0，单位是像素
+
+```js
+// labelPosition & labelOffset: 注释位置在线段中间处，再往结束方向偏移20px
+{
+  labelPosition: 0.5,
+  labelOffset: 20
+}
+```
+
+### arrow  _`<Boolean>`_    (选填)
+&nbsp;&nbsp;是否加箭头配置: 默认false
+### arrowPosition  _`<Number>`_   (选填)
+&nbsp;&nbsp;箭头位置: 取值0-1之间, 0代表代表在线段开始处，1代表在线段结束处。 默认值0.5
+### arrowOffset  _`<Number>`_   (选填)
+&nbsp;&nbsp;箭头位置的偏移值: 距离线段箭头位置的偏移值。 默认值为0，单位是像素
+
+```js
+// arrowPosition & arrowOffset: 箭头位置在线段中间处，再往结束方向偏移20px
+{
+  arrowPosition: 0.5,
+  arrowOffset: 20
+}
+```
+
+### arrowShapeType _`<String>`_   (选填)
+&nbsp;&nbsp;箭头样式类型: 可使用系统集成的和可使用自己注册的，只需要保证类型对应即可。
+
+```js
+// 自行注册的
+import {Arrow} from 'butterfly-dag';
+Arrow.registerArrow([{
+  key: 'yourArrow1',
+  type: 'svg',
+  content: require('/your_fold/your_arrow.svg') // 引用外部svg
+}, {
+  key: 'yourArrow1',
+  type: 'pathString',
+  content: 'M5 0 L0 -2 Q 1.0 0 0 2 Z' // path的d属性
+}]);
+```
+
+### [Manhattan]draggable  _`<Number>`_   (选填)
+&nbsp;&nbsp;设置类型为Manhattan线段是否能拖动
+
+<img width="600" src="https://img.alicdn.com/imgextra/i3/O1CN01OnHABO1VPSGb0PBbW_!!6000000002645-1-tps-400-300.gif">
+
+### Class  _`<Class>`_    (选填)
+&nbsp;&nbsp;拓展类：一般来说已经满足需要了，因为逻辑较为复杂，不建议拓展线的基类。当传入拓展类的时候，该节点组则会按拓展类的draw方法进行渲染，拓展类的相关方法也会覆盖父类的方法
 
 `* 设置 isExpandWidth 为 true 时，获取 eventHandlerDom 用于挂载事件`
 
-## API：
+<br>
+<br>
 
-### <a name='edge-custom-dom'>自定义线段</a>：
+## 类重写API：
+```js
+import {Edge} from 'butterfly-dag';
+
+Class YourEdge extends Endpoint {
+
+  /**
+    * 锚点挂载后的回调
+    */
+  mount() {}
+
+  /**
+    * 锚点挂载后的回调
+    * @return {boolean} - 返回该线段是否能连接。若返回true，则会生成线段；若返回false，则会把线段销毁。
+    */
+  isConnect() {}
+  
+  /**
+    * 线段的渲染方法
+    * @param {obj} data - 线段基本信息 
+    * @return {dom} - 返回渲染svg dom的根节点
+    */
+  draw(obj) {}
+
+  /**
+    * 箭头的渲染方法
+    * @param {string} pathString - 线段path的描绘字符串(path中的d属性)
+    * @return {dom} - 返回箭头渲染dom的根节点
+    */
+  drawArrow() {path}
+
+  /**
+    * 注释的渲染方法
+    * @param {string/dom} label - 注释的内容字符串或者是label的dom
+    * @return {dom} - 返回注释渲染dom的根节点
+    */
+  drawLabel() {}
+
+  /**
+    * 自定义计算线段路径方法
+    * @param {object} sourcePoint - 来源点的坐标及线段出线的方向
+    * @param {object} targetPoint - 目标点的坐标及线段入线的方向
+    * @return {string} - 返回线段path的描绘字符串(path中的d属性)
+    */
+  calcPath(sourcePoint, targetPoint) {}
+}
+```
+
+<br>
+<br>
+
+## 外部调用API
+
+### edge.redraw ()
+
+*作用*： 更新线段位置: 但线段所在的节点或者锚点位置发生变化先, 需要调用下redraw更新其对应的线。
 
 ```js
-/**
-  * @return {dom} - 自定义节点的dom
-  */
-draw = () => {}
+redraw = () => {}
+```
 
-/**
-  * @param {obj} sourcePoint(可选参数) - 源节点的坐标和方向 
-  * @param {obj} targetPoint(可选参数) - 目标节点的坐标和方向 
-  * @return {string} - path的路径
-  */
-calcPath = () => {}
+### edge.setZIndex (index)
 
-/**
-  * 线条挂载后的回调
-  */
-mounted = () => {}
+*作用*： 设置线段的z-index值
 
-/**
-  * 线条重绘后的回调
-  */
-updated = () => {}
+*参数*
 
-/**
-  * 设置线段z-index
-  * @param {number} zIndex -  zIndex的值
-  */
+* `{number} zIndex`zIndex的值
+
+```js
 setZIndex = (index) => {}
 ```
 
-### <a name='edge-custom-arrow'>自定义箭头</a>：
+### edge.updateLabel (label)
+
+*作用*： 更新线段的注释
+
+*参数*
+
+* `{string|dom}`label的字符串或者dom
+
+*返回*
+
+* `{dom}`更新label的dom
 
 ```js
-/**
-  * @return {dom} - 自定义箭头的dom
-  */
-drawArrow = () => {}
-
-```
-
-### <a name='edge-custom-label'>自定义label</a>：
-```js
-/**
-  * @return {dom} - 自定义label的dom
-  */
-drawLabel = () => {}
-```
-
-### 更新label：
-```js
-/**
-  * @param {string|dom} - label的字符窜或者节点
-  * @return {dom} - 更新label的dom
-  */
 updateLabel = (label) => {}
 ```
 
-### <a name='edge-isConnect'>线段连通性</a>：
+### edge.remove ()
+
+*作用*： 线段删除的方法。与canvas.removeEdge的方法作用一致。
+
 ```js
-/**
-  * ps：判断线段连通性的两种方法
-  * 简单方法一：通过锚点的scope，相连的2个锚点scope一致即可连接
-  * 复杂的方法二：通过isConnect函数判断，返回true则可连，返回false则不可连
-  */
-
-/**
-  * @return {boolean} - 可以自定义复杂的连接条件
-  */
-isConnect = () => {}
-
+remove = () => {}
 ```
 
-### <a name='edge-event'>事件</a>：
+### edge.emit(event,data)
+
+*作用*： 线段发送事件的方法，画布及任何一个元素都可接收。
+
+*参数*
+
+* `{string} event`发送事件名称
+* `{number} data`发送事件数据
 
 ```js
-
-/**
-  * 发送事件
-  */
 emit = (string, obj) => {}
-
-/**
-  * 接受事件
-  */
-on = (string, callback) => {}
 ```
 
-### <a name='edge-animation'>动画</a>：
-```js
-/**
-  * 开启动画
-  * @param {obj} options(可选参数) - 配置动画效果
-  * @param {number} options.radius (可选参数) - 动画节点半径
-  * @param {string} options.color (可选参数) - 动画节点颜色
-  * @param {string} options.dur (可选参数) - 动画运行时间，如：1s
-  * @param {number|string} options.repeatCount (可选参数) - 动画重复次数，如：1 或者 'indefinite'
-  */
-addAnimate = (options) => {}
+### edge.on(event,callback)
 
+*作用*： 线段接收事件的方法，能接收画布及任何一个元素的事件。
+
+*参数*
+
+* `{string} event`接收事件名称
+* `{function} callback`接收事件回调
+
+```js
+on = (string, function) => {}
+```
+
+### edge.addAnimate (options)
+
+*作用*： 给该线段加上动画
+
+*参数*
+
+* `{obj} options(可选参数)`配置动画效果
+* `{number} options.radius (可选参数)`动画节点半径
+* `{string} options.color (可选参数) `动画节点颜色
+* `{string} options.dur (可选参数)`动画运行时间，如：1s
+* `{number|string} options.repeatCount (可选参数)`动画重复次数，如：1 或者 'indefinite'
+
+```js
+addAnimate = (options) => {}
 ```
 
 <img width="600" src="https://img.alicdn.com/tfs/TB1anoGvkL0gK0jSZFAXXcA9pXa-921-532.gif">
-ps: 1000节点+1000条线段，动画完美运行
+性能: 1000节点+1000条线段，动画完美运行
 <img width="600" src="https://img.alicdn.com/tfs/TB1N4a_wi_1gK0jSZFqXXcpaXXa-662-466.gif">
+
+### [Manhattan]edge.getBreakPoints ()
+
+*作用*： 获取线段拐点: 只有shapeType为Manhattan的线段才会使用此方法。
+
+```js
+getBreakPoints = () => {}
+```

@@ -20,7 +20,7 @@ class MindMap extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'Bezier2-1'
+          shapeType: 'Bezier2-1'
         }
       },
       layout: {
