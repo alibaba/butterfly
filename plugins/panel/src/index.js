@@ -2,7 +2,7 @@ import _ from 'lodash';
 import $ from 'jquery';
 
 import uml from './uml/index.js';
-import routine from './routine/index.js';
+import basic from './basic/index.js';
 
 import Node from './node/panel-node.js';
 
@@ -19,7 +19,7 @@ class panelPlugins {
     // 内置主题
     this.systemData = [
       ...uml,
-      ...routine
+      ...basic
     ];
   }
 
@@ -58,8 +58,8 @@ class panelPlugins {
               this.imgData.push(item);
             }
             break;
-          case 'routine' :
-            for (let item of routine) {
+          case 'basic' :
+            for (let item of basic) {
               item.width = registerData.width || 36;
               item.height = registerData.height || 36;
               this.imgData.push(item);

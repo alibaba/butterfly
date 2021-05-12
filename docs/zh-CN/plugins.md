@@ -224,9 +224,9 @@ this.canvas.draw(
 
 #### 内置常规模块
 
-![routine-detail](./routine-detail.png)
+![basic-detail](./basic-detail.png)
 
-*文件名即为id*：如： `System-routine-1`
+*文件名即为id*：如： `System-Basic-1`
 ### 属性
 
 #### root  _`<dom>`_    (必填)
