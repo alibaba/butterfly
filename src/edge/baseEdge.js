@@ -152,11 +152,7 @@ class BaseEdge extends Edge {
       this._breakPoints = obj.breakPoints;
     } else if (this.shapeType === 'AdvancedBezier') {
       path = DrawUtil.drawAdvancedBezier(sourcePoint, targetPoint);
-    } else if (this.shapeType === 'Bezier2-1') {
-      path = DrawUtil.drawSecondBezier(sourcePoint, targetPoint, this.shapeType);
-    } else if (this.shapeType === 'Bezier2-2') {
-      path = DrawUtil.drawSecondBezier(sourcePoint, targetPoint, this.shapeType);
-    } else if (this.shapeType === 'Bezier2-3') {
+    } else if (/^Bezier2-[1-3]$/.test(this.shapeType)) {
       path = DrawUtil.drawSecondBezier(sourcePoint, targetPoint, this.shapeType);
     }
     this._path = path;
