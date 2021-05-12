@@ -1,7 +1,8 @@
 'use strict';
 import React, {Component} from 'react';
 import mockData from './data.js';
-import { TreeCanvas } from 'butterfly-dag';
+// import { TreeCanvas } from 'butterfly-dag';
+import { TreeCanvas } from '../../../index.js';
 import './index.less';
 class MindMap extends Component {
   constructor() {
@@ -18,7 +19,7 @@ class MindMap extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          shapeType: 'AdvancedBezier',
+          shapeType: 'Bezier2-1'
         }
       },
       layout: {

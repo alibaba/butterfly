@@ -466,6 +466,9 @@ class BaseCanvas extends Canvas {
           edges: [],
           endpoints: []
         };
+      } else if (data.type === 'node:resize') {
+        this._dragType = 'node:resize';
+        this._dragNode = data.node;
       } else if (data.type === 'group:resize') {
         this._dragType = 'group:resize';
         this._dragGroup = data.group;
@@ -1005,6 +1008,8 @@ class BaseCanvas extends Canvas {
             x: canvasX,
             y: canvasY
           });
+        } else if (this._dragType === 'node:resize') {
+          this._dragNode.resize(canvasX, canvasY);
         } else if (this._dragType === 'group:resize') {
           let pos = this._getGroupPos(this._dragGroup);
           let _newWidth = canvasX - pos.left;
