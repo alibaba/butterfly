@@ -56,6 +56,7 @@ class Test extends Component {
         {
           root: document.getElementById('dnd1'),
           canvas: this.canvas,
+          type: 'routine',
           data: [
             {
               id: 'pika0',
@@ -114,7 +115,7 @@ class Test extends Component {
           width: 40,
           height: 40,
           rotate: 45,
-          content: 'UML-ClassDiagram-1',
+          content: 'System-Uml-ClassDiagram-1',
           Class: PanelNode,
         },{
           id: '2',
