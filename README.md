@@ -81,6 +81,9 @@ canvas.draw({
 * [缩略图(Minimap)](./docs/zh-CN/minimap.md#endpoint-api)
 * [提示 & 菜单(tooltips & menu)](./docs/zh-CN/tooltip.md)
 * [布局(Layout)](./docs/zh-CN/layout.md)
+* 插件
+  * 箭头
+  * [左侧画板(pannel)](./docs/zh-CN/plugins-pannel.md)
 * React & Vue支持
   * [React butterfly组件支持](./docs/zh-CN/react.md)
   * [Vue2 butterfly组件支持](./docs/zh-CN/vue.md)
