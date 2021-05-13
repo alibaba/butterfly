@@ -15,7 +15,7 @@ import Layout from './src/utils/layout/layout';
 import Arrow from './src/utils/arrow';
 import './src/index.less';
 
-module.exports = {
+let Butterfly = {
   Canvas,
   TreeCanvas,
   Edge,
@@ -28,3 +28,7 @@ module.exports = {
   Layout,
   Arrow
 };
+
+window.Butterfly = Butterfly;
+
+module.exports = Butterfly;
