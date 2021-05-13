@@ -626,7 +626,7 @@ clearActionQueue = (options) => {}
 
 *返回*
 
-* `{array<number}` - 转换后的坐标
+* `{array<number>}` - 转换后的坐标
 
 ```js
 terminal2canvas = (coordinates) => {}
