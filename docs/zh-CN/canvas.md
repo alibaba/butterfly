@@ -783,7 +783,7 @@ on = (string, callback) => {}
 
 ## 其他辅助方法
 
-### canvas.setGirdMode (show, options)
+### canvas.setGridMode (show, options)
 
 *作用*：设置网格背景
 
@@ -793,9 +793,9 @@ on = (string, callback) => {}
 * `{array} options` - 网格背景的定制化参数
 
 ```js
-setGirdMode = (show, options) => {}
+setGridMode = (show, options) => {}
 
-this.canvas.setGirdMode(true, {
+this.canvas.setGridMode(true, {
   isAdsorb: false,         // 是否自动吸附,默认关闭
   theme: {
     shapeType: 'line',     // 展示的类型，支持line & circle

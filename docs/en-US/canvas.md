@@ -783,7 +783,7 @@ on = (string, callback) => {}
 
 ## Other API
 
-### canvas.setGirdMode (show, options)
+### canvas.setGridMode (show, options)
 
 *descripition*：set the grid background
 
@@ -793,9 +793,9 @@ on = (string, callback) => {}
 * `{array} options` - parameters for grid background
 
 ```js
-setGirdMode = (show, options) => {}
+setGridMode = (show, options) => {}
 
-this.canvas.setGirdMode(true, {
+this.canvas.setGridMode(true, {
   isAdsorb: false,         // Whether to automatically adsorb, default value is false
   theme: {
     shapeType: 'line',     // show type，support line & circle

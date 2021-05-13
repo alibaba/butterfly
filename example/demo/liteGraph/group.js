@@ -1,6 +1,7 @@
 'use strict';
 
 import { Group } from 'butterfly-dag';
+// import { Group } from '../../../index.js';
 import $ from 'jquery';
 import _ from 'lodash';
 class BaseGroup extends Group {

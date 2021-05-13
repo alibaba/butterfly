@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import mockData from './data.js'
 import './index.less';
 import { Canvas } from 'butterfly-dag';
+// import { Canvas } from '../../../index.js';
 import $ from 'jquery';
 class LiteGraph extends Component{
   constructor(){
@@ -24,7 +25,7 @@ class LiteGraph extends Component{
         }
     })
     this.canvas.draw(mockData, () => {
-      this.canvas.setGirdMode(true, {
+      this.canvas.setGridMode(true, {
         isAdsorb: false,         // 是否自动吸附,默认关闭
         theme: {
           shapeType: 'circle',     // 展示的类型，支持line & circle
