@@ -2,8 +2,8 @@ import {Node} from 'butterfly-dag';
 import $ from 'jquery';
 import _ from 'lodash';
 
-import UML from '../uml/index.js';
 import panelPlugins from '../index.js';
+
 import './panel-node.less';
 
 class PanelNode extends Node {
@@ -86,15 +86,15 @@ class PanelNode extends Node {
 
     // 根据content内容渲染，先匹配内置的ID，在匹配注册的ID，都没有对应的就直接为src插入
     if (!_.isNull(this.content)) {
-      if (this.content.substring(0,3) === 'UML') {
-        for (let item of UML) {
+      if (this.content.substring(0,6) === 'System') {
+        for (let item of panelPlugins.systemData) {
           if (this.content === item.id) {
             img = $(`<img src='${item.content}' class="panel-img"/>`);
             break;
           }
         }
         if (_.isNull(img)) {
-          console.warn('请输入正确的内置UML图片ID');
+          console.warn('请输入正确的内置图片ID');
         }
       } else {
         for (let item of panelPlugins.userImgData) {
