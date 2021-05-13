@@ -14,7 +14,7 @@ import Tips from './src/utils/toolTip';
 import Layout from './src/utils/layout/layout';
 import './src/index.less';
 
-module.exports = {
+let Butterfly = {
   Canvas,
   TreeCanvas,
   Edge,
@@ -26,3 +26,7 @@ module.exports = {
   Tips,
   Layout
 };
+
+window.Butterfly = Butterfly;
+
+module.exports = Butterfly;
