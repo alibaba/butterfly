@@ -47,6 +47,19 @@ class GridService {
     }
     this.isActive = true;
   }
+  
+  getThemeGap(）{
+    let _gap = parseInt(this.theme.gap);  
+
+    if (Number.isNaN(_gap)){
+      return 5;
+    }
+
+    _gap = _gap < 5 ? 5 : _gap;
+
+    return _gap;
+  }
+  
   createCircle() {
     let _ctx = this.dom.getContext('2d');
     // _ctx.fillStyle = "rgba(0, 0, 0, 1)";
@@ -55,8 +68,8 @@ class GridService {
     _ctx.beginPath();
     _ctx.fillStyle = this.theme.circleColor || '#000';
     let _p = Math.PI * 2;
-    let _gap = parseInt(this.theme.gap);
-    _gap = _gap < 5 ? 5 : _gap;
+    let _gap = this.getThemeGap();
+
     for (let i = 0; i < this.canvasWidth; i += _gap) {
       for (let j = 0; j < this.canvasHeight; j += _gap) {
         _ctx.moveTo(i, j);
@@ -65,12 +78,13 @@ class GridService {
     }
     _ctx.fill();
   }
+
   createLine() {
     let _ctx = this.dom.getContext('2d');
     _ctx.strokeStyle = this.theme.lineColor || '#000';
     _ctx.lineWidth = this.theme.lineWidth || 1;
-    let _gap = parseInt(this.theme.gap);
-    _gap = _gap < 5 ? 5 : _gap;
+    let _gap = this.getThemeGap();
+
     for (let j = 0; j < this.canvasHeight; j += _gap) {
       _ctx.beginPath();
       _ctx.moveTo(0, j);
@@ -87,9 +101,11 @@ class GridService {
     }
     _ctx.stroke();
   }
+
   justifyAllCoordinate() {
     let groups = this.canvas.groups;
     let nodes = this.canvas.nodes;
+    let gap = this.getThemeGap();
 
     let _justifyItem = (item, type) => {
       let _sx = item.left;
@@ -97,14 +113,14 @@ class GridService {
       let _ex = item.left + item.getWidth();
       let _ey = item.top + item.getHeight();
 
-      let _left = _sx % this.theme.gap;
-      let _right = _ex % this.theme.gap;
-      let _top = _sy % this.theme.gap;
-      let _bottom = _ey % this.theme.gap;
-      let _posLeft = this.theme.gap - _left;
-      let _posRight = this.theme.gap - _right;
-      let _posTop = this.theme.gap - _top;
-      let _posBottom = this.theme.gap - _bottom;
+      let _left = _sx % gap;
+      let _right = _ex % gap;
+      let _top = _sy % gap;
+      let _bottom = _ey % gap;
+      let _posLeft = gap - _left;
+      let _posRight = gap - _right;
+      let _posTop = gap - _top;
+      let _posBottom = gap - _bottom;
 
       let _pos = {
         left: Infinity,
