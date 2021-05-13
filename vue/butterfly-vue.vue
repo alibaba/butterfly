@@ -5,20 +5,18 @@
 </template>
 
 <script>
-import "butterfly-dag/dist/index.css";
-import "./butterfly-vue.css";
-import { Canvas } from "butterfly-dag";
-import { defaultOptions } from "./util/default-data";
+import 'butterfly-dag/dist/index.css';
+import './butterfly-vue.css';
+import { Canvas } from 'butterfly-dag';
+import { defaultOptions } from './util/default-data.js';
 import {
   processNodes,
   processEdge,
   processGroups,
-} from "./util/process";
+} from './util/process.js';
 
-
-import recalc from "./util/re-calc";
-import relayout from "./util/re-layout";
-
+import recalc from './util/re-calc.js';
+import relayout from './util/re-layout.js';
 
 export default {
   name: "butterfly-vue",

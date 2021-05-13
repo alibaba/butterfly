@@ -1,66 +1,87 @@
 <template>
   <div id="app">
-    <butterfly-vue
-      :canvasData="mockData"
-      @onCreateEdge="logCreateEdge"
-      @onChangeEdges="logChangeEdges"
-      @onDeleteEdge="logDeleteEdge"
-      @onLoaded="finishLoaded"
-    />
-    <el-button @click="add">add</el-button>
+    <el-container>
+      <el-aside width="200px">
+        <div class="logo">
+          Butterfly-Vue
+        </div>
+        <div class="sidebar">
+          <el-menu
+            class="sidebar-el-menu"
+            :default-active="onRoutes"
+            background-color="#324157"
+            text-color="#bfcbd9"
+            active-text-color="#20a0ff"
+            unique-opened
+            router
+          >
+            <el-menu-item index="base">基础组件</el-menu-item>
+            <el-menu-item index="a">基础组件1</el-menu-item>
+          </el-menu>
+        </div>
+      </el-aside>
+      <el-container>
+        <el-header>示例</el-header>
+        <el-main>
+        <router-view></router-view>
+        </el-main>
+      </el-container>
+    </el-container>
+    
   </div>
 </template>
 
 <script>
-import ButterflyVue from 'butterfly-vue';
-import 'butterfly-vue/dist/index.css';
-// import ButterflyVue from '../../butterfly-vue';
-// import ButterflyVue from '../../dist/index';
-// import '../../dist/index.css';
-import mockData from "./mockData";
 
 export default {
   name: 'App',
-  components: {
-    ButterflyVue
+  data() {
+    return {
+    };
   },
-  data(){
-    return{
-      mockData,
-      canvansRef:{},
-      e: {},
+  computed: {
+    onRoutes() {
+      return this.$route.path.replace('/', '');
     }
-  },
-  methods:{
-    add() {
-      this.e.redraw();
-    },
-    logCreateEdge(e) {
-      console.log('---------CreateEdge---------');
-      console.log(e);
-      console.log(mockData);
-      console.log(this.canvansRef.getDataMap());
-      console.log('----------------');
-    },
-    logDeleteEdge(e) {
-      console.log('---------DeleteEdge---------');
-      console.log(e);
-      console.log(mockData);
-      console.log(this.canvansRef.getDataMap());
-      console.log('----------------');
-    },
-    logChangeEdges(e) {
-      console.log('---------ChangeEdges---------');
-      console.log(e);
-      console.log(mockData);
-      console.log(this.canvansRef.getDataMap());
-      console.log('----------------');
-    },
-    finishLoaded(e) {
-      this.e = e;
-      this.canvansRef = e.canvas;
-      console.log("finish");
-    },
   }
 }
 </script>
+
+<style scoped>
+  #app {
+    width: 100%;
+  }
+
+  .el-aside {
+    background-color: rgb(50, 65, 87);
+  }
+
+  .logo {
+    height: 32px;
+    margin: 16px;
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
+    text-align: center;
+    line-height: 32px;
+  }
+  .sidebar {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 64px;
+    bottom: 0;
+    overflow-y: scroll;
+  }
+
+  .sidebar::-webkit-scrollbar {
+    width: 0;
+  }
+
+  .sidebar-el-menu:not(.el-menu--collapse) {
+    width: 200px;
+  }
+
+  .sidebar > ul {
+    height: 100%;
+  }
+</style>

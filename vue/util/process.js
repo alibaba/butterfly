@@ -1,8 +1,8 @@
 import Node from '../coms/node';
 import Edge from '../coms/edge';
 import Group from '../coms/group';
-import diff from './diff'
-import {addNodesCom , addEdgesCom , addGroupsCom} from './add-com'
+import diff from './diff';
+import {addNodesCom , addEdgesCom , addGroupsCom} from './add-com';
 
 const process = ({nodes = [], edges = [], groups = []}) => {
   return {
@@ -40,7 +40,8 @@ const processNodes = (canvas,nodes,oldNodes) => {
   canvas.removeNodes(deleted.map(e => e.id), true);
 
   canvas.addNodes(process({nodes: created}).nodes);
-  addNodesCom({nodes: created}.nodes);
+  
+  addNodesCom(canvas.getDataMap().nodes,{nodes: created}.nodes);
 };
 
 const processEdge = (canvas,edges,oldEdges) => {

@@ -1,47 +1,33 @@
 <template>
-  <div ref="nodeContent"></div>
+  <div class="vue-bf-node">
+    node{{nodeData.id}}
+  </div>
 </template>
 
 <script>
-import {defaultNode} from "../util/default-data"
-import Vue from 'vue'
 
 export default {
-  name: "Vue-node",
+  name: "vue-node",
   props: {
-    id: {
-      type: String,
+    nodeData: {
+      type: Object,
       required: true,
     },
-    render: {
-      type: String,
-      default: defaultNode
-    },
+    // canvasNode: {
+    //   type: Object,
+    //   required: true,
+    // }
   },
-  methods:{
-    renderDom(){
-      const Com = Vue.extend({
-        template: `${this.render}`,
-        props:{
-          id: {
-            type: String,
-            required: true,
-          }
-        },
-        methods:{},
-        created(){}
-      })
-
-      const nodeCom = new Com({propsData: {id : this.id} }).$mount();
-      this.$refs['nodeContent'].appendChild(nodeCom.$el)
-    }
-  },
-  mounted(){
-    this.renderDom();
-  }
 };
 </script>
 
-<style>
-
+<style scoped>
+  .vue-bf-node {
+    width: 100px;
+    height: 25px;
+    border-radius: 5px;
+    background-color: white;
+    border: 1px solid #aaa;
+    text-align: center;
+  }
 </style>

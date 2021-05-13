@@ -21,7 +21,7 @@ if (!fs.existsSync(dist)) {
 
 
 export default {
-  input: 'butterfly-vue.vue',
+  input: 'index.js',
   output: [
     {
       file: pkg.main,
@@ -55,6 +55,6 @@ export default {
         ]
       }
     ),
-    terser()
+    // terser()
   ]
 }

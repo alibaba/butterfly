@@ -1,47 +1,44 @@
 <template>
-  <div ref="groupContent"></div>
+  <div class="vue-bf-group">
+    <div class="vue-bf-group-header">
+      group{{nodeData.id}}
+    </div>
+    <div class="vue-bf-group-content"></div> 
+  </div>
 </template>
 
 <script>
-import {defaultGroup} from "../util/default-data"
-import Vue from 'vue'
 
 export default {
-  name: "Vue-group",
+  name: "vue-group",
   props: {
-    id: {
-      type: String,
+    nodeData: {
+      type: Object,
       required: true,
     },
-    render: {
-      type: String,
-      default: defaultGroup
-    },
+    // canvasGroup: {
+    //   type: Object,
+    //   required: true,
+    // }
   },
-  methods:{
-    renderDom(){
-      const Com = Vue.extend({
-        template: `${this.render}`,
-        props:{
-          id: {
-            type: String,
-            required: true,
-          }
-        },
-        methods:{},
-        created(){}
-      })
-
-      const groupCom = new Com({propsData: {id : this.id} }).$mount();
-      this.$refs['groupContent'].appendChild(groupCom.$el);
-    }
-  },
-  mounted(){
-    this.renderDom();
-  }
 };
 </script>
 
-<style>
+<style scoped>
+  .vue-bf-group {
+    border-radius: 5px;
+    min-width: 250px;
+    border: 1px solid #aaa;
+  }
 
+  .vue-bf-group .vue-bf-group-header {
+    height: 30px;
+    background-color: #aaa;
+    text-align: center;
+    line-height: 30px;
+  }
+
+  .vue-bf-group .vue-bf-group-content {
+    min-height: 120px;
+  }
 </style>
