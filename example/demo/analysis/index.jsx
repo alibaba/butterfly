@@ -22,7 +22,7 @@ class Scene4New extends Component {
         edge: {
           // shapeType: 'Straight', 
           // 可以跟下面自定义注册箭头类型对应
-          // arrowShapeType: 'arrow1'
+          arrowShapeType: 'arrow1'
           // labelPosition和labelOffset配合使用
           // labelPosition: 1,
           // labelOffset: -20,
@@ -33,7 +33,7 @@ class Scene4New extends Component {
     Arrow.registerArrow([{
       key: 'arrow1',
       type: 'svg',
-      content: require('../../../static/arrow/arrow1.svg')
+      content: require('../../../plugins/arrow/uml-1.svg')
     }]);
 
     this.canvas.draw(mockData, () => {

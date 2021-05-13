@@ -254,7 +254,6 @@ class BaseEdge extends Edge {
       let arrowObj = ArrowUtil.ARROW_TYPE[this.arrowShapeType];
       let arrowWidth = arrowObj.width || 8;
       let arrowHeight = arrowObj.height || 8;
-      console.log(arrowObj);
       let dom = undefined;
       if (arrowObj.type === 'pathString') {
         dom = document.createElementNS('http://www.w3.org/2000/svg', 'path');

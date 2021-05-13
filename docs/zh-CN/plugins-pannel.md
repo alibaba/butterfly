@@ -218,13 +218,13 @@ this.canvas.draw(
 
 #### 内置UML模块
 
-![uml-detail](./uml-detail.png)
+![uml-detail](https://img.alicdn.com/imgextra/i2/O1CN014BUVCs1v1npUkWAb8_!!6000000006113-2-tps-500-415.png)
 
 *文件名即为id*：如： `System-Uml-ClassDiagram-1`
 
 #### 内置常规模块
 
-![basic-detail](./basic-detail.png)
+![basic-detail](https://img.alicdn.com/imgextra/i1/O1CN01pRT4Iu1rkRyYUlIeD_!!6000000005669-2-tps-656-228.png)
 
 *文件名即为id*：如： `System-Basic-1`
 ### 属性

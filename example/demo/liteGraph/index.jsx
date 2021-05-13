@@ -31,7 +31,7 @@ class LiteGraph extends Component{
           gap: 20,               // 网格间隙
           backgroud: '#252525',     // 网格背景颜色
           circleRadiu: 1.5,        // 圆点半径
-          circleColor: 'rgba(255, 255, 255, 0.8)'    // 圆点颜色
+          circleColor: 'rgba(255, 255, 255, 0.2)'    // 圆点颜色
         }
       });
     });
@@ -42,6 +42,8 @@ class LiteGraph extends Component{
   render() {
     return (
       <div className='litegraph-page'>
+        <button className='action-btn undo-btn' onClick={() => {this.canvas.undo()}}>undo</button>
+        <button className='action-btn redo-btn' onClick={() => {this.canvas.redo()}}>redo</button>
         <div className='litegraph-canvas' id='dag-canvas'></div>
       </div>
     )
