@@ -144,7 +144,7 @@ this.canvas.draw(
   }
 );
 
-// 使用自定义(方式一)推荐
+// 方式一(推荐): 使用自定义
 // 此处的初始化可以使用前面注册过的id作为content传入
 
 panelPlugins.register(
@@ -182,7 +182,7 @@ this.canvas.draw(
   }
 );
 
-// 使用自定义(方式二)
+// 方式二: 使用自定义
 
 this.canvas.draw(
   {
@@ -196,7 +196,7 @@ this.canvas.draw(
   }
 );
 
-// 使用自定义(方式三)
+// 方式三: 使用自定义
 
 import pika from '../img/pikatest.jpg';
 
@@ -230,32 +230,32 @@ this.canvas.draw(
 ### 属性
 
 #### root  _`<dom>`_    (必填)
-&nbsp;&nbsp;`panel`渲染的`dom`节点
+&nbsp;&nbsp;`panel`渲染`dom`的容器
 
 #### canvas  _`<Object>`_    (必填)
-&nbsp;&nbsp;`butterfly-dag`的`canvas`
+&nbsp;&nbsp;`butterfly-dag`的`canvas`实例
 
 #### type  _`<String>`_    (选填)
-&nbsp;&nbsp;使用那个内置的`panel`库
+&nbsp;&nbsp;内置的`panel`库类型: `uml` or `basic`
 
 #### width  _`<Number>`_    (选填)
-&nbsp;&nbsp;在`root`里渲染的`type`中的每个`panel`的宽度,默认`36`
+&nbsp;&nbsp;在root容器中渲染元素的宽度,默认`36`
 
 #### height  _`<Number>`_    (选填)
-&nbsp;&nbsp;在`root`里渲染的`type`中的每个`panel`的宽度,默认`36`
+&nbsp;&nbsp;在root容器中渲染元素的高度,默认`36`
 
 #### data  _`<Array>`_    (选填)
 &nbsp;&nbsp;自定义的`panel`,会追加在最后:自定义`panel`配置主要为：
 
-* id _`<String>`_ (必填)用于添加进画布是的id前缀、唯一标识（不要和系统自带的重复）
+* id _`<String>`_ (必填) 用于添加进画布是的id前缀、唯一标识（不要和系统自带的重复）
 
-* content _`<String>`_ (必填)`PanelNode`中填充的图片(`<img src="content" />` | 内置主题图片`ID`)
+* content _`<String>`_ (必填) `PanelNode`中填充的图片(`<img src="content" />` | 内置主题图片`ID`)
 
-* type _`<String>`_ (选填)后续内容，用于标示图片的类型
+* type _`<String>`_ (选填) 后续内容，用于标示图片的类型
 
-* width _`<Number>`_ (选填)在`root`中渲染的自定义`panel`的宽度,默认`36`
+* width _`<Number>`_ (选填) 在`root`中渲染的自定义`panel`的宽度,默认`36`
 
-* height _`<Number>`_ (选填)在`root`中渲染的自定义`panel`的高度,默认`36`
+* height _`<Number>`_ (选填) 在`root`中渲染的自定义`panel`的高度,默认`36`
 
 ### API
 

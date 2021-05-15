@@ -16,7 +16,7 @@ canvas.draw({
   }]
 })
 
-// 用法二:
+// 用法二: 此方法必须在node的mount挂载后才能使用
 let node = this.canvas.getNode('xxx');
 node.addEndpoint({
   id: 'xxxx',
@@ -98,6 +98,7 @@ node.addEndpoint({
 });
 ```
 
+<img width="600" src="https://img.alicdn.com/imgextra/i1/O1CN01x8cvVc1oQo8daQTji_!!6000000005220-1-tps-600-400.gif">
 
 
 ### limitNum _`<Number>`_ (选填)

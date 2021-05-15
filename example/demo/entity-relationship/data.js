@@ -1,9 +1,8 @@
 'use strict';
 
-const BaseNode = require('./node');
-const BaseEdge = require('./edge');
-
-module.exports = {
+import BaseNode from './node';
+import BaseEdge from './edge';
+const data = {
   nodes: [{
       id: '1',
       text: 'Gets Paid',
@@ -202,3 +201,5 @@ module.exports = {
 ],
   groupd: []
 }
+
+export default data;

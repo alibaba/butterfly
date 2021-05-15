@@ -1,7 +1,7 @@
 # Endpoint
 
 ## Usage
-```
+```js
 // Usage One:
 canvas.draw({
   nodes: [{
@@ -15,7 +15,7 @@ canvas.draw({
   }]
 })
 
-// Usage Two:
+// Usage Two: This method must be used after the node is mounted
 let node = this.canvas.getNode('xxx');
 node.addEndpoint({
   id: 'xxxx',
@@ -97,7 +97,7 @@ node.addEndpoint({
 });
 ```
 
-
+<img width="600" src="https://img.alicdn.com/imgextra/i1/O1CN01x8cvVc1oQo8daQTji_!!6000000005220-1-tps-600-400.gif">
 
 ### limitNum _`<Number>`_ (Optional)
 

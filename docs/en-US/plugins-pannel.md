@@ -2,15 +2,15 @@
 
 ## panel
 
-### 安装
+### Install
 
 ```
 npm install butterfly-dag butterfly-plugins-panel
 ```
 
-### 用法
+### Usage
 
-#### 注册
+#### Resigter
 
 ``` js
 import {panelPlugins} from 'butterfly-dag/plugins';
@@ -50,7 +50,7 @@ panelPlugins.register(
 
 ```
 
-#### 初始化
+#### Iitialization
 
 ``` JS
 import panelPlugins from 'butterfly-dag/plugins';
@@ -64,11 +64,11 @@ let root = document.getElementById('dag-canvas');
 
 this.canvas = new BaseCanvas({
   root: root,
-  disLinkable: true, // 可删除连线
-  linkable: true,    // 可连线
-  draggable: true,   // 可拖动
-  zoomable: true,    // 可放大
-  moveable: true,    // 可平移
+  disLinkable: true, // enable disConnect edge
+  linkable: true,    // enable connect edges
+  draggable: true,   // enable drag nodes
+  zoomable: true,    // enable zoom canvas
+  moveable: true,    // enable move canvas
 });
 
 panelPlugins.register(
@@ -130,7 +130,7 @@ this.canvas.draw(
 ```
 
 ``` JS
-// 使用内置UML图(内置`UML`图片`ID`)
+// Use System UML picture (System 'UML' picture 'ID')
 
 this.canvas.draw(
   {
@@ -144,8 +144,8 @@ this.canvas.draw(
   }
 );
 
-// 使用自定义(方式一)推荐
-// 此处的初始化可以使用前面注册过的id作为content传入
+// Method 1 (recommended): use custom
+// The initialization here can use the previously registered ID as the content
 
 panelPlugins.register(
   [
@@ -182,7 +182,7 @@ this.canvas.draw(
   }
 );
 
-// 使用自定义(方式二)
+// Method 2: use custom
 
 this.canvas.draw(
   {
@@ -196,7 +196,7 @@ this.canvas.draw(
   }
 );
 
-// 使用自定义(方式三)
+// Method 3: use custom
 
 import pika from '../img/pikatest.jpg';
 
@@ -214,54 +214,55 @@ this.canvas.draw(
 
 ```
 
-### 内置模块
+### System Module
 
-#### 内置UML模块
+#### System UML Module
 
-![uml-detail](./uml-detail.png)
+![uml-detail](https://img.alicdn.com/imgextra/i2/O1CN014BUVCs1v1npUkWAb8_!!6000000006113-2-tps-500-415.png)
 
-*文件名即为id*：如： `System-Uml-ClassDiagram-1`
+*the file name is id*：such as： `System-Uml-ClassDiagram-1`
 
-#### 内置常规模块
+#### System General Module
 
-![basic-detail](./basic-detail.png)
+![basic-detail](https://img.alicdn.com/imgextra/i1/O1CN01pRT4Iu1rkRyYUlIeD_!!6000000005669-2-tps-656-228.png)
 
-*文件名即为id*：如： `System-Basic-1`
-### 属性
+*the file name is id*：such as： `System-Basic-1`
 
-#### root  _`<dom>`_    (必填)
-&nbsp;&nbsp;`panel`渲染的`dom`节点
+### Attribute
 
-#### canvas  _`<Object>`_    (必填)
-&nbsp;&nbsp;`butterfly-dag`的`canvas`
+#### root  _`<dom>`_    (Require)
+&nbsp;&nbsp;the container for `pannel` rendering `dom`
 
-#### type  _`<String>`_    (选填)
-&nbsp;&nbsp;使用那个内置的`panel`库
+#### canvas  _`<Object>`_    (Require)
+&nbsp;&nbsp;the `canvas` instance of `butterfly-dag`
 
-#### width  _`<Number>`_    (选填)
-&nbsp;&nbsp;在`root`里渲染的`type`中的每个`panel`的宽度,默认`36`
+#### type  _`<String>`_    (Optional)
+&nbsp;&nbsp;System 'panel' library type: `uml` or `basic`
 
-#### height  _`<Number>`_    (选填)
-&nbsp;&nbsp;在`root`里渲染的`type`中的每个`panel`的宽度,默认`36`
+#### width  _`<Number>`_    (Optional)
+&nbsp;&nbsp;render the width of the element in the root container. Default value ` 36`
 
-#### data  _`<Array>`_    (选填)
+#### height  _`<Number>`_    (Optional)
+&nbsp;&nbsp;render the height of the element in the root container. Default value ` 36`
+
+#### data  _`<Array>`_    (Optional)
 &nbsp;&nbsp;自定义的`panel`,会追加在最后:自定义`panel`配置主要为：
 
-* id _`<String>`_ (必填)用于添加进画布是的id前缀、唯一标识（不要和系统自带的重复）
+* id _`<String>`_ (Require) 用于添加进画布是的id前缀、唯一标识（不要和系统自带的重复）
 
-* content _`<String>`_ (必填)`PanelNode`中填充的图片(`<img src="content" />` | 内置主题图片`ID`)
+* content _`<String>`_ (Require) `PanelNode`中填充的图片(`<img src="content" />` | 内置主题图片`ID`)
 
-* type _`<String>`_ (选填)后续内容，用于标示图片的类型
+* type _`<String>`_ (Optional) 后续内容，用于标示图片的类型
 
-* width _`<Number>`_ (选填)在`root`中渲染的自定义`panel`的宽度,默认`36`
+* width _`<Number>`_ (Optional) 在`root`中渲染的自定义`panel`的宽度,默认`36`
 
-* height _`<Number>`_ (选填)在`root`中渲染的自定义`panel`的高度,默认`36`
+* height _`<Number>`_ (Optional) 在`root`中渲染的自定义`panel`的高度,默认`36`
 
 ### API
 
 #### panelPlugins.register(data, callback)
 
-*作用*：注册`panel`到`root`中
+*descripition*：注册`panel`到`root`中
 
 *参数*
 
@@ -347,7 +348,7 @@ panelPlugins.register(
 
 ##### panelNode.focus ()
 
-*作用*： 节点变为未选中状态
+*descripition*： 节点变为未选中状态
 
 ```js
 panelNode.focus();
@@ -355,7 +356,7 @@ panelNode.focus();
 
 ##### panelNode.unfocus ()
 
-*作用*： 节点变为选中状态
+*descripition*： 节点变为选中状态
 
 ```js
 panelNode.unfocus();
@@ -363,7 +364,7 @@ panelNode.unfocus();
 
 ##### panelNode.rotate (angle)
 
-*作用*： 节点旋转
+*descripition*： 节点旋转
 
 *参数*
 

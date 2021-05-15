@@ -1,8 +1,12 @@
-## Force Layout
-Force-directed layout is a set of algorithms which are imporved and extended by lots of researchers based on the earliest classical force-directed algorithm. They simulate the nodes and edges in the graph as the physical objects. There are attractive forces and repulsive forces between nodes to iteratively move them to reach a reasonable layout.
+# Auto Layout
+<p align="center">
+  <img width="900" src="https://img.alicdn.com/imgextra/i4/O1CN01pYwnbh1gGiUMaUIKm_!!6000000004115-2-tps-1418-2839.png">
+</p>
 
-#### legend
-![Force布局](https://img.alicdn.com/tfs/TB1W2Feh9slXu8jSZFuXXXg7FXa-1092-707.png)
+
+## Force Layout
+&nbsp;&nbsp;&nbsp;&nbsp;Force-directed layout is a set of algorithms which are improved and extended by lots of researchers based on the earliest classical force-directed algorithm. They simulate the nodes and edges in the graph as the physical objects. There are attractive forces and repulsive forces between nodes to iteratively move them to reach a reasonable layout.
+
 
 #### Examples
 
@@ -12,9 +16,9 @@ this.canvas = new Canvas({
     type: 'forceLayout',
     options: {
       link: {
-        // 线条的距离
+        // link distance
         distance: 50,
-        // 线条的粗细
+        // link strength
         strength: 1
       }
     },
@@ -26,12 +30,7 @@ this.canvas = new Canvas({
 
 ## Dagre Layout
 
-Dagre Layout is an appropriate layout method for directed flow graph.It will calculate the levels and positions of nodes automatically according to the edge directions in the data. 
-
-
-#### legend
-
-![Dagre布局](https://img.alicdn.com/tfs/TB1kzjEkRFR4u4jSZFPXXanzFXa-1335-782.png)
+&nbsp;&nbsp;&nbsp;&nbsp;Dagre Layout is an appropriate layout method for directed flow graph.It will calculate the levels and positions of nodes automatically according to the edge directions in the data. 
 
 #### Examples
 
@@ -63,11 +62,7 @@ this.canvas = new Canvas({
 
 ## Grid Layout
 
-Grid Layout will order the nodes according to the parameters, and then place the nodes on the grids.
-
-#### legend
-
-![grid布局](https://img.alicdn.com/tfs/TB1uU6LVxD1gK0jSZFsXXbldVXa-1498-750.png)
+&nbsp;&nbsp;&nbsp;&nbsp;Grid Layout will order the nodes according to the parameters, and then place the nodes on the grids.
 
 #### Examples
 
@@ -77,25 +72,25 @@ this.canvas = new TreeCanvas({
   layout: {
     type: 'grid',
     options: {
-          // group的渲染方法
-          width: 150,
-          // 布局画布总长度
-          height: 100,
-          // 布局相对起始点
-          begin: [0, 0],
-          // prevents node overlap, may overflow boundingBox if not enough space
-          preventOverlap: true,
-          // extra spacing around nodes when preventOverlap: true
-          preventOverlapPadding: 10,
-          // uses all available space on false, uses minimal space on true
-          condense: false,
-          //行数
-          rows: undefined,
-          // 列数
-          cols: undefined,
-          // 排序方式 
-          sortBy: 'degree',
-          nodeSize: 30,
+      // canvas width
+      width: 150,
+      // canvas height
+      height: 100,
+      // layout begin position
+      begin: [0, 0],
+      // prevents node overlap, may overflow boundingBox if not enough space
+      preventOverlap: true,
+      // extra spacing around nodes when preventOverlap: true
+      preventOverlapPadding: 10,
+      // uses all available space on false, uses minimal space on true
+      condense: false,
+      // row number
+      rows: undefined,
+      // column number
+      cols: undefined,
+      // sort method
+      sortBy: 'degree',
+      nodeSize: 30,
     },
   }
 });
@@ -117,10 +112,7 @@ this.canvas = new TreeCanvas({
 
 ## Fruchterman Layout
 
-Fruchterman Reingold 布局算法在原理上而言属于力导向布局算法。
-#### legend
-
-![Fruchterman布局](https://img.alicdn.com/tfs/TB1hDH5VpP7gK0jSZFjXXc5aXXa-1171-786.png)
+&nbsp;&nbsp;&nbsp;&nbsp;The Fruchterman Reingold layout algorithm is a force-oriented layout algorithm in principle.
 
 #### Examples
 
@@ -178,13 +170,10 @@ import {TreeCanvas} from 'butterfly-dag';
 
 
 ## Concentric Layout
-Concentric Layout places the nodes on concentric circles.
 
-#### 图例
+&nbsp;&nbsp;&nbsp;&nbsp;Concentric Layout places the nodes on concentric circles.
 
-![Concentric Layout](https://img.alicdn.com/tfs/TB1f1fPVuH2gK0jSZJnXXaT1FXa-939-681.png)
-
-#### 代码演示
+#### Example
 
 ``` js
 import {TreeCanvas} from 'butterfly-dag';
@@ -239,12 +228,7 @@ this.canvas = new TreeCanvas({
 
 ## Radial Layout
 
-Radial layout is a kind of layout method to make the graph radial. Taking a focusnode as the center, the rest of the nodes are arranged on rings with different distances according to the degree relationship with focusnode. Nodes one degree away from focusnode are placed on the first ring nearest to it, nodes two degrees away from focusnode are placed on the second ring, and so on.
-
-
-#### legend
-
-![Radial layout](https://img.alicdn.com/imgextra/i4/O1CN017UUWwh1u9l4RfYcyi_!!6000000005995-2-tps-1240-489.png)
+&nbsp;&nbsp;&nbsp;&nbsp;Radial layout is a kind of layout method to make the graph radial. Taking a focusnode as the center, the rest of the nodes are arranged on rings with different distances according to the degree relationship with focusnode. Nodes one degree away from focusnode are placed on the first ring nearest to it, nodes two degrees away from focusnode are placed on the second ring, and so on.
 
 #### Examples
 

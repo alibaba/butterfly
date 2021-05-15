@@ -1,12 +1,11 @@
 'use strict';
 import React, { Component } from 'react';
-require('./index.less');
-require('butterfly-dag/dist/index.css');
+import './index.less';
+import 'butterfly-dag/dist/index.css';
 
-const Canvas = require('./circleCanvas.js');
-const Edge = require('./edge.js');
-const mockData = require('./data.js');
-
+import Canvas from './circleCanvas';
+import Edge from './edge';
+import mockData from './data';
 class Circle extends Component {
   constructor() {
     super();
@@ -76,4 +75,4 @@ class Circle extends Component {
   }
 }
 
-module.exports = Circle;
+export default Circle;

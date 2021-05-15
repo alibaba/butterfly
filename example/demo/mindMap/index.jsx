@@ -1,10 +1,9 @@
 'use strict';
 import React, {Component} from 'react';
 import mockData from './data.js';
-const TreeCanvas = require('../../../index.js').TreeCanvas;
 // import { TreeCanvas } from 'butterfly-dag';
-require('./index.less');
-
+import { TreeCanvas } from '../../../index.js';
+import './index.less';
 class MindMap extends Component {
   constructor() {
     super();
@@ -63,4 +62,4 @@ class MindMap extends Component {
   }
 }
 
-module.exports = MindMap;
+export default MindMap;

@@ -1,9 +1,7 @@
 'use strict';
 
-// const Node = require('../../../index.js').Node;
 import { Node } from 'butterfly-dag';
-const $ = require('jquery');
-
+import $ from 'jquery'
 class Input extends Node {
   constructor(opts) {
     super(opts);
@@ -35,4 +33,4 @@ class Input extends Node {
   }
 }
 
-module.exports = Input;
+export default Input;

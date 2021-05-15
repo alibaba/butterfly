@@ -235,14 +235,16 @@ class BaseEdge extends Edge {
     });
     let deg = Math.atan2(vector.y, vector.x) / Math.PI * 180;
     let arrowObj = ArrowUtil.ARROW_TYPE[this.arrowShapeType];
+    let arrowWidth = arrowObj.width || 8;
+    let arrowHeight = arrowObj.height || 8;
     if (arrowObj.type === 'pathString') {
       this.arrowDom.setAttribute('d', arrowObj.content);
     } else if (arrowObj.type === 'svg') {
       if (vector.x === 0) {
-        _y -= 4;
+        _y -= arrowHeight / 2;
       } else {
-        _x -= 4;
-        _y -= 4;
+        _x -= arrowWidth / 2;
+        _y -= arrowHeight / 2;
       }
     }
     this.arrowDom.setAttribute('transform', `rotate(${deg}, ${x}, ${y})translate(${_x}, ${_y})`);
@@ -250,14 +252,16 @@ class BaseEdge extends Edge {
   drawArrow(arrow) {
     if (arrow) {
       let arrowObj = ArrowUtil.ARROW_TYPE[this.arrowShapeType];
+      let arrowWidth = arrowObj.width || 8;
+      let arrowHeight = arrowObj.height || 8;
       let dom = undefined;
       if (arrowObj.type === 'pathString') {
         dom = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       } else if (arrowObj.type === 'svg') {
         dom = document.createElementNS('http://www.w3.org/2000/svg', 'image');
         dom.setAttribute('href', arrowObj.content);
-        dom.setAttribute('width', '8px');
-        dom.setAttribute('height', '8px');
+        dom.setAttribute('width', `${arrowWidth}px`);
+        dom.setAttribute('height', `${arrowHeight}px`);
       }
       dom.setAttribute('class', 'butterflies-arrow');
       return dom;

@@ -1,13 +1,11 @@
 'use strict';
 import React, {Component} from 'react';
-// const Canvas = require('../../../index.js').Canvas;
 import { Canvas } from 'butterfly-dag';
-const mockData = require('./data.js');
-const RelationEdge = require('./edge_relation.jsx');
 
-require('./index.less');
-require('butterfly-dag/dist/index.css');
-
+import mockData from './data';
+import RelationEdge from './edge_relation';
+import './index.less';
+import 'butterfly-dag/dist/index.css';
 class RelationalNetwork extends Component {
   constructor() {
     super();
@@ -46,4 +44,4 @@ class RelationalNetwork extends Component {
   }
 }
 
-module.exports = RelationalNetwork;
+export default RelationalNetwork;

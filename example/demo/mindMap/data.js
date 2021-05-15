@@ -1,8 +1,7 @@
 'use strict';
 
-const Node = require('./node.js');
-
-module.exports = {
+import Node from './node';
+const data = {
   nodes: {
     isRoot: true,
     id: 'Root',
@@ -372,3 +371,5 @@ module.exports = {
     type: 'node'
   }]
 };
+
+export default data;

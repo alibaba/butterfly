@@ -8,7 +8,7 @@ let canvas = new Canvas({
   // 如下属性
 });
 canvas.draw({
-	// 数据
+  // 数据
 })
 ```
 
@@ -45,7 +45,7 @@ canvas.draw({
 
 &nbsp;&nbsp;画布主题配置，默认初始化样式和交互，主要分为：
 
-* edge 连线配置: 默认所有线段的样式和交互
+* edge 连线配置: 默认所有线段的样式和交互。拖动出来的线也会使用该配置。
 
   *参数*：
 
@@ -106,6 +106,8 @@ canvas.draw({
   * enable _`<Boolean>`_ 画布是否自动延展；默认 `false`
 
   * autoMovePadding _`<Array>`_ 触发自动延展的画布内边距；默认 `[20,20,20,20]`
+
+<img width="600" src="https://img.alicdn.com/tfs/TB16lUNBG61gK0jSZFlXXXDKFXa-1665-801.gif">
   
 * autoResizeRootSize _`<Boolean>`_ 自动适配Root容器大小；默认 `true`
 
@@ -174,6 +176,7 @@ setLinkable = (boolean) => {}
 *参数*
 
 * `{true|false} boolean` 是否支持所有节点可断线
+
 ```js
 setDisLinkable = (boolean) => {}
 ```
@@ -185,6 +188,7 @@ setDisLinkable = (boolean) => {}
 *参数*
 
 * `{true|false} boolean` 是否支持所有节点可拖动
+
 ```js
 setDraggable = (boolean) => {}
 ```
@@ -443,7 +447,7 @@ setZoomable = (boolean, boolean) => {}}
 
 ### canvas.setMoveable (boolean)
 
-*作用*：设置画布平移
+*作用*：设置是否能通过拖动画布空白出来移动整体画布
 
 *参数*
 
@@ -492,7 +496,7 @@ getZoom = () => {}
 
 ### canvas.getOffset ()
 
-*作用*：获取画布的偏移值
+*作用*：获取画布整体移动的偏移值
 
 *返回*
 
@@ -504,11 +508,11 @@ getOffset = () => {}
 
 ### canvas.getOrigin ()
 
-*作用*：获取画布的偏移值的中心点
+*descripition*：获取画布的缩放的中心点,一般跟随着鼠标的位置
 
-*返回*
+*return*
 
-* `{[x, y]}` - 画布的偏移值的中心点(百分比)
+* `{[x, y]}` - 画布的缩放的中心点(单位是百分比)
 
 ```js
 getOrigin = () => {}
@@ -516,11 +520,11 @@ getOrigin = () => {}
 
 ### canvas.setOrigin ([x ,y])
 
-*作用*：手动设置画布缩放的中心点
+*descripition*：手动设置画布缩放的中心点,一般跟随着鼠标的位置
 
-*参数*
+*params*
 
-* `{[x, y]} array` - x,y的中心点坐标
+* `{[x, y]} array` - 画布的缩放的中心点(单位是百分比)
 
 ```js
 setOrigin = ([x ,y]) => {}
@@ -532,8 +536,8 @@ setOrigin = ([x ,y]) => {}
 
 *参数*
 
-* `{string/function} nodeId/groupId or filter`  - 节点的id或者过滤器
-* `{string} type`  - 节点的类型(node or group)
+* `{string} nodeId/groupId`  - 节点/分点组的id
+* `{string} type`  - 节点的类型, `node` 或者 `group`
 * `{object} options {offset: [0,0]}`  - 聚焦配置属性，如偏移值
 * `{function} callback`  - 聚焦后的回调
 
@@ -548,7 +552,7 @@ focusNodeWithAnimate = (string, type, options, callback) => {}
 *参数*
 
 * `{object} {nodes: [], groups: []}`  - 节点和节点组的id数组
-* `{array} type`  - 节点的类型(node or group)
+* `{array} type`  - 节点的类型, `node` 或者 `group`
 * `{object} options {offset: [0,0]}`  - 聚焦配置属性，如偏移值
 * `{function} callback`  - 聚焦后的回调
 
@@ -692,7 +696,7 @@ getAllUnion = () => {}
 
 ### canvas.add2Union (name, obj)
 
-*作用*：添加聚合组 || 添加聚合组元素
+*作用*：添加聚合组 || 添加聚合组元素，用于框选模式
 
 *参数*
 
@@ -751,12 +755,13 @@ canvas.on('type key', (data) => {
 * `system.links.delete`	删除连线
 * `system.link.connect`	连线成功
 * `system.link.reconnect`	线段重连
-* `system.link.click`	点击事件
+* `system.link.click`	线段点击事件
+* `system.group.add`	新增节点组
 * `system.group.delete`	删除节点组
 * `system.group.move`	移动节点组
 * `system.group.addMembers`	节点组添加节点
 * `system.group.removeMembers`	节点组删除节点
-* `system.multiple.select`	框选结果
+* `system.multiple.select`	框选结束
 * `system.drag.start`	拖动开始
 * `system.drag.move`	拖动
 * `system.drag.end`	拖动结束
@@ -778,19 +783,19 @@ on = (string, callback) => {}
 
 ## 其他辅助方法
 
-### canvas.setGirdMode (show, options)
+### canvas.setGridMode (show, options)
 
-*作用*：设置网格布局
+*作用*：设置网格背景
 
 *参数*
 
-* `{true|false} boolean`  - 是否开启网格布局功能
-* `{array} options` - 网格布局的定制化参数
+* `{true|false} boolean`  - 是否开启网格背景功能
+* `{array} options` - 网格背景的定制化参数
 
 ```js
-setGirdMode = (show, options) => {}
+setGridMode = (show, options) => {}
 
-this.canvas.setGirdMode(true, {
+this.canvas.setGridMode(true, {
   isAdsorb: false,         // 是否自动吸附,默认关闭
   theme: {
     shapeType: 'line',     // 展示的类型，支持line & circle
@@ -807,7 +812,7 @@ this.canvas.setGirdMode(true, {
 
 ### canvas.setMinimap = (show, options)
 
-*作用*：设置缩略图
+*作用*：设置是否开启缩略图
 
 *参数*
 

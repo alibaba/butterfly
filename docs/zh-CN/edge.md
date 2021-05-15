@@ -105,6 +105,8 @@ import {Arrow} from 'butterfly-dag';
 Arrow.registerArrow([{
   key: 'yourArrow1',
   type: 'svg',
+  width: 10,   // 选填，默认8px
+  height: 10,  // 选填，默认8px
   content: require('/your_fold/your_arrow.svg') // 引用外部svg
 }, {
   key: 'yourArrow1',
@@ -133,12 +135,12 @@ import {Edge} from 'butterfly-dag';
 Class YourEdge extends Endpoint {
 
   /**
-    * 锚点挂载后的回调
+    * 线段挂载后的回调
     */
   mount() {}
 
   /**
-    * 锚点挂载后的回调
+    * 线段是否能连接的方法
     * @return {boolean} - 返回该线段是否能连接。若返回true，则会生成线段；若返回false，则会把线段销毁。
     */
   isConnect() {}
@@ -181,7 +183,7 @@ Class YourEdge extends Endpoint {
 
 ### edge.redraw ()
 
-*作用*： 更新线段位置: 但线段所在的节点或者锚点位置发生变化先, 需要调用下redraw更新其对应的线。
+*作用*： 更新线段位置: 线段所在的节点或者锚点位置发生变化后, 需要调用下redraw更新其对应的线
 
 ```js
 redraw = () => {}

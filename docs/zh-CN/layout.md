@@ -1,8 +1,12 @@
-## Force Layout
-力导向图布局作为较早被发明的一种实际应用布局算法，经过研究者多年改进、扩展，已发展成为一类算法的集合。该类算法的特点是模拟物理世界中的作用力，施加在节点上，并迭代计算以达到合理放置节点、美观布局的一类算法。
+# 布局
+<p align="center">
+  <img width="900" src="https://img.alicdn.com/imgextra/i4/O1CN01pYwnbh1gGiUMaUIKm_!!6000000004115-2-tps-1418-2839.png">
+</p>
 
-#### 图例
-![Force布局](https://img.alicdn.com/tfs/TB1W2Feh9slXu8jSZFuXXXg7FXa-1092-707.png)
+
+## Force Layout
+
+&nbsp;&nbsp;&nbsp;&nbsp;力导向图布局作为较早被发明的一种实际应用布局算法，经过研究者多年改进、扩展，已发展成为一类算法的集合。该类算法的特点是模拟物理世界中的作用力，施加在节点上，并迭代计算以达到合理放置节点、美观布局的一类算法。
 
 #### 代码演示
 
@@ -26,12 +30,7 @@ this.canvas = new Canvas({
 
 ## Dagre Layout
 
-Dagre 是适合有向流程图的布局算法。其根据图数据中边的方向，自动计算节点的层级及位置。
-
-
-#### 图例
-
-![Dagre布局](https://img.alicdn.com/tfs/TB1kzjEkRFR4u4jSZFPXXanzFXa-1335-782.png)
+&nbsp;&nbsp;&nbsp;&nbsp;Dagre 是适合有向流程图的布局算法。其根据图数据中边的方向，自动计算节点的层级及位置。
 
 #### 代码演示
 
@@ -62,11 +61,7 @@ this.canvas = new Canvas({
 
 ## Grid Layout
 
-Grid 网格布局根据参数指定的排序方式对节点进行排序后，将节点排列在网格上。
-
-#### 图例
-
-![grid布局](https://img.alicdn.com/tfs/TB1uU6LVxD1gK0jSZFsXXbldVXa-1498-750.png)
+&nbsp;&nbsp;&nbsp;&nbsp;Grid 网格布局根据参数指定的排序方式对节点进行排序后，将节点排列在网格上。
 
 #### 代码演示
 
@@ -116,10 +111,7 @@ this.canvas = new TreeCanvas({
 
 ## Fruchterman Layout
 
-Fruchterman Reingold 布局算法在原理上而言属于力导向布局算法。
-#### 图例
-
-![Fruchterman布局](https://img.alicdn.com/tfs/TB1hDH5VpP7gK0jSZFjXXc5aXXa-1171-786.png)
+&nbsp;&nbsp;&nbsp;&nbsp;Fruchterman Reingold 布局算法在原理上而言属于力导向布局算法。
 
 #### 代码演示
 
@@ -178,11 +170,7 @@ import {TreeCanvas} from 'butterfly-dag';
 
 ## Concentric Layout
 
-Concentric 同心圆布局将所有节点放置在同心圆上。
-
-#### 图例
-
-![Concentric布局](https://img.alicdn.com/tfs/TB1f1fPVuH2gK0jSZJnXXaT1FXa-939-681.png)
+&nbsp;&nbsp;&nbsp;&nbsp;Concentric 同心圆布局将所有节点放置在同心圆上。
 
 #### 代码演示
 
@@ -220,7 +208,7 @@ import {TreeCanvas} from 'butterfly-dag';
 
 ## Tree Layout
 
-参考：[antvis/hierarchy](https://github.com/antvis/hierarchy)
+&nbsp;&nbsp;&nbsp;&nbsp;参考：[antvis/hierarchy](https://github.com/antvis/hierarchy)
 
 ``` js
 import {TreeCanvas} from 'butterfly-dag';
@@ -240,12 +228,7 @@ this.canvas = new TreeCanvas({
 
 ## Radial Layout
 
-Radial 布局是将图布局成辐射状的布局方法。以一个 focusNode 为中心，其余节点按照与 focusNode 的度数关系排列在不同距离的环上。距离 focusNode 一度的节点布局在与其最近的第一个环上，距离 focusNode 二度的节点布局在第二个环上，以此类推。
-
-
-#### 图例
-
-![Radial布局](https://img.alicdn.com/imgextra/i4/O1CN017UUWwh1u9l4RfYcyi_!!6000000005995-2-tps-1240-489.png)
+&nbsp;&nbsp;&nbsp;&nbsp;Radial 布局是将图布局成辐射状的布局方法。以一个 focusNode 为中心，其余节点按照与 focusNode 的度数关系排列在不同距离的环上。距离 focusNode 一度的节点布局在与其最近的第一个环上，距离 focusNode 二度的节点布局在第二个环上，以此类推。
 
 #### 代码演示
 

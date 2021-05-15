@@ -1,10 +1,13 @@
 'use strict';
 
-const Node = require('./node.js');
-const CenterNode = require('./centerNode.js');
-const Edge = require('./edge.js');
+import Node from './node';
+import CenterNode from './centerNode';
+import Edge from './edge';
+
 // const Group = require('./group.js');
-module.exports = {
+
+
+const data = {
   nodes: [{
     id: 0,
     text: '测试0',
@@ -218,3 +221,5 @@ module.exports = {
     text: '这是group5的注释'
   }]
 }
+
+export default data;

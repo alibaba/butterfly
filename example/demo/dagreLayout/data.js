@@ -1,6 +1,7 @@
 'use strict';
-const node = require('./base_node.jsx');
-module.exports = {
+import node from './base_node';
+
+const data = {
   nodes: [{
     id: 'test1',
     name: 'test1',
@@ -65,3 +66,5 @@ module.exports = {
   }
 ]
 };
+
+export default data;

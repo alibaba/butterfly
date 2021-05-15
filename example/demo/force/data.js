@@ -1,7 +1,6 @@
 'use stice';
 
-const Node = require('./node.jsx');
-
+import Node from './node';
 let num = 200;
 
 function genNode() {
@@ -36,7 +35,7 @@ function genEdge() {
 	return edges;
 }
 
-module.exports = {
+export default {
 	nodes: genNode(),
 	edges: genEdge()
 }

@@ -16,7 +16,7 @@ import CoordinateService from '../utils/coordinate';
 // scope的比较
 import ScopeCompare from '../utils/scopeCompare';
 // 网格模式
-import GridService from '../utils/girdService';
+import GridService from '../utils/gridService';
 // 辅助线模式
 import GuidelineService from '../utils/guidelineService';
 // 小地图模式
@@ -393,7 +393,7 @@ class BaseCanvas extends Canvas {
           terHeight: $(this.root).height()
         });
         this.canvasWrapper.resize({root: this.root});
-        this.setGirdMode(true, undefined , true);
+        this.setGridMode(true, undefined , true);
       });
       _resizeObserver.observe(this.root);
     } else {
@@ -408,7 +408,7 @@ class BaseCanvas extends Canvas {
           terHeight: $(this.root).height()
         });
         this.canvasWrapper.resize({root: this.root});
-        this.setGirdMode(true, undefined, true);
+        this.setGridMode(true, undefined, true);
       })
     }
 
@@ -2390,6 +2390,7 @@ class BaseCanvas extends Canvas {
     return _.find(this.edges, item => item.id === id);
   }
   addEdges(links, isNotEventEmit) {
+
     $(this.svg).css('visibility', 'hidden');
 
     const _edgeFragment = document.createDocumentFragment();
@@ -3852,7 +3853,7 @@ class BaseCanvas extends Canvas {
     this.emit('system.canvas.move');
     this.emit('events', {type: 'system.canvas.move'});
   }
-  setGirdMode(flat = true, options = this._bgObj, _isResize) {
+  setGridMode(flat = true, options = this._bgObj, _isResize) {
     if (flat) {
       this._bgObjQueue.push(options);
       if (this._bgTimer) {

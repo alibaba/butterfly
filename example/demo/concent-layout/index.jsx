@@ -1,13 +1,10 @@
 'use strict';
 import React, {Component} from 'react';
-// const DrageCanvas = require('../../../index.js').DrageCanvas;
-// const Canvas = require('../../../index.js').Canvas;
 import { Canvas } from 'butterfly-dag';
-const mockData = require('./data.js');
+import mockData from './data';
 
-require('./index.less');
-require('butterfly-dag/dist/index.css');
-
+import './index.less';
+import 'butterfly-dag/dist/index.css';
 class ConcentLayout extends Component {
   constructor() {
     super();
@@ -44,4 +41,4 @@ class ConcentLayout extends Component {
   }
 }
 
-module.exports = ConcentLayout;
+export default ConcentLayout;

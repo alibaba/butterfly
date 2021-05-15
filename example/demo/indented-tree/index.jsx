@@ -1,10 +1,9 @@
 'use strict';
 import React, {Component} from 'react';
-require('./index.less');
-const Node = require('./node.js');
-const $ = require('jquery');
 
-// const Canvas = require('../../../index.js').TreeCanvas;
+import './index.less';
+import Node from './node';
+import $ from 'jquery';
 import { TreeCanvas } from 'butterfly-dag';
 const mockData = {
   nodes: {
@@ -152,4 +151,4 @@ class IndentedTree extends Component {
   }
 }
 
-module.exports = IndentedTree;
+export default IndentedTree;

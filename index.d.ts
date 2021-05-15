@@ -8,5 +8,6 @@ export {
   TreeNode,
   Minimap,
   Tips,
-  Layout
+  Layout,
+  Arrow
 } from './index.js';
