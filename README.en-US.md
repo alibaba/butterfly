@@ -26,7 +26,7 @@ English | [简体中文](./README.md)
 * Use DOM/REACT/VUE to customize elements: flexibility and excellent expandability
 
 <p align="center">
-  <img width="900" src="https://img.alicdn.com/imgextra/i4/O1CN01d7WHVs1vkEDzWRRlW_!!6000000006210-2-tps-2400-8172.png">
+  <img width="900" src="https://img.alicdn.com/imgextra/i3/O1CN018CrqXz1KRK7Euhj6X_!!6000000001160-2-tps-1155-1081.png">
 </p>
 
 ## 🚀QUICK DEMO LOCAL
@@ -111,6 +111,11 @@ canvas.draw({
 <img width="98%" src="https://img.alicdn.com/imgextra/i4/O1CN01tbmIry23xWea1YcBQ_!!6000000007322-1-tps-1665-829.gif">
 
 * Butterfly-Editor(doing)
+
+## 🎨Excellent Cases
+<p align="center">
+  <img width="900" src="https://img.alicdn.com/imgextra/i4/O1CN01d7WHVs1vkEDzWRRlW_!!6000000006210-2-tps-2400-8172.png">
+</p>
 
 ## 🤝 How to contribute
 We welcome all contributors, please read the [Contribution Guide](./docs/en-US/CONTRIBUTING.md) before becoming a Contributor.

@@ -209,7 +209,7 @@ setDraggable = (boolean) => {}
 getGroup = (string) => {}
 ```
 
-### canvas.addGroup (object|Group, nodes, options)
+### canvas.addGroup ([object](./group.md#group-attr) | Group, nodes, options)
 
 *descripition*：Add groups. If the group does not exist, create the group and add nodes into the group; If the group exists, nodes will be add into the current group.
 
@@ -270,10 +270,10 @@ getNode = (string) => {}
 * `{object|Node} object` node infomation；Node － Node Basic Class
 
 ```js
-addNode = (object|Node) => {}
+addNode = ([object](./node.md#node-attr) | Node) => {}
 ```
 
-### canvas.addNodes (array<object|Node>)
+### canvas.addNodes (array< [object](./node.md#node-attr) | Node >)
 
 *descripition*：add multiple nodes
 
@@ -309,7 +309,7 @@ removeNode = (string) => {}
 removeNodes = (array) => {}
 ```
 
-### canvas.addEdge (object|Edge)
+### canvas.addEdge ( [object](./edge.md#edge-attr) | Edge )
 
 *descripition*：add edge
 
@@ -321,7 +321,7 @@ removeNodes = (array) => {}
 addEdge = (object|Edge) => {}
 ```
 
-### canvas.addEdges (array<object|Edge>)
+### canvas.addEdges (array< [object](./edge.md#edge-attr) | Edge >)
 
 *descripition*：add multiple edge
 

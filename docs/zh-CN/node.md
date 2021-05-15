@@ -36,7 +36,7 @@ canvas.addNode({
 <br>
 <br>
 
-## 属性
+## 属性<a name='node-attr'></a>
 
 ### id  _`<String>`_    (必填)
 &nbsp;&nbsp;节点唯一标识

@@ -30,7 +30,7 @@ canvas.addEdge({
 <br>
 <br>
 
-## 属性
+## 属性 <a name='edge-attr'></a>
 
 ### id  _`<String>`_    (必填)
 &nbsp;&nbsp;节点唯一标识

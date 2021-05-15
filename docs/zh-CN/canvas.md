@@ -222,7 +222,7 @@ getGroup = (string) => {}
 * `{number} options.padding` 添加节点组padding
 
 ```js
-addGroup = (object|Group, nodes, options) => {}
+addGroup = ([object](./group.md#group-attr) | Group, nodes, options) => {}
 ```
 
 此API除了可以新建节点组以外, 还可以做多选成组:
@@ -261,7 +261,7 @@ removeGroup = (string | Group) => {}
 getNode = (string) => {}
 ```
 
-### canvas.addNode (object|Node)
+### canvas.addNode ( [object](./node.md#node-attr) | Node )
 
 *作用*：添加节点
 
@@ -273,7 +273,7 @@ getNode = (string) => {}
 addNode = (object|Node) => {}
 ```
 
-### canvas.addNodes (array<object|Node>)
+### canvas.addNodes ( array< [object](./node.md#node-attr) | Node > )
 
 *作用*：批量添加节点
 
@@ -318,7 +318,7 @@ removeNodes = (array) => {}
 * `{object|Edge} object`  - 连线的信息；Edge － 连线的基类
 
 ```js
-addEdge = (object|Edge) => {}
+addEdge = ([object](./edge.md#edge-attr) | Edge ) => {}
 ```
 
 ### canvas.addEdges (array<object|Edge>)
@@ -330,7 +330,7 @@ addEdge = (object|Edge) => {}
 * `{array<object | Edge>}`   - 连线的信息；Edge － 连线的基类
 
 ```js
-addEdges = (array<object|Edge>) => {}
+addEdges = (array< [object](./edge.md#edge-attr) | Edge >) => {}
 ```
 
 ### canvas.removeEdge (param)
