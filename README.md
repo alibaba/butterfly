@@ -26,7 +26,7 @@
 * 利用DOM/REACT/VUE来定制元素；灵活性，可塑性，拓展性优秀
 
 <p align="center">
-  <img width="900" src="https://img.alicdn.com/imgextra/i4/O1CN01d7WHVs1vkEDzWRRlW_!!6000000006210-2-tps-2400-8172.png">
+  <img width="900" src="https://img.alicdn.com/imgextra/i3/O1CN018CrqXz1KRK7Euhj6X_!!6000000001160-2-tps-1155-1081.png">
 </p>
 
 ## 🚀快速本地DEMO
@@ -58,7 +58,7 @@ import 'butterfly-dag/pack/index.css';
 
 ### 生成画布
 ```
-const Canvas = require('butterfly-dag').Canvas;
+import {Canvas} from 'butterfly-dag';
 let canvas = new Canvas({
   root: dom,              //canvas的根节点(必传)
   zoomable: true,         //可缩放(可传)
@@ -111,6 +111,11 @@ canvas.draw({
 <img width="98%" src="https://img.alicdn.com/imgextra/i2/O1CN01nRgm2r1I0BOXGYq9a_!!6000000000830-1-tps-1665-826.gif">
 
 * Butterfly-Editor(doing)
+
+## 🎨优秀案例
+<p align="center">
+  <img width="900" src="https://img.alicdn.com/imgextra/i4/O1CN01d7WHVs1vkEDzWRRlW_!!6000000006210-2-tps-2400-8172.png">
+</p>
 
 ## 🤝如何贡献
 我们欢迎所有的贡献者，在成为贡献者之前，请先阅读[贡献指南](./docs/zh-CN/CONTRIBUTING.md)。

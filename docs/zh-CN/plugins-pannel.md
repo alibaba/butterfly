@@ -247,7 +247,7 @@ this.canvas.draw(
 #### data  _`<Array>`_    (选填)
 &nbsp;&nbsp;自定义的`panel`,会追加在最后:自定义`panel`配置主要为：
 
-* id _`<String>`_ (必填) 用于添加进画布是的id前缀、唯一标识（不要和系统自带的重复）
+* id _`<String>`_ (必填) 用于添加进画布是的id前缀、唯一标识（注意: 不要和系统自带的重复）
 
 * content _`<String>`_ (必填) `PanelNode`中填充的图片(`<img src="content" />` | 内置主题图片`ID`)
 
@@ -269,8 +269,7 @@ this.canvas.draw(
 * `{function} calllback`（可选） 注册完毕后的回调
 
 ``` js
-// 无自定义
-
+// 使用系统内置UML主题
 panelPlugins.register(
   [
     {
@@ -283,8 +282,7 @@ panelPlugins.register(
   }
 );
 
-// 有自定义
-
+// 自定义
 panelPlugins.register(
   [
     {
@@ -347,7 +345,7 @@ panelPlugins.register(
 
 ##### panelNode.focus ()
 
-*作用*： 节点变为未选中状态
+*作用*： 节点变为选中状态
 
 ```js
 panelNode.focus();
@@ -355,7 +353,7 @@ panelNode.focus();
 
 ##### panelNode.unfocus ()
 
-*作用*： 节点变为选中状态
+*作用*： 节点变为未选中状态
 
 ```js
 panelNode.unfocus();

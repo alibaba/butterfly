@@ -36,7 +36,7 @@ canvas.addNode({
 <br>
 <br>
 
-## attribute：
+## attribute：<a name='node-attr'></a>
 
 ### id  _`<String>`_    (Require)
 &nbsp;&nbsp;unique id

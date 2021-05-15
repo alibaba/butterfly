@@ -240,38 +240,38 @@ this.canvas.draw(
 &nbsp;&nbsp;System 'panel' library type: `uml` or `basic`
 
 #### width  _`<Number>`_    (Optional)
-&nbsp;&nbsp;render the width of the element in the root container. Default value ` 36`
+&nbsp;&nbsp;render the width of the element in the root container. Default value `36`
 
 #### height  _`<Number>`_    (Optional)
-&nbsp;&nbsp;render the height of the element in the root container. Default value ` 36`
+&nbsp;&nbsp;render the height of the element in the root container. Default value `36`
 
 #### data  _`<Array>`_    (Optional)
-&nbsp;&nbsp;自定义的`panel`,会追加在最后:自定义`panel`配置主要为：
+&nbsp;&nbsp;custom `panel`, it will append to the bottom of root; configuration :
 
-* id _`<String>`_ (Require) 用于添加进画布是的id前缀、唯一标识（不要和系统自带的重复）
+* id _`<String>`_ (Require) unique id used to add to the canvas and uesd to id prefix; (note: do not duplicate with the system itself)
 
-* content _`<String>`_ (Require) `PanelNode`中填充的图片(`<img src="content" />` | 内置主题图片`ID`)
+* content _`<String>`_ (Require) the content of `PanelNode`(`<img src="content" />` or System picture of `ID`)
 
-* type _`<String>`_ (Optional) 后续内容，用于标示图片的类型
+* type _`<String>`_ (Optional) content type,  types used to mark images
 
-* width _`<Number>`_ (Optional) 在`root`中渲染的自定义`panel`的宽度,默认`36`
+* width _`<Number>`_ (Optional) render the width of the element in the root container. Default value `36`
 
-* height _`<Number>`_ (Optional) 在`root`中渲染的自定义`panel`的高度,默认`36`
+* height _`<Number>`_ (Optional) render the height of the element in the root container. Default value `36`
 
 ### API
 
 #### panelPlugins.register(data, callback)
 
-*descripition*：注册`panel`到`root`中
+*descripition*：register `panel` to `root`
 
-*参数*
+*params*
 
 * `{Array} data` 里面包含`panel`数据
 * `{function} calllback`（可选） 注册完毕后的回调
 
 ``` js
-// 无自定义
 
+// Use System uml theme
 panelPlugins.register(
   [
     {
@@ -284,8 +284,7 @@ panelPlugins.register(
   }
 );
 
-// 有自定义
-
+// Custom
 panelPlugins.register(
   [
     {
@@ -305,8 +304,7 @@ panelPlugins.register(
   ]
 );
 
-// 多组
-
+// combination
 panelPlugins.register(
   [
     {
@@ -317,7 +315,7 @@ panelPlugins.register(
     {
       root: document.getElementById('dnd1'),
       canvas: this.canvas,
-      type: 'uml',
+      type: 'custom',
       data: [
         {
           id: 'user-1',
@@ -332,23 +330,23 @@ panelPlugins.register(
 );
 ```
 
-### 节点（PanelNode）
+### PanelNode
 
-* 继承自`butterfly-dag`的`Node`
+* Extend `Node` from `butterfly-dag`
 
-#### 属性
+#### attribute
 
 ##### actived  _`<Boolean>`_ 
-&nbsp;&nbsp; 控制是否激活状态（激活显示node的控制点）
+&nbsp;&nbsp; controls whether the state is activated (activates the control point displaying the node)
 
 ##### rotatorDeg _`<Number>`_ 
-&nbsp;&nbsp; 当前节点的旋转角度
+&nbsp;&nbsp; rotation angle of current node
 
 #### API
 
 ##### panelNode.focus ()
 
-*descripition*： 节点变为未选中状态
+*descripition*： node becomes selected
 
 ```js
 panelNode.focus();
@@ -356,7 +354,7 @@ panelNode.focus();
 
 ##### panelNode.unfocus ()
 
-*descripition*： 节点变为选中状态
+*descripition*： Node becomes unselected
 
 ```js
 panelNode.unfocus();
@@ -364,11 +362,11 @@ panelNode.unfocus();
 
 ##### panelNode.rotate (angle)
 
-*descripition*： 节点旋转
+*descripition*： rotate the node
 
-*参数*
+*params*
 
-* `angle `_`<Number>`_ 设置节点的旋转角度（顺时针）
+* `angle `_`<Number>`_ set the rotation angle of the node (clockwise)
 
 ```js
 panelNode.rotate(45);

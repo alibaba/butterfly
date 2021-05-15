@@ -37,7 +37,7 @@ canvas.addGroup({
 <br>
 <br>
 
-## attribute
+## attribute <a name='group-attr'></a>
 
 ### id _`<String>`_ (Require)
 &nbsp;&nbsp;unique id of node

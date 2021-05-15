@@ -28,7 +28,7 @@ canvas.addEdge({
 <br>
 <br>
 
-## attribute
+## attribute <a name='edge-attr'></a>
 
 ### id  _`<String>`_    (Require)
 &nbsp;&nbsp;unique id of edge
