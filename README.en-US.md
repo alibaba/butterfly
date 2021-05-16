@@ -58,7 +58,7 @@ import 'butterfly-dag/pack/index.css';
 
 ### Create Canvas
 ```
-const Canvas = require('butterfly-dag').Canvas;
+import {Canvas} from 'butterfly-dag';
 let canvas = new Canvas({
   root: dom,              //canvas root dom (require)
   zoomable: true,         //enable zoom canvas (option)
@@ -84,7 +84,7 @@ canvas.draw({
 * [Layout](./docs/en-US/layout.md)
 * Plugins
   * arrow
-  * [pannel](./docs/zh-CN/plugins-pannel.md)
+  * [pannel](./docs/en-US/plugins-pannel.md)
 * React & Vue Support
   * [React butterfly](./docs/en-US/react.md)
   * [Vue2 butterfly](./docs/en-US/vue.md)

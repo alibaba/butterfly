@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import './index.less';
 import 'butterfly-dag/dist/index.css';
 // import { Canvas, Arrow } from '../../../index.js';
-import { Canvas } from 'butterfly-dag';
+import { Canvas, Arrow } from 'butterfly-dag';
 import mockData from './data';
 class Scene4New extends Component {
   constructor() {
