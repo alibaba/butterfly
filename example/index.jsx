@@ -18,6 +18,7 @@ import EntityRelationship from './demo/entity-relationship/index.jsx';
 import Emergency2 from './demo/emergency2/index.jsx';
 import Industry from './demo/industry/index.jsx';
 import Policy from './demo/policy/index.jsx';
+import PluginPanel from './demo/pluginPanel/index.jsx';
 import Flow from './demo/flow/index.jsx';
 import Analysis from './demo/analysis/index.jsx';
 import Schedule from './demo/schedule/index.jsx';
@@ -108,6 +109,9 @@ ReactDOM.render((
             <Menu.Item key="mindMap">
               <Link to="/mind_map">MindMap</Link>
             </Menu.Item>
+            <Menu.Item key="plugin-panel">
+              <Link to="/plugin-panel">Plugin-panel</Link>
+            </Menu.Item>
             <Menu.Item key="policy">
               <Link to="/policy">Policy</Link>
             </Menu.Item>
@@ -151,6 +155,7 @@ ReactDOM.render((
           <Route path="/entity-relationship" component={EntityRelationship} />
           <Route path="/emergency2" component={Emergency2} />
           <Route path="/industry" component={Industry} />
+          <Route path="/plugin-panel" component={PluginPanel} />
           <Route path="/policy" component={Policy} />
           <Route path="/flow" component={Flow} />
           <Route path="/analysis" component={Analysis} />
