@@ -1,13 +1,13 @@
 <template>
   <el-container>
     <el-aside width="200px">
-      <div draggable class="node-container" @dragstart="(e)=>{dragstart(e,user1)}">
+      <div draggable class="node-container" @dragstart="(e)=>{dragstart(e,user1)}" ref="user1">
         <dragNode :itemData="user1"/>
       </div>
-      <div draggable class="node-container" @dragstart="(e)=>{dragstart(e,user2)}">
+      <div draggable class="node-container" @dragstart="(e)=>{dragstart(e,user2)}" ref="user2">
         <dragNode :itemData="user2"/>
       </div>
-      <div draggable class="node-container" @dragstart="(e)=>{dragstart(e,user3)}">
+      <div draggable class="node-container" @dragstart="(e)=>{dragstart(e,user3)}" ref="user3">
         <dragNode :itemData="user3"/>
       </div>
     </el-aside>
@@ -41,6 +41,7 @@ export default {
   data(){
     return{
       user1: {
+        ref: 'user1',
         userData: {
           title: '申请人',
           input: '',
@@ -49,6 +50,7 @@ export default {
         }
       },
       user2: {
+        ref: 'user2',
         userData: {
           title: '审批人',
           input: '',
@@ -57,6 +59,7 @@ export default {
         }
       },
       user3: {
+        ref: 'user3',
         userData: {
           title: '验收人',
           input: '',
@@ -71,6 +74,18 @@ export default {
             left: 10,
             top: 10,
             render: dragNode,
+            endpoints: [
+              {
+                id: 'left',
+                orientation: [-1, 0],
+                pos: [0, 0.5]
+              }, 
+              {
+                id: 'right',
+                orientation: [1, 0],
+                pos: [0, 0.5]
+              }
+            ],
             userData: {
               title: '申请人',
               input: '',
@@ -95,11 +110,22 @@ export default {
     },
     dragstart(e,user) {
       e.dataTransfer.setData('user',JSON.stringify(user));
+      e.dataTransfer.setDragImage(this.$refs[user.ref],0,0);
     },
     dragover(e) {
       e.preventDefault();
     },
     addNode(e) {
+      const endpointLeft = {
+        id: 'left',
+        orientation: [-1, 0],
+        pos: [0, 0.5]
+      };
+      const endpointRight = {
+        id: 'right',
+        orientation: [1, 0],
+        pos: [0, 0.5]
+      };
       let {clientX, clientY} = e;
       let coordinates = this.canvansRef.terminal2canvas([clientX, clientY]);
       let user = JSON.parse(e.dataTransfer.getData('user'));
@@ -109,6 +135,10 @@ export default {
         top: coordinates[1],
         render: dragNode,
         userData: user.userData,
+        endpoints: [
+          endpointLeft,
+          endpointRight
+        ]
       });
     },
     finishLoaded(e) {
