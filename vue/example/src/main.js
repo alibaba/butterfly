@@ -6,11 +6,7 @@ import router from './router.js';
 import 'element-ui/lib/theme-chalk/index.css';
 import './assets/css/main.css';
 
-console.log(new Vue());
-
 Vue.use(ElementUI);
-
-console.log(new Vue());
 
 new Vue({
   router,

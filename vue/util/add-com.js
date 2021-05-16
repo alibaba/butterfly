@@ -19,7 +19,7 @@ import _ from 'lodash';
         vueCon = Vue.extend({
           template: item.render,
           props:{
-            nodeData: {
+            itemData: {
               type: Object,
               required: true,
             }
@@ -51,7 +51,7 @@ import _ from 'lodash';
   }
 
   let propsData = {
-    nodeData: item,
+    itemData: item,
   }
 
   if (type === 'node') {

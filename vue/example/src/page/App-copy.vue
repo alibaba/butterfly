@@ -32,7 +32,7 @@ const endpoints = [
 ];
 
 export default {
-  name: "App",
+  name: "base",
   currentCanvas: null,
 
   components: {

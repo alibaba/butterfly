@@ -1,12 +1,11 @@
 <template>
-  <div class="butterfly-vue" :class="className">
+  <div :class="className">
     <div class="butterfly-vue-container" ref="canvas-dag"></div>
   </div>
 </template>
 
 <script>
 import 'butterfly-dag/dist/index.css';
-import './butterfly-vue.css';
 import { Canvas } from 'butterfly-dag';
 import { defaultOptions } from './util/default-data.js';
 import {
@@ -23,6 +22,7 @@ export default {
   props: {
     className: {
       type: String,
+      default: 'butterfly-vue',
     },
     baseCanvas: {
       type: Function,
@@ -183,15 +183,23 @@ export default {
   },
 
   watch: {
-    canvasData: {
-      handler(newValue) {
-        this.nodes = newValue.nodes;
-        this.groups = newValue.groups;
-        this.edges = newValue.edges;
+    groups: {
+      handler() {
         this.updateCavans();
         this.re();
-      },
-      deep: true,
+      }
+    },
+    nodes: {
+      handler() {
+        this.updateCavans();
+        this.re();
+      }
+    },
+    edges: {
+      handler() {
+        this.updateCavans();
+        this.re();
+      }
     },
   },
   mounted() {
@@ -216,6 +224,32 @@ export default {
       } else if (data.type === "link:reconnect") {
         this.onChangeEdges(data);
       } else {
+        if (data.type === 'drag:end') {
+          let {dragGroup, dragNode} = data;
+
+          if (dragGroup !== null) {
+            let groupIndex = this.groups.findIndex((item) => {
+              return item.id === dragGroup.id;
+            })
+            if (groupIndex !== -1) {
+              this.groups[groupIndex].left = dragGroup.left;
+              this.groups[groupIndex].top = dragGroup.top;
+            }
+            this.canvasData.groups = this.groups;
+          }
+
+          if (dragNode !== null) {
+            let nodeIndex = this.nodes.findIndex((item) => {
+              return item.id === dragNode.id;
+            })
+            if (nodeIndex !== -1) {
+              this.nodes[nodeIndex].left = dragNode.left;
+              this.nodes[nodeIndex].top = dragNode.top;
+            }
+            this.canvasData.nodes = this.nodes;
+          }
+
+        }
         this.onOtherEvent(data);
       }
     });
@@ -223,4 +257,25 @@ export default {
 };
 </script>
 
-<style></style>
+<style scope>
+.butterfly-vue {
+  min-height: 500px;
+  min-width: 500px;
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: relative;
+}
+
+.butterfly-vue-container {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  display: block;
+}
+
+.butterfly-node {
+  position: absolute;
+  user-select: none;
+}
+</style>

@@ -1,7 +1,7 @@
 <template>
   <div class="vue-bf-group">
     <div class="vue-bf-group-header">
-      group{{nodeData.id}}
+      group{{itemData.id}}
     </div>
     <div class="vue-bf-group-content"></div> 
   </div>
@@ -12,7 +12,7 @@
 export default {
   name: "vue-group",
   props: {
-    nodeData: {
+    itemData: {
       type: Object,
       required: true,
     },

@@ -15,15 +15,16 @@
             unique-opened
             router
           >
-            <el-menu-item index="base">基础组件</el-menu-item>
-            <el-menu-item index="a">基础组件1</el-menu-item>
+            <el-menu-item index="emergency">emergency</el-menu-item>
+            <el-menu-item index="base">基础用法</el-menu-item>
+            <el-menu-item index="userEndpoint">自定义锚点用法</el-menu-item>
           </el-menu>
         </div>
       </el-aside>
       <el-container>
         <el-header>示例</el-header>
         <el-main>
-        <router-view></router-view>
+          <router-view></router-view>
         </el-main>
       </el-container>
     </el-container>
@@ -50,6 +51,10 @@ export default {
 <style scoped>
   #app {
     width: 100%;
+  }
+
+  .el-header {
+    line-height: 60px;
   }
 
   .el-aside {

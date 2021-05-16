@@ -1,6 +1,6 @@
 <template>
   <div class="vue-bf-node">
-    node{{nodeData.id}}
+    node{{itemData.id}}
   </div>
 </template>
 
@@ -9,7 +9,7 @@
 export default {
   name: "vue-node",
   props: {
-    nodeData: {
+    itemData: {
       type: Object,
       required: true,
     },

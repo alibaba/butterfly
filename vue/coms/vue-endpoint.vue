@@ -1,5 +1,5 @@
 <template>
-  <div :id="'bf_endpoint_'+id" class="vue-bf-endpoint-container">
+  <div :id="'bf_endpoint_'+id" :class="className">
     <slot>
       <div>
         {{id}}
@@ -17,12 +17,16 @@ export default {
       type: String,
       required: true,
     },
+    className: {
+      type: String,
+      default: 'vue-bf-endpoint-default'
+    }
   },
 };
 </script>
 
-<style scoped>
-  .vue-bf-endpoint-container {
+<style scope>
+  .vue-bf-endpoint-default {
     display: inline-block;
     width: 22px;
     height: 22px;

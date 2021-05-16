@@ -1,30 +1,28 @@
 <template>
-  <div id="app">
+  <div>
     <butterfly-vue
       :canvasData="mockData"
       @onCreateEdge="logCreateEdge"
       @onChangeEdges="logChangeEdges"
       @onDeleteEdge="logDeleteEdge"
-      @onLoaded="finishLoaded"
       @onOtherEvent="logOtherEvent"
+      @onLoaded="finishLoaded"
+      className='emergency'
+      key="emergency"
     />
-    <el-button @click="add">add</el-button>
   </div>
 </template>
 
 <script>
 import {ButterflyVue} from 'butterfly-vue';
 import 'butterfly-vue/dist/index.css';
-// import {ButterflyVue} from '../../../index.js';
 
-// import {ButterflyVue} from '../../../dist/index.js';
-// import '../../../dist/index.css';
-// import {ButterflyVue} from '../../dist/index.js';
-// import '../../dist/index.css';
-import mockData from "../mockData";
+// import {ButterflyVue} from '../../../../index.js';
+
+import mockData from "./emergency-mockData.js";
 
 export default {
-  name: 'App',
+  name: 'emergency',
   components: {
     ButterflyVue,
   },
@@ -33,19 +31,10 @@ export default {
       mockData,
       canvansRef:{},
       e: {},
+      nodeIndex: 0,
     }
   },
   methods:{
-    add() {
-      // this.e.redraw();
-      this.mockData.nodes.push({
-        id: '4',
-        top: 50,
-        left: 300,
-        render: `<div>测试节点4</div>`
-      });
-      console.log(1);
-    },
     logCreateEdge(e) {
       console.log('---------CreateEdge---------');
       console.log(e);
@@ -78,3 +67,13 @@ export default {
   }
 }
 </script>
+
+<style>
+  .emergency {
+    height: 700px;
+    min-width: 500px;
+    width: 100%;
+    display: block;
+    position: relative;
+  }
+</style>

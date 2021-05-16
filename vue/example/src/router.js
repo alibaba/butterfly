@@ -6,23 +6,23 @@ Vue.use(Router);
 const routes = [
   {
     path: '/',
-    redirect: '/base'
+    redirect: '/emergency'
   },
   {
     path: '/base',
-    component: /*base*/ () => import( /* webpackChunkName: "Base" */ './page/App.vue'),
-    meta: { title: '基础组件' },
+    component: /*base*/ () => import( /* webpackChunkName: "Base" */ './page/base/base.vue'),
+    meta: { title: '基础用法' },
   },
   {
-    path: '/a',
-    component: /*Home*/ () => import( /* webpackChunkName: "Home" */ './page/App-copy.vue'),
-    meta: { title: '1' },
+    path: '/userEndpoint',
+    component: /*userEndpoint*/ () => import( /* webpackChunkName: "UserEndpoint" */ './page/userEndpoint/user-endpoint.vue'),
+    meta: { title: '自定义锚点用法' },
   },
-  // {
-  //   path: '/b',
-  //   component: /*Home*/ () => import( /* webpackChunkName: "Home" */ './page/'),
-  //   meta: { title: '2' },
-  // }
+  {
+    path: '/emergency',
+    component: /*emergency*/ () => import( /* webpackChunkName: "emergency" */ './page/emergency/emergency.vue'),
+    meta: { title: 'emergency' },
+  }
 ];
 
 const router = new Router({
