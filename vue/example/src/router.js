@@ -22,6 +22,11 @@ const routes = [
     path: '/emergency',
     component: /*emergency*/ () => import( /* webpackChunkName: "emergency" */ './page/emergency/emergency.vue'),
     meta: { title: 'emergency' },
+  },
+  {
+    path: '/drag',
+    component: /*drag*/ () => import( /* webpackChunkName: "drag" */ './page/drag/drag.vue'),
+    meta: { title: 'drag' },
   }
 ];
 

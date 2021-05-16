@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div class="control">
       <el-button @click="addNode">添加节点(node)</el-button>
       <el-button @click="addGroup">添加组(group)</el-button>
       <el-button @click="updateGroup">修改组(group)</el-button>
@@ -108,3 +108,9 @@ export default {
   }
 }
 </script>
+
+<style scope>
+ .control {
+   padding-left: 10px;
+ }
+</style>
