@@ -28,6 +28,10 @@
     background: #fff;
     width: 6px;
     height: 6px;
+    cursor: pointer;
+    &.point-rect {
+      border-radius: 0;
+    }
   }
 
   .n {
@@ -41,7 +45,7 @@
     left: 100%;
     top: 50%;
     margin-left: -4px;
-    margin-top: -4px;
+    margin-top: -3px;
   }
 
   .s {
@@ -74,6 +78,7 @@
     top: 0%;
     margin-left: -4px;
     margin-top: -4px;
+    cursor: ne-resize;
   }
 
   .s-e {
@@ -81,6 +86,7 @@
     top: 100%;
     margin-left: -4px;
     margin-top: -4px;
+    cursor: se-resize;
   }
 
   .s-w {
@@ -88,6 +94,7 @@
     top: 100%;
     margin-left: -4px;
     margin-top: -4px;
+    cursor: sw-resize;
   }
 
   .n-w {
@@ -95,6 +102,7 @@
     top: 0%;
     margin-left: -4px;
     margin-top: -4px;
+    cursor: nw-resize;
   }
   
 }
