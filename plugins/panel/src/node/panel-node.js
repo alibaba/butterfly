@@ -122,13 +122,13 @@ class PanelNode extends Node {
     this.controlEndPointR = $('<div class="point rotator unactived"></div>')
       .attr('id', 'rotator');
 
-    this.controlEndPointNE = $('<div class="point n-e unactived"></div>')
+    this.controlEndPointNE = $('<div class="point point-rect n-e unactived"></div>')
       .attr('id', 'n-e');
-    this.controlEndPointSE = $('<div class="point s-e unactived"></div>')
+    this.controlEndPointSE = $('<div class="point point-rect s-e unactived"></div>')
       .attr('id', 's-e');
-    this.controlEndPointSW = $('<div class="point s-w unactived"></div>')
+    this.controlEndPointSW = $('<div class="point point-rect s-w unactived"></div>')
       .attr('id', 's-w');
-    this.controlEndPointNW = $('<div class="point n-w unactived"></div>')
+    this.controlEndPointNW = $('<div class="point point-rect n-w unactived"></div>')
       .attr('id', 'n-w');
     
     content.append(img);

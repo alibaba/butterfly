@@ -47,6 +47,11 @@ class PluginPanel extends Component {
     // this.canvas.on('events', (data) => {
     //   console.log(data);
     // });
+    this.canvas.on('system.canvas.click', () => {
+      this.canvas.nodes.forEach((item) => {
+        item.unfocus && item.unfocus();
+      });
+    });
   }
   render() {
     return (
