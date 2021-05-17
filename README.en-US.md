@@ -73,7 +73,7 @@ canvas.draw({
 ```
 
 ## 🔗 API Document
-
+* * *__!!! 3.x API documentation, please go to__*[here](https://github.com/alibaba/butterfly/blob/master/README.en-US.md);
 * [Canvas](./docs/en-US/canvas.md)
 * [Group](./docs/en-US/group.md)
 * [Node](./docs/en-US/node.md)
@@ -88,8 +88,6 @@ canvas.draw({
 * React & Vue Support
   * [React butterfly](./docs/en-US/react.md)
   * [Vue2 butterfly](./docs/en-US/vue.md)
-
-* * *__3.x API documentation, please go to__*[here](https://github.com/alibaba/butterfly/blob/master/README.en-US.md);
 
 ## ⌨️Business-specific React Extension Components
 * [Data/Table-Field mapping](https://github.com/aliyun/react-data-mapping/blob/master/README.en-US.md)
