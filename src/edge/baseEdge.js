@@ -154,6 +154,8 @@ class BaseEdge extends Edge {
       path = DrawUtil.drawAdvancedBezier(sourcePoint, targetPoint);
     } else if (/^Bezier2-[1-3]$/.test(this.shapeType)) {
       path = DrawUtil.drawSecondBezier(sourcePoint, targetPoint, this.shapeType);
+    } else if(this.shapeType === 'BrokenLine'){
+      path = DrawUtil.drawBrokenLine(sourcePoint, targetPoint);
     }
     this._path = path;
     return path;
