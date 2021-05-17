@@ -49,7 +49,7 @@ canvas.draw({
 
   *参数*：
 
-  * type _`<String>`_ 标志线条连接到节点还是连接到锚点。默认为`endpoint`
+  * type _`<String>`_ 标志线条连接到节点还是连接到锚点。默认为`node`
 
   * shapeType _`<String>`_  线条类型可以是：Bezier(贝塞尔曲线)，Flow(折线)，Straight(直线)，Manhattan(曼哈顿路由线)，AdvancedBezier(更美丽的贝塞尔曲线)；默认为`Straight`
 

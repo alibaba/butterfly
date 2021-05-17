@@ -44,7 +44,7 @@ class BaseCanvas extends Canvas {
         includeGroups: _.get(options, 'theme.group.includeGroups', false)
       },
       edge: {
-        type: _.get(options, 'theme.edge.type') || 'endpoint',
+        type: _.get(options, 'theme.edge.type') || 'node',
         shapeType: _.get(options, 'theme.edge.shapeType') || 'Straight',
         Class: _.get(options, 'theme.edge.Class') || Edge,
         arrow: _.get(options, 'theme.edge.arrow'),
