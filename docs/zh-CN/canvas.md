@@ -84,7 +84,7 @@ canvas.draw({
 
 ### layout _`<Object>`_   (选填)
 
-&nbsp;&nbsp;画布初始化根据设置的布局来自动排版，[可参考](https://github.com/alibaba/butterfly/docs/zh-CN/layout.md)
+&nbsp;&nbsp;画布初始化根据设置的布局来自动排版，[可参考](https://github.com/alibaba/butterfly/blob/master/docs/zh-CN/layout.md)
 
 ### theme
 
