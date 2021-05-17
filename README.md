@@ -26,7 +26,7 @@
 * 利用DOM/REACT/VUE来定制元素；灵活性，可塑性，拓展性优秀
 
 <p align="center">
-  <img width="900" src="https://img.alicdn.com/imgextra/i4/O1CN01d7WHVs1vkEDzWRRlW_!!6000000006210-2-tps-2400-8172.png">
+  <img width="900" src="https://img.alicdn.com/imgextra/i3/O1CN018CrqXz1KRK7Euhj6X_!!6000000001160-2-tps-1155-1081.png">
 </p>
 
 ## 🚀快速本地DEMO
@@ -58,7 +58,7 @@ import 'butterfly-dag/pack/index.css';
 
 ### 生成画布
 ```
-const Canvas = require('butterfly-dag').Canvas;
+import {Canvas} from 'butterfly-dag';
 let canvas = new Canvas({
   root: dom,              //canvas的根节点(必传)
   zoomable: true,         //可缩放(可传)
@@ -74,47 +74,22 @@ canvas.draw({
 
 ## 🔗 API文档
 * [画布(Canvas)](./docs/zh-CN/canvas.md)
-  * [属性配置](./docs/zh-CN/canvas.md#canvas-attr)
-  * [节点，线段，节点组的查看,新增,删除](./docs/zh-CN/canvas.md#canvas-api-crud)
-  * [缩放，平移](./docs/zh-CN/canvas.md#canvas-api-zoom-move)
-  * [适配画布和聚焦局部节点](./docs/zh-CN/canvas.md#canvas-api-focus)
-  * [重做和撤销](./docs/zh-CN/canvas.md#canvas-api-redo-undo)
-  * [坐标转换和坐标偏移](./docs/zh-CN/canvas.md#canvas-api-coordinate)
-  * [框选](./docs/zh-CN/canvas.md#canvas-api-selected)
-  * [发出/接收事件](./docs/zh-CN/canvas.md#canvas-api-events)
-  * [其他辅助方法(网格背景，辅助线，保存画布为图片)](./docs/zh-CN/canvas.md#canvas-api-other)
 * [节点组(Group)](./docs/zh-CN/group.md)
-  * [属性配置](./docs/zh-CN/group.md#group-attr)
-  * [自定义节点组](./docs/zh-CN/group.md#group-custom)
-  * [新增，删除成员节点](./docs/zh-CN/group.md#group-member)
-  * [自定义锚点](./docs/zh-CN/group.md#group-endpoint)
-  * [发出/接收事件](./docs/zh-CN/group.md#group-move)
-  * [事件](./docs/zh-CN/group.md#group-event)
 * [节点(Node)](./docs/zh-CN/node.md)
-  * [属性配置](./docs/zh-CN/node.md#node-attr)
-  * [自定义节点](./docs/zh-CN/node.md#node-custom)
-  * [自定义锚点](./docs/zh-CN/node.md#node-endpoint)
-  * [发出/接收事件](./docs/zh-CN/node.md#node-move)
-  * [事件](./docs/zh-CN/node.md#node-event)
-  * [[树状布局] 收缩 & 展开子节点](./docs/zh-CN/node.md#node-collapse)
 * [线(Edge)](./docs/zh-CN/edge.md)
-  * [属性配置](./docs/zh-CN/edge.md#edge-attr)
-  * [自定义线段](./docs/zh-CN/edge.md#edge-custom-dom)
-  * [自定义箭头](./docs/zh-CN/edge.md#edge-custom-arrow)
-  * [自定义label](./docs/zh-CN/edge.md#edge-custom-label)
-  * [线段连通性](./docs/zh-CN/edge.md#edge-isConnect)
-  * [发出/接收事件](./docs/zh-CN/edge.md#edge-event)
-  * [线段动画](./docs/zh-CN/edge.md#edge-animation)
 * [锚点(Endpoint)](./docs/zh-CN/endpoint.md)
-  * [属性配置](./docs/zh-CN/endpoint.md#endpoint-attr)
-  * [通用API](./docs/zh-CN/endpoint.md#endpoint-api)
 * [缩略图(Minimap)](./docs/zh-CN/minimap.md#endpoint-api)
 * [提示 & 菜单(tooltips & menu)](./docs/zh-CN/tooltip.md)
 * [布局(Layout)](./docs/zh-CN/layout.md)
+* 插件
+  * 箭头
+  * [左侧画板(pannel)](./docs/zh-CN/plugins-pannel.md)
 * React & Vue支持
   * [React butterfly组件支持](./docs/zh-CN/react.md)
   * [Vue2 butterfly组件支持](./docs/zh-CN/vue.md)
 
+
+* *__3.x的API文档，请移步到__*[这里](https://github.com/alibaba/butterfly/blob/master/README.md);
 
 ## ⌨️垂直业务React拓展组件
 * [数据/字段映射组件](https://github.com/aliyun/react-data-mapping): 适用于做数据字段映射，表字段映射，表格连线等业务
@@ -138,6 +113,11 @@ canvas.draw({
 <img width="98%" src="https://img.alicdn.com/imgextra/i2/O1CN01nRgm2r1I0BOXGYq9a_!!6000000000830-1-tps-1665-826.gif">
 
 * Butterfly-Editor(doing)
+
+## 🎨优秀案例
+<p align="center">
+  <img width="900" src="https://img.alicdn.com/imgextra/i4/O1CN01d7WHVs1vkEDzWRRlW_!!6000000006210-2-tps-2400-8172.png">
+</p>
 
 ## 🤝如何贡献
 我们欢迎所有的贡献者，在成为贡献者之前，请先阅读[贡献指南](./docs/zh-CN/CONTRIBUTING.md)。

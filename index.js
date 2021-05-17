@@ -12,6 +12,7 @@ import TreeNode from './src/node/treeNode';
 import Minimap from './src/utils/minimap';
 import Tips from './src/utils/toolTip';
 import Layout from './src/utils/layout/layout';
+import Arrow from './src/utils/arrow';
 import './src/index.less';
 
 let Butterfly = {
@@ -24,7 +25,8 @@ let Butterfly = {
   TreeNode,
   Minimap,
   Tips,
-  Layout
+  Layout,
+  Arrow
 };
 
 window.Butterfly = Butterfly;

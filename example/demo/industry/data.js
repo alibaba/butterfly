@@ -1,7 +1,8 @@
+'use strict';
+
 import BaseNode from './node';
 import BaseEdge from './edge';
-
-export default {
+const data = {
   nodes: [{
     id: 0,
     name: '乙二醇MEG(液体)',
@@ -43,7 +44,7 @@ export default {
       id: 'left',
       orientation: [-1, 0],
       pos: [0, 0.5]
-    }, {
+    },{
       id: 'right',
       orientation: [1, 0],
       pos: [0, 0.5]
@@ -70,7 +71,7 @@ export default {
       orientation: [-1, 0],
       pos: [0, 0.5]
     }]
-  }, {
+  },  {
     id: 7,
     name: '第二脂化(280℃)',
     type: 'blue',
@@ -83,15 +84,15 @@ export default {
       id: 'left',
       orientation: [-1, 0],
       pos: [0, 0.5]
-    }, {
+    },{
       id: 'right',
       orientation: [1, 0],
       pos: [0, 0.5]
-    }, {
+    },{
       id: 'bottom',
       orientation: [0, 1],
       pos: [0.5, 0]
-    }]
+    }, ]
   }, {
     id: 8,
     name: '聚酯熔体',
@@ -120,7 +121,7 @@ export default {
       orientation: [1, 0],
       pos: [0, 0.5]
     }]
-  }, {
+  },{
     id: 5,
     name: '乙二醇MEG(液体)',
     type: 'blue',
@@ -148,7 +149,7 @@ export default {
       orientation: [0, 1],
       pos: [0.5, 0]
     }]
-  }, {
+  },{
     id: 9,
     name: '乙二醇MEG(液体)',
     type: 'blue',
@@ -162,7 +163,7 @@ export default {
       orientation: [0, -1],
       pos: [0.5, 0]
     }]
-  }],
+  }, ],
   edges: [{
     source: 'right',
     target: 'left',
@@ -172,7 +173,7 @@ export default {
     arrow: true,
     arrowPosition: 0.5,
     Class: BaseEdge
-  }, {
+  },{
     source: 'right',
     target: 'left',
     sourceNode: 1,
@@ -226,7 +227,7 @@ export default {
     arrow: true,
     arrowPosition: 0.5,
     Class: BaseEdge
-  }, {
+  },{
     source: 'bottom',
     target: 'top',
     sourceNode: 5,
@@ -235,7 +236,7 @@ export default {
     arrow: true,
     arrowPosition: 0.5,
     Class: BaseEdge
-  }, {
+  },{
     source: 'bottom',
     target: 'top',
     sourceNode: 6,
@@ -244,6 +245,7 @@ export default {
     arrow: true,
     arrowPosition: 0.5,
     Class: BaseEdge
-  }],
+  },],
   groupd: []
-};
+}
+export default data;

@@ -26,6 +26,10 @@ class BaseNode extends Node {
     this._endpointLimitNum = opts._endpointLimitNum;
     // 标识是否在移动做，兼容冒泡
     this._isMoving = false;
+    // 长宽
+    this.width = undefined;
+    this.height = undefined;
+    this._isForceUpdateSize = false;
   }
 
   draw(obj) {
@@ -68,7 +72,6 @@ class BaseNode extends Node {
       _node: this,
       _global: this.global
     }, obj));
-    
     this.emit('InnerEvents', {
       type: 'node:addEndpoint',
       data: endpoint
@@ -125,7 +128,6 @@ class BaseNode extends Node {
       this.dom = obj.dom;
       obj.left && ($(this.dom).css('left', `${obj.left}px`));
       obj.top && ($(this.dom).css('top', `${obj.top}px`));
-
     } else {
       this.dom = this.draw(_.assign({
         id: this.id,
@@ -134,7 +136,10 @@ class BaseNode extends Node {
         dom: this.dom,
         options: this.options
       }, obj));
+    }
+    if (!this._hasEventListener) {
       this._addEventListener();
+      this._hasEventListener = true;
     }
   }
   // drag的时候移动的api
@@ -158,12 +163,20 @@ class BaseNode extends Node {
     });
   }
 
-  getWidth() {
-    return $(this.dom).outerWidth();
+  getWidth(useCache) {
+    if (!useCache || !this.width || this._isForceUpdateSize) {
+      this.width = $(this.dom).outerWidth();
+      this._isForceUpdateSize = false;
+    }
+    return this.width;
   }
 
-  getHeight() {
-    return $(this.dom).outerHeight();
+  getHeight(useCache) {
+    if (!useCache || !this.height || this._isForceUpdateSize) {
+      this.height = $(this.dom).outerHeight();
+      this._isForceUpdateSize = false;
+    }
+    return this.height;
   }
 
   _createEndpoint(isInited) {
@@ -237,6 +250,7 @@ class BaseNode extends Node {
       });
       $(this.dom).remove();
       this.removeAllListeners();
+      this._hasEventListener = false;
     } else {
       this.endpoints.forEach((item) => {
         !item._isInitedDom && item.destroy(isNotEvent);

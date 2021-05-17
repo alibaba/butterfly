@@ -3,7 +3,7 @@
 import BaseNode from './node';
 import BaseEdge from './edge';
 
-export default {
+const data = {
   nodes: [{
     id: '0',
     text: 'Fire Incident',
@@ -744,5 +744,6 @@ export default {
     Class: BaseEdge
   }],
   groupd: []
-};
+}
 
+export default data;

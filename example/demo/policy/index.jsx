@@ -1,12 +1,9 @@
+'use strict';
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
-import {Canvas} from 'butterfly-dag';
-import mockData from './data.js';
-
 import './index.less';
-import './iconfont.css';
 import 'butterfly-dag/dist/index.css';
-
+import { Canvas } from 'butterfly-dag';
+import mockData from './data';
 class Policy extends Component {
   constructor() {
     super();
@@ -22,12 +19,15 @@ class Policy extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'AdvancedBezier',
+          shapeType: 'AdvancedBezier',
           arrow: true
         }
       }
     });
     this.canvas.draw(mockData);
+    this.canvas.on('events', (data) => {
+      console.log(data);
+    });
   }
   render() {
     return (
@@ -39,4 +39,4 @@ class Policy extends Component {
   }
 }
 
-ReactDOM.render(<Policy />, document.getElementById('root'));
+export default Policy;

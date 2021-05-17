@@ -2,10 +2,30 @@
 import _ from 'lodash';
 
 // todo:丰富箭头样式
-const arrow = {
-    default1: 'M0 0 L-3 3 L2 0 L-3 -3 Z',
-    default: `M5 0 L0 -2 Q 1.0 0 0 2 Z`,
+let ARROW_TYPE = {
+    default1: {
+      type: 'pathString',
+      content: 'M0 0 L-3 3 L2 0 L-3 -3 Z'
+    },
+    default: {
+      type: 'pathString',
+      content: 'M5 0 L0 -2 Q 1.0 0 0 2 Z'
+    },
     length: 5,
+
+    //自定义
+    // arrow1: {
+    //   type: 'svg',
+    //   content: require('../../static/arrow/arrow1.svg')
+    // },
+    // arrow2: {
+    //   type: 'svg',
+    //   content: require('../../static/arrow/arrow2.svg')
+    // },
+    // arrow3: {
+    //   type: 'svg',
+    //   content: require('../../static/arrow/arrow3.svg')
+    // },
 };
 
 // 计算线条某个位置的斜率
@@ -50,7 +70,6 @@ function calcSlope(opts) {
       p1 = dom.getPointAtLength(dom.getTotalLength() * arrowPosition);
     }
     
-
     x = p1.x - p0.x;
     y = p1.y - p0.y;
   }
@@ -58,7 +77,19 @@ function calcSlope(opts) {
   return {x, y};
 }
 
+const registerArrow = (arrows) => {
+  arrows.forEach((item) => {
+    ARROW_TYPE[item.key] = {
+      type: item.type,
+      content: item.content,
+      width: item.width,
+      height: item.height
+    }
+  });
+}
+
 export default {
   calcSlope,
-  arrow
+  ARROW_TYPE,
+  registerArrow
 };

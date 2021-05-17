@@ -1,0 +1,111 @@
+.panel-node {
+  position: absolute;
+  line-height: 0px;
+  text-align: center;
+  border: 1px solid #D9D9D9;
+  box-shadow: 0 2px 3px 0 rgba(0,112,204,0.06);
+  color: #222;
+
+  .panel-content {
+    width: 100%;
+    height: 100%;
+  }
+
+  .panel-img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .unactived {
+    display: none !important;
+  }  
+
+  .point {
+    position: absolute;
+    z-index: 100;
+    border: 1px solid #999;
+    border-radius: 50%;
+    background: #fff;
+    width: 6px;
+    height: 6px;
+    cursor: pointer;
+    &.point-rect {
+      border-radius: 0;
+    }
+  }
+
+  .n {
+    left: 50%;
+    top: 0%;
+    margin-left: -4px;
+    margin-top: -4px;
+  }
+
+  .e {
+    left: 100%;
+    top: 50%;
+    margin-left: -4px;
+    margin-top: -3px;
+  }
+
+  .s {
+    left: 50%;
+    top: 100%;
+    margin-left: -4px;
+    margin-top: -4px;
+  }
+
+  .w {
+    left: 0%;
+    top: 50%;
+    margin-left: -4px;
+    margin-top: -4px;
+  }
+
+  .rotator {
+    left: 50%;
+    top: (-36px);
+    margin-left: -11px;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='24' height='24' xmlns='http://www.w3.org/2000/svg' fill='%23757575'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Ccircle stroke='%23CCD1DA' fill='%23FFF' cx='12' cy='12' r='11.5'/%3E%3Cpath d='M16.242 12.012a4.25 4.25 0 00-5.944-4.158L9.696 6.48a5.75 5.75 0 018.048 5.532h1.263l-2.01 3.002-2.008-3.002h1.253zm-8.484-.004a4.25 4.25 0 005.943 3.638l.6 1.375a5.75 5.75 0 01-8.046-5.013H5.023L7.02 9.004l1.997 3.004h-1.26z' fill='%23000' fill-rule='nonzero'/%3E%3C/g%3E%3C/svg%3E");
+    width: 22px;
+    height: 22px;
+    background-size: 100% 100%;
+    box-shadow: none;
+  }
+
+  .n-e {
+    left: 100%;
+    top: 0%;
+    margin-left: -4px;
+    margin-top: -4px;
+    cursor: ne-resize;
+  }
+
+  .s-e {
+    left: 100%;
+    top: 100%;
+    margin-left: -4px;
+    margin-top: -4px;
+    cursor: se-resize;
+  }
+
+  .s-w {
+    left: 0%;
+    top: 100%;
+    margin-left: -4px;
+    margin-top: -4px;
+    cursor: sw-resize;
+  }
+
+  .n-w {
+    left: 0%;
+    top: 0%;
+    margin-left: -4px;
+    margin-top: -4px;
+    cursor: nw-resize;
+  }
+  
+}
+
+
+

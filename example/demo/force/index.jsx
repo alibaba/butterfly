@@ -1,12 +1,15 @@
+'use strict';
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
-import {Canvas} from 'butterfly-dag';
-import mockData from './data';
 
-import 'butterfly-dag/dist/index.css';
+import { Canvas } from 'butterfly-dag';
+import mockData from './data';
 import './index.less';
+import 'butterfly-dag/dist/index.css';
 
 class ForceTree extends Component {
+  constructor() {
+    super();
+  }
   componentDidMount() {
     let root = document.getElementById('dag-canvas');
     this.canvas = new Canvas({
@@ -29,11 +32,19 @@ class ForceTree extends Component {
       },
       theme: {
         edge: {
-          type: 'Straight'
+          shapeType: 'Straight'
         }
       }
     });
+    // setTimeout(() => {
+    //   this.canvas.draw(mockData);
+    // }, 500);
+    // console.log(mockData);
     this.canvas.draw(mockData);
+
+    this.canvas.on('events', (data) => {
+      console.log(data);
+    });
   }
   render() {
     return (
@@ -45,4 +56,5 @@ class ForceTree extends Component {
   }
 }
 
-ReactDOM.render(<ForceTree />, document.getElementById('root'));
+
+export default ForceTree;

@@ -1,7 +1,8 @@
+'use strict';
+
 import Node from './node';
 import Edge from './edge';
-
-export default {
+const data = {
   nodes: [
     {
       id: '1',
@@ -219,7 +220,22 @@ export default {
         orientation: [0, -1],
         pos: [0.5, 0]
       }]
-    },
+    }, 
+    {
+      id: '16',
+      label: '节点组测试',
+      className: 'icon-background-color',
+      iconType: 'icon-guanlian',
+      top: 10,
+      left: 10,
+      group: 'group_1',
+      Class: Node,
+      endpoints: [{
+        id: 'top',
+        orientation: [0, -1],
+        pos: [0.5, 0]
+      }]
+    }
   ],
   edges: [
     {
@@ -344,18 +360,55 @@ export default {
       arrowPosition: 0.5,
       Class: Edge
     },
+    {
+      source: 'bottom',
+      target: 'top',
+      sourceNode: '1',
+      targetNode: '16',
+      arrow: true,
+      type: 'endpoint',
+      arrowPosition: 0.5,
+      Class: Edge
+    },
+    {
+      source: 'bottom',
+      target: 'top',
+      sourceNode: '1',
+      targetNode: 'group_1',
+      arrow: true,
+      type: 'endpoint',
+      arrowPosition: 0.5,
+      Class: Edge
+    }
   ],
   groups: [{
+    id: 'group_1',
+    group: 'group',
+    options: {
+      title: '测试2'
+    },
+    draggable: true,
+    top: 200,
+    left: 20,
+    width: 250,
+    height: 150,
+    resize: true,
+    endpoints: [{
+      id: 'top',
+      orientation: [0, -1],
+      pos: [0.5, 0]
+    }]
+  }, {
     id: 'group',
     options: {
       title: '测试'
     },
-    draggable: false,
+    draggable:true,
     top: 310,
-    left: 185,
-    width: 500,
-    height: 300,
+    left: 0,
+    width: 800,
+    height: 400,
     resize: true
   }],
 };
-
+export default data;

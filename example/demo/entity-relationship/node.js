@@ -1,13 +1,17 @@
-import $ from 'jquery';
-import {Node} from 'butterfly-dag';
+'use strict';
 
+import { Node } from 'butterfly-dag';
+import $ from 'jquery';
 class BaseNode extends Node {
+  constructor(opts) {
+    super(opts);
+  }
   draw = (data) => {
     let container = $('<div class="entity-base-node"></div>')
       .css('top', data.top)
       .css('left', data.left)
       .attr('id', data.id);
-
+    
     // 添加颜色
     if (data.options.color) {
       container.addClass(data.options.color);
@@ -16,7 +20,7 @@ class BaseNode extends Node {
     // 渲染外形
     container.addClass(data.options.shape);
 
-    // 有外边框的椭圆
+    //有外边框的椭圆
     if (data.options.ellipseBorderWidth) {
       const width = data.options.width / 2;
       const height = data.options.height / 2;

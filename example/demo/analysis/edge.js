@@ -1,5 +1,7 @@
 'use strict';
-import {Edge} from 'butterfly-dag';
+
+// import { Edge } from '../../../index.js';
+import { Edge } from 'butterfly-dag';
 import $ from 'jquery';
 
 class BaseEdge extends Edge {
@@ -19,11 +21,11 @@ class BaseEdge extends Edge {
   }
   drawLabel(text) {
     let dom = null;
-    if (text) {
+    if (!!text) {
       dom = $(`<i class="newIconfont iconjiandao-tianchong label ${text}"></i>`)[0];
     }
     return dom;
   }
-}
+};
 
 export default BaseEdge;

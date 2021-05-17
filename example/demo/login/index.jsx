@@ -1,12 +1,9 @@
+'use strict';
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
-import {Canvas} from 'butterfly-dag';
-import mockData from './data.js';
-
-import 'butterfly-dag/dist/index.css';
-import './iconfont.css';
 import './index.less';
-
+import 'butterfly-dag/dist/index.css';
+import { Canvas } from 'butterfly-dag';
+import mockData from './data';
 class LoginNew extends Component {
   constructor() {
     super();
@@ -22,11 +19,14 @@ class LoginNew extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'AdvancedBezier',
+          shapeType: 'AdvancedBezier',
         }
       }
     });
     this.canvas.draw(mockData);
+    this.canvas.on('events', (data) => {
+      console.log(data);
+    });
   }
   render() {
     return (
@@ -38,4 +38,4 @@ class LoginNew extends Component {
   }
 }
 
-ReactDOM.render(<LoginNew />, document.getElementById('root'));
+export default LoginNew;

@@ -1,9 +1,10 @@
-import User from './node_user.js';
-import Train from './node_train.js';
-import Phone from './node_phone.js';
-import Email from './node_email.js';
+'use strict';
 
-export default {
+import User from './node_user';
+import Train from './node_train';
+import Phone from './node_phone';
+import Email from './node_email';
+const data = {
   nodes: [{
     id: '1',
     name: '王大萌',
@@ -130,3 +131,4 @@ export default {
     target: '10'
   }]
 };
+export default data;

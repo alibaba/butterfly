@@ -1,18 +1,79 @@
+'use strict';
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
-import {TreeCanvas} from 'butterfly-dag';
-import mockData from './data';
-import Node from './node';
 
-import 'butterfly-dag/dist/index.css';
-import './iconfont.css';
 import './index.less';
+import Node from './node';
+import $ from 'jquery';
+import { TreeCanvas } from 'butterfly-dag';
+const mockData = {
+  nodes: {
+    id: '0',
+    isRoot: true,
+    condition: 'and',
+    desc: '企业经营异常记录数',
+    Class: Node,
+    endpoints: [{
+      id: 'left',
+      orientation: [-1, 0],
+      pos: [0, 0.5]
+    }, {
+      id: 'bottom',
+      orientation: [0, 1],
+      pos: [0.5, 0]
+    }],
+    children: [{
+      id: '1',
+      condition: 'and',
+      Class: Node,
+      desc: '请选择指标',
+      endpoints: [{
+        id: 'left',
+        orientation: [-1, 0],
+        pos: [0, 0.5]
+      }, {
+        id: 'bottom',
+        orientation: [0, 1],
+        pos: [0.5, 0]
+      }],
+      children: [{
+        id: '2',
+        desc: '请选择指标',
+        Class: Node,
+        endpoints: [{
+          id: 'left',
+          orientation: [-1, 0],
+          pos: [0, 0.5]
+        }, {
+          id: 'bottom',
+          orientation: [0, 1],
+          pos: [0.5, 0]
+        }],
+      }]
+    }]
+  },
+  edges: [{
+    id: '0',
+    source: 'bottom',
+    target: 'left',
+    sourceNode: '0',
+    targetNode: '1',
+    type: 'endpoint'
+  }, {
+    id: '1',
+    source: 'bottom',
+    target: 'left',
+    sourceNode: '1',
+    targetNode: '2',
+    type: 'endpoint'
+  }]
+};
 
 class IndentedTree extends Component {
   constructor() {
     super();
   }
   componentDidMount() {
+
     let root = document.getElementById('dag-canvas');
 
     this.canvas = new TreeCanvas({
@@ -24,7 +85,7 @@ class IndentedTree extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'Manhattan'
+          shapeType: 'Manhattan'
         }
       },
       layout: {
@@ -75,14 +136,10 @@ class IndentedTree extends Component {
           targetNode: (_tmpNum++).toString(),
           type: 'endpoint'
         });
-        // TODO :问题在这里
-        try {
-          this.canvas.redraw();
-        } catch (e) {
-          console.log(e);
-        }
+        this.canvas.redraw();
       }
     });
+
   }
   render() {
     return (
@@ -94,4 +151,4 @@ class IndentedTree extends Component {
   }
 }
 
-ReactDOM.render(<IndentedTree />, document.getElementById('root'));
+export default IndentedTree;

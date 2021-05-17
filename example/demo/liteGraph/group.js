@@ -1,7 +1,9 @@
-import {Group} from 'butterfly-dag';
+'use strict';
+
+import { Group } from 'butterfly-dag';
+// import { Group } from '../../../index.js';
 import $ from 'jquery';
 import _ from 'lodash';
-
 class BaseGroup extends Group {
   draw(obj) {
     let _dom = obj.dom;
@@ -15,7 +17,7 @@ class BaseGroup extends Group {
     let group = $(_dom);
     this._container = $('<div></div>')
       .attr('class', 'test_container');
-
+    
     group.append(this._container);
 
     // 添加文字
@@ -31,6 +33,5 @@ class BaseGroup extends Group {
   getHeight() {
     return $(this.dom).height();
   }
-}
-
+};
 export default BaseGroup;

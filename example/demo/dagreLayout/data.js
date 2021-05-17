@@ -1,6 +1,7 @@
+'use strict';
 import node from './base_node';
 
-export default {
+const data = {
   nodes: [{
     id: 'test1',
     name: 'test1',
@@ -38,7 +39,7 @@ export default {
     Class: node,
     className: 'nodeBackground-color'
   }
-  ],
+],
   edges: [{
     source: 'test1',
     target: 'test2',
@@ -63,6 +64,7 @@ export default {
     source: 'test4',
     target: 'test7'
   }
-  ]
+]
 };
 
+export default data;

@@ -1,10 +1,10 @@
+'use strict';
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
-import {Canvas} from 'butterfly-dag';
-import mockData from './data';
+
 import './index.less';
 import 'butterfly-dag/dist/index.css';
-
+import { Canvas } from 'butterfly-dag';
+import mockData from './data';
 class System extends Component {
   constructor() {
     super();
@@ -20,11 +20,14 @@ class System extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'Straight'
+          shapeType: 'Straight'
         }
       }
     });
     this.canvas.draw(mockData);
+    this.canvas.on('events', (data) => {
+      console.log(data);
+    });
   }
   render() {
     return (
@@ -36,5 +39,4 @@ class System extends Component {
   }
 }
 
-ReactDOM.render(<System />, document.getElementById('root'));
-
+export default System;

@@ -1,18 +1,15 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import {Canvas} from 'butterfly-dag';
-
-import mockData from './data';
-
 import './index.less';
+import  mockData  from './data';
+
 import 'butterfly-dag/dist/index.css';
+import { Canvas } from 'butterfly-dag';
 
 class Flow extends React.Component {
   constructor() {
     super();
     this.canvas = null;
   }
-
   componentDidMount() {
     // css里面的类名限制太死了
     let root = document.getElementById('dag-canvas');
@@ -25,13 +22,13 @@ class Flow extends React.Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'AdvancedBezier',
+          shapeType: 'AdvancedBezier',
         }
       }
     });
     this.canvas.draw(mockData);
+    // this.canvas.zoom(0.5);
   }
-
   render() {
     return (
       <div className='flow-page'>
@@ -42,4 +39,4 @@ class Flow extends React.Component {
   }
 }
 
-ReactDOM.render(<Flow />, document.getElementById('root'));
+export default Flow;
