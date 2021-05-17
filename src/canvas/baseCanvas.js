@@ -85,7 +85,8 @@ class BaseCanvas extends Canvas {
     // 贯穿所有对象的配置
     this.global = _.get(options, 'global', {
       isScopeStrict: _.get(options, 'global.isScopeStrict'), // 是否为scope的严格模式
-      limitQueueLen: 5 // 默认操作队列只有5步
+      limitQueueLen: 5, // 默认操作队列只有5步
+      isCloneDeep: _.get(options, 'global.isCloneDeep', true), // addNode,addEdge,addGroup传入的数据是否深拷贝一份
     });
 
     // 放大缩小和平移的数值
@@ -1561,13 +1562,15 @@ class BaseCanvas extends Canvas {
         _nodeObj = node;
       } else {
         const _NodeClass = node.Class || this._NodeClass;
-        _nodeObj = new _NodeClass(_.assign(_.cloneDeep(node), {
-          _global: this.global,
-          _on: this.on.bind(this),
-          _emit: this.emit.bind(this),
-          _endpointLimitNum: this.theme.endpoint.limitNum,
-          draggable: node.draggable !== undefined ? node.draggable : this.draggable
-        }));
+        _nodeObj = new _NodeClass(
+          _.assign({}, this.global.isCloneDeep ? _.cloneDeep(node) : node, {
+            _global: this.global,
+            _on: this.on.bind(this),
+            _emit: this.emit.bind(this),
+            _endpointLimitNum: this.theme.endpoint.limitNum,
+            draggable: node.draggable !== undefined ? node.draggable : this.draggable
+          })
+        );
       }
 
       if (this._isExistNode(_nodeObj)) {
@@ -1937,13 +1940,15 @@ class BaseCanvas extends Canvas {
     if (group instanceof Group) {
       _groupObj = group;
     } else {
-      _groupObj = new GroupClass(_.assign(_.cloneDeep(group), {
-        _global: this.global,
-        _emit: this.emit.bind(this),
-        _on: this.on.bind(this),
-        _endpointLimitNum: this.theme.endpoint.limitNum,
-        draggable: group.draggable !== undefined ? group.draggable : this.draggable
-      }));
+      _groupObj = new GroupClass(
+        _.assign({}, this.isCloneDeep ? _.cloneDeep(group) : group, {
+          _global: this.global,
+          _emit: this.emit.bind(this),
+          _on: this.on.bind(this),
+          _endpointLimitNum: this.theme.endpoint.limitNum,
+          draggable: group.draggable !== undefined ? group.draggable : this.draggable
+        })
+      );
     }
     
     if (this._isExistGroup(_groupObj)) {
@@ -2026,13 +2031,15 @@ class BaseCanvas extends Canvas {
               _nodeObj = item;
             } else {
               const _NodeClass = item.Class || this._NodeClass;
-              _nodeObj = new _NodeClass(_.assign(_.cloneDeep(item), {
-                _global: this.global,
-                _on: this.on.bind(this),
-                _emit: this.emit.bind(this),
-                _endpointLimitNum: this.theme.endpoint.limitNum,
-                draggable: item.draggable !== undefined ? item.draggable : this.draggable
-              }));
+              _nodeObj = new _NodeClass(
+                _.assign({}, this.global.isCloneDeep ? _.cloneDeep(item) : item,, {
+                  _global: this.global,
+                  _on: this.on.bind(this),
+                  _emit: this.emit.bind(this),
+                  _endpointLimitNum: this.theme.endpoint.limitNum,
+                  draggable: item.draggable !== undefined ? item.draggable : this.draggable
+                })
+              );
             }
             if (!_isAbsolutePos) {
               _nodeObj.top = _nodeObj.top - _groupObj.top;
@@ -2064,13 +2071,15 @@ class BaseCanvas extends Canvas {
               _groupObj = item;
             } else {
               const _GroupClass = item.Class || this._GroupClass;
-              _newGroupObj = new _GroupClass(_.assign(_.cloneDeep(item), {
-                _global: this.global,
-                _on: this.on.bind(this),
-                _emit: this.emit.bind(this),
-                _endpointLimitNum: this.theme.endpoint.limitNum,
-                draggable: item.draggable !== undefined ? item.draggable : this.draggable
-              }));
+              _newGroupObj = new _GroupClass(
+                _.assign({}, this.global.isCloneDeep ? _.cloneDeep(item) : item,, {
+                  _global: this.global,
+                  _on: this.on.bind(this),
+                  _emit: this.emit.bind(this),
+                  _endpointLimitNum: this.theme.endpoint.limitNum,
+                  draggable: item.draggable !== undefined ? item.draggable : this.draggable
+                })
+              );
             }
             if (!_isAbsolutePos) {
               _newGroupObj.top = _newGroupObj.top - _groupObj.top;
