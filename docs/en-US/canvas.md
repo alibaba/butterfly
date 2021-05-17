@@ -84,7 +84,7 @@ canvas.draw({
 
 ### layout _`<Object>`_   (Optional)
 
-&nbsp;&nbsp;canvas initialization automatically arranges the layout according to what you set, [reference](https://github.com/alibaba/butterfly/docs/en-US/layout.md)
+&nbsp;&nbsp;canvas initialization automatically arranges the layout according to what you set, [reference](https://github.com/alibaba/butterfly/blob/master/docs/en-US/layout.md)
 
 ### theme
 
