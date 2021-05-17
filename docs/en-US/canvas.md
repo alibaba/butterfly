@@ -2,10 +2,51 @@
 
 ```js
 let canvas = new Canvas({
-  root: dom,
-  theme: {},
-  ...
   // the attribute below
+  root: dom,               // canvas root dom (require)
+  layout: 'ForceLayout',   // layout setting , integrated or custom , (optional)
+  zoomable: true,          // enable zoom canvas (optional)
+  moveable: true,          // enable move canvas (optional)
+  draggable: true,         // enable drag nodes (optional)
+  linkable: true,          // enable connect edges (optional)
+  disLinkable: true,       // enable disConnect edges (optional)
+  layout: {},              // initialize auto layout (optional)
+  theme: {                 // theme (optional) 
+    group: {
+      type: 'normal'       // Node group type: normal (drag in and drag out), inner (can only be dragged in and not out)
+    },
+    edge: {
+      type: 'Bezier',      // edge type：Bezier curve，Polyline ，Straight，Manhattan line，Improved Bezier curve。values ： Bezier/Flow/Straight/Manhattan/AdvancedBezier
+      label: 'test',       // edge label
+      arrow: true,         // whether to show arrow
+      arrowPosition: 0.5,  // arrow position (0 ~ 1)
+      arrowOffset: 0.0,    // arrow offset
+      arrowShapeType: '',  // custom arrow style
+      Class: XXClass,      // custom Class
+      isExpandWidth: false,// expand line interaction area
+      defaultAnimate: false// turn on line animation by default
+    },
+    endpoint: {
+      position: [],        // limit endpoint position ['Top', 'Bottom', 'Left', 'Right'],
+      linkableHighlight: true,// point.linkable method is triggered when connecting, can be highlighted
+      limitNum: 10,        // limit the number of anchor connections
+      expandArea: {        // when the anchor point is too small, the connection hot zone can be expanded.
+        left: 10,
+        right: 10,
+        top: 10,
+        botton: 10
+      }
+    },
+    zoomGap: 0.001,       // mouse zoom in and out gap settings
+    autoFixCanvas: {     // auto expand canvas when drag nodes or edges near the edge of canvas.
+      enable: false,
+      autoMovePadding: [20, 20, 20, 20]
+    },
+    autoResizeRootSize: true // automatically adapt to the root size, the default is true
+  },
+  global: {                // custom configuration, will run through all canvas, group, node, edge, endpoint objects
+    isScopeStrict: false   // whether scope is strict mode (default is false)
+  }
 });
 canvas.draw({
   // data
@@ -40,6 +81,10 @@ canvas.draw({
 ### disLinkable _`<Boolean>`_   (Optional)
 
 &nbsp;&nbsp;whether the nodes in canvas can be dragged to delete connection; value type `boolean`, Default value `false`
+
+### layout _`<Object>`_   (Optional)
+
+&nbsp;&nbsp;canvas initialization automatically arranges the layout according to what you set, [reference](https://github.com/alibaba/butterfly/docs/en-US/layout.md)
 
 ### theme
 

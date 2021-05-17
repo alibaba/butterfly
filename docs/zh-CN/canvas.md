@@ -2,10 +2,51 @@
 
 ```js
 let canvas = new Canvas({
-  root: dom,
-  theme: {},
-  ...
   // 如下属性
+  root: dom,               //canvas的根节点(必传)
+  layout: 'ForceLayout',   //布局设置(选填)，可使用集成的，也可自定义布局
+  zoomable: true,          //可缩放(选填)
+  moveable: true,          //可平移(选填)
+  draggable: true,         //节点可拖动(选填)
+  linkable: true,          //节点可连接(选填)
+  disLinkable: true,       //节点可取消连接(选填)
+  layout: {},              //初始化自动布局(选填)
+  theme: {                 //主题定制(选填) 
+    group: {
+      type: 'normal'       //节点组类型(选填): normal(随意拖入拖出),inner(只能拖入不能拖出)
+    },
+    edge: {
+      type: 'Bezier',      //线条默认类型
+      label: 'test',       //线条默认label
+      arrow: true,         //线条默认是否带箭头
+      arrowPosition: 0.5,  //箭头位置(0 ~ 1)
+      arrowOffset: 0.0,    //箭头偏移
+      arrowShapeType: '',  //自定义箭头样式
+      Class: XXClass,      //自己拓展的class,拖动连线的时候会采用该拓展类
+      isExpandWidth: false,//增加线条交互区域
+      defaultAnimate: false//默认开启线条动画
+    },
+    endpoint: {
+      position: [],        //限制锚点位置['Top', 'Bottom', 'Left', 'Right'],
+      linkableHighlight: true,//连线时会触发point.linkable的方法，可做高亮
+      limitNum: 10,        //限制锚点的连接数目
+      expandArea: {        //锚点过小时，可扩大连线热区
+        left: 10,
+        right: 10,
+        top: 10,
+        botton: 10
+      }
+    },
+    zoomGap: 0.001,         //鼠标放大缩小间隙设置
+    autoFixCanvas: {     //节点拖动或连线拖动到画布边缘时，画布自动延展
+      enable: false,
+      autoMovePadding: [20, 20, 20, 20] //触发自动延展的画布内边距
+    },
+    autoResizeRootSize: true // 自动适配root大小，默认为true
+  },
+  global: {                //自定义配置，会贯穿所有canvas，group，node，edge，endpoint对象
+    isScopeStrict: false   //scope是否为严格模式(默认为false)
+  }
 });
 canvas.draw({
   // 数据
@@ -40,6 +81,10 @@ canvas.draw({
 ### disLinkable _`<Boolean>`_   (选填)
 
 &nbsp;&nbsp;画布节点是否可拖动；值类型 `boolean`，默认 `false`
+
+### layout _`<Object>`_   (选填)
+
+&nbsp;&nbsp;画布初始化根据设置的布局来自动排版，[可参考](https://github.com/alibaba/butterfly/docs/zh-CN/layout.md)
 
 ### theme
 
