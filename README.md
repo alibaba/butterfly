@@ -89,6 +89,8 @@ canvas.draw({
   * [Vue2 butterfly组件支持](./docs/zh-CN/vue.md)
 
 
+* *__3.x的API文档，请移步到__*[这里](https://github.com/alibaba/butterfly/blob/master/README.md);
+
 ## ⌨️垂直业务React拓展组件
 * [数据/字段映射组件](https://github.com/aliyun/react-data-mapping): 适用于做数据字段映射，表字段映射，表格连线等业务
 <p align="center">

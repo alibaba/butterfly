@@ -88,7 +88,7 @@ class BaseCanvas extends Canvas {
       limitQueueLen: 5, // 默认操作队列只有5步
       isCloneDeep: _.get(options, 'global.isCloneDeep', true), // addNode,addEdge,addGroup传入的数据是否深拷贝一份
     });
-
+    
     // 放大缩小和平移的数值
     this._zoomData = 1;
     this._moveData = [0, 0];
@@ -2032,7 +2032,7 @@ class BaseCanvas extends Canvas {
             } else {
               const _NodeClass = item.Class || this._NodeClass;
               _nodeObj = new _NodeClass(
-                _.assign({}, this.global.isCloneDeep ? _.cloneDeep(item) : item,, {
+                _.assign({}, this.global.isCloneDeep ? _.cloneDeep(item) : item , {
                   _global: this.global,
                   _on: this.on.bind(this),
                   _emit: this.emit.bind(this),
@@ -2072,7 +2072,7 @@ class BaseCanvas extends Canvas {
             } else {
               const _GroupClass = item.Class || this._GroupClass;
               _newGroupObj = new _GroupClass(
-                _.assign({}, this.global.isCloneDeep ? _.cloneDeep(item) : item,, {
+                _.assign({}, this.global.isCloneDeep ? _.cloneDeep(item) : item, {
                   _global: this.global,
                   _on: this.on.bind(this),
                   _emit: this.emit.bind(this),
