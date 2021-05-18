@@ -98,6 +98,8 @@ canvas.draw({
 
   * shapeType _`<String>`_  edge type: Bezier, AdvancedBezier, Flow, Straight, Manhattan, Bezier2-1, Bezier2-2, Bezier2-3, BrokenLine; Default value `Straight`
 
+  <img width="600" src="https://img.alicdn.com/imgextra/i3/O1CN01sHnesN1SMIhN62CLK_!!6000000002232-2-tps-1418-404.png">
+
   * label _`<String/Dom>`_ edge label
 
   * labelPosition _`<Number>`_ edge label position: the value is between 0-1, 0 represents the beginning of the egde, and 1 represents the end of the egde. Default value `0.5`

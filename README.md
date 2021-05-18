@@ -83,11 +83,16 @@ canvas.draw({
 * [提示 & 菜单(tooltips & menu)](./docs/zh-CN/tooltip.md)
 * [布局(Layout)](./docs/zh-CN/layout.md)
 * 插件
-  * 箭头
+  * [箭头(arrow)](./docs/zh-CN/plugins-arrows.md)
   * [左侧画板(pannel)](./docs/zh-CN/plugins-pannel.md)
 * React & Vue支持
   * [React butterfly组件支持](./docs/zh-CN/react.md)
   * [Vue2 butterfly组件支持](./docs/zh-CN/vue.md)
+
+## 🎨优秀案例
+<p align="center">
+  <img width="900" src="https://img.alicdn.com/imgextra/i4/O1CN01d7WHVs1vkEDzWRRlW_!!6000000006210-2-tps-2400-8172.png">
+</p>
 
 ## ⌨️垂直业务React拓展组件
 * [数据/字段映射组件](https://github.com/aliyun/react-data-mapping): 适用于做数据字段映射，表字段映射，表格连线等业务
@@ -111,11 +116,6 @@ canvas.draw({
 <img width="98%" src="https://img.alicdn.com/imgextra/i2/O1CN01nRgm2r1I0BOXGYq9a_!!6000000000830-1-tps-1665-826.gif">
 
 * Butterfly-Editor(doing)
-
-## 🎨优秀案例
-<p align="center">
-  <img width="900" src="https://img.alicdn.com/imgextra/i4/O1CN01d7WHVs1vkEDzWRRlW_!!6000000006210-2-tps-2400-8172.png">
-</p>
 
 ## 🤝如何贡献
 我们欢迎所有的贡献者，在成为贡献者之前，请先阅读[贡献指南](./docs/zh-CN/CONTRIBUTING.md)。

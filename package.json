@@ -38,7 +38,7 @@
     "mini-css-extract-plugin": "~1.6.0",
     "mocha": "^8.2.1",
     "nyc": "^15.1.0",
-    "rollup": "~2.47.0",
+    "rollup": "~2.48.0",
     "rollup-plugin-babel": "~4.4.0",
     "rollup-plugin-commonjs": "~10.1.0",
     "rollup-plugin-extensions": "~0.1.0",
