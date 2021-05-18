@@ -36,5 +36,4 @@ export default {
     color: #FFF;
     background-color: #F66902;
   }
-
 </style>

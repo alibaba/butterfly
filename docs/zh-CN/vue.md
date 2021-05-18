@@ -1,12 +1,19 @@
-# Vue版小蝴蝶（butterfly-vue）
+# Vue版小蝴蝶（butterfly-vue） {ignore=true}
 
-toc
-
-## 安装
+## 安装 {ignore=true}
 
 ``` bash
 $ npm i butterfly-vue butterfly-dag -S
 ```
+
+  - [用法](#用法)
+  - [属性](#属性)
+    - [canvasConf](#canvasconf)
+    - [canvasData](#canvasdata)
+    - [`canvasData.render`渲染方式（两种）](#canvasdatarender渲染方式两种)
+      - [Object类型（.vue文件）推荐使用](#object类型vue文件推荐使用)
+      - [String类型（template）](#string类型template)
+  - [自定义锚点使用](#自定义锚点使用)
 
 ## 用法
 
@@ -71,7 +78,6 @@ export default {
 
 <script>
 import ButterflyVue from 'butterfly-vue';
-import 'butterfly-vue/index.css';
 import mockData from "./mockData.js";
 
 export default {
@@ -95,7 +101,7 @@ export default {
 |  canvasConf   | Object            | 参考官网[定义](https://github.com/alibaba/butterfly/blob/master/docs/zh-CN/canvas.md#canvas-attr)                         |          [见下文](#canvasConf)          |  false   |
 |  baseCanvas   | Function          | 参考官网[定义](https://github.com/alibaba/butterfly/blob/master/docs/zh-CN/canvas.md)                                     | import { Canvas } from "butterfly-dag"; |  false   |
 |  canvasData   | Object            | [见下文](#canvasData)                                                                                                     |                                         |   true   |
-|   className   | String            | 追加在最外层`div`上的`class`直接替换掉`butterfly-vue`样式                                                               |             `butterfly-vue`             |  false   |
+|   className   | String            | 追加在最外层`div`上的`class`直接替换掉`butterfly-vue`样式                                                                 |             `butterfly-vue`             |  false   |
 | onChangeEdges | (data) => void;   | 线改变触发(system.link.reconnect)                                                                                         |                                         |  false   |
 | onCreateEdge  | (data) => void;   | 线创造触发(system.link.connect)                                                                                           |                                         |  false   |
 | onDeleteEdge  | (data) => void;   | 线删除触发(system.links.delete)                                                                                           |                                         |  false   |
@@ -216,7 +222,6 @@ export default {
 
 <script>
 import ButterflyVue from 'butterfly-vue';
-import 'butterfly-vue/index.css';
 
 import gridNode from './node/drag-node.vue';
 
@@ -261,7 +266,6 @@ export default {
 
 <script>
 import ButterflyVue from 'butterfly-vue';
-import 'butterfly-vue/index.css';
 
 export default {
   name: 'App',
@@ -296,4 +300,86 @@ export default {
 module.exports = {
   runtimeCompiler: true
 }
+```
+
+## 自定义锚点使用
+
+``` vue
+// endpoint-node.vue
+<template>
+  <div class="endpoint-node">
+    <butterfly-vue-endpoint id="1"/>
+    <butterfly-vue-endpoint id="2" className="endpoint-2">
+      content
+    </butterfly-vue-endpoint>
+  </div>
+</template>
+
+<script>
+
+import {ButterflyVueEndpoint} from 'butterfly-vue';
+
+export default {
+  name: "endpoint-node",
+  components: {
+    ButterflyVueEndpoint
+  },
+};
+</script>
+
+<style scoped>
+  .endpoint-node {
+    width: 200px;
+    height: 100px;
+    border-radius: 5px;
+    border: 1px solid #aaa;
+    padding: 10px;
+    box-shadow: 3px 4px 16px #888888;
+  }
+
+  .endpoint-node .endpoint-2 {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+  }
+</style>
+```
+
+``` vue
+// component.vue
+<template>
+  <div>
+    <butterfly-vue :canvasData="graphData" />
+  </div>
+</template>
+
+<script>
+import {ButterflyVue} from 'butterfly-vue';
+import 'butterfly-vue/dist/index.css';
+
+import endpointNode from "./endpoint-node.vue";
+
+export default {
+  name: 'User-Endpoint',
+  components: {
+    ButterflyVue,
+  },
+  data(){
+    return{
+      graphData: {
+        groups: [],
+        nodes: [
+          {
+            id: '0',
+            left: 10,
+            top: 10,
+            render: endpointNode,
+          }
+        ],
+        edges: [],
+      },
+    }
+  },
+}
+</script>
 ```

@@ -18,7 +18,6 @@
 
 <script>
 import {ButterflyVue} from 'butterfly-vue';
-import 'butterfly-vue/dist/index.css';
 
 // import {ButterflyVue} from '../../../../index.js';
 
@@ -85,7 +84,7 @@ export default {
 </script>
 
 <style scope>
- .control {
-   padding-left: 10px;
- }
+  .control {
+    padding-left: 10px;
+  }
 </style>

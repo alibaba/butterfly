@@ -16,10 +16,6 @@ export default {
       type: Object,
       required: true,
     },
-    // canvasGroup: {
-    //   type: Object,
-    //   required: true,
-    // }
   },
 };
 </script>

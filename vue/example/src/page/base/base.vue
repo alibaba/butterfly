@@ -8,6 +8,7 @@
     <el-divider></el-divider>
     <butterfly-vue
       :canvasData="mockData"
+      :canvasConf="canvasConfig"
       @onCreateEdge="logCreateEdge"
       @onChangeEdges="logChangeEdges"
       @onDeleteEdge="logDeleteEdge"
@@ -20,7 +21,6 @@
 
 <script>
 import {ButterflyVue} from 'butterfly-vue';
-import 'butterfly-vue/dist/index.css';
 
 // import {ButterflyVue} from '../../../../index.js';
 
@@ -39,6 +39,18 @@ export default {
       nodeIndex: 0,
       groupIndex: 0,
       update: 0,
+      canvasConfig:{
+        disLinkable: true, // 可删除连线
+        linkable: true,    // 可连线
+        draggable: true,   // 可拖动
+        zoomable: true,    // 可放大
+        moveable: true,    // 可平移
+        theme: {
+          edge: {
+            shapeType: 'Flow'
+          }
+        }
+      },
     }
   },
   methods:{

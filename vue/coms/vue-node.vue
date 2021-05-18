@@ -13,10 +13,6 @@ export default {
       type: Object,
       required: true,
     },
-    // canvasNode: {
-    //   type: Object,
-    //   required: true,
-    // }
   },
 };
 </script>

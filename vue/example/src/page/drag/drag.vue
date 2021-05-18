@@ -26,7 +26,6 @@
 
 <script>
 import {ButterflyVue} from 'butterfly-vue';
-import 'butterfly-vue/dist/index.css';
 
 import dragNode from './node/drag-node.vue';
 

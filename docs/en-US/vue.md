@@ -1,12 +1,21 @@
-# butterfly-vue
+# butterfly-vue {ignore=true}
 
-## Install
+## Install {ignore=true}
 
 Using npm:
 
 ``` bash
 $ npm i butterfly-vue butterfly-dag -S
 ```
+
+  - [Usage](#usage)
+  - [Options](#options)
+    - [canvasConf](#canvasconf)
+    - [canvasData](#canvasdata)
+    - [`canvasData.render` Render mode (two)](#canvasdatarender-render-mode-two)
+      - [Object type (.vue) Recommended](#object-type-vue-recommended)
+      - [String type（template）](#string-typetemplate)
+  - [Custom Endpoint usage](#custom-endpoint-usage)
 
 ## Usage
 
@@ -71,7 +80,6 @@ export default {
 
 <script>
 import ButterflyVue from 'butterfly-vue';
-import 'butterfly-vue/index.css';
 import mockData from "./mockData.js";
 
 export default {
@@ -215,7 +223,6 @@ export default {
 
 <script>
 import ButterflyVue from 'butterfly-vue';
-import 'butterfly-vue/index.css';
 
 import gridNode from './node/drag-node.vue';
 
@@ -260,7 +267,6 @@ export default {
 
 <script>
 import ButterflyVue from 'butterfly-vue';
-import 'butterfly-vue/index.css';
 
 export default {
   name: 'App',
@@ -295,4 +301,86 @@ export default {
 module.exports = {
   runtimeCompiler: true
 }
+```
+
+## Custom Endpoint usage
+
+``` vue
+// endpoint-node.vue
+<template>
+  <div class="endpoint-node">
+    <butterfly-vue-endpoint id="1"/>
+    <butterfly-vue-endpoint id="2" className="endpoint-2">
+      content
+    </butterfly-vue-endpoint>
+  </div>
+</template>
+
+<script>
+
+import {ButterflyVueEndpoint} from 'butterfly-vue';
+
+export default {
+  name: "endpoint-node",
+  components: {
+    ButterflyVueEndpoint
+  },
+};
+</script>
+
+<style scoped>
+  .endpoint-node {
+    width: 200px;
+    height: 100px;
+    border-radius: 5px;
+    border: 1px solid #aaa;
+    padding: 10px;
+    box-shadow: 3px 4px 16px #888888;
+  }
+
+  .endpoint-node .endpoint-2 {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+  }
+</style>
+```
+
+``` vue
+// component.vue
+<template>
+  <div>
+    <butterfly-vue :canvasData="graphData" />
+  </div>
+</template>
+
+<script>
+import {ButterflyVue} from 'butterfly-vue';
+import 'butterfly-vue/dist/index.css';
+
+import endpointNode from "./endpoint-node.vue";
+
+export default {
+  name: 'User-Endpoint',
+  components: {
+    ButterflyVue,
+  },
+  data(){
+    return{
+      graphData: {
+        groups: [],
+        nodes: [
+          {
+            id: '0',
+            left: 10,
+            top: 10,
+            render: endpointNode,
+          }
+        ],
+        edges: [],
+      },
+    }
+  },
+}
+</script>
 ```

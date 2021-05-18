@@ -4,7 +4,7 @@ import Vue from 'vue';
 import _ from 'lodash';
 
 /**
- * 校验render
+ * 渲染render
  * @param {Object} item 渲染对象（就是mockdata中的每一项）
  * @param {String} type 渲染类型
  * @param {Array} canvasNodes 渲染节点对应的渲染类型
@@ -181,7 +181,6 @@ const addEdgesCom = (edges) => {
     }
   })
 };
-
 
 export {
   addCom,
