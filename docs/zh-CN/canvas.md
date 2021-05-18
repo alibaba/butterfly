@@ -96,7 +96,7 @@ canvas.draw({
 
   * type _`<String>`_ 标志线条连接到节点还是连接到锚点。默认为`node`
 
-  * shapeType _`<String>`_  线条类型可以是：Bezier(贝塞尔曲线)，Flow(折线)，Straight(直线)，Manhattan(曼哈顿路由线)，AdvancedBezier(更美丽的贝塞尔曲线)；默认为`Straight`
+  * shapeType _`<String>`_  线条类型可以是：Bezier(贝塞尔曲线)，Flow(折线)，Straight(直线)，Manhattan(曼哈顿路由线)，AdvancedBezier(更美丽的贝塞尔曲线)，Bezier2-1，Bezier2-2，Bezier2-3(二阶贝塞尔曲线)，BrokenLine(折线)；默认为`Straight`
 
   * label _`<String/Dom>`_ 线条注释
 
