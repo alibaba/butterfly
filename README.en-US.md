@@ -83,7 +83,7 @@ canvas.draw({
 * [Tooltips & Menu](./docs/en-US/tooltip.md)
 * [Layout](./docs/en-US/layout.md)
 * Plugins
-  * arrow
+  * [arrow](./docs/en-US/plugins-arrows.md)
   * [pannel](./docs/en-US/plugins-pannel.md)
 * React & Vue Support
   * [React butterfly](./docs/en-US/react.md)

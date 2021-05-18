@@ -83,7 +83,7 @@ canvas.draw({
 * [提示 & 菜单(tooltips & menu)](./docs/zh-CN/tooltip.md)
 * [布局(Layout)](./docs/zh-CN/layout.md)
 * 插件
-  * 箭头
+  * [箭头(arrow)](./docs/zh-CN/plugins-arrows.md)
   * [左侧画板(pannel)](./docs/zh-CN/plugins-pannel.md)
 * React & Vue支持
   * [React butterfly组件支持](./docs/zh-CN/react.md)

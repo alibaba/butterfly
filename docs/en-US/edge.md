@@ -64,6 +64,9 @@ canvas.addEdge({
 &nbsp;&nbsp;position restriction of edge entrance and exit: Left / Right / Top / Bottom
 ### shapeType  _`<String>`_    (Optional)
 &nbsp;&nbsp;edge type: Bezier/Flow/Straight/Manhattan/AdvancedBezier/Bezier2-1/Bezier2-2/Bezier2-3/BrokenLine
+
+<img width="600" src="https://img.alicdn.com/imgextra/i3/O1CN01sHnesN1SMIhN62CLK_!!6000000002232-2-tps-1418-404.png">
+
 ### label  _`<String/Dom>`_   (Optional)
 &nbsp;&nbsp;edge label: can accept string or dom
 ### labelPosition  _`<Number>`_   (Optional)

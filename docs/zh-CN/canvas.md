@@ -98,6 +98,8 @@ canvas.draw({
 
   * shapeType _`<String>`_  线条类型可以是：Bezier(贝塞尔曲线)，Flow(折线)，Straight(直线)，Manhattan(曼哈顿路由线)，AdvancedBezier(更美丽的贝塞尔曲线)，Bezier2-1，Bezier2-2，Bezier2-3(二阶贝塞尔曲线)，BrokenLine(折线)；默认为`Straight`
 
+  <img width="600" src="https://img.alicdn.com/imgextra/i3/O1CN01sHnesN1SMIhN62CLK_!!6000000002232-2-tps-1418-404.png">
+
   * label _`<String/Dom>`_ 线条注释
 
   * labelPosition _`<Number>`_ 线条上注释位置: 取值0-1之间, 0代表代表在线段开始处，1代表在线段结束处。 默认值`0.5`
