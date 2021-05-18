@@ -201,8 +201,8 @@ const data = {
   },
   edges: [{
     id: '0',
-    target: 'subNode1',
     source: 'Root',
+    target: 'subNode1',
     type: 'node',
   }, {
     id: '1',
@@ -221,8 +221,8 @@ const data = {
     type: 'node'
   }, {
     id: '4',
-    source: 'subNode2-3',
-    target: 'subNode2',
+    source: 'subNode2',
+    target: 'subNode2-3',
     type: 'node'
   }, {
     id: '4',
@@ -231,23 +231,23 @@ const data = {
     type: 'node'
   }, {
     id: '4',
-    source: 'subNode2-1-1',
-    target: 'subNode2-1',
+    source: 'subNode2-1',
+    target: 'subNode2-1-1',
     type: 'node'
   }, {
     id: '5',
-    source: 'subNode3',
-    target: 'Root',
-    type: 'node'
-  }, {
-    id: '6',
-    source: 'subNode3-1',
+    source: 'Root',
     target: 'subNode3',
     type: 'node'
   }, {
+    id: '6',
+    source: 'subNode3',
+    target: 'subNode3-1',
+    type: 'node'
+  }, {
     id: '7',
-    source: 'subNode4',
-    target: 'Root',
+    source: 'Root',
+    target: 'subNode4',
     type: 'node'
   }, {
     id: '8',
@@ -256,38 +256,38 @@ const data = {
     type: 'node'
   }, {
     id: '9',
-    source: 'subNode4-2',
-    target: 'subNode4',
+    source: 'subNode4',
+    target: 'subNode4-2',
     type: 'node'
   }, {
     id: '10',
-    source: 'subNode4-3',
-    target: 'subNode4',
+    source: 'subNode4',
+    target: 'subNode4-3',
     type: 'node'
   }, {
     id: '11',
-    source: 'subNode4-4',
-    target: 'subNode4',
+    source: 'subNode4',
+    target: 'subNode4-4',
     type: 'node'
   }, {
     id: '12',
-    source: 'subNode4-1-1',
-    target: 'subNode4-1',
+    source: 'subNode4-1',
+    target: 'subNode4-1-1',
     type: 'node'
   }, {
     id: '13',
-    source: 'subNode4-1-2',
-    target: 'subNode4-1',
+    source: 'subNode4-1',
+    target: 'subNode4-1-2',
     type: 'node'
   }, {
     id: '14',
-    source: 'subNode4-1-3',
-    target: 'subNode4-1',
+    source: 'subNode4-1',
+    target: 'subNode4-1-3',
     type: 'node'
   }, {
     id: '15',
-    source: 'subNode4-1-4',
-    target: 'subNode4-1',
+    source: 'subNode4-1',
+    target: 'subNode4-1-4',
     type: 'node'
   }, {
     id: '16',
@@ -311,8 +311,8 @@ const data = {
     type: 'node'
   }, {
     id: '20',
-    source: 'subNode5',
-    target: 'Root',
+    source: 'Root',
+    target: 'subNode5',
     type: 'node'
   }, {
     id: '21',
@@ -366,7 +366,7 @@ const data = {
     type: 'node'
   }, {
     id: '28',
-    source: 'subNode3',
+    source: 'subNode3-1',
     target: 'subNode3-1-3',
     type: 'node'
   }]

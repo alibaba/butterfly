@@ -19,11 +19,21 @@ class Scene4New extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'AdvancedBezier',
+          shapeType: 'AdvancedBezier',
+        },
+        // 允许group嵌套
+        group: {
+          includeGroups: true
         }
       }
     });
-    this.canvas.draw(mockData);
+    this.canvas.draw(mockData, () => {
+      // setTimeout(() => {
+      //   this.canvas.removeGroup('group');
+      //   this.canvas.removeNode('1');
+      // }, 3000);
+
+    });
     this.canvas.on('events', (data) => {
       // console.log(data);
     });
@@ -31,6 +41,8 @@ class Scene4New extends Component {
   render() {
     return (
       <div className='schedule'>
+        <button className='action-btn undo-btn' onClick={() => { this.canvas.undo(); }}>undo</button>
+        <button className='action-btn redo-btn' onClick={() => { this.canvas.redo(); }}>redo</button>
         <div className="schedule-canvas" id="dag-canvas">
         </div>
       </div>
