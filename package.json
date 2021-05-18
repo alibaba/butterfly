@@ -6,7 +6,7 @@
   "es": "es/index.js",
   "pack": "pack/index.js",
   "scripts": {
-    "test": "mocha --require ./test/window.js ./test/*.test.js",
+    "test": "mocha --exit --require ./test/window.js ./test/*.test.js",
     "release": "rollup -c && npm publish",
     "coverage": "nyc npm run test",
     "compile": "./node_modules/webpack/bin/webpack.js",
@@ -27,7 +27,7 @@
     "@babel/register": "~7.13.0",
     "babel-loader": "~8.2.0",
     "babel-plugin-transform-es2015-modules-commonjs": "~6.26.2",
-    "canvas": "^2.6.1",
+    "canvas": "=2.6.1",
     "css-loader": "~5.2.4",
     "ignore-styles": "^5.0.1",
     "jquery": "^3.5.1",
