@@ -15,6 +15,9 @@ export default {
     itemData: {
       type: Object,
     },
+    canvasNode: {
+      type: Object
+    }
   },
   methods: {
     click(e) {
@@ -24,6 +27,7 @@ export default {
   },
   created() {
     // console.log(this.itemData);
+    // console.log(this.canvasNode);
   }
 };
 </script>

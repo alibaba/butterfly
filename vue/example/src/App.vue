@@ -17,6 +17,7 @@
           >
             <el-menu-item index="emergency">emergency</el-menu-item>
             <el-menu-item index="drag">drag</el-menu-item>
+            <el-menu-item index="grid">grid(layout)</el-menu-item>
             <el-menu-item index="base">基础用法</el-menu-item>
             <el-menu-item index="userEndpoint">自定义锚点用法</el-menu-item>
           </el-menu>

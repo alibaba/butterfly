@@ -106,75 +106,82 @@ export default {
     onCreateEdge(data) {
       let link = data.links[0];
 
-      let edgeInfo = {
-        id: `${link.sourceNode.id}.${link.sourceEndpoint.id}-${link.targetNode.id}.${link.targetEndpoint.id}`,
-        sourceEndpointId: link.sourceEndpoint.id,
-        sourceNodeId: link.sourceNode.id,
-        targetEndpointId: link.targetEndpoint.id,
-        targetNodeId: link.targetNode.id,
-      };
-      this.edges.push({
-        id: `${edgeInfo.sourceNodeId}.${edgeInfo.sourceEndpointId}-${edgeInfo.targetNodeId}.${edgeInfo.targetEndpointId}`,
-        sourceNode: edgeInfo.sourceNodeId,
-        targetNode: edgeInfo.targetNodeId,
-        source: edgeInfo.sourceEndpointId,
-        target: edgeInfo.targetEndpointId,
-      });
-      this.$emit("onCreateEdge", edgeInfo);
+      if (link) {
+        let edgeInfo = {
+          id: `${link.sourceNode.id}.${link.sourceEndpoint.id}-${link.targetNode.id}.${link.targetEndpoint.id}`,
+          sourceEndpointId: link.sourceEndpoint.id,
+          sourceNodeId: link.sourceNode.id,
+          targetEndpointId: link.targetEndpoint.id,
+          targetNodeId: link.targetNode.id,
+        };
+        this.edges.push({
+          id: `${edgeInfo.sourceNodeId}.${edgeInfo.sourceEndpointId}-${edgeInfo.targetNodeId}.${edgeInfo.targetEndpointId}`,
+          sourceNode: edgeInfo.sourceNodeId,
+          targetNode: edgeInfo.targetNodeId,
+          source: edgeInfo.sourceEndpointId,
+          target: edgeInfo.targetEndpointId,
+        });
+        this.$emit("onCreateEdge", edgeInfo);
+      }
     },
 
     onDeleteEdge(data) {
       let link = data.links[0];
-      let edgeInfo = {
-        id: link.id,
-        sourceEndpointId: link.sourceEndpoint.id,
-        sourceNodeId: link.sourceNode.id,
-        targetEndpointId: link.targetEndpoint.id,
-        targetNodeId: link.targetNode.id,
-      };
-      let index = this.edges.findIndex((item) => {
-        return item.id === link.id;
-      });
-      this.edges.splice(index,1);
-      this.$emit("onDeleteEdge", edgeInfo);
+
+      if (link) {
+        let edgeInfo = {
+          id: link.id,
+          sourceEndpointId: link.sourceEndpoint.id,
+          sourceNodeId: link.sourceNode.id,
+          targetEndpointId: link.targetEndpoint.id,
+          targetNodeId: link.targetNode.id,
+        };
+        let index = this.edges.findIndex((item) => {
+          return item.id === link.id;
+        });
+        this.edges.splice(index,1);
+        this.$emit("onDeleteEdge", edgeInfo);
+      }
     },
 
     onChangeEdges(data) {
       let addLinkData = data.addLinks[0];
       let delLinkData = data.delLinks[0];
 
-      let edgeInfo = {
-        addLink: {
-          id: `${addLinkData.sourceNode.id}.${addLinkData.sourceEndpoint.id}-${addLinkData.targetNode.id}.${addLinkData.targetEndpoint.id}`,
-          sourceEndpointId: addLinkData.sourceEndpoint.id,
-          sourceNodeId: addLinkData.sourceNode.id,
-          targetEndpointId: addLinkData.targetEndpoint.id,
-          targetNodeId: addLinkData.targetNode.id,
-        },
-        delLinks: {
-          id: `${delLinkData.sourceNode.id}.${delLinkData.sourceEndpoint.id}-${delLinkData.targetNode.id}.${delLinkData.targetEndpoint.id}`,
-          sourceEndpointId: delLinkData.sourceEndpoint.id,
-          sourceNodeId: delLinkData.sourceNode.id,
-          targetEndpointId: delLinkData.targetEndpoint.id,
-          targetNodeId: delLinkData.targetNode.id,
-        },
-        info: data.info,
-      };
+      if (addLinkData && delLinkData) {
+        let edgeInfo = {
+          addLink: {
+            id: `${addLinkData.sourceNode.id}.${addLinkData.sourceEndpoint.id}-${addLinkData.targetNode.id}.${addLinkData.targetEndpoint.id}`,
+            sourceEndpointId: addLinkData.sourceEndpoint.id,
+            sourceNodeId: addLinkData.sourceNode.id,
+            targetEndpointId: addLinkData.targetEndpoint.id,
+            targetNodeId: addLinkData.targetNode.id,
+          },
+          delLinks: {
+            id: `${delLinkData.sourceNode.id}.${delLinkData.sourceEndpoint.id}-${delLinkData.targetNode.id}.${delLinkData.targetEndpoint.id}`,
+            sourceEndpointId: delLinkData.sourceEndpoint.id,
+            sourceNodeId: delLinkData.sourceNode.id,
+            targetEndpointId: delLinkData.targetEndpoint.id,
+            targetNodeId: delLinkData.targetNode.id,
+          },
+          info: data.info,
+        };
       
-      let index = this.edges.findIndex((item) => {
-        return item.id === edgeInfo.delLinks.id;
-      });
-      this.edges.splice(index,1);
+        let index = this.edges.findIndex((item) => {
+          return item.id === edgeInfo.delLinks.id;
+        });
+        this.edges.splice(index,1);
 
-      this.edges.push({
-        id: `${addLinkData.sourceNode.id}.${addLinkData.sourceEndpoint.id}-${addLinkData.targetNode.id}.${addLinkData.targetEndpoint.id}`,
-        sourceNode: edgeInfo.addLink.sourceNodeId,
-        targetNode: edgeInfo.addLink.targetNodeId,
-        source: edgeInfo.addLink.sourceEndpointId,
-        target: edgeInfo.addLink.targetEndpointId,
-      });
+        this.edges.push({
+          id: `${addLinkData.sourceNode.id}.${addLinkData.sourceEndpoint.id}-${addLinkData.targetNode.id}.${addLinkData.targetEndpoint.id}`,
+          sourceNode: edgeInfo.addLink.sourceNodeId,
+          targetNode: edgeInfo.addLink.targetNodeId,
+          source: edgeInfo.addLink.sourceEndpointId,
+          target: edgeInfo.addLink.targetEndpointId,
+        });
 
-      this.$emit("onChangeEdges", edgeInfo);
+        this.$emit("onChangeEdges", edgeInfo);
+      }
     },
 
     onOtherEvent(data) {

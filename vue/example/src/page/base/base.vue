@@ -22,7 +22,7 @@
 import {ButterflyVue} from 'butterfly-vue';
 import 'butterfly-vue/dist/index.css';
 
-// import {ButterflyVue} from '../../../dist/index.js';
+// import {ButterflyVue} from '../../../../index.js';
 
 import mockData from "./base-mockData.js";
 
@@ -35,7 +35,7 @@ export default {
     return{
       mockData,
       canvansRef:{},
-      e: {},
+      butterflyVue: {},
       nodeIndex: 0,
       groupIndex: 0,
       update: 0,
@@ -99,11 +99,11 @@ export default {
     logOtherEvent(e) {
       // console.log(e);
     },
-    finishLoaded(e) {
-      this.e = e;
-      this.canvansRef = e.canvas;
+    finishLoaded(VueCom) {
+      this.butterflyVue = VueCom;
+      this.canvansRef = VueCom.canvas;
       console.log("finish");
-      console.log(e);
+      console.log(VueCom);
     },
   }
 }

@@ -13,6 +13,9 @@ export default {
     itemData: {
       type: Object,
     },
+    canvasNode: {
+      type: Object
+    }
   },
   methods: {
   },

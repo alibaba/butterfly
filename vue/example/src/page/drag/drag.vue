@@ -30,10 +30,10 @@ import 'butterfly-vue/dist/index.css';
 
 import dragNode from './node/drag-node.vue';
 
-// import {ButterflyVue} from '../../../dist/index.js';
+// import {ButterflyVue} from '../../../../index.js';
 
 export default {
-  name: 'drag',
+  name: 'Drag',
   components: {
     ButterflyVue,
     dragNode
@@ -141,15 +141,15 @@ export default {
         ]
       });
     },
-    finishLoaded(e) {
-      this.butterflyVue = e;
-      this.canvansRef = e.canvas;
-      console.log("finish");
+    finishLoaded(VueCom) {
+      this.butterflyVue = VueCom;
+      this.canvansRef = VueCom.canvas;
       this.canvansRef.setMinimap(true, {
         height: 100,
         nodeColor: "rgb(234,217,162)",
         activeNodeColor: "rgb(234,162,176)",
       });
+      console.log("finish");
     },
   }
 }

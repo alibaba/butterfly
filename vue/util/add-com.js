@@ -66,7 +66,7 @@ import _ from 'lodash';
   
     let canvasNode = canvasNodes[canvasNodeIndex];
 
-    // propsData.canvasNode = canvasNode;
+    propsData.canvasNode = canvasNode;
   
     const nodeCon = new vueCon({
       propsData

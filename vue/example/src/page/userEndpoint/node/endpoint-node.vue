@@ -22,6 +22,9 @@ export default {
     itemData: {
       type: Object,
     },
+    canvasNode: {
+      type: Object
+    }
   },
   methods: {
     judge(id){
@@ -29,7 +32,7 @@ export default {
     }
   },
   created() {
-
+    // console.log(this.canvasNode);
   }
 };
 </script>
