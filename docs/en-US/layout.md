@@ -67,8 +67,8 @@ this.canvas = new Canvas({
 #### Examples
 
 ``` js
-import {TreeCanvas} from 'butterfly-dag';
-this.canvas = new TreeCanvas({
+import {Canvas} from 'butterfly-dag';
+this.canvas = new Canvas({
   layout: {
     type: 'grid',
     options: {
@@ -117,7 +117,7 @@ this.canvas = new TreeCanvas({
 #### Examples
 
 ``` js
-import {TreeCanvas} from 'butterfly-dag';
+import {Canvas} from 'butterfly-dag';
  this.canvas = new Canvas({
       layout: {
         type: 'fruchterman',
@@ -176,7 +176,7 @@ import {TreeCanvas} from 'butterfly-dag';
 #### Example
 
 ``` js
-import {TreeCanvas} from 'butterfly-dag';
+import {Canvas} from 'butterfly-dag';
  this.canvas = new Canvas({
       layout: {
         type: 'fruchterman',
@@ -206,25 +206,6 @@ import {TreeCanvas} from 'butterfly-dag';
 | maxLevelDiff | Number | false | undefines |  The sum of concentric values in each level. If it is undefined, maxValue / 4 will take place, where maxValue is the max value of ordering properties. For example, if sortBy is 'degree', maxValue is the max degree value of all the nodes
 | sortBy | String | false | undefined | Order the nodes according to this parameter. It is the property's name of node. The node with higher value will be placed to the center. If it is undefined, the algorithm will order the nodes by their degree
 
-## Tree Layout
-
-参考：[antvis/hierarchy](https://github.com/antvis/hierarchy)
-
-``` js
-import {TreeCanvas} from 'butterfly-dag';
-this.canvas = new TreeCanvas({
-  layout: {
-    type: 'dagreLayout',
-    options: {
-      rankdir: 'TB',
-      nodesep: 40,
-      ranksep: 40,
-      controlPoints: false,
-    },
-  }
-});
-```
-
 
 ## Radial Layout
 
@@ -237,36 +218,36 @@ this.canvas = new Canvas({
   layout: {
     type: 'Radial',
     options: {
-        // total width of layout canvas
-        width:800,
-        // total length of layout canvas
-        height:800,
-        /** the maximum iteration number of stopping iteration */
-        maxIteration: 200,
-        /** layout Center */
-        center: [400, 400],
-        /** center point, the default is the first point in the data */
-        focusNode: '0',
-        /** radius of each circle */
-        unitRadius: 80,
-        /** default edge length */
-        linkDistance: 100,
-        /** Is overlapping prevented */
-        preventOverlap: true,
-        /** node diameter */
-        nodeSize: 20,
-        /** node spacing, the minimum distance between nodes to prevent node overlap (the shortest distance between the edges of two nodes) */
-        nodeSpacing: undefined,
-        /** whether it must be a strict radial layout, that is, the nodes of each layer are strictly arranged on a ring. When preventoverlap is true  */
-        strictRadial: true,
-        /** maximum number of iterations to prevent overlapping steps */
-        maxPreventOverlapIteration: 200,
-        link: {
-            // the distance between lines
-            distance: 50,
-            // the thickness of the line
-            strength: 1
-        },
+      // total width of layout canvas
+      width:800,
+      // total length of layout canvas
+      height:800,
+      /** the maximum iteration number of stopping iteration */
+      maxIteration: 200,
+      /** layout Center */
+      center: [400, 400],
+      /** center point, the default is the first point in the data */
+      focusNode: '0',
+      /** radius of each circle */
+      unitRadius: 80,
+      /** default edge length */
+      linkDistance: 100,
+      /** Is overlapping prevented */
+      preventOverlap: true,
+      /** node diameter */
+      nodeSize: 20,
+      /** node spacing, the minimum distance between nodes to prevent node overlap (the shortest distance between the edges of two nodes) */
+      nodeSpacing: undefined,
+      /** whether it must be a strict radial layout, that is, the nodes of each layer are strictly arranged on a ring. When preventoverlap is true  */
+      strictRadial: true,
+      /** maximum number of iterations to prevent overlapping steps */
+      maxPreventOverlapIteration: 200,
+      link: {
+          // the distance between lines
+          distance: 50,
+          // the thickness of the line
+          strength: 1
+      },
     },
   }
 });
@@ -286,3 +267,117 @@ this.canvas = new Canvas({
 | nodeSize | Number | false | 10 | node size (diameter, used to prevent collision detection when nodes overlap)
 | strictRadial | Boolean | false | true | whether it must be a strict radial layout, that is, the nodes of each layer are strictly arranged on a ring. It takes effect when preventoverlap is true. When preventoverlap is true and strictradial is false, the overlapped nodes expand strictly along the ring. However, if there are too many nodes in a ring, the overlapped nodes may not be completely avoided. When preventoverlap is true and strictradial is true, the overlapped nodes on the same ring are not strictly arranged along the ring, and the overlapped nodes can be offset before and after the ring to avoid overlapping.
 | maxPreventOverlapIteration | Number | false | 200 | maximum number of iterations to prevent overlapping steps
+
+
+## Tree Layout
+
+## Tree Layout
+
+&nbsp;&nbsp;&nbsp;&nbsp;reference：[antvis/hierarchy](https://github.com/antvis/hierarchy)
+
+### compactBox
+
+``` js
+import {TreeCanvas} from 'butterfly-dag';
+this.canvas = new TreeCanvas({
+  layout: {
+    type: 'compactBox',
+    options: {
+      direction: 'TB', // H / V / LR / RL / TB / BT
+      getHeight(d) {
+        return 60;
+      },
+      getWidth(d) {
+        return 120;
+      },
+      getHGap(d) {
+        return 20;
+      },
+      getVGap(d) {
+        return 80;
+      }
+    },
+  }
+});
+```
+
+### dendrogram
+
+``` js
+import {TreeCanvas} from 'butterfly-dag';
+this.canvas = new TreeCanvas({
+  layout: {
+    type: 'dendrogram',
+    options: {
+      direction: 'TB', // H / V / LR / RL / TB / BT
+      getHeight(d) {
+        return 60;
+      },
+      getWidth(d) {
+        return 120;
+      },
+      getHGap(d) {
+        return 20;
+      },
+      getVGap(d) {
+        return 80;
+      }
+    },
+  }
+});
+```
+
+### indented
+
+``` js
+import {TreeCanvas} from 'butterfly-dag';
+this.canvas = new TreeCanvas({
+  layout: {
+    type: 'indented',
+    options: {
+      direction: 'H', // H / LR / RL
+      getHeight(d) {
+        return 60;
+      },
+      getWidth(d) {
+        return 120;
+      },
+      getHGap(d) {
+        return 20;
+      },
+      getVGap(d) {
+        return 80;
+      }
+    },
+  }
+});
+```
+
+### mindmap
+
+``` js
+import {TreeCanvas} from 'butterfly-dag';
+this.canvas = new TreeCanvas({
+  layout: {
+    type: 'mindmap',
+    options: {
+      direction: 'H',                   // H / LR / RL
+      getSide(d) {
+        return d.data.side || 'right';  // `left` or right
+      },
+      getHeight(d) {
+        return 10;
+      },
+      getWidth(d) {
+        return 40;
+      },
+      getHGap(d) {
+        return 50;
+      },
+      getVGap(d) {
+        return 20;
+      }
+    },
+  }
+});
+```
