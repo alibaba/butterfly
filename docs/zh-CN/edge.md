@@ -65,7 +65,7 @@ canvas.addEdge({
 ### orientationLimit  _`<Array>`_    (选填)
 &nbsp;&nbsp;线条进出口的位置限制: Left / Right / Top / Bottom
 ### shapeType  _`<String>`_    (选填)
-&nbsp;&nbsp;线条的类型: Bezier/Flow/Straight/Manhattan/AdvancedBezier
+&nbsp;&nbsp;线条的类型: Bezier/Flow/Straight/Manhattan/AdvancedBezier/Bezier2-1/Bezier2-2/Bezier2-3/BrokenLine
 ### label  _`<String/Dom>`_   (选填)
 &nbsp;&nbsp;线条上注释: 可传字符串和dom
 ### labelPosition  _`<Number>`_   (选填)
