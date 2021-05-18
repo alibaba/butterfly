@@ -43,7 +43,7 @@ canvas.addEdge({
 
 ### System Arrow
 
-<img width="600" src="https://img.alicdn.com/imgextra/i1/O1CN01aFWWuR1ZtSga2X8vm_!!6000000003252-2-tps-1418-333.png">
+<img width="650" src="https://img.alicdn.com/imgextra/i4/O1CN01uousZW1cXss5NpeoX_!!6000000003611-2-tps-1418-316.png">
 
 ### 外部引入箭头
 
