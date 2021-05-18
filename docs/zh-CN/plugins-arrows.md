@@ -47,4 +47,4 @@ canvas.addEdge({
 
 ### 外部引入箭头
 
-&nbsp;&nbsp;&nbsp;&nbsp;用户注册svg或者是自定写path的箭头，此外，我们已经支持iconfont下载的svg可以作为箭头的样式，iconfont或者是你的不错的选择。
+&nbsp;&nbsp;&nbsp;&nbsp;用户注册svg或者是自定写path的箭头，此外，我们已经支持iconfont下载的svg可以作为箭头的样式，iconfont是你或许的不错的选择。
