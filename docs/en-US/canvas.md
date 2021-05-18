@@ -51,7 +51,7 @@ canvas.draw({
 
   * type _`<String>`_ whether the edge is connected to a node or to an endpoint. Default value `endpoint`
 
-  * shapeType _`<String>`_  edge type: Bezier, AdvancedBezier, Flow, Straight, Manhattan; Default value `Straight`
+  * shapeType _`<String>`_  edge type: Bezier, AdvancedBezier, Flow, Straight, Manhattan, Bezier2-1, Bezier2-2, Bezier2-3, BrokenLine; Default value `Straight`
 
   * label _`<String/Dom>`_ edge label
 
