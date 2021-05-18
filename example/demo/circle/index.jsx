@@ -34,7 +34,7 @@ class Circle extends Component {
       },
       theme: {
         edge: {
-          type: 'Straight'
+          shapeType: 'Straight'
         }
       }
     });

@@ -49,7 +49,7 @@ class Grid extends Component {
       },
       theme: {
         edge: {
-          type: 'Straight'
+          shapeType: 'Straight'
         }
       }
     });

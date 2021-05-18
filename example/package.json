@@ -11,7 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "antd": "~3.26.7",
-    "butterfly-dag": "*",
+    "butterfly-dag": "~4.0.1",
     "jquery": "^3.4.1",
     "react": "~16.12.0",
     "react-dom": "~16.12.0",

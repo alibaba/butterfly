@@ -175,9 +175,10 @@ class BaseEndpoint extends Endpoint {
       this._left = result[0] + _offsetLeft;
       this._posTop = this._top;
       this._posLeft = this._left;
-      if (_currentNodeType === 'node' && _currentNode._group) {
-        this._posTop += _currentNode._group.top;
-        this._posLeft += _currentNode._group.left;
+      if (_currentNode._group) {
+        let _groupPos = this._getGroupPos(_currentNode._group);
+        this._posTop += _groupPos.top;
+        this._posLeft += _groupPos.left;
       }
       $(dom)
         .css('top', this._top)
@@ -185,8 +186,26 @@ class BaseEndpoint extends Endpoint {
 
       this.updated && this.updated();
     }
-  }
 
+    this.emit('InnerEvents', {
+      type: 'endpoint:updatePos',
+      point: this
+    });
+  }
+  _getGroupPos(group) {
+    let targetGroup = group;
+    let top = 0;
+    let left = 0;
+    while (targetGroup) {
+      top += targetGroup.top;
+      left += targetGroup.left;
+      targetGroup = targetGroup._group;
+    }
+    return {
+      top,
+      left
+    }
+  }
   hasConnection() {
     return this.connectedNum > 0;
   }
