@@ -1,8 +1,8 @@
 import Node from '../coms/node';
 import Edge from '../coms/edge';
 import Group from '../coms/group';
-import diff from './diff'
-import { addNodesCom, addEdgesCom, addGroupsCom } from './add-com'
+import diff from './diff';
+import {addNodesCom , addEdgesCom , addGroupsCom} from './add-com';
 
 const process = ({ nodes = [], edges = [], groups = [] }) => {
   return {
@@ -13,9 +13,6 @@ const process = ({ nodes = [], edges = [], groups = [] }) => {
       };
     }),
     edges: edges.map(edge => {
-      const labelDOM = document.createElement('div');
-      labelDOM.id = edge.id;
-
       return {
         ...edge,
         type: 'endpoint',
@@ -40,33 +37,35 @@ const process = ({ nodes = [], edges = [], groups = [] }) => {
 const processNodes = (canvas, nodes, oldNodes) => {
   const { created, deleted } = diff(nodes, oldNodes);
 
-  canvas.addNodes(process({ nodes: created }).nodes);
-  addNodesCom({ nodes: created }.nodes);
+  canvas.removeNodes(deleted.map(e => e.id), true);
 
-  canvas.removeNodes(process({ nodes: deleted }).nodes.map(e => e.id));
+  canvas.addNodes(process({nodes: created}).nodes);
+  
+  addNodesCom(canvas.getDataMap().nodes,{nodes: created}.nodes);
 };
 
 const processEdge = (canvas, edges, oldEdges) => {
   const { created, deleted } = diff(edges, oldEdges);
 
-  canvas.addEdges(process({ edges: created }).edges, true);
+  canvas.removeEdges(deleted.map(e => e.id), true);
 
-  addEdgesCom({ edges: created }.edges);
-
-  canvas.removeEdges(process({ edges: deleted }).edges.map(e => e.id));
+  canvas.addEdges(process({edges: created}).edges, true);
+  
+  addEdgesCom({edges: created}.edges);
 };
 
-const processGroups = (canvas, groups, oldGroups) => {
-  const { created, deleted } = diff(groups, oldGroups);
+const processGroups = (canvas,groups,oldGroups) => {
+  const {created, deleted} = diff(groups, oldGroups);
 
-  process({ groups: created }).groups.forEach(group => {
-    canvas.addGroup(group);
-  });
-  addGroupsCom({ groups: created }.groups);
-
-  process({ groups: deleted }).groups.forEach(group => {
+  process({groups: deleted}).groups.forEach(group => {
     canvas.removeGroup(group.id);
   });
+
+  process({groups: created}).groups.forEach(group => {
+    canvas.addGroup(group);
+  });
+
+  addGroupsCom({groups: created}.groups);
 };
 
 export {
@@ -74,4 +73,4 @@ export {
   processNodes,
   processEdge,
   processGroups
-}
+};
