@@ -245,7 +245,7 @@ export default {
             this.canvasData.groups = this.groups;
           }
 
-          if (dragNode !== null) {
+          if (dragNode !== null && Array.isArray(this.nodes)) {
             let nodeIndex = this.nodes.findIndex((item) => {
               return item.id === dragNode.id;
             })

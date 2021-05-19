@@ -35,6 +35,14 @@ const process = ({ nodes = [], edges = [], groups = [] }) => {
  * @param {Array} oldNodes 老节点
  */
 const processNodes = (canvas, nodes, oldNodes) => {
+  // 对nodes进行拆解
+  if(canvas.layout && canvas.layout.isFlatNode) {
+    nodes = canvas._handleTreeNodes(nodes || [], _.get({}, 'isFlatNode', false))
+  }
+
+  // 自动布局
+  canvas._autoLayout({nodes});
+
   const { created, deleted } = diff(nodes, oldNodes);
 
   canvas.removeNodes(deleted.map(e => e.id), true);
