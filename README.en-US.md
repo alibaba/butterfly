@@ -113,7 +113,7 @@ canvas.draw({
 
 * Scheduling Diagram(doing)
 * (Monitoring)[https://github.com/aliyun/react-monitor-dag/blob/master/README.en-US.md]: Suitable for the status display of task flow, data flow and other business
-<img width="98%" src="https://img.alicdn.com/imgextra/i4/O1CN01tbmIry23xWea1YcBQ_!!6000000007322-1-tps-1665-829.gif">
+<img width="98%" src="https://img.alicdn.com/imgextra/i2/O1CN01eJigoL1gd9tjRSvdi_!!6000000004164-1-tps-1665-826.gif">
 
 * Butterfly-Editor(doing)
 

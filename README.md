@@ -113,7 +113,7 @@ canvas.draw({
 
 * 调度编排图(doing)
 * [监控图](https://github.com/aliyun/react-monitor-dag): 适用于任务流，数据流等业务的状态展示
-<img width="98%" src="https://img.alicdn.com/imgextra/i2/O1CN01nRgm2r1I0BOXGYq9a_!!6000000000830-1-tps-1665-826.gif">
+<img width="98%" src="https://img.alicdn.com/imgextra/i2/O1CN01eJigoL1gd9tjRSvdi_!!6000000004164-1-tps-1665-826.gif">
 
 * Butterfly-Editor(doing)
 

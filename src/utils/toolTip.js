@@ -133,6 +133,7 @@ let createTip = (opts, callback) => {
   let isMouseInTips = false;
   let isMouseInTarget = false;
   let timer = null;
+  let notEventThrough = !!opts.notEventThrough;
   let _mouseIn = (e) => {
     isMouseInTips = true;
   }
@@ -156,6 +157,10 @@ let createTip = (opts, callback) => {
   let {data, targetDom, genTipDom} = opts;
   let _tipsDom = opts.tipsDom;
   targetDom.addEventListener('mouseover', (e) => {
+    if (notEventThrough) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
     isMouseInTarget = true;
     if (_tipsDom) {
       tipstDom = _tipsDom;
@@ -170,6 +175,10 @@ let createTip = (opts, callback) => {
   });
 
   targetDom.addEventListener('mouseout', (e) => {
+    if (notEventThrough) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
     isMouseInTarget = false;
     _hide();
   });
