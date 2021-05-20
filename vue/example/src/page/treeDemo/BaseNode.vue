@@ -16,46 +16,15 @@
       >
       </el-option>
     </el-select>
-    <div class="card">
+    <div class="card" v-if="itemData.desc">
       <div class="title">
         <span>
-          {{ itemData.title || itemData.desc }}
+          {{ itemData.title }}
         </span>
         <i class="el-icon-close close" @click="deleteItem"></i>
       </div>
       <el-row class="content">
-        <el-input v-model="itemData.desc" disabled style="width: 180px"></el-input>
-        <el-select
-          v-model="itemData.operator"
-          clearable
-          filterable
-          style="width: 105px"
-          @change="handleOperateChange"
-        >
-          <el-option
-            v-for="item in operatorList"
-            :key="item.standardCode"
-            :label="item.codeNm"
-            :value="item.standardCode"
-          >
-          </el-option>
-        </el-select>
-        <el-select
-          v-model="itemData.paramType"
-          clearable
-          filterable
-          style="width: 120px"
-          @change="handleTypeChange"
-        >
-          <el-option
-            v-for="item in paramTypeList"
-            :key="item.standardCode"
-            :label="item.codeNm"
-            :value="item.standardCode"
-          >
-          </el-option>
-        </el-select>
-        <el-input v-model="itemData.value" style="width: 180px"></el-input>
+        <span>{{itemData.desc}}</span>
       </el-row>
     </div>
   </div>
@@ -63,7 +32,6 @@
 <script>
 export default {
   props: {
-    item: Object,
     itemData: Object,
   },
   data() {
@@ -75,26 +43,6 @@ export default {
         { standardCode: '04', codeNm: '并且' },
         { standardCode: '05', codeNm: '或者' },
       ],
-      operatorList: [
-        { standardCode: '01', codeNm: '等于' },
-        { standardCode: '02', codeNm: '大于' },
-        { standardCode: '03', codeNm: '小于' },
-        { standardCode: '04', codeNm: '大于等于' },
-        { standardCode: '05', codeNm: '小于等于' },
-        { standardCode: '06', codeNm: '为空' },
-        { standardCode: '07', codeNm: '不为空' },
-        { standardCode: '08', codeNm: '存在于' },
-        { standardCode: '09', codeNm: '不存在于' },
-      ],
-      paramTypeList: [
-        { standardCode: '01', codeNm: '常量' },
-        { standardCode: '02', codeNm: '范围' },
-        { standardCode: '03', codeNm: '正则表达式' },
-        { standardCode: '04', codeNm: '基础变量' },
-        { standardCode: '05', codeNm: '衍生变量' },
-        { standardCode: '06', codeNm: '关联字段' },
-        { standardCode: '07', codeNm: '自定义参数' },
-      ],
     };
   },
   methods: {
@@ -102,10 +50,9 @@ export default {
     handleOperateChange() {},
     handleTypeChange() {},
     deleteItem() {
-      // this.list.splice(this.index,1)
+      this.$emit('del', this.itemData.id)
     },
   },
-  mounted() {},
 };
 </script>
 <style scoped>
@@ -127,12 +74,24 @@ export default {
   margin-bottom: 8px;
   box-sizing: border-box;
 }
+.card-text {
+  margin: 0 10px;
+}
 .title {
   border-radius: 4px 4px 0px 0px;
   padding: 4px;
   width: 100%;
   color: white;
   background-color: rgb(50, 65, 87);
+  box-sizing: border-box;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  line-height: 1;
+}
+.title span {
+  margin-right: 10px;
 }
 .close {
   float: right;

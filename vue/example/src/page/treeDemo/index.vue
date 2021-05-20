@@ -14,6 +14,7 @@
       @onDeleteEdge="logEvent"
       @onOtherEvent="logEvent"
       @onLoaded="finishLoaded"
+      @del="del"
     />
   </div>
 </template>
@@ -22,12 +23,12 @@
 import mockData, { endpoints } from './data';
 import { TreeCanvas } from 'butterfly-dag';
 import { v4 as uuidv4 } from 'uuid';
-import { ButterflyVue } from '../../../../index'
+import { ButterflyVue } from '../../../../index';
 import BaseNode from './BaseNode.vue';
 
 export default {
   components: {
-    ButterflyVue
+    ButterflyVue,
   },
   data() {
     const canvasConf = {
@@ -95,46 +96,30 @@ export default {
       mockData,
       canvasConf,
       baseCanvas: TreeCanvas,
+      canvasRef: null,
     };
-  },
-  watch: {
-    mockData: {
-      handler(val) {
-        console.log(val);
-      },
-      deep: true,
-    },
-  },
-  computed: {
-    canvas() {
-      return this.$refs.bv && this.$refs.bv.canvas;
-    },
-  },
-  mounted() {
-    // console.log(this.$refs.bv.re())
   },
   methods: {
     logEvent(e) {
       // console.log(e)
     },
-    finishLoaded(canvans) {
-      console.log(canvans);
+    finishLoaded(ref) {
+      this.canvasRef = ref;
       console.log('finish');
     },
     showData() {
-      console.log(this.$refs.bv);
+      console.log(this.canvasRef);
       console.log(this.mockData);
     },
     handleAddNode(parentId = '0') {
       let id = uuidv4();
-      // addNode，removeNode可以还需要重写下
       this.mockData.nodes.children.push({
         id,
         parentId,
         condition: 'and',
         render: BaseNode,
-        desc: '近X个月X万元交易次数',
-        value: `近<"name":"param.month","type":"text","code":"month">个月交易金额超过<"name":"param.money","type":"number">元的交易次数`,
+        title: '近X个月X万元交易次数',
+        desc: `近<"name":"params.month","type":"input">个月交易金额超过<"name":"params.money","type":"input">元的交易次数`,
         endpoints,
       });
       this.mockData.edges.push({
@@ -146,8 +131,41 @@ export default {
         type: 'endpoint',
       });
     },
+    del(id) {
+      // 删除节点
+      deepFirstSearch(this.mockData.nodes, id);
+      // 删除连线
+      let index = 0
+      for (; index < this.mockData.edges.length; index++) {
+        const item = this.mockData.edges[index];
+        if (item.targetNode === id || item.sourceNode === id) {
+          this.mockData.edges.splice(index, 1);
+          index--
+        }
+      }
+    },
   },
 };
+function deepFirstSearch(node, id) {
+  if (node != null) {
+    const stack = [];
+    stack.push(node);
+    while (stack.length != 0) {
+      const item = stack.pop();
+      const children = item.children;
+      if (children && children.length > 0) {
+        const idIndex = children.findIndex((item) => item.id === id);
+        if (idIndex > -1) {
+          children.splice(idIndex, 1);
+          return;
+        }
+        for (let i = children.length - 1; i >= 0; i--) {
+          stack.push(children[i]);
+        }
+      }
+    }
+  }
+}
 </script>
 
 <style>

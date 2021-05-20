@@ -35,7 +35,7 @@ const routes = [
   },
   {
     path: '/tree',
-    component: /*tree*/ () => import( /* webpackChunkName: "drag" */ './page/treeDemo/index.vue'),
+    component: /*tree*/ () => import( /* webpackChunkName: "tree" */ './page/treeDemo/index.vue'),
     meta: { title: 'tree' },
   }
 ];

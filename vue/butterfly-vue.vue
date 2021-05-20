@@ -72,7 +72,7 @@ export default {
       const oldGroups = this.canvas.groups;
 
       processGroups(this.canvas, this.groups, oldGroups);
-      processNodes(this.canvas, this.nodes, oldNodes);
+      processNodes(this.canvas, this.nodes, oldNodes, this);
       processEdge(this.canvas, this.edges, oldEdges);
     },
 
@@ -94,11 +94,11 @@ export default {
       const oldGroups = this.canvas.groups;
 
       processEdge(this.canvas, [], oldEdges);
-      processNodes(this.canvas ,[] , oldNodes);
+      processNodes(this.canvas ,[] , oldNodes, this);
       processGroups(this.canvas, [], oldGroups);
 
       processGroups(this.canvas, this.groups, oldGroups);
-      processNodes(this.canvas, this.nodes, oldNodes);
+      processNodes(this.canvas, this.nodes, oldNodes, this);
       processEdge(this.canvas, this.edges, oldEdges);
       this.re();
     },
