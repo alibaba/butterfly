@@ -39,7 +39,7 @@ const processNodes = (canvas, nodes, oldNodes, parent) => {
   if(canvas.layout && canvas.layout.isFlatNode) {
     nodes = canvas._handleTreeNodes(nodes || [], _.get({}, 'isFlatNode', false))
   }
-
+  
   // 自动布局
   canvas._autoLayout({nodes});
 
@@ -50,6 +50,11 @@ const processNodes = (canvas, nodes, oldNodes, parent) => {
   canvas.addNodes(process({nodes: created}).nodes);
   
   addNodesCom(canvas.getDataMap().nodes,{nodes: created}.nodes, parent);
+
+  canvas.nodes.forEach((item, index) => {
+    item.left = nodes[index].left
+    item.top = nodes[index].top
+  })
 };
 
 const processEdge = (canvas, edges, oldEdges) => {

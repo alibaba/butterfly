@@ -119,7 +119,7 @@ export default {
         condition: 'and',
         render: BaseNode,
         title: '近X个月X万元交易次数',
-        desc: `近<"name":"params.month","type":"input">个月交易金额超过<"name":"params.money","type":"input">元的交易次数`,
+        desc: `请选择指标`,
         endpoints,
       });
       this.mockData.edges.push({
