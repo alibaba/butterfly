@@ -35,11 +35,12 @@ const process = ({ nodes = [], edges = [], groups = [] }) => {
  * @param {Array} oldNodes 老节点
  */
 const processNodes = (canvas, nodes, oldNodes, parent) => {
+  console.log(nodes)
   // 对nodes进行拆解
   if(canvas.layout && canvas.layout.isFlatNode) {
     nodes = canvas._handleTreeNodes(nodes || [], _.get({}, 'isFlatNode', false))
   }
-  
+
   // 自动布局
   canvas._autoLayout({nodes});
 
@@ -51,11 +52,20 @@ const processNodes = (canvas, nodes, oldNodes, parent) => {
   
   addNodesCom(canvas.getDataMap().nodes,{nodes: created}.nodes, parent);
 
-  canvas.nodes.forEach((item, index) => {
-    item.left = nodes[index].left
-    item.top = nodes[index].top
-  })
+  // 重置canvas.nodes的定位，用于re-layout.js的布局
+  resetCanvasNodesPosition(canvas, nodes)
 };
+
+function resetCanvasNodesPosition(canvas, nodes) {
+  let tempNodeObj = {}
+  nodes.forEach(item => {
+    tempNodeObj[item.id] = item
+  })
+  canvas.nodes.forEach((item) => {
+    item.left = tempNodeObj[item.id].left
+    item.top = tempNodeObj[item.id].top
+  })
+}
 
 const processEdge = (canvas, edges, oldEdges) => {
   const { created, deleted } = diff(edges, oldEdges);
