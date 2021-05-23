@@ -1,10 +1,13 @@
-'use strict';
 import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
 import Canvas from './canvas';
-import mockData from './data';
+import mockData from './data.js';
+
 import './index.less';
+import './iconfont.css';
 import 'butterfly-dag/dist/index.css';
-class RelationalNetwork extends Component {
+
+class RelationalBook extends Component {
   constructor() {
     super();
     this.canvas = null;
@@ -20,7 +23,7 @@ class RelationalNetwork extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          shapeType: 'Straight',
+          shapeType: 'AdvancedBezier',
         },
       }
     });
@@ -39,4 +42,4 @@ class RelationalNetwork extends Component {
   }
 }
 
-export default RelationalNetwork;
+ReactDOM.render(<RelationalBook />, document.getElementById('root'));

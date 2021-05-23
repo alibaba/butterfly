@@ -1,7 +1,6 @@
-'use strict';
-
-import { Node, Tips } from 'butterfly-dag';
+import {Node, Tips} from 'butterfly-dag';
 import $ from 'jquery';
+
 class BaseNode extends Node {
   constructor(opts) {
     super(opts);
@@ -24,12 +23,12 @@ class BaseNode extends Node {
       .css('height', data.options.height)
       .attr('id', data.id);
 
-    //添加外框
+    // 添加外框
     if (data.options.border) {
       container.addClass(data.options.border);
     }
     // 添加文字
-    container.append(`<span class="text">${data.options.text}</span>`)
+    container.append(`<span class="text">${data.options.text}</span>`);
 
     return container[0];
   }

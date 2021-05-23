@@ -1,7 +1,6 @@
-'use strict';
-
-import { Node } from 'butterfly-dag';
+import {Node} from 'butterfly-dag';
 import $ from 'jquery';
+
 class AlisBaseNode extends Node {
   constructor(opts) {
     super(opts);
@@ -71,7 +70,7 @@ class AlisBaseNode extends Node {
           $(this).parent('.title-text').text(oldInputText);
         }
       });
-    })
+    });
   }
 }
 export default AlisBaseNode;

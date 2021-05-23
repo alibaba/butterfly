@@ -1,8 +1,10 @@
 'use strict';
 
-import { Node } from 'butterfly-dag';
+// const Node = require('../../../index.js').Node;
+import {Node} from 'butterfly-dag';
 import $ from 'jquery';
 import './node.less';
+
 class BaseNode extends Node {
   constructor(opts) {
     super(opts);
@@ -10,9 +12,9 @@ class BaseNode extends Node {
   }
   draw = (opts) => {
     let container = $('<div class="decision-node"></div>')
-                    .attr('id', opts.id)
-                    .css('top', opts.top + 'px')
-                    .css('left', opts.left + 'px')
+      .attr('id', opts.id)
+      .css('top', opts.top + 'px')
+      .css('left', opts.left + 'px');
 
     this._createTypeIcon(container);
     this._createText(container);

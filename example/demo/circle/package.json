@@ -1,0 +1,13 @@
+{
+  "name": "circle dag",
+  "cn_name": "环形关系分析图",
+  "description": "a circle dag to show the relation between entities",
+  "cn_description": "环形分析图，用于更好帮助分析、展示关联具有比例的关联数据、实体的关系",
+  "dependencies": {
+    "butterfly-dag": "*",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "jquery": "*",
+    "lodash": "*"
+  }
+}
