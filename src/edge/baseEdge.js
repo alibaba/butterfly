@@ -2,8 +2,9 @@
 
 const _ = require('lodash');
 const $ = require('jquery');
-const DrawUtil = require('../utils/link');
+
 import ArrowUtil from '../utils/arrow';
+import * as DrawUtil from '../utils/link';
 import LinkAnimateUtil from '../utils/link/link_animate'
 
 import './baseEdge.less';
