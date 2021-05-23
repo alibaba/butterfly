@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "es": "es/index.js",
   "pack": "pack/index.js",
+  "unpkg": "unpkg/index.unpkg.js",
   "scripts": {
     "test": "mocha --exit --require ./test/window.js ./test/*.test.js",
     "release": "rollup -c && npm publish",
