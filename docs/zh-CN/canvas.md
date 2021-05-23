@@ -76,11 +76,11 @@ canvas.draw({
 
 ### linkable _`<Boolean>`_   (选填)
 
-&nbsp;&nbsp;画布节点是否可拖动；值类型 `boolean`，默认 `false`
+&nbsp;&nbsp;画布锚点是否可以拖动连线；值类型 `boolean`，默认 `false`
 
 ### disLinkable _`<Boolean>`_   (选填)
 
-&nbsp;&nbsp;画布节点是否可拖动；值类型 `boolean`，默认 `false`
+&nbsp;&nbsp;画布锚点是否可以拖动断开线；值类型 `boolean`，默认 `false`
 
 ### layout _`<Object>`_   (选填)
 

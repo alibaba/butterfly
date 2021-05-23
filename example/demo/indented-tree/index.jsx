@@ -2,9 +2,10 @@
 import React, {Component} from 'react';
 
 import './index.less';
-import Node from './node';
 import $ from 'jquery';
 import { TreeCanvas } from 'butterfly-dag';
+// import { TreeCanvas } from '../../../index.js';
+import Node from './node';
 const mockData = {
   nodes: {
     id: '0',
@@ -93,12 +94,12 @@ class IndentedTree extends Component {
         options: {
           direction: 'LR',
           isHorizontal: true,
-          indent: 80,
+          indent: 160,
           getHeight: function getHeight() {
             return 16;
           },
           getWidth: function getWidth() {
-            return 16;
+            return 100;
           }
         }
       }
