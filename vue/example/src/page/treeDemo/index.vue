@@ -6,6 +6,7 @@
     </div>
     <butterfly-vue
       ref="bv"
+      className='tree'
       :canvasConf="canvasConf"
       :canvasData="mockData"
       :baseCanvas="baseCanvas"
@@ -122,14 +123,15 @@ export default {
         desc: `请选择指标`,
         endpoints,
       });
-      this.mockData.edges.push({
-        id: parentId + '-' + id,
-        source: 'bottom',
-        target: 'left',
-        sourceNode: '0',
-        targetNode: id,
-        type: 'endpoint',
-      });
+      // this.mockData.edges.push({
+      //   id: parentId + '-' + id,
+      //   source: 'bottom',
+      //   target: 'left',
+      //   sourceNode: '0',
+      //   targetNode: id,
+      //   type: 'endpoint',
+      // });
+      this.canvasRef.redraw();
     },
     del(id) {
       // 删除节点
@@ -143,6 +145,7 @@ export default {
           index--
         }
       }
+      this.canvasRef.redraw();
     },
   },
 };
@@ -169,4 +172,11 @@ function deepFirstSearch(node, id) {
 </script>
 
 <style>
+  .tree {
+    height: 700px;
+    min-width: 500px;
+    width: 100%;
+    display: block;
+    position: relative;
+  }
 </style>

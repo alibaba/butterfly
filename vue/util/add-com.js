@@ -146,6 +146,9 @@ const addGroupsCom = (groups) => {
 
 const addNodesCom = (canvasNodes, nodes, parent) => {
   nodes.map((item,index) => {
+    if (_.isArray(item)) {
+      return ;
+    }
     const id = item.id;
     if (!id) {
       console.warn(`nodes的${index}不含ID属性，请检查格式`);

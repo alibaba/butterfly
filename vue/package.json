@@ -1,6 +1,6 @@
 {
   "name": "butterfly-vue",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "vue version for butterfly",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -24,11 +24,9 @@
     "butterfly-dag": "*",
     "lodash": "*"
   },
-  "dependencies": {
-    "butterfly-dag": "^4.0.0",
-    "lodash": "^4.17.20"
-  },
   "devDependencies": {
+    "butterfly-dag": "^4.0.0",
+    "lodash": "^4.17.20",
     "@babel/core": "^7.12.10",
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/plugin-transform-runtime": "^7.12.10",

@@ -1,15 +1,24 @@
 import Node from '../coms/node';
+import TreeNode from '../coms/tree-node';
 import Edge from '../coms/edge';
 import Group from '../coms/group';
 import diff from './diff';
+import {TreeCanvas} from 'butterfly-dag';
+import relayout from './re-layout';
 import {addNodesCom , addEdgesCom , addGroupsCom} from './add-com';
 
-const process = ({ nodes = [], edges = [], groups = [] }) => {
+// treeNode还没有使用起来。待解决
+const process = ({ nodes = [], edges = [], groups = [] , canvas = {}}) => {
+  let BaseNode = Node;
+  if (canvas.constructor === TreeCanvas) {
+    console.log(1);
+    BaseNode = TreeNode;
+  }
   return {
     nodes: nodes.map((node) => {
       return {
         ...node,
-        Class: Node,
+        Class: BaseNode,
       };
     }),
     edges: edges.map(edge => {
@@ -33,14 +42,18 @@ const process = ({ nodes = [], edges = [], groups = [] }) => {
  * @param {Canvas} canvas 
  * @param {Array} nodes 新节点
  * @param {Array} oldNodes 老节点
+ * @param {Object} parent butterfly-vue
  */
 const processNodes = (canvas, nodes, oldNodes, parent) => {
-  // 对nodes进行拆解
-  if(canvas.layout && canvas.layout.isFlatNode) {
-    nodes = canvas._handleTreeNodes(nodes || [], _.get({}, 'isFlatNode', false))
+  
+  // 判断是TreeCanvas
+  if (canvas.constructor === TreeCanvas) {
+    // 对nodes进行拆解
+    if(canvas.layout && canvas.layout.isFlatNode) {
+      nodes = canvas._handleTreeNodes(nodes || [], _.get({}, 'isFlatNode', false))
+    }
+    relayout(canvas, nodes);
   }
-  // 自动布局
-  canvas._autoLayout({...canvas, nodes});
 
   const { created, deleted } = diff(nodes, oldNodes);
 
@@ -50,20 +63,7 @@ const processNodes = (canvas, nodes, oldNodes, parent) => {
   
   addNodesCom(canvas.getDataMap().nodes,{nodes: created}.nodes, parent);
 
-  // 重置canvas.nodes的定位，用于re-layout.js的布局
-  resetCanvasNodesPosition(canvas, nodes)
 };
-
-function resetCanvasNodesPosition(canvas, nodes) {
-  let tempNodeObj = {}
-  nodes.forEach(item => {
-    tempNodeObj[item.id] = item
-  })
-  canvas.nodes.forEach((item) => {
-    item.left = tempNodeObj[item.id].left
-    item.top = tempNodeObj[item.id].top
-  })
-}
 
 const processEdge = (canvas, edges, oldEdges) => {
   const { created, deleted } = diff(edges, oldEdges);
