@@ -32,7 +32,8 @@
     "react-dom": "~16.12.0",
     "react-hot-keys": "^2.6.2",
     "react-router": "~5.1.2",
-    "react-router-dom": "~5.1.2"
+    "react-router-dom": "~5.1.2",
+    "systemjs": "^6.9.0"
   },
   "devDependencies": {
     "@antv/hierarchy": "~0.6.4",

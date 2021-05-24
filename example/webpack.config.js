@@ -81,7 +81,7 @@ module.exports = {
     ],
     extensions: ['.js', '.jsx', '.json']
   },
-  devtool: 'cheap-source-map',
+  devtool: 'eval-source-map',
   module: {
     rules: [
       {

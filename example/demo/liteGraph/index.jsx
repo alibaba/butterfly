@@ -25,7 +25,7 @@ class LiteGraph extends Component {
       }
     });
     this.canvas.draw(mockData, () => {
-      this.canvas.setGirdMode(true, {
+      this.canvas.setGridMode(true, {
         isAdsorb: false,         // 是否自动吸附,默认关闭
         theme: {
           shapeType: 'circle',     // 展示的类型，支持line & circle
