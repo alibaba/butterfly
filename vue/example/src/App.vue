@@ -20,6 +20,7 @@
             <el-menu-item index="grid">grid(layout)</el-menu-item>
             <el-menu-item index="base">基础用法</el-menu-item>
             <el-menu-item index="userEndpoint">自定义锚点用法</el-menu-item>
+            <el-menu-item index="tree">tree</el-menu-item>
           </el-menu>
         </div>
       </el-aside>
