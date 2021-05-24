@@ -1,18 +1,14 @@
-'use strict';
 import React, {Component} from 'react';
-require('./index.less');
+import ReactDOM from 'react-dom';
+import {TreeCanvas} from 'butterfly-dag';
 
-// const Canvas = require('../../../index.js').TreeCanvas;
-import { TreeCanvas } from 'butterfly-dag';
-// import { TreeCanvas } from '../../../index';
-const {mockData} = require('./data');
+import mockData from './data';
+
+import 'butterfly-dag/dist/index.css';
+import './index.less';
 
 class CompactBoxTree extends Component {
-  constructor() {
-    super();
-  }
   componentDidMount() {
-
     let root = document.getElementById('dag-canvas');
     this.canvas = new TreeCanvas({
       root: root,
@@ -23,7 +19,7 @@ class CompactBoxTree extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'Manhattan',
+          shapeType: 'Manhattan',
           arrow: true
         }
       },
@@ -46,13 +42,12 @@ class CompactBoxTree extends Component {
         }
       }
     });
+
     this.canvas.draw(mockData, {}, () => {
       this.canvas.focusCenterWithAnimate();
     });
-    this.canvas.on('events', (data) => {
-      console.log(data);
-    });
   }
+
   render() {
     return (
       <div className='compact-box-tree-page'>
@@ -63,4 +58,5 @@ class CompactBoxTree extends Component {
   }
 }
 
-module.exports = CompactBoxTree;
+ReactDOM.render(<CompactBoxTree />, document.getElementById('root'));
+

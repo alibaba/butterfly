@@ -1,0 +1,52 @@
+.sider {
+  width: 120px;
+  background: rgb(248, 252, 249);
+  padding-top: 1px;
+  border-right: 1px solid #ebedf0;
+  float: left;
+  height: calc(100vh - 60px);
+  overflow: auto;  
+
+  &.fold {
+    width: 0;
+  }
+
+  .folder-op {
+    position: fixed;
+    left: 119px;
+    cursor: pointer;
+    top: 50%;
+    height: 66px;
+    width: 22px;
+    text-align: center;
+    line-height: 66px;
+    background: #f8fcf9;
+    z-index: 100;
+    border: 1px solid #ebedf0;
+    border-left: none;
+    border-radius: 0 5px 5px 0;
+
+    &.active {
+      left: 0;
+    }
+  }
+
+  .demo-cover {
+    width: 100px;
+    height: 70px;
+    margin: 8px 0 8px 8px;
+    cursor: pointer;
+    padding: 10px;
+    border: 1px solid #ebedf0;
+
+    &.active {
+      border-color: #f66902;
+    }
+
+    img {
+      height: 100%;
+      width: 100%;
+      background: white;
+    }
+  }
+}

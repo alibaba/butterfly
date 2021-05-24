@@ -1,16 +1,13 @@
-'use strict';
 import React, {Component} from 'react';
-require('./index.less');
-require('butterfly-dag/dist/index.css');
+import ReactDOM from 'react-dom';
+import {Canvas} from 'butterfly-dag';
 
-// const Canvas = require('../../../index.js').Canvas;
-import { Canvas } from 'butterfly-dag';
-const mockData = require('./data.js');
+import mockData from './data.js';
+
+import './index.less';
+import 'butterfly-dag/dist/index.css';
 
 class Entity extends Component {
-  constructor() {
-    super();
-  }
   componentDidMount() {
     let root = document.getElementById('dag-canvas');
     this.canvas = new Canvas({
@@ -22,16 +19,14 @@ class Entity extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'Straight',
+          shapeType: 'Straight',
           arrow: true
         }
       }
     });
     this.canvas.draw(mockData);
-    this.canvas.on('events', (data) => {
-      console.log(data);
-    });
   }
+
   render() {
     return (
       <div className='entity-page'>
@@ -42,4 +37,4 @@ class Entity extends Component {
   }
 }
 
-module.exports = Entity;
+ReactDOM.render(<Entity />, document.getElementById('root'));

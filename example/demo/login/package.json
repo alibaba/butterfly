@@ -1,0 +1,13 @@
+{
+  "name": "login",
+  "cn_name": "登录流程图",
+  "description": "a dag to show to how to make a Login sequence diagram",
+  "cn_description": "一个登录顺序流程图",
+  "dependencies": {
+    "butterfly-dag": "*",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "jquery": "*",
+    "lodash": "*"
+  }
+}

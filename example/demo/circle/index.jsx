@@ -1,16 +1,14 @@
-'use strict';
-import React, { Component } from 'react';
-require('./index.less');
-require('butterfly-dag/dist/index.css');
+import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
 
-const Canvas = require('./circleCanvas.js');
-const Edge = require('./edge.js');
-const mockData = require('./data.js');
+import Edge from './edge';
+import mockData from './data.js';
+import Canvas from './circleCanvas.js';
+
+import './index.less';
+import 'butterfly-dag/dist/index.css';
 
 class Circle extends Component {
-  constructor() {
-    super();
-  }
   componentDidMount() {
     let root = document.getElementById('dag-canvas');
     this.canvas = new Canvas({
@@ -30,12 +28,12 @@ class Circle extends Component {
           getHeight: () => {
             return 15;
           },
-          
+
         },
       },
       theme: {
         edge: {
-          type: 'Straight'
+          shapeType: 'Straight'
         }
       }
     });
@@ -43,28 +41,33 @@ class Circle extends Component {
     this.canvas.draw(mockData, () => {
       this.canvas.focusCenterWithAnimate();
     });
-    this.canvas.on('system.link.connect', ({ links }) => {
+    this.canvas.on('system.link.connect', ({links}) => {
       links.forEach(link => {
-        link.targetNode.active && link.targetNode.active(link.targetNode.dom)
-      })
+        link.targetNode.active && link.targetNode.active(link.targetNode.dom);
+      });
     });
+
     // 节点点击事件
-    this.canvas.on('clickCircleNode', (event) => {
+    this.canvas.on('clickCircleNode', () => {
       this.canvas.addEdge({
         id: 3,
         source: 'centerNode',
         target: 13,
         Class: Edge
       });
-    })
+    });
+
     // 左箭头点击事件
     this.canvas.on('clickArrowLeft', (event) => {
-      console.log(event, 'left')
-    })
+      // eslint-disable-next-line no-console
+      console.log(event, 'left');
+    });
+
     // 右箭头点击事件
     this.canvas.on('clickArrowRight', (event) => {
-      console.log(event, 'right')
-    })
+      // eslint-disable-next-line no-console
+      console.log(event, 'right');
+    });
   }
   render() {
     return (
@@ -76,4 +79,4 @@ class Circle extends Component {
   }
 }
 
-module.exports = Circle;
+ReactDOM.render(<Circle />, document.getElementById('root'));

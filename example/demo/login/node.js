@@ -1,9 +1,6 @@
-'use strict';
-
-// const Node = require('../../../index.js').Node;
-import { Node } from 'butterfly-dag';
-const $ = require('jquery');
-require('./node.less');
+import {Node} from 'butterfly-dag';
+import $ from 'jquery';
+import './node.less';
 
 class BaseNode extends Node {
   constructor(opts) {
@@ -12,10 +9,10 @@ class BaseNode extends Node {
   }
   draw = (opts) => {
     const container = $('<div class="login-base-node"></div>')
-                    .attr('id', opts.id)
-                    .css('top', opts.top + 'px')
-                    .css('left', opts.left + 'px')
-                    .addClass(opts.options.className);
+      .attr('id', opts.id)
+      .css('top', opts.top + 'px')
+      .css('left', opts.left + 'px')
+      .addClass(opts.options.className);
 
     if (opts.options.circleType === 'border') {
       let textContainer;
@@ -27,7 +24,7 @@ class BaseNode extends Node {
 
         textContainer.append(span1);
         textContainer.append(span2);
-      }else {
+      } else {
         textContainer = $(`<div class="text-box2">${opts.options.label}</div>`)[0];
       }
 
@@ -54,4 +51,4 @@ class BaseNode extends Node {
   }
 }
 
-module.exports = BaseNode;
+export default BaseNode;

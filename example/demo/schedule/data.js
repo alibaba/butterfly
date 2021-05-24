@@ -1,9 +1,7 @@
-'use strict';
+import Node from './node';
+import Edge from './edge';
 
-const Node = require('./node.js');
-const Edge = require('./edge');
-
-module.exports = {
+export default {
   nodes: [
     {
       id: '1',
@@ -352,7 +350,7 @@ module.exports = {
     options: {
       title: '测试'
     },
-    draggable:false,
+    draggable: false,
     top: 310,
     left: 185,
     width: 500,
@@ -360,3 +358,4 @@ module.exports = {
     resize: true
   }],
 };
+

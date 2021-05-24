@@ -1,11 +1,9 @@
-'use strict';
+import User from './node_user.js';
+import Train from './node_train.js';
+import Phone from './node_phone.js';
+import Email from './node_email.js';
 
-const User = require('./node_user.jsx');
-const Train = require('./node_train.jsx');
-const Phone = require('./node_phone.jsx');
-const Email = require('./node_email.jsx');
-
-module.exports = {
+export default {
   nodes: [{
     id: '1',
     name: '王大萌',

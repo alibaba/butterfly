@@ -1,12 +1,10 @@
-'use strict';
 import React, {Component} from 'react';
-require('./index.less');
-require('butterfly-dag/dist/index.css');
-
-// const Canvas = require('../../../index.js').Canvas;
-import { Canvas } from 'butterfly-dag';
-// import { Canvas } from '../../../index';
-const mockData = require('./data.js');
+import ReactDOM from 'react-dom';
+import {Canvas} from 'butterfly-dag';
+import mockData from './data.js';
+import 'butterfly-dag/dist/index.css';
+import './iconfont.css';
+import './index.less';
 
 class Scene4New extends Component {
   constructor() {
@@ -23,7 +21,7 @@ class Scene4New extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'AdvancedBezier',
+          shapeType: 'AdvancedBezier',
         }
       }
     });
@@ -42,4 +40,4 @@ class Scene4New extends Component {
   }
 }
 
-module.exports = Scene4New;
+ReactDOM.render(<Scene4New />, document.getElementById('root'));

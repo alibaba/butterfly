@@ -1,9 +1,8 @@
 'use strict';
+import Node from './node';
+import Edge from './edge';
 
-const Node = require('./node.js');
-const Edge = require('./edge');
-
-module.exports = {
+const data = {
   nodes: [
     {
       id: '1',
@@ -368,284 +367,285 @@ module.exports = {
     },
   ],
   edges: [{
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '1',
-      targetNode: '4',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.9,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '1',
-      targetNode: '5',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.9,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '1',
-      targetNode: '6',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.9,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '1',
-      targetNode: '7',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.9,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '1',
-      targetNode: '8',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.9,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '1',
-      targetNode: '9',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.9,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '1',
-      targetNode: '10',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.9,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '2',
-      targetNode: '4',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.9,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '3',
-      targetNode: '5',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.9,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '3',
-      targetNode: '6',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.9,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '3',
-      targetNode: '7',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.9,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '3',
-      targetNode: '8',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.9,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '3',
-      targetNode: '9',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.9,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '3',
-      targetNode: '10',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.9,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '4',
-      targetNode: '11',
-      label: 'rotate-down',
-      type: 'endpoint',
-      arrowPosition: 0.9,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '5',
-      targetNode: '12',
-      label: 'rotate-down',
-      type: 'endpoint',
-      arrowPosition: 0.9,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '6',
-      targetNode: '13',
-      label: 'rotate-down',
-      type: 'endpoint',
-      arrowPosition: 0.9,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '7',
-      targetNode: '14',
-      label: 'rotate-down',
-      type: 'endpoint',
-      arrowPosition: 0.9,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '8',
-      targetNode: '15',
-      label: 'rotate-down',
-      type: 'endpoint',
-      arrowPosition: 0.9,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '9',
-      targetNode: '16',
-      label: 'rotate-down',
-      type: 'endpoint',
-      arrowPosition: 0.9,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '10',
-      targetNode: '17',
-      label: 'rotate-down',
-      type: 'endpoint',
-      arrowPosition: 0.9,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '11',
-      targetNode: '18',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.8,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '12',
-      targetNode: '19',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.8,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '13',
-      targetNode: '20',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.8,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '14',
-      targetNode: '21',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.8,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '15',
-      targetNode: '22',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.8,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '16',
-      targetNode: '23',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.8,
-      Class: Edge
-    },
-    {
-      source: 'bottom',
-      target: 'top',
-      sourceNode: '17',
-      targetNode: '24',
-      arrow: true,
-      type: 'endpoint',
-      arrowPosition: 0.8,
-      Class: Edge
-    },
+    source: 'bottom',
+    target: 'top',
+    sourceNode: '1',
+    targetNode: '4',
+    arrow: true,
+    type: 'endpoint',
+    arrowPosition: 0.9,
+    Class: Edge
+  },
+  {
+    source: 'bottom',
+    target: 'top',
+    sourceNode: '1',
+    targetNode: '5',
+    arrow: true,
+    type: 'endpoint',
+    arrowPosition: 0.9,
+    Class: Edge
+  },
+  {
+    source: 'bottom',
+    target: 'top',
+    sourceNode: '1',
+    targetNode: '6',
+    arrow: true,
+    type: 'endpoint',
+    arrowPosition: 0.9,
+    Class: Edge
+  },
+  {
+    source: 'bottom',
+    target: 'top',
+    sourceNode: '1',
+    targetNode: '7',
+    arrow: true,
+    type: 'endpoint',
+    arrowPosition: 0.9,
+    Class: Edge
+  },
+  {
+    source: 'bottom',
+    target: 'top',
+    sourceNode: '1',
+    targetNode: '8',
+    arrow: true,
+    type: 'endpoint',
+    arrowPosition: 0.9,
+    Class: Edge
+  },
+  {
+    source: 'bottom',
+    target: 'top',
+    sourceNode: '1',
+    targetNode: '9',
+    arrow: true,
+    type: 'endpoint',
+    arrowPosition: 0.9,
+    Class: Edge
+  },
+  {
+    source: 'bottom',
+    target: 'top',
+    sourceNode: '1',
+    targetNode: '10',
+    arrow: true,
+    type: 'endpoint',
+    arrowPosition: 0.9,
+    Class: Edge
+  },
+  {
+    source: 'bottom',
+    target: 'top',
+    sourceNode: '2',
+    targetNode: '4',
+    arrow: true,
+    type: 'endpoint',
+    arrowPosition: 0.9,
+    Class: Edge
+  },
+  {
+    source: 'bottom',
+    target: 'top',
+    sourceNode: '3',
+    targetNode: '5',
+    arrow: true,
+    type: 'endpoint',
+    arrowPosition: 0.9,
+    Class: Edge
+  },
+  {
+    source: 'bottom',
+    target: 'top',
+    sourceNode: '3',
+    targetNode: '6',
+    arrow: true,
+    type: 'endpoint',
+    arrowPosition: 0.9,
+    Class: Edge
+  },
+  {
+    source: 'bottom',
+    target: 'top',
+    sourceNode: '3',
+    targetNode: '7',
+    arrow: true,
+    type: 'endpoint',
+    arrowPosition: 0.9,
+    Class: Edge
+  },
+  {
+    source: 'bottom',
+    target: 'top',
+    sourceNode: '3',
+    targetNode: '8',
+    arrow: true,
+    type: 'endpoint',
+    arrowPosition: 0.9,
+    Class: Edge
+  },
+  {
+    source: 'bottom',
+    target: 'top',
+    sourceNode: '3',
+    targetNode: '9',
+    arrow: true,
+    type: 'endpoint',
+    arrowPosition: 0.9,
+    Class: Edge
+  },
+  {
+    source: 'bottom',
+    target: 'top',
+    sourceNode: '3',
+    targetNode: '10',
+    arrow: true,
+    type: 'endpoint',
+    arrowPosition: 0.9,
+    Class: Edge
+  },
+  {
+    source: 'bottom',
+    target: 'top',
+    sourceNode: '4',
+    targetNode: '11',
+    label: 'rotate-down',
+    type: 'endpoint',
+    arrowPosition: 0.9,
+    Class: Edge
+  },
+  {
+    source: 'bottom',
+    target: 'top',
+    sourceNode: '5',
+    targetNode: '12',
+    label: 'rotate-down',
+    type: 'endpoint',
+    arrowPosition: 0.9,
+    Class: Edge
+  },
+  {
+    source: 'bottom',
+    target: 'top',
+    sourceNode: '6',
+    targetNode: '13',
+    label: 'rotate-down',
+    type: 'endpoint',
+    arrowPosition: 0.9,
+    Class: Edge
+  },
+  {
+    source: 'bottom',
+    target: 'top',
+    sourceNode: '7',
+    targetNode: '14',
+    label: 'rotate-down',
+    type: 'endpoint',
+    arrowPosition: 0.9,
+    Class: Edge
+  },
+  {
+    source: 'bottom',
+    target: 'top',
+    sourceNode: '8',
+    targetNode: '15',
+    label: 'rotate-down',
+    type: 'endpoint',
+    arrowPosition: 0.9,
+    Class: Edge
+  },
+  {
+    source: 'bottom',
+    target: 'top',
+    sourceNode: '9',
+    targetNode: '16',
+    label: 'rotate-down',
+    type: 'endpoint',
+    arrowPosition: 0.9,
+    Class: Edge
+  },
+  {
+    source: 'bottom',
+    target: 'top',
+    sourceNode: '10',
+    targetNode: '17',
+    label: 'rotate-down',
+    type: 'endpoint',
+    arrowPosition: 0.9,
+    Class: Edge
+  },
+  {
+    source: 'bottom',
+    target: 'top',
+    sourceNode: '11',
+    targetNode: '18',
+    arrow: true,
+    type: 'endpoint',
+    arrowPosition: 0.8,
+    Class: Edge
+  },
+  {
+    source: 'bottom',
+    target: 'top',
+    sourceNode: '12',
+    targetNode: '19',
+    arrow: true,
+    type: 'endpoint',
+    arrowPosition: 0.8,
+    Class: Edge
+  },
+  {
+    source: 'bottom',
+    target: 'top',
+    sourceNode: '13',
+    targetNode: '20',
+    arrow: true,
+    type: 'endpoint',
+    arrowPosition: 0.8,
+    Class: Edge
+  },
+  {
+    source: 'bottom',
+    target: 'top',
+    sourceNode: '14',
+    targetNode: '21',
+    arrow: true,
+    type: 'endpoint',
+    arrowPosition: 0.8,
+    Class: Edge
+  },
+  {
+    source: 'bottom',
+    target: 'top',
+    sourceNode: '15',
+    targetNode: '22',
+    arrow: true,
+    type: 'endpoint',
+    arrowPosition: 0.8,
+    Class: Edge
+  },
+  {
+    source: 'bottom',
+    target: 'top',
+    sourceNode: '16',
+    targetNode: '23',
+    arrow: true,
+    type: 'endpoint',
+    arrowPosition: 0.8,
+    Class: Edge
+  },
+  {
+    source: 'bottom',
+    target: 'top',
+    sourceNode: '17',
+    targetNode: '24',
+    arrow: true,
+    type: 'endpoint',
+    arrowPosition: 0.8,
+    Class: Edge
+  },
   ]
 };
+export default data;

@@ -1,0 +1,13 @@
+{
+  "name": "lite_graph",
+  "cn_name": "网格背景模板",
+  "description": "a dag to show to how to use grid layout and custom anchors",
+  "cn_description": "网格背景模板、自定义锚点",
+  "dependencies": {
+    "butterfly-dag": "*",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "jquery": "*",
+    "lodash": "*"
+  }
+}

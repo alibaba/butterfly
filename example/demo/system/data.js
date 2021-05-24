@@ -1,11 +1,9 @@
-'use strict';
+import BaseGroup from './group';
+import BaseNode from './node';
+import BaseEdge from './edge';
+import BaseEndpoint from './endpoint';
 
-const BaseGroup = require('./group');
-const BaseNode = require('./node');
-const BaseEdge = require('./edge');
-const BaseEndpoint = require('./endpoint');
-
-module.exports = {
+export default {
   nodes: [{
     id: '0',
     top: 160,
@@ -16,9 +14,9 @@ module.exports = {
     text: 'ATOMIC',
     Class: BaseNode,
     endpoints: [{
-      id: "right",
+      id: 'right',
       orientation: [1, 0],
-      pos: [0 ,0.5],
+      pos: [0, 0.5],
       Class: BaseEndpoint
     }]
   }, {
@@ -32,19 +30,19 @@ module.exports = {
     text: 'ATOMIC',
     Class: BaseNode,
     endpoints: [{
-      id: "left",
+      id: 'left',
       orientation: [-1, 0],
-      pos: [0 ,0.5],
+      pos: [0, 0.5],
       Class: BaseEndpoint
     }, {
-      id: "right_1",
+      id: 'right_1',
       orientation: [1, 0],
-      pos: [0 ,0.33],
+      pos: [0, 0.33],
       Class: BaseEndpoint
     }, {
-      id: "right_2",
+      id: 'right_2',
       orientation: [1, 0],
-      pos: [0 ,0.66],
+      pos: [0, 0.66],
       Class: BaseEndpoint
     }]
   }, {
@@ -57,14 +55,14 @@ module.exports = {
     text: 'ATOMIC',
     Class: BaseNode,
     endpoints: [{
-      id: "left_1",
+      id: 'left_1',
       orientation: [-1, 0],
-      pos: [0 ,0.33],
+      pos: [0, 0.33],
       Class: BaseEndpoint
     }, {
-      id: "left_2",
+      id: 'left_2',
       orientation: [-1, 0],
-      pos: [0 ,0.66],
+      pos: [0, 0.66],
       Class: BaseEndpoint
     }]
   }],
@@ -75,19 +73,19 @@ module.exports = {
     text: 'COUPLED',
     Class: BaseGroup,
     endpoints: [{
-      id: "left",
+      id: 'left',
       orientation: [-1, 0],
-      pos: [0 ,0.5],
+      pos: [0, 0.5],
       Class: BaseEndpoint
     }, {
-      id: "right_1",
+      id: 'right_1',
       orientation: [1, 0],
-      pos: [0 ,0.33],
+      pos: [0, 0.33],
       Class: BaseEndpoint
     }, {
-      id: "right_2",
+      id: 'right_2',
       orientation: [1, 0],
-      pos: [0 ,0.66],
+      pos: [0, 0.66],
       Class: BaseEndpoint
     }]
   }],
@@ -140,4 +138,4 @@ module.exports = {
     label: [undefined, 'B'],
     Class: BaseEdge
   }]
-}
+};

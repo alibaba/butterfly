@@ -1,20 +1,13 @@
-'use strict';
-
-// const Node = require('../../../index.js').Node;
-import { Node } from 'butterfly-dag';
-const $ = require('jquery');
+import {Node} from 'butterfly-dag';
+import $ from 'jquery';
 
 class BaseNode extends Node {
-  constructor(opts) {
-    super(opts);
-  }
   mounted() {
-
     // 假如菱形的话定制锚点，可指定任意的dom为endopoint
     // console.log(this)
     if (this.options.shape === 'diamond') {
       let pointPos = ['top', 'right', 'bottom', 'left'];
-      pointPos.forEach((pos, index) => {
+      pointPos.forEach((pos) => {
         let point = $(`<div class='butterflie-circle-endpoint ${pos}'></div>`);
         $(this.dom).append(point);
         let obj = {
@@ -28,7 +21,7 @@ class BaseNode extends Node {
           obj.orientation = [1, 0];
         } else if (pos === 'bottom') {
           obj.orientation = [0, 1];
-        } else if (pos === 'left'){
+        } else if (pos === 'left') {
           obj.orientation = [-1, 0];
         }
         this.addEndpoint(obj);
@@ -39,9 +32,10 @@ class BaseNode extends Node {
     if (this.endpoints && this.endpoints.length > 0) {
       this.endpoints.forEach((point) => {
         $(point.dom).addClass(this.options.color);
-      })
+      });
     }
   }
+
   draw = (data) => {
     let container = $('<div class="emergency2-base-node"></div>')
       .css('top', data.top)
@@ -49,7 +43,7 @@ class BaseNode extends Node {
       .css('width', data.options.width)
       .css('height', data.options.height)
       .attr('id', data.id);
-    
+
     // 添加颜色
     if (data.options.color) {
       container.addClass(data.options.color);
@@ -74,4 +68,4 @@ class BaseNode extends Node {
   }
 }
 
-module.exports = BaseNode;
+export default BaseNode;

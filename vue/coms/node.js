@@ -1,6 +1,5 @@
 import {Node} from 'butterfly-dag';
 
-
 const getNodeStyle = (left, top) => {
   return {
     left: left + 'px',

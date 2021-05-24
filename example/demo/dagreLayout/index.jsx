@@ -1,21 +1,26 @@
-'use strict';
 import React, {Component} from 'react';
-import DagreCanvas from './dagreCanvas';
+import ReactDOM from 'react-dom';
 import {Button, Select, Slider} from 'antd';
-require('./index.less');
-require('butterfly-dag/dist/index.css');
-const mockData = require('./data.js');
-const node = require('./base_node.jsx');
-const RelationEdge = require('./edge_relation.jsx');
 
+import mockData from './data';
+import node from './base_node';
+import RelationEdge from './edge';
+import DagreCanvas from './dagre-canvas';
+
+import './index.less';
+import 'antd/dist/antd.css';
+import 'butterfly-dag/dist/index.css';
+
+const Option = Select.Option;
 class DagreLayout extends Component {
   constructor() {
     super();
     this.canvas = null;
     this.state = {
       addNodesStatus: true
-    }
+    };
   }
+
   componentDidMount() {
     let root = document.getElementById('dag-canvas');
     this.canvas = new DagreCanvas({
@@ -36,7 +41,7 @@ class DagreLayout extends Component {
       },
       theme: {
         edge: {
-          type: 'AdvancedBezier',
+          shapeType: 'AdvancedBezier',
           arrow: true,
           arrowPosition: 0.5,
           Class: RelationEdge
@@ -45,9 +50,10 @@ class DagreLayout extends Component {
     });
     this.canvas.draw(mockData);
   }
+
   // 添加节点
   addNodes = () => {
-    if(!this.state.addNodesStatus) {
+    if (!this.state.addNodesStatus) {
       return;
     }
     this.canvas.addNodes([
@@ -79,6 +85,7 @@ class DagreLayout extends Component {
       addNodesStatus: false
     });
   }
+
   // 删除节点
   removeNodes = () => {
     this.canvas.removeNodes(['test8', 'test9']);
@@ -97,12 +104,14 @@ class DagreLayout extends Component {
       addNodesStatus: true
     });
   }
+
   // 配置项改变
-  optionsChange(key, value){
+  optionsChange(key, value) {
     let oldOptions = this.canvas.layout.options;
     let newOptions = {...oldOptions, [key]: value};
     this.canvas.drageReDraw(newOptions);
   }
+
   render() {
     return (
       <div className='dagreLayout-page'>
@@ -115,7 +124,7 @@ class DagreLayout extends Component {
           </div>
           <div className='operate-item'>
             <div className='operate-rankdir'>布局方向:</div>
-            <Select defaultValue="TB" style={{ width: 120 }} onChange={this.optionsChange.bind(this, 'rankdir')}>
+            <Select defaultValue="TB" style={{width: 120}} onChange={this.optionsChange.bind(this, 'rankdir')}>
               <Option value="TB">TB</Option>
               <Option value="BT">BT</Option>
               <Option value="LR">LR</Option>
@@ -124,7 +133,7 @@ class DagreLayout extends Component {
           </div>
           <div className='operate-item'>
             <div className='operate-align'>对齐方向:</div>
-            <Select defaultValue='默认' style={{ width: 120 }} onChange={this.optionsChange.bind(this, 'align')}>
+            <Select defaultValue='默认' style={{width: 120}} onChange={this.optionsChange.bind(this, 'align')}>
               <Option value={undefined}>默认</Option>
               <Option value="UL">UL</Option>
               <Option value="UR">UR</Option>
@@ -134,11 +143,11 @@ class DagreLayout extends Component {
           </div>
           <div className='operate-item'>
             <div className='operate-nodesep'>水平间距:</div>
-            <Slider defaultValue={40} onAfterChange = {this.optionsChange.bind(this, 'nodesep')}/>
+            <Slider defaultValue={40} onAfterChange = {this.optionsChange.bind(this, 'nodesep')} />
           </div>
           <div className='operate-item'>
             <div className='operate-ranksep'>层间距:</div>
-            <Slider defaultValue={40} onAfterChange = {this.optionsChange.bind(this, 'ranksep')}/>
+            <Slider defaultValue={40} onAfterChange = {this.optionsChange.bind(this, 'ranksep')} />
           </div>
         </div>
         <div className="flow-canvas" id="dag-canvas">
@@ -148,4 +157,4 @@ class DagreLayout extends Component {
   }
 }
 
-module.exports = DagreLayout;
+ReactDOM.render(<DagreLayout />, document.getElementById('root'));

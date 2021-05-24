@@ -1,8 +1,12 @@
-## Force Layout
-Force-directed layout is a set of algorithms which are imporved and extended by lots of researchers based on the earliest classical force-directed algorithm. They simulate the nodes and edges in the graph as the physical objects. There are attractive forces and repulsive forces between nodes to iteratively move them to reach a reasonable layout.
+# Auto Layout
+<p align="center">
+  <img width="900" src="https://img.alicdn.com/imgextra/i4/O1CN01pYwnbh1gGiUMaUIKm_!!6000000004115-2-tps-1418-2839.png">
+</p>
 
-#### legend
-![Force布局](https://img.alicdn.com/tfs/TB1W2Feh9slXu8jSZFuXXXg7FXa-1092-707.png)
+
+## Force Layout
+&nbsp;&nbsp;&nbsp;&nbsp;Force-directed layout is a set of algorithms which are improved and extended by lots of researchers based on the earliest classical force-directed algorithm. They simulate the nodes and edges in the graph as the physical objects. There are attractive forces and repulsive forces between nodes to iteratively move them to reach a reasonable layout.
+
 
 #### Examples
 
@@ -12,9 +16,9 @@ this.canvas = new Canvas({
     type: 'forceLayout',
     options: {
       link: {
-        // 线条的距离
+        // link distance
         distance: 50,
-        // 线条的粗细
+        // link strength
         strength: 1
       }
     },
@@ -26,12 +30,7 @@ this.canvas = new Canvas({
 
 ## Dagre Layout
 
-Dagre Layout is an appropriate layout method for directed flow graph.It will calculate the levels and positions of nodes automatically according to the edge directions in the data. 
-
-
-#### legend
-
-![Dagre布局](https://img.alicdn.com/tfs/TB1kzjEkRFR4u4jSZFPXXanzFXa-1335-782.png)
+&nbsp;&nbsp;&nbsp;&nbsp;Dagre Layout is an appropriate layout method for directed flow graph.It will calculate the levels and positions of nodes automatically according to the edge directions in the data. 
 
 #### Examples
 
@@ -63,39 +62,35 @@ this.canvas = new Canvas({
 
 ## Grid Layout
 
-Grid Layout will order the nodes according to the parameters, and then place the nodes on the grids.
-
-#### legend
-
-![grid布局](https://img.alicdn.com/tfs/TB1uU6LVxD1gK0jSZFsXXbldVXa-1498-750.png)
+&nbsp;&nbsp;&nbsp;&nbsp;Grid Layout will order the nodes according to the parameters, and then place the nodes on the grids.
 
 #### Examples
 
 ``` js
-import {TreeCanvas} from 'butterfly-dag';
-this.canvas = new TreeCanvas({
+import {Canvas} from 'butterfly-dag';
+this.canvas = new Canvas({
   layout: {
     type: 'grid',
     options: {
-          // group的渲染方法
-          width: 150,
-          // 布局画布总长度
-          height: 100,
-          // 布局相对起始点
-          begin: [0, 0],
-          // prevents node overlap, may overflow boundingBox if not enough space
-          preventOverlap: true,
-          // extra spacing around nodes when preventOverlap: true
-          preventOverlapPadding: 10,
-          // uses all available space on false, uses minimal space on true
-          condense: false,
-          //行数
-          rows: undefined,
-          // 列数
-          cols: undefined,
-          // 排序方式 
-          sortBy: 'degree',
-          nodeSize: 30,
+      // canvas width
+      width: 150,
+      // canvas height
+      height: 100,
+      // layout begin position
+      begin: [0, 0],
+      // prevents node overlap, may overflow boundingBox if not enough space
+      preventOverlap: true,
+      // extra spacing around nodes when preventOverlap: true
+      preventOverlapPadding: 10,
+      // uses all available space on false, uses minimal space on true
+      condense: false,
+      // row number
+      rows: undefined,
+      // column number
+      cols: undefined,
+      // sort method
+      sortBy: 'degree',
+      nodeSize: 30,
     },
   }
 });
@@ -117,41 +112,38 @@ this.canvas = new TreeCanvas({
 
 ## Fruchterman Layout
 
-Fruchterman Reingold 布局算法在原理上而言属于力导向布局算法。
-#### legend
-
-![Fruchterman布局](https://img.alicdn.com/tfs/TB1hDH5VpP7gK0jSZFjXXc5aXXa-1171-786.png)
+&nbsp;&nbsp;&nbsp;&nbsp;The Fruchterman Reingold layout algorithm is a force-oriented layout algorithm in principle.
 
 #### Examples
 
 ``` js
-import {TreeCanvas} from 'butterfly-dag';
+import {Canvas} from 'butterfly-dag';
  this.canvas = new Canvas({
       layout: {
         type: 'fruchterman',
         options: {
-            // 布局画布总宽度
-            width: 500,
-            // 布局画布总长度
-            height: 500,
-            /** 停止迭代的最大迭代数 */
-            // maxIteration: 1000,
-            /** 布局中心 */
-            center: [250, 250],
-            /** 重力大小，影响图的紧凑程度 */
-            gravity: 5,
-            /** 速度 */
-            speed: 5,
-            /** 是否产生聚类力 */
-            clustering: true,
-            /** 聚类力大小 */
-            clusterGravity: 8,
-            link: {
-                // 线条的距离
-                distance: 50,
-                // 线条的粗细
-                strength: 1
-            },
+          // 布局画布总宽度
+          width: 500,
+          // 布局画布总长度
+          height: 500,
+          /** 停止迭代的最大迭代数 */
+          // maxIteration: 1000,
+          /** 布局中心 */
+          center: [250, 250],
+          /** 重力大小，影响图的紧凑程度 */
+          gravity: 5,
+          /** 速度 */
+          speed: 5,
+          /** 是否产生聚类力 */
+          clustering: true,
+          /** 聚类力大小 */
+          clusterGravity: 8,
+          link: {
+              // 线条的距离
+              distance: 50,
+              // 线条的粗细
+              strength: 1
+          }
         },
       },
       theme: {
@@ -178,16 +170,13 @@ import {TreeCanvas} from 'butterfly-dag';
 
 
 ## Concentric Layout
-Concentric Layout places the nodes on concentric circles.
 
-#### 图例
+&nbsp;&nbsp;&nbsp;&nbsp;Concentric Layout places the nodes on concentric circles.
 
-![Concentric Layout](https://img.alicdn.com/tfs/TB1f1fPVuH2gK0jSZJnXXaT1FXa-939-681.png)
-
-#### 代码演示
+#### Example
 
 ``` js
-import {TreeCanvas} from 'butterfly-dag';
+import {Canvas} from 'butterfly-dag';
  this.canvas = new Canvas({
       layout: {
         type: 'fruchterman',
@@ -217,34 +206,10 @@ import {TreeCanvas} from 'butterfly-dag';
 | maxLevelDiff | Number | false | undefines |  The sum of concentric values in each level. If it is undefined, maxValue / 4 will take place, where maxValue is the max value of ordering properties. For example, if sortBy is 'degree', maxValue is the max degree value of all the nodes
 | sortBy | String | false | undefined | Order the nodes according to this parameter. It is the property's name of node. The node with higher value will be placed to the center. If it is undefined, the algorithm will order the nodes by their degree
 
-## Tree Layout
-
-参考：[antvis/hierarchy](https://github.com/antvis/hierarchy)
-
-``` js
-import {TreeCanvas} from 'butterfly-dag';
-this.canvas = new TreeCanvas({
-  layout: {
-    type: 'dagreLayout',
-    options: {
-      rankdir: 'TB',
-      nodesep: 40,
-      ranksep: 40,
-      controlPoints: false,
-    },
-  }
-});
-```
-
 
 ## Radial Layout
 
-Radial layout is a kind of layout method to make the graph radial. Taking a focusnode as the center, the rest of the nodes are arranged on rings with different distances according to the degree relationship with focusnode. Nodes one degree away from focusnode are placed on the first ring nearest to it, nodes two degrees away from focusnode are placed on the second ring, and so on.
-
-
-#### legend
-
-![Radial layout](https://img.alicdn.com/imgextra/i4/O1CN017UUWwh1u9l4RfYcyi_!!6000000005995-2-tps-1240-489.png)
+&nbsp;&nbsp;&nbsp;&nbsp;Radial layout is a kind of layout method to make the graph radial. Taking a focusnode as the center, the rest of the nodes are arranged on rings with different distances according to the degree relationship with focusnode. Nodes one degree away from focusnode are placed on the first ring nearest to it, nodes two degrees away from focusnode are placed on the second ring, and so on.
 
 #### Examples
 
@@ -253,37 +218,37 @@ this.canvas = new Canvas({
   layout: {
     type: 'Radial',
     options: {
-        // total width of layout canvas
-        width:800,
-        // total length of layout canvas
-        height:800,
-        /** the maximum iteration number of stopping iteration */
-        maxIteration: 200,
-        /** layout Center */
-        center: [400, 400],
-        /** center point, the default is the first point in the data */
-        focusNode: '0',
-        /** radius of each circle */
-        unitRadius: 80,
-        /** default edge length */
-        linkDistance: 100,
-        /** Is overlapping prevented */
-        preventOverlap: true,
-        /** node diameter */
-        nodeSize: 20,
-        /** node spacing, the minimum distance between nodes to prevent node overlap (the shortest distance between the edges of two nodes) */
-        nodeSpacing: undefined,
-        /** whether it must be a strict radial layout, that is, the nodes of each layer are strictly arranged on a ring. When preventoverlap is true  */
-        strictRadial: true,
-        /** maximum number of iterations to prevent overlapping steps */
-        maxPreventOverlapIteration: 200,
-        link: {
-            // the distance between lines
-            distance: 50,
-            // the thickness of the line
-            strength: 1
-        },
-    },
+      // total width of layout canvas
+      width:800,
+      // total length of layout canvas
+      height:800,
+      /** the maximum iteration number of stopping iteration */
+      maxIteration: 200,
+      /** layout Center */
+      center: [400, 400],
+      /** center point, the default is the first point in the data */
+      focusNode: '0',
+      /** radius of each circle */
+      unitRadius: 80,
+      /** default edge length */
+      linkDistance: 100,
+      /** Is overlapping prevented */
+      preventOverlap: true,
+      /** node diameter */
+      nodeSize: 20,
+      /** node spacing, the minimum distance between nodes to prevent node overlap (the shortest distance between the edges of two nodes) */
+      nodeSpacing: undefined,
+      /** whether it must be a strict radial layout, that is, the nodes of each layer are strictly arranged on a ring. When preventoverlap is true  */
+      strictRadial: true,
+      /** maximum number of iterations to prevent overlapping steps */
+      maxPreventOverlapIteration: 200,
+      link: {
+          // the distance between lines
+          distance: 50,
+          // the thickness of the line
+          strength: 1
+      }
+    }
   }
 });
 ```
@@ -303,25 +268,113 @@ this.canvas = new Canvas({
 | strictRadial | Boolean | false | true | whether it must be a strict radial layout, that is, the nodes of each layer are strictly arranged on a ring. It takes effect when preventoverlap is true. When preventoverlap is true and strictradial is false, the overlapped nodes expand strictly along the ring. However, if there are too many nodes in a ring, the overlapped nodes may not be completely avoided. When preventoverlap is true and strictradial is true, the overlapped nodes on the same ring are not strictly arranged along the ring, and the overlapped nodes can be offset before and after the ring to avoid overlapping.
 | maxPreventOverlapIteration | Number | false | 200 | maximum number of iterations to prevent overlapping steps
 
-## DagreCompound Layout
-Visual layout of composite hierarchical DAG based on dagre
+## Tree Layout
 
-#### legend
-![DagreCompound布局](https://img.alicdn.com/imgextra/i1/O1CN01tfFzxK1hpoRzuamxX_!!6000000004327-0-tps-720-420.jpg)
+&nbsp;&nbsp;&nbsp;&nbsp;reference：[antvis/hierarchy](https://github.com/antvis/hierarchy)
 
-#### Examples
+### compactBox
 
 ``` js
-this.canvas = new Canvas({
+import {TreeCanvas} from 'butterfly-dag';
+this.canvas = new TreeCanvas({
   layout: {
-    type: 'dagreCompound'
+    type: 'compactBox',
+    options: {
+      direction: 'TB', // H / V / LR / RL / TB / BT
+      getHeight(d) {
+        return 60;
+      },
+      getWidth(d) {
+        return 120;
+      },
+      getHGap(d) {
+        return 20;
+      },
+      getVGap(d) {
+        return 80;
+      }
+    },
   }
 });
-
 ```
 
-#### API
+### dendrogram
 
-| name | Type | Required | Default | Options | Description  
-| :------ | :------ | :------ | :------ | :------ | :------
-| rankdir | String | false | TB| "TB/BT/LR/RL"  | The alignment of the nodes. T: top; B：bottom; L: left; R: right
+``` js
+import {TreeCanvas} from 'butterfly-dag';
+this.canvas = new TreeCanvas({
+  layout: {
+    type: 'dendrogram',
+    options: {
+      direction: 'TB', // H / V / LR / RL / TB / BT
+      getHeight(d) {
+        return 60;
+      },
+      getWidth(d) {
+        return 120;
+      },
+      getHGap(d) {
+        return 20;
+      },
+      getVGap(d) {
+        return 80;
+      }
+    },
+  }
+});
+```
+
+### indented
+
+``` js
+import {TreeCanvas} from 'butterfly-dag';
+this.canvas = new TreeCanvas({
+  layout: {
+    type: 'indented',
+    options: {
+      direction: 'H', // H / LR / RL
+      getHeight(d) {
+        return 60;
+      },
+      getWidth(d) {
+        return 120;
+      },
+      getHGap(d) {
+        return 20;
+      },
+      getVGap(d) {
+        return 80;
+      }
+    },
+  }
+});
+```
+
+### mindmap
+
+``` js
+import {TreeCanvas} from 'butterfly-dag';
+this.canvas = new TreeCanvas({
+  layout: {
+    type: 'mindmap',
+    options: {
+      direction: 'H',                   // H / LR / RL
+      getSide(d) {
+        return d.data.side || 'right';  // `left` or right
+      },
+      getHeight(d) {
+        return 10;
+      },
+      getWidth(d) {
+        return 40;
+      },
+      getHGap(d) {
+        return 50;
+      },
+      getVGap(d) {
+        return 20;
+      }
+    },
+  }
+});
+```

@@ -1,15 +1,12 @@
-'use strict';
 import React, {Component} from 'react';
-require('./index.less');
-require('butterfly-dag/dist/index.css');
+import ReactDOM from 'react-dom';
+import IndustryCanvas from './canvas';
+import mockData from './data.js';
 
-const IndustryCanvas = require('./canvas');
-const mockData = require('./data.js');
-
+import 'butterfly-dag/dist/index.css';
+import './index.less';
+import './iconfont.css';
 class Industry extends Component {
-  constructor() {
-    super();
-  }
   componentDidMount() {
     let root = document.getElementById('dag-canvas');
     this.canvas = new IndustryCanvas({
@@ -20,17 +17,16 @@ class Industry extends Component {
       zoomable: true,    // 可放大
       moveable: true,    // 可平移
       css: {
-        groupHoverClass: 'datac-group-drag-hover',   // 节点移动到上面新增的class 
+        groupHoverClass: 'datac-group-drag-hover',   // 节点移动到上面新增的class
         groupActiveClass: 'datac-group-drag-active'   // 节点可移动到上面新增的class
       },
       theme: {
         edge: {
-          type: 'AdvancedBezier'
+          shapeType: 'AdvancedBezier'
         },
       }
     });
     this.canvas.draw(mockData);
-    
   }
   render() {
     return (
@@ -42,4 +38,4 @@ class Industry extends Component {
   }
 }
 
-module.exports = Industry;
+ReactDOM.render(<Industry />, document.getElementById('root'));

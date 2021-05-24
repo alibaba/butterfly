@@ -1,6 +1,6 @@
-'use strict';
-const node = require('./base_node.jsx');
-module.exports = {
+import node from './base_node';
+
+export default {
   nodes: [{
     id: 'test1',
     name: 'test1',
@@ -38,7 +38,7 @@ module.exports = {
     Class: node,
     className: 'nodeBackground-color'
   }
-],
+  ],
   edges: [{
     source: 'test1',
     target: 'test2',
@@ -63,5 +63,6 @@ module.exports = {
     source: 'test4',
     target: 'test7'
   }
-]
+  ]
 };
+

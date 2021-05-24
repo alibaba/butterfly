@@ -1,6 +1,6 @@
-const Node = require('./node.js');
+import Node from './node.js';
 
-export const mockData = {
+const mockData = {
   nodes: {
     isRoot: true,
     id: 'Root',
@@ -24,7 +24,7 @@ export const mockData = {
       iconClass: 'icon-class',
       endpoints: [{
         id: '1',
-        orientation: [0,- 1],
+        orientation: [0, -1],
         pos: [0.5, 0]
       }, {
         id: '2',
@@ -40,7 +40,7 @@ export const mockData = {
         iconClass: 'icon-class',
         endpoints: [{
           id: '1',
-          orientation: [0,- 1],
+          orientation: [0, -1],
           pos: [0.5, 0]
         }, {
           id: '2',
@@ -56,7 +56,7 @@ export const mockData = {
         iconClass: 'icon-class',
         endpoints: [{
           id: '1',
-          orientation: [0,- 1],
+          orientation: [0, -1],
           pos: [0.5, 0]
         }, {
           id: '2',
@@ -74,7 +74,7 @@ export const mockData = {
       // collapsed: true,
       endpoints: [{
         id: '1',
-        orientation: [0,- 1],
+        orientation: [0, -1],
         pos: [0.5, 0]
       }, {
         id: '2',
@@ -90,7 +90,7 @@ export const mockData = {
         iconClass: 'icon-class',
         endpoints: [{
           id: '1',
-          orientation: [0,- 1],
+          orientation: [0, -1],
           pos: [0.5, 0]
         }, {
           id: '2',
@@ -106,7 +106,7 @@ export const mockData = {
         iconClass: 'icon-class',
         endpoints: [{
           id: '1',
-          orientation: [0,- 1],
+          orientation: [0, -1],
           pos: [0.5, 0]
         }, {
           id: '2',
@@ -123,7 +123,7 @@ export const mockData = {
       iconClass: 'icon-class',
       endpoints: [{
         id: '1',
-        orientation: [0,- 1],
+        orientation: [0, -1],
         pos: [0.5, 0]
       }, {
         id: '2',
@@ -183,3 +183,5 @@ export const mockData = {
     type: 'endpoint'
   }]
 };
+
+export default mockData;

@@ -1,12 +1,12 @@
-'use strict';
 import React, {Component} from 'react';
-require('./index.less');
-require('butterfly-dag/dist/index.css');
+import ReactDOM from 'react-dom';
+import {Canvas, Arrow} from 'butterfly-dag';
 
-// const Canvas = require('../../../index.js').Canvas;
-import { Canvas } from 'butterfly-dag';
-const mockData = require('./data.js');
+import mockData from './data';
+import UML_IMG from 'butterfly-dag/plugins/arrow/uml-1.svg';
 
+import './index.less';
+import 'butterfly-dag/dist/index.css';
 class Scene4New extends Component {
   constructor() {
     super();
@@ -22,12 +22,27 @@ class Scene4New extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'Straight',
+          // shapeType: 'Straight',
+          // 可以跟下面自定义注册箭头类型对应
+          arrowShapeType: 'arrow1'
+          // labelPosition和labelOffset配合使用
+          // labelPosition: 1,
+          // labelOffset: -20,
         }
       }
     });
-    this.canvas.draw(mockData);
+    // 自定义注册箭头，与上面theme.edge.arrowShapeType对应
+    Arrow.registerArrow([{
+      key: 'arrow1',
+      type: 'svg',
+      content: UML_IMG
+    }]);
+
+    this.canvas.draw(mockData, () => {
+    });
+
     this.canvas.on('events', (data) => {
+      // eslint-disable-next-line no-console
       console.log(data);
     });
   }
@@ -41,4 +56,4 @@ class Scene4New extends Component {
   }
 }
 
-module.exports = Scene4New;
+ReactDOM.render(<Scene4New />, document.getElementById('root'));

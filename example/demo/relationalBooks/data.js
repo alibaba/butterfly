@@ -1,10 +1,7 @@
-'use strict';
+import BaseNode from './node';
+import AlisBaseNode from './alis-node';
 
-const BaseNode = require('./node.js');
-const AlisBaseNode = require('./alis-node.js');
-const $ = require('jquery');
-
-module.exports = {
+export default {
   nodes: [
     {
       id: '0',
@@ -13,9 +10,9 @@ module.exports = {
       left: 172,
       data: {
         content: [
-          { id: '1', content: 'id', sourceNodeId: '2', targetNodeId: '3' },
-          { id: '4', content: 'isbn', sourceNodeId: '5', targetNodeId: '6' },
-          { id: '7', content: 'title', sourceNodeId: '8', targetNodeId: '9' },
+          {id: '1', content: 'id', sourceNodeId: '2', targetNodeId: '3'},
+          {id: '4', content: 'isbn', sourceNodeId: '5', targetNodeId: '6'},
+          {id: '7', content: 'title', sourceNodeId: '8', targetNodeId: '9'},
         ],
       },
 
@@ -52,8 +49,8 @@ module.exports = {
       left: 750,
       data: {
         content: [
-          { id: '16', content: 'id', sourceNodeId: '17', targetNodeId: '18' },
-          { id: '19', content: 'name', sourceNodeId: '20', targetNodeId: '21' },
+          {id: '16', content: 'id', sourceNodeId: '17', targetNodeId: '18'},
+          {id: '19', content: 'name', sourceNodeId: '20', targetNodeId: '21'},
         ],
       },
 
@@ -88,8 +85,8 @@ module.exports = {
       name: 'Publisher',
       data: {
         content: [
-          { id: '28', content: 'id', sourceNodeId: '29', targetNodeId: '30' },
-          { id: '31', content: 'name', sourceNodeId: '32', targetNodeId: '33' },
+          {id: '28', content: 'id', sourceNodeId: '29', targetNodeId: '30'},
+          {id: '31', content: 'name', sourceNodeId: '32', targetNodeId: '33'},
         ],
       },
       top: 754,
@@ -140,3 +137,4 @@ module.exports = {
     },
   ],
 };
+

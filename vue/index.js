@@ -1,15 +1,19 @@
-/**
- * 暂无使用
- */
-
-import butterflyVue from './butterfly-vue.vue';
+import ButterflyVue from './butterfly-vue.vue';
+import ButterflyVueEndpoint from './coms/vue-endpoint.vue';
 
 const install = (Vue)=>{
-  Vue.component(butterflyVue.name, butterflyVue);
+  Vue.component(ButterflyVue.name, ButterflyVue);
+  Vue.component(ButterflyVueEndpoint.name, ButterflyVueEndpoint);
 }
 
 // 默认导出组件
 export default {
   install,
-  butterflyVue
+  ButterflyVue,
+  ButterflyVueEndpoint
 };
+
+export {
+  ButterflyVue,
+  ButterflyVueEndpoint
+}

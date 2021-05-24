@@ -1,10 +1,8 @@
-'use strict';
+import Info from './node_info';
+import Semiconductor from './node_semiconductor';
+import Edge from './edge';
 
-const Info = require('./node_info');
-const Semiconductor = require('./node_semiconductor');
-const Edge = require('./edge');
-
-module.exports = {
+export default {
   nodes: [{
     id: '0',
     top: 50,
@@ -17,7 +15,7 @@ module.exports = {
     left: 150,
     type: 'semiconductor_1',
     Class: Semiconductor,
-    inputs:[{
+    inputs: [{
       id: '0'
     }],
     outputs: [{
@@ -29,7 +27,7 @@ module.exports = {
     left: 380,
     type: 'semiconductor_2',
     Class: Semiconductor,
-    inputs:[{
+    inputs: [{
       id: '0'
     }, {
       id: '1'
@@ -43,7 +41,7 @@ module.exports = {
     left: 590,
     type: 'semiconductor_3',
     Class: Semiconductor,
-    inputs:[{
+    inputs: [{
       id: '0'
     }],
     outputs: [{
@@ -55,7 +53,7 @@ module.exports = {
     left: 780,
     type: 'semiconductor_4',
     Class: Semiconductor,
-    inputs:[{
+    inputs: [{
       id: '0'
     }, {
       id: '1'
@@ -69,7 +67,7 @@ module.exports = {
     left: 780,
     type: 'semiconductor_5',
     Class: Semiconductor,
-    inputs:[{
+    inputs: [{
       id: '0'
     }, {
       id: '1'
@@ -83,7 +81,7 @@ module.exports = {
     left: 780,
     type: 'semiconductor_6',
     Class: Semiconductor,
-    inputs:[{
+    inputs: [{
       id: '0'
     }, {
       id: '1'
@@ -97,7 +95,7 @@ module.exports = {
     left: 780,
     type: 'semiconductor_7',
     Class: Semiconductor,
-    inputs:[{
+    inputs: [{
       id: '0'
     }, {
       id: '1'
@@ -111,7 +109,7 @@ module.exports = {
     left: 780,
     type: 'semiconductor_8',
     Class: Semiconductor,
-    inputs:[{
+    inputs: [{
       id: '0'
     }, {
       id: '1'
@@ -164,4 +162,5 @@ module.exports = {
     type: 'endpoint',
     Class: Edge
   }]
-}
+};
+

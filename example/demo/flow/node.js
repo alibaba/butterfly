@@ -1,20 +1,18 @@
-'use strict';
+import $ from 'jquery';
+import {Node} from 'butterfly-dag';
 
-// const Node = require('../../../index.js').Node;
-import { Node } from 'butterfly-dag';
-const $ = require('jquery');
 import './node.less';
-
 class BaseNode extends Node {
   constructor(opts) {
     super(opts);
     this.options = opts;
   }
+
   draw = (opts) => {
     const container = $('<div class="flow-base-node"></div>')
-                    .css('top', opts.top)
-                    .css('left', opts.left)
-                    .attr('id', opts.id);
+      .css('top', opts.top)
+      .css('left', opts.left)
+      .attr('id', opts.id);
 
     const logoContainer = $(`<div class="logo-containe"><i class="iconfont ${opts.options.iconType}"><i/></div>`);
 
@@ -26,4 +24,4 @@ class BaseNode extends Node {
   }
 }
 
-module.exports = BaseNode;
+export default BaseNode;

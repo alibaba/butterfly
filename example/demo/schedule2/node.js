@@ -1,9 +1,6 @@
-'use strict';
-
-// const Node = require('../../../index.js').Node;
-import { Node } from 'butterfly-dag';
-const $ = require('jquery');
-require('./node.less');
+import {Node} from 'butterfly-dag';
+import $ from 'jquery';
+import './node.less';
 
 class BaseNode extends Node {
   constructor(opts) {
@@ -12,9 +9,9 @@ class BaseNode extends Node {
   }
   draw = (opts) => {
     const container = $('<div class="schedule2-base-node"></div>')
-                    .attr('id', opts.id)
-                    .css('top', opts.top + 'px')
-                    .css('left', opts.left + 'px')
+      .attr('id', opts.id)
+      .css('top', opts.top + 'px')
+      .css('left', opts.left + 'px');
 
     this._createTypeIcon(container);
     this._createText(container);
@@ -34,4 +31,4 @@ class BaseNode extends Node {
   }
 }
 
-module.exports = BaseNode;
+export default BaseNode;

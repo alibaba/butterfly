@@ -1,0 +1,13 @@
+{
+  "name": "policy",
+  "cn_name": "政策顺序图",
+  "description": "a dag to show to how to make a Policy sequence diagram",
+  "cn_description": "一个政策顺序图",
+  "dependencies": {
+    "butterfly-dag": "*",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "jquery": "*",
+    "lodash": "*"
+  }
+}

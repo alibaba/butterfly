@@ -2,7 +2,7 @@
 
 Provide public Minimap services and settings property for butterfly
 
-## 一，Usage for butterfly
+## Usage for butterfly
 
 ```js
 // in butterfly
@@ -13,20 +13,112 @@ canvas.setMinimap(false)
 
 ```
 
-## 二，Usage for other app
+<br>
+<br>
+
+## Property（options）
+
+### root _`<DOMNode>`_（Require）
+&nbsp;&nbsp;root canvas dom
+### height _`<Number>`_ (Optional)
+&nbsp;&nbsp;minimap height，default：`200`
+### width _`<Number>`_ (Optional)
+&nbsp;&nbsp;minimap width，default：`200`
+### className _`<String>`_ (Optional)
+&nbsp;&nbsp;minimap container class name，default：`butterfly-minimap-container`
+### containerStyle _`<Object>`_ (Optional)
+&nbsp;&nbsp;minimap container css
+### viewportStyle _`<Object>`_ (Optional)
+&nbsp;&nbsp;minimap view css
+### backgroudStyle _`<Object>`_ (Optional)
+&nbsp;&nbsp;minimap backgroud css
+### nodeColor _`<String>`_ (Optional)
+&nbsp;&nbsp;node color，default：`rgba(255, 103, 101, 1)`
+### groupColor _`<String>`_ (Optional)
+&nbsp;&nbsp;group color，default：`rgba(0, 193, 222, 1)`
+### nodes _`<Array>`_ (Optional)
+&nbsp;&nbsp;group data，default：`[ ]`
+```ts
+interface Node {
+  id: number | string;    // Node ID
+  group: number | string; // Node group ID
+  left: number;           // Abscissa
+  top: number;            // Y-axis
+  width: number;          // width
+  height: number;         // height
+  minimapActive: boolean; // Is currently active
+}
+```
+### groups _`<Array>`_ (Optional)
+&nbsp;&nbsp;group data，default：`[ ]`
+```ts
+interface Group {
+  id: number | string;      // Node group ID
+  left: number;             // Abscissa
+  top: number;              // Y-axis
+  width: number;            // width  
+  height: number;           // height
+  options: {
+    minimapActive: boolean; // Is currently active
+  }
+}
+```
+### offset _`<Array>`_ (Optional)
+&nbsp;&nbsp;canvas offset，default：`[0, 0]`
+### zoom _`<Number>`_ (Optional)
+&nbsp;&nbsp;canvas zoom，default：`1`
+### move _`<Function>`_（Require）
+&nbsp;&nbsp;minimap interaction function for moving the canvas, referring to butterfly's move function
+```ts
+interface MoveFn {
+  ([x: number, y: number]): void
+}
+```
+### terminal2canvas _`<Function>`_ （Require）
+&nbsp;&nbsp;interaction function for butterfly's convert coordinate the canvas
+```ts
+interface Term2CvsFn {
+  ([x: number, y: number]): [x: number, y: number]
+}
+```
+### canvas2terminal _`<Function>`_（Require）
+&nbsp;&nbsp;interaction function for canvas's convert to coordinate of screen 
+```ts
+interface Cvs2TermFn {
+  ([x: number, y: number]): [x: number, y: number]
+}
+```
+### safeDistance _`<Number>`_ (Optional)
+&nbsp;&nbsp;safe distance to protect user from moving viewport window outside of minimap，default：`20`
+### activeNodeColor _`<String>`_ (Optional)
+&nbsp;&nbsp;active node color，default：`rgba(255, 253, 76, 1)`
+### activeGroupColor _`<String>`_ (Optional)
+&nbsp;&nbsp;active group color，default：`rgba(255, 253, 76, 1)`
+### events _`<Number>`_ (Optional)
+&nbsp;&nbsp;events to call minimap redraw，default：`[ ]`
+
+<br>
+<br>
+
+## Used in other systems
 
 ```js
 // in other system
 const Minimap = require('butterfly-dag').Minimap;
 
-// create a new Minimap
+// Create a Minimap
 minimap = new Minimap({
   root: HTMLElement,
   move: () => null,
-  terminal2canvas: () => null
+  terminal2canvas: () => null,
+  // Incoming initial data for initial rendering
+  nodes: [],
+  groups: [],
+  zoom: 1,
+  offset: []
 });
 
-// update Minimap data
+// Update Minimap data
 minimap.update({
   nodes: this.nodes,
   groups: this.groups,
@@ -34,85 +126,7 @@ minimap.update({
   offset: this.getOffset()
 });
 
-// destroy minmap
+// destroy
 minimap.destroy();
 
-```
-
-## 三，Property
-
-### 1, options
-
-| key | describe | default 
-| ---- | ---- | ---- |
-| root | root canvas dom | null(必填) | 
-| height | minimap height | 200 |
-| width  | minimap width | 200 |
-| className | minimap container class name | `butterfly-minimap-container` |
-| containerStyle | minimap container css | |
-| viewportStyle | minimap view css | |
-| backgroudStyle  | minimap backgroud css | |
-| nodeColor | node color | `rgba(255, 103, 101, 1)` |
-| groupColor | group color | `rgba(0, 193, 222, 1)` |
-| nodes | node data, refer specifically to the description below. | [] |
-| groups | group data, refer specifically to the description below.  | [] |
-| offset | canvas offset | [0, 0] | 
-| zoom | canvas zoom | 1 |
-| move | minimap interaction function for moving the canvas, referring to butterfly's move function | Require |
-| terminal2canvas | interaction function for butterfly's convert coordinate the canvas | Require |
-| canvas2terminal | interaction function for canvas's convert to coordinate of screen   | Require |
-| safeDistance | safe distance to protect user from moving viewport window outside of minimap | 20 |
-| activeNodeColor | active node color | `rgba(255, 253, 76, 1)` |
-| activeGroupColor | active group color | `rgba(255, 253, 76, 1)` |
-| events | events to call minimap redraw | [] |
-
-### 2, Detail
-
-**(1) nodes**
-```ts
-interface Node {
-  id: number | string;    // node ID
-  group: number | string; // group ID
-  left: number;           // x coordinate
-  top: number;            // y coordinate
-  width: number;          // width
-  height: number;         // height
-  minimapActive: boolean; // active status
-}
-```
-
-**(2) groups**
-```ts
-interface Group {
-  id: number | string;      // node ID
-  left: number;             // x coordinate
-  top: number;              // y coordinate
-  width: number;            // width  
-  height: number;           // height
-  options: {
-    minimapActive: boolean; // active status
-  }  
-}
-```
-
-**(3) move**
-```ts
-interface MoveFn {
-  ([x: number, y: number]): void
-}
-```
-
-
-**(4) terminal2canvas**
-```ts
-interface Term2CvsFn {
-  ([x: number, y: number]): [x: number, y: number]
-}
-```
-
-**(5) canvas2terminal**
-```ts
-interface Cvs2TermFn {
-  ([x: number, y: number]): [x: number, y: number]
-}
 ```

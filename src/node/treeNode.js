@@ -12,6 +12,13 @@ class TreeNode extends Node {
       this.isRoot = options.isRoot;
     }
   }
+  _init(obj = {}) {
+    super._init(obj);
+    if (obj.parent) {
+      this.parent = obj.parent;
+      this.options.parent = obj.parent;
+    }
+  }
   collapse() {
     this._emit('InnerEvents', {
       type: 'node:collapse',

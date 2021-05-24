@@ -1,10 +1,6 @@
-'use strict';
-
+import {Node} from 'butterfly-dag';
+import $ from 'jquery';
 import './node.less';
-// const Node = require('../../../index.js').Node;
-import { Node } from 'butterfly-dag';
-const $ = require('jquery');
-
 class BaseNode extends Node {
   constructor(opts) {
     super(opts);
@@ -15,9 +11,9 @@ class BaseNode extends Node {
   }
   draw = (opts) => {
     let container = $('<div class="industry-base-node"></div>')
-                    .css('top', opts.top)
-                    .css('left', opts.left)
-                    .attr('id', opts.id);
+      .css('top', opts.top)
+      .css('left', opts.left)
+      .attr('id', opts.id);
 
     let icon = $(`<div class="circle ${opts.options.circleColor}"><i class="iconfont ${opts.options.iconType}"></i></div>`)[0];
 
@@ -38,7 +34,7 @@ class BaseNode extends Node {
     });
 
     this._createIcon(container[0]);
-    
+
     setTimeout(() => {
       this._addEndpoint();
     });
@@ -95,4 +91,4 @@ class BaseNode extends Node {
   }
 }
 
-module.exports = BaseNode;
+export default BaseNode;

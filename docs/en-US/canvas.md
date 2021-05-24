@@ -2,6 +2,7 @@
 
 ```js
 let canvas = new Canvas({
+  // the attribute below
   root: dom,               // canvas root dom (require)
   layout: 'ForceLayout',   // layout setting , integrated or custom , (optional)
   zoomable: true,          // enable zoom canvas (optional)
@@ -9,6 +10,7 @@ let canvas = new Canvas({
   draggable: true,         // enable drag nodes (optional)
   linkable: true,          // enable connect edges (optional)
   disLinkable: true,       // enable disConnect edges (optional)
+  layout: {},              // initialize auto layout (optional)
   theme: {                 // theme (optional) 
     group: {
       type: 'normal'       // Node group type: normal (drag in and drag out), inner (can only be dragged in and not out)
@@ -19,6 +21,7 @@ let canvas = new Canvas({
       arrow: true,         // whether to show arrow
       arrowPosition: 0.5,  // arrow position (0 ~ 1)
       arrowOffset: 0.0,    // arrow offset
+      arrowShapeType: '',  // custom arrow style
       Class: XXClass,      // custom Class
       isExpandWidth: false,// expand line interaction area
       defaultAnimate: false// turn on line animation by default
@@ -45,433 +48,770 @@ let canvas = new Canvas({
     isScopeStrict: false   // whether scope is strict mode (default is false)
   }
 });
-```
-
-## attribute<a name='canvas-attr'></a>：
-
-| key | describe | type | default 
-| :------ | :------ | :------ | :------ 
-| root | canvas root dom | Dom (Require) | `*this dom must set 'position:relative'`
-| layout | auto layout | string/function (optional) | null 
-| zoomable | enable zoom canvas | boolean (optional) | false 
-| moveable | enable move canvas | boolean (optional) | false 
-| draggable | enable drag nodes | boolean (optional) | false 
-| linkable | enable connect edges | boolean (optional) | false 
-| disLinkable | enable disConnect edges | boolean (optional) | false 
-| theme | canvas theme setting | object (optional) | undefined
-| global | global attribute | object (optional) | undefined
-
-
-* **layout**，pass string / function into the property of layout
- * forceLayout
- * dagreLayout
- * concentricLayout
- * circleLayout
- * fruchterman
- * radial
- * dagreCompound
- * custom layout，pass in custom method, which can be layout according to user needs. Note:`In addition, remember to overwrite the Edge calcPath method, otherwise it will be replaced by butterfly's built-in calculation edge  method, and the resulting edge cannot be realized.`
-* **autoFixCanvas**, auto expand canvas when drag nodes or edges near the margin of canvas, set autoMovePadding to adjust the area of hotspots. See: ![autoFixCanvas](https://img.alicdn.com/tfs/TB16lUNBG61gK0jSZFlXXXDKFXa-1665-801.gif)
-* **isScopeStrict**，used to set the global scope strict mode
-  * The default is false. If the value is set to true, the scope must match when the scope must be identical; if the value is false, all values are matched when the scope is undefined.
-
-```
-let canvas = new Canvas({
-  layout: (opts) => {
-    // canvas width and height
-    let width = opts.width;
-    let height = opts. height;
-    // nodes, groups, and edges data to be rendered
-    let data = opts.data;
-    // assign the left and top values of nodes and groups
-    ......
-  }
+canvas.draw({
+  // data
 })
 ```
 
-## API：
+<br>
+<br>
 
-### <a name='canvas-other'>Canvas API</a>：
+## attribute
+
+### root _`<dom>`_ (Require)
+
+&nbsp;&nbsp;container: a dom element with width and height, canvas root node
+  
+### zoomable _`<Boolean>`_   (Optional)
+
+&nbsp;&nbsp;whether the canvas is scalable; value type `boolean`, Default value `false`
+
+### moveable _`<Boolean>`_   (Optional)
+
+&nbsp;&nbsp;whether the canvas is movable; value type `boolean`, Default value `false`
+
+### draggable _`<Boolean>`_   (Optional)
+
+&nbsp;&nbsp;whether the canvas is draggable; value type `boolean`, Default value `false`
+
+### linkable _`<Boolean>`_   (Optional)
+
+&nbsp;&nbsp;whether the nodes in canvas can be dragged to add connection; value type `boolean`, Default value `false`
+
+### disLinkable _`<Boolean>`_   (Optional)
+
+&nbsp;&nbsp;whether the nodes in canvas can be dragged to delete connection; value type `boolean`, Default value `false`
+
+### layout _`<Object>`_   (Optional)
+
+&nbsp;&nbsp;canvas initialization automatically arranges the layout according to what you set, [reference](https://github.com/alibaba/butterfly/blob/master/docs/en-US/layout.md)
+
+### theme
+
+&nbsp;&nbsp;canvas theme configuration, default initialization style and interaction, mainly:
+
+* edge &nbsp;&nbsp; connection configuration: Default style and interaction of all edges. The dragged edge will also use this configuration.
+
+  *params*：
+
+  * type _`<String>`_ whether the edge is connected to a node or to an endpoint. Default value `node`
+
+  * shapeType _`<String>`_  edge type: Bezier, AdvancedBezier, Flow, Straight, Manhattan, Bezier2-1, Bezier2-2, Bezier2-3, BrokenLine; Default value `Straight`
+
+  <img width="650" src="https://img.alicdn.com/imgextra/i3/O1CN01sHnesN1SMIhN62CLK_!!6000000002232-2-tps-1418-404.png">
+
+  * label _`<String/Dom>`_ edge label
+
+  * labelPosition _`<Number>`_ edge label position: the value is between 0-1, 0 represents the beginning of the egde, and 1 represents the end of the egde. Default value `0.5`
+
+  * labelOffset _`<Number>`_ the position offset of edge label: the offset value from the label position of edge. The default value is 0, and the unit is `px`
+
+  ```js
+  // labelPosition & labelOffset: the label position is in the middle of edge，offset 20px to the end
+  {
+    labelPosition: 0.5,
+    labelOffset: 20
+  }
+  ```
+
+  * arrow _`<Boolean>`_ whether to add arrow configuration: Default value `true`
+
+  * arrowPosition _`<Number>`_ arrow position: value between 0-1, 0 represents the beginning of the edge, and 1 represents the end of the edge. Default value `0.5`
+
+  * arrowOffset _`<Number>`_ the position offset of arrow: the offset value from the arrow position of edge. The default value is 0, and the unit is `px`
+
+  * isExpandWidth _`<Boolean>`_ expand the edge interaction area, default value `false`. If `true`, get `eventHandlerDom` for attach events
+
+  * defaultAnimate `<Boolean>`_ turn on line animation; Default value `false`
+
+  * Class _`<Class>`_ custom extend class
+
+* endpoint &nbsp;&nbsp; endpoint config: default style and interaction of all endpoints
+
+  *params*：
+
+  * linkableHighlight _`<Boolean>`_  `point.linkable` method will be triggered when connecting, which can be used for line highlighting; Defualt value `true`
+
+  * limitNum _`<Number>`_ limit the number of endpoing connections; Default value `10`
+
+  * expandArea _`<Object>`_ the hot zone connected of endpoint: Since the endpoint area may be too small, it provides the property of expanding the hot zone;Default value `{left: 10, top: 10, right: 10, bottom: 10}`
+
+* group &nbsp;&nbsp; group config
+
+  *params*：
+
+  * type _`<String>`_ group type: `normal`(can be dragged in and out), `inner`(can only be dragged in but not out);Default value `normal`
+
+  * includeGroups _`<Boolean>`_ whether the node group allows included node groups
+
+* zoomGap _`<Number>`_ mouse zoom in and out gap setting; Value between[0-1], Defualt `0.001`
+
+* autoFixCanvas When the node is dragged or the edge is dragged to around the edge of the canvas, the canvas is automatically extended
+
+  *params*：
+
+  * enable _`<Boolean>`_ whether the canvas is automatically extended; Default value `false`
+
+  * autoMovePadding _`<Array>`_ inner margin of the canvas that triggers automatic extension; Default value `[20,20,20,20]`
+
+<img width="650" src="https://img.alicdn.com/tfs/TB16lUNBG61gK0jSZFlXXXDKFXa-1665-801.gif">
+  
+* autoResizeRootSize _`<Boolean>`_ Automatically adapt to the Root container size; Default value `true`
+
+### global   (Optional)
+
+&nbsp;&nbsp;global	Global attributes; _`object (Option)`_, Default value `undefined`
+
+<br>
+<br>
+
+## API
+
+### canvas.draw (data, calllback)
+
+*descripition*：the rendering method of the canvas, `please note that the canvas rendering is asynchronous rendering`
+
+*params*
+
+* `{object} data` include: groups, nodes, edges
+* `{function} calllback` `*The rendering process is asynchronous, please pay attention to the callback if you need it`
 
 ```js
-/**
-  * draw function
-  * @param {data} data  - include groups, nodes, edges
-  * @param {function} callback  - `*the rendering process is an asynchronous process, please pay attention to the callback.`
-  */
 draw = (data, calllback) => {}
+```
 
-/**
-  * Re-rendering method, it will delete all previous elements and re-render
-  * @param {data} data  - include groups, nodes, edges
-  * @param {function} callback  - `*the rendering process is an asynchronous process, please pay attention to the callback.`
-  */
+### canvas.redraw (data, calllback)
+
+*descripition*：the re-rendering method will delete all previous elements and re-render, `note that the canvas rendering is asynchronous rendering`
+
+*params*
+
+* `{object} data` new groups, new nodes and new edges
+* `{function} calllback` `*The rendering process is asynchronous, please pay attention to the callback if you need it`
+
+```js
 redraw = (data, calllback) => {}
+```
 
-/**
-  * get all data from canvas
-  * @return {data} - canvas data
-  */
+### canvas.getDataMap (data, calllback)
+
+*descripition*：get all the data of the canvas: nodes, edges, groups
+
+*return*
+
+* `{object} data` groups, nodes, and edges data
+
+```js
 getDataMap = () => {}
+```
 
-/**
-  * Set whether all nodes of the canvas can linkable
-  * @param {true|false} boolean  - whether to support all nodes can link
-  */
+### canvas.setLinkable (boolean)
+
+*descripition*：set whether all nodes of the canvas can be dragged to connect edge
+
+*params*
+
+* `{true|false} boolean` whether to support all nodes can be dragged to connect edge
+```js
 setLinkable = (boolean) => {}
+```
 
-/**
-  * Set whether all nodes of the canvas can dislinkable
-  * @param {true|false} boolean  - whether to support all nodes can dislink
-  */
+### canvas.setDisLinkable (boolean)
+
+*descripition*：set whether all nodes of the canvas can be disconnected connecttion
+
+*params*
+
+* `{true|false} boolean` whether all nodes of the canvas can be disconnected connecttion
+
+```js
 setDisLinkable = (boolean) => {}
+```
 
-/**
-  * Set whether all nodes of the canvas are draggable
-  * @param {true|false} boolean  - whether to support all nodes can drag
-  */
+### canvas.setDraggable (boolean)
+
+*descripition*：set whether all nodes of the canvas can be dragged
+
+*params*
+
+* `{true|false} boolean` whether to support all nodes can be dragged
+
+```js
 setDraggable = (boolean) => {}
 ```
 
-### <a name='canvas-api-crud'>query,add,delete node，edge，group</a>：
+### canvas.getGroup (string)
+
+*descripition*：get group by id
+
+*params*
+
+* `{string} id` group id
+
+*return*
+
+* `{Group}` Group instance
 
 ```js
-/**
-  * get group by id
-  * @param {string} id  - group id
-  * @return {Group} - Group Object
-  */
 getGroup = (string) => {}
+```
 
-/**
-  * add group function
-  * @param {object|Group} object  - group data or Group instance
-  * @param {array[object|Node]} object  - (Optional) Node information. If there is a value, the node is automatically added to the node group. Allow adding existing nodes in the canvas.
-  * @param {object} options - 参数
-  * @param {string} options.posType - 'absolute or relative' , Identifies whether the coordinates of the node are absolute relative to the canvas or relative to the node group
-  * @param {number} options.padding - add group padding
-  */
+### canvas.addGroup ([object](./group.md#group-attr) | Group, nodes, options)
+
+*descripition*：Add groups. If the group does not exist, create the group and add nodes into the group; If the group exists, nodes will be add into the current group.
+
+*params*
+
+* `{object | Group} object` Group: group information or group instance
+* `{array< object | Node >} object` (Optional) Node information: these nodes will be added to the group. If the node does not exist, it will create these nodes
+* `{object} options` params
+* `{string} options.posType` 'absolute or relative' , Identifies whether the coordinates of the node are absolute positioning relative to the canvas or relative to the node group
+* `{number} options.padding` group padding
+
+```js
 addGroup = (object|Group, nodes, options) => {}
+```
 
-/**
-  * delete group by id
-  * @param {string} id  - node id
-  * @return {Group} - Group Obejct
-  */
-removeGroup = (string) => {}
-/**
-  * get node by id
-  * @param {string} id  - node id
-  * @return {Node} - Node Object
-  */
+This API can not only create new groups, but also select multiple nodes into groups:
+
+<img width="650" src="https://img.alicdn.com/imgextra/i1/O1CN01S2n8Sy1aayJ8euH7n_!!6000000003347-1-tps-600-400.gif">
+
+### canvas.removeGroup (string | Group)
+
+*descripition* delete the group, but not delete the nodes inside
+
+*params*
+
+* `{string | Group} id` group id / Group instance
+
+*return*
+
+* `{Group}` delete Group instance
+
+```js
+removeGroup = (string | Group) => {}
+```
+
+### canvas.getNode (string)
+
+*descripition*：get node by id
+
+*params*
+
+* `{string} id` node id
+
+*return*
+
+* `{Node}` Node instance
+
+```js
 getNode = (string) => {}
+```
 
-/**
-  * add node function
-  * @param {object|Node} object  - node data or Node instance
-  */
-addNode = (object|Node) => {}
+### canvas.addNode (object|Node)
 
-/**
-  * add multiple nodes
-  * @param {array<object|Node>}  - node data or Node instance
-  */
+*descripition*：add node
+
+*params*
+
+* `{object|Node} object` node infomation；Node － Node Basic Class
+
+```js
+addNode = ([object](./node.md#node-attr) | Node) => {}
+```
+
+### canvas.addNodes (array< [object](./node.md#node-attr) | Node >)
+
+*descripition*：add multiple nodes
+
+*params*
+
+* `{array<object|Node>}` Node infomation；Node － Node Basic Class
+
+```js
 addNodes = (array<object|Node>) => {}
+```
 
-/**
-  * delete node by id
-  * @param nodeId string  - node id
-  */
+### canvas.removeNode (string)
+
+*descripition*：delete node
+
+*params*
+
+* `nodeId string`  - node id
+
+```js
 removeNode = (string) => {}
+```
 
-/**
-  * delete multiple nodes by ids
-  * @param nodeIds array  - node ids array
-  */
+### canvas.removeNodes (array)
+
+*descripition*：delete multiple node
+
+*params*
+
+* `nodeIds array`  - multiple node id
+
+```js
 removeNodes = (array) => {}
+```
 
-/**
-  * add edge function
-  * @param {object|Edge} object  - edge data or Edge instance
-  */
+### canvas.addEdge ( [object](./edge.md#edge-attr) | Edge )
+
+*descripition*：add edge
+
+*params*
+
+* `{object|Edge} object`  - Edge infomation；Edge － Edge Basic Class
+
+```js
 addEdge = (object|Edge) => {}
+```
 
-/**
-  * add multiple edges
-  * @param {array<object|Edge>}   - edge data or Edge instance
-  */
+### canvas.addEdges (array< [object](./edge.md#edge-attr) | Edge >)
+
+*descripition*：add multiple edge
+
+*params*
+
+* `{array<object | Edge>}`   - Edge infomation；Edge － Edge Basic Class
+
+```js
 addEdges = (array<object|Edge>) => {}
+```
 
-/**
-  * delete Edge by id or Edge Object
-  * @param {string or Edge} id or Edge  - Edge id or Edge Object
-  * @return {Edge} - Edge Object
-  */
+### canvas.removeEdge (param)
+
+*descripition*：delete edge by id or Edge instance
+
+*params*
+
+* `{string | Edge} id or Edge`  - edge id or Edge instance
+
+*return*
+
+* `{Edge}` - delete Edge instance
+
+```js
 removeEdge = (param) => {}
+```
 
-/**
-  * delete multiple Edges by ids or Edge Objects
-  * @param {array} string or Edge  - Edge ids array or Edge Objects array
-  * @return {array} Edge - Edge array
-  */
+### canvas.removeEdges (param)
+
+*descripition*：delete multiple edge by id or Edge instance
+
+*params*
+
+* `{array} string or Edge`  - edge id array or Edge instance array
+
+*return*
+
+* `{array} Edge` - delete Edge instance array
+
+```js
 removeEdges = (param) => {}
+```
 
-/**
-  * get neighbor edges by node id 
-  * @param {string} id  - node id
-  * @return {Edges} - neighbor Edges Object
-  */
+### canvas.getNeighborEdges (string)
+
+*descripition*：get neighbor edges by node id
+
+*params*
+
+* `{string} nodeId`  - node id
+
+*return*
+
+* `{Edges}` - Edge instance array
+
+```js
 getNeighborEdges = (string) => {}
+```
 
-/**
-  * get neighbor edges by endpoint id 
-  * @param {string} nodeId  - node id
-  * @param {string} endpointId  - endpoint id
-  * @return {Edges} - neighbor Edges Object
-  */
+### canvas.getNeighborEdgesByEndpoint (string, string)
+
+*descripition*：get neighbor edges by endpoint id
+
+*params*
+
+* `{string} nodeId`  - node id
+* `{string} endpointId`  - endpoint id
+
+*return*
+
+* `{Edges}` - Edge instance array
+
+```js
 getNeighborEdgesByEndpoint = (string, string) => {}
+```
 
-/**
-  * find N-level association nodes and edges
-  * @param {Object} options - parameters
-  * @param {Node} options.node - starting node
-  * @param {Endpoint} options.endpoint - starting endpoint, optional
-  * @param {String} options.type - find direction , optional value all\in\out，default value all , optional
-  * @param {Number} options.level - level，starting level is 0 level , default value Infinity
-  * @param {Function} options.iteratee - whether to continue traversing the decision function, return boolean value
-  * @returns {Object<nodes: Node, edges: Edge>} filteredGraph - lookup result
-  */
+### canvas.getNeighborNodesAndEdgesByLevel (options)
+
+*descripition*：find N-level association nodes and edges
+
+*params*
+
+  * `{Object} options` - parameters
+  * `{Node} options.node` - options.node - starting node
+  * `{Endpoint} options.endpoint` - options.endpoint - starting endpoint(Optional)
+  * `{String} options.type` - find direction , optional value all\in\out, default value `all` (Optional)
+  * `{Number} options.level` - level，starting level is 0 level , default value `Infinity`
+  * `{Function} options.iteratee` - whether to continue traversing the decision function, return boolean value
+
+*return*
+
+* `{Object<nodes: Node, edges: Edge>} filteredGraph` - filteredGraph - lookup result
+
+```js
 getNeighborNodesAndEdgesByLevel = (options) => {}
+```
 
-/**
-  * set z-index attribute to edge
-  * @param {Array<Edge>} edges - edges
-  * @param {number} zIndex - z-index value
-  */
+### canvas.setEdgeZIndex (edges, zIndex)
+
+*descripition*：set edge z-index attribute
+
+*params*
+
+* `{Array<Edge>} edges` - edges array
+* `{number} zIndex` - z-index
+
+```js
 setEdgeZIndex = (edges, zIndex) => {}
 ```
 
-### <a name='canvas-api-zoom-move'>缩放，平移</a>：
+### canvas.setZoomable (boolean, boolean)
+
+*descripition*：set whether the canvas can be zoomable
+
+*params*
+
+* `{true|false} boolean`  - whether the canvas can be zoomable
+* `{true|false} boolean`  - the direction of zoom。Now it defaults to the two finger direction of MAC, but it is opposite to the mouse wheel direction of Window. Default value: false. If true, the direction is opposite
 
 ```js
-/**
-  * set canvas zoomable
-  * @param {true|false} boolean 
-  * @param {true|false} boolean  - the direction of zoom。Now it defaults to the two finger direction of MAC, but it is opposite to the mouse wheel direction of Window. Default value: false. If true, the direction is opposite
-  */
-setZoomable = (boolean) => {}
+setZoomable = (boolean, boolean) => {}}
+```
 
-/**
-  * set canvas moveable
-  * @param {true|false} boolean
-  */
+### canvas.setMoveable (boolean)
+
+*descripition*： set whether the canvas can be movable by dragging blank area
+
+*params*
+
+* `{true|false} boolean`  - whether the canvas can be movable
+```js
 setMoveable = (boolean) => {}
+```
 
-/**
-  * set canvas offset
-  * @param {[x, y]} array
-  */
+### canvas.move  (postion)
+
+*descripition*：set canvas offset
+
+*params*
+
+* `{[x, y]} array`  - x,y
+
+```js
 move = (postion) => {}
+```
 
-/**
-  * set canvas zoom
-  * @param {scale} float  - zoom value between 0-1
-  * @param {function} callback  - zoom callback
-  */
-zoom = (postion) => {}
+### canvas.zoom (scale)
 
-/**
-  * get canvas zoom value
-  * @return {float} - zoom value (0-1)
-  */
+*descripition*：set canvas zoom value
+
+*params*
+
+* `{float} scale` - zoom value between 0-1
+* `{function} callback`  - zoom callback
+
+```js
+zoom = (scale) => {}
+```
+
+### canvas.getZoom ()
+
+*descripition*：get canvas zoom value
+
+*return*
+
+* `{float}` - zoom value between 0-1
+
+```js
 getZoom = () => {}
+```
 
-/**
-  * get canvas offset value
-  * @return {[x, y]} - offset value
-  */
+### canvas.getOffset ()
+
+*descripition*：get canvas offset value which by dragging canvas
+
+*return*
+
+* `{[x, y]}` - offset value
+
+```js
 getOffset = () => {}
+```
 
-/**
-  * get canvas origin reference point
-  * @return {[x, y]} - canvas origin reference point (percentage)
-  */
+### canvas.getOrigin ()
+
+*descripition*：get the center point of the canvas scaling, generally following the position of the mouse
+
+*return*
+
+* `{[x, y]}` - the center point of the canvas's zoom (percentage)
+
+```js
 getOrigin = () => {}
+```
 
-/**
-  * set canvas origin reference point
-  * @param {[x, y]} array  - canvas origin reference point (percentage)
-  */
+### canvas.setOrigin ([x ,y])
+
+*descripition*：set the center point of the canvas zoom, generally follow the position of the mouse
+
+*params*
+
+* `{[x, y]} array` - the center point of the canvas's zoom (percentage)
+
+```js
 setOrigin = ([x ,y]) => {}
 ```
 
-### <a name='canvas-api-focus'>fit canvas and focus part nodes</a>：
+### canvas.focusNodeWithAnimate (string, type, options, callback)
+
+*descripition*：focus on some node or group
+
+*params*
+
+* `{string} nodeId/groupId`  - node/group id
+* `{string} type`  - type, `node` or `group`
+* `{object} options {offset: [0,0]}`  - focus attribute , such as offset
+* `{function} callback`  - finish callabck
 
 ```js
-/**
-  * focus on some node/ group
-  * @param {string/function} nodeId/groupId or filter  - node/group id or filter
-  * @param {string} type  - type (node or group)
-  * @param {object} options {offset: [0,0]}  - focus attribute , such as offset
-  * @param {function} callback  - Focused callback
-  */
 focusNodeWithAnimate = (string, type, options, callback) => {}
+```
 
-/**
-  * focus on multiple node/ group
-  * @param {object} {nodes: [], groups: []}  - node and group ids array
-  * @param {array} type  - type array (node or group)
-  * @param {object} options {offset: [0,0]}  - focus attribute , such as offset
-  * @param {function} callback  - Focused callback
-  */
+### canvas.focusNodesWithAnimate (objs, type, options, callback)
+
+*descripition*：focus on multiple node/ group
+
+*params*
+
+* `{object} {nodes: [], groups: []}`  - node/group id array
+* `{array} type`  - type, `node` or `group`
+* `{object} options {offset: [0,0]}`  - focus attribute , such as offset
+* `{function} callback`  - finish callabck
+
+```js
 focusNodesWithAnimate = (objs, type, options, callback) => {}
+```
 
-/**
-  * centered canvas, show all nodes and groups in canvas, it will automatically adjust the canvas position and zoom
-  * @param {object} options {offset: [0,0]}  - focus attribute , such as offset
-  * @param {function} callback  - Focused callback
-  */
+### canvas.focusCenterWithAnimate (options, callback)
+
+*descripition*：focus on the entire canvas and automatically adjust the position and scale of the canvas
+
+*params*
+
+* `{object} options {offset: [0,0]}`  - focus attribute , such as offset
+* `{function} callback`  - finish callabck
+
+```js
 focusCenterWithAnimate = (options, callback) => {}
 ```
 
-### <a name='canvas-api-redo-undo'>redo & undo</a>：
+<img width="650" src="https://img.alicdn.com/imgextra/i2/O1CN01zrkUqk1SP34Sup0vt_!!6000000002238-1-tps-1661-824.gif">
+
+### canvas.redo ()
+
+*descripition*：redo
 
 ```js
-/**
-  * redo action
-  */
-redo = (options) => {}
+redo = () => {}
+```
 
-/**
-  * rollback action
-  */
-undo = (options) => {}
+### canvas.undo ()
 
-/**
-  * add the topmost element to the action queue
-  * @param {Object} options - params
-  * @param {String} options.type - element type
-  * @param {Object} options.data - element data
-  */
+*descripition*：undo
+
+```js
+undo = () => {}
+```
+
+### canvas.pushActionQueue (options)
+
+*descripition*：add the topmost element to the action queue (undo / redo queue)
+
+*params*
+* `{Object} options` - params
+* `{String} options.type` - element type
+* `{Object} options.data` - element data
+
+```js
 pushActionQueue = (options) => {}
+```
 
-/**
-  * remove topmost element from action queue
-  */
+### canvas.popActionQueue (options)
+
+*descripition*：delete the topmost element from the action queue (undo / redo queue)
+
+```js
 popActionQueue = (options) => {}
+```
 
-/**
-  * clear action queue
-  */
+### canvas.clearActionQueue (options)
+
+*descripition*：delete all elements from the action queue (undo / redo queue)
+
+```js
 clearActionQueue = (options) => {}
 ```
 
-### <a name='canvas-api-coordinate'>coordinate conversion and offset</a>：
-``` js
-/**
-  * convert the coordinates from screen to canvas
-  * @param {array[number]} coordinates - origin coordinates([x,y])
-  * @return {number} - converted coordinates
-  */
-terminal2canvas = (coordinates) => {}
+### canvas.terminal2canvas (coordinates)
 
-/**
-  * convert the coordinates from canvas to screen
-  * @param {array[number]} coordinates - origin coordinates([x,y])
-  * @return {number} - converted coordinates
-  */
+*descripition*：onvert the coordinates from screen to canvas
+
+*params*
+
+* `{array<number>} coordinates` - origin coordinates([x,y])
+
+*return*
+
+* `{number}` - converted coordinates
+
+```js
+terminal2canvas = (coordinates) => {}
+```
+
+### canvas.canvas2terminal (coordinates)
+
+*descripition*：convert the coordinates from canvas to screen
+
+*params*
+
+* `{array<number>} coordinates` - origin coordinates([x,y])
+
+*return*
+
+* `{number}` - converted coordinates
+
+
+```js
 canvas2terminal = (coordinates) => {}
 ```
 
-* **canvas2terminal**，convert the coordinates from canvas to screen
-  * As shown in the figure, the canvas is scaled, and the coordinates after the movement do not match the coordinates of the original canvas. This method is needed to convert. Special Note: Users who drag and drop nodes pay attention to these two `e.clientX` and `e.clientY`, and need to call this method to convert.
-<img width="400" src="http://img.alicdn.com/tfs/TB1lWIAFHvpK1RjSZPiXXbmwXXa-973-850.jpg">
+*descripition*
 
-* **terminal2canvas**，convert the coordinates from screen to canvas
-  * `canvas2terminal` in contrast
+* As shown in the figure, the canvas is scaled, and the coordinates after the movement do not match the coordinates of the original canvas. This method is needed to convert. Special Note: Users who drag and drop nodes pay attention to these two `e.clientX` and `e.clientY`, and need to call this method to convert.
 
-### <a name='canvas-api-selected'>mutiply selection</a>：
+<img width="650" src="http://img.alicdn.com/tfs/TB1lWIAFHvpK1RjSZPiXXbmwXXa-973-850.jpg">
+
+
+### canvas.setSelectMode (boolean, contents , selecMode)
+
+*descripition*: set select mode: Note that select mode and normal drag canvas mode are mutually exclusive and cannot be set at the same time
+
+*params*
+
+* `{true|false} boolean`  - enable multiple select
+* `{array} contents` - accept select contents(node/endpoint/edge, default `node`)
+* `{string} selecMode` - accept selec mode(include|touch|senior),default 'include',include:You can select only if the element all included; touch: You can select only if you touch the element; senior: needs to include all from left to right,select only touch from right to left)
 
 ```js
-/**
-  * set select mode
-  * @param {true|false} boolean enable multiple select
-  * @param {array} contents - accept select contents(node/endpoint/edge, default node)
-  * @param {string} selecMode - accept selec mode(include|touch|senior),default 'include',include:You can select only if the element all included; touch: You can select only if you touch the element; senior: needs to include all from left to right,select only touch from right to left)
-  */
-setSelectMode = (boolean, contents, selecMode) => {}
-
-/**
-  * get union by name
-  * @param {name} string  - union name
-  */
-getUnion = (name) => {}
-
-/**
-  * get all unions
-  */
-getAllUnion = () => {}
-
-/**
-  * add some union or add union item , used in multiple selection mode
-  * @param {name} string  - union name
-  * @param {obj} object  - union item
-  */
-add2Union = (name, obj) => {}
-
-/**
-  * remove union by name
-  * @param {name} string  - union name
-  */
-removeUnion = (name) => {}
-
-/**
-  * remove all union
-  */
-removeAllUnion = () => {}
+setSelectMode = (boolean, contents , selecMode) => {}
 ```
 
-* **add2Union**
-  * `name`，union name。add union if it does not exist , add union item if it exists.
-  * `object`，union item
+### canvas.getUnion (name)
+
+*descripition*：get union by name
+
+*params*
+
+* `{name} string`  - union name
 
 ```js
-this.canvas.add2Union('my union name', {
-  nodes: []     // Node object or nodeId
-  groups: []    // Group object or groupId
-  edges: []     // Edge object or edgeId
-  endpoints: [] // Endpoint object
+getUnion = (name) => {}
+```
+
+### canvas.getAllUnion ()
+
+*descripition*：get all unions
+
+```js
+getAllUnion = () => {}
+```
+
+### canvas.add2Union (name, obj)
+
+*descripition*：add some union or add union item , used in multiple selection mode
+
+*params*
+
+* `{name} string`  - union name.If not exist, add a new union; if it already exists, add item to union
+* `{obj} object`  - union item
+
+```js
+add2Union = (name, obj) => {}
+
+this.canvas.add2Union('my union', {
+  nodes: []     // Node instance or nodeId
+  groups: []    // Group instance or groupId
+  edges: []     // Edge instance or edgeId
+  endpoints: [] // Endpoint instance
 });
 ```
 
-### <a name='canvas-api-events'>events</a>：
+### canvas.removeUnion (name)
+
+*descripition*：remove union
+
+*params*
+
+* `{name} string`  - union name
+
+```js
+removeUnion = (name) => {}
+```
+
+### canvas.removeAllUnion ()
+
+*descripition*：remove all union
+
+```js
+removeAllUnion = () => {}
+```
+
+<br>
+<br>
+
+## Events
 
 ```js
 let canvas = new Canvas({...});
 canvas.on('type key', (data) => {
-  //data 
+  //data
 });
 ```
 
-| key | describe | return 
-| :------ | :------ | :------
-| system.canvas.click | click on the blank space of the canvas event | -
-| system.canvas.zoom | canvas zoom event | -
-| system.nodes.delete | delete node event | -
-| system.node.move | move node event | -
-| system.nodes.add | add multiple nodes event | -
-| system.links.delete | delete edge event | -
-| system.link.connect | connect edge event | -
-| system.link.reconnect | edge reconnect event | -
-| system.link.click | click edge event | -
-| system.group.delete | delete group event | -
-| system.group.move | move group event | -
-| system.group.addMembers | add node to group event | -
-| system.group.removeMembers | delete node from group event | -
-| system.multiple.select | multiple select callback event | -
-| system.drag.start | drag start event | -
-| system.drag.move | drag move event | -
-| system.drag.end | drag end event | -
+*event key*
+
+* `system.canvas.click` click on the blank space of the canvas event
+* `system.canvas.zoom`	canvas zoom event
+* `system.nodes.delete`	delete node event
+* `system.node.move`	move node event
+* `system.nodes.add`	add multiple nodes event
+* `system.links.delete`	delete edge event
+* `system.link.connect`	connect edge event
+* `system.link.reconnect`	edge reconnect event
+* `system.link.click`	click edge event
+* `system.group.add`	add group event
+* `system.group.delete`	delete group event
+* `system.group.move`	move group event
+* `system.group.addMembers`	add node to group event
+* `system.group.removeMembers`	delete node from group event
+* `system.multiple.select`	multiple select callback event
+* `system.drag.start`	drag start event
+* `system.drag.move`	drag move event
+* `system.drag.end`	drag end event
 
 ```js
 /**
@@ -485,59 +825,24 @@ emit = (string, obj) => {}
 on = (string, callback) => {}
 ```
 
-### <a name='canvas-api-other'>other api</a>：
+<br>
+<br>
+
+## Other API
+
+### canvas.setGridMode (show, options)
+
+*descripition*：set the grid background
+
+*params*
+
+* `{true|false} boolean`  - whether to open
+* `{array} options` - parameters for grid background
 
 ```js
-/**
-  * set the grid layout
-  * @param {true|false} boolean  - whether to open
-  * @param {array} options - parameters for grid layout
-  */
-setGirdMode = (show, options) => {}
+setGridMode = (show, options) => {}
 
-/**
-  * automatically align nodes / groups on the canvas(must be effective under the grid layout)
-  */
-justifyCoordinate = () => {}
-
-
-/**
-  * set guide line
-  * @param {true|false} boolean  - whether to open
-  * @param {array} options - parameters for guide line
-  */
-setGuideLine = (show, options) => {}
-
-/**
-  * set minimap
-  * @param {true|false} boolean  - whether to open
-  * @param {Object} please  refer to the minimap section for details
-  */
-setMinimap = (show, options) => {}
-
-/**
-  * save canvas to iamge
-  * @param {object=} options - saved image parameters
-  * @param {string=} options.type - image type (png/jpeg/svg , default png) , optional
-  * @param {number=} options.quality - image quality (0~1 , default 1) , optional
-  * @param {number=} options.width - image width (default canvas width) , optional
-  * @param {number=} options.height - image height (default canvas height) , optional
-  * @return {Promise}
-  */
-save2img = (options) => {}
-
-/**
-  * need to update location when root canvas moves or size changes
-  */
-updateRootResize = () => {}
-```
-
-* **setGirdMode**, Set the grid layout
-  * `show`，whether to open
-  * `options`，set the parameters of the grid layout ,  please look at the following comment
-
-```js
-this.canvas.setGirdMode(true, {
+this.canvas.setGridMode(true, {
   isAdsorb: false,         // Whether to automatically adsorb, default value is false
   theme: {
     shapeType: 'line',     // show type，support line & circle
@@ -552,11 +857,67 @@ this.canvas.setGirdMode(true, {
 });
 ```
 
-* **setGuideLine**, Set the guide line
-  * `show`, whether to open
-  * `options`, the parameters of the guide line, please lookup the following comment
+### canvas.setMinimap = (show, options)
+
+*descripition*：enable minimap
+
+*params*
+
+* `{true|false} boolean`  - whether to enable minimap
+* `{Object}` please  refer to the minimap document for details
 
 ```js
+setMinimap = (show, options) => {}
+```
+
+### canvas.save2img (options)
+
+*descripition*：save canvas to iamge
+
+*params*
+
+* `{object} options` - saved image parameters (Optional)
+* `{string} options.type` - image type (png/jpeg/svg , default png) , (Optional)
+* `{number} options.quality` - image quality (0~1 , default 1) , (Optional)
+* `{number} options.width` - image width (default canvas width) , (Optional)
+* `{number} options.height` - image height (default canvas height) , (Optional)
+
+*return*
+
+* `{Promise}`
+
+```js
+save2img = (options) => {}
+
+this.canvas.save2img({type: 'png', width: 1920, height: 1080, quality: 1})
+  .then(dataUrl => {
+    var link = document.createElement('a');
+    link.download = 'XXX.png';
+    link.href = dataUrl;
+    link.click();
+  });
+```
+
+### canvas.justifyCoordinate ()
+
+*descripition*：automatically align nodes / groups on the canvas(must be effective under the grid background)
+
+```js
+justifyCoordinate = () => {}
+```
+
+### canvas.setGuideLine (show, options)
+
+*descripition*：set guide line
+
+*params*
+
+* `{true|false} boolean`  - whether to open
+* `{array} options` - parameters for guide line
+
+```js
+setGuideLine = (show, options) => {}
+
 this.canvas.setGuideLine(true, {
   limit: 1,             // limit guide line number
   theme: {
@@ -565,20 +926,11 @@ this.canvas.setGuideLine(true, {
   }
 });
 ```
- 
-* **save2img**，save canvas to image
-  * `options`，parameter
-  * `options.type`，image type 
-  * `options.quality`，image quality
-  * `options.width`，image width
-  * `options.height`，image height
+
+### canvas.updateRootResize ()
+
+*descripition*：need to update location when root canvas moves or size changes
 
 ```js
-this.canvas.save2img({type: 'png', width: 1920, height: 1080, quality: 1})
-  .then(dataUrl => {
-    var link = document.createElement('a');
-    link.download = 'XXX.png';
-    link.href = dataUrl;
-    link.click();
-  });
+updateRootResize = () => {}
 ```

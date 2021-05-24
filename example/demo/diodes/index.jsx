@@ -1,15 +1,13 @@
-'use strict';
 import React, {Component} from 'react';
-require('./index.less');
+import ReactDOM from 'react-dom';
+import {Canvas} from 'butterfly-dag';
 
-// const Canvas = require('../../../index.js').Canvas;
-import { Canvas } from 'butterfly-dag';
-const mockData = require('./data');
+import mockData from './data';
+
+import 'butterfly-dag/dist/index.css';
+import './index.less';
 
 class Diodes extends Component {
-  constructor() {
-    super();
-  }
   componentDidMount() {
     let root = document.getElementById('dag-canvas');
     this.canvas = new Canvas({
@@ -21,16 +19,14 @@ class Diodes extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'Manhattan',
+          shapeType: 'Manhattan',
           defaultAnimate: true
         }
       }
     });
     this.canvas.draw(mockData);
-    this.canvas.on('events', (data) => {
-      console.log(data);
-    });
   }
+
   render() {
     return (
       <div className='diodes-page'>
@@ -41,4 +37,4 @@ class Diodes extends Component {
   }
 }
 
-module.exports = Diodes;
+ReactDOM.render(<Diodes />, document.getElementById('root'));
