@@ -33,6 +33,11 @@ const routes = [
     component: /*userEndpoint*/ () => import( /* webpackChunkName: "UserEndpoint" */ './page/userEndpoint/user-endpoint.vue'),
     meta: { title: '自定义锚点用法' },
   },
+  {
+    path: '/tree',
+    component: /*tree*/ () => import( /* webpackChunkName: "tree" */ './page/treeDemo/index.vue'),
+    meta: { title: 'tree' },
+  }
 ];
 
 const router = new Router({
