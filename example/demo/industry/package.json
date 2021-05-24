@@ -1,0 +1,13 @@
+{
+  "name": "industry",
+  "cn_name": "工业制作顺序图",
+  "description": "a dag to show to how to make a industrial production sequence diagram",
+  "cn_description": "一个工业制作顺序图",
+  "dependencies": {
+    "butterfly-dag": "*",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "jquery": "*",
+    "lodash": "*"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "flow",
+  "cn_name": "流程图",
+  "description": "a dag to display a flow",
+  "cn_description": "用于展示流程的DAG图",
+  "dependencies": {
+    "butterfly-dag": "*",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "jquery": "*",
+    "lodash": "*",
+    "antd": "^3.0.0"
+  }
+}

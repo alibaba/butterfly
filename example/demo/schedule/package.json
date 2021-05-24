@@ -1,0 +1,13 @@
+{
+  "name": "schedule",
+  "cn_name": "清单图",
+  "description": "a dag to show to how to make a schedule",
+  "cn_description": "一个清单图",
+  "dependencies": {
+    "butterfly-dag": "*",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "jquery": "*",
+    "lodash": "*"
+  }
+}

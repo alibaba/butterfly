@@ -1,11 +1,10 @@
-'use strict';
-
 import Node from './node';
-import BaseGroup from './group';
 import Edge from './edge';
+import BaseGroup from './group';
 import BaseEndpoint from './endpoint';
 
-const data={
+
+const data = {
   nodes: [{
     id: '0',
     top: 100,
@@ -257,6 +256,6 @@ const data={
     type: 'endpoint',
     Class: Edge
   }]
-}
+};
 
 export default data;

@@ -1,7 +1,8 @@
-'use strict';
 import React, {Component} from 'react';
-import { Canvas } from 'butterfly-dag';
-import mockData from './data';
+import ReactDOM from 'react-dom';
+import {Canvas} from 'butterfly-dag';
+
+import mockData from './data.js';
 
 import './index.less';
 import 'butterfly-dag/dist/index.css';
@@ -10,6 +11,7 @@ class ConcentLayout extends Component {
     super();
     this.canvas = null;
   }
+
   componentDidMount() {
     let root = document.getElementById('dag-canvas');
     this.canvas = new Canvas({
@@ -31,6 +33,7 @@ class ConcentLayout extends Component {
     });
     this.canvas.draw(mockData);
   }
+
   render() {
     return (
       <div className='concentLayout-page'>
@@ -41,4 +44,4 @@ class ConcentLayout extends Component {
   }
 }
 
-export default ConcentLayout;
+ReactDOM.render(<ConcentLayout />, document.getElementById('root'));

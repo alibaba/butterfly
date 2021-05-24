@@ -1,10 +1,9 @@
-'use strict';
-
 import BaseGroup from './group';
 import BaseNode from './node';
 import BaseEdge from './edge';
 import BaseEndpoint from './endpoint';
-const data = {
+
+export default {
   nodes: [{
     id: '0',
     top: 160,
@@ -15,9 +14,9 @@ const data = {
     text: 'ATOMIC',
     Class: BaseNode,
     endpoints: [{
-      id: "right",
+      id: 'right',
       orientation: [1, 0],
-      pos: [0 ,0.5],
+      pos: [0, 0.5],
       Class: BaseEndpoint
     }]
   }, {
@@ -31,19 +30,19 @@ const data = {
     text: 'ATOMIC',
     Class: BaseNode,
     endpoints: [{
-      id: "left",
+      id: 'left',
       orientation: [-1, 0],
-      pos: [0 ,0.5],
+      pos: [0, 0.5],
       Class: BaseEndpoint
     }, {
-      id: "right_1",
+      id: 'right_1',
       orientation: [1, 0],
-      pos: [0 ,0.33],
+      pos: [0, 0.33],
       Class: BaseEndpoint
     }, {
-      id: "right_2",
+      id: 'right_2',
       orientation: [1, 0],
-      pos: [0 ,0.66],
+      pos: [0, 0.66],
       Class: BaseEndpoint
     }]
   }, {
@@ -56,14 +55,14 @@ const data = {
     text: 'ATOMIC',
     Class: BaseNode,
     endpoints: [{
-      id: "left_1",
+      id: 'left_1',
       orientation: [-1, 0],
-      pos: [0 ,0.33],
+      pos: [0, 0.33],
       Class: BaseEndpoint
     }, {
-      id: "left_2",
+      id: 'left_2',
       orientation: [-1, 0],
-      pos: [0 ,0.66],
+      pos: [0, 0.66],
       Class: BaseEndpoint
     }]
   }],
@@ -74,19 +73,19 @@ const data = {
     text: 'COUPLED',
     Class: BaseGroup,
     endpoints: [{
-      id: "left",
+      id: 'left',
       orientation: [-1, 0],
-      pos: [0 ,0.5],
+      pos: [0, 0.5],
       Class: BaseEndpoint
     }, {
-      id: "right_1",
+      id: 'right_1',
       orientation: [1, 0],
-      pos: [0 ,0.33],
+      pos: [0, 0.33],
       Class: BaseEndpoint
     }, {
-      id: "right_2",
+      id: 'right_2',
       orientation: [1, 0],
-      pos: [0 ,0.66],
+      pos: [0, 0.66],
       Class: BaseEndpoint
     }]
   }],
@@ -139,5 +138,4 @@ const data = {
     label: [undefined, 'B'],
     Class: BaseEdge
   }]
-}
-export default data;
+};
