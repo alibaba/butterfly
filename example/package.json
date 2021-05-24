@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server",
     "eslint": "eslint . --fix",
-    "build": "NODE_ENV=production webpack"
+    "build": "NODE_ENV=production webpack && node build/patch"
   },
   "eslintConfig": {
     "extends": "aliyun"

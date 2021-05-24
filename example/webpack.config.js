@@ -69,8 +69,8 @@ module.exports = {
     app: './index.jsx'
   },
   output: {
-    filename: '[name].js',
-    chunkFilename: '[name].js',
+    filename: '[name].[hash].js',
+    chunkFilename: '[name].[hash].js',
     publicPath: publicPath
   },
   resolve: {
