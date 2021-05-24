@@ -1,28 +1,14 @@
+const _ = require('lodash');
 const dagreLayout = require("./dagreLayout");
 
+// group存在的情况
 // STEP1: 找出单独节点&group节点， 单独布局
 // STEP2: group内的节点单独布局
-function dagreCompound (params) {
-  console.log('init params: ', params);
+const getNodesPosition = (params, basicTl) => {
+  console.log('params: ', params);
   // 拿到坐标， 重组data
   const {data: initData, ranksep, nodesep} = params;
 
-  if (_.isEmpty(initData.groups)) {
-    dagreLayout(params);
-    return;
-  }
-
-  // group存在的情况
-  // 判断是不是嵌套布局
-  // const groupInGroups = initData.groups.filter(v => v.group);
-
-  // if (!_.isEmpty(groupInGroups)) {
-  //   groupInGroups.forEach(inGroup => {
-  //     // 找出嵌套在外层的group
-  //     const outGroup = initData.groups.find(initG => initG.id === inGroup.group);
-
-  //   });
-  // }
   // step1: 找出单独节点&group节点， 单独布局
   const aloneNodes = initData.nodes.filter(v => !v.group);
 
@@ -42,7 +28,7 @@ function dagreCompound (params) {
 
   // 拿到group节点坐标
   dagreLayout(groupData);
-  console.log('groupData: ', groupData);
+
   // group坐标赋值
   (params.data.groups || []).forEach(initGroup => {
     const item = groupData.data.nodes.find(n => n.id === initGroup.id);
@@ -51,8 +37,16 @@ function dagreCompound (params) {
       return;
     }
 
-    initGroup.top = item.top;
-    initGroup.left = item.left;
+    let basic = {
+      top: 0,
+      left: 0
+    }
+    if (basicTl) {
+      basic = basicTl;
+    }
+
+    initGroup.top = item.top + basic.top;
+    initGroup.left = item.left + basic.left;
   });
 
   // 修改单节点的坐标
@@ -64,8 +58,17 @@ function dagreCompound (params) {
       return;
     }
 
-    params.data.nodes[nodeIndex].top = item.top;
-    params.data.nodes[nodeIndex].left = item.left;
+
+    let basic = {
+      top: 0,
+      left: 0
+    }
+    if (basicTl) {
+      basic = basicTl;
+    }
+
+    params.data.nodes[nodeIndex].top = item.top + basic.top;
+    params.data.nodes[nodeIndex].left = item.left + basic.left;
 
   });
 
@@ -83,7 +86,7 @@ function dagreCompound (params) {
       }
     };
     dagreLayout(inGroupDatas);
-    console.log('inGroupDatas: ', idx, inGroupDatas);
+
     inGroupDatas.data.nodes.forEach(node => {
       const nodeIndex = params.data.nodes.findIndex(f => f.id === node.id);
 
@@ -95,6 +98,44 @@ function dagreCompound (params) {
       params.data.nodes[nodeIndex].left = node.left;
     });
   });
+
+  // 嵌套的groups
+  let groupIds = [];
+
+  initData.groups.forEach(g => {
+    if (g.group) {
+      groupIds.push(g.group);
+    }
+  });
+  groupIds = _.uniq(groupIds);
+  console.log('groupIds: ', groupIds);
+
+  if (!_.isEmpty(groupIds)) {
+    const inGroupNodes = {};
+    groupIds.forEach(gId => {
+      // 找出嵌套在内层的group与节点
+      const inGroups = initData.groups.filter(inG => inG.group === gId);
+      // 需要删除group节点的group参数， 不然会死循环
+      inGroups.forEach(g => delete g.group);
+
+      const inGroupsIds = inGroups.map(v => v.id);
+      const inNodes = initData.nodes.filter(inN => [gId, ...inGroupsIds].includes(inN.group));
+
+      inGroupNodes[gId] = {
+        inGroups, inNodes
+      }
+      const basicTl = params.data.groups.find(v => v.id === gId);
+
+      getNodesPosition({
+        ...params,
+        data: {
+          nodes: inNodes,
+          groups: inGroups,
+          edges: initData.edges
+        }
+      }, basicTl);
+    });
+  }
 };
 
 /**
@@ -158,4 +199,16 @@ const getInGroupNodesEdges = (data, groupId) => {
   return _.uniqWith(nodeEdges, _.isEqual);
 };
 
-module.exports = dagreCompound;
+function dagreGroupLayout(params) {
+  const {data} = params;
+
+  if (_.isEmpty(data.groups)) {
+    dagreLayout(params);
+    return;
+  }
+
+  getNodesPosition(params);
+  console.log('params: ', params);
+};
+
+module.exports = dagreGroupLayout;

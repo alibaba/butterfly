@@ -17,7 +17,10 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Butterfly from 'butterfly-dag';
 import ButterflyReact from 'butterfly-react';
-import 'butterfly-dag/dist/index.css';
+import LocalButterfly from '../../../../../index';
+
+// import 'butterfly-dag/dist/index.css';
+import '../../../../../src/index.less';
 
 // ================= 执行依赖 =================
 
@@ -37,6 +40,7 @@ const globalCache = {
   antd: Antd,
   'prop-types': PropTypes,
   lodash: _,
+  'local::butterfly-dag': LocalButterfly
 };
 
 

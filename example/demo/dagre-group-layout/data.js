@@ -48,7 +48,7 @@ const nodesAndGroupData = {
     {
       id: '4',
       group: 'group1',
-      label: '字符串处理',
+      label: '字符串4',
       className: 'icon-background-color',
       iconType: 'icon-shujuji',
       Class: Node,
@@ -61,7 +61,7 @@ const nodesAndGroupData = {
     {
       id: '5',
       group: 'group1',
-      label: '字符串处理',
+      label: '字符串5',
       className: 'icon-background-color',
       iconType: 'icon-shujuji',
       Class: Node,
@@ -74,7 +74,7 @@ const nodesAndGroupData = {
     {
       id: '6',
       group: 'group2',
-      label: '字符串处理2-1',
+      label: '字符串6',
       className: 'icon-background-color',
       iconType: 'icon-shujuji',
       Class: Node,
@@ -87,7 +87,7 @@ const nodesAndGroupData = {
     {
       id: '7',
       group: 'group2',
-      label: '字符串处理2-2',
+      label: '字符串7',
       className: 'icon-background-color',
       iconType: 'icon-shujuji',
       Class: Node,
@@ -498,6 +498,19 @@ const groupInGroupData = {
         orientation: [0, -1],
         pos: [0.5, 0]
       }]
+    },
+    {
+      id: '6',
+      group: 'group3',
+      label: '字符串处理',
+      className: 'icon-background-color',
+      iconType: 'icon-shujuji',
+      Class: Node,
+      endpoints: [{
+        id: 'top',
+        orientation: [0, -1],
+        pos: [0.5, 0]
+      }]
     }
   ],
   edges: [
@@ -541,6 +554,16 @@ const groupInGroupData = {
       type: 'endpoint',
       arrowPosition: 0.5,
       Class: Edge
+    },
+    {
+      source: 'bottom',
+      target: 'top',
+      sourceNode: '3',
+      targetNode: '6',
+      arrow: true,
+      type: 'endpoint',
+      arrowPosition: 0.5,
+      Class: Edge
     }
   ],
   groups: [{
@@ -549,7 +572,7 @@ const groupInGroupData = {
       title: '测试1'
     },
     draggable:true,
-    width: 300,
+    width: 400,
     height: 200,
     resize: true
   }, {
@@ -559,7 +582,7 @@ const groupInGroupData = {
       title: '测试2'
     },
     draggable:true,
-    width: 300,
+    width: 400,
     height: 200,
     resize: true
   }, {
@@ -568,10 +591,10 @@ const groupInGroupData = {
       title: '测试3'
     },
     draggable:true,
-    width: 800,
+    width: 600,
     height: 400,
     resize: true
   }]
 }
 
-module.exports = groupsData;
+module.exports = groupInGroupData;

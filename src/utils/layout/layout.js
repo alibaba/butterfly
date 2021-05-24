@@ -13,7 +13,7 @@ import forceLayout from './forceLayout.js'
 import concentLayout from './concentLayout.js'
 import dagreLayout from './dagreLayout.js';
 import radial from './radial/radial.js';
-import dagreCompound from './dagreCompound.js';
+import dagreGroupLayout from './dagreGroupLayout.js';
 
 
 // 离散树形布局
@@ -62,5 +62,5 @@ export default {
   fruchterman,
   circleLayout: Layout.circleLayout,
   radial,
-  dagreCompound
+  dagreGroupLayout
 }
