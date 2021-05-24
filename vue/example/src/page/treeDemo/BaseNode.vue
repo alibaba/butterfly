@@ -50,7 +50,7 @@ export default {
     handleOperateChange() {},
     handleTypeChange() {},
     deleteItem() {
-      this.$emit('del', this.itemData.id)
+      this.$emit('del', this.itemData.id);
     },
   },
 };

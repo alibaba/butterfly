@@ -123,15 +123,15 @@ export default {
         desc: `请选择指标`,
         endpoints,
       });
-      // this.mockData.edges.push({
-      //   id: parentId + '-' + id,
-      //   source: 'bottom',
-      //   target: 'left',
-      //   sourceNode: '0',
-      //   targetNode: id,
-      //   type: 'endpoint',
-      // });
-      this.canvasRef.redraw();
+      this.mockData.edges.push({
+        id: parentId + '-' + id,
+        source: 'bottom',
+        target: 'left',
+        sourceNode: '0',
+        targetNode: id,
+        type: 'endpoint',
+      });
+      // this.canvasRef.redraw();
     },
     del(id) {
       // 删除节点
@@ -142,7 +142,7 @@ export default {
         const item = this.mockData.edges[index];
         if (item.targetNode === id || item.sourceNode === id) {
           this.mockData.edges.splice(index, 1);
-          index--
+          index--;
         }
       }
       this.canvasRef.redraw();

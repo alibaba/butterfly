@@ -1,4 +1,4 @@
-import BaseNode from './BaseNode.vue'
+import BaseNode from './BaseNode.vue';
 export const endpoints = [
   {
     id: 'left',
@@ -10,7 +10,7 @@ export const endpoints = [
     orientation: [0, 1],
     pos: [0.45, 0]
   }
-]
+];
 
 const mockData = {
   nodes: {
@@ -96,5 +96,5 @@ const mockData = {
       type: 'endpoint',
     },
   ],
-}
-export default mockData
+};
+export default mockData;

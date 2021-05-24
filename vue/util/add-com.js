@@ -74,8 +74,8 @@ import _ from 'lodash';
     // 暂时不用指向parent
     // nodeCon.$parent = parent
     // 打通组件的$emit事件传输
-    nodeCon._events = parent._events
-    nodeCon.$mount()
+    nodeCon._events = parent._events;
+    nodeCon.$mount();
     addUserEndpoint(canvasNode,nodeCon._vnode);
     
     return nodeCon;
