@@ -3,6 +3,10 @@ const regexp = /require\("(.+)"\)/g;
 const gatherDeps = (code) => {
   const result = code.match(regexp);
 
+  if (!result) {
+    return [];
+  }
+
   const deps = result.map(item => {
     const match = item.match(/require\("(.+)"\)/);
 

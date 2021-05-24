@@ -63,16 +63,22 @@ if (process.env.NODE_ENV === 'production') {
   generate();
 }
 
+let output = {
+  filename: '[name].[hash].js',
+  chunkFilename: '[name].[hash].js',
+  publicPath: publicPath
+};
+
+if (process.env.NODE_ENV !== 'production') {
+  output.chunkFilename = output.filename = '[name].js';
+}
+
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
   entry: {
     app: './index.jsx'
   },
-  output: {
-    filename: '[name].[hash].js',
-    chunkFilename: '[name].[hash].js',
-    publicPath: publicPath
-  },
+  output: output,
   resolve: {
     modules: [
       path.resolve(process.cwd(), 'node_modules'),
