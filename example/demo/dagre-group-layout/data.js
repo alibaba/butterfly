@@ -597,4 +597,4 @@ const groupInGroupData = {
   }]
 }
 
-module.exports = groupInGroupData;
+module.exports = nodesAndGroupData;

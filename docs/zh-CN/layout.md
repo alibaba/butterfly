@@ -59,6 +59,38 @@ this.canvas = new Canvas({
 | ranksep | Number | false | 50 |  | 层间距（px）。在rankdir 为 'TB' 或 'BT' 时是竖直方向相邻层间距；在rankdir 为 'LR' 或 'RL' 时代表水平方向相邻层间距
 | controlPoints | Boolean | false | false | |  是否保留布局连线的控制点
 
+
+## Dagre Group Layout
+
+&nbsp;&nbsp;&nbsp;&nbsp;Dagre 是适合有向流程图的布局算法。其根据图数据中边的方向，自动计算节点的层级及位置。
+
+#### 代码演示
+
+``` js
+this.canvas = new Canvas({
+  layout: {
+    type: 'dagreGroupLayout',
+    options: {
+      rankdir: 'TB',
+      nodesep: 40,
+      ranksep: 40,
+      controlPoints: false,
+    },
+  }
+});
+```
+
+#### API
+
+
+| 名称 | 类型 | 是否必须 | 默认值 | 可选值 | 说明  
+| :------ | :------ | :------ | :------ | :------ | :------
+| rankdir | String | false | TB| "TB/BT/LR/RL"  |布局的方向。T：top（上）；B：bottom（下）；L：left（左）；R：right（右）。
+| align | String | false | 'UL'| 'UL' / 'UR' / 'DL' / 'DR' | 节点对齐方式。U：upper（上）；D：down（下）；L：left（左）；R：right（右）
+| nodesep | Number | false | 50 |  | 节点间距（px）。在rankdir 为 'TB' 或 'BT' 时是节点的水平间距；在rankdir 为 'LR' 或 'RL' 时代表节点的竖直方向间距
+| ranksep | Number | false | 50 |  | 层间距（px）。在rankdir 为 'TB' 或 'BT' 时是竖直方向相邻层间距；在rankdir 为 'LR' 或 'RL' 时代表水平方向相邻层间距
+| controlPoints | Boolean | false | false | |  是否保留布局连线的控制点
+
 ## Grid Layout
 
 &nbsp;&nbsp;&nbsp;&nbsp;Grid 网格布局根据参数指定的排序方式对节点进行排序后，将节点排列在网格上。

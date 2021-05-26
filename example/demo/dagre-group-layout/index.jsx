@@ -1,27 +1,23 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import {Button, Select, Slider} from 'antd';
 
 import mockData from './data';
-import {Canvas} from 'local::butterfly-dag';
+// import {Canvas} from 'butterfly-dag';
+import {Canvas} from 'local::butterfly-dag'; //引用本地数据时使用
 
 import './index.less';
 import 'antd/dist/antd.css';
 import 'butterfly-dag/dist/index.css';
 
-const Option = Select.Option;
-class DagreLayout extends Component {
+class DagreGroupLayout extends Component {
   constructor() {
     super();
     this.canvas = null;
-    this.state = {
-      addNodesStatus: true
-    };
   }
 
   componentDidMount() {
     let root = document.getElementById('dag-canvas');
-    console.log('Canvas: ', Canvas);
+
     this.canvas = new Canvas({
       root: root,
       disLinkable: true, // 可删除连线
@@ -59,4 +55,4 @@ class DagreLayout extends Component {
   }
 }
 
-ReactDOM.render(<DagreLayout />, document.getElementById('root'));
+ReactDOM.render(<DagreGroupLayout />, document.getElementById('root'));

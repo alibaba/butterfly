@@ -53,7 +53,9 @@ const getNodesPosition = (initParams, basicTl) => {
 
   // step1: 找出单独节点&group节点， 单独布局
   const aloneNodes = initData.nodes.filter(v => !v.group);
+  console.log('aloneNodes: ', aloneNodes);
   const aloneGroups = initData.groups.filter(v => !v.group);
+  console.log('aloneGroups: ', aloneGroups);
 
   // 获取group和单节点之间的连线关系
   const groupAloneNodesEdges = getGroupAndAloneNodesEdges(initData);
@@ -98,19 +100,13 @@ const getNodesPosition = (initParams, basicTl) => {
   });
 
   // 嵌套的groups
-  let groupIds = [];
+  const groupIds = _.uniq(initData.groups.filter(g => g.group).map(g => g.group));
 
-  initData.groups.forEach(g => {
-    if (g.group) {
-      groupIds.push(g.group);
-    }
-  });
-  groupIds = _.uniq(groupIds);
   console.log('groupIds: ', groupIds);
 
   let [inGroupNodesPt, inGroupsGroupsPt] = [[], []];
-  if (!_.isEmpty(groupIds)) {
 
+  if (!_.isEmpty(groupIds)) {
     groupIds.forEach(gId => {
       // 找出嵌套在内层的group与节点
       const inGroups = initData.groups.filter(inG => inG.group === gId);
@@ -158,6 +154,7 @@ const getGroupAndAloneNodesEdges = (data) => {
   // groups与单节点之间的关系
   groups.forEach(g => {
     const groupItemNodes = nodes.filter(n => n.group === g.id);
+
     groupItemNodes.forEach(iNode => {
       const sourceEdges = edges.filter(e => String(e.source) === String(iNode.id));
       const targetEdges = edges.filter(e => String(e.target) === String(iNode.id));

@@ -60,6 +60,38 @@ this.canvas = new Canvas({
 | controlPoints | Boolean | false | false | | Whether to keep the control points of layout
 
 
+
+## Dagre Group Layout
+
+&nbsp;&nbsp;&nbsp;&nbsp;Dagre Group Layout is an appropriate layout method for directed flow graph.It will calculate the levels and positions of nodes automatically according to the edge directions in the data. 
+
+#### Examples
+
+``` js
+this.canvas = new Canvas({
+  layout: {
+    type: 'dagreGroupLayout',
+    options: {
+      rankdir: 'TB',
+      nodesep: 40,
+      ranksep: 40,
+      controlPoints: false,
+    },
+  }
+});
+```
+
+#### API
+
+
+| name | Type | Required | Default | Options | Description  
+| :------ | :------ | :------ | :------ | :------ | :------
+| rankdir | String | false | TB| "TB/BT/LR/RL"  | The alignment of the nodes. T: top; B：bottom; L: left; R: right
+| align | String | false | 'UL'| 'UL' / 'UR' / 'DL' / 'DR' | The alignment of the nodes. U: upper; D: down; L: left; R: right
+| nodesep | Number | false | 50 |  | The separation between nodes with unit px. When rankdir is 'TB' or 'BT', nodesep represents the horizontal separations between nodes; When rankdir is 'LR' or 'RL', nodesep represents the vertical separations between nodes
+| ranksep | Number | false | 50 |  | The separations between adjacent levels with unit px. When rankdir is 'TB' or 'BT', ranksep represents the vertical separations between adjacent levels; when rankdir is 'LR' or 'RL', rankdir represents the horizontal separations between adjacent levels
+| controlPoints | Boolean | false | false | | Whether to keep the control points of layout
+
 ## Grid Layout
 
 &nbsp;&nbsp;&nbsp;&nbsp;Grid Layout will order the nodes according to the parameters, and then place the nodes on the grids.
