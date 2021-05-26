@@ -53,13 +53,10 @@ const getNodesPosition = (initParams, basicTl) => {
 
   // step1: 找出单独节点&group节点， 单独布局
   const aloneNodes = initData.nodes.filter(v => !v.group);
-  console.log('aloneNodes: ', aloneNodes);
   const aloneGroups = initData.groups.filter(v => !v.group);
-  console.log('aloneGroups: ', aloneGroups);
 
   // 获取group和单节点之间的连线关系
   const groupAloneNodesEdges = getGroupAndAloneNodesEdges(initData);
-  console.log('groupAloneNodesEdges: ', groupAloneNodesEdges);
 
   const groupData = {
     ...params,
@@ -84,7 +81,6 @@ const getNodesPosition = (initParams, basicTl) => {
   (params.data.groups || []).forEach((group, idx) => {
     const inGroupNodes = initData.nodes.filter(v => v.group === group.id);
     const inGroupNodeEdges = getInGroupNodesEdges(group.id);
-    console.log('inGroupNodeEdges: ', inGroupNodeEdges);
 
     const inGroupDatas = {
       ...params,
@@ -101,8 +97,6 @@ const getNodesPosition = (initParams, basicTl) => {
 
   // 嵌套的groups
   const groupIds = _.uniq(initData.groups.filter(g => g.group).map(g => g.group));
-
-  console.log('groupIds: ', groupIds);
 
   let [inGroupNodesPt, inGroupsGroupsPt] = [[], []];
 
@@ -207,7 +201,6 @@ const getInGroupNodesEdges = (data, groupId) => {
  */
 function dagreGroupLayout(params) {
   const {data} = params;
-  console.log('params1: ', params);
 
   if (_.isEmpty(data.groups)) {
     dagreLayout(params);
@@ -215,7 +208,6 @@ function dagreGroupLayout(params) {
   }
 
   const pt = getNodesPosition(params);
-  console.log('pt: ', pt);
   
   params.data.nodes.forEach(n => {
     const ptNode = pt.nodes.find(pNode => pNode.id === n.id);
@@ -238,9 +230,6 @@ function dagreGroupLayout(params) {
     g.top = ptNode.top;
     g.left = ptNode.left;
   });
-
-
-  console.log('params2: ', params);
 };
 
 module.exports = dagreGroupLayout;
