@@ -61,7 +61,6 @@
     "@antv/matrix-util": "^3.0.4",
     "d3-force": "~2.1.1",
     "dagre": "~0.8.5",
-    "dagre-compound": "^0.0.8",
     "dom-to-image": "~2.6.0",
     "eventemitter3": "4.0.7",
     "ml-matrix": "^6.5.0"

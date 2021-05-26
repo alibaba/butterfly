@@ -22,7 +22,6 @@ window.CONFIG = {
 };
 
 const prefix = window.CONFIG.prefix;
-console.log('prefix: ', prefix);
 
 const main = async () => {
   try {
