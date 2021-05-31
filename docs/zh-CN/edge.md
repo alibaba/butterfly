@@ -135,7 +135,7 @@ Arrow.registerArrow([{
 ```js
 import {Edge} from 'butterfly-dag';
 
-Class YourEdge extends Endpoint {
+Class YourEdge extends Edge {
 
   /**
     * 线段挂载后的回调
