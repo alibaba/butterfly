@@ -133,7 +133,7 @@ Arrow.registerArrow([{
 ```js
 import {Edge} from 'butterfly-dag';
 
-Class YourEdge extends Endpoint {
+Class YourEdge extends Edge {
 
   /**
     * callback after the edge is mounted
