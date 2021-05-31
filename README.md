@@ -29,7 +29,10 @@
   <img width="900" src="https://img.alicdn.com/imgextra/i3/O1CN018CrqXz1KRK7Euhj6X_!!6000000001160-2-tps-1155-1081.png">
 </p>
 
-## 🚀快速本地DEMO
+## 🚀DEMO
+
+### 本地DEMO
+
 ```
 git clone git@github.com:alibaba/butterfly.git
 npm install
@@ -37,6 +40,10 @@ cd example
 npm install
 npm start
 ```
+
+### 线上DEMO
+
+[小蝴蝶官网](https://butterfly-dag.gitee.io/butterfly-dag/demo/analysis)
 
 ## 📦 安装
 ```
