@@ -31,7 +31,7 @@ English | [简体中文](./README.md)
 
 ## 🚀DEMO
 
-#### LOCAL DEMO
+### LOCAL DEMO
 
 ```
 git clone git@github.com:alibaba/butterfly.git
@@ -41,7 +41,7 @@ npm install
 npm start
 ```
 
-#### ONLINE DEMO
+### ONLINE DEMO
 
 [Official website](https://butterfly-dag.gitee.io/butterfly-dag/demo/analysis)
 
