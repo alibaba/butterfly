@@ -1955,7 +1955,7 @@ class BaseCanvas extends Canvas {
                 };
                 // 检查endpoint限制连接数目
                 let _linkNums = this.edges.filter((_edge) => {
-                  return _edge.sourceEndpoint.id === point.id;
+                  return _edge.sourceEndpoint && _edge.sourceEndpoint.id === point.id;
                 }).length + 1;
                 if (_linkNums > point.limitNum) {
                   console.warn(`id为${point.id}的锚点限制了${point.limitNum}条连线`);
