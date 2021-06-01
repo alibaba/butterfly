@@ -1,4 +1,4 @@
-import {Node} from 'butterfly-dag';
+import {Node} from 'butterfly-dag/pack';
 import $ from 'jquery';
 
 const getNodeStyle = (left, top) => {
@@ -9,43 +9,47 @@ const getNodeStyle = (left, top) => {
   };
 };
 
-class CustomNode extends Node {
-  // 这个方法只会被调用一次
-  draw(obj) {
-    const div = document.createElement('div');
-    const style = getNodeStyle(obj.left, obj.top);
-    Object.keys(style).forEach(key => {
-      div.style[key] = style[key];
-    });
+const nodeFactor = (uniqId) => {
+  class CustomNode extends Node {
+    // 这个方法只会被调用一次
+    draw(obj) {
+      const div = document.createElement('div');
+      const style = getNodeStyle(obj.left, obj.top);
+      Object.keys(style).forEach(key => {
+        div.style[key] = style[key];
+      });
 
-    div.className = 'butterfly-node';
-    div.id = 'bf_node_' + obj.id;
+      div.className = 'butterfly-node';
+      div.id = uniqId + 'bf_node_' + obj.id;
 
-    return div;
+      return div;
+    }
+
+    _addEventListener() {
+      $(this.dom).on('mousedown', (e) => {
+        const LEFT_KEY = 0;
+        if (e.button !== LEFT_KEY) {
+          return;
+        }
+
+        if (this.draggable) {
+          this._isMoving = true;
+          this.emit('InnerEvents', {
+            type: 'node:dragBegin',
+            data: this
+          });
+        } else {
+          // 单纯为了抛错事件给canvas，为了让canvas的dragtype不为空，不会触发canvas:click事件
+          this.emit('InnerEvents', {
+            type: 'node:mouseDown',
+            data: this
+          });
+        }
+      });
+    }
   }
 
-  _addEventListener() {
-    $(this.dom).on('mousedown', (e) => {
-      const LEFT_KEY = 0;
-      if (e.button !== LEFT_KEY) {
-        return;
-      }
+  return CustomNode;
+};
 
-      if (this.draggable) {
-        this._isMoving = true;
-        this.emit('InnerEvents', {
-          type: 'node:dragBegin',
-          data: this
-        });
-      } else {
-        // 单纯为了抛错事件给canvas，为了让canvas的dragtype不为空，不会触发canvas:click事件
-        this.emit('InnerEvents', {
-          type: 'node:mouseDown',
-          data: this
-        });
-      }
-    });
-  }
-}
-
-export default CustomNode;
+export default nodeFactor;

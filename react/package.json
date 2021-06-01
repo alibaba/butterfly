@@ -1,6 +1,6 @@
 {
   "name": "butterfly-react",
-  "version": "0.0.10-beta",
+  "version": "0.0.28-beta",
   "description": "react version for butterfly",
   "license": "MIT",
   "main": "dist/index.js",
@@ -10,7 +10,8 @@
   "scripts": {
     "start": "cd example && npm run dev",
     "build": "rollup -c ./rollup.config.js",
-    "eslint": "eslint --ext .js --ext .jsx --ignore-path .eslintignore ."
+    "eslint": "eslint --ext .js --ext .jsx --ignore-path .eslintignore .",
+    "prepublishOnly": "npm run build"
   },
   "eslintConfig": {
     "extends": "aliyun"
@@ -47,6 +48,7 @@
     "debug": "^4.3.1",
     "jquery": "^3.5.1",
     "lodash": "^4.17.20",
+    "postcss": "^8.2.6",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.0"
   }

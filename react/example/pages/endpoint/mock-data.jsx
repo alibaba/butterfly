@@ -11,7 +11,10 @@ export const initialValue = {
       render() {
         return (
           <Node title="节点1">
-            <Endpoint id="endpoint-1">
+            <Endpoint 
+              id="endpoint-1"
+              nodeId="1"
+            >
               锚点1
             </Endpoint>
           </Node>
@@ -23,11 +26,17 @@ export const initialValue = {
       render() {
         return (
           <Node title="节点2">
-            <Endpoint id="endpoint-2">
+            <Endpoint 
+              id="endpoint-2"
+              nodeId="2"
+            >
               锚点2
             </Endpoint>
             <div style={{position: 'absolute', right: 0, bottom: 0}}>
-              <Endpoint id="endpoint-3">
+              <Endpoint 
+                id="endpoint-3"
+                nodeId="2"
+              >
                 内部锚点
               </Endpoint>
             </div>
@@ -71,20 +80,35 @@ export const switchData = _.cloneDeep(initialValue);
 switchData.nodes[1].render = function render() {
   return (
     <Node title="节点2">
-      <Endpoint id="endpoint-2">
+      <Endpoint 
+        id="endpoint-2"
+        nodeId="2"
+      >
         锚点2
       </Endpoint>
-      <Endpoint id="endpoint-4">
+      <Endpoint 
+        id="endpoint-4"
+        nodeId="2"
+      >
         锚点4
       </Endpoint>
-      <Endpoint id="endpoint-5">
+      <Endpoint 
+        id="endpoint-5"
+        nodeId="2"
+      >
         锚点5
       </Endpoint>
-      <Endpoint id="endpoint-6">
+      <Endpoint 
+        id="endpoint-6"
+        nodeId="2"
+      >
         锚点6
       </Endpoint>
       <div style={{position: 'absolute', right: 0, bottom: 0}}>
-        <Endpoint id="endpoint-3">
+        <Endpoint 
+          id="endpoint-3"
+          nodeId="2"
+        >
           锚点3
         </Endpoint>
       </div>
@@ -97,7 +121,10 @@ switchData.nodes.push({
   render() {
     return (
       <Node title="节点">
-        <Endpoint id={`endpoint-100`}>
+        <Endpoint 
+          id={`endpoint-100`}
+          nodeId="100"
+        >
           锚点100
         </Endpoint>
       </Node>

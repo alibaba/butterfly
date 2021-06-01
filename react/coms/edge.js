@@ -1,20 +1,35 @@
-import {Edge} from 'butterfly-dag';
+import _ from 'lodash';
+import {Edge} from 'butterfly-dag/pack';
 
 
-class CustomEdge extends Edge {
-  drawLabel() {
-    const div = document.createElement('div');
+const edgeFactory = (uniqId) => {
+  class CustomEdge extends Edge {
+    constructor(options) {
+      super(options);
 
-    if (!this.id) {
-      this.id = String(Number(new Date()));
+      const calcPath = _.get(options, 'options.calcPath');
+
+      if (calcPath && _.isFunction(calcPath)) {
+        this.calcPath = calcPath;
+      }
     }
 
-    div.id = `edge_label_${this.id}`;
-    div.className = 'butterflies-label';
+    drawLabel() {
+      const div = document.createElement('div');
 
-    return div;
+      if (!this.id) {
+        this.id = String(Number(new Date()));
+      }
+
+      div.id = uniqId + `edge_label_${this.id}`;
+      div.className = 'butterflies-label';
+
+      return div;
+    }
   }
-}
 
 
-export default CustomEdge;
+  return CustomEdge;
+};
+
+export default edgeFactory;
