@@ -11,33 +11,7 @@ const defaultOptions = {
     }
   }
 };
-
-
-const defaultGroup = 
-  (
-    `
-      <div class="vue-bf-group">
-      <div class="vue-bf-group-header">
-          {{ id }}
-        </div>
-        <div class="vue-bf-group-content"></div> 
-      </div>
-    `
-  );
-
-const defaultNode = 
-  (
-    `
-      <div class="vue-bf-node">
-        {{ id }}
-      </div>
-    `
-  );
-
-
-
+  
 export {
   defaultOptions,
-  defaultGroup,
-  defaultNode,
 };

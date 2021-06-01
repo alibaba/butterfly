@@ -6,7 +6,6 @@ import mockData from './data.js';
 import 'butterfly-dag/dist/index.css';
 import './index.less';
 
-
 class Radial extends Component {
   constructor() {
     super();
@@ -57,7 +56,7 @@ class Radial extends Component {
       },
       theme: {
         edge: {
-          type: 'Straight',
+          shapeType: 'Straight',
           arrow: true,
           arrowPosition: 0.8,
         }

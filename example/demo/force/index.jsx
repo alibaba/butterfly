@@ -29,7 +29,7 @@ class ForceTree extends Component {
       },
       theme: {
         edge: {
-          type: 'Straight'
+          shapeType: 'Straight'
         }
       }
     });

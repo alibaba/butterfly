@@ -1,9 +1,10 @@
-import Edge from './edge';
-import BaseEndpoint from './endpoint';
 import Node from './node';
+import Edge from './edge';
 import BaseGroup from './group';
+import BaseEndpoint from './endpoint';
 
-export default {
+
+const data = {
   nodes: [{
     id: '0',
     top: 100,
@@ -256,3 +257,5 @@ export default {
     Class: Edge
   }]
 };
+
+export default data;

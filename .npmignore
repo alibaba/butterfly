@@ -1,2 +1,6 @@
 node_modules
 test
+example
+/react
+/vue
+/plugins/pannel

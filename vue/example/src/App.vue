@@ -1,65 +1,98 @@
 <template>
   <div id="app">
-    <butterfly-vue
-      :canvasData="mockData"
-      @onCreateEdge="logEvent"
-      @onChangeEdges="logEvent"
-      @onDeleteEdge="logEvent"
-      @onOtherEvent="logEvent"
-      @onLoaded="finishLoaded"
-    />
-    <el-button >add</el-button>
-    <div id="aaa"></div>
+    <el-container>
+      <el-aside width="200px">
+        <div class="logo">
+          Butterfly-Vue
+        </div>
+        <div class="sidebar">
+          <el-menu
+            class="sidebar-el-menu"
+            :default-active="onRoutes"
+            background-color="#324157"
+            text-color="#bfcbd9"
+            active-text-color="#20a0ff"
+            unique-opened
+            router
+          >
+            <el-menu-item index="emergency">emergency</el-menu-item>
+            <el-menu-item index="drag">drag</el-menu-item>
+            <el-menu-item index="grid">grid(layout)</el-menu-item>
+            <el-menu-item index="base">基础用法</el-menu-item>
+            <el-menu-item index="userEndpoint">自定义锚点用法</el-menu-item>
+          </el-menu>
+        </div>
+      </el-aside>
+      <el-container>
+        <el-header>示例</el-header>
+        <el-main>
+          <router-view></router-view>
+        </el-main>
+      </el-container>
+    </el-container>
+    
   </div>
 </template>
 
 <script>
-// import ButterflyVue from 'butterfly-vue';
-// import 'butterfly-vue/index.css';
-import ButterflyVue from './dist/index.unpkg';
-// import './dist/index.css';
-// import ButterflyVue from '../../dist/index.unpkg';
-// import '../../dist/index.css';
-// import ButterflyVue from "../../butterfly-vue.vue";
-import "../../butterfly-vue.css";
-import mockData from "./mockData";
-import Vue from "vue";
 
 export default {
-  name: "App",
-  components: {
-    ButterflyVue,
-  },
+  name: 'App',
   data() {
     return {
-      mockData,
     };
   },
-  methods: {
-    logEvent(e) {
-      console.log(e);
-    },
-    finishLoaded(canvans) {
-      console.log(canvans);
-      console.log("finish");
-    },
-  },
-  mounted() {
-    var Profile = Vue.extend({
-      template: "<el-button>{{firstName}} {{lastName}} aka {{alias}}</el-button>",
-      data: function () {
-        return {
-          firstName: "Walter",
-          lastName: "White",
-          alias: "Heisenberg",
-        };
-      },
-    });
-    const dom = document.getElementById('aaa');
-
-    console.log(dom);
-
-    new Profile().$mount('#aaa');
-  },
-};
+  computed: {
+    onRoutes() {
+      return this.$route.path.replace('/', '');
+    }
+  }
+}
 </script>
+
+<style scoped>
+  #app {
+    width: 100%;
+  }
+
+  .el-header {
+    line-height: 60px;
+  }
+
+  .el-aside {
+    background-color: rgb(50, 65, 87);
+  }
+
+  .el-main {
+    padding: 0;
+  }
+
+  .logo {
+    height: 32px;
+    margin: 16px;
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
+    text-align: center;
+    line-height: 32px;
+  }
+  .sidebar {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 64px;
+    bottom: 0;
+    overflow-y: scroll;
+  }
+
+  .sidebar::-webkit-scrollbar {
+    width: 0;
+  }
+
+  .sidebar-el-menu:not(.el-menu--collapse) {
+    width: 200px;
+  }
+
+  .sidebar > ul {
+    height: 100%;
+  }
+</style>

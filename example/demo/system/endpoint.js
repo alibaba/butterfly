@@ -17,4 +17,5 @@ class BaseEndpoint extends Endpoint {
     return point;
   }
 }
+
 export default BaseEndpoint;

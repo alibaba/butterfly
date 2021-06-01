@@ -163,3 +163,4 @@ export default {
     Class: Edge
   }]
 };
+

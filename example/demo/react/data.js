@@ -1,6 +1,6 @@
 import React from 'react';
-import Node from './node.jsx';
-import Label from './label.jsx';
+import Node from './node.js';
+import Label from './label.js';
 
 const endpoints = [
   {

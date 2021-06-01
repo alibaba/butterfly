@@ -7,7 +7,6 @@ import Node from './node';
 import 'butterfly-dag/dist/index.css';
 import './iconfont.css';
 import './index.less';
-
 class IndentedTree extends Component {
   constructor() {
     super();
@@ -24,7 +23,7 @@ class IndentedTree extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'Manhattan'
+          shapeType: 'Manhattan'
         }
       },
       layout: {
@@ -32,12 +31,12 @@ class IndentedTree extends Component {
         options: {
           direction: 'LR',
           isHorizontal: true,
-          indent: 80,
+          indent: 160,
           getHeight: function getHeight() {
             return 16;
           },
           getWidth: function getWidth() {
-            return 16;
+            return 100;
           }
         }
       }

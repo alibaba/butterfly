@@ -65,4 +65,4 @@ class IndustryCanvas extends Canvas {
   }
 }
 
-module.exports = IndustryCanvas;
+export default IndustryCanvas;

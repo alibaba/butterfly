@@ -5,7 +5,6 @@ import mockData from './data.js';
 
 import 'butterfly-dag/dist/index.css';
 import './index.less';
-
 class LiteGraph extends Component {
   constructor() {
     super();
@@ -21,12 +20,12 @@ class LiteGraph extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'AdvancedBezier'
+          shapeType: 'AdvancedBezier'
         }
       }
     });
     this.canvas.draw(mockData, () => {
-      this.canvas.setGirdMode(true, {
+      this.canvas.setGridMode(true, {
         isAdsorb: false,         // 是否自动吸附,默认关闭
         theme: {
           shapeType: 'circle',     // 展示的类型，支持line & circle

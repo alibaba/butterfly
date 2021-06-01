@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server",
     "eslint": "eslint . --fix",
-    "build": "NODE_ENV=production webpack"
+    "build": "NODE_ENV=production webpack && node build/patch"
   },
   "eslintConfig": {
     "extends": "aliyun"
@@ -15,6 +15,7 @@
   "author": "jambin",
   "license": "MIT",
   "dependencies": {
+    "@babel/standalone": "^7.14.1",
     "@stackblitz/sdk": "^1.5.2",
     "antd": "~3.26.7",
     "axios": "^0.21.1",
@@ -25,12 +26,14 @@
     "i18next-browser-languagedetector": "^6.0.1",
     "jquery": "^3.4.1",
     "jszip": "^3.6.0",
+    "less": "^3.7.1",
     "react": "~16.12.0",
     "react-ace": "^9.3.0",
     "react-dom": "~16.12.0",
     "react-hot-keys": "^2.6.2",
     "react-router": "~5.1.2",
-    "react-router-dom": "~5.1.2"
+    "react-router-dom": "~5.1.2",
+    "systemjs": "^6.9.0"
   },
   "devDependencies": {
     "@antv/hierarchy": "~0.6.4",

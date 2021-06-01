@@ -1,8 +1,7 @@
-import {Node} from 'butterfly-dag';
+import {TreeNode} from 'butterfly-dag';
 import $ from 'jquery';
 import './node.less';
-
-class BaseNode extends Node {
+class BaseNode extends TreeNode {
   constructor(opts) {
     super(opts);
     this.addIcon = null;

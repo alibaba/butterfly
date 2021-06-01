@@ -1,10 +1,13 @@
 {
   "name": "butterfly-vue",
-  "version": "0.0.5",
+  "version": "1.0.0",
   "description": "vue version for butterfly",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "unpkg": "dist/index.unpkg.js",
+  "files": [
+    "dist"
+  ],
   "keywords": [
     "节点式编程，数据图，流程图，连通图"
   ],
@@ -19,13 +22,11 @@
   },
   "peerDependencies": {
     "butterfly-dag": "*",
-    "lodash": "*",
-    "vue": "^2.6.12"
+    "lodash": "*"
   },
   "dependencies": {
-    "butterfly-dag": "^3.1.2",
-    "lodash": "^4.17.20",
-    "vue": "^2.6.12"
+    "butterfly-dag": "^4.0.0",
+    "lodash": "^4.17.20"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",

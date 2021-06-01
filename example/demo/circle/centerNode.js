@@ -2,7 +2,6 @@ import $ from 'jquery';
 import {Node} from 'butterfly-dag';
 
 import './node.less';
-
 class CenterNode extends Node {
   constructor(opts) {
     super(opts);
@@ -42,4 +41,4 @@ class CenterNode extends Node {
   }
 }
 
-module.exports = CenterNode;
+export default CenterNode;

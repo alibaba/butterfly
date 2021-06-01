@@ -19,7 +19,7 @@ class Diodes extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'Manhattan',
+          shapeType: 'Manhattan',
           defaultAnimate: true
         }
       }

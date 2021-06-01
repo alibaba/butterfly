@@ -2,10 +2,11 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import {TreeCanvas} from 'butterfly-dag';
 
-import {mockData} from './data';
+import mockData from './data';
 
 import 'butterfly-dag/dist/index.css';
 import './index.less';
+
 class CompactBoxTree extends Component {
   componentDidMount() {
     let root = document.getElementById('dag-canvas');
@@ -18,7 +19,7 @@ class CompactBoxTree extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'Manhattan',
+          shapeType: 'Manhattan',
           arrow: true
         }
       },

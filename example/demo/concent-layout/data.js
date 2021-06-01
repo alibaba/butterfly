@@ -282,3 +282,4 @@ export default {
     Class: Edge,
   }]
 };
+

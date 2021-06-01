@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Canvas} from 'butterfly-dag';
 
-import {mockData} from './data';
+import mockData from './data';
 
 import './index.less';
 import 'butterfly-dag/dist/index.css';
@@ -25,7 +25,7 @@ class Flow extends React.Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'AdvancedBezier',
+          shapeType: 'AdvancedBezier',
         }
       }
     });

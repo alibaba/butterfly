@@ -26,21 +26,6 @@ class BaseGroup extends Group {
 
     return _dom;
   }
-  // drawArrow(isShow) {
-  //   let dom = super.drawArrow(isShow);
-  //   if (this.options.color) {
-  //     $(dom).addClass(this.options.color);
-  //   }
-  //   return dom;
-  // }
-  // drawLabel(text) {
-  //   // let dom = super.drawArrow(text);
-  //   // console.log(dom);
-  //   let dom = null;
-  //   if (!!text) {
-  //     dom = $(`<span class="label">${text}</span>`)[0];
-  //   }
-  //   return dom;
-  // }
 }
+
 export default BaseGroup;

@@ -112,4 +112,4 @@ class CircleCanvas extends Canvas {
   }
 }
 
-module.exports = CircleCanvas;
+export default CircleCanvas;
