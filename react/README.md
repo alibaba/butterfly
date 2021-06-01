@@ -5,7 +5,7 @@
 
 ## 调试
 ```shell
-$ tnpm i && cd example && tnpm i
+$ npm i && cd example && npm i
 
 # 使用vite作为调试工具
 $ npm run dev
