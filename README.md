@@ -112,7 +112,7 @@ canvas.draw({
   <img width="49%" src="https://img.alicdn.com/imgextra/i4/O1CN01Nt9rpo25y6NlRMUtR_!!6000000007594-1-tps-595-411.gif">
 </p>
 
-* 表字段血缘/业务血缘(开源中): 适用于表级血缘,表字段级血缘,业务链路血缘等业务
+* [表字段血缘/业务血缘](https://github.com/aliyun/react-lineage-dag): 适用于表级血缘,表字段级血缘,业务链路血缘等业务
 <img width="98%" src="https://img.alicdn.com/imgextra/i4/O1CN01ou8wTq20SQv4AnedD_!!6000000006848-1-tps-1337-761.gif">
 
 * [可视化建模图](https://github.com/aliyun/react-visual-modeling): 适用于UML，数据库建模，数据仓库建设等业务
