@@ -30,7 +30,7 @@ class LiteGraph extends Component{
         theme: {
           shapeType: 'circle',     // 展示的类型，支持line & circle
           gap: 20,               // 网格间隙
-          backgroud: '#252525',     // 网格背景颜色
+          background: 'rgba(0, 0, 0, 0.65)',     // 网格背景颜色
           circleRadiu: 1.5,        // 圆点半径
           circleColor: 'rgba(255, 255, 255, 0.2)'    // 圆点颜色
         }

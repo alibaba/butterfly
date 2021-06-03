@@ -848,7 +848,7 @@ this.canvas.setGridMode(true, {
     shapeType: 'line',     // 展示的类型，支持line & circle
     gap: 23,               // 网格间隙
     adsorbGap: 8,          // 吸附间距
-    backgroud: '#fff',     // 网格背景颜色
+    background: '#fff',     // 网格背景颜色
     lineColor: '#000',     // 网格线条颜色
     lineWidth: 1,          // 网格粗细
     circleRadiu: 1,        // 圆点半径

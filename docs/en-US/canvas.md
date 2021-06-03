@@ -848,7 +848,7 @@ this.canvas.setGridMode(true, {
     shapeType: 'line',     // show type，support line & circle
     gap: 23,               // grid gap
     adsorbGap: 8,          // adsorb gap
-    backgroud: '#fff',     // grid backgroud
+    background: '#fff',     // grid background
     lineColor: '#000',     // grid line color
     lineWidth: 1,          // grid line thickness
     circleRadiu: 1,        // grid circle radiu
