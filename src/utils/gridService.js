@@ -39,11 +39,13 @@ class GridService {
       this._resize();
       $(this.dom).appendTo(this.root); 
     }
-
     if (this.theme.shapeType === 'circle') {
       this.createCircle();
     } else if (this.theme.shapeType === 'line') {
       this.createLine();
+    }
+    if (!!this.theme.background) {
+      $(this.dom).css('background', this.theme.background);
     }
     this.isActive = true;
   }
