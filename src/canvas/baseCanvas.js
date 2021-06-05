@@ -2477,7 +2477,6 @@ class BaseCanvas extends Canvas {
             }
           }
         }
-
         if (!sourceNode || !targetNode) {
           console.warn(`butterflies error: can not connect edge. link sourceNodeId:${link.sourceNode};link targetNodeId:${link.targetNode}`);
           return;
