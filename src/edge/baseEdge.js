@@ -198,6 +198,10 @@ class BaseEdge extends Edge {
     }
     this.label = label;
     this.labelDom = labelDom;
+    // 防止异步渲染，计算不出label长宽
+    setTimeout(() => {
+      this.redrawLabel();
+    });
     this.emit('InnerEvents', {
       type: 'edge:updateLabel',
       data: this
