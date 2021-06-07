@@ -441,8 +441,8 @@ class BaseCanvas extends Canvas {
         this._moveNode(data.node, data.x, data.y, data.isNotEventEmit);
       } else if (data.type === 'group:move') {
         this._moveGroup(data.group, data.x, data.y, data.isNotEventEmit);
-      } else if (data.type === 'link:click') {
-        this._dragType = 'link:click';
+      } else if (data.type === 'link:mouseDown') {
+        this._dragType = 'link:mouseDown';
       } else if (data.type === 'link:dragBegin') {
         this._dragType = 'link:drag';
         this._dragPathEdge = {
