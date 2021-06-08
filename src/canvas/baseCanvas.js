@@ -3387,6 +3387,12 @@ class BaseCanvas extends Canvas {
       return item.id;
     });
 
+    if (nodeIds.length === 0 && groupIds.length === 0) {
+      this.move([0, 0]);
+      this.zoom(1, callback);
+      return;
+    }
+
     this.focusNodesWithAnimate({
       nodes: nodeIds,
       groups: groupIds
