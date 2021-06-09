@@ -3,6 +3,6 @@ export default `
 
 ## Usage
 \`\`\`shell
-$ npm i && npm run dev
+$ npm i && npm start
 \`\`\`
 `;
