@@ -52,7 +52,10 @@ let addAnimate = (targetDom, path, options = {}, animateDom) => {
 
   if (!_animateDom) {
     _animateDom = circle;
-    $(_animateDom).insertAfter(targetDom);
+    // 延迟插入
+    setTimeout(() => {
+      $(_animateDom).insertAfter(targetDom);
+    }, 20);
   }
 
   return _animateDom;
