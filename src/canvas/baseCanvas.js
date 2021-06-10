@@ -115,6 +115,12 @@ class BaseCanvas extends Canvas {
     this.svg = null;
     this.wrapper = null;
     this.canvasWrapper = null;
+
+    // 节点,线段,节点组z-index值，顺序：节点 > 线段 > 节点组
+    this._dragGroupZIndex = 50;
+    this._dragNodeZIndex = 250;
+    this._dragEdgeZindex = 499;
+
     // 加一层wrapper方便处理缩放，平移
     this._genWrapper();
     // 加一层svg画线条
@@ -139,12 +145,6 @@ class BaseCanvas extends Canvas {
     if($(this.root).css('position') === 'static') {
       $(this.root).css('position', 'relative');
     }
-
-    // 节点,线段,节点组z-index值，顺序：节点 > 线段 > 节点组
-    this._dragGroupZIndex = 50;
-    this._dragNodeZIndex = 250;
-    this._dragEdgeZindex = 499;
-    this._isInitEdgeZIndex = false;
 
     // 检测节点拖动节点组的hover状态
     this._hoverGroupQueue = [];
@@ -334,6 +334,7 @@ class BaseCanvas extends Canvas {
       .attr('height', _SVGHeight)
       .attr('version', '1.1')
       .attr('xmlns', 'http://www.w3.org/2000/svg')
+      .css('z-index', this._dragEdgeZindex)
       .appendTo(this.wrapper);
 
     if(!_isMobi) {
@@ -678,22 +679,6 @@ class BaseCanvas extends Canvas {
         y: event.clientY
       };
       
-      // 初始化z-index
-      if (!this._isInitEdgeZIndex) {
-        $(this.svg).css('z-index', this._dragEdgeZindex);
-        this.nodes.forEach((item) => {
-          $(item.dom).css('z-index', (this._dragNodeZIndex) * 2 - 1);
-          _.get(item, 'endpoints').forEach((point) => {
-            $(point.dom).css('z-index', this._dragNodeZIndex * 2);
-          });
-        });
-        this.edges.forEach((item) => {
-          if (item.labelDom) {
-            $(item.labelDom).css('z-index', this._dragEdgeZindex + 1);
-          }
-        });
-        this._isInitEdgeZIndex = true;
-      }
       // 拖动的时候提高z-index
       if (this._dragNode && this._dragNode.__type == 'node') {
         $(this._dragNode.dom).css('z-index', (++this._dragNodeZIndex) * 2 - 1);
@@ -1585,6 +1570,13 @@ class BaseCanvas extends Canvas {
         initObj['dom'] = _nodeObj.dom;
       }
       _nodeObj._init(initObj);
+
+      // 初始化 node zIndex
+      $(_nodeObj.dom).css('z-index', (this._dragNodeZIndex) * 2 - 1);
+      _.get(_nodeObj, 'endpoints').forEach((point) => {
+        $(point.dom).css('z-index', this._dragNodeZIndex * 2);
+      });
+
       // 一定要比group的addNode执行的之前，不然会重复把node加到this.nodes里面
       this.nodes.push(_nodeObj);
 
@@ -2556,6 +2548,7 @@ class BaseCanvas extends Canvas {
         _edgeFragment.appendChild(edge.dom);
 
         if (edge.labelDom) {
+          $(edge.labelDom).css('z-index', this._dragEdgeZindex + 1)
           _labelFragment.appendChild(edge.labelDom);
         }
 
