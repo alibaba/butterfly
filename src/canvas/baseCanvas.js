@@ -3366,7 +3366,9 @@ class BaseCanvas extends Canvas {
     $(this.wrapper).animate({
       top: offsetY,
       left: offsetX,
-    }, time);
+    }, time, () => {
+      callback && callback();
+    });
     this._moveData = [offsetX, offsetY];
 
     this._coordinateService._changeCanvasInfo({
@@ -3377,7 +3379,7 @@ class BaseCanvas extends Canvas {
       originY: 50
     });
 
-    this.zoom(scale, callback);
+    this.zoom(scale);
   }
   focusCenterWithAnimate(options, callback) {
     let nodeIds = this.nodes.map((item) => {
@@ -3447,8 +3449,10 @@ class BaseCanvas extends Canvas {
     // animate不支持scale，使用setInterval自己实现
     $(this.wrapper).animate({
       top: targetY,
-      left: targetX,
-    }, time);
+      left: targetX
+    }, time, () => {
+      callback && callback();
+    });
     this._moveData = [targetX, targetY];
 
     this._coordinateService._changeCanvasInfo({
@@ -3459,7 +3463,7 @@ class BaseCanvas extends Canvas {
       scale: 1
     });
 
-    this.zoom(1, callback);
+    this.zoom(1);
 
     this._guidelineService.isActive && this._guidelineService.clearCanvas();
   }
