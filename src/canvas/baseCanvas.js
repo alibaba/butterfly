@@ -1571,12 +1571,6 @@ class BaseCanvas extends Canvas {
       }
       _nodeObj._init(initObj);
 
-      // 初始化 node zIndex
-      $(_nodeObj.dom).css('z-index', (this._dragNodeZIndex) * 2 - 1);
-      _.get(_nodeObj, 'endpoints').forEach((point) => {
-        $(point.dom).css('z-index', this._dragNodeZIndex * 2);
-      });
-
       // 一定要比group的addNode执行的之前，不然会重复把node加到this.nodes里面
       this.nodes.push(_nodeObj);
 
@@ -1603,6 +1597,12 @@ class BaseCanvas extends Canvas {
     result.forEach((item) => {
       // 渲染endpoint
       item._createEndpoint(isNotEventEmit);
+
+      // 初始化 node zIndex
+      $(item.dom).css('z-index', (this._dragNodeZIndex) * 2 - 1);
+      _.get(item, 'endpoints').forEach((point) => {
+        $(point.dom).css('z-index', this._dragNodeZIndex * 2);
+      });
 
       // 节点挂载
       !isNotEventEmit && item.mounted && item.mounted();
