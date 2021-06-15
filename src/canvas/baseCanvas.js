@@ -3356,11 +3356,13 @@ class BaseCanvas extends Canvas {
     offsetY = -offsetY + customOffset[1];
 
     const time = 500;
-    $(this.wrapper).animate({
-      top: offsetY,
-      left: offsetX,
-    }, time, () => {
-      callback && callback();
+    let animatePromise = new Promise((resolve) => {
+      $(this.wrapper).animate({
+        top: offsetY,
+        left: offsetX,
+      }, time, () => {
+        resolve();
+      });
     });
     this._moveData = [offsetX, offsetY];
 
@@ -3372,7 +3374,16 @@ class BaseCanvas extends Canvas {
       originY: 50
     });
 
-    this.zoom(scale);
+
+    let zoomPromise = new Promise((resolve) => {
+      this.zoom(scale, () => {
+        resolve();
+      });
+    });
+
+    Promise.all([animatePromise, zoomPromise]).then(() => {
+      callback && callback();
+    });
   }
   focusCenterWithAnimate(options, callback) {
     let nodeIds = this.nodes.map((item) => {
@@ -3440,11 +3451,13 @@ class BaseCanvas extends Canvas {
     const time = 500;
 
     // animate不支持scale，使用setInterval自己实现
-    $(this.wrapper).animate({
-      top: targetY,
-      left: targetX
-    }, time, () => {
-      callback && callback();
+    let animatePromise = new Promise((resolve) => {
+      $(this.wrapper).animate({
+        top: targetY,
+        left: targetX
+      }, time, () => {
+        resolve()
+      });
     });
     this._moveData = [targetX, targetY];
 
@@ -3456,7 +3469,15 @@ class BaseCanvas extends Canvas {
       scale: 1
     });
 
-    this.zoom(1);
+    let zoomPromise = new Promise((resolve) => {
+      this.zoom(1, () => {
+        resolve();
+      });
+    });
+
+    Promise.all([animatePromise, zoomPromise]).then(() => {
+      callback && callback();
+    });
 
     this._guidelineService.isActive && this._guidelineService.clearCanvas();
   }
