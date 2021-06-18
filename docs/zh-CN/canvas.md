@@ -16,7 +16,8 @@ let canvas = new Canvas({
       type: 'normal'       //节点组类型(选填): normal(随意拖入拖出),inner(只能拖入不能拖出)
     },
     edge: {
-      type: 'Bezier',      //线条默认类型
+      type: 'endpoint',    //线段连接类型
+      shapeType: 'Bezier', //线条默认类型
       label: 'test',       //线条默认label
       arrow: true,         //线条默认是否带箭头
       arrowPosition: 0.5,  //箭头位置(0 ~ 1)

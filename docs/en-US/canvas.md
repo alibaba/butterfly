@@ -16,7 +16,8 @@ let canvas = new Canvas({
       type: 'normal'       // Node group type: normal (drag in and drag out), inner (can only be dragged in and not out)
     },
     edge: {
-      type: 'Bezier',      // edge type：Bezier curve，Polyline ，Straight，Manhattan line，Improved Bezier curve。values ： Bezier/Flow/Straight/Manhattan/AdvancedBezier
+      type: 'endpoint',    // edge connection type
+      shapeType: 'Bezier', // edge type：Bezier curve，Polyline ，Straight，Manhattan line，Improved Bezier curve。values ： Bezier/Flow/Straight/Manhattan/AdvancedBezier
       label: 'test',       // edge label
       arrow: true,         // whether to show arrow
       arrowPosition: 0.5,  // arrow position (0 ~ 1)
