@@ -3,7 +3,7 @@ import {Tooltip} from 'antd';
 
 const Label = () => {
   return (
-    <Tooltip title="添加一个节点">
+    <Tooltip title="我, 是一个label">
       <div className="label">
         +
       </div>
