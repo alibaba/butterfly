@@ -858,6 +858,37 @@ this.canvas.setGridMode(true, {
 });
 ```
 
+### canvas.justifyCoordinate ()
+
+*作用*：把画布上的节点，节点组自动对齐(必须在网格布局下才生效)
+
+```js
+justifyCoordinate = () => {}
+```
+
+### canvas.setGuideLine (show, options)
+
+*作用*：设置辅助线
+
+*参数*
+
+* `{true|false} boolean`  - 是否开启辅助线功能
+* `{array} options` - 辅助线的定制化参数
+
+```js
+setGuideLine = (show, options) => {}
+
+this.canvas.setGuideLine(true, {
+  limit: 1,             // 限制辅助线条数
+  theme: {
+    lineColor: 'red',   // 网格线条颜色
+    lineWidth: 1,       // 网格粗细
+  }
+});
+```
+
+<img width="600" src="https://img.alicdn.com/imgextra/i1/O1CN01bBhPsu1b3pH0VD1X9_!!6000000003410-1-tps-1274-600.gif">
+
 ### canvas.setMinimap = (show, options)
 
 *作用*：设置是否开启缩略图
@@ -897,35 +928,6 @@ this.canvas.save2img({type: 'png', width: 1920, height: 1080, quality: 1})
     link.href = dataUrl;
     link.click();
   });
-```
-
-### canvas.justifyCoordinate ()
-
-*作用*：把画布上的节点，节点组自动对齐(必须在网格布局下才生效)
-
-```js
-justifyCoordinate = () => {}
-```
-
-### canvas.setGuideLine (show, options)
-
-*作用*：设置辅助线
-
-*参数*
-
-* `{true|false} boolean`  - 是否开启辅助线功能
-* `{array} options` - 辅助线的定制化参数
-
-```js
-setGuideLine = (show, options) => {}
-
-this.canvas.setGuideLine(true, {
-  limit: 1,             // 限制辅助线条数
-  theme: {
-    lineColor: 'red',   // 网格线条颜色
-    lineWidth: 1,       // 网格粗细
-  }
-});
 ```
 
 ### canvas.updateRootResize ()
