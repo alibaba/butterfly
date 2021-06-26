@@ -203,7 +203,6 @@ class GuidelineService {
     this.clearCanvas();
   }
   setOrigin(x, y) {
-    console.log(`${x}% ${y}%`);
     $(this.dom)
       .css('transform-origin', `${x}% ${y}%`)
   }
