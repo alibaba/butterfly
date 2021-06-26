@@ -28,7 +28,7 @@ class GuidelineService {
     this.theme = _.merge(this.theme, options.theme || {});
 
     if (!this.dom) {
-      this.dom = $('<div class="butterfly-gird-canvas-wrapper"></div>')[0];
+      this.dom = $('<div class="butterfly-guide-canvas-wrapper"></div>')[0];
       this.guideLineCanvas = $('<canvas class="butterfly-guideline-canvas"></canvas>')[0];
       this._resize();
       $(this.guideLineCanvas).appendTo(this.dom);
@@ -58,9 +58,9 @@ class GuidelineService {
     this.cxt.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 
     let _left = parseInt(item.left);
-    let _right = parseInt(item.left + item.getWidth());
+    let _right = parseInt(item.left + item.getWidth(true));
     let _top = parseInt(item.top);
-    let _bottom = parseInt(item.top + item.getHeight());
+    let _bottom = parseInt(item.top + item.getHeight(true));
     let _leftDis = Infinity;
     let _rightDis = Infinity;
     let _topDis = Infinity;
@@ -201,6 +201,11 @@ class GuidelineService {
       .css('left', x)
       .css('top', y);
     this.clearCanvas();
+  }
+  setOrigin(x, y) {
+    console.log(`${x}% ${y}%`);
+    $(this.dom)
+      .css('transform-origin', `${x}% ${y}%`)
   }
   clearCanvas() {
     this.cxt && this.cxt.clearRect(0, 0, this.canvasWidth, this.canvasHeight);

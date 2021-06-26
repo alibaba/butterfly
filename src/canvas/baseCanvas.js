@@ -156,15 +156,19 @@ class BaseCanvas extends Canvas {
       root: this.root,
       canvas: this
     });
+    this._gridObjQueue = [];
+    this._gridObj = undefined;
+    this._gridTimer = undefined;
 
     // 辅助线
     this._guidelineService = new GuidelineService({
       root: this.root,
       canvas: this
     });
-    this._bgObjQueue = [];
-    this._bgObj = undefined;
-    this._bgTimer = undefined;
+    this._guideObjQueue = [];
+    this._guideObj = undefined;
+    this._guideTimer = undefined;
+    
 
     // 坐标转换服务
     this._coordinateService = new CoordinateService({
@@ -3749,6 +3753,7 @@ class BaseCanvas extends Canvas {
           scale: this._zoomData
         });
         this._guidelineService.zoom(this._zoomData);
+        this._guidelineService.setOrigin(this._coordinateService.originX, this._coordinateService.originY);
         this.emit('system.canvas.zoom', {
           zoom: this._zoomData
         });
@@ -3795,6 +3800,7 @@ class BaseCanvas extends Canvas {
       originX: parseFloat(originX),
       originY: parseFloat(originY)
     });
+    this._guidelineService.setOrigin(originX, originY);
   }
   getZoom() {
     return this._zoomData;
@@ -3829,6 +3835,7 @@ class BaseCanvas extends Canvas {
         }
         this._coordinateService._changeCanvasInfo(_canvasInfo);
         this._guidelineService.zoom(this._zoomData);
+        this._guidelineService.setOrigin(this._coordinateService.originX, this._coordinateService.originY);
         $(this.wrapper).css({
           transform: `scale(${this._zoomData})`
         });
@@ -3862,47 +3869,47 @@ class BaseCanvas extends Canvas {
     this.emit('system.canvas.move');
     this.emit('events', {type: 'system.canvas.move'});
   }
-  setGridMode(flat = true, options = this._bgObj, _isResize) {
+  setGridMode(flat = true, options = this._gridObj, _isResize) {
     if (flat) {
-      this._bgObjQueue.push(options);
-      if (this._bgTimer) {
+      this._gridObjQueue.push(options);
+      if (this._gridTimer) {
         return;
       }
-      this._bgTimer = setInterval(() => {
-        if (this._bgObjQueue.length === 0) {
-          clearInterval(this._bgTimer);
-          this._bgTimer = null;
+      this._gridTimer = setInterval(() => {
+        if (this._gridObjQueue.length === 0) {
+          clearInterval(this._gridTimer);
+          this._gridTimer = null;
           return;
         }
-        this._bgObj = this._bgObjQueue.pop();
+        this._gridObj = this._gridObjQueue.pop();
         _isResize && this._gridService._resize();
-        this._gridService.create(this._bgObj);
-        this._bgObjQueue = [];
+        this._gridService.create(this._gridObj);
+        this._gridObjQueue = [];
       }, 1000);
     } else {
       this._gridService.destroy();
-      this._bgObjQueue = [];
+      this._gridObjQueue = [];
     }
   }
-  setGuideLine(flat = true, options = this._bgObj) {
+  setGuideLine(flat = true, options = this._guideObj) {
     if (flat) {
-      this._bgObjQueue.push(options);
-      if (this._bgTimer) {
+      this._guideObjQueue.push(options);
+      if (this._guideTimer) {
         return;
       }
-      this._bgTimer = setInterval(() => {
-        if (this._bgObjQueue.length === 0) {
-          clearInterval(this._bgTimer);
-          this._bgTimer = null;
+      this._guideTimer = setInterval(() => {
+        if (this._guideObjQueue.length === 0) {
+          clearInterval(this._guideTimer);
+          this._guideTimer = null;
           return;
         }
-        this._bgObj = this._bgObjQueue.pop();
-        this._guidelineService.create(this._bgObj);
-        this._bgObjQueue = [];
+        this._guideObj = this._guideObjQueue.pop();
+        this._guidelineService.create(this._guideObj);
+        this._guideObjQueue = [];
       }, 200);
     } else {
       this._guidelineService.destroy();
-      this._bgObjQueue = [];
+      this._guideObjQueue = [];
     }
   }
   canvas2terminal(coordinates, options) {
