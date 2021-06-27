@@ -880,6 +880,10 @@ setGuideLine = (show, options) => {}
 
 this.canvas.setGuideLine(true, {
   limit: 1,             // limit guide line number
+  adsorp: {
+    enable: false       // enable auto adsorp
+    gap: 5              // adsorp gap
+  },
   theme: {
     lineColor: 'red',   // guide line color
     lineWidth: 1,       // guide line thickness
