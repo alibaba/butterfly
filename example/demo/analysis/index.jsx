@@ -45,6 +45,12 @@ class Scene4New extends Component {
       // eslint-disable-next-line no-console
       console.log(data);
     });
+    this.canvas.setGuideLine(true, {
+      adsorp: {
+        enable: true,
+        gap: 5
+      }
+    })
   }
   render() {
     return (
