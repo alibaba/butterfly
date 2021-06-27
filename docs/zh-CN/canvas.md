@@ -832,6 +832,10 @@ setGuideLine = (show, options) => {}
 
 this.canvas.setGuideLine(true, {
   limit: 1,             // 限制辅助线条数
+  adsorp: {
+    enable: false       // 开启吸附效果
+    gap: 5              // 吸附间隔
+  },
   theme: {
     lineColor: 'red',   // 网格线条颜色
     lineWidth: 1,       // 网格粗细
