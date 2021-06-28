@@ -24,7 +24,8 @@
 import mockData, { endpoints } from './data';
 import { TreeCanvas } from 'butterfly-dag';
 import { v4 as uuidv4 } from 'uuid';
-import { ButterflyVue } from '../../../../index';
+// import { ButterflyVue } from '../../../../index';
+import { ButterflyVue } from 'butterfly-vue';
 import BaseNode from './BaseNode.vue';
 
 export default {
@@ -131,7 +132,6 @@ export default {
         targetNode: id,
         type: 'endpoint',
       });
-      // this.canvasRef.redraw();
     },
     del(id) {
       // 删除节点
@@ -145,7 +145,6 @@ export default {
           index--;
         }
       }
-      this.canvasRef.redraw();
     },
   },
 };

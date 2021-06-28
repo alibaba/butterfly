@@ -10,7 +10,7 @@ export default (canvas, nodes = null) => {
         // 自动布局
         canvas._autoLayout({...canvas, nodes});
         // 重置canvas.nodes的定位，用于re-layout.js的布局
-        resetCanvasNodesPosition(canvas, nodes)
+        resetCanvasNodesPosition(canvas, nodes);
       } else {
         canvas._autoLayout(canvas);
       }
@@ -27,17 +27,19 @@ export default (canvas, nodes = null) => {
   canvas.relayout(nodes);
 };
 
-function resetCanvasNodesPosition(canvas, nodes) {
+const resetCanvasNodesPosition = (canvas, nodes) => {
   let tempNodeObj = {};
+  
   nodes.forEach(item => {
     tempNodeObj[item.id] = item;
   });
+
   canvas.nodes.forEach((item) => {
-    if (_.get(tempNodeObj,'[item.id].left')) {
+    if (_.get(tempNodeObj,`[${item.id}].left`)) {
       item.left = tempNodeObj[item.id].left;
     }
-    if (_.get(tempNodeObj,'[item.id].top')) {
-      item.left = tempNodeObj[item.id].left;
+    if (_.get(tempNodeObj,`[${item.id}].left`)) {
+      item.top = tempNodeObj[item.id].top;
     }
   })
 }
