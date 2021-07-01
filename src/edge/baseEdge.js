@@ -319,7 +319,7 @@ class BaseEdge extends Edge {
     }, options), this.animateDom);
   }
   redrawAnimate() {
-    LinkAnimateUtil.addAnimate(this.dom, this._path, {
+    this.animateDom = LinkAnimateUtil.addAnimate(this.dom, this._path, {
       _isContinue: true
     }, this.animateDom);
   }
