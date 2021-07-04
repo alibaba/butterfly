@@ -55,6 +55,7 @@ class BaseCanvas extends Canvas {
         label: _.get(options, 'theme.edge.label'),
         labelPosition: _.get(options, 'theme.edge.labelPosition'),
         labelOffset: _.get(options, 'theme.edge.labelOffset'),
+        labelUpdateInterval: _.get(options, 'theme.edge.labelUpdateInterval', 20),
         isRepeat: _.get(options, 'theme.edge.isRepeat') || false,
         isLinkMyself: _.get(options, 'theme.edge.isLinkMyself') || false,
         isExpandWidth: _.get(options, 'theme.edge.isExpandWidth') || false,
@@ -871,6 +872,7 @@ class BaseCanvas extends Canvas {
                   label: this.theme.edge.label,
                   labelPosition: this.theme.edge.labelPosition,
                   labelOffset: this.theme.edge.labelOffset,
+                  labelUpdateInterval: this.theme.edge.labelUpdateInterval,
                   isExpandWidth: this.theme.edge.isExpandWidth
                 };
                 pointObj['options'] = _.assign({}, pointObj, {
@@ -2537,6 +2539,7 @@ class BaseCanvas extends Canvas {
           draggable: link.draggable === undefined ? _.get(this, 'theme.edge.draggable') : link.draggable,
           labelPosition: link.labelPosition === undefined ? _.get(this, 'theme.edge.labelPosition') : link.labelPosition,
           labelOffset: link.labelOffset === undefined ? _.get(this, 'theme.edge.labelOffset') : link.labelOffset,
+          labelUpdateInterval:  link.labelUpdateInterval === undefined ? _.get(this, 'theme.edge.labelUpdateInterval') : link.labelUpdateInterval,
           options: link,
           _sourceType,
           _targetType,
@@ -2601,6 +2604,7 @@ class BaseCanvas extends Canvas {
           draggable: link.draggable === undefined ? _.get(this, 'theme.edge.draggable') : link.draggable,
           labelPosition: link.labelPosition === undefined ? _.get(this, 'theme.edge.labelPosition') : link.labelPosition,
           labelOffset: link.labelOffset === undefined ? _.get(this, 'theme.edge.labelOffset') : link.labelOffset,
+          labelUpdateInterval: link.labelUpdateInterval === undefined ? _.get(this, 'theme.edge.labelUpdateInterval') : link.labelUpdateInterval,
           isExpandWidth: this.theme.edge.isExpandWidth,
           defaultAnimate: this.theme.edge.defaultAnimate,
           _global: this.global,
