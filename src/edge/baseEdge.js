@@ -51,7 +51,7 @@ class BaseEdge extends Edge {
     this._labelHeight = 0;
     // 函数节流
     this._updateTimer = null;
-    this._UPDATE_INTERVAL = 20;
+    this._UPDATE_INTERVAL = _.get(opts, 'labelUpdateInterval', 20);
     // 线段起始位置
     this._sourcePoint = null;
     this._targetPoint = null;
