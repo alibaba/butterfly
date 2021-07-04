@@ -146,6 +146,19 @@ draw = (data, calllback) => {}
 redraw = (data, calllback) => {}
 ```
 
+### canvas.autoLayout (type, options)
+
+*作用*：手动调用自动布局
+
+*参数*
+
+* `{string} type` 布局类型
+* `{object} options` 布局参数
+
+```js
+autoLayout = (type, options) => {}
+```
+
 ### canvas.getDataMap (data, calllback)
 
 *作用*：获取画布的所有数据：节点，线段，分组

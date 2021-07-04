@@ -279,6 +279,33 @@ class BaseCanvas extends Canvas {
       groups: this.groups
     };
   }
+  autoLayout(type, options) {
+    this.layout = _.assign({}, this.layout, {
+      type,
+      options
+    });
+    let {nodes, groups, edges} = this;
+    let newNodes = nodes.map(item => item.options);
+    let newGroups = groups.map(item => item.options);
+    let newEdges = edges.map((item) => {
+      return {
+        source: _.get(item, 'options.sourceNode.id'),
+        target: _.get(item, 'options.targetNode.id')
+      };
+    });
+    this._autoLayout({
+      groups: newGroups,
+      nodes: newNodes,
+      edges: newEdges
+    });
+    newNodes.forEach((item, index) => {
+      this.nodes[index].moveTo(item.left, item.top);
+    });
+    // todo: 以后支持复合groups才打开
+    // newGroups.forEach((item, index) => {
+    //   this.groups[index].moveTo(item.left, iten.top);
+    // });
+  }
   _genSvgWrapper() {
     function _detectMob() {
       const toMatch = [
