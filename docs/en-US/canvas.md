@@ -194,6 +194,19 @@ draw = (data, calllback) => {}
 redraw = (data, calllback) => {}
 ```
 
+### canvas.autoLayout (type, options)
+
+*descripition*：manually invoke automatic layout
+
+*params*
+
+* `{string} type` layout tyoe
+* `{object} options` layout params
+
+```js
+autoLayout = (type, options) => {}
+```
+
 ### canvas.getDataMap (data, calllback)
 
 *descripition*：get all the data of the canvas: nodes, edges, groups
