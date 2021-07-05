@@ -11,9 +11,10 @@ export const initialValue = {
       render() {
         return (
           <Node title="节点1">
-            <Endpoint 
+            <Endpoint
               id="endpoint-1"
               nodeId="1"
+              className="red-endpoint"
             >
               锚点1
             </Endpoint>
@@ -26,14 +27,14 @@ export const initialValue = {
       render() {
         return (
           <Node title="节点2">
-            <Endpoint 
+            <Endpoint
               id="endpoint-2"
               nodeId="2"
             >
               锚点2
             </Endpoint>
             <div style={{position: 'absolute', right: 0, bottom: 0}}>
-              <Endpoint 
+              <Endpoint
                 id="endpoint-3"
                 nodeId="2"
               >
@@ -80,32 +81,32 @@ export const switchData = _.cloneDeep(initialValue);
 switchData.nodes[1].render = function render() {
   return (
     <Node title="节点2">
-      <Endpoint 
+      <Endpoint
         id="endpoint-2"
         nodeId="2"
       >
         锚点2
       </Endpoint>
-      <Endpoint 
+      <Endpoint
         id="endpoint-4"
         nodeId="2"
       >
         锚点4
       </Endpoint>
-      <Endpoint 
+      <Endpoint
         id="endpoint-5"
         nodeId="2"
       >
         锚点5
       </Endpoint>
-      <Endpoint 
+      <Endpoint
         id="endpoint-6"
         nodeId="2"
       >
         锚点6
       </Endpoint>
       <div style={{position: 'absolute', right: 0, bottom: 0}}>
-        <Endpoint 
+        <Endpoint
           id="endpoint-3"
           nodeId="2"
         >
@@ -121,7 +122,7 @@ switchData.nodes.push({
   render() {
     return (
       <Node title="节点">
-        <Endpoint 
+        <Endpoint
           id={`endpoint-100`}
           nodeId="100"
         >
