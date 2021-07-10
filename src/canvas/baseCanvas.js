@@ -293,8 +293,8 @@ class BaseCanvas extends Canvas {
     let newGroups = groups.map(item => item.options);
     let newEdges = edges.map((item) => {
       return {
-        source: _.get(item, 'options.sourceNode.id'),
-        target: _.get(item, 'options.targetNode.id')
+        source: _.get(item, 'sourceNode.id'),
+        target: _.get(item, 'targetNode.id')
       };
     });
     this._autoLayout({
