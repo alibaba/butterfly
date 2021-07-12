@@ -4207,7 +4207,7 @@ class BaseCanvas extends Canvas {
     } else if (step.type === 'system:addEdges') {
       this.addEdges(step.data, true);
     } else if (step.type === 'system:removeEdges') {
-      this.removeEdges(step.data, true);
+      this.removeEdges(step.data, true, true);
     } else if (step.type === 'system:moveNodes') {
       for (let key in step.data.nodes) {
         let _nodeInfo = step.data.nodes[key];
