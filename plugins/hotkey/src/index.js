@@ -27,10 +27,23 @@ class HotKeyPlugins {
   };
 
   // 如果监听到的是nodes edges groups 和 canvas事件 则对选中状态进行存储
+  _unfocus = () => {
+    if(this.selectedItems.nodes.length !== 0){
+      this.selectedItems.nodes.forEach(ele=>ele.unfocus())
+    }
+    if(this.selectedItems.edges.length !== 0){
+      this.selectedItems.edges.forEach(ele=>ele.unfocus())
+    }
+    if(this.selectedItems.groups.length !== 0){
+      this.selectedItems.groups.forEach(ele=>ele.unFocus())
+    }
+  }
+ 
   _updateSelectedItem = async (args) => {
     const { type } = args;
     switch (type) {
       case 'node:click': {
+        this._unfocus()
         this.selectedItems = {
           nodes: [args.node],
           edges: [],
@@ -39,6 +52,7 @@ class HotKeyPlugins {
         break;
       }
       case 'link:click': {
+        this._unfocus()
         this.selectedItems = {
           nodes: [],
           edges: [args.edge],
@@ -47,6 +61,7 @@ class HotKeyPlugins {
         break;
       }
       case 'group:click': {
+        this._unfocus()
         this.selectedItems = {
           nodes: [],
           edges: [],
@@ -55,15 +70,7 @@ class HotKeyPlugins {
         break;
       }
       case 'canvas:click': {
-        if(this.selectedItems.nodes.length !== 0){
-          this.selectedItems.nodes.forEach(ele=>ele.unfocus())
-        }
-        if(this.selectedItems.edges.length !== 0){
-          this.selectedItems.edges.forEach(ele=>ele.unfocus())
-        }
-        if(this.selectedItems.groups.length !== 0){
-          this.selectedItems.groups.forEach(ele=>ele.unFocus())
-        }
+        this._unfocus()
         this.selectedItems = {
           nodes: [],
           edges: [],
