@@ -49,13 +49,6 @@ export default {
         ]
       }
     ),
-    // url(
-    //   {
-    //     limit: 100 * 1024, // inline files < 100k, copy files > 100k
-    //     include: ["**/*.svg", "**/*.eot", "**/*.tff", "**/*.woff", "**/*.woff2"], // defaults to .svg, .png, .jpg and .gif files
-    //     emitFiles: true // defaults to true
-    //   }
-    // ),
     terser()
   ]
 }
