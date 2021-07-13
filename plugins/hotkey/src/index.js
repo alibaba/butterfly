@@ -26,7 +26,6 @@ class HotKeyPlugins {
     obj.canvas.on('events', this._updateSelectedItem);
   };
 
-  // 如果监听到的是nodes edges groups 和 canvas事件 则对选中状态进行存储
   _unfocus = () => {
     if(this.selectedItems.nodes.length !== 0){
       this.selectedItems.nodes.forEach(ele=>ele.unfocus())
@@ -39,6 +38,7 @@ class HotKeyPlugins {
     }
   }
  
+  // 如果监听到的是nodes edges groups 和 canvas事件 则对选中状态进行存储
   _updateSelectedItem = async (args) => {
     const { type } = args;
     switch (type) {
