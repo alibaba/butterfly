@@ -39,7 +39,7 @@ HotKeyPlugin.register({
 ## 常见的方式和默认的功能
 |  参数  |     说明    |                                     类型                                    | 默认值 |
 |:------:|:-----------:|:---------------------------------------------------------------------------:|:-----:|
-| SelectAll |  全选 | Array<key> |   "cltr+A"   |
+| onSelectAll |  全选 | Array<key> |   "cltr+A"   |
 | onCopy |  复制 | Array<key> |   "cltr+C"   |
 | onPaste |  粘贴 | Array<key> |   "cltr+V"   |
 | onDelete |  删除 | Array<key> |   "cltr+D (delete)"  |
