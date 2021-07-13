@@ -7,7 +7,7 @@
 > 自定义的快捷键key参数现在只支持大写字母输入 例如请输入A不要输入a
 
 ```js
-import {HotKeyPlugin} from 'butterfly-dag/hotkey/plugins';
+import {HotKeyPlugin} from 'butterfly-dag/plugins/hotkey/index';
 
 let canvasInstance = new Canvas({...});
 
