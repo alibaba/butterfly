@@ -1,4 +1,4 @@
-import { transformCode } from './tool';
+import { transformCode } from './codemap';
 class HotKeyPlugins {
   constructor() {
     this.addCanvas = {};
@@ -52,6 +52,7 @@ class HotKeyPlugins {
         break;
       }
       case 'link:click': {
+        console.log(this)
         this._unfocus()
         this.selectedItems = {
           nodes: [],
@@ -61,7 +62,10 @@ class HotKeyPlugins {
         break;
       }
       case 'group:click': {
-        this._unfocus()
+        setTimeout(() => {
+          this._unfocus()
+        }, 1000);
+
         this.selectedItems = {
           nodes: [],
           edges: [],
@@ -116,11 +120,10 @@ class HotKeyPlugins {
       const customerMapper = {}
       this.hotkeyFromConfig.forEach((ele)=>{
         const customerKey = ele.key.split("+")
-        const {pCtrl,pShift,pAlt,pMeta} = this.hasKeys(customerKey)
-        const customerCtrl =  pCtrl > -1 ? transformCode(customerKey[pCtrl]) : 'T';
-        const customerShift =  pShift > -1 ? transformCode(customerKey[pShift]) : 'T';
-        const customerAlt = pAlt > -1 ? transformCode(customerKey[pAlt]) : 'T';
-        const customerMeta = pMeta > -1 ? transformCode(customerKey[pMeta]) : 'T';
+        const customerCtrl =  this.hasKey(customerKey,'ctrl') ? transformCode('ctrl') : 'T';
+        const customerShift =  this.hasKey(customerKey,'shift') ? transformCode('shift') : 'T';
+        const customerAlt = this.hasKey(customerKey,'alt') ? transformCode('alt') : 'T';
+        const customerMeta = this.hasKey(customerKey,'command') ? transformCode('command') : 'T';
         const customerKeyCode = transformCode(customerKey[customerKey.length-1]);
         const KeyString  = `${customerCtrl}-${customerMeta}-${customerAlt}-${customerShift}-${customerKeyCode}`
         customerMapper[KeyString] = ele.handler;
@@ -132,12 +135,8 @@ class HotKeyPlugins {
     }
   };
 
-  hasKeys = (keyArray) => {
-    const pCtrl =  keyArray.indexOf('ctrl') 
-    const pShift = keyArray.indexOf('shift') 
-    const pAlt = keyArray.indexOf('Alt') 
-    const pMeta = keyArray.indexOf('Meta') 
-    return { pCtrl, pShift, pAlt, pMeta}
+  hasKey = ( keyArray, keyname ) => {
+    return keyArray.indexOf( keyname ) >-1
   }
 
   onDelete = () => {
