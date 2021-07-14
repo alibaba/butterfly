@@ -44,6 +44,7 @@ class HotKeyPlugins {
     switch (type) {
       case 'node:click': {
         this._unfocus()
+        args.node.focus()
         this.selectedItems = {
           nodes: [args.node],
           edges: [],
@@ -52,8 +53,8 @@ class HotKeyPlugins {
         break;
       }
       case 'link:click': {
-        console.log(this)
         this._unfocus()
+        args.edge.focus()
         this.selectedItems = {
           nodes: [],
           edges: [args.edge],
@@ -62,10 +63,8 @@ class HotKeyPlugins {
         break;
       }
       case 'group:click': {
-        setTimeout(() => {
-          this._unfocus()
-        }, 1000);
-
+        this._unfocus()
+        args.group.focus()
         this.selectedItems = {
           nodes: [],
           edges: [],
