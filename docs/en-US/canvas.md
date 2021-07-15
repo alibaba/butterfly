@@ -812,6 +812,7 @@ canvas.on('type key', (data) => {
 * `system.canvas.zoom`	canvas zoom event
 * `system.nodes.delete`	delete node event
 * `system.node.move`	move node event
+* `system.node.click`	click node event
 * `system.nodes.add`	add multiple nodes event
 * `system.links.delete`	delete edge event
 * `system.link.connect`	connect edge event
