@@ -92,6 +92,7 @@ canvas.draw({
 * 插件
   * [箭头(arrow)](./docs/zh-CN/plugins-arrows.md)
   * [左侧画板(pannel)](./docs/zh-CN/plugins-pannel.md)
+  * [快捷键(hotkey)](./docs/zh-CN/plugins-hotkey.md)
 * React & Vue支持
   * [React butterfly组件支持](./docs/zh-CN/react.md)
   * [Vue2 butterfly组件支持](./docs/zh-CN/vue.md)
