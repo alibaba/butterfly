@@ -1,0 +1,11 @@
+{
+  "name": "plugin-hotkey",
+  "cn_name": "插件--快捷键",
+  "description": "a dag exapmle to show how to use hotkey plugin",
+  "cn_description": "hotkey案例",
+  "dependencies": {
+    "butterfly-dag": "*",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+  }
+}

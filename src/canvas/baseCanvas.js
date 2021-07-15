@@ -3188,6 +3188,7 @@ class BaseCanvas extends Canvas {
     const updateEvts = [
       'system.canvas.zoom',
       'system.node.delete',
+      'system.node.click'
       'system.node.move',
       'system.nodes.add',
       'system.group.delete',
