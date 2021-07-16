@@ -274,6 +274,10 @@ class ButterflyReact extends React.Component {
       // 等待下一次更新
       this.updateFlag = true;
     }
+
+    if (this.canvas.updateFn) {
+      this.canvas.updateFn();
+    }
   }
 
   /**
