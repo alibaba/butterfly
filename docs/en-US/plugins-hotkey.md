@@ -1,16 +1,17 @@
 # Introduction：
-- A hotket plugin for butterfly;
-- We support the built-in functions of these shown in default function table
+- A hotkey plugin for butterfly;
+- We support the built-in functions of these shown in default functions table
 - Hotkey configuration supported.
 
 
-# 使用方式
+# Usage
 - Capital letters are allowed only in configuration
 - Camel-Case allowed only for functional key
-- eg： A instead of a；cltr instead of Ctrl ；rightArrow instead of other;
+> eg： A instead of a；cltr instead of Ctrl ；rightArrow instead of others;
 
 
-```js
+#### Register
+```JavaScript
 import * as HotKeyPlugin from 'butterfly-dag/plugins/hotkey/dist/index.unpkg.js';';
 
 let canvasInstance = new Canvas({...});
@@ -27,25 +28,24 @@ HotKeyPlugin.register({
     handler: () => {}
   }]
 })
-
 ```
 
 # API
 ## Hotkey:
 
-|  参数  |     说明    |                                     类型                                    | 默认值 |
+|  Params  |     Instruction    |                                    Type                                    | Default |
 |:------:|:-----------:|:---------------------------------------------------------------------------:|:-----:|
-| canvas | canva |            object          |   {}   |
+| canvas | canva instance|            object          |   {}   |
 | root | dom |        Dom      |   {}   |
 | config | see example |        Array      |   []   |
 
 
 ## Default Functions
-|  方法  |     说明                                                            | 默认值 |
+|  Method  |     Instruction                                                            | Default |
 |:------:|:-----------:|:-----:|
 | onSelectAll |  select all  |   "cltr+A"   |
 | onCopy |  copy |   "cltr+C"   |
 | onPaste |  paste  |   "cltr+V"   |
-| onDelete |  delete  |   "cltr+D" 或者 "delete"  |
+| onDelete |  delete  |   "cltr+D" or "delete"  |
 | onUndo |  undo |   "cltr+Z  |
 | onRedo |  redo  |   "ctrl+shift+Z"  |
