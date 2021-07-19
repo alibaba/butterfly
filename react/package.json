@@ -1,6 +1,6 @@
 {
   "name": "butterfly-react",
-  "version": "0.0.32-beta",
+  "version": "0.0.33-beta",
   "description": "react version for butterfly",
   "license": "MIT",
   "main": "dist/index.js",

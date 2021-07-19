@@ -12,8 +12,8 @@ const processFactory = (uniqId = '') => (
   return {
     nodes: nodes.map((node) => {
       return {
-        ...node,
         Class: nodeFactory(uniqId),
+        ...node,
       };
     }),
     edges: edges.map(edge => {
@@ -21,15 +21,15 @@ const processFactory = (uniqId = '') => (
       labelDOM.id = edge.id;
 
       return {
+        Class: edgeFactory(uniqId),
         ...edge,
         type: 'endpoint',
-        Class: edgeFactory(uniqId),
       };
     }),
     groups: groups.map(group => {
       return {
-        ...group,
         Class: groupFactory(uniqId),
+        ...group,
       };
     })
   };
