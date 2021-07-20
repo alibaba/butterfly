@@ -37,7 +37,7 @@ class HotKeyPlugins {
       this.selectedItems.groups.forEach(ele=>ele.unFocus())
     }
   }
- 
+
   // 如果监听到的是nodes edges groups 和 canvas事件 则对选中状态进行存储
   _updateSelectedItem = async (args) => {
     const { type } = args;
@@ -180,7 +180,6 @@ class HotKeyPlugins {
     this.selectedItems.nodes = nodes;
     this.selectedItems.edges = edges;
     this.selectedItems.groups = groups;
-    console.log(this.selectedItems)
     // 设置focus样式；
     this.canvas.nodes.forEach(ele=>{
       ele.focus()
