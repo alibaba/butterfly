@@ -2438,6 +2438,7 @@ class BaseCanvas extends Canvas {
         });
 
         _edgeFragment.appendChild(link.dom);
+        link.eventHandlerDom && _edgeFragment.appendChild(link.eventHandlerDom)
 
         if (link.labelDom) {
           _labelFragment.appendChild(link.labelDom);
