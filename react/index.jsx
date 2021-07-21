@@ -171,9 +171,34 @@ class ButterflyReact extends React.Component {
     });
   }
 
+  // 对齐节点的属性
+  alignNodesCls() {
+    const canvas = this.canvas;
+    const {nodes} = this.props;
+
+    canvas.nodes.forEach(cvsNode => {
+      const userNode = nodes.find(e => e.id === cvsNode.id);
+
+      const alignNodeCls = () => {
+        if (!cvsNode || !userNode) {
+          return;
+        }
+        for (let option in cvsNode.options) {
+          if (userNode[option] !== undefined) {
+            cvsNode.options[option] = userNode[option];
+          }
+        }
+      };
+
+      alignNodeCls();
+    });
+  }
+
   shouldComponentUpdate() {
     debug('align edge class');
     this.alignEdgesCls();
+    debug('align node class');
+    this.alignNodesCls();
     return true;
   }
 
