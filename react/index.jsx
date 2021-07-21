@@ -185,7 +185,6 @@ class ButterflyReact extends React.Component {
         }
         for (let option in cvsNode.options) {
           if (userNode[option] !== undefined) {
-            console.log(userNode[option]);
             cvsNode.options[option] = userNode[option];
           }
         }
