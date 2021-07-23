@@ -8,6 +8,7 @@ class BaseNode extends Node {
   constructor(opts) {
     super(opts);
     this.id = opts.id;
+    this.generateEdgeFirst = opts.generateEdgeFirst;
     this.scope = opts.scope;
     this.group = opts.group;
     this.top = opts.top || 0;
@@ -50,9 +51,9 @@ class BaseNode extends Node {
     return node[0];
   }
 
-  focus() {}
+  focus() { }
 
-  unFocus() {}
+  unFocus() { }
 
   addEndpoint(obj, isInited) {
     if (isInited) {
@@ -194,21 +195,31 @@ class BaseNode extends Node {
       if (e.button !== LEFT_KEY) {
         return;
       }
-      if (!['SELECT', 'INPUT', 'RADIO', 'CHECKBOX', 'TEXTAREA'].includes(e.target.nodeName)) {
+      if (this.generateEdgeFirst && this.endpoints.length === 1) {
+        const _endPoint = this.endpoints[0];
         e.preventDefault();
-      }
-      if (this.draggable) {
-        this._isMoving = true;
+        e.stopPropagation();
         this.emit('InnerEvents', {
-          type: 'node:dragBegin',
-          data: this
+          type: 'endpoint:drag',
+          data: _endPoint
         });
       } else {
-        // 单纯为了抛错事件给canvas，为了让canvas的dragtype不为空，不会触发canvas:click事件
-        this.emit('InnerEvents', {
-          type: 'node:mouseDown',
-          data: this
-        });
+        if (!['SELECT', 'INPUT', 'RADIO', 'CHECKBOX', 'TEXTAREA'].includes(e.target.nodeName)) {
+          e.preventDefault();
+        }
+        if (this.draggable) {
+          this._isMoving = true;
+          this.emit('InnerEvents', {
+            type: 'node:dragBegin',
+            data: this
+          });
+        } else {
+          // 单纯为了抛错事件给canvas，为了让canvas的dragtype不为空，不会触发canvas:click事件
+          this.emit('InnerEvents', {
+            type: 'node:mouseDown',
+            data: this
+          });
+        }
       }
     });
 
