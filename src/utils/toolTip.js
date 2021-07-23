@@ -132,12 +132,20 @@ let createTip = (opts, callback) => {
   let tipstDom = null;
   let isMouseInTips = false;
   let isMouseInTarget = false;
+  let isMouseClick = false;
   let timer = null;
   let notEventThrough = !!opts.notEventThrough;
+  // 传入参数：是否需要在用户点击endpoint之后隐藏tips
+  const needTipsHidden = opts.needTipsHidden === undefined? true : opts.needTipsHidden? true : false;
   let _mouseIn = (e) => {
-    isMouseInTips = true;
+    if (!isMouseClick) {
+      isMouseInTips = true;
+    } else {
+      isMouseInTips = false;
+    }
   }
   let _mouseOut = (e) => {
+    isMouseClick = false;
     isMouseInTips = false;
     _hide();
   }
@@ -153,10 +161,13 @@ let createTip = (opts, callback) => {
         currentTips.removeEventListener('mouseout', _mouseOut);
       }
     }, 50);
-  }
+  };
   let {data, targetDom, genTipDom} = opts;
   let _tipsDom = opts.tipsDom;
   targetDom.addEventListener('mouseover', (e) => {
+    if (isMouseClick) {
+      return;
+    }
     if (notEventThrough) {
       e.stopPropagation();
       e.preventDefault();
@@ -183,6 +194,16 @@ let createTip = (opts, callback) => {
     _hide();
   });
 
+  targetDom.addEventListener('mousedown', () => {
+    if (needTipsHidden) {
+      isMouseClick = true;
+      isMouseInTarget = false;
+      _hide();
+    }
+  });
+  document.addEventListener('mouseup', () => {
+    isMouseClick = false;
+  });
 };
 
 let currentMenu = null;
