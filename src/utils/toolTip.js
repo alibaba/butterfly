@@ -185,22 +185,28 @@ let createTip = (opts, callback) => {
     currentTips.addEventListener('mouseout', _mouseOut);
   });
 
-  targetDom.addEventListener('mouseout', (e) => {
+  targetDom.onmouseout = (e) => {
     if (notEventThrough) {
       e.stopPropagation();
       e.preventDefault();
     }
     isMouseInTarget = false;
     _hide();
-  });
+  };
 
-  targetDom.addEventListener('mousedown', () => {
+  targetDom.onmousedown = () => {
     if (needTipsHidden) {
+      const _setClickFalse = () => {
+        isMouseClick = false;
+        document.removeEventListener('mouseup', _setClickFalse);
+      };
+      document.addEventListener('mouseup', _setClickFalse);
       isMouseClick = true;
       isMouseInTarget = false;
       _hide();
     }
-  });
+  };
+
   document.addEventListener('mouseup', () => {
     isMouseClick = false;
   });
