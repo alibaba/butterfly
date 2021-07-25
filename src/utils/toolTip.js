@@ -185,7 +185,9 @@ let createTip = (opts, callback) => {
     currentTips.addEventListener('mouseout', _mouseOut);
   });
 
+  const _targetMouseOut = targetDom.onmouseout;
   targetDom.onmouseout = (e) => {
+    _targetMouseOut(e);
     if (notEventThrough) {
       e.stopPropagation();
       e.preventDefault();
@@ -194,7 +196,9 @@ let createTip = (opts, callback) => {
     _hide();
   };
 
-  targetDom.onmousedown = () => {
+  const _targetMouseDown = targetDom.onmousedown;
+  targetDom.onmousedown = (e) => {
+    _targetMouseDown(e);
     if (needTipsHidden) {
       const _setClickFalse = () => {
         isMouseClick = false;
@@ -206,10 +210,6 @@ let createTip = (opts, callback) => {
       _hide();
     }
   };
-
-  document.addEventListener('mouseup', () => {
-    isMouseClick = false;
-  });
 };
 
 let currentMenu = null;
