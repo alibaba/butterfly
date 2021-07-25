@@ -20,6 +20,7 @@ $ npm i butterfly-react butterfly-dag -S
 | options | Object | 参考官网[定义](https://github.com/alibaba/butterfly/blob/master/docs/zh-CN/canvas.md#canvas-attr) | | |
 | onEdgesChange | (IEdge[]) => void; | | |
 | onCreateEdge | (IEdge) => void; | | |
+| onReconnectEdge | (res(同原生重连返回参数)) => void; | 当线从一个锚点拖拽到新的锚点时触发| |
 | onDeleteEdge | (IEdge) => void; | | |
 | className | String | | |
 | onLoaded | (canvas) => void; | 画布加载完毕后返回画布实例| |
