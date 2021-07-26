@@ -171,9 +171,34 @@ class ButterflyReact extends React.Component {
     });
   }
 
+  // 对齐节点的属性
+  alignNodesCls() {
+    const canvas = this.canvas;
+    const {nodes} = this.props;
+
+    canvas.nodes.forEach(cvsNode => {
+      const userNode = nodes.find(e => e.id === cvsNode.id);
+
+      const alignNodeCls = () => {
+        if (!cvsNode || !userNode) {
+          return;
+        }
+        for (let option in cvsNode.options) {
+          if (userNode[option] !== undefined) {
+            cvsNode.options[option] = userNode[option];
+          }
+        }
+      };
+
+      alignNodeCls();
+    });
+  }
+
   shouldComponentUpdate() {
     debug('align edge class');
     this.alignEdgesCls();
+    debug('align node class');
+    this.alignNodesCls();
     return true;
   }
 
@@ -182,7 +207,8 @@ class ButterflyReact extends React.Component {
     const {
       onCreateEdge,
       onEdgesChange,
-      onDeleteEdge
+      onDeleteEdge,
+      onReconnectEdge
     } = this.props;
 
     // 由于 hooks 组件每次会重新生成 event，所以需要更新 event
@@ -190,8 +216,12 @@ class ButterflyReact extends React.Component {
       canvas.off('system.link.connect', this._onCreateEdge);
     }
 
+    if (this._onReconnectEdge) {
+      canvas.off('system.link.reconnect', this._onReconnectEdge);
+    }
+
     if (this._onDeleteEdge) {
-      canvas.off('system.link.delete', this._onDeleteEdge);
+      canvas.off('system.links.delete', this._onDeleteEdge);
     }
 
     this._onCreateEdge = ({links}) => {
@@ -226,32 +256,42 @@ class ButterflyReact extends React.Component {
 
     canvas.on('system.link.connect', this._onCreateEdge);
 
-    this._onDeleteEdge = ({links}) => {
-      const link = links[0];
-      // 直接取消当前连线，然后重新绘制一条
-      const {
-        sourceNode,
-        sourceEndpoint,
-        targetNode,
-        targetEndpoint
-      } = link;
-
-      const sourceNodeId = sourceNode.id;
-      const sourceEndpointId = sourceEndpoint.id;
-      const targetNodeId = targetNode.id;
-      const targetEndpointId = targetEndpoint.id;
-
-      call(onDeleteEdge)({
-        sourceNodeId,
-        sourceEndpointId,
-        targetNodeId,
-        targetEndpointId
-      });
+    this._onReconnectEdge = (res) => {
+      call(onReconnectEdge)(res);
 
       call(onEdgesChange)(canvas.edges);
     };
 
-    canvas.on('system.link.delete', this._onDeleteEdge);
+    canvas.on('system.link.reconnect', this._onReconnectEdge);
+
+    this._onDeleteEdge = ({links}) => {
+      const link = links[0];
+      // 直接取消当前连线，然后重新绘制一条
+      if (link) {
+        const {
+          sourceNode,
+          sourceEndpoint,
+          targetNode,
+          targetEndpoint
+        } = link;
+
+        const sourceNodeId = sourceNode.id;
+        const sourceEndpointId = sourceEndpoint.id;
+        const targetNodeId = targetNode.id;
+        const targetEndpointId = targetEndpoint.id;
+
+        call(onDeleteEdge)({
+          sourceNodeId,
+          sourceEndpointId,
+          targetNodeId,
+          targetEndpointId
+        });
+
+        call(onEdgesChange)(canvas.edges);
+      }
+    };
+
+    canvas.on('system.links.delete', this._onDeleteEdge);
   }
 
   async componentDidUpdate(preProps) {

@@ -812,6 +812,7 @@ canvas.on('type key', (data) => {
 * `system.canvas.zoom`	画布缩放
 * `system.nodes.delete`	删除节点
 * `system.node.move`	移动节点
+* `system.node.click`	点击节点
 * `system.nodes.add`	批量节点添加
 * `system.links.delete`	删除连线
 * `system.link.connect`	连线成功
