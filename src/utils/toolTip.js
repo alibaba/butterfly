@@ -187,7 +187,10 @@ let createTip = (opts, callback) => {
 
   const _targetMouseOut = targetDom.onmouseout;
   targetDom.onmouseout = (e) => {
-    _targetMouseOut(e);
+    if (_targetMouseOut) {
+      _targetMouseOut(e);
+    }
+    
     if (notEventThrough) {
       e.stopPropagation();
       e.preventDefault();
@@ -198,7 +201,10 @@ let createTip = (opts, callback) => {
 
   const _targetMouseDown = targetDom.onmousedown;
   targetDom.onmousedown = (e) => {
-    _targetMouseDown(e);
+    if (_targetMouseDown) {
+      _targetMouseDown(e);
+    }
+    
     if (needTipsHidden) {
       const _setClickFalse = () => {
         isMouseClick = false;
