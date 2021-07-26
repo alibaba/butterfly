@@ -14,17 +14,23 @@ please refer to [React Demo](https://butterfly-dag.gitee.io/butterfly-dag/demo/r
 
 ## 属性
 
-| Prop          | Type                | Description                                                                              | Default |
-|---------------|---------------------|------------------------------------------------------------------------------------------|---------|
-| nodes         | [INode[]](#INode)   |                                                                                          | []      |
-| egdes         | [IEdge[]](#IEdge)   |                                                                                          | []      |
-| groups        | [IGroup[]](#IGroup) |                                                                                          | []      |
-| options       | Object              | [see](https://github.com/alibaba/butterfly/blob/master/docs/zh-CN/canvas.md#canvas-attr) |         |
-| onEdgesChange | (IEdge[]) => void; |                                                                                          |         |
-| onCreateEdge  | (IEdge) => void; |                                                                                          |         |
-| onDeleteEdge  | (IEdge) => void; |                                                                                          |         |
-| className     | String              |                                                                                          |         |
-| onLoaded      | (canvas) => void; | Canvans onLoaded event                                                                   |         |
+| Prop            | Type                | Description                                                                              | Default |
+| --------------- | ------------------- | ---------------------------------------------------------------------------------------- | ------- |
+| nodes           | [INode[]](#INode)   |                                                                                          | []      |
+| egdes           | [IEdge[]](#IEdge)   |                                                                                          | []      |
+| groups          | [IGroup[]](#IGroup) |                                                                                          | []      |
+| options         | Object              | [see](https://github.com/alibaba/butterfly/blob/master/docs/zh-CN/canvas.md#canvas-attr) |         |
+| onEdgesChange   | (IEdge[]) => void;  |                                                                                          |         |
+| onCreateEdge    | (IEdge) => void;    |                                                                                          |         |
+| onReconnectEdge | (res) => void;      | Triggered when a line is dragged from an anchor to a new endpoint                        |         |
+| onDeleteEdge    | (IEdge) => void;    |                                                                                          |         |
+| className       | String              |                                                                                          |         |
+| onLoaded        | (canvas) => void;   | Canvans onLoaded event                                                                   |         |
+
+### res
+
+* Same as the original(butterfly-dag) reconnection return parameter
+* If you don't understand, you can `console.log`
 
 ### INode
 
