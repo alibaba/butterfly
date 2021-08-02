@@ -51,6 +51,9 @@ class ButterflyReact extends React.Component {
     this.canvas = null;
     // 渲染节点实例
     this.dom = null;
+
+    // 是否强制渲染过
+    this.hasForced = false;
   }
 
   savePropsHash() {
@@ -129,6 +132,7 @@ class ButterflyReact extends React.Component {
 
     call(this.props.onLoaded)(this.canvas);
   }
+
   // 控制渲染边上的cls
   alignEdgesCls() {
     const canvas = this.canvas;
@@ -420,6 +424,13 @@ class ButterflyReact extends React.Component {
                   // 对齐所有的锚点
                   this.canvas.recalc();
                   this.alignEdge();
+
+                  if (this.hasForced) {
+                    return this.hasForced = false;
+                  }
+
+                  this.forceUpdate();
+                  this.hasForced = true;
                 }}
               />
               {
