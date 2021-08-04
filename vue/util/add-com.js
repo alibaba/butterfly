@@ -90,11 +90,33 @@ import _ from 'lodash';
 
 };
 
+// 一些UI组件的渲染方式的补充
+const addUserEndpointByComponentInstance = (canvasNode, ComponentInstance) => {
+  let options = ComponentInstance.$options;
+  let componentTag = options && options._componentTag;
+  let componentInstanceChildrens = ComponentInstance.$children;
+
+  if (componentTag === 'butterfly-vue-endpoint') {
+    let dom = ComponentInstance.$el;
+    let id = dom.id;
+    canvasNode.addEndpoint({
+      id,
+      dom,
+    })
+    return;
+  }
+
+  for (let componentInstanceChildren of componentInstanceChildrens) {
+    addUserEndpointByComponentInstance(canvasNode, componentInstanceChildren)
+  }
+
+};
+
 const addUserEndpoint = (canvasNode,VNode) => {
   let VNodeTemp = VNode;
   let tag = VNodeTemp.tag;
   let children = VNodeTemp.children;
-  
+
   // 当虚拟树节点到达底部
   if (_.isUndefined(tag)) {
     return;
@@ -111,8 +133,16 @@ const addUserEndpoint = (canvasNode,VNode) => {
     return;
   }
 
+  let componentInstance = VNodeTemp.componentInstance;
+  if (!_.isUndefined(componentInstance)) {
+    let componentInstanceChildrens = componentInstance.$children;
+    for (let componentInstanceChildren of componentInstanceChildrens) {
+      addUserEndpointByComponentInstance(canvasNode, componentInstanceChildren)
+    }
+  }
+
   if (!_.isUndefined(children)) {
-    for(let VNodeChildren of children){
+    for (let VNodeChildren of children) {
       addUserEndpoint(canvasNode,VNodeChildren);
     }
   }
