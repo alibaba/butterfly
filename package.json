@@ -49,13 +49,8 @@
     "rollup-plugin-url": "~3.0.1",
     "style-loader": "~3.2.0",
     "url-loader": "~4.1.0",
-<<<<<<< HEAD
-    "webpack": "~5.42.0",
-    "webpack-cli": "~4.7.0"
-=======
     "webpack": "~5.50.0",
-    "webpack-cli": "~4.6.0"
->>>>>>> dev/v4
+    "webpack-cli": "~4.7.0"
   },
   "peerDependencies": {
     "jquery": ">=2.0.0",
