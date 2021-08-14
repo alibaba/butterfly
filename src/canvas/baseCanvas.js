@@ -1554,7 +1554,7 @@ class BaseCanvas extends Canvas {
         return;
       }
       let toDomClassName = toDom.className;
-      if (toDomClassName.indexOf('butterfly-tooltip') === -1) {
+      if (toDomClassName && toDomClassName.indexOf('butterfly-tooltip') === -1) {
         mouseLeaveEvent();
       }
     });
