@@ -319,7 +319,8 @@ class BaseCanvas extends Canvas {
           /iPad/i,
           /iPod/i,
           /BlackBerry/i,
-          /Windows Phone/i
+          /Windows Phone/i,
+          /Electron/i
       ];
       return toMatch.some((toMatchItem) => {
           return window.navigator.userAgent.match(toMatchItem);
@@ -1543,7 +1544,7 @@ class BaseCanvas extends Canvas {
         return;
       }
       let toDomClassName = toDom.className;
-      if (toDomClassName.indexOf('butterfly-tooltip') === -1) {
+      if (toDomClassName && toDomClassName.indexOf('butterfly-tooltip') === -1) {
         mouseLeaveEvent();
       }
     });
