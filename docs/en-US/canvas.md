@@ -16,7 +16,8 @@ let canvas = new Canvas({
       type: 'normal'       // Node group type: normal (drag in and drag out), inner (can only be dragged in and not out)
     },
     edge: {
-      type: 'Bezier',      // edge type：Bezier curve，Polyline ，Straight，Manhattan line，Improved Bezier curve。values ： Bezier/Flow/Straight/Manhattan/AdvancedBezier
+      type: 'endpoint',    // edge connection type
+      shapeType: 'Bezier', // edge type：Bezier curve，Polyline ，Straight，Manhattan line，Improved Bezier curve。values ： Bezier/Flow/Straight/Manhattan/AdvancedBezier
       label: 'test',       // edge label
       arrow: true,         // whether to show arrow
       arrowPosition: 0.5,  // arrow position (0 ~ 1)
@@ -191,6 +192,19 @@ draw = (data, calllback) => {}
 
 ```js
 redraw = (data, calllback) => {}
+```
+
+### canvas.autoLayout (type, options)
+
+*descripition*：manually invoke automatic layout
+
+*params*
+
+* `{string} type` layout tyoe
+* `{object} options` layout params
+
+```js
+autoLayout = (type, options) => {}
 ```
 
 ### canvas.getDataMap (data, calllback)
@@ -798,6 +812,7 @@ canvas.on('type key', (data) => {
 * `system.canvas.zoom`	canvas zoom event
 * `system.nodes.delete`	delete node event
 * `system.node.move`	move node event
+* `system.node.click`	click node event
 * `system.nodes.add`	add multiple nodes event
 * `system.links.delete`	delete edge event
 * `system.link.connect`	connect edge event
@@ -848,7 +863,7 @@ this.canvas.setGridMode(true, {
     shapeType: 'line',     // show type，support line & circle
     gap: 23,               // grid gap
     adsorbGap: 8,          // adsorb gap
-    backgroud: '#fff',     // grid backgroud
+    background: '#fff',     // grid background
     lineColor: '#000',     // grid line color
     lineWidth: 1,          // grid line thickness
     circleRadiu: 1,        // grid circle radiu
@@ -856,6 +871,41 @@ this.canvas.setGridMode(true, {
   }
 });
 ```
+
+### canvas.justifyCoordinate ()
+
+*descripition*：automatically align nodes / groups on the canvas(must be effective under the grid background)
+
+```js
+justifyCoordinate = () => {}
+```
+
+### canvas.setGuideLine (show, options)
+
+*descripition*：set guide line
+
+*params*
+
+* `{true|false} boolean`  - whether to open
+* `{array} options` - parameters for guide line
+
+```js
+setGuideLine = (show, options) => {}
+
+this.canvas.setGuideLine(true, {
+  limit: 1,             // limit guide line number
+  adsorp: {
+    enable: false       // enable auto adsorp
+    gap: 5              // adsorp gap
+  },
+  theme: {
+    lineColor: 'red',   // guide line color
+    lineWidth: 1,       // guide line thickness
+  }
+});
+```
+
+<img width="600" src="https://img.alicdn.com/imgextra/i1/O1CN01bBhPsu1b3pH0VD1X9_!!6000000003410-1-tps-1274-600.gif">
 
 ### canvas.setMinimap = (show, options)
 
@@ -896,35 +946,6 @@ this.canvas.save2img({type: 'png', width: 1920, height: 1080, quality: 1})
     link.href = dataUrl;
     link.click();
   });
-```
-
-### canvas.justifyCoordinate ()
-
-*descripition*：automatically align nodes / groups on the canvas(must be effective under the grid background)
-
-```js
-justifyCoordinate = () => {}
-```
-
-### canvas.setGuideLine (show, options)
-
-*descripition*：set guide line
-
-*params*
-
-* `{true|false} boolean`  - whether to open
-* `{array} options` - parameters for guide line
-
-```js
-setGuideLine = (show, options) => {}
-
-this.canvas.setGuideLine(true, {
-  limit: 1,             // limit guide line number
-  theme: {
-    lineColor: 'red',   // guide line color
-    lineWidth: 1,       // guide line thickness
-  }
-});
 ```
 
 ### canvas.updateRootResize ()

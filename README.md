@@ -29,7 +29,10 @@
   <img width="900" src="https://img.alicdn.com/imgextra/i3/O1CN018CrqXz1KRK7Euhj6X_!!6000000001160-2-tps-1155-1081.png">
 </p>
 
-## 🚀快速本地DEMO
+## 🚀DEMO
+
+### 本地DEMO
+
 ```
 git clone git@github.com:alibaba/butterfly.git
 npm install
@@ -37,6 +40,10 @@ cd example
 npm install
 npm start
 ```
+
+### 线上DEMO
+
+[小蝴蝶官网](https://butterfly-dag.gitee.io/butterfly-dag/demo/analysis)
 
 ## 📦 安装
 ```
@@ -85,6 +92,7 @@ canvas.draw({
 * 插件
   * [箭头(arrow)](./docs/zh-CN/plugins-arrows.md)
   * [左侧画板(pannel)](./docs/zh-CN/plugins-pannel.md)
+  * [快捷键(hotkey)](./docs/zh-CN/plugins-hotkey.md)
 * React & Vue支持
   * [React butterfly组件支持](./docs/zh-CN/react.md)
   * [Vue2 butterfly组件支持](./docs/zh-CN/vue.md)
@@ -105,7 +113,7 @@ canvas.draw({
   <img width="49%" src="https://img.alicdn.com/imgextra/i4/O1CN01Nt9rpo25y6NlRMUtR_!!6000000007594-1-tps-595-411.gif">
 </p>
 
-* 表字段血缘/业务血缘(开源中): 适用于表级血缘,表字段级血缘,业务链路血缘等业务
+* [表字段血缘/业务血缘](https://github.com/aliyun/react-lineage-dag): 适用于表级血缘,表字段级血缘,业务链路血缘等业务
 <img width="98%" src="https://img.alicdn.com/imgextra/i4/O1CN01ou8wTq20SQv4AnedD_!!6000000006848-1-tps-1337-761.gif">
 
 * [可视化建模图](https://github.com/aliyun/react-visual-modeling): 适用于UML，数据库建模，数据仓库建设等业务

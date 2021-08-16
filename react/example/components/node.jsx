@@ -18,7 +18,7 @@ const Node = (props) => {
 
 Node.propTypes = {
   title: PropTypes.string,
-  children: PropTypes.element
+  children: PropTypes.any
 };
 
 export default Node;

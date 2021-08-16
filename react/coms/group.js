@@ -1,4 +1,4 @@
-import {Group} from 'butterfly-dag';
+import {Group} from 'butterfly-dag/pack';
 import $ from 'jquery';
 
 const getNodeStyle = (left, top) => {
@@ -9,46 +9,49 @@ const getNodeStyle = (left, top) => {
   };
 };
 
-class CustomGroup extends Group {
-  draw(group) {
-    const div = document.createElement('div');
+const groupFactory = (uniqId) => {
+  class CustomGroup extends Group {
+    draw(group) {
+      const div = document.createElement('div');
 
-    const style = getNodeStyle(group.left, group.top);
-    Object.keys(style).forEach(key => {
-      div.style[key] = style[key];
-    });
+      const style = getNodeStyle(group.left, group.top);
+      Object.keys(style).forEach(key => {
+        div.style[key] = style[key];
+      });
 
-    div.className = 'butterfly-group';
+      div.className = 'butterfly-group';
 
-    div.id = `bf_group_${group.id}`;
-    div.className = 'butterflies-group';
+      div.id = uniqId + `bf_group_${group.id}`;
+      div.className = 'butterflies-group';
 
-    return div;
+      return div;
+    }
+
+    _addEventListener() {
+      $(this.dom).on('mousedown', (e) => {
+        const LEFT_KEY = 0;
+        if (e.button !== LEFT_KEY) {
+          return;
+        }
+
+        if (this.draggable) {
+          this._isMoving = true;
+          this.emit('InnerEvents', {
+            type: 'group:dragBegin',
+            data: this
+          });
+        } else {
+          // 单纯为了抛错事件给canvas，为了让canvas的dragtype不为空，不会触发canvas:click事件
+          this.emit('InnerEvents', {
+            type: 'group:mouseDown',
+            data: this
+          });
+        }
+      });
+    }
   }
 
-  _addEventListener() {
-    $(this.dom).on('mousedown', (e) => {
-      const LEFT_KEY = 0;
-      if (e.button !== LEFT_KEY) {
-        return;
-      }
+  return CustomGroup;
+};
 
-      if (this.draggable) {
-        this._isMoving = true;
-        this.emit('InnerEvents', {
-          type: 'group:dragBegin',
-          data: this
-        });
-      } else {
-        // 单纯为了抛错事件给canvas，为了让canvas的dragtype不为空，不会触发canvas:click事件
-        this.emit('InnerEvents', {
-          type: 'group:mouseDown',
-          data: this
-        });
-      }
-    });
-  }
-}
-
-
-export default CustomGroup;
+export default groupFactory;

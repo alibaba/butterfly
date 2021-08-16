@@ -16,7 +16,8 @@ let canvas = new Canvas({
       type: 'normal'       //节点组类型(选填): normal(随意拖入拖出),inner(只能拖入不能拖出)
     },
     edge: {
-      type: 'Bezier',      //线条默认类型
+      type: 'endpoint',    //线段连接类型
+      shapeType: 'Bezier', //线条默认类型
       label: 'test',       //线条默认label
       arrow: true,         //线条默认是否带箭头
       arrowPosition: 0.5,  //箭头位置(0 ~ 1)
@@ -191,6 +192,19 @@ draw = (data, calllback) => {}
 
 ```js
 redraw = (data, calllback) => {}
+```
+
+### canvas.autoLayout (type, options)
+
+*作用*：手动调用自动布局
+
+*参数*
+
+* `{string} type` 布局类型
+* `{object} options` 布局参数
+
+```js
+autoLayout = (type, options) => {}
 ```
 
 ### canvas.getDataMap (data, calllback)
@@ -798,6 +812,7 @@ canvas.on('type key', (data) => {
 * `system.canvas.zoom`	画布缩放
 * `system.nodes.delete`	删除节点
 * `system.node.move`	移动节点
+* `system.node.click`	点击节点
 * `system.nodes.add`	批量节点添加
 * `system.links.delete`	删除连线
 * `system.link.connect`	连线成功
@@ -848,7 +863,7 @@ this.canvas.setGridMode(true, {
     shapeType: 'line',     // 展示的类型，支持line & circle
     gap: 23,               // 网格间隙
     adsorbGap: 8,          // 吸附间距
-    backgroud: '#fff',     // 网格背景颜色
+    background: '#fff',     // 网格背景颜色
     lineColor: '#000',     // 网格线条颜色
     lineWidth: 1,          // 网格粗细
     circleRadiu: 1,        // 圆点半径
@@ -856,6 +871,41 @@ this.canvas.setGridMode(true, {
   }
 });
 ```
+
+### canvas.justifyCoordinate ()
+
+*作用*：把画布上的节点，节点组自动对齐(必须在网格布局下才生效)
+
+```js
+justifyCoordinate = () => {}
+```
+
+### canvas.setGuideLine (show, options)
+
+*作用*：设置辅助线
+
+*参数*
+
+* `{true|false} boolean`  - 是否开启辅助线功能
+* `{array} options` - 辅助线的定制化参数
+
+```js
+setGuideLine = (show, options) => {}
+
+this.canvas.setGuideLine(true, {
+  limit: 1,             // 限制辅助线条数
+  adsorp: {
+    enable: false       // 开启吸附效果
+    gap: 5              // 吸附间隔
+  },
+  theme: {
+    lineColor: 'red',   // 网格线条颜色
+    lineWidth: 1,       // 网格粗细
+  }
+});
+```
+
+<img width="600" src="https://img.alicdn.com/imgextra/i1/O1CN01bBhPsu1b3pH0VD1X9_!!6000000003410-1-tps-1274-600.gif">
 
 ### canvas.setMinimap = (show, options)
 
@@ -896,35 +946,6 @@ this.canvas.save2img({type: 'png', width: 1920, height: 1080, quality: 1})
     link.href = dataUrl;
     link.click();
   });
-```
-
-### canvas.justifyCoordinate ()
-
-*作用*：把画布上的节点，节点组自动对齐(必须在网格布局下才生效)
-
-```js
-justifyCoordinate = () => {}
-```
-
-### canvas.setGuideLine (show, options)
-
-*作用*：设置辅助线
-
-*参数*
-
-* `{true|false} boolean`  - 是否开启辅助线功能
-* `{array} options` - 辅助线的定制化参数
-
-```js
-setGuideLine = (show, options) => {}
-
-this.canvas.setGuideLine(true, {
-  limit: 1,             // 限制辅助线条数
-  theme: {
-    lineColor: 'red',   // 网格线条颜色
-    lineWidth: 1,       // 网格粗细
-  }
-});
 ```
 
 ### canvas.updateRootResize ()

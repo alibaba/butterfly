@@ -1,5 +1,3 @@
-import Edge from '../coms/edge.js';
-
 export default {
   zoomable: true,          // 可缩放(可传)
   moveable: true,          // 可平移(可传)
@@ -8,8 +6,7 @@ export default {
   disLinkable: true,       // 节点可取消连接(可传)
   theme: {
     edge: {
-      arrow: true,
-      Class: Edge
+      arrow: true
     }
   }
 };

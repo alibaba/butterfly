@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import './index.less';
-import 'react-dev-utils/webpackHotDevClient';
+import 'react-error-overlay';
 import Router from './router';
 
 ReactDOM.render(

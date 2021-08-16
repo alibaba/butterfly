@@ -132,12 +132,20 @@ let createTip = (opts, callback) => {
   let tipstDom = null;
   let isMouseInTips = false;
   let isMouseInTarget = false;
+  let isMouseClick = false;
   let timer = null;
   let notEventThrough = !!opts.notEventThrough;
+  // 传入参数：是否需要在用户点击endpoint之后隐藏tips
+  const needTipsHidden = opts.needTipsHidden === undefined? true : opts.needTipsHidden? true : false;
   let _mouseIn = (e) => {
-    isMouseInTips = true;
+    if (!isMouseClick) {
+      isMouseInTips = true;
+    } else {
+      isMouseInTips = false;
+    }
   }
   let _mouseOut = (e) => {
+    isMouseClick = false;
     isMouseInTips = false;
     _hide();
   }
@@ -153,10 +161,13 @@ let createTip = (opts, callback) => {
         currentTips.removeEventListener('mouseout', _mouseOut);
       }
     }, 50);
-  }
+  };
   let {data, targetDom, genTipDom} = opts;
   let _tipsDom = opts.tipsDom;
   targetDom.addEventListener('mouseover', (e) => {
+    if (isMouseClick) {
+      return;
+    }
     if (notEventThrough) {
       e.stopPropagation();
       e.preventDefault();
@@ -174,15 +185,37 @@ let createTip = (opts, callback) => {
     currentTips.addEventListener('mouseout', _mouseOut);
   });
 
-  targetDom.addEventListener('mouseout', (e) => {
+  const _targetMouseOut = targetDom.onmouseout;
+  targetDom.onmouseout = (e) => {
+    if (_targetMouseOut) {
+      _targetMouseOut(e);
+    }
+    
     if (notEventThrough) {
       e.stopPropagation();
       e.preventDefault();
     }
     isMouseInTarget = false;
     _hide();
-  });
+  };
 
+  const _targetMouseDown = targetDom.onmousedown;
+  targetDom.onmousedown = (e) => {
+    if (_targetMouseDown) {
+      _targetMouseDown(e);
+    }
+    
+    if (needTipsHidden) {
+      const _setClickFalse = () => {
+        isMouseClick = false;
+        document.removeEventListener('mouseup', _setClickFalse);
+      };
+      document.addEventListener('mouseup', _setClickFalse);
+      isMouseClick = true;
+      isMouseInTarget = false;
+      _hide();
+    }
+  };
 };
 
 let currentMenu = null;

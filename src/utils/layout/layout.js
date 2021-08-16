@@ -14,6 +14,7 @@ import concentLayout from './concentLayout.js'
 import dagreLayout from './dagreLayout.js';
 import radial from './radial/radial.js';
 import dagreGroupLayout from './dagreGroupLayout.js';
+import treeLayout from './hierarchy';
 
 
 // 离散树形布局
@@ -42,14 +43,6 @@ function forceTreeLayout(param) {
 
   // 后续需要考虑group的布局
 }
-
-// 后续拓展树形布局
-function treeLayout(param) {
-
-}
-
-
-
 
 
 export default {

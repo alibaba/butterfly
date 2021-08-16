@@ -8,99 +8,7 @@ $ npm i butterfly-react butterfly-dag -S
 
 ## 用法
 
-```jsx
-import React from 'react';
-import ReactButterfly from 'butterfly-react';
-
-const endpoints = [
-  {
-    id: 'right',
-    orientation: [1, 0],
-    pos: [0, 0.5]
-  },
-  {
-    id: 'left',
-    orientation: [-1, 0],
-    pos: [0, 0.5]
-  }
-];
-
-const data = {
-  groups: [
-    {
-      id: '1',
-      left: 10,
-      top: 100,
-      render() {
-        return (
-          <div style={{width:'250px',textAlign:'center',backgroundColor:'blanchedalmond'}}>
-            测试group
-          </div>
-        )
-      }
-    }
-  ],
-  nodes: [
-    {
-      id: '1',
-      group:'1',
-      endpoints: endpoints,
-      render() {
-        return (
-          <div>
-            测试节点1
-          </div>
-        );
-      }
-    },
-    {
-      id: '2',
-      top: 25,
-      left: 300,
-      endpoints: endpoints,
-      render() {
-        return (
-          <div>
-            测试节点2
-          </div>
-        );
-      }
-    },
-    {
-      id: '3',
-      top: 25,
-      left: 600,
-      endpoints: endpoints,
-    }
-  ],
-  edges: [
-    {
-      id: '1-2',
-      sourceNode: '1',
-      targetNode: '2',
-      source: 'right',
-      target: 'left',
-      labelRender: () => {
-        return '测试label';
-      }
-    }
-  ],
-};
-
-class App extends React.Component {
-  state = {
-    data
-  }
-
-  render() {
-    return (
-      <div>
-        <ReactButterfly {...this.state.data} />
-      </div>
-    );
-  }
-}
-```
+请参考 [React Demo](https://butterfly-dag.gitee.io/butterfly-dag/demo/react)
 
 ## 属性
 
@@ -112,6 +20,7 @@ class App extends React.Component {
 | options | Object | 参考官网[定义](https://github.com/alibaba/butterfly/blob/master/docs/zh-CN/canvas.md#canvas-attr) | | |
 | onEdgesChange | (IEdge[]) => void; | | |
 | onCreateEdge | (IEdge) => void; | | |
+| onReconnectEdge | (res(同原生重连返回参数)) => void; | 当线从一个锚点拖拽到新的锚点时触发| |
 | onDeleteEdge | (IEdge) => void; | | |
 | className | String | | |
 | onLoaded | (canvas) => void; | 画布加载完毕后返回画布实例| |
