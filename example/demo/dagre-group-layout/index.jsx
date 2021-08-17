@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 
 import mockData from './data';
-// import {Canvas} from 'butterfly-dag';
-import {Canvas} from 'local::butterfly-dag'; //引用本地数据时使用
+import {Canvas} from 'butterfly-dag';
+// import {Canvas} from 'local::butterfly-dag'; // 引用本地数据时使用
 
 import './index.less';
 import 'antd/dist/antd.css';
