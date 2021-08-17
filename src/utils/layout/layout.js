@@ -13,7 +13,7 @@ import forceLayout from './forceLayout.js'
 import concentLayout from './concentLayout.js'
 import dagreLayout from './dagreLayout.js';
 import radial from './radial/radial.js';
-import dagreGroupLayout from './dagreGroupLayout.js';
+import DagreGroupLayout from './dagreGroupLayout.js';
 import treeLayout from './hierarchy';
 
 
@@ -55,5 +55,5 @@ export default {
   fruchterman,
   circleLayout: Layout.circleLayout,
   radial,
-  dagreGroupLayout
+  dagreGroupLayout: DagreGroupLayout.dagreGroupLayout
 }

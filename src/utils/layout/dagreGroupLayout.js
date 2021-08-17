@@ -232,4 +232,7 @@ function dagreGroupLayout(params) {
   });
 };
 
-module.exports = dagreGroupLayout;
+// module.exports = dagreGroupLayout;
+export default {
+  dagreGroupLayout
+};
