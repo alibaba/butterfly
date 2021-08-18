@@ -12,7 +12,6 @@ import enUS from './i18n/en_US.json';
 
 import './index.less';
 import 'antd/dist/antd.css';
-
 const Home = dynamic(() => import('./pages/home'));
 const Gallery = dynamic(() => import('./pages/gallery'));
 const CodeBox = dynamic(() => import('./pages/code-box'));

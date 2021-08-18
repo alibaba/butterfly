@@ -85,9 +85,11 @@ function dagreLayout(param) {
       curnode[index].top = item.top;
       curnode[index].posInfo = item.posInfo;
     });
-  }
+
+    return param;
+}
   
-  function getFunc(func, value, defaultValue) {
+function getFunc(func, value, defaultValue) {
     let resultFunc;
     if (func) {
       resultFunc = func;
@@ -97,6 +99,6 @@ function dagreLayout(param) {
       resultFunc = () => defaultValue;
     }
     return resultFunc;
-  }
+}
 
-  module.exports = dagreLayout
+module.exports = dagreLayout;

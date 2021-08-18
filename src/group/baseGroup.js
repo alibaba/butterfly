@@ -230,7 +230,6 @@ class BaseGroup extends Group {
   _moveTo(x, y) {
     // 自身移动
     $(this.dom).css('top', y).css('left', x);
-
     // 节点组的锚点移动
     this.endpoints.forEach((item) => {
       item.moveTo(x - this.left + item._left, y - this.top + item._top);

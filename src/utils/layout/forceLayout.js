@@ -71,6 +71,6 @@ function forceLayout(param) {
     });
     // 后续需要考虑group的布局
   
-  }
+}
 
-module.exports = forceLayout
+module.exports = forceLayout;

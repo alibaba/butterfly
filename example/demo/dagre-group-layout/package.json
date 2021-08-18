@@ -1,0 +1,14 @@
+{
+  "name": "dagre-group-layout",
+  "cn_name": "dagre-group布局",
+  "description": "a demo to show how to use dagre group layout",
+  "cn_description": "dagre-group布局示例",
+  "dependencies": {
+    "butterfly-dag": "*",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "jquery": "*",
+    "lodash": "*",
+    "antd": "^3.0.0"
+  }
+}
