@@ -44,8 +44,8 @@ function RadialLayout(params) {
     return;
   }
   if (nodes.length === 1) {
-    nodes[0].x = center[0];
-    nodes[0].y = center[1];
+    nodes[0].x = nodes[0].left = center[0];  
+    nodes[0].y = nodes[0].top = center[1];
     return;
   }
   const linkDistance = self.linkDistance;
@@ -135,8 +135,8 @@ function RadialLayout(params) {
   });
   self.positions = positions;
   positions.forEach((p, i) => {
-    nodes[i].x = p[0] + center[0];
-    nodes[i].y = p[1] + center[1];
+    nodes[i].x = nodes[i].left = p[0] + center[0];
+    nodes[i].y = nodes[i].top = p[1] + center[1];
   });
   // move the graph to origin, centered at focusNode
   positions.forEach((p) => {
@@ -196,8 +196,8 @@ function RadialLayout(params) {
   }
   // move the graph to center
   positions.forEach((p, i) => {
-    nodes[i].x = p[0] + center[0];
-    nodes[i].y = p[1] + center[1];
+    nodes[i].x = nodes[i].left = p[0] + center[0];
+    nodes[i].y = nodes[i].top = p[1] + center[1];
   });
   
 }
