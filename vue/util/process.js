@@ -14,8 +14,8 @@ const process = ({ nodes = [], edges = [], groups = [] }) => {
     }),
     edges: edges.map(edge => {
       return {
-        ...edge,
         type: 'endpoint',
+        ...edge,
         Class: Edge,
       };
     }),
