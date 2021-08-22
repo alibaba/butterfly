@@ -263,6 +263,9 @@ let createMenu = (opts, callback) => {
 }
 
 let closeMenu = (callback) => {
+  if (!currentMenu) {
+    return;
+  }
   hide(currentMenu, callback);
   currentMenu = null;
   document.removeEventListener('click', _hideMenu);
