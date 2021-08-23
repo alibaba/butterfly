@@ -5,6 +5,8 @@ export default (canvas, nodes = null) => {
     return;
   }
   if (!canvas.relayout) {
+    const {type, options} = canvas.layout || {};
+    
     canvas.relayout = function (nodes) {
       if (nodes) {
         // 自动布局
@@ -12,7 +14,7 @@ export default (canvas, nodes = null) => {
         // 重置canvas.nodes的定位，用于re-layout.js的布局
         resetCanvasNodesPosition(canvas, nodes);
       } else {
-        canvas._autoLayout(canvas);
+        canvas.autoLayout(type, options || {});
       }
   
       this.nodes.forEach(node => {
