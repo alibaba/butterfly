@@ -1,4 +1,4 @@
-import endpointNode from "./node/endpoint-node.vue";
+import endpointNode from './node/endpoint-node.vue';
 
 export default {
   groups: [],
@@ -30,6 +30,24 @@ export default {
         endpoints: ['2']
       },
     },
+    {
+      id: '4',
+      top: 250,
+      left: 10,
+      render: endpointNode,
+      userData: {
+        endpoints: ['4']
+      },
+    },
+    {
+      id: '5',
+      top: 250,
+      left: 300,
+      render: endpointNode,
+      userData: {
+        endpoints: ['5']
+      },
+    },
   ],
   edges: [
     {
@@ -48,5 +66,13 @@ export default {
       target: 'bf_endpoint_3',
       render: '<div>测试label</div>'
     },
+    {
+      id: '4.bf_endpoint_4-5.bf_endpoint_5',
+      sourceNode: '4',
+      targetNode: '5',
+      source: 'bf_endpoint_4',
+      target: 'bf_endpoint_5',
+      render: '<div>测试label</div>'
+    }
   ],
 };

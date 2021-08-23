@@ -9,7 +9,7 @@ import _ from 'lodash';
  * @param {String} type 渲染类型
  * @param {Array} canvasNodes 渲染节点对应的渲染类型
  */
- const render = (item, type, canvasNodes = null) => {
+ const render = (item, type, canvasNodes = null, parent) => {
 
   let vueCon;
 
@@ -70,8 +70,12 @@ import _ from 'lodash';
   
     const nodeCon = new vueCon({
       propsData
-    }).$mount();
-  
+    });
+    // 暂时不用指向parent
+    // nodeCon.$parent = parent
+    // 打通组件的$emit事件传输
+    nodeCon._events = parent._events;
+    nodeCon.$mount();
     addUserEndpoint(canvasNode,nodeCon._vnode);
     
     return nodeCon;
@@ -86,11 +90,33 @@ import _ from 'lodash';
 
 };
 
+// 一些UI组件的渲染方式的补充
+const addUserEndpointByComponentInstance = (canvasNode, ComponentInstance) => {
+  let options = ComponentInstance.$options;
+  let componentTag = options && options._componentTag;
+  let componentInstanceChildrens = ComponentInstance.$children;
+
+  if (componentTag === 'butterfly-vue-endpoint') {
+    let dom = ComponentInstance.$el;
+    let id = dom.id;
+    canvasNode.addEndpoint({
+      id,
+      dom,
+    })
+    return;
+  }
+
+  for (let componentInstanceChildren of componentInstanceChildrens) {
+    addUserEndpointByComponentInstance(canvasNode, componentInstanceChildren)
+  }
+
+};
+
 const addUserEndpoint = (canvasNode,VNode) => {
   let VNodeTemp = VNode;
   let tag = VNodeTemp.tag;
   let children = VNodeTemp.children;
-  
+
   // 当虚拟树节点到达底部
   if (_.isUndefined(tag)) {
     return;
@@ -107,8 +133,16 @@ const addUserEndpoint = (canvasNode,VNode) => {
     return;
   }
 
+  let componentInstance = VNodeTemp.componentInstance;
+  if (!_.isUndefined(componentInstance)) {
+    let componentInstanceChildrens = componentInstance.$children;
+    for (let componentInstanceChildren of componentInstanceChildrens) {
+      addUserEndpointByComponentInstance(canvasNode, componentInstanceChildren)
+    }
+  }
+
   if (!_.isUndefined(children)) {
-    for(let VNodeChildren of children){
+    for (let VNodeChildren of children) {
       addUserEndpoint(canvasNode,VNodeChildren);
     }
   }
@@ -140,8 +174,11 @@ const addGroupsCom = (groups) => {
   });
 };
 
-const addNodesCom = (canvasNodes,nodes) => {
+const addNodesCom = (canvasNodes, nodes, parent) => {
   nodes.map((item,index) => {
+    if (_.isArray(item)) {
+      return ;
+    }
     const id = item.id;
     if (!id) {
       console.warn(`nodes的${index}不含ID属性，请检查格式`);
@@ -154,7 +191,7 @@ const addNodesCom = (canvasNodes,nodes) => {
       return;
     }
 
-    let nodeCon = render(item, 'node', canvasNodes);
+    let nodeCon = render(item, 'node', canvasNodes, parent);
 
     dom.appendChild(nodeCon.$el);
   })

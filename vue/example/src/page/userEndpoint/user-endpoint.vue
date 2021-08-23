@@ -17,12 +17,12 @@
 </template>
 
 <script>
-import {ButterflyVue} from 'butterfly-vue';
 
-// import {ButterflyVue} from '../../../../index.js';
+// import {ButterflyVue} from 'butterfly-vue';
+import {ButterflyVue} from '../../../../index.js';
 
-import endpointNode from "./node/endpoint-node.vue";
-import mockData from "./endpoint-mockData.js";
+import endpointNode from './node/endpoint-node.vue';
+import mockData from './endpoint-mockData.js';
 
 export default {
   name: 'User-Endpoint',

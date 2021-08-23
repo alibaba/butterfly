@@ -5,12 +5,23 @@
     <butterfly-vue-endpoint id="3" className="endpoint-3" v-if="judge('3')">
       <el-tag>endpoint</el-tag>
     </butterfly-vue-endpoint>
+    <el-row v-if="judge('4')">
+      <butterfly-vue-endpoint id="4" className="endpoint-4">
+        <el-tag>endpoint</el-tag>
+      </butterfly-vue-endpoint>
+    </el-row>
+    <v-card max-width="344" v-if="judge('5')">
+      <butterfly-vue-endpoint id="5" className="endpoint-5">
+        content
+      </butterfly-vue-endpoint>
+    </v-card>
   </div>
 </template>
 
 <script>
 
 import {ButterflyVueEndpoint} from 'butterfly-vue';
+
 // import {ButterflyVueEndpoint} from '../../../../../index.js';
 
 export default {
@@ -62,5 +73,15 @@ export default {
     position: absolute;
     bottom: 10px;
     right: 10px;
+  }
+
+  .endpoint-node .endpoint-4 {
+    position: relative;
+    display: inline-block;
+  }
+
+  .endpoint-node .endpoint-5 {
+    position: relative;
+    display: inline-block;
   }
 </style>

@@ -11,9 +11,8 @@
 </template>
 
 <script>
-import {ButterflyVue} from 'butterfly-vue';
 
-// import {ButterflyVue} from '../../../../index.js';
+import {ButterflyVue} from '../../../../index.js';
 
 import mockData from "./grid-mockData.js";
 

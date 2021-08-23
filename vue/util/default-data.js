@@ -7,7 +7,7 @@ const defaultOptions = {
   theme: {
     edge: {
       arrow: true,
-      type: 'Straight',
+      shapeType: 'Straight',
     }
   }
 };

@@ -25,11 +25,11 @@
 </template>
 
 <script>
-import {ButterflyVue} from 'butterfly-vue';
+// import {ButterflyVue} from 'butterfly-vue';
 
 import dragNode from './node/drag-node.vue';
 
-// import {ButterflyVue} from '../../../../index.js';
+import {ButterflyVue} from '../../../../index.js';
 
 export default {
   name: 'Drag',

@@ -1,15 +1,24 @@
 import Node from '../coms/node';
+import TreeNode from '../coms/tree-node';
 import Edge from '../coms/edge';
 import Group from '../coms/group';
 import diff from './diff';
+import {TreeCanvas} from 'butterfly-dag';
+import relayout from './re-layout';
 import {addNodesCom , addEdgesCom , addGroupsCom} from './add-com';
 
-const process = ({ nodes = [], edges = [], groups = [] }) => {
+// treeNode还没有使用起来。待解决
+const process = ({ nodes = [], edges = [], groups = [] , canvas = {}}) => {
+  let BaseNode = Node;
+  if (canvas.constructor === TreeCanvas) {
+    console.log(1);
+    BaseNode = TreeNode;
+  }
   return {
     nodes: nodes.map((node) => {
       return {
         ...node,
-        Class: Node,
+        Class: BaseNode,
       };
     }),
     edges: edges.map(edge => {
@@ -33,15 +42,27 @@ const process = ({ nodes = [], edges = [], groups = [] }) => {
  * @param {Canvas} canvas 
  * @param {Array} nodes 新节点
  * @param {Array} oldNodes 老节点
+ * @param {Object} parent butterfly-vue
  */
-const processNodes = (canvas, nodes, oldNodes) => {
+const processNodes = (canvas, nodes, oldNodes, parent) => {
+  
+  // 判断是TreeCanvas
+  if (canvas.constructor === TreeCanvas) {
+    // 对nodes进行拆解
+    if(canvas.layout && canvas.layout.isFlatNode) {
+      nodes = canvas._handleTreeNodes(nodes || [], _.get({}, 'isFlatNode', false))
+    }
+    relayout(canvas, nodes);
+  }
+
   const { created, deleted } = diff(nodes, oldNodes);
 
   canvas.removeNodes(deleted.map(e => e.id), true);
 
   canvas.addNodes(process({nodes: created}).nodes);
   
-  addNodesCom(canvas.getDataMap().nodes,{nodes: created}.nodes);
+  addNodesCom(canvas.getDataMap().nodes,{nodes: created}.nodes, parent);
+
 };
 
 const processEdge = (canvas, edges, oldEdges) => {
