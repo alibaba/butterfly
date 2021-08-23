@@ -260,6 +260,7 @@ export default {
         this.onOtherEvent(data);
       }
     });
+    // window.canvas = this.canvas;
   },
 };
 </script>

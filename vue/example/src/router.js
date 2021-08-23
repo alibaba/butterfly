@@ -24,6 +24,11 @@ const routes = [
     meta: { title: 'grid' },
   },
   {
+    path: '/radial',
+    component: /*radial*/ () => import( /* webpackChunkName: "radial" */ './page/radial/radial.vue'),
+    meta: { title: 'radial' },
+  },
+  {
     path: '/base',
     component: /*base*/ () => import( /* webpackChunkName: "Base" */ './page/base/base.vue'),
     meta: { title: '基础用法' },

@@ -1,4 +1,4 @@
-import gridNode from "./node/grid-node.vue";
+import raidalNode from "./node/radial-node.vue";
 
 export default {
   groups: [],
@@ -6,172 +6,172 @@ export default {
     {
       id: '0',
       label: '0',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '1',
       label: '1',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '2',
       label: '2',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '3',
       label: '3',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '4',
       label: '4',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '5',
       label: '5',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '6',
       label: '6',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '7',
       label: '7',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '8',
       label: '8',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '9',
       label: '9',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '10',
       label: '10',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '11',
       label: '11',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '12',
       label: '12',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '13',
       label: '13',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '14',
       label: '14',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '15',
       label: '15',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '16',
       label: '16',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '17',
       label: '17',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '18',
       label: '18',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '19',
       label: '19',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '20',
       label: '20',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '21',
       label: '21',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '22',
       label: '22',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '23',
       label: '23',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '24',
       label: '24',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '25',
       label: '25',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '26',
       label: '26',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '27',
       label: '27',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '28',
       label: '28',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '29',
       label: '29',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '30',
       label: '30',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '31',
       label: '31',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '32',
       label: '32',
-      render: gridNode
+      render: raidalNode
     },
     {
       id: '33',
       label: '33',
-      render: gridNode
+      render: raidalNode
     },
   ],
   edges: [

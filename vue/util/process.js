@@ -11,7 +11,6 @@ import {addNodesCom , addEdgesCom , addGroupsCom} from './add-com';
 const process = ({ nodes = [], edges = [], groups = [] , canvas = {}}) => {
   let BaseNode = Node;
   if (canvas.constructor === TreeCanvas) {
-    console.log(1);
     BaseNode = TreeNode;
   }
   return {
@@ -23,8 +22,8 @@ const process = ({ nodes = [], edges = [], groups = [] , canvas = {}}) => {
     }),
     edges: edges.map(edge => {
       return {
-        ...edge,
         type: 'endpoint',
+        ...edge,
         Class: Edge,
       };
     }),
