@@ -5,7 +5,7 @@ class DefaultEdge extends Edge {
     let dom = super.drawArrow(isShow);
     return dom;
   }
-  drawLabel() {
+  drawLabel(text) {
     const div = document.createElement('div');
 
     if (!this.id) {
@@ -14,6 +14,7 @@ class DefaultEdge extends Edge {
 
     div.id = `edge_label_${this.id}`;
     div.className = 'butterflies-label';
+    div.innerText = text;
 
     return div;
   }
