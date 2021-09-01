@@ -208,6 +208,13 @@ export default {
         this.re();
       }
     },
+    canvasData: {
+      handler() {
+        this.nodes =  this.canvasData.nodes;
+        this.groups = this.canvasData.groups;
+        this.edges = this.canvasData.edges;
+      }
+    }
   },
   mounted() {
     this.initCanvas();
