@@ -9,7 +9,7 @@ import _ from 'lodash';
  * @param {String} type 渲染类型
  * @param {Array} canvasNodes 渲染节点对应的渲染类型
  */
- const render = (item, type, canvasNodes = null, parent) => {
+ const render = (item, type, parent = null, canvasNodes = null) => {
 
   let vueCon;
 
@@ -71,7 +71,7 @@ import _ from 'lodash';
     const nodeCon = new vueCon({
       propsData
     });
-    // 暂时不用指向parent
+    // 暂时不用指向parent 节点的emit支持
     // nodeCon.$parent = parent
     // 打通组件的$emit事件传输
     nodeCon._events = parent._events;
@@ -83,7 +83,12 @@ import _ from 'lodash';
   else {
     const Con = new vueCon({
       propsData
-    }).$mount();
+    })
+    // 暂时不用指向parent  edge和group的emit支持
+    // Con.$parent = parent
+    // 打通组件的$emit事件传输
+    Con._events = parent._events;
+    Con.$mount();
     
     return Con;
   }
@@ -153,7 +158,7 @@ const addCom = (proData) => {
   addNodesCom(proData.nodes);
 };
 
-const addGroupsCom = (groups) => {
+const addGroupsCom = (groups, parent) => {
   groups.map((item,index) => {
     const id = item.id;
     if (!id) {
@@ -167,7 +172,7 @@ const addGroupsCom = (groups) => {
       return;
     }
 
-    let groupCon = render(item, 'group');
+    let groupCon = render(item, 'group', parent);
 
     dom.appendChild(groupCon.$el);
 
@@ -191,13 +196,13 @@ const addNodesCom = (canvasNodes, nodes, parent) => {
       return;
     }
 
-    let nodeCon = render(item, 'node', canvasNodes, parent);
+    let nodeCon = render(item, 'node', parent, canvasNodes);
 
     dom.appendChild(nodeCon.$el);
   })
 };
 
-const addEdgesCom = (edges) => {
+const addEdgesCom = (edges, parent) => {
   edges.map((item,index) => {
     const id = item.id;
     if (!id) {
@@ -212,7 +217,7 @@ const addEdgesCom = (edges) => {
         return;
       }
 
-      let edgeCon = render(item, 'edge');
+      let edgeCon = render(item, 'edge', parent);
 
       dom.appendChild(edgeCon.$el);
     }

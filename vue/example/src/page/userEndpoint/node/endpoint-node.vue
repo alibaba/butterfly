@@ -20,9 +20,7 @@
 
 <script>
 
-import {ButterflyVueEndpoint} from 'butterfly-vue';
-
-// import {ButterflyVueEndpoint} from '../../../../../index.js';
+import {ButterflyVueEndpoint} from '../../../../../index.js';
 
 export default {
   name: "endpoint-node",

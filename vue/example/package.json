@@ -7,9 +7,9 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
-    "butterfly-vue": "^1.0.3",
     "core-js": "^3.6.5",
     "element-ui": "^2.15.0",
+    "lodash": "^4.17.21",
     "vue": "^2.6.11",
     "vue-router": "^3.5.1",
     "vuetify": "^2.5.8"

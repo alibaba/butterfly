@@ -64,17 +64,17 @@ const processNodes = (canvas, nodes, oldNodes, parent) => {
 
 };
 
-const processEdge = (canvas, edges, oldEdges) => {
+const processEdge = (canvas, edges, oldEdges, parent) => {
   const { created, deleted } = diff(edges, oldEdges);
 
   canvas.removeEdges(deleted.map(e => e.id), true);
 
   canvas.addEdges(process({edges: created}).edges, true);
   
-  addEdgesCom({edges: created}.edges);
+  addEdgesCom({edges: created}.edges, parent);
 };
 
-const processGroups = (canvas,groups,oldGroups) => {
+const processGroups = (canvas, groups, oldGroups, parent) => {
   const {created, deleted} = diff(groups, oldGroups);
 
   process({groups: deleted}).groups.forEach(group => {
@@ -85,7 +85,7 @@ const processGroups = (canvas,groups,oldGroups) => {
     canvas.addGroup(group);
   });
 
-  addGroupsCom({groups: created}.groups);
+  addGroupsCom({groups: created}.groups, parent);
 };
 
 export {

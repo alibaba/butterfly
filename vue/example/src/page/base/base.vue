@@ -4,6 +4,7 @@
       <el-button @click="addNode">添加节点(node)</el-button>
       <el-button @click="addGroup">添加组(group)</el-button>
       <el-button @click="updateGroup">修改组(group)</el-button>
+      <el-button @click="redraw">重绘</el-button>
     </div>
     <el-divider></el-divider>
     <butterfly-vue
@@ -14,16 +15,19 @@
       @onDeleteEdge="logDeleteEdge"
       @onOtherEvent="logOtherEvent"
       @onLoaded="finishLoaded"
+      @dblclick="lableEmit"
       key="base"
     />
   </div>
 </template>
 
 <script>
-
+import _ from 'lodash';
 import {ButterflyVue} from '../../../../index.js';
 
 import mockData from "./base-mockData.js";
+
+import emergencyMockData from '../emergency/emergency-mockData.js';
 
 export default {
   name: 'Base',
@@ -53,6 +57,9 @@ export default {
     }
   },
   methods:{
+    lableEmit(text) {
+      console.log(text);
+    },
     addNode() {
       const endpoints = [
         {
@@ -86,6 +93,12 @@ export default {
       this.mockData.groups[2].userData.name = `updateName${this.update}`
       this.update++;
     },
+    redraw() {
+      this.mockData = {nodes:[], edges:[], groups:[]};
+      this.$nextTick(() => {
+        this.mockData = _.cloneDeep(emergencyMockData);
+      })
+    },
     logCreateEdge(e) {
       console.log('---------CreateEdge---------');
       console.log(e);
@@ -113,6 +126,7 @@ export default {
     finishLoaded(VueCom) {
       this.butterflyVue = VueCom;
       this.canvansRef = VueCom.canvas;
+      window.butterflyVue = VueCom;
       console.log("finish");
       console.log(VueCom);
     },

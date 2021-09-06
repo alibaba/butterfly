@@ -24,8 +24,7 @@
 import mockData, { endpoints } from './data';
 import { TreeCanvas } from 'butterfly-dag';
 import { v4 as uuidv4 } from 'uuid';
-// import {ButterflyVue} from '../../../../index.js';
-import { ButterflyVue } from 'butterfly-vue';
+import {ButterflyVue} from '../../../../index.js';
 import BaseNode from './BaseNode.vue';
 
 export default {
