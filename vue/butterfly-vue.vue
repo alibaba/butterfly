@@ -71,9 +71,9 @@ export default {
       const oldEdges = this.canvas.edges;
       const oldGroups = this.canvas.groups;
 
-      processGroups(this.canvas, this.groups, oldGroups);
+      processGroups(this.canvas, this.groups, oldGroups, this);
       processNodes(this.canvas, this.nodes, oldNodes, this);
-      processEdge(this.canvas, this.edges, oldEdges);
+      processEdge(this.canvas, this.edges, oldEdges, this);
     },
 
     // 重新计算节点和边的位置
@@ -93,13 +93,13 @@ export default {
       const oldEdges = this.canvas.edges;
       const oldGroups = this.canvas.groups;
 
-      processEdge(this.canvas, [], oldEdges);
+      processEdge(this.canvas, [], oldEdges, this);
       processNodes(this.canvas ,[] , oldNodes, this);
-      processGroups(this.canvas, [], oldGroups);
+      processGroups(this.canvas, [], oldGroups, this);
 
-      processGroups(this.canvas, this.groups, oldGroups);
+      processGroups(this.canvas, this.groups, oldGroups, this);
       processNodes(this.canvas, this.nodes, oldNodes, this);
-      processEdge(this.canvas, this.edges, oldEdges);
+      processEdge(this.canvas, this.edges, oldEdges, this);
       this.re();
     },
 

@@ -15,7 +15,7 @@ export default {
   methods: {
     labelClick(e) {
       console.log('labelClick');
-      e.stopPropagation();
+      this.$emit('dblclick', 'emitlabelClick');
     }
   },
   created() {

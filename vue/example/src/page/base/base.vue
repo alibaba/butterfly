@@ -15,13 +15,14 @@
       @onDeleteEdge="logDeleteEdge"
       @onOtherEvent="logOtherEvent"
       @onLoaded="finishLoaded"
+      @dblclick="lableEmit"
       key="base"
     />
   </div>
 </template>
 
 <script>
-
+import _ from 'lodash';
 import {ButterflyVue} from '../../../../index.js';
 
 import mockData from "./base-mockData.js";
@@ -56,6 +57,9 @@ export default {
     }
   },
   methods:{
+    lableEmit(text) {
+      console.log(text);
+    },
     addNode() {
       const endpoints = [
         {
@@ -90,9 +94,9 @@ export default {
       this.update++;
     },
     redraw() {
-      this.mockData = {nodes:[],edges:[],groups:[]};
+      this.mockData = {nodes:[], edges:[], groups:[]};
       this.$nextTick(() => {
-        this.mockData = emergencyMockData;
+        this.mockData = _.cloneDeep(emergencyMockData);
       })
     },
     logCreateEdge(e) {
@@ -122,6 +126,7 @@ export default {
     finishLoaded(VueCom) {
       this.butterflyVue = VueCom;
       this.canvansRef = VueCom.canvas;
+      window.butterflyVue = VueCom;
       console.log("finish");
       console.log(VueCom);
     },
