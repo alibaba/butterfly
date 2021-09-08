@@ -5,6 +5,7 @@
       <el-button @click="addGroup">添加组(group)</el-button>
       <el-button @click="updateGroup">修改组(group)</el-button>
       <el-button @click="redraw">重绘</el-button>
+      <el-button @click="logData">log数据</el-button>
     </div>
     <el-divider></el-divider>
     <butterfly-vue
@@ -98,6 +99,10 @@ export default {
       this.$nextTick(() => {
         this.mockData = _.cloneDeep(emergencyMockData);
       })
+    },
+    logData() {
+      console.log(mockData);
+      console.log(this.canvansRef.getDataMap());
     },
     logCreateEdge(e) {
       console.log('---------CreateEdge---------');
