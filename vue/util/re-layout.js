@@ -17,7 +17,7 @@ export default (canvas, nodes = null) => {
       } else {
         if (canvas.constructor === TreeCanvas) {
           canvas._autoLayout(canvas);
-        } else {
+        } else if (type && options) {
           canvas.autoLayout(type, options || {});
         }
       }
