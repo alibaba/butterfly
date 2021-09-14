@@ -2379,17 +2379,25 @@ class BaseCanvas extends Canvas {
         }
         let targetNode = this._hoverGroupQueue.pop();
         let targetGroup = this._findGroupByCoordinates(targetNode, targetNode.left, targetNode.top);
-        if (targetGroup && targetGroup.scope && targetGroup.scope !== targetNode.scope) {
-          return;
-        }
         if (targetGroup) {
           if (!this._hoverGroupObj || targetGroup.id !== this._hoverGroupObj.id) {
-            this._hoverGroupObj && $(this._hoverGroupObj.dom).removeClass('butterfly-group-hover');
-            $(targetGroup.dom).addClass('butterfly-group-hover');
+            const _hoverGroupObjDom = this._hoverGroupObj && $(this._hoverGroupObj.dom);
+            _hoverGroupObjDom && _hoverGroupObjDom.removeClass('butterfly-group-hover-valid');
+            _hoverGroupObjDom && _hoverGroupObjDom.removeClass('butterfly-group-hover-invalid');
+            _hoverGroupObjDom && _hoverGroupObjDom.removeClass('butterfly-group-hover');
+            if (targetGroup.scope && targetGroup.scope === targetNode.scope) {
+              $(targetGroup.dom).addClass('butterfly-group-hover-valid');
+            } else if (targetGroup.scope && targetGroup.scope !== targetNode.scope) {
+              $(targetGroup.dom).addClass('butterfly-group-hover-invalid');
+            } else {
+              $(targetGroup.dom).addClass('butterfly-group-hover');
+            }
             this._hoverGroupObj = targetGroup;
           }
         } else {
           this._hoverGroupObj && $(this._hoverGroupObj.dom).removeClass('butterfly-group-hover');
+          this._hoverGroupObj && $(this._hoverGroupObj.dom).removeClass('butterfly-group-hover-valid');
+          this._hoverGroupObj && $(this._hoverGroupObj.dom).removeClass('butterfly-group-hover-invalid');
           this._hoverGroupObj = undefined;
         }
         this._hoverGroupQueue = [];
@@ -2398,6 +2406,8 @@ class BaseCanvas extends Canvas {
   }
   _clearHoverGroup(group) {
     this._hoverGroupObj && $(this._hoverGroupObj.dom).removeClass('butterfly-group-hover');
+    this._hoverGroupObj && $(this._hoverGroupObj.dom).removeClass('butterfly-group-hover-valid');
+    this._hoverGroupObj && $(this._hoverGroupObj.dom).removeClass('butterfly-group-hover-invalid');
     this._hoverGroupTimer = undefined; 
     this._hoverGroupObj = undefined;
     this._hoverGroupQueue = [];
