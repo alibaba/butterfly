@@ -143,6 +143,7 @@ export default {
     finishLoaded(VueCom) {
       this.butterflyVue = VueCom;
       this.canvansRef = VueCom.canvas;
+      window.butterflyVue = VueCom;
       this.canvansRef.setMinimap(true, {
         height: 100,
         nodeColor: "rgb(234,217,162)",

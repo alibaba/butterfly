@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import {TreeCanvas} from 'butterfly-dag';
 
 export default (canvas, nodes = null) => {
   if (!canvas) {
@@ -14,7 +15,11 @@ export default (canvas, nodes = null) => {
         // 重置canvas.nodes的定位，用于re-layout.js的布局
         resetCanvasNodesPosition(canvas, nodes);
       } else {
-        canvas.autoLayout(type, options || {});
+        if (canvas.constructor === TreeCanvas) {
+          canvas._autoLayout(canvas);
+        } else if (type && options) {
+          canvas.autoLayout(type, options || {});
+        }
       }
   
       this.nodes.forEach(node => {

@@ -1,5 +1,5 @@
 <template>
-  <div class="label">
+  <div class="label" @onClick="labelClick">
     {{this.itemData.userData.content}}
   </div>
 </template>
@@ -11,6 +11,13 @@ export default {
     itemData: {
       type: Object,
     },
+  },
+  methods: {
+    labelClick(e) {
+      console.log('labelClick');
+      e.stopPropagation();
+      this.$emit('click', 'emitlabelClick');
+    }
   },
 };
 </script>
