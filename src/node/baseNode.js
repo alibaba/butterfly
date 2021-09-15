@@ -77,6 +77,12 @@ class BaseNode extends Node {
       data: endpoint
     });
 
+    let nodeZindex = $(this.dom).css('z-index');
+
+    if (nodeZindex !== 'auto') {
+      $(endpoint.dom).css('z-index', Number(nodeZindex) + 1);
+    }
+
     this.endpoints.push(endpoint);
     return endpoint;
   }
