@@ -9,10 +9,14 @@ const common = {
     hints: false
   },
   entry: './index.js',
+  target: ['web', 'es5'],
   output: {
     path: __dirname,
     filename: 'dist/index.js',
     libraryTarget: 'umd',
+    environment: {
+      arrowFunction: false
+    }
   },
   resolve: { 
     alias: {},
