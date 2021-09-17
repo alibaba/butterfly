@@ -909,7 +909,7 @@ class BaseCanvas extends Canvas {
                 });
                 // 检查endpoint限制连接数目
                 let _linkNums = this.edges.filter((_edge) => {
-                  return _edge.sourceEndpoint.id === point.id;
+                  return (_edge.sourceEndpoint.nodeId + _edge.sourceEndpoint.id) === (point.nodeId + point.id);
                 }).length + 1;
                 if (_linkNums > point.limitNum) {
                   console.warn(`id为${point.id}的锚点限制了${point.limitNum}条连线`);
@@ -1088,7 +1088,7 @@ class BaseCanvas extends Canvas {
         // 检查endpoint限制连接数目
         if (_targetEndpoint && _targetEndpoint.limitNum !== undefined) {
           let _linkNum = this.edges.filter((_edge) => {
-            return _edge.targetEndpoint.id === _targetEndpoint.id;
+            return (_edge.targetEndpoint.nodeId + _edge.targetEndpoint.id) === (_targetEndpoint.nodeId + _targetEndpoint.id);
           }).length + this._dragEdges.length;
           if (_linkNum > _targetEndpoint.limitNum) {
             console.warn(`id为${_targetEndpoint.id}的锚点限制了${_targetEndpoint.limitNum}条连线`);
