@@ -913,6 +913,9 @@ class BaseCanvas extends Canvas {
                 }).length + 1;
                 if (_linkNums > point.limitNum) {
                   console.warn(`id为${point.nodeId}的节点下的id为${point.id}锚点限制了${point.limitNum}条连线`);
+                  this.emit('system.endpoint.limit', {
+                    endpoint: point
+                  });
                   return;
                 }
                 let _newEdge = new EdgeClass(_.assign(pointObj, {
@@ -1094,6 +1097,9 @@ class BaseCanvas extends Canvas {
           }).length + this._dragEdges.length;
           if (_linkNum > _targetEndpoint.limitNum) {
             console.warn(`id为${_targetEndpoint.nodeId}的节点下的id为${_targetEndpoint.id}锚点限制了${_targetEndpoint.limitNum}条连线`);
+            this.emit('system.endpoint.limit', {
+              endpoint: _targetEndpoint
+            });
             isDestoryEdges = true;
           }
         }
