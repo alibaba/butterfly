@@ -826,6 +826,7 @@ canvas.on('type key', (data) => {
 * `system.group.move`	移动节点组
 * `system.group.addMembers`	节点组添加节点
 * `system.group.removeMembers`	节点组删除节点
+* `system.endpoint.limit`	连线锚点到达上限
 * `system.multiple.select`	框选结束
 * `system.drag.start`	拖动开始
 * `system.drag.move`	拖动
