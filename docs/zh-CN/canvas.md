@@ -43,7 +43,8 @@ let canvas = new Canvas({
       enable: false,
       autoMovePadding: [20, 20, 20, 20] //触发自动延展的画布内边距
     },
-    autoResizeRootSize: true // 自动适配root大小，默认为true
+    autoResizeRootSize: true, // 自动适配root大小，默认为true
+    isMouseMoveStopPropagation: true, // 拖动事件是否阻止冒泡
   },
   global: {                //自定义配置，会贯穿所有canvas，group，node，edge，endpoint对象
     isScopeStrict: false   //scope是否为严格模式(默认为false)
@@ -158,6 +159,8 @@ canvas.draw({
 <img width="650" src="https://img.alicdn.com/tfs/TB16lUNBG61gK0jSZFlXXXDKFXa-1665-801.gif">
   
 * autoResizeRootSize _`<Boolean>`_ 自动适配Root容器大小；默认 `true`
+
+* isMouseMoveStopPropagation _`<Boolean>`_ 拖动事件是否停止冒泡事件；默认 `false`
 
 ### global   (选填)
 

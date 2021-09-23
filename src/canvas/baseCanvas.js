@@ -80,7 +80,8 @@ class BaseCanvas extends Canvas {
         autoMovePadding: _.get(options, 'theme.autoFixCanvas.autoMovePadding') || [20, 20, 20, 20] // 上，右，下，左
       },
       // 自动适配父级div大小
-      autoResizeRootSize: _.get(options, 'theme.autoResizeRootSize', true)
+      autoResizeRootSize: _.get(options, 'theme.autoResizeRootSize', true),
+      isMouseMoveStopPropagation: _.get(options, 'theme.isLinkStopPropagation') || false,
     };
 
     // 贯穿所有对象的配置
@@ -760,6 +761,9 @@ class BaseCanvas extends Canvas {
       const LEFT_BUTTON = 0;
       if (event.button !== LEFT_BUTTON) {
         return;
+      }
+      if (this.theme.isMouseMoveStopPropagation) {
+        event.stopPropagation();
       }
       if (this._dragType) {
         const canvasX = this._coordinateService._terminal2canvas('x', event.clientX);
