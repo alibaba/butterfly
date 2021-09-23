@@ -76,7 +76,6 @@ import _ from 'lodash';
     // 打通组件的$emit事件传输
     nodeCon._events = parent._events;
     nodeCon.$mount();
-    addUserEndpoint(canvasNode,nodeCon._vnode);
     
     return nodeCon;
   }
@@ -199,6 +198,19 @@ const addNodesCom = (canvasNodes, nodes, parent) => {
     let nodeCon = render(item, 'node', parent, canvasNodes);
 
     dom.appendChild(nodeCon.$el);
+
+    // 需要先挂载锚点才可以添加锚点
+    let canvasNodeIndex = canvasNodes.findIndex((node)=>{
+      return node.id === item.id;
+    })
+  
+    if (canvasNodeIndex === -1) {
+      console.warn(`canvas.addNodes方法出错`);
+      return null;
+    }
+  
+    let canvasNode = canvasNodes[canvasNodeIndex];
+    addUserEndpoint(canvasNode,nodeCon._vnode);
   })
 };
 
