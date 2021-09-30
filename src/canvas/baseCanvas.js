@@ -2401,9 +2401,8 @@ class BaseCanvas extends Canvas {
               $(targetGroup.dom).addClass('butterfly-group-hover-valid');
             } else if (targetGroup.scope && targetGroup.scope !== targetNode.scope) {
               $(targetGroup.dom).addClass('butterfly-group-hover-invalid');
-            } else {
-              $(targetGroup.dom).addClass('butterfly-group-hover');
             }
+            $(targetGroup.dom).addClass('butterfly-group-hover');
             this._hoverGroupObj = targetGroup;
           }
         } else {
