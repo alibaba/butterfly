@@ -823,7 +823,7 @@ canvas.on('type key', (data) => {
 * `system.group.move`	move group event
 * `system.group.addMembers`	add node to group event
 * `system.group.removeMembers`	delete node from group event
-* `system.endpoint.limit`	connect edge but the limitNum of endpoint is exceeded
+* `system.endpoint.limit`	connection exceeds the limitNum of Endpoint
 * `system.multiple.select`	multiple select callback event
 * `system.drag.start`	drag start event
 * `system.drag.move`	drag move event
