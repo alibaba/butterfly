@@ -81,7 +81,7 @@ class BaseCanvas extends Canvas {
       },
       // 自动适配父级div大小
       autoResizeRootSize: _.get(options, 'theme.autoResizeRootSize', true),
-      isMouseMoveStopPropagation: _.get(options, 'theme.isLinkStopPropagation') || false,
+      isMouseMoveStopPropagation: _.get(options, 'theme.isMouseMoveStopPropagation') || false,
     };
 
     // 贯穿所有对象的配置
