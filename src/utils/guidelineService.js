@@ -264,7 +264,7 @@ class GuidelineService {
     this.cxt && this.cxt.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
   }
   destroy() {
-    $(this.dom).destroy();
+    this.dom && $(this.dom).destroy();
     this.isActive = false;
   }
 }
