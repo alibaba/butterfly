@@ -107,6 +107,8 @@ canvas.draw({
 
   * labelOffset _`<Number>`_ the position offset of edge label: the offset value from the label position of edge. The default value is 0, and the unit is `px`
 
+  * isAllowLinkInSameNode _`<Boolean>`_ anchor connection restriction: whether to allow anchor connections in the same node
+
   ```js
   // labelPosition & labelOffset: the label position is in the middle of edge，offset 20px to the end
   {
