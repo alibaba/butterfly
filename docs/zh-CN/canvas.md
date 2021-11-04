@@ -89,6 +89,8 @@ canvas.draw({
 
   * expandArea _`<Object>`_ 锚点连接的热区: 由于锚点区域有可能过小，所以提供了热区扩大的属性；默认 `{left: 10, top: 10, right: 10, bottom: 10}`
 
+  * isAllowLinkInSameNode _`<Boolean>`_ 锚点连接限制: 是否允许同一节点中的锚点连接
+
 * group 节点组配置
 
   *参数*：

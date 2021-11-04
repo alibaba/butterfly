@@ -72,6 +72,7 @@ class BaseCanvas extends Canvas {
           top: _.get(options, 'theme.endpoint.expandArea.top') === undefined ? 10 : _.get(options, 'theme.endpoint.expandArea.top'),
           bottom: _.get(options, 'theme.endpoint.expandArea.bottom') === undefined ? 10 : _.get(options, 'theme.endpoint.expandArea.bottom'),
         },
+        isAllowLinkInSameNode: _.get(options, 'theme.endpoint.isAllowLinkInSameNode', true)
       },
       zoomGap: _.get(options, 'theme.zoomGap') || 0.001,
       // 鼠标到达边缘画布自动移动
@@ -1104,6 +1105,15 @@ class BaseCanvas extends Canvas {
             console.warn(`id为${_targetEndpoint.id}的锚点限制了${_targetEndpoint.limitNum}条连线`);
             isDestoryEdges = true;
           }
+        }
+
+        if (!this.theme.endpoint.isAllowLinkInSameNode) {
+          this._dragEdges.forEach((_edge) => {
+            if (_edge.sourceEndpoint.nodeId === _targetEndpoint.nodeId) {
+              isDestoryEdges = true;
+              return;
+            }
+          });
         }
 
         if (isDestoryEdges) {
