@@ -1,12 +1,17 @@
 <template>
   <div>
-    <butterfly-vue
-      :canvasData="mockData"
-      :canvasConf="canvasConfig"
-      @onLoaded="finishLoaded"
-      className='grid'
-      key="grid"
-    />
+    <div class="control">
+      <el-button @click="addEdge">添加连线0-29</el-button>
+    </div>
+    <div>
+      <butterfly-vue
+        :canvasData="mockData"
+        :canvasConf="canvasConfig"
+        @onLoaded="finishLoaded"
+        className='grid'
+        key="grid"
+      />
+    </div>
   </div>
 </template>
 
@@ -66,6 +71,14 @@ export default {
     }
   },
   methods:{
+    addEdge() {
+      this.mockData.edges.push({
+        id: '0-29',
+        type: 'node',
+        source: '0',
+        target: '29',
+      })
+    },
     finishLoaded(VueCom) {
       this.butterflyVue = VueCom;
       this.canvansRef = VueCom.canvas;
@@ -76,6 +89,9 @@ export default {
 </script>
 
 <style>
+  .control {
+    padding-left: 10px;
+  }
   .grid {
     height: 700px;
     min-width: 500px;

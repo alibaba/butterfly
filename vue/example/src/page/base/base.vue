@@ -6,6 +6,7 @@
       <el-button @click="updateGroup">修改组(group)</el-button>
       <el-button @click="redraw">重绘</el-button>
       <el-button @click="logData">log数据</el-button>
+      <el-button @click="addEdge" :disabled="addEdgeEnable">添加连线1-4</el-button>
     </div>
     <el-divider></el-divider>
     <butterfly-vue
@@ -55,6 +56,7 @@ export default {
           }
         }
       },
+      addEdgeEnable: false
     }
   },
   methods:{
@@ -104,6 +106,16 @@ export default {
       console.log(mockData);
       console.log(this.canvansRef.getDataMap());
     },
+    addEdge() {
+      this.mockData.edges.push({
+        id: '1.right-4.left',
+        sourceNode: '1',
+        targetNode: '4',
+        source: 'right',
+        target: 'left',
+      })
+      this.addEdgeEnable = true;
+    },
     logCreateEdge(e) {
       console.log('---------CreateEdge---------');
       console.log(e);
@@ -131,6 +143,17 @@ export default {
     finishLoaded(VueCom) {
       this.butterflyVue = VueCom;
       this.canvansRef = VueCom.canvas;
+      // this.canvansRef.setGuideLine(true, {
+      //   limit: 4,             // 限制辅助线条数
+      //   adsorp: {
+      //     enable: false,       // 开启吸附效果
+      //     gap: 5              // 吸附间隔
+      //   },
+      //   theme: {
+      //     lineColor: 'red',   // 网格线条颜色
+      //     lineWidth: 1,       // 网格粗细
+      //   }
+      // });
       window.butterflyVue = VueCom;
       console.log("finish");
       console.log(VueCom);
@@ -140,7 +163,7 @@ export default {
 </script>
 
 <style scope>
- .control {
-   padding-left: 10px;
- }
+  .control {
+    padding-left: 10px;
+  }
 </style>
