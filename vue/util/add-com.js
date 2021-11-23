@@ -9,7 +9,7 @@ import _ from 'lodash';
  * @param {String} type 渲染类型
  * @param {Array} canvasNodes 渲染节点对应的渲染类型
  */
- const render = (item, type, parent = null, canvasNodes = null) => {
+const render = (item, type, parent = null, canvasNodes = null) => {
 
   let vueCon;
 
@@ -103,9 +103,11 @@ const addUserEndpointByComponentInstance = (canvasNode, ComponentInstance) => {
   if (componentTag === 'butterfly-vue-endpoint') {
     let dom = ComponentInstance.$el;
     let id = dom.id;
+    let param = ComponentInstance.param;
     canvasNode.addEndpoint({
       id,
       dom,
+      ...param
     })
     return;
   }
@@ -130,9 +132,11 @@ const addUserEndpoint = (canvasNode,VNode) => {
   if (tag.search('butterfly-vue-endpoint') !== -1) {
     let dom = VNodeTemp.elm;
     let id = dom.id;
+    let param = VNodeTemp.componentInstance.param;
     canvasNode.addEndpoint({
       id,
       dom,
+      ...param
     })
     return;
   }

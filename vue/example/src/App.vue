@@ -97,4 +97,7 @@ export default {
   .sidebar > ul {
     height: 100%;
   }
+  .el-menu {
+    border-right: solid 0px#e6e6e6;
+  }
 </style>

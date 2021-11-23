@@ -308,7 +308,7 @@ module.exports = {
 // endpoint-node.vue
 <template>
   <div class="endpoint-node">
-    <butterfly-vue-endpoint id="1"/>
+    <butterfly-vue-endpoint id="1" :param="{scope:'endpoint-1', limitNum: 2}"/>
     <butterfly-vue-endpoint id="2" className="endpoint-2">
       content
     </butterfly-vue-endpoint>
@@ -383,3 +383,11 @@ export default {
 }
 </script>
 ```
+
+| Prop      | 类型   | 说明                     | 默认值                  | required |
+| --------- | ------ | ------------------------ | ----------------------- | -------- |
+| id        | String | 自定义endpoint的唯一标示 |                         | true     |
+| className | String | 自定义endpoint的样式     | vue-bf-endpoint-default | false    |
+| param     | Object | endponit的其他参数       |                         | false    |
+
+[param属性参考地址](https://github.com/alibaba/butterfly/blob/master/docs/zh-CN/endpoint.md#%E5%B1%9E%E6%80%A7)

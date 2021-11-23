@@ -20,6 +20,9 @@ export default {
     className: {
       type: String,
       default: 'vue-bf-endpoint-default'
+    },
+    param: {
+      type: Object
     }
   },
 };

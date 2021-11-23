@@ -72,6 +72,7 @@ class BaseCanvas extends Canvas {
           top: _.get(options, 'theme.endpoint.expandArea.top') === undefined ? 10 : _.get(options, 'theme.endpoint.expandArea.top'),
           bottom: _.get(options, 'theme.endpoint.expandArea.bottom') === undefined ? 10 : _.get(options, 'theme.endpoint.expandArea.bottom'),
         },
+        isAllowLinkInSameNode: _.get(options, 'theme.endpoint.isAllowLinkInSameNode', true)
       },
       zoomGap: _.get(options, 'theme.zoomGap') || 0.001,
       // 鼠标到达边缘画布自动移动
@@ -81,7 +82,7 @@ class BaseCanvas extends Canvas {
       },
       // 自动适配父级div大小
       autoResizeRootSize: _.get(options, 'theme.autoResizeRootSize', true),
-      isMouseMoveStopPropagation: _.get(options, 'theme.isLinkStopPropagation') || false,
+      isMouseMoveStopPropagation: _.get(options, 'theme.isMouseMoveStopPropagation') || false,
     };
 
     // 贯穿所有对象的配置
@@ -1106,6 +1107,15 @@ class BaseCanvas extends Canvas {
             });
             isDestoryEdges = true;
           }
+        }
+
+        if (!this.theme.endpoint.isAllowLinkInSameNode) {
+          this._dragEdges.forEach((_edge) => {
+            if (_edge.sourceEndpoint.nodeId === _targetEndpoint.nodeId) {
+              isDestoryEdges = true;
+              return;
+            }
+          });
         }
 
         if (isDestoryEdges) {
@@ -2401,9 +2411,8 @@ class BaseCanvas extends Canvas {
               $(targetGroup.dom).addClass('butterfly-group-hover-valid');
             } else if (targetGroup.scope && targetGroup.scope !== targetNode.scope) {
               $(targetGroup.dom).addClass('butterfly-group-hover-invalid');
-            } else {
-              $(targetGroup.dom).addClass('butterfly-group-hover');
             }
+            $(targetGroup.dom).addClass('butterfly-group-hover');
             this._hoverGroupObj = targetGroup;
           }
         } else {
