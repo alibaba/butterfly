@@ -128,6 +128,20 @@ getWidth = () => {}
 getHeight = () => {}
 ```
 
+### group.setSize(width, height)
+
+*description*： set size of the group
+
+*param*
+
+* `{number} width`the width of the group
+
+* `{number} height`the height of the group
+
+```js
+setSize = (width, height) => {}
+```
+
 ### group.addNode (node)
 
 *description*：  add node to the group
