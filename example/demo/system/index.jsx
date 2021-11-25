@@ -1,11 +1,9 @@
-'use strict';
 import React, {Component} from 'react';
-
-require('./index.less');
-require('butterfly-dag/dist/index.css');
-
-const Canvas = require('../../../index.js').Canvas;
-const mockData = require('./data');
+import ReactDOM from 'react-dom';
+import {Canvas} from 'butterfly-dag';
+import mockData from './data';
+import './index.less';
+import 'butterfly-dag/dist/index.css';
 
 class System extends Component {
   constructor() {
@@ -22,14 +20,11 @@ class System extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'Straight'
+          shapeType: 'Straight'
         }
       }
     });
     this.canvas.draw(mockData);
-    this.canvas.on('events', (data) => {
-      console.log(data);
-    });
   }
   render() {
     return (
@@ -41,4 +36,5 @@ class System extends Component {
   }
 }
 
-module.exports = System;
+ReactDOM.render(<System />, document.getElementById('root'));
+

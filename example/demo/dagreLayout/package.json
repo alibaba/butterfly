@@ -1,0 +1,14 @@
+{
+  "name": "dagre-layout",
+  "cn_name": "dagre布局",
+  "description": "a demo to show how to use dagre layout",
+  "cn_description": "dagre布局示例",
+  "dependencies": {
+    "butterfly-dag": "*",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "jquery": "*",
+    "lodash": "*",
+    "antd": "^3.0.0"
+  }
+}

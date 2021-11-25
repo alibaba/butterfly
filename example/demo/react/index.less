@@ -1,0 +1,85 @@
+#root {
+  height: 100%;
+}
+
+#bf-layout .trigger {
+  font-size: 18px;
+  line-height: 64px;
+  padding: 0 24px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+#bf-layout .trigger:hover {
+  color: #1890ff;
+}
+
+#bf-layout .logo {
+  height: 32px;
+  background: rgba(255, 255, 255, 0.3);
+  margin: 16px;
+  color: white;
+  text-align: center;
+  line-height: 32px;
+  font-weight: border;
+}
+
+.site-layout .site-layout-background {
+  background: #fff;
+  overflow: hidden;
+}
+
+.node {
+  box-shadow: @butterfly-box-shadow;
+  background-color: @butterfly-theme-color;
+  border-radius:0 0 5px 5px;
+  .header {
+    padding: 10px;
+    width: 250px;
+    border-radius: 5px 5px 0 0;
+    color: @butterfly-overlay-font-color;
+    background-color: @butterfly-primary-color;
+    border: @butterfly-box-border;
+  }
+
+  .content {
+    color:@butterfly-normal-font-color;
+    padding: 10px; 
+    border: @butterfly-box-border;
+    border-top: none;
+    border-radius: 0 0 5px 5px;
+    .info{
+      .ant-input-sm {
+        height: 29px;
+        background-color: @butterfly-theme-color;
+      }
+    }
+    .history {
+      padding: 5px 0;
+      font-size: 12px;
+      border-top: 1px solid #eee;
+      margin-top: 10px;
+    }
+  }
+}
+
+.label {
+  width: 38px;
+  height: 22px;
+  background-color: @butterfly-theme-color;
+  box-shadow: @butterfly-box-shadow;
+  border-radius: @butterfly-box-radius;
+  cursor: pointer;
+  z-index: 1;
+  position: relative;
+  outline: none;
+  border: @butterfly-box-border;
+  color: @butterfly-normal-font-color;
+  text-align: center;
+  line-height: 19px;
+  font-size: 12px;
+}
+.label:hover {
+  background: @butterfly-primary-color;
+  color: @butterfly-overlay-font-color;
+}

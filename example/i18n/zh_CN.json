@@ -1,0 +1,23 @@
+{
+  "layout_header_home": "首页",
+  "layout_header_demo": "示例",
+  "layout_header_doc": "文档",
+  "codebox_loading": "加载中...",
+  "codebox_editor_export_success": "导出成功！",
+  "codebox_editor_export_failed": "导出失败！错误原因：",
+  "codebox_editor_edit": "在github上编辑",
+  "codebox_editor_play": "执行（cmd+s）",
+  "codebox_editor_export": "导出",
+  "codebox_open": "展开",
+  "codebox_close": "收起",
+  "home_out_of_the_box": "开箱即用",
+  "home_box_desc": "丰富DEMO，开箱即用，支持demo调试，导出即用",
+  "home_manage_canvas": "全方位管理画布",
+  "home_canvas_desc": "全方位管理画布，开发者只需要更专注定制化的需求",
+  "home_flexible": "强定制性",
+  "home_flexible_desc": "利用DOM/REACT/VUE来定制元素；灵活性，可塑性，拓展性优秀",
+  "home_sub_title": "一个基于JS的数据驱动的节点式编排组件库",
+  "home_begin": "开始使用",
+  "home_see_demo": "查看示例",
+  "home_example": "实例"
+}

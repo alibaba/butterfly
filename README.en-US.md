@@ -21,15 +21,18 @@
 English | [简体中文](./README.md)
 
 ## ✨ Features
-* Simple & Poweful & Rich DEMO
+* Simple & Powerful & Rich DEMO
 * Manage the canvas in all aspects, developers only need to focus more on customized needs
-* Use dom to customize elements: flexibility and excellent expandability
+* Use DOM/REACT/VUE to customize elements: flexibility and excellent expandability
 
 <p align="center">
-  <img width="900" src="https://img.alicdn.com/tfs/TB1nq6hCeT2gK0jSZFvXXXnFXXa-1200-2660.png">
+  <img width="900" src="https://img.alicdn.com/imgextra/i3/O1CN018CrqXz1KRK7Euhj6X_!!6000000001160-2-tps-1155-1081.png">
 </p>
 
-## QUCIK DEMO LOCAL
+## 🚀DEMO
+
+### LOCAL DEMO
+
 ```
 git clone git@github.com:alibaba/butterfly.git
 npm install
@@ -37,6 +40,10 @@ cd example
 npm install
 npm start
 ```
+
+### ONLINE DEMO
+
+[Official website](https://butterfly-dag.gitee.io/butterfly-dag/demo/analysis)
 
 ## 📦 Install
 ```
@@ -58,12 +65,12 @@ import 'butterfly-dag/pack/index.css';
 
 ### Create Canvas
 ```
-const Canvas = require('butterfly-dag').Canvas;
+import {Canvas} from 'butterfly-dag';
 let canvas = new Canvas({
   root: dom,              //canvas root dom (require)
   zoomable: true,         //enable zoom canvas (option)
   moveable: true,         //enable move canvas (option)
-  draggable: true,        //enbale drag nodes (options)
+  draggable: true,        //enable drag nodes (options)
 });
 canvas.draw({
   groups: [],  // group  data
@@ -73,44 +80,52 @@ canvas.draw({
 ```
 
 ## 🔗 API Document
-
+* * *__!!! 3.x API documentation, please go to__*[here](https://github.com/alibaba/butterfly/blob/master/README.en-US.md);
 * [Canvas](./docs/en-US/canvas.md)
-  * [attribute](./docs/en-US/canvas.md#canvas-attr)
-  * [get, add and delete node，edge，group](./docs/en-US/canvas.md#canvas-api-crud)
-  * [zoom and move canvas](./docs/en-US/canvas.md#canvas-api-zoom-move)
-  * [fit canvas and focus part nodes](./docs/en-US/canvas.md#canvas-api-focus)
-  * [redo, undo](./docs/en-US/canvas.md#canvas-api-redo-undo)
-  * [coordinate conversion and offset](./docs/en-US/canvas.md#canvas-api-coordinate)
-  * [mutiply selection](./docs/en-US/canvas.md#canvas-api-selected)
-  * [events](./docs/en-US/canvas.md#canvas-api-events)
-  * [other api](./docs/en-US/canvas.md#canvas-api-other)
 * [Group](./docs/en-US/group.md)
-  * [attribute](./docs/en-US/group.md#group-attr)
-  * [custom group](./docs/en-US/group.md#group-custom)
-  * [add and delete members](./docs/en-US/group.md#group-member)
-  * [custom endpoint](./docs/en-US/group.md#group-endpoint)
-  * [move group](./docs/en-US/group.md#group-move)
-  * [events](./docs/en-US/group.md#group-event)
 * [Node](./docs/en-US/node.md)
-  * [attribute](./docs/en-US/node.md#node-attr)
-  * [custom node](./docs/en-US/node.md#node-custom)
-  * [custom endpoint](./docs/en-US/node.md#node-endpoint)
-  * [move node](./docs/en-US/node.md#node-move)
-  * [events](./docs/en-US/node.md#node-event)
-  * [[tree layout] collapse and expand sub node]()
 * [Edge](./docs/en-US/edge.md)
-  * [attribute](./docs/en-US/edge.md#edge-attr)
-  * [custom edge](./docs/en-US/edge.md#edge-custom-dom)
-  * [custom arrow](./docs/en-US/edge.md#edge-custom-arrow)
-  * [custom label](./docs/en-US/edge.md#edge-custom-label)
-  * [edge connectivity](./docs/en-US/edge.md#edge-isConnect)
-  * [events](./docs/en-US/edge.md#edge-event)
-  * [animation](./docs/en-US/edge.md#edge-animation)
 * [Endpoint](./docs/en-US/endpoint.md)
-  * [attribute](./docs/en-US/endpoint.md#endpoint-attr)
-  * [API](./docs/en-US/endpoint.md#endpoint-api)
 * [Minimap](./docs/en-US/minimap.md#endpoint-api)
-* [Layout(doing)]()
+* [Tooltips & Menu](./docs/en-US/tooltip.md)
+* [Layout](./docs/en-US/layout.md)
+* Plugins
+  * [arrow](./docs/en-US/plugins-arrows.md)
+  * [pannel](./docs/en-US/plugins-pannel.md)
+* React & Vue Support
+  * [React butterfly](./docs/en-US/react.md)
+  * [Vue2 butterfly](./docs/en-US/vue.md)
 
-## 🤝 Contribution
-Butterfly is a completely open source project and we welcome everyone to contribute to fixing bugs and improvements. For information on how to get started, read our [contribution guide](./docs/en-US/CONTRIBUTING.md).
+## 🎨Excellent Cases
+<p align="center">
+  <img width="900" src="https://img.alicdn.com/imgextra/i4/O1CN01d7WHVs1vkEDzWRRlW_!!6000000006210-2-tps-2400-8172.png">
+</p>
+
+## ⌨️Business-specific React Extension Components
+* [Data/Table-Field mapping](https://github.com/aliyun/react-data-mapping/blob/master/README.en-US.md)
+<p align="center">
+  <img width="49%" src="https://img.alicdn.com/imgextra/i2/O1CN01O8w0tT26WuU5J6lty_!!6000000007670-1-tps-595-411.gif">
+  <img width="49%" src="https://img.alicdn.com/imgextra/i2/O1CN017Gcu0Y1mbgIHcgqwr_!!6000000004973-1-tps-595-411.gif">
+</p>
+<p align="center">
+  <img width="49%" src="https://img.alicdn.com/imgextra/i2/O1CN011xYzxM1ZenzfVE0Xq_!!6000000003220-1-tps-595-411.gif">
+  <img width="49%" src="https://img.alicdn.com/imgextra/i4/O1CN01Nt9rpo25y6NlRMUtR_!!6000000007594-1-tps-595-411.gif">
+</p>
+
+* [Blood Map](https://github.com/aliyun/react-lineage-dag): Suitable for table blood dag, table field blood dag, business chain blood dag and other blood dag
+<img width="98%" src="https://img.alicdn.com/imgextra/i4/O1CN01ou8wTq20SQv4AnedD_!!6000000006848-1-tps-1337-761.gif">
+
+* [Visual Modeling](https://github.com/aliyun/react-visual-modeling/blob/master/README.en-US.md): Suitable for UML, database modeling, data warehouse construction
+<img width="98%" src="https://img.alicdn.com/imgextra/i4/O1CN01VZxfyl1pOLc15k7XM_!!6000000005350-1-tps-1665-829.gif">
+
+* Scheduling Diagram(doing)
+* [Monitoring](https://github.com/aliyun/react-monitor-dag/blob/master/README.en-US.md): Suitable for the status display of task flow, data flow and other business
+<img width="98%" src="https://img.alicdn.com/imgextra/i2/O1CN01eJigoL1gd9tjRSvdi_!!6000000004164-1-tps-1665-826.gif">
+
+* Butterfly-Editor(doing)
+
+## 🤝 How to contribute
+We welcome all contributors, please read the [Contribution Guide](./docs/en-US/CONTRIBUTING.md) before becoming a Contributor.
+
+If you already know, come to [Issues](https://github.com/alibaba/butterfly/issues) or [Pull requests](https://github.com/alibaba/butterfly/pulls) to become contributors, and let's grow and be better and better together.
+

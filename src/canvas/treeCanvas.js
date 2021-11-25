@@ -3,6 +3,7 @@
 import Canvas from "./baseCanvas";
 const _ = require('lodash');
 import TreeNode from '../node/treeNode';
+import Node from '../node/baseNode';
 import Hierarchy from '../utils/layout/hierarchy';
 
 class TreeCanvas extends Canvas {
@@ -45,6 +46,18 @@ class TreeCanvas extends Canvas {
         this.expandNode(data.nodeId);
       }
     });
+  }
+  findSubTree(item) {
+    let queue = [item];
+    let result = [];
+    while (queue.length > 0) {
+      let _item = queue.pop();
+      result.push(_item);
+      if (_item.children?.length > 0) {
+        queue = queue.concat(_item.children);
+      }
+    }
+    return result;
   }
   collapseNode (nodeId) {
     let collapseNodes = [];
@@ -94,12 +107,29 @@ class TreeCanvas extends Canvas {
       if (item.subCollapsed) {
         item.destroy(true);
       }
+
+      // 重置子节点的collapsed状态
+      if (item.id !== nodeId && item.collapsed) {
+        delete item.collapsed;
+      }
     });
     collapseEdges.forEach((item) => {
       item.destroy(true);
     });
 
     this.redraw();
+
+    this.emit('system.node.collapse', {
+      target: targetNode,
+      nodes: collapseNodes,
+      edges: collapseEdges
+    });
+    this.emit('events', {
+      type: 'node.collapse',
+      target: targetNode,
+      nodes: collapseNodes,
+      edges: collapseEdges
+    });
 
     return {
       nodes: collapseNodes,
@@ -141,7 +171,7 @@ class TreeCanvas extends Canvas {
       return _isCollapsed;
     });
     this.nodes = _.differenceBy(this.nodes, subNodes, 'id');
-    this.addNodes(subNodes, true);
+    let addNodes = this.addNodes(subNodes, true);
     this.edges = _.filter(this.edges, (a) => {
       if (a.type === 'endpoint') {
         return !_.some(collapseEdges, ((b) => {
@@ -153,7 +183,7 @@ class TreeCanvas extends Canvas {
         }));
       }
     });
-    this.addEdges(collapseEdges, true);
+    let addEdges = this.addEdges(collapseEdges, true);
     subNodes.forEach((item) => {
       delete item.subCollapsed;
     });
@@ -162,6 +192,17 @@ class TreeCanvas extends Canvas {
       delete item.collapsed;
     });
     this.redraw();
+    this.emit('system.node.expand', {
+      target: targetNode,
+      nodes: addNodes,
+      edges: addEdges
+    });
+    this.emit('events', {
+      type: 'node.expand',
+      target: targetNode,
+      nodes: addNodes,
+      edges: addEdges
+    });
   }
 
   redraw() {
@@ -216,11 +257,13 @@ class TreeCanvas extends Canvas {
       edges: [],
       groups: []
     });
-
     this.nodes.forEach((item) => {
       if (item.subCollapsed) {
         return;
       }
+      item?.endpoints?.forEach(endpoint => {
+        endpoint.updatePos();
+      });
       let obj = tmpTreeObj[item.id];
       if (item.top !== obj.top || item.left !== obj.left) {
         item.options.top = obj.top;
@@ -229,8 +272,56 @@ class TreeCanvas extends Canvas {
         item.moveTo(obj.left, obj.top);
       }
     });
+    this.edges.forEach((item) => {
+      item.redraw();
+    });
+    this.emit('system.canvas.redraw');
+    this.emit('events', {
+      type: 'canvas:redraw'
+    });
   }
+  addNodes(data, isNotEventEmit) {
+    let nodes = super.addNodes(data, isNotEventEmit);
+    nodes.forEach((item) => {
+      if(item.parent) {
+        let parentNode = this.getNode(item.parent);
+        if (!_.some(parentNode.children, ['id', item.id])) {
+          !parentNode.children && (parentNode.children = []);
+          parentNode.children.push(item);
+        }
+      }
+    });
+    return nodes;
+  }
+  removeNodes(data, isNotDelEdge, isNotEventEmit) {
+    let nodes = data.map((item) => {
+      if (item instanceof Node) {
+        return item;
+      } else {
+        return this.getNode(item);
+      }
+    });
 
+    let rmNodes = [];
+
+    nodes.forEach((item) => {
+      let _subTree = this.findSubTree(item);
+      rmNodes = rmNodes.concat(_subTree);
+      // 如果是某个节点的子节点,将此节点从父节点的children中移除
+      if (item.parent) {
+        const parentNode = this.getNode(item.parent);
+        if (parentNode) {
+          parentNode.children = parentNode.children.filter((node) => node.id !== item.id);
+        }
+      }
+    });
+
+    rmNodes = _.unionBy(rmNodes, 'id');
+
+    let result = super.removeNodes(rmNodes, isNotDelEdge, isNotEventEmit);
+
+    return result;
+  }
   getRootNode() {
     return this.nodes.filter((item) => {
       return item.isRoot;

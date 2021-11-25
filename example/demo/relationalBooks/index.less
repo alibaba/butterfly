@@ -10,22 +10,30 @@
     width: 100%;
     height: 100%;
     .butterflies-link {
-      stroke: #c66767;
-      stroke-width: 3px;
+      stroke: @butterfly-line-color;
+      stroke-width: 1px;
     }
     .butterfly-wrapper {
-      .base-node {
+      .relational-book-base-node {
         width: 200px;
         position: absolute;
+        height: 32px;
+        line-height: 28px;
+        text-align: center;
+        vertical-align: middle;
+        border-radius: 5px;
+        color: @butterfly-normal-font-color;
+        box-shadow: @butterfly-box-shadow;
         .title {
           line-height: 32px;
           height: 32px;
           width: 100%;
           display: flex;
           justify-content: space-between;
-          background: #255c82;
+          background: @butterfly-primary-color;
+          border-radius: 15px 15px 0px 0px;
           padding: 0 8px;
-          color: #fff;
+          color:@butterfly-overlay-font-color;
           .remove {
             cursor: pointer;
           }
@@ -36,24 +44,51 @@
         .content {
           height: 32px;
           width: 200px;
-          display: flex;
+          // display: flex;
           justify-content: space-between;
           align-items: center;
           padding: 0 8px;
-          background: #c7dbd2;
-          border-bottom: 1px solid #000;
+          background: @butterfly-theme-color;
+          border: @butterfly-box-border;
+          position: relative;
+          cursor: pointer;
+          .targetEndPoint{
+            left: -3px;
+            position: absolute;
+          }
+          .sourceEndPoint{
+            right: -3px;
+            position: absolute;
+          }
           .remove {
+            display: none;
             cursor: pointer;
           }
           .text {
             .input-text {
               height: 28px;
-              border: 1px solid #000;
+              border: @butterfly-box-border;
               width: 130px;
               padding: 0 4px;
             }
           }
           .edit {
+            display: none;
+            cursor: pointer;
+          }
+        }
+        .content:last-child {
+          border-radius: 0px 0px 15px 15px;
+        }
+        .content:hover {
+          display: flex;
+          background: @butterfly-box-move-background-color;
+          .remove {
+            display : contents;
+            cursor: pointer;
+          }
+          .edit {
+            display : contents;
             cursor: pointer;
           }
         }
@@ -64,18 +99,18 @@
         .title {
           line-height: 32px;
           height: 32px;
-          width: 100%;
           display: flex;
           justify-content: space-between;
-          background: #146297;;
+          background: @butterfly-primary-color;
+          border-radius: 15px 15px 0px 0px;
           padding: 0 8px;
-          color: #fff;
+          color:@butterfly-overlay-font-color;
           .title-text {
             input {
               width: 140px;
-              color: #333;
+              color: @butterfly-normal-font-color;
               height: 28px;
-              border: 1px solid #ccc;
+              border: @butterfly-box-border;
             }
           }
           #close {
@@ -89,8 +124,10 @@
           display: flex;
           padding: 8px;
           justify-content: space-between;
-          border: 1px solid #ccc;
-          background: #fff;
+          border: @butterfly-box-border;
+          background: @butterfly-theme-color;
+          border-radius: 0px 0px 15px 15px;
+          color: @butterfly-normal-font-color;
           p {
             textarea {
               min-height: 80px;
@@ -98,7 +135,14 @@
             }
           }
           .alis-node-edit {
+            display: none;
+          }
+        }
+        .container:hover {
+          background: @butterfly-box-move-background-color;
+          .alis-node-edit {
             cursor: pointer;
+            display: contents;
           }
         }
       }

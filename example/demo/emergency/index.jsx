@@ -1,15 +1,13 @@
-'use strict';
+import ReactDOM from 'react-dom';
+import {Canvas} from 'butterfly-dag';
 import React, {Component} from 'react';
-require('./index.less');
-require('butterfly-dag/dist/index.css');
 
-const Canvas = require('../../../index.js').Canvas;
-const mockData = require('./data.js');
+import mockData from './data.js';
+
+import './index.less';
+import 'butterfly-dag/dist/index.css';
 
 class Emergency extends Component {
-  constructor() {
-    super();
-  }
   componentDidMount() {
     let root = document.getElementById('dag-canvas');
     this.canvas = new Canvas({
@@ -21,7 +19,7 @@ class Emergency extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'Manhattan',
+          shapeType: 'Manhattan',
           arrow: true
         },
         // 拖动边缘处自动适应画布
@@ -31,10 +29,8 @@ class Emergency extends Component {
       }
     });
     this.canvas.draw(mockData);
-    this.canvas.on('events', (data) => {
-      console.log(data);
-    });
   }
+
   render() {
     return (
       <div className='emergency-page'>
@@ -45,4 +41,4 @@ class Emergency extends Component {
   }
 }
 
-module.exports = Emergency;
+ReactDOM.render(<Emergency />, document.getElementById('root'));

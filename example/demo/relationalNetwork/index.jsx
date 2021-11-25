@@ -1,11 +1,12 @@
-'use strict';
 import React, {Component} from 'react';
-const Canvas = require('../../../index.js').Canvas;
-const mockData = require('./data.js');
-const RelationEdge = require('./edge_relation.jsx');
+import ReactDOM from 'react-dom';
+import {Canvas} from 'butterfly-dag';
+import mockData from './data.js';
+import RelationEdge from './edgerelation.js';
 
-require('./index.less');
-require('butterfly-dag/dist/index.css');
+import './index.less';
+import './newIconfont.css';
+import 'butterfly-dag/dist/index.css';
 
 class RelationalNetwork extends Component {
   constructor() {
@@ -24,7 +25,7 @@ class RelationalNetwork extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'Straight',
+          shapeType: 'Straight',
           Class: RelationEdge
         },
         endpoint: {
@@ -45,4 +46,4 @@ class RelationalNetwork extends Component {
   }
 }
 
-module.exports = RelationalNetwork;
+ReactDOM.render(<RelationalNetwork />, document.getElementById('root'));

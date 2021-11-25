@@ -2,14 +2,13 @@
   width: 100%;
   height: 100%;
   text-align: center;
-  background: #fff;
   .compactBoxTree-canvas {
     width: 100%;
     height: 100%;
     .butterfly-wrapper {
       #Root {
         width: 100px;
-        background: #5475e9;
+        background: @butterfly-primary-color;
         border: none;
         border-radius: 5px;
         font-weight: 500;
@@ -17,17 +16,17 @@
         line-height: 28px;
         padding: 0;
         .title {
-          color: #fff;
+          color: @butterfly-overlay-font-color;
         }
       }
       .mind-map-node {
         position: absolute;
-        background: #fff;
-        border: 1px solid #9e9e9e;
+        background: @butterfly-theme-color;
+        border: @butterfly-box-border;
         border-radius: 10px;
         padding: 4px 8px;
         .title {
-          color: #333;
+          color: @butterfly-normal-font-color;
         }
       }
     }

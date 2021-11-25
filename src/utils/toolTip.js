@@ -1,21 +1,19 @@
+'use strict';
+
+import './toolTip.less';
+
 const $ = require('jquery');
 
-const Default = {
+const DEFUALT = {
   TEMPLATE:
-    '<div class="butterfly-toolTip" role="butterfly-tooltip"><div class="butterfly-tooltip-arrow"></div><div class="butterfly-tooltip-inner"></div></div>',
-
+    '<div class="butterfly-tooltip-container"><div class="butterfly-tooltip-arrow"></div><div class="butterfly-tooltip-inner"></div></div>',
   $viewAppend: 'body',
-  $viewScale: '.butterfly-wrapper', // 有缩放的图层
-
-  $viewCon: '.butterfly-toolTip',
-  $inner: '.butterfly-tooltip-inner',
-  callbackWhitelist: ['LI'],
-
-  evntList: ['hover'],
-
-  callBackOpen: true,
-
-  delay: 300,
+  $viewCon: {
+    tips: '.butterfly-tips',
+    menu: '.butterfly-menu',
+    common: '.butterfly-tooltip-container'
+  },
+  $inner: '.butterfly-tooltip-inner'
 };
 
 const _toFixed_3 = (num) => {
@@ -26,7 +24,8 @@ const _toFixed_3 = (num) => {
     return Number(parseFloat(num).toFixed(3));
   }
 };
-const _getTipOffset = (placement, pos) => {
+
+const _getTipOffset = (placement, pos, offset = {x: 0, y: 0}) => {
   const _pos = {};
   let { left, top, width, height, actualWidth, actualHeight } = pos;
   left = _toFixed_3(left);
@@ -39,146 +38,282 @@ const _getTipOffset = (placement, pos) => {
   switch (placement) {
     case 'top':
       _pos.left = left + width / 2 - actualWidth / 2;
-      _pos.top = top - actualHeight;
+      _pos.top = top - actualHeight - 5;
       break;
     case 'left':
-      _pos.left = left - actualWidth;
+      _pos.left = left - actualWidth - 5;
       _pos.top = top + height / 2 - actualHeight / 2;
       break;
     case 'right':
-      _pos.left = left + width;
+      _pos.left = left + width + 5;
       _pos.top = top + height / 2 - actualHeight / 2;
       break;
     case 'bottom':
       _pos.left = left + width / 2 - actualWidth / 2;
-      _pos.top = top + actualHeight;
+      _pos.top = top + height + 5;
+      break;
     default:
       _pos.left = left + width / 2 - actualWidth / 2;
-      _pos.top = top - actualHeight;
+      _pos.top = top - height - 5;
+  }
+
+  if (offset.x) {
+    _pos.left += offset.x;
+  }
+  if (offset.y) {
+    _pos.top += offset.y;
   }
   return _pos;
 };
 
-const show = (opts, dom, toolTipDom, callBackFunc, e) => {
-  $(opts.$viewCon).remove();
+let _menuOldPos = {x: 0, y: 0}
+const show = (opts, type, tipsDom, targetDom, callback) => {
+  $(DEFUALT.$viewCon[type]).remove();
 
-  opts.callBackOpen &&
-    toolTipDom.on('click', (e) => {
-      if (callBackFunc) {
-        const res = { key:$(e.target).attr("key"),value: e.target.textContent };
-        if (opts.callbackWhitelist.includes(e.target.nodeName)) {
-          $(opts.$viewCon).remove();
-          callBackFunc(res, e)
-        };
-      }
-      e.stopPropagation();
-    });
+  let tipsContainer = $(DEFUALT.TEMPLATE);
+  tipsContainer.find(DEFUALT.$inner).append(tipsDom);
+  $(tipsContainer).appendTo(DEFUALT.$viewAppend);
 
-  toolTipDom.appendTo($(opts.$viewAppend));
   let placement = opts.placement || 'top';
-  toolTipDom.addClass(placement);
 
-  const scaleArr = ($(opts.$viewScale).css("transform") || 'none').replace('matrix(', '').replace(')', '').split(',');
-  const scale = scaleArr[0] === 'none' ? 1 : scaleArr[0];
+  $(tipsContainer)
+    .addClass(DEFUALT.$viewCon[type].replace('.', ''))
+    .addClass(placement)
+    .addClass('in'); // todo in的动画
+  if (opts.className) {
+    tipsContainer.addClass(opts.className);
+  }
 
   const pos = {
-    top: dom.offset().top,
-    left: dom.offset().left,
-    width: dom.outerWidth() * scale,
-    height: dom.outerHeight() * scale,
-    actualWidth: toolTipDom.outerWidth(),
-    actualHeight: toolTipDom.outerHeight(),
+    top: $(targetDom).offset().top,
+    left: $(targetDom).offset().left,
+    width: $(targetDom).outerWidth(),
+    height: $(targetDom).outerHeight(),
+    actualWidth: $(tipsContainer).outerWidth(),
+    actualHeight: $(tipsContainer).outerHeight()
   };
 
   let posInit = {}
   if (opts.x || opts.x === 0) {
     posInit = {
-      left: opts.x,
-      top: opts.y
+      left: opts.offsetX ? opts.x + opts.offsetX : opts.x,
+      top: opts.offsetY ? opts.y + opts.offsetY : opts.y
     }
   } else {
-    posInit = _getTipOffset(placement, pos);
+    let offset = {
+      x: 0,
+      y: 0
+    };
+    if (opts.offsetX) {
+      offset.x = opts.offsetX;
+    }
+    if (opts.offsetY) {
+      offset.y = opts.offsetY;
+    }
+    posInit = _getTipOffset(placement, pos, offset);
   }
+  _menuOldPos = {
+    x: posInit.left,
+    y: posInit.top
+  };
   const position = `top: ${posInit.top}px; left: ${posInit.left}px;`;
-  toolTipDom.attr('style', position).addClass('in');
-};
-
-const hide = (toolTipDom) => {
-  toolTipDom.removeClass('in').remove();
-};
-
-function creatTips(option, dom, callBackFunc) {
-  const opts = { ...Default, ...option };
-
-  let toolTipDom = $(opts.TEMPLATE);
-  toolTipDom.find(opts.$inner).html(opts.content);
-
-  let _timeoutMouseover = null;
-
-  opts.evntList.includes('hover') &&
-    dom
-      .on('mouseover', (e) => {
-        clearTimeout(_timeoutMouseover);
-        _timeoutMouseover = setTimeout(() => {
-          show(opts, dom, toolTipDom, callBackFunc, e);
-        }, opts.delay);
-      })
-      .on('mouseout', (e) => {
-        clearTimeout(_timeoutMouseover);
-        !$(opts.$viewCon).hasClass('butterfly-active-tip') && hide(toolTipDom);
-      });
-  const clickOrSame = (e) => {
-    if ($(opts.$viewCon).hasClass('butterfly-active-tip')) {
-      $(opts.$viewCon).removeClass('butterfly-active-tip');
-      hide(toolTipDom);
-    } else {
-      toolTipDom.addClass('butterfly-active-tip');
-      show(opts, dom, toolTipDom, callBackFunc, e);
-    }
-  }
-  opts.evntList.includes('click') &&
-    dom.on('click', (e) => {
-      clickOrSame(e);
-    });
-
-  opts.evntList.includes('mousedown') && dom.mousedown((e) => {
-    $(dom).bind("contextmenu", function (e) {
-      return false;
-    });
-    if (3 == e.which) {
-      clickOrSame(e);
-    }
-  });
-  opts.nowShow && show(opts, dom, toolTipDom, callBackFunc, '');
-
-  return dom;
+  $(tipsContainer).attr('style', position);
+  callback && callback(tipsContainer[0]);
+  return tipsContainer[0];
 }
 
-function creatMenus(opts, dom, callBackFunc, menu = [], showTip = false) {
-  const menuDom = $('<div class="butterfly-tip-menu-div"></div>');
+const hide = (tipsDom, callback) => {
+  $(tipsDom).removeClass('in').remove();
+  callback && callback(tipsDom);
+};
 
-  const menuUl = $('<ul class="butterfly-tip-menu-ul"></ul>');
-
-  (menu || []).forEach((item) => {
-    $('<li class="butterfly-tip-menu-li"></li>')
-      .attr('key', `${item.key}`)
-      .text(item.value)
-      .appendTo(menuUl);
+let createTip = (opts, callback) => {
+  let currentTips = null;
+  let tipstDom = null;
+  let isMouseInTips = false;
+  let isMouseInTarget = false;
+  let isMouseClick = false;
+  let timer = null;
+  let notEventThrough = !!opts.notEventThrough;
+  // 传入参数：是否需要在用户点击endpoint之后隐藏tips
+  const needTipsHidden = opts.needTipsHidden === undefined? true : opts.needTipsHidden? true : false;
+  let _mouseIn = (e) => {
+    if (!isMouseClick) {
+      isMouseInTips = true;
+    } else {
+      isMouseInTips = false;
+    }
+  }
+  let _mouseOut = (e) => {
+    isMouseClick = false;
+    isMouseInTips = false;
+    _hide();
+  }
+  let _hide = () => {
+    if (timer) {
+      clearTimeout(timer);
+    }
+    timer = setTimeout(() => {
+      if (!isMouseInTips && !isMouseInTarget && currentTips) {
+        hide(currentTips);
+        currentTips.removeEventListener('mouseover', _mouseIn);
+        currentTips.removeEventListener('mousemove', _mouseIn);
+        currentTips.removeEventListener('mouseout', _mouseOut);
+      }
+    }, 50);
+  };
+  let {data, targetDom, genTipDom} = opts;
+  let _tipsDom = opts.tipsDom;
+  targetDom.addEventListener('mouseover', (e) => {
+    if (_tipsDom) {
+      tipstDom = _tipsDom;
+    }
+    if (genTipDom) {
+      tipstDom = genTipDom(data);
+    }
+    if (isMouseClick || !tipstDom) {
+      return;
+    }
+    if (notEventThrough) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+    isMouseInTarget = true;
+    currentTips = show(opts, 'tips', tipstDom, targetDom, callback);
+    currentTips.addEventListener('mouseover', _mouseIn);
+    currentTips.addEventListener('mousemove', _mouseIn);
+    currentTips.addEventListener('mouseout', _mouseOut);
   });
 
-  showTip && $(`<div class="butterfly-tip-menu-title">${opts.content}</div>`).appendTo(menuDom);
-  menuUl.appendTo(menuDom);
+  const _targetMouseOut = targetDom.onmouseout;
+  targetDom.onmouseout = (e) => {
+    if (_targetMouseOut) {
+      _targetMouseOut(e);
+    }
+    
+    if (notEventThrough) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+    isMouseInTarget = false;
+    _hide();
+  };
 
-  opts.placement = opts.placement || 'right';
-  opts.content = menuDom;
-  opts.evntList = opts.evntList || [];
+  const _targetMouseDown = targetDom.onmousedown;
+  targetDom.onmousedown = (e) => {
+    if (_targetMouseDown) {
+      _targetMouseDown(e);
+    }
+    
+    if (needTipsHidden) {
+      const _setClickFalse = () => {
+        isMouseClick = false;
+        document.removeEventListener('mouseup', _setClickFalse);
+      };
+      document.addEventListener('mouseup', _setClickFalse);
+      isMouseClick = true;
+      isMouseInTarget = false;
+      _hide();
+    }
+  };
+};
 
-  opts.nowShow = opts.nowShow || true;
+let currentMenu = null;
+let currentDragDom = null;
+let _isDraggingMenu = false;
+let _mouseOldPos = {x: 0, y: 0};
+let _hideMenu = (e) => {
+  if (e.target === currentMenu || $(currentMenu).find(e.target).length > 0) {
+    return ;
+  }
+  currentMenu && hide(currentMenu);
+  document.removeEventListener('click', _hideMenu);
+}
+let createMenu = (opts, callback) => {
+  let {data, targetDom, genTipDom} = opts;
+  let _createMenu = () => {
+    let tipsDom = null;
+    if (genTipDom) {
+      tipsDom = genTipDom(data);
+    }
+    if (opts.tipsDom) {
+      tipsDom = opts.tipsDom;
+    }
+    currentMenu = show(opts, 'menu', tipsDom, targetDom, callback);
+    if (opts.closable) {
+      document.addEventListener('click', _hideMenu);
+    }
 
-  return creatTips(opts, dom, callBackFunc);
+    if (opts.draggable) {
+      if (!opts.dragDom) {
+        currentDragDom = currentMenu;
+      } else {
+        currentDragDom = opts.dragDom;
+      }
+      document.addEventListener('mousedown', _dragBegin);
+      document.addEventListener('mousemove', _dragMove);
+      document.addEventListener('mouseup', _dragEnd);
+    }
+  }
+  if (opts.action === 'click') {
+    targetDom.addEventListener('click', _createMenu);
+  } else {
+    _createMenu();
+  }
+}
+
+let closeMenu = (callback) => {
+  if (!currentMenu) {
+    return;
+  }
+  hide(currentMenu, callback);
+  currentMenu = null;
+  document.removeEventListener('click', _hideMenu);
+  if (currentDragDom) {
+    document.removeEventListener('mousedown', _dragBegin);
+    document.removeEventListener('mousemove', _dragMove);
+    document.removeEventListener('mouseup', _dragEnd);
+    currentDragDom = null;
+  }
+}
+
+let _dragBegin = (e) => {
+  _isDraggingMenu = true;
+  _mouseOldPos = {
+    x: e.clientX,
+    y: e.clientY
+  }
+}
+let _dragTimer = null;
+let _dragMove = (e) => {
+  if (_isDraggingMenu && currentDragDom) {
+    if (_dragTimer) {
+      return;
+    }
+    _dragTimer = setTimeout(() => {
+      let _y = _menuOldPos.y + (e.clientY - _mouseOldPos.y);
+      let _x = _menuOldPos.x + (e.clientX - _mouseOldPos.x);
+      $(currentMenu)
+        .css('top', _y)
+        .css('left', _x);
+        _mouseOldPos = {
+          x: e.clientX,
+          y: e.clientY
+        }
+        _menuOldPos = {
+          x: _x,
+          y: _y
+        }
+        _dragTimer = null;
+    }, 20);
+  }
+}
+let _dragEnd = (e) => {
+  _isDraggingMenu = false;
 }
 
 export default {
-  creatTips,
-  creatMenus,
+  createTip,
+  createMenu,
+  closeMenu
 };

@@ -1,7 +1,5 @@
-'use strict';
-
-const Node = require('../../../index.js').Node;
-const $ = require('jquery');
+import {Node} from 'butterfly-dag';
+import $ from 'jquery';
 
 class AlisBaseNode extends Node {
   constructor(opts) {
@@ -72,7 +70,7 @@ class AlisBaseNode extends Node {
           $(this).parent('.title-text').text(oldInputText);
         }
       });
-    })
+    });
   }
 }
-module.exports = AlisBaseNode;
+export default AlisBaseNode;

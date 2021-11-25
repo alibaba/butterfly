@@ -1,0 +1,126 @@
+
+
+.entity-page {
+  width: 100%;
+  height: 100%;
+
+  .entity-canvas {
+    width: 100%;
+    height: 100%;
+  }
+
+  .entity-base-node {
+    position: absolute;
+    text-align: center;
+    background: @butterfly-theme-color;
+    vertical-align: middle;
+    border-radius: 5px;
+    line-height: 3;
+    border: @butterfly-box-border;
+  }
+
+  .butterflies-link {
+    stroke-width: 1px;
+  }
+  .box-background-color{
+    background-color: @butterfly-primary-color;
+    fill:#f00;
+    stroke: aqua;
+  }
+
+  .circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+  }
+
+  .diamond {
+    .text {
+      font-size: 14px;
+      color: @butterfly-normal-font-color;
+      text-align: center;
+    }
+    width: 70px;
+    height: 70px;
+    transform: rotate(45deg);
+    border-radius: 0px;
+    line-height: 5;
+    background-color: @butterfly-theme-color;
+    .rotate {
+      transform: rotate(-45deg) translateX(-3%) translateY(-72%);
+    }
+   
+  }
+  
+  .rect {
+    width: 137px;
+    height: 42px;
+    border-radius: 6px;
+  }
+
+  .transparent {
+    background: transparent;
+  }
+
+  .ellipse {
+    border-radius: 50%;
+    height: 42px;
+    width: 82px;
+  }
+
+  .ellipse-border {
+    border-radius: 50%;
+    height: 45px;
+    width: 95px;
+  }
+
+  .triangle {
+    width: 100px;
+    height: 50px;
+    background-color: transparent;
+    fill: @butterfly-theme-color;
+    stroke: @butterfly-box-border-color-base;
+    border:none;
+    stroke-width:1
+  }
+
+  .dashed {
+    border-style: dashed;
+  }
+
+  .solid {
+    border-style: solid;
+  }
+
+  .text {
+    color: @butterfly-overlay-font-color;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    -webkit-box-pack: center;
+    overflow: hidden;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+  }
+
+  .triangle-text {
+    font-size: 14px;
+    top: 40%;
+    color: @butterfly-normal-font-color;
+  }
+
+  .label {
+    position: absolute;
+    width: 38px;
+    height: 22px;
+    background: @butterfly-theme-color;
+    text-align: center;
+    border-radius: 100px;
+  }
+}

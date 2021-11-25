@@ -23,13 +23,16 @@
 ## ✨ 特性
 * 丰富DEMO，开箱即用
 * 全方位管理画布，开发者只需要更专注定制化的需求
-* 利用dom来定制元素；灵活性，可塑性，拓展性优秀
+* 利用DOM/REACT/VUE来定制元素；灵活性，可塑性，拓展性优秀
 
 <p align="center">
-  <img width="900" src="https://img.alicdn.com/tfs/TB1nq6hCeT2gK0jSZFvXXXnFXXa-1200-2660.png">
+  <img width="900" src="https://img.alicdn.com/imgextra/i3/O1CN018CrqXz1KRK7Euhj6X_!!6000000001160-2-tps-1155-1081.png">
 </p>
 
-## 快速本地DEMO
+## 🚀DEMO
+
+### 本地DEMO
+
 ```
 git clone git@github.com:alibaba/butterfly.git
 npm install
@@ -37,6 +40,10 @@ cd example
 npm install
 npm start
 ```
+
+### 线上DEMO
+
+[小蝴蝶官网](https://butterfly-dag.gitee.io/butterfly-dag/demo/analysis)
 
 ## 📦 安装
 ```
@@ -58,7 +65,7 @@ import 'butterfly-dag/pack/index.css';
 
 ### 生成画布
 ```
-const Canvas = require('butterfly-dag').Canvas;
+import {Canvas} from 'butterfly-dag';
 let canvas = new Canvas({
   root: dom,              //canvas的根节点(必传)
   zoomable: true,         //可缩放(可传)
@@ -73,44 +80,52 @@ canvas.draw({
 ```
 
 ## 🔗 API文档
+* *__!!! 3.x的API文档，请移步到__*[这里](https://github.com/alibaba/butterfly/blob/master/README.md);
 * [画布(Canvas)](./docs/zh-CN/canvas.md)
-  * [属性配置](./docs/zh-CN/canvas.md#canvas-attr)
-  * [节点，线段，节点组的查看,新增,删除](./docs/zh-CN/canvas.md#canvas-api-crud)
-  * [缩放，平移](./docs/zh-CN/canvas.md#canvas-api-zoom-move)
-  * [适配画布和聚焦局部节点](./docs/zh-CN/canvas.md#canvas-api-focus)
-  * [重做和撤销](./docs/zh-CN/canvas.md#canvas-api-redo-undo)
-  * [坐标转换和坐标偏移](./docs/zh-CN/canvas.md#canvas-api-coordinate)
-  * [框选](./docs/zh-CN/canvas.md#canvas-api-selected)
-  * [事件](./docs/zh-CN/canvas.md#canvas-api-events)
-  * [其他辅助方法](./docs/zh-CN/canvas.md#canvas-api-other)
 * [节点组(Group)](./docs/zh-CN/group.md)
-  * [属性配置](./docs/zh-CN/group.md#group-attr)
-  * [自定义节点组](./docs/zh-CN/group.md#group-custom)
-  * [新增，删除成员节点](./docs/zh-CN/group.md#group-member)
-  * [自定义锚点](./docs/zh-CN/group.md#group-endpoint)
-  * [移动](./docs/zh-CN/group.md#group-move)
-  * [事件](./docs/zh-CN/group.md#group-event)
 * [节点(Node)](./docs/zh-CN/node.md)
-  * [属性配置](./docs/zh-CN/node.md#node-attr)
-  * [自定义节点](./docs/zh-CN/node.md#node-custom)
-  * [自定义锚点](./docs/zh-CN/node.md#node-endpoint)
-  * [移动](./docs/zh-CN/node.md#node-move)
-  * [事件](./docs/zh-CN/node.md#node-event)
-  * [[树状布局] 收缩 & 展开子节点]()
 * [线(Edge)](./docs/zh-CN/edge.md)
-  * [属性配置](./docs/zh-CN/edge.md#edge-attr)
-  * [自定义线段](./docs/zh-CN/edge.md#edge-custom-dom)
-  * [自定义箭头](./docs/zh-CN/edge.md#edge-custom-arrow)
-  * [自定义label](./docs/zh-CN/edge.md#edge-custom-label)
-  * [线段连通性](./docs/zh-CN/edge.md#edge-isConnect)
-  * [事件](./docs/zh-CN/edge.md#edge-event)
-  * [线段动画](./docs/zh-CN/edge.md#edge-animation)
 * [锚点(Endpoint)](./docs/zh-CN/endpoint.md)
-  * [属性配置](./docs/zh-CN/endpoint.md#endpoint-attr)
-  * [通用API](./docs/zh-CN/endpoint.md#endpoint-api)
 * [缩略图(Minimap)](./docs/zh-CN/minimap.md#endpoint-api)
-* [布局(正在整理中)]()
+* [提示 & 菜单(tooltips & menu)](./docs/zh-CN/tooltip.md)
+* [布局(Layout)](./docs/zh-CN/layout.md)
+* 插件
+  * [箭头(arrow)](./docs/zh-CN/plugins-arrows.md)
+  * [左侧画板(pannel)](./docs/zh-CN/plugins-pannel.md)
+  * [快捷键(hotkey)](./docs/zh-CN/plugins-hotkey.md)
+* React & Vue支持
+  * [React butterfly组件支持](./docs/zh-CN/react.md)
+  * [Vue2 butterfly组件支持](./docs/zh-CN/vue.md)
 
+## 🎨优秀案例
+<p align="center">
+  <img width="900" src="https://img.alicdn.com/imgextra/i4/O1CN01d7WHVs1vkEDzWRRlW_!!6000000006210-2-tps-2400-8172.png">
+</p>
 
-## 🤝贡献
-小蝴蝶是一个完全开源的项目，我们欢迎大家为修复错误和改进做出贡献。有关如何开始的信息，请阅读我们的[贡献指南](./docs/zh-CN/CONTRIBUTING.md).
+## ⌨️垂直业务React拓展组件
+* [数据/字段映射组件](https://github.com/aliyun/react-data-mapping): 适用于做数据字段映射，表字段映射，表格连线等业务
+<p align="center">
+  <img width="49%" src="https://img.alicdn.com/imgextra/i2/O1CN01O8w0tT26WuU5J6lty_!!6000000007670-1-tps-595-411.gif">
+  <img width="49%" src="https://img.alicdn.com/imgextra/i2/O1CN017Gcu0Y1mbgIHcgqwr_!!6000000004973-1-tps-595-411.gif">
+</p>
+<p align="center">
+  <img width="49%" src="https://img.alicdn.com/imgextra/i2/O1CN011xYzxM1ZenzfVE0Xq_!!6000000003220-1-tps-595-411.gif">
+  <img width="49%" src="https://img.alicdn.com/imgextra/i4/O1CN01Nt9rpo25y6NlRMUtR_!!6000000007594-1-tps-595-411.gif">
+</p>
+
+* [表字段血缘/业务血缘](https://github.com/aliyun/react-lineage-dag): 适用于表级血缘,表字段级血缘,业务链路血缘等业务
+<img width="98%" src="https://img.alicdn.com/imgextra/i4/O1CN01ou8wTq20SQv4AnedD_!!6000000006848-1-tps-1337-761.gif">
+
+* [可视化建模图](https://github.com/aliyun/react-visual-modeling): 适用于UML，数据库建模，数据仓库建设等业务
+<img width="98%" src="https://img.alicdn.com/imgextra/i4/O1CN01VZxfyl1pOLc15k7XM_!!6000000005350-1-tps-1665-829.gif">
+
+* 调度编排图(doing)
+* [监控图](https://github.com/aliyun/react-monitor-dag): 适用于任务流，数据流等业务的状态展示
+<img width="98%" src="https://img.alicdn.com/imgextra/i2/O1CN01eJigoL1gd9tjRSvdi_!!6000000004164-1-tps-1665-826.gif">
+
+* Butterfly-Editor(doing)
+
+## 🤝如何贡献
+我们欢迎所有的贡献者，在成为贡献者之前，请先阅读[贡献指南](./docs/zh-CN/CONTRIBUTING.md)。
+
+如果您已经了解，快来[Issus](https://github.com/alibaba/butterfly/issues)或[Pull requests](https://github.com/alibaba/butterfly/pulls)成为贡献者吧，让我们和小蝴蝶一起成长，一起变得更好、更棒！

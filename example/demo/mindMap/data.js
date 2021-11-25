@@ -1,203 +1,201 @@
-'use strict';
+import Node from './node.js';
 
-const Node = require('./node.js');
-
-module.exports = {
+export default {
   nodes: {
     isRoot: true,
     id: 'Root',
     title: '根节点',
     Class: Node,
     children: [{
-        id: 'subNode1',
+      id: 'subNode1',
+      Class: Node,
+      title: '子节点 1',
+      side: 'left',
+      children: [{
+        id: 'subNode1-1',
         Class: Node,
-        title: '子节点 1',
-        side: "left",
-        children: [{
-            id: 'subNode1-1',
-            Class: Node,
-            title: '子节点 1-1',
-            side: "right",
-          },
-          {
-            id: 'subNode1-2',
-            Class: Node,
-            title: '子节点 1-2',
-            side: "right",
-            children: [{
-              id: 'subNode1-2-1',
-              Class: Node,
-              title: '子节点 1-2-1',
-              side: "right",
-            }]
-          }, {
-            id: 'subNode1-3',
-            Class: Node,
-            title: '子节点 1-3',
-            side: "right",
-          }
-        ]
-      }, {
-        id: 'subNode2',
-        Class: Node,
-        title: '子节点 2',
-        side: "left",
-        children: [{
-            id: 'subNode2-1',
-            Class: Node,
-            title: '子节点 2-1',
-            side: "right",
-            children: [{
-              id: 'subNode2-1-1',
-              Class: Node,
-              title: '子节点 2-1-1',
-              side: "right",
-            }]
-          },
-          {
-            id: 'subNode2-2',
-            Class: Node,
-            title: '子节点 2-2',
-            side: "right",
-          }, {
-            id: 'subNode2-3',
-            Class: Node,
-            title: '子节点 2-3',
-            side: "right",
-            children: [{
-              id: 'subNode2-3-1',
-              Class: Node,
-              title: '子节点 2-3-1',
-              side: "right",
-            }]
-          }
-        ]
+        title: '子节点 1-1',
+        side: 'right',
       },
       {
-        id: 'subNode3',
+        id: 'subNode1-2',
         Class: Node,
-        title: '子节点 3',
-        side: "left",
+        title: '子节点 1-2',
+        side: 'right',
         children: [{
-          id: 'subNode3-1',
-          side: "left",
+          id: 'subNode1-2-1',
           Class: Node,
-          title: '子节点 3-1',
-          children: [{
-            id: 'subNode3-1-1',
-            side: "left",
-            Class: Node,
-            title: '子节点 3-1-1',
-          }, {
-            id: 'subNode3-1-2',
-            side: "left",
-            Class: Node,
-            title: '子节点 3-1-2',
-          }, {
-            id: 'subNode3-1-3',
-            side: "left",
-            Class: Node,
-            title: '子节点 3-1-3',
-          }]
+          title: '子节点 1-2-1',
+          side: 'right',
         }]
       }, {
-        id: 'subNode4',
+        id: 'subNode1-3',
         Class: Node,
-        title: '子节点 4',
-        side: "right",
+        title: '子节点 1-3',
+        side: 'right',
+      }
+      ]
+    }, {
+      id: 'subNode2',
+      Class: Node,
+      title: '子节点 2',
+      side: 'left',
+      children: [{
+        id: 'subNode2-1',
+        Class: Node,
+        title: '子节点 2-1',
+        side: 'right',
         children: [{
-          id: 'subNode4-1',
+          id: 'subNode2-1-1',
           Class: Node,
-          side: "right",
-          title: '子节点 4-1',
-          children: [{
-            id: 'subNode4-1-1',
-            side: "right",
-            Class: Node,
-            title: '子节点 4-1-1',
-          }, {
-            id: 'subNode4-1-2',
-            side: "right",
-            Class: Node,
-            title: '子节点 4-1-2',
-          }, {
-            id: 'subNode4-1-3',
-            side: "right",
-            Class: Node,
-            title: '子节点 4-1-3',
-          }, {
-            id: 'subNode4-1-4',
-            Class: Node,
-            side: "right",
-            title: '子节点 4-1-4',
-          }]
-        }, {
-          id: 'subNode4-2',
-          Class: Node,
-          side: "right",
-          title: '子节点 4-2',
-        }, {
-          id: 'subNode4-3',
-          side: "right",
-          Class: Node,
-          title: '子节点 4-3',
-        }, {
-          id: 'subNode4-4',
-          Class: Node,
-          side: "right",
-          title: '子节点 4-4',
+          title: '子节点 2-1-1',
+          side: 'right',
         }]
+      },
+      {
+        id: 'subNode2-2',
+        Class: Node,
+        title: '子节点 2-2',
+        side: 'right',
       }, {
-        id: 'subNode5',
+        id: 'subNode2-3',
+        Class: Node,
+        title: '子节点 2-3',
+        side: 'right',
+        children: [{
+          id: 'subNode2-3-1',
+          Class: Node,
+          title: '子节点 2-3-1',
+          side: 'right',
+        }]
+      }
+      ]
+    },
+    {
+      id: 'subNode3',
+      Class: Node,
+      title: '子节点 3',
+      side: 'left',
+      children: [{
+        id: 'subNode3-1',
+        side: 'left',
+        Class: Node,
+        title: '子节点 3-1',
+        children: [{
+          id: 'subNode3-1-1',
+          side: 'left',
+          Class: Node,
+          title: '子节点 3-1-1',
+        }, {
+          id: 'subNode3-1-2',
+          side: 'left',
+          Class: Node,
+          title: '子节点 3-1-2',
+        }, {
+          id: 'subNode3-1-3',
+          side: 'left',
+          Class: Node,
+          title: '子节点 3-1-3',
+        }]
+      }]
+    }, {
+      id: 'subNode4',
+      Class: Node,
+      title: '子节点 4',
+      side: 'right',
+      children: [{
+        id: 'subNode4-1',
         Class: Node,
         side: 'right',
-        title: '子节点 5',
+        title: '子节点 4-1',
         children: [{
-            id: 'subNode5-1',
-            Class: Node,
-            title: '子节点 5-1',
-            side: "right",
-          },
-          {
-            id: 'subNode5-2',
-            Class: Node,
-            title: '子节点 5-2',
-            side: "right",
-            children: [{
-              id: 'subNode5-2-1',
-              Class: Node,
-              title: '子节点 5-2-1',
-              side: "right",
-            }, {
-              id: 'subNode5-2-2',
-              Class: Node,
-              title: '子节点 5-2-2',
-              side: "right",
-            }, {
-              id: 'subNode5-2-3',
-              Class: Node,
-              title: '子节点 5-2-3',
-              side: "right",
-            }]
-          }, {
-            id: 'subNode5-3',
-            Class: Node,
-            title: '子节点 5-3',
-            side: "right",
-            children: [{
-              id: 'subNode5-3-1',
-              Class: Node,
-              title: '子节点 5-3-1',
-              side: "right",
-            }, {
-              id: 'subNode5-3-2',
-              Class: Node,
-              title: '子节点 5-3-2',
-              side: "right",
-            }]
-          }
-        ]
+          id: 'subNode4-1-1',
+          side: 'right',
+          Class: Node,
+          title: '子节点 4-1-1',
+        }, {
+          id: 'subNode4-1-2',
+          side: 'right',
+          Class: Node,
+          title: '子节点 4-1-2',
+        }, {
+          id: 'subNode4-1-3',
+          side: 'right',
+          Class: Node,
+          title: '子节点 4-1-3',
+        }, {
+          id: 'subNode4-1-4',
+          Class: Node,
+          side: 'right',
+          title: '子节点 4-1-4',
+        }]
+      }, {
+        id: 'subNode4-2',
+        Class: Node,
+        side: 'right',
+        title: '子节点 4-2',
+      }, {
+        id: 'subNode4-3',
+        side: 'right',
+        Class: Node,
+        title: '子节点 4-3',
+      }, {
+        id: 'subNode4-4',
+        Class: Node,
+        side: 'right',
+        title: '子节点 4-4',
+      }]
+    }, {
+      id: 'subNode5',
+      Class: Node,
+      side: 'right',
+      title: '子节点 5',
+      children: [{
+        id: 'subNode5-1',
+        Class: Node,
+        title: '子节点 5-1',
+        side: 'right',
+      },
+      {
+        id: 'subNode5-2',
+        Class: Node,
+        title: '子节点 5-2',
+        side: 'right',
+        children: [{
+          id: 'subNode5-2-1',
+          Class: Node,
+          title: '子节点 5-2-1',
+          side: 'right',
+        }, {
+          id: 'subNode5-2-2',
+          Class: Node,
+          title: '子节点 5-2-2',
+          side: 'right',
+        }, {
+          id: 'subNode5-2-3',
+          Class: Node,
+          title: '子节点 5-2-3',
+          side: 'right',
+        }]
+      }, {
+        id: 'subNode5-3',
+        Class: Node,
+        title: '子节点 5-3',
+        side: 'right',
+        children: [{
+          id: 'subNode5-3-1',
+          Class: Node,
+          title: '子节点 5-3-1',
+          side: 'right',
+        }, {
+          id: 'subNode5-3-2',
+          Class: Node,
+          title: '子节点 5-3-2',
+          side: 'right',
+        }]
       }
+      ]
+    }
     ]
   },
   edges: [{

@@ -1,0 +1,13 @@
+{
+  "name": "plugin-panel",
+  "cn_name": "插件图",
+  "description": "a dag to show to how to make a mind map",
+  "cn_description": "一个脑图（思维导图）",
+  "dependencies": {
+    "butterfly-dag": "*",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "jquery": "*",
+    "lodash": "*"
+  }
+}

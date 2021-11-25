@@ -26,6 +26,10 @@ class BaseNode extends Node {
     this._endpointLimitNum = opts._endpointLimitNum;
     // 标识是否在移动做，兼容冒泡
     this._isMoving = false;
+    // 长宽
+    this.width = undefined;
+    this.height = undefined;
+    this._isForceUpdateSize = false;
   }
 
   draw(obj) {
@@ -58,21 +62,26 @@ class BaseNode extends Node {
         isInited
       });
       return obj;
-    } 
+    }
     // 这部分可能还需要想一下
     const EndpointClass = obj.Class || Endpoint;
     const endpoint = new EndpointClass(_.assign({
+      limitNum: obj.limitNum || this._endpointLimitNum,
       _on: this._on,
       _emit: this._emit,
       _node: this,
-      _limitNum: obj.limitNum || this._endpointLimitNum,
       _global: this.global
     }, obj));
-    
     this.emit('InnerEvents', {
       type: 'node:addEndpoint',
       data: endpoint
     });
+
+    let nodeZindex = $(this.dom).css('z-index');
+
+    if (nodeZindex !== 'auto') {
+      $(endpoint.dom).css('z-index', Number(nodeZindex) + 1);
+    }
 
     this.endpoints.push(endpoint);
     return endpoint;
@@ -82,6 +91,10 @@ class BaseNode extends Node {
     const rmEndpointIndex = _.findIndex(this.endpoints, point => point.id === pointId);
     if (rmEndpointIndex !== -1) {
       const rmEndpoint = this.endpoints.splice(rmEndpointIndex, 1)[0];
+      this.emit('InnerEvents', {
+        type: 'node:removeEndpoint',
+        data: rmEndpoint
+      });
       rmEndpoint.destroy();
       return rmEndpoint;
     }
@@ -121,7 +134,6 @@ class BaseNode extends Node {
       this.dom = obj.dom;
       obj.left && ($(this.dom).css('left', `${obj.left}px`));
       obj.top && ($(this.dom).css('top', `${obj.top}px`));
-
     } else {
       this.dom = this.draw(_.assign({
         id: this.id,
@@ -130,7 +142,10 @@ class BaseNode extends Node {
         dom: this.dom,
         options: this.options
       }, obj));
+    }
+    if (!this._hasEventListener) {
       this._addEventListener();
+      this._hasEventListener = true;
     }
   }
   // drag的时候移动的api
@@ -154,12 +169,20 @@ class BaseNode extends Node {
     });
   }
 
-  getWidth() {
-    return $(this.dom).outerWidth();
+  getWidth(useCache) {
+    if (!useCache || !this.width || this._isForceUpdateSize) {
+      this.width = $(this.dom).outerWidth();
+      this._isForceUpdateSize = false;
+    }
+    return this.width;
   }
 
-  getHeight() {
-    return $(this.dom).outerHeight();
+  getHeight(useCache) {
+    if (!useCache || !this.height || this._isForceUpdateSize) {
+      this.height = $(this.dom).outerHeight();
+      this._isForceUpdateSize = false;
+    }
+    return this.height;
   }
 
   _createEndpoint(isInited) {
@@ -171,13 +194,15 @@ class BaseNode extends Node {
   }
 
   _addEventListener() {
-
+    // todo 做事件代理的形式
     $(this.dom).on('mousedown', (e) => {
       const LEFT_KEY = 0;
       if (e.button !== LEFT_KEY) {
         return;
       }
-      e.preventDefault();
+      if (!['SELECT', 'INPUT', 'RADIO', 'CHECKBOX', 'TEXTAREA'].includes(e.target.nodeName)) {
+        e.preventDefault();
+      }
       if (this.draggable) {
         this._isMoving = true;
         this.emit('InnerEvents', {
@@ -220,6 +245,10 @@ class BaseNode extends Node {
     super.emit(type, data);
     this._emit(type, data);
   }
+  on(type, callback) {
+    super.on(type, callback);
+    this._on(type, callback);
+  }
   destroy(isNotEvent) {
     if (!isNotEvent) {
       this.endpoints.forEach((item) => {
@@ -227,6 +256,7 @@ class BaseNode extends Node {
       });
       $(this.dom).remove();
       this.removeAllListeners();
+      this._hasEventListener = false;
     } else {
       this.endpoints.forEach((item) => {
         !item._isInitedDom && item.destroy(isNotEvent);

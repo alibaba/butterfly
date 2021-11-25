@@ -1,0 +1,108 @@
+.home-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+  display: flex;
+  background: rgba(28, 28, 28, 0.65);
+  align-items: center;
+  justify-content: space-between;
+
+  .right-menu {
+    padding-right: 12px;
+  }
+
+  .home-header-wrap {
+    display: flex;
+    align-items: center;
+  }
+
+  .logo {
+    height: 25px;
+    margin-left: 20px;
+    line-height: 36px;
+  }
+
+  .ant-menu {
+    text-align: right;
+    height: 60px;
+    background: transparent;
+    .ant-menu-item {
+      border-bottom: 0px solid transparent;
+      padding: 7px 20px;
+
+      &.icon {
+        padding: 7px 0px;
+      }
+    }
+
+    .ant-menu-item-selected {
+      background: transparent;
+      border-bottom: 0px solid transparent;
+      border-radius: 0px;
+      > a {
+        color: #f66902;
+      }
+      > .select-buttom {
+        height: 4px;
+        background: #f66902;
+        border-radius: 2px;
+        margin-top: -7px;
+        margin-bottom: 3px;
+      }
+    }
+  }
+  .ant-menu-horizontal > .ant-menu-item a {
+    color: #ffffff;
+  }
+  .home-lego-title {
+    padding: 0 12px;
+    font-family: PingFangSC-Medium;
+    font-size: 24px;
+    color: #ffffff;
+    letter-spacing: 1px;
+  }
+  .anticon {
+    font-size: 16px;
+    color: #fff;
+    padding-left: 24px;
+  }
+  .home-header-user {
+    margin: 0 24px;
+    width: 23px;
+  }
+}
+
+.menu-light {
+  position: fixed;
+  z-index: 999;
+  min-width: calc(100vw - 17px);
+  top: 0;
+  height: 60px;
+  background: rgb(28, 28, 28);
+
+  .ant-menu {
+    background: transparent;
+    .ant-menu-item:hover {
+      border-bottom: 0;
+      a {
+        color: #f66902;
+      }
+    }
+    .ant-menu-item-selected {
+      border-bottom: 0px solid transparent;
+      a {
+        color: #f66902;
+      }
+    }
+    .ant-menu-item-selected:hover {
+      border-bottom: 0px solid transparent;
+      a {
+        color: #f66902;
+      }
+    }
+  }
+  .ant-menu-horizontal {
+    border-bottom: 0;
+  }
+}

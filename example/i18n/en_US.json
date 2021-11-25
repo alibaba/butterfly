@@ -1,0 +1,23 @@
+{
+  "layout_header_home": "Home",
+  "layout_header_demo": "Demo",
+  "layout_header_doc": "Doc",
+  "codebox_loading": "loading...",
+  "codebox_editor_export_success": "export success！",
+  "codebox_editor_export_failed": "export failed! cause by：",
+  "codebox_editor_edit": "edit on github",
+  "codebox_editor_play": "play（cmd+s）",
+  "codebox_editor_export": "export",
+  "codebox_open": "open",
+  "codebox_close": "close",
+  "home_out_of_the_box": "Out of box",
+  "home_box_desc": "Rich demo, out of the box, support demo debugging, export and use",
+  "home_manage_canvas": "Strong manager",
+  "home_canvas_desc": "All around management canvas, developers only need to focus on customized needs",
+  "home_flexible": "Flexible",
+  "home_flexible_desc": "Use DOM / react / Vue to customize elements; excellent flexibility, plasticity and expansibility",
+  "home_sub_title": "A JS based data driven nodal choreography component library",
+  "home_begin": "Getting Started",
+  "home_see_demo": "Demos",
+  "home_example": "Example"
+}

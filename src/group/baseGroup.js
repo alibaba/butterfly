@@ -21,8 +21,11 @@ class BaseGroup extends Group {
     this.width = opts.width || 300;
     this.height = opts.height || 150;
     this.resize = opts.resize;
+    this.draggable = opts.draggable;
+    this.group = opts.group;
     this.dom = null;
     this.nodes = [];
+    this.groups = [];
     this.options = opts.options;
     // 鸭子辨识手动判断类型
     this.__type = 'group';
@@ -33,18 +36,55 @@ class BaseGroup extends Group {
     // endpoint 这部分需要考虑
     this.endpoints = [];
     this._endpointsData = opts.endpoints;
+    // 标识是否在移动做，兼容冒泡
+    this._isMoving = false;
   }
-  init() {
-    this.dom = this.draw({
-      id: this.id,
-      top: this.top,
-      left: this.left,
-      width: this.width,
-      height: this.height,
-      dom: this.dom,
-      options: this.options
-    });
-    this._addEventListener();
+  _init(obj = {}) {
+    if (this._isInited) {
+      return;
+    }
+    if (obj.left) {
+      this.left = obj.left;
+    }
+    if (obj.top) {
+      this.top = obj.top;
+    }
+    if (obj.width) {
+      this.width = obj.width;
+    }
+    if (obj.height) {
+      this.height = obj.height;
+    }
+    this._isInited = true;
+    if (obj._isDeleteGroup) {
+      this.group = undefined;
+      this._group = undefined;
+    } else {
+      obj.group && (this.group = obj.group);
+    }
+    if (obj.dom) {
+      this.dom = obj.dom;
+    }
+    if (this.dom) {
+      this.left && ($(this.dom).css('left', `${this.left}px`));
+      this.top && ($(this.dom).css('top', `${this.top}px`));
+      this.width && ($(this.dom).css('width', `${this.width}px`));
+      this.height && ($(this.dom).css('height', `${this.height}px`));
+    } else {
+      this.dom = this.draw({
+        id: this.id,
+        top: this.top,
+        left: this.left,
+        width: this.width,
+        height: this.height,
+        dom: this.dom,
+        options: this.options
+      });
+    }
+    if (!this._hasEventListener) {
+      this._addEventListener();
+      this._hasEventListener = true;
+    }
   }
   draw(obj) {
     let _dom = obj.dom;
@@ -190,16 +230,28 @@ class BaseGroup extends Group {
   _moveTo(x, y) {
     // 自身移动
     $(this.dom).css('top', y).css('left', x);
-    // 所在节点的锚点移动
-    this.nodes.forEach((node) => {
-      node.endpoints.forEach((point) => {
-        point.updatePos();
-      });
-    });
     // 节点组的锚点移动
     this.endpoints.forEach((item) => {
       item.moveTo(x - this.left + item._left, y - this.top + item._top);
     });
+    
+    // 所在节点或者节点组的锚点移动
+    let allItems = (group) => {
+      let result = [];
+      let queue = [group];
+      while(queue.length > 0) {
+        let item = queue.pop();
+        result = result.concat(item.nodes);
+        result = result.concat(item.groups);
+        queue = queue.concat(item.groups);
+      }
+      return result;
+    }
+    allItems(this).forEach((item) => {
+      item.endpoints.forEach((point) => {
+        point.updatePos();
+      });
+    })
     this.top = y;
     this.left = x;
   }
@@ -227,15 +279,32 @@ class BaseGroup extends Group {
   getEndpoint(pointId) {
     return _.find(this.endpoints, point => pointId === point.id);
   }
-  _appendNodes(nodes = []) {
-    nodes.forEach((item) => {
+  removeEndpoint(pointId) {
+    const rmEndpointIndex = _.findIndex(this.endpoints, point => point.id === pointId);
+    if (rmEndpointIndex !== -1) {
+      const rmEndpoint = this.endpoints.splice(rmEndpointIndex, 1)[0];
+      this.emit('InnerEvents', {
+        type: 'node:removeEndpoint',
+        data: rmEndpoint
+      });
+      rmEndpoint.destroy();
+      return rmEndpoint;
+    }
+  }
+  _appendChildren(children = []) {
+    children.forEach((item) => {
       item._group = this;
       item.group = this.id;
       $(this.dom).append(item.dom);
-      this.nodes.push(item);
+      if (item.__type === 'node') {
+        this.nodes.push(item);
+      } else {
+        this.groups.push(item);
+      }
     });
   }
   _addEventListener() {
+    // 节点组点击事件
     $(this.dom).on('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
@@ -247,16 +316,24 @@ class BaseGroup extends Group {
         group: this
       });
     });
+    // 节点组鼠标点下事件
     $(this.dom).on('mousedown', (e) => {
       // 兼容节点冒泡上来的事件
-      let isChildNodeMoving = _.some(this.nodes, (item) => {
-        return item._isMoving;
-      });
+      let allGroups = this.getSubGroup().concat(this);
+      let isChildNodeMoving = false;
+      for (let i = 0; i < allGroups.length; i++) {
+        isChildNodeMoving = _.some(allGroups[i].nodes.concat(allGroups[i].groups), (item) => {
+          return item._isMoving;
+        });
+        if (isChildNodeMoving) {
+          break;
+        }
+      }
       if (isChildNodeMoving) {
         return;
       }
       // 兼容resize按钮冒泡上来的事件
-      if(_.get(e, 'target.className', '').indexOf('butterfly-group-icon-resize') !== -1) {
+      if($(e.target).attr('class').indexOf('butterfly-group-icon-resize') !== -1) {
         return;
       }
 
@@ -265,11 +342,16 @@ class BaseGroup extends Group {
         return;
       }
       e.preventDefault();
-      // e.stopPropagation();
-      this.emit('InnerEvents', {
-        type: 'group:dragBegin',
-        data: this
-      });
+      if (this._group) {
+        e.stopPropagation();
+      }
+      if (this.draggable) {
+        this._isMoving = true;
+        this.emit('InnerEvents', {
+          type: 'group:dragBegin',
+          data: this
+        });
+      }
     });
   }
   _createEndpoint(isInited) {
@@ -278,6 +360,25 @@ class BaseGroup extends Group {
     } else if (this._endpointsData) {
       this._endpointsData.map(item => this.addEndpoint(item));
     }
+  }
+  getParentGroup() {
+    let result = [];
+    let targetGroup = this;
+    while (targetGroup) {
+      targetGroup = targetGroup._group;
+      targetGroup && result.push(targetGroup);
+    }
+    return result;
+  }
+  getSubGroup() {
+    let result = [];
+    let queue = [this];
+    while(queue.length > 0) {
+      let group = queue.pop();
+      result = result.concat(group.groups);
+      queue = queue.concat(group.groups);
+    }
+    return result;
   }
   addEndpoint(obj, isInited) {
     if (isInited) {
@@ -308,12 +409,14 @@ class BaseGroup extends Group {
     super.emit(type, data);
     this._emit(type, data);
   }
+  on(type, callback) {
+    super.on(type, callback);
+    this._on(type, callback);
+  }
   destroy(isNotEventEmit) {
     this.endpoints.forEach((item) => {
-      !item._isInitedDom && item.destroy();
+      !item._isInitedDom && item.destroy(isNotEventEmit);
     });
-    $(this.dom).off();
-    $(this.dom).remove();
     if (!isNotEventEmit) {
       this._emit('system.group.delete', {
         group: this
@@ -322,8 +425,14 @@ class BaseGroup extends Group {
         type: 'group:delete',
         group: this
       });
+      $(this.dom).off();
+      $(this.dom).remove();
       this.removeAllListeners();
+      this._hasEventListener = false;
+    } else {
+      $(this.dom).detach();
     }
+    this._isInited = false;
   }
 }
 

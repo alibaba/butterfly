@@ -1,8 +1,7 @@
 const _ = require('lodash');
 const $ = require('jquery');
-
 // 每一个dot是一个圆形或者
-const DOT_COLOR = 'rgba(76, 158, 164, 1)';
+const DOT_COLOR = 'rgba(246, 105, 2, 1)';
 const GROUP_COLOR = 'rgba(61, 86, 92, 1)';
 const DOT_ACTIVE_COLOR = 'rgba(255, 253, 76, 1)';
 const GROUP_ACTIVE_COLOR = 'rgba(255, 253, 76, 1)';
@@ -309,7 +308,7 @@ class Minimap {
       left: 0,
       top: 0,
       // border: '1px solid pink',
-      'background-color': 'rgba(79, 111, 126, 0.4)',
+      'background-color': 'rgba(246,105,2,0.20)',
       ...viewportStyle,
     });
 
