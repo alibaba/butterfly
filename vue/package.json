@@ -1,6 +1,6 @@
 {
   "name": "butterfly-vue",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "vue version for butterfly",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -22,16 +22,18 @@
   },
   "peerDependencies": {
     "butterfly-dag": "*",
-    "lodash": "*"
+    "lodash": "*",
+    "jquery": ">=2.0.0"
   },
   "devDependencies": {
-    "butterfly-dag": "^4.0.0",
-    "lodash": "^4.17.20",
     "@babel/core": "^7.12.10",
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/plugin-transform-runtime": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
     "@rollup/plugin-babel": "^5.2.2",
+    "butterfly-dag": "^4.0.0",
+    "jquery": "^3.6.0",
+    "lodash": "^4.17.20",
     "rollup": "^2.36.1",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-css-only": "^3.1.0",
