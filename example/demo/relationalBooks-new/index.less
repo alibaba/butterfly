@@ -1,0 +1,115 @@
+.relational-books-page{
+  width: 100%;
+  height: 100%;
+  position: relative;
+  .butterfly-minimap-container {
+    top: 30px;
+    right: 30px !important;
+  }
+  .flow-canvas {
+    width: 100%;
+    height: 100%;
+    .butterflies-link {
+      stroke: #c66767;
+      stroke-width: 3px;
+    }
+    .butterfly-wrapper {
+      .base-node {
+        width: 200px;
+        position: absolute;
+        .title {
+          line-height: 32px;
+          height: 32px;
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          background: #597EF7;
+          padding: 0 8px;
+          color: #fff;
+          .remove {
+            cursor: pointer;
+          }
+          .add-node {
+            cursor: pointer;
+          }
+        }
+        .content {
+          height: 32px;
+          width: 200px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0 8px;
+          background: #fff;
+          border: 1px solid #d9d9d9;
+          .remove {
+            visibility: hidden;
+            cursor: pointer;
+          }
+          .text {
+            .input-text {
+              height: 28px;
+              border: 1px solid #000;
+              width: 130px;
+              padding: 0 4px;
+            }
+          }
+          .edit {
+            visibility: hidden;
+            cursor: pointer;
+          }
+        }
+        .content:hover > .remove,.content:hover > .edit {
+          visibility: visible;
+        }
+        .content:hover {
+          background: #d9d9d9;
+        }
+      }
+      .group-node {
+        width: 200px;
+        position: absolute;
+        .title {
+          line-height: 32px;
+          height: 32px;
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          background: #597EF7;
+          padding: 0 8px;
+          color: #fff;
+          .title-text {
+            input {
+              width: 140px;
+              color: #333;
+              height: 28px;
+              border: 1px solid #ccc;
+            }
+          }
+          #close {
+            cursor: pointer;
+          }
+          .alis-node-edit {
+            cursor: pointer;
+          }
+        }
+        .container {
+          display: flex;
+          padding: 8px;
+          justify-content: space-between;
+          border: 1px solid #ccc;
+          background: #fff;
+          p {
+            textarea {
+              min-height: 80px;
+              width: 164px;
+            }
+          }
+          .alis-node-edit {
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+}
