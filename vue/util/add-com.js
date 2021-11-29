@@ -1,7 +1,9 @@
+import Vue from 'vue';
+import $ from 'jquery';
+import _ from 'lodash';
+
 import VueGroup from '../coms/vue-group.vue';
 import VueNode from '../coms/vue-node.vue';
-import Vue from 'vue';
-import _ from 'lodash';
 
 /**
  * 渲染render
@@ -161,7 +163,7 @@ const addCom = (proData) => {
   addNodesCom(proData.nodes);
 };
 
-const addGroupsCom = (groups, parent) => {
+const addGroupsCom = (canvasRoot, groups, parent) => {
   groups.map((item,index) => {
     const id = item.id;
     if (!id) {
@@ -169,7 +171,7 @@ const addGroupsCom = (groups, parent) => {
       return;
     }
 
-    const dom = document.getElementById('bf_group_' + item.id);
+    const dom = $(canvasRoot).find(`*[id^='bf_group_${item.id}']`);
 
     if (!dom) {
       return;
@@ -177,12 +179,12 @@ const addGroupsCom = (groups, parent) => {
 
     let groupCon = render(item, 'group', parent);
 
-    dom.appendChild(groupCon.$el);
+    dom.append(groupCon.$el);
 
   });
 };
 
-const addNodesCom = (canvasNodes, nodes, parent) => {
+const addNodesCom = (canvasRoot, canvasNodes, nodes, parent) => {
   nodes.map((item,index) => {
     if (_.isArray(item)) {
       return ;
@@ -193,7 +195,7 @@ const addNodesCom = (canvasNodes, nodes, parent) => {
       return;
     }
 
-    const dom = document.getElementById('bf_node_' + item.id);
+    const dom = $(canvasRoot).find(`*[id^='bf_node_${item.id}']`);
 
     if (!dom) {
       return;
@@ -201,7 +203,7 @@ const addNodesCom = (canvasNodes, nodes, parent) => {
 
     let nodeCon = render(item, 'node', parent, canvasNodes);
 
-    dom.appendChild(nodeCon.$el);
+    dom.append(nodeCon.$el);
 
     // 需要先挂载锚点才可以添加锚点
     let canvasNodeIndex = canvasNodes.findIndex((node)=>{
@@ -218,7 +220,7 @@ const addNodesCom = (canvasNodes, nodes, parent) => {
   })
 };
 
-const addEdgesCom = (edges, parent) => {
+const addEdgesCom = (canvasRoot, edges, parent) => {
   edges.map((item,index) => {
     const id = item.id;
     if (!id) {
@@ -227,7 +229,7 @@ const addEdgesCom = (edges, parent) => {
     }
 
     if (item.render) {
-      const dom = document.getElementById('edge_label_' + item.id);
+      const dom = $(canvasRoot).find(`*[id^='edge_label_${item.id}']`);
 
       if (!dom) {
         return;
@@ -235,7 +237,7 @@ const addEdgesCom = (edges, parent) => {
 
       let edgeCon = render(item, 'edge', parent);
 
-      dom.appendChild(edgeCon.$el);
+      dom.append(edgeCon.$el);
     }
   })
 };
