@@ -1,9 +1,9 @@
+import {TreeCanvas} from 'butterfly-dag';
 import Node from '../coms/node';
 import TreeNode from '../coms/tree-node';
 import Edge from '../coms/edge';
 import Group from '../coms/group';
 import diff from './diff';
-import {TreeCanvas} from 'butterfly-dag';
 import relayout from './re-layout';
 import {addNodesCom , addEdgesCom , addGroupsCom} from './add-com';
 
@@ -60,7 +60,7 @@ const processNodes = (canvas, nodes, oldNodes, parent) => {
 
   canvas.addNodes(process({nodes: created}).nodes);
   
-  addNodesCom(canvas.getDataMap().nodes,{nodes: created}.nodes, parent);
+  addNodesCom(canvas.root, canvas.getDataMap().nodes, {nodes: created}.nodes, parent);
 
 };
 
@@ -71,7 +71,7 @@ const processEdge = (canvas, edges, oldEdges, parent) => {
 
   canvas.addEdges(process({edges: created}).edges, true);
   
-  addEdgesCom({edges: created}.edges, parent);
+  addEdgesCom(canvas.root, {edges: created}.edges, parent);
 };
 
 const processGroups = (canvas, groups, oldGroups, parent) => {
@@ -85,7 +85,7 @@ const processGroups = (canvas, groups, oldGroups, parent) => {
     canvas.addGroup(group);
   });
 
-  addGroupsCom({groups: created}.groups, parent);
+  addGroupsCom(canvas.root, {groups: created}.groups, parent);
 };
 
 export {
