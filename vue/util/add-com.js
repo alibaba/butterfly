@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import $ from 'jquery';
 import _ from 'lodash';
 
 import VueGroup from '../coms/vue-group.vue';
@@ -171,7 +170,7 @@ const addGroupsCom = (canvasRoot, groups, parent) => {
       return;
     }
 
-    const dom = $(canvasRoot).find(`*[id^='bf_group_${item.id}']`);
+    const dom = canvasRoot.querySelector(`*[id^='bf_group_${item.id}']`);
 
     if (!dom) {
       return;
@@ -195,7 +194,7 @@ const addNodesCom = (canvasRoot, canvasNodes, nodes, parent) => {
       return;
     }
 
-    const dom = $(canvasRoot).find(`*[id^='bf_node_${item.id}']`);
+    const dom = canvasRoot.querySelector(`*[id^='bf_node_${item.id}']`);
 
     if (!dom) {
       return;
@@ -229,7 +228,7 @@ const addEdgesCom = (canvasRoot, edges, parent) => {
     }
 
     if (item.render) {
-      const dom = $(canvasRoot).find(`*[id^='edge_label_${item.id}']`);
+      const dom = canvasRoot.querySelector(`*[id^='edge_label_${item.id}']`);
 
       if (!dom) {
         return;
