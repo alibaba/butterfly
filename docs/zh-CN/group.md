@@ -123,7 +123,22 @@ getWidth = () => {}
 /**
   * @return {number} - 节点组高度
   */
+``` js
 getHeight = () => {}
+```
+
+### group.setSize(width, height)
+
+*作用*： 设置节点组的大小
+
+*参数*
+
+* `{number} width`节点组宽度
+
+* `{number} height`节点组高度
+
+```js
+setSize = (width, height) => {}
 ```
 
 ### group.addNode (node)

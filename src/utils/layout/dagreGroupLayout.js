@@ -29,7 +29,9 @@ const getNodeTl = (iNodes = [], dagreNodes = [], basicTl) => {
     pt.push({
       id: iNode.id,
       top: item.top + basic.top,
-      left: item.left + basic.left
+      left: item.left + basic.left,
+      width: item.width,
+      height: item.height
     });
   });
 
@@ -48,12 +50,13 @@ const getNodeTl = (iNodes = [], dagreNodes = [], basicTl) => {
 const getNodesPosition = (initParams, basicTl) => {
   const params = _.cloneDeep(initParams);
   // 拿到坐标， 重组data
-  const {data: initData, ranksep, nodesep} = params;
+  const {data: initData, ranksep, nodesep, rankdir} = params;
   const [nodesPt, groupsPt] = [[], []];
 
   // step1: 找出单独节点&group节点， 单独布局
   const aloneNodes = initData.nodes.filter(v => !v.group);
   const aloneGroups = initData.groups.filter(v => !v.group);
+  let reLayout = false;
 
   // 获取group和单节点之间的连线关系
   const groupAloneNodesEdges = getGroupAndAloneNodesEdges(initData);
@@ -92,10 +95,59 @@ const getNodesPosition = (initParams, basicTl) => {
     };
     dagreLayout(inGroupDatas);
 
-    nodesPt.push(...getNodeTl(params.data.nodes, inGroupDatas.data.nodes));
+    const tidyNodeData = getNodeTl(params.data.nodes, inGroupDatas.data.nodes);
+    // group宽度高度根据节点位置去调整。调整过后要重新布局
+    let left, top, right, bottom;
+    tidyNodeData.forEach((node) => {
+      if (!left || node.left < left) {
+        left = node.left;
+      }
+      if (!top || node.top < top) {
+        top = node.top;
+      }
+      if (!right || inGroupNodes.find(n => n.id === node.id).width + node.left > right) {
+        right = node.left + inGroupNodes.find(n => n.id === node.id).width;
+      }
+      if (!bottom || inGroupNodes.find(n => n.id === node.id).height + node.top > bottom) {
+        bottom = node.top + inGroupNodes.find(n => n.id === node.id).height;
+      }
+    });
+    // 期望的group最窄横竖坐标
+    if (rankdir && (rankdir === 'LR' || rankdir === 'RL')) {
+      top -= nodesep / 2;
+      bottom += nodesep / 2;
+      left -= ranksep / 2;
+      right += ranksep / 2;
+    } else {
+      top -= ranksep / 2;
+      bottom += ranksep / 2;
+      left -= nodesep / 2;
+      right += nodesep / 2;
+    }
+    // 宽度是否合适
+    if (group.width < (right - left)) {
+      group.width = right - left;
+      reLayout = true;
+    }
+    if (group.height < (bottom - top)) {
+      group.height = bottom - top;
+      reLayout = true;
+    }
+
+    // 移动相对坐标
+    const relateLeft = (group.width - (right - left)) / 2 - left;
+    const relateTop = (group.height - (bottom - top)) / 2 - top;
+    if (!reLayout) {
+      tidyNodeData.forEach((node) => {
+        node.left += relateLeft;
+        node.top += relateTop;
+      });
+    }
+
+    nodesPt.push(...tidyNodeData);
   });
 
-  // 嵌套的groups
+  // 嵌套的groups， 这里的重新编排逻辑之后再加
   const groupIds = _.uniq(initData.groups.filter(g => g.group).map(g => g.group));
 
   let [inGroupNodesPt, inGroupsGroupsPt] = [[], []];
@@ -127,6 +179,9 @@ const getNodesPosition = (initParams, basicTl) => {
     });
   }
 
+  if (reLayout) {
+    return getNodesPosition(params, basicTl);
+  }
   return {
     nodes: [...nodesPt, ...inGroupNodesPt],
     groups: [...groupsPt, ...inGroupsGroupsPt]
@@ -218,6 +273,8 @@ function dagreGroupLayout(params) {
 
     n.top = ptNode.top;
     n.left = ptNode.left;
+    n.width = ptNode.width;
+    n.height = ptNode.height;
   });
 
   params.data.groups.forEach(g => {
@@ -229,6 +286,8 @@ function dagreGroupLayout(params) {
 
     g.top = ptNode.top;
     g.left = ptNode.left;
+    g.width = ptNode.width;
+    g.height = ptNode.height;
   });
 };
 

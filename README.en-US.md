@@ -104,7 +104,7 @@ canvas.draw({
 ## ⌨️Business-specific React Extension Components
 * [Data/Table-Field mapping](https://github.com/aliyun/react-data-mapping/blob/master/README.en-US.md)
 <p align="center">
-  <img width="49%" src="https://img.alicdn.com/imgextra/i2/O1CN01O8w0tT26WuU5J6lty_!!6000000007670-1-tps-595-411.gif">
+  <img width="49%" src="https://img.alicdn.com/imgextra/i4/O1CN012ecl7n25IsnZeXw1d_!!6000000007504-1-tps-595-411.gif">
   <img width="49%" src="https://img.alicdn.com/imgextra/i2/O1CN017Gcu0Y1mbgIHcgqwr_!!6000000004973-1-tps-595-411.gif">
 </p>
 <p align="center">
