@@ -4,6 +4,9 @@
 
 ``` js
 const Node = require('butterfly-dag').Node;
+
+// 当canvas为TreeCanvas时可选TreeNode
+// const TreeNode = require('butterfly-dag').TreeNode;
 class ANode extends Node {
   draw(obj) {
     // 这里可以根据业务需要，自己生成dom
