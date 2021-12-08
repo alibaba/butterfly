@@ -54,13 +54,13 @@ const processNodes = (canvas, nodes, oldNodes, parent) => {
     relayout(canvas, nodes);
   }
 
-  const { created, deleted } = diff(nodes, oldNodes);
+  const { created, deleted, updated } = diff(nodes, oldNodes);
 
-  canvas.removeNodes(deleted.map(e => e.id), true);
+  canvas.removeNodes(deleted.concat(updated).map(e => e.id), true);
 
-  canvas.addNodes(process({nodes: created}).nodes);
+  canvas.addNodes(process({nodes: created.concat(updated)}).nodes);
   
-  addNodesCom(canvas.root, canvas.getDataMap().nodes, {nodes: created}.nodes, parent);
+  addNodesCom(canvas.root, canvas.getDataMap().nodes, {nodes: created.concat(updated)}.nodes, parent);
 
 };
 
