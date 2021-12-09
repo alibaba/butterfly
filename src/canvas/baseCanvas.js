@@ -1109,7 +1109,7 @@ class BaseCanvas extends Canvas {
           }
         }
 
-        if (!this.theme.endpoint.isAllowLinkInSameNode) {
+        if (_targetEndpoint && !this.theme.endpoint.isAllowLinkInSameNode) {
           this._dragEdges.forEach((_edge) => {
             if (_edge.sourceEndpoint.nodeId === _targetEndpoint.nodeId) {
               isDestoryEdges = true;
@@ -2463,6 +2463,14 @@ class BaseCanvas extends Canvas {
     const _labelFragment = document.createDocumentFragment();
     const result = links.map((link) => {
 
+      // 判断节点内的锚点是否可以连线
+      if (!this.theme.endpoint.isAllowLinkInSameNode) {
+        if (link.sourceNode === link.targetNode) {
+          console.warn(`butterflies error: isAllowLinkInSameNode is ${this.theme.endpoint.isAllowLinkInSameNode}. link sourceNodeId = link targetNodeId:${link.sourceNode}`);
+          return;
+        }
+      }
+
       // link已经存在
       if (link instanceof Edge) {
         link._init({
@@ -2470,7 +2478,7 @@ class BaseCanvas extends Canvas {
         });
 
         _edgeFragment.appendChild(link.dom);
-        link.eventHandlerDom && _edgeFragment.appendChild(link.eventHandlerDom)
+        link.eventHandlerDom && _edgeFragment.appendChild(link.eventHandlerDom);
 
         if (link.labelDom) {
           _labelFragment.appendChild(link.labelDom);
