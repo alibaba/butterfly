@@ -307,6 +307,7 @@ this.canvas = new Canvas({
 ### compactBox
 
 ``` js
+// 当canvas为TreeCanvas时Node可选TreeNode;
 import {TreeCanvas} from 'butterfly-dag';
 this.canvas = new TreeCanvas({
   layout: {
@@ -333,6 +334,7 @@ this.canvas = new TreeCanvas({
 ### dendrogram
 
 ``` js
+// 当canvas为TreeCanvas时Node可选TreeNode;
 import {TreeCanvas} from 'butterfly-dag';
 this.canvas = new TreeCanvas({
   layout: {
@@ -359,6 +361,7 @@ this.canvas = new TreeCanvas({
 ### indented
 
 ``` js
+// 当canvas为TreeCanvas时Node可选TreeNode;
 import {TreeCanvas} from 'butterfly-dag';
 this.canvas = new TreeCanvas({
   layout: {
@@ -385,6 +388,7 @@ this.canvas = new TreeCanvas({
 ### mindmap
 
 ``` js
+// 当canvas为TreeCanvas时Node可选TreeNode;
 import {TreeCanvas} from 'butterfly-dag';
 this.canvas = new TreeCanvas({
   layout: {

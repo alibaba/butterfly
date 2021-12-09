@@ -1,6 +1,7 @@
 # 画布(Canvas)
 
 ```js
+// 可选TreeCanvas
 let canvas = new Canvas({
   // 如下属性
   root: dom,               //canvas的根节点(必传)
