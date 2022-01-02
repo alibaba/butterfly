@@ -13,6 +13,7 @@ $ npm i butterfly-vue butterfly-dag -S
     - [`canvasData.render`渲染方式（两种）](#canvasdatarender渲染方式两种)
       - [Object类型（.vue文件）推荐使用](#object类型vue文件推荐使用)
       - [String类型（template）](#string类型template)
+  - [方法](#方法)
   - [自定义锚点使用](#自定义锚点使用)
 
 ## 用法
@@ -300,6 +301,40 @@ export default {
 module.exports = {
   runtimeCompiler: true
 }
+```
+
+## 方法
+
+| 方法名 | 说明         | 参数  |
+| :----: | ------------ | :---: |
+| redraw | 重新绘制画布 |  `-`  |
+
+``` vue
+<template>
+  <div>
+    <button @click="redraw">重绘画布</button>
+    <butterfly-vue
+      ref="butterflyVue"
+    />
+  </div>
+</template>
+
+<script>
+import {ButterflyVue} from 'butterfly-vue';
+
+export default {
+  name: 'Drag',
+  components: {
+    ButterflyVue,
+  },
+  methods:{
+    redraw() {
+      this.$refs.butterflyVue.redraw();
+    },
+  }
+}
+</script>
+
 ```
 
 ## 自定义锚点使用
