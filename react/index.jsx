@@ -1,7 +1,8 @@
 import React from 'react';
 import _ from 'lodash';
+import ReactDOM from 'react-dom';
 import _debug from 'debug';
-import {Canvas} from 'butterfly-dag/pack';
+import {Canvas} from 'butterfly-dag/dist';
 
 import props from './props';
 import diff from './util/diff.js';
@@ -12,8 +13,9 @@ import processFactory from './util/process.js';
 import NodeRender from './coms/node-render.jsx';
 import CommonRender from './coms/common-render.jsx';
 import defaultOptions from './util/default-options';
+import checkRender from './util/check-render';
 
-import 'butterfly-dag/pack/index.css';
+import 'butterfly-dag/dist/index.css';
 import './index.less';
 
 const debug = _debug('butterfly-react');
@@ -51,6 +53,9 @@ class ButterflyReact extends React.Component {
     this.canvas = null;
     // 渲染节点实例
     this.dom = null;
+
+    // 是否强制渲染过
+    this.hasForced = false;
   }
 
   savePropsHash() {
@@ -129,6 +134,7 @@ class ButterflyReact extends React.Component {
 
     call(this.props.onLoaded)(this.canvas);
   }
+
   // 控制渲染边上的cls
   alignEdgesCls() {
     const canvas = this.canvas;
@@ -388,7 +394,10 @@ class ButterflyReact extends React.Component {
     const processEdge = () => {
       const {created, deleted} = diff(edges, oldEdges);
 
-      canvas.addEdges(this.process({edges: created}).edges, true);
+      const createdEdges = this.process({edges: created}).edges;
+
+      canvas.addEdges(createdEdges, true);
+
       canvas.removeEdges(this.process({edges: deleted}).edges.map(e => e.id));
     };
 
@@ -420,6 +429,13 @@ class ButterflyReact extends React.Component {
                   // 对齐所有的锚点
                   this.canvas.recalc();
                   this.alignEdge();
+
+                  if (this.hasForced) {
+                    return this.hasForced = false;
+                  }
+
+                  this.forceUpdate();
+                  this.hasForced = true;
                 }}
               />
               {

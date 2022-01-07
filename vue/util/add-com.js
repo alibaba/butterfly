@@ -72,6 +72,9 @@ const render = (item, type, parent = null, canvasNodes = null) => {
     const nodeCon = new vueCon({
       propsData
     });
+    nodeCon.$butterfly = {
+      type: type
+    }
     // 暂时不用指向parent 节点的emit支持
     // nodeCon.$parent = parent
     // 打通组件的$emit事件传输
@@ -93,68 +96,6 @@ const render = (item, type, parent = null, canvasNodes = null) => {
     return Con;
   }
 
-};
-
-// 一些UI组件的渲染方式的补充
-const addUserEndpointByComponentInstance = (canvasNode, ComponentInstance) => {
-  let options = ComponentInstance.$options;
-  let componentTag = options && options._componentTag;
-  let componentInstanceChildrens = ComponentInstance.$children;
-
-  if (componentTag === 'butterfly-vue-endpoint') {
-    let dom = ComponentInstance.$el;
-    let id = dom.id;
-    let param = ComponentInstance.param;
-    canvasNode.addEndpoint({
-      id,
-      dom,
-      ...param
-    })
-    return;
-  }
-
-  for (let componentInstanceChildren of componentInstanceChildrens) {
-    addUserEndpointByComponentInstance(canvasNode, componentInstanceChildren)
-  }
-
-};
-
-const addUserEndpoint = (canvasNode,VNode) => {
-  let VNodeTemp = VNode;
-  let tag = VNodeTemp.tag;
-  let children = VNodeTemp.children;
-
-  // 当虚拟树节点到达底部
-  if (_.isUndefined(tag)) {
-    return;
-  }
-
-  // 找到自定义节点
-  if (tag.search('butterfly-vue-endpoint') !== -1) {
-    let dom = VNodeTemp.elm;
-    let id = dom.id;
-    let param = VNodeTemp.componentInstance.param;
-    canvasNode.addEndpoint({
-      id,
-      dom,
-      ...param
-    })
-    return;
-  }
-
-  let componentInstance = VNodeTemp.componentInstance;
-  if (!_.isUndefined(componentInstance)) {
-    let componentInstanceChildrens = componentInstance.$children;
-    for (let componentInstanceChildren of componentInstanceChildrens) {
-      addUserEndpointByComponentInstance(canvasNode, componentInstanceChildren)
-    }
-  }
-
-  if (!_.isUndefined(children)) {
-    for (let VNodeChildren of children) {
-      addUserEndpoint(canvasNode,VNodeChildren);
-    }
-  }
 };
 
 const addCom = (proData) => {
@@ -215,7 +156,6 @@ const addNodesCom = (canvasRoot, canvasNodes, nodes, parent) => {
     }
   
     let canvasNode = canvasNodes[canvasNodeIndex];
-    addUserEndpoint(canvasNode,nodeCon._vnode);
   })
 };
 

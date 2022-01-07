@@ -2,6 +2,7 @@
   <div>
     <div class="control">
       <el-button @click="addNode">添加节点(node)</el-button>
+      <el-button @click="updateEndpoiint">变更锚点</el-button>
     </div>
     <el-divider></el-divider>
     <butterfly-vue
@@ -38,6 +39,14 @@ export default {
     }
   },
   methods:{
+    updateEndpoiint() {
+      if (this.mockData.nodes[0].userData.endpoints.includes('3')) {
+        let endpoints = ['1'];
+        this.mockData.nodes[0].userData.endpoints = endpoints;
+      } else {
+        this.mockData.nodes[0].userData.endpoints.push('3');
+      }
+    },
     addNode() {
       this.mockData.nodes.push({
         id: `add${this.nodeIndex}`,

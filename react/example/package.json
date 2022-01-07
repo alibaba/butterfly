@@ -1,7 +1,8 @@
 {
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "start": "webpack-dev-server"
   },
   "peerDependencies": {
     "prop-types": "^15.5.4",
@@ -12,11 +13,27 @@
     "jquery": "*"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.12.1",
-    "@vitejs/plugin-react-refresh": "^1.1.0",
     "less": "^4.1.0",
     "react-dev-utils": "^11.0.1",
-    "vite": "^2.0.0-beta.12"
+    "@babel/core": "^7.14.6",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/plugin-transform-runtime": "^7.12.1",
+    "@babel/plugin-proposal-object-rest-spread": "^7.14.7",
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
+    "@babel/plugin-syntax-top-level-await": "^7.14.5",
+    "@babel/preset-env": "^7.14.7",
+    "@babel/preset-react": "^7.14.5",
+    "babel-loader": "^8.2.2",
+    "babel-plugin-add-module-exports": "^1.0.4",
+    "mini-css-extract-plugin": "~0.9.0",
+    "html-webpack-plugin": "^3.2.0",
+    "style-loader": "~0.21.0",
+    "url-loader": "~1.0.1",
+    "css-loader": "~1.0.0",
+    "less-loader": "~4.1.0",
+    "webpack": "~4.41.5",
+    "webpack-cli": "~3.0.8",
+    "webpack-dev-server": "~3.10.1"
   },
   "files": [
     "dist",
@@ -25,7 +42,7 @@
   "dependencies": {
     "@ant-design/icons": "^4.4.0",
     "antd": "^4.11.2",
-    "butterfly-dag": "^3.1.6",
+    "butterfly-dag": "^4.1.0",
     "debug": "^4.3.1",
     "jquery": "^3.5.1",
     "lodash": "^4.17.20",

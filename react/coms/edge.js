@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {Edge} from 'butterfly-dag/pack';
+import {Edge} from 'butterfly-dag/dist';
 
 
 const edgeFactory = (uniqId) => {
