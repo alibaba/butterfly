@@ -398,22 +398,6 @@ class ButterflyReact extends React.Component {
 
       canvas.addEdges(createdEdges, true);
 
-      createdEdges.forEach(item => {
-        const dom = document.getElementById(this.uniqId + 'edge_label_' + item.id);
-
-        if (!dom) {
-          return null;
-        }
-
-        checkRender(item.render, 'edge');
-
-        const hasRender = !!item['labelRender'];
-
-        ReactDOM.render(
-          hasRender ? item['labelRender']() : null,
-          dom
-        );
-      });
       canvas.removeEdges(this.process({edges: deleted}).edges.map(e => e.id));
     };
 
@@ -427,7 +411,7 @@ class ButterflyReact extends React.Component {
   }
 
   render() {
-    const {className, groups, nodes} = this.props;
+    const {className, groups, nodes, edges} = this.props;
 
     return (
       <div
@@ -454,6 +438,14 @@ class ButterflyReact extends React.Component {
                   this.hasForced = true;
                 }}
               />
+              {
+                <CommonRender
+                  data={edges}
+                  renderKey="labelRender"
+                  idPrefix={this.uniqId + 'edge_label_'}
+                  type="edge"
+                />
+              }
               <CommonRender
                 data={groups}
                 type="group"
