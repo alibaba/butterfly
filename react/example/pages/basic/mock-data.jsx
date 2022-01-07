@@ -20,8 +20,9 @@ export const data = {
       id: '1',
       top: 100,
       endpoints: endpoints,
-      render() {
-        return <Node title="测试节点1" />;
+      isHighlight1: false,
+      render(item) {
+        return <Node title="测试节点1" item={item} />;
       }
     },
     {

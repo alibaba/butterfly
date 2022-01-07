@@ -1,7 +1,8 @@
 import React from 'react';
 import _ from 'lodash';
+import ReactDOM from 'react-dom';
 import _debug from 'debug';
-import {Canvas} from 'butterfly-dag/pack';
+import {Canvas} from 'butterfly-dag/dist';
 
 import props from './props';
 import diff from './util/diff.js';
@@ -12,8 +13,9 @@ import processFactory from './util/process.js';
 import NodeRender from './coms/node-render.jsx';
 import CommonRender from './coms/common-render.jsx';
 import defaultOptions from './util/default-options';
+import checkRender from './util/check-render';
 
-import 'butterfly-dag/pack/index.css';
+import 'butterfly-dag/dist/index.css';
 import './index.less';
 
 const debug = _debug('butterfly-react');
@@ -392,7 +394,26 @@ class ButterflyReact extends React.Component {
     const processEdge = () => {
       const {created, deleted} = diff(edges, oldEdges);
 
-      canvas.addEdges(this.process({edges: created}).edges, true);
+      const createdEdges = this.process({edges: created}).edges;
+
+      canvas.addEdges(createdEdges, true);
+
+      createdEdges.forEach(item => {
+        const dom = document.getElementById(this.uniqId + 'edge_label_' + item.id);
+
+        if (!dom) {
+          return null;
+        }
+
+        checkRender(item.render, 'edge');
+
+        const hasRender = !!item['labelRender'];
+
+        ReactDOM.render(
+          hasRender ? item['labelRender']() : null,
+          dom
+        );
+      });
       canvas.removeEdges(this.process({edges: deleted}).edges.map(e => e.id));
     };
 
@@ -406,7 +427,7 @@ class ButterflyReact extends React.Component {
   }
 
   render() {
-    const {className, groups, nodes, edges} = this.props;
+    const {className, groups, nodes} = this.props;
 
     return (
       <div
@@ -433,14 +454,6 @@ class ButterflyReact extends React.Component {
                   this.hasForced = true;
                 }}
               />
-              {
-                <CommonRender
-                  data={edges}
-                  renderKey="labelRender"
-                  idPrefix={this.uniqId + 'edge_label_'}
-                  type="edge"
-                />
-              }
               <CommonRender
                 data={groups}
                 type="group"
