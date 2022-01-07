@@ -21,9 +21,9 @@ const processFactory = (uniqId = '') => (
       labelDOM.id = edge.id;
 
       return {
+        type: 'endpoint',
         Class: edgeFactory(uniqId),
         ...edge,
-        type: 'endpoint',
       };
     }),
     groups: groups.map(group => {

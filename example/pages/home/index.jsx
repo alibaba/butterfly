@@ -2,6 +2,8 @@ import React from 'react';
 import i18next from 'i18next';
 import {Link} from 'react-router-dom';
 
+import * as cnzz from '../../cnzz/index';
+
 import './index.less';
 
 const prefix = window.CONFIG.prefix;
@@ -40,12 +42,24 @@ const Home = () => {
           <a
             className="link-button primary"
             href="https://github.com/alibaba/butterfly/blob/master/README.md"
+            onClick={() => cnzz.log(
+              cnzz.CATAGORY_TYPES.HOME,
+              cnzz.ACTION_TYPES.JUMP,
+              'to-doc',
+              'doc'
+            )}
           >
             {i18next.t('home_begin')}
           </a>
           <Link
             className="link-button"
             to={`${prefix}demo`}
+            onClick={() => cnzz.log(
+              cnzz.CATAGORY_TYPES.HOME,
+              cnzz.ACTION_TYPES.JUMP,
+              'to-demo',
+              'demo'
+            )}
           >
             {i18next.t('home_see_demo')}
           </Link>
