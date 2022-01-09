@@ -14,7 +14,7 @@ let canvas = new Canvas({
   layout: {},              //初始化自动布局(选填)
   theme: {                 //主题定制(选填) 
     group: {
-      type: 'normal'       //节点组类型(选填): normal(随意拖入拖出),inner(只能拖入不能拖出)
+      type: 'normal',       //节点组类型(选填): normal(随意拖入拖出),inner(只能拖入不能拖出)
       dragGroupZIndex: 50  //节点组的默认z-index（选填，默认值：50）
     },
     node: {
