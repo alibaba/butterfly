@@ -42,7 +42,7 @@ export default {
   edges: [{
     source: 'test1',
     target: 'test2',
-  }, 
+  },
   {
     source: 'test1',
     target: 'test3'

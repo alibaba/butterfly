@@ -15,6 +15,7 @@ $ npm i butterfly-vue butterfly-dag -S
     - [`canvasData.render` Render mode (two)](#canvasdatarender-render-mode-two)
       - [Object type (.vue) Recommended](#object-type-vue-recommended)
       - [String type（template）](#string-typetemplate)
+  - [Function](#function)
   - [Custom Endpoint usage](#custom-endpoint-usage)
 
 ## Usage
@@ -301,6 +302,40 @@ export default {
 module.exports = {
   runtimeCompiler: true
 }
+```
+
+## Function
+
+| Method | Description   | Parameters |
+| :----: | ------------- | :--------: |
+| redraw | Redraw canvas |    `-`     |
+
+``` vue
+<template>
+  <div>
+    <button @click="redraw">Redraw canvas</button>
+    <butterfly-vue
+      ref="butterflyVue"
+    />
+  </div>
+</template>
+
+<script>
+import {ButterflyVue} from 'butterfly-vue';
+
+export default {
+  name: 'Drag',
+  components: {
+    ButterflyVue,
+  },
+  methods:{
+    redraw() {
+      this.$refs.butterflyVue.redraw();
+    },
+  }
+}
+</script>
+
 ```
 
 ## Custom Endpoint usage

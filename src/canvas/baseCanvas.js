@@ -41,7 +41,11 @@ class BaseCanvas extends Canvas {
     this.theme = {
       group: {
         type: _.get(options, 'theme.group.type') || 'normal',
-        includeGroups: _.get(options, 'theme.group.includeGroups', false)
+        includeGroups: _.get(options, 'theme.group.includeGroups', false),
+        dragGroupZIndex: _.get(options, 'theme.group.dragGroupZIndex', 50)
+      },
+      node: {
+        dragNodeZIndex: _.get(options, 'theme.node.dragNodeZIndex', 250)
       },
       edge: {
         type: _.get(options, 'theme.edge.type') || 'node',
@@ -60,6 +64,7 @@ class BaseCanvas extends Canvas {
         isLinkMyself: _.get(options, 'theme.edge.isLinkMyself') || false,
         isExpandWidth: _.get(options, 'theme.edge.isExpandWidth') || false,
         defaultAnimate: _.get(options, 'theme.edge.defaultAnimate') || false,
+        dragEdgeZindex: _.get(options, 'theme.edge.dragEdgeZindex', 499)
       },
       endpoint: {
         // 暂时不支持position
@@ -120,9 +125,9 @@ class BaseCanvas extends Canvas {
     this.canvasWrapper = null;
 
     // 节点,线段,节点组z-index值，顺序：节点 > 线段 > 节点组
-    this._dragGroupZIndex = 50;
-    this._dragNodeZIndex = 250;
-    this._dragEdgeZindex = 499;
+    this._dragGroupZIndex = this.theme.group.dragGroupZIndex;
+    this._dragNodeZIndex = this.theme.node.dragNodeZIndex;
+    this._dragEdgeZindex = this.theme.edge.dragEdgeZindex;
 
     // 加一层wrapper方便处理缩放，平移
     this._genWrapper();

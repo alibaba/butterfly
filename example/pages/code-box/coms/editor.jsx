@@ -6,6 +6,7 @@ import classnames from 'classnames';
 import Hotkeys from 'react-hot-keys';
 import {Icon, Tooltip, message} from 'antd';
 
+import * as cnzz from '../../../cnzz';
 import exportCode from './export-code';
 
 import 'ace-builds/src-noconflict/mode-javascript';
@@ -30,6 +31,19 @@ const Editor = (props) => {
     if (op.link) {
       return window.open(op.link, '_blank');
     }
+
+    const map = {
+      play: cnzz.ACTION_TYPES.RUN_DEMO,
+      export: cnzz.ACTION_TYPES.EXPORT_DEMO,
+      edit: cnzz.ACTION_TYPES.EDIT_GITHUB_DEMO
+    };
+
+    map[op.action] && cnzz.log(
+      cnzz.CATAGORY_TYPES.DEMO,
+      map[op.action],
+      demo,
+      demo
+    );
 
     switch (op.action) {
       case 'play':
@@ -67,6 +81,13 @@ const Editor = (props) => {
 
   // 触发代码变更
   const onCodeChange = (code) => {
+    cnzz.log(
+      cnzz.CATAGORY_TYPES.DEMO,
+      cnzz.ACTION_TYPES.EDIT_DEMO,
+      demo,
+      `${active}-${code}`
+    );
+
     editorCodes.forEach(file => {
       if (file.filename === active) {
         file.code = code;

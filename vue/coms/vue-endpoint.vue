@@ -25,6 +25,37 @@ export default {
       type: Object
     }
   },
+  methods: {
+    findParent(self) {
+      if (self.$parent) {
+        if (self.$parent.$butterfly && self.$parent.$butterfly.type) {
+          if (['node'].includes(self.$parent.$butterfly.type) && self.$parent.canvasNode) {
+            return self.$parent;
+          }
+        } else {
+          return this.findParent(self.$parent)
+        }
+      } else {
+        console.warn('锚点没有被node包裹上,请检查！');
+      }
+    }
+  },
+  mounted() {
+    let butterflyParent = this.findParent(this);
+    if(!butterflyParent.canvasNode.getEndpoint('bf_endpoint_' + this.id)) {
+      butterflyParent.canvasNode.addEndpoint({
+        id: 'bf_endpoint_' + this.id,
+        dom: this.$el,
+        ...this.param
+      });
+    }
+  },
+  beforeDestroy() {
+    let butterflyParent = this.findParent(this);
+    if (butterflyParent.canvasNode.getEndpoint('bf_endpoint_' + this.id)) {
+      butterflyParent.canvasNode.removeEndpoint('bf_endpoint_' + this.id);
+    }
+  }
 };
 </script>
 

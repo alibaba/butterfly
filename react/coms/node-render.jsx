@@ -121,7 +121,7 @@ const NodeRender = (props) => {
 
     checkRender(item.render, 'node');
     const hasRender = !!item.render;
-    const element = hasRender ? item.render() : <BfNode key={id} {...item} />;
+    const element = hasRender ? item.render(item) : <BfNode key={id} {...item} />;
 
     return ReactDOM.createPortal(element, dom);
   });

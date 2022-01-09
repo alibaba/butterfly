@@ -6,6 +6,8 @@ import classnames from 'classnames';
 import {Link, withRouter} from 'react-router-dom';
 import {Tooltip, notification, Spin, Icon} from 'antd';
 
+import * as cnzz from '../../cnzz';
+
 import './index.less';
 
 const prefix = window.CONFIG.prefix;
@@ -75,7 +77,17 @@ const Sider = (props) => {
                   title={tips(file)}
                   placement="right"
                 >
-                  <Link to={`${prefix}demo/${file.dir}`}><img src={file.cover} /></Link>
+                  <Link
+                    to={`${prefix}demo/${file.dir}`}
+                    onClick={() => cnzz.log(
+                      cnzz.CATAGORY_TYPES.DEMO,
+                      cnzz.ACTION_TYPES.VIEW_DEMO,
+                      file.dir,
+                      file.dir
+                    )}
+                  >
+                    <img src={file.cover} />
+                  </Link>
                 </Tooltip>
               </div>
             );
@@ -102,7 +114,7 @@ Sider.propTypes = {
       demo: PropTypes.string
     })
   }),
-  onFold: PropTypes.func
+  onFold: PropTypes.func,         // 展开-收起
 };
 
 export default withRouter(Sider);

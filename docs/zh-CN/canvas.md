@@ -15,6 +15,10 @@ let canvas = new Canvas({
   theme: {                 //主题定制(选填) 
     group: {
       type: 'normal'       //节点组类型(选填): normal(随意拖入拖出),inner(只能拖入不能拖出)
+      dragGroupZIndex: 50  //节点组的默认z-index（选填，默认值：50）
+    },
+    node: {
+      dragNodeZIndex: 250  //节点的默认z-index/2（选填，默认值250）
     },
     edge: {
       type: 'endpoint',    //线段连接类型
@@ -26,7 +30,8 @@ let canvas = new Canvas({
       arrowShapeType: '',  //自定义箭头样式
       Class: XXClass,      //自己拓展的class,拖动连线的时候会采用该拓展类
       isExpandWidth: false,//增加线条交互区域
-      defaultAnimate: false//默认开启线条动画
+      defaultAnimate: false,//默认开启线条动画
+      dragEdgeZindex: 499  //线段的默认z-index(选填，默认：499)
     },
     endpoint: {
       position: [],        //限制锚点位置['Top', 'Bottom', 'Left', 'Right'],

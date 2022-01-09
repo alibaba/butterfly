@@ -7,7 +7,7 @@ export default {
       render: PropTypes.func,           // 渲染函数
       left: PropTypes.number,
       top: PropTypes.number,
-      draggable: PropTypes.boolean
+      draggable: PropTypes.bool
     })
   ),
   edges: PropTypes.arrayOf(

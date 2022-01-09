@@ -14,6 +14,10 @@ let canvas = new Canvas({
   theme: {                 // theme (optional) 
     group: {
       type: 'normal'       // Node group type: normal (drag in and drag out), inner (can only be dragged in and not out)
+      dragGroupZIndex: 50  // Node group z-index: (optional, Default:50)
+    },
+    node: {
+      dragNodeZIndex: 250  //node z-index/2 (optional, Default:250)
     },
     edge: {
       type: 'endpoint',    // edge connection type
@@ -26,6 +30,7 @@ let canvas = new Canvas({
       Class: XXClass,      // custom Class
       isExpandWidth: false,// expand line interaction area
       defaultAnimate: false// turn on line animation by default
+      dragEdgeZindex: 499  // edge z-index (optional, Default:490)
     },
     endpoint: {
       position: [],        // limit endpoint position ['Top', 'Bottom', 'Left', 'Right'],
