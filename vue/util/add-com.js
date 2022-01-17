@@ -154,8 +154,6 @@ const addNodesCom = (canvasRoot, canvasNodes, nodes, parent) => {
       console.warn(`canvas.addNodes方法出错`);
       return null;
     }
-  
-    let canvasNode = canvasNodes[canvasNodeIndex];
   })
 };
 

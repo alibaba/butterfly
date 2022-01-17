@@ -13,7 +13,7 @@ let canvas = new Canvas({
   layout: {},              // initialize auto layout (optional)
   theme: {                 // theme (optional) 
     group: {
-      type: 'normal'       // Node group type: normal (drag in and drag out), inner (can only be dragged in and not out)
+      type: 'normal',       // Node group type: normal (drag in and drag out), inner (can only be dragged in and not out)
       dragGroupZIndex: 50  // Node group z-index: (optional, Default:50)
     },
     node: {
@@ -29,7 +29,7 @@ let canvas = new Canvas({
       arrowShapeType: '',  // custom arrow style
       Class: XXClass,      // custom Class
       isExpandWidth: false,// expand line interaction area
-      defaultAnimate: false// turn on line animation by default
+      defaultAnimate: false,// turn on line animation by default
       dragEdgeZindex: 499  // edge z-index (optional, Default:490)
     },
     endpoint: {

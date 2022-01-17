@@ -45,7 +45,7 @@ const resetCanvasNodesPosition = (canvas, nodes) => {
     if (_.get(tempNodeObj,`[${item.id}].left`)) {
       item.left = tempNodeObj[item.id].left;
     }
-    if (_.get(tempNodeObj,`[${item.id}].left`)) {
+    if (_.get(tempNodeObj,`[${item.id}].top`)) {
       item.top = tempNodeObj[item.id].top;
     }
   })
