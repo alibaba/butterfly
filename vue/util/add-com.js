@@ -70,6 +70,7 @@ const render = (item, type, parent = null, canvasNodes = null) => {
     propsData.canvasNode = canvasNode;
   
     const nodeCon = new vueCon({
+      parent: parent,
       propsData
     });
     nodeCon.$butterfly = {
