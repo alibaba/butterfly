@@ -2692,12 +2692,25 @@ class BaseCanvas extends Canvas {
           orientation: link.targetEndpoint.orientation ? link.targetEndpoint.orientation : undefined
         };
       } else if (link.type === 'node') {
+        let _getNodePos = (node, attr) => {
+          let result = 0;
+          let queue = [node.group];
+          while(queue.length > 0) {
+            let groupId = queue.pop();
+            let group = this.getGroup(groupId);
+            if (group) {
+              result += group[attr];
+              group.group && queue.push(group.group);
+            }
+          }
+          return result;
+        }
         _soucePoint = {
-          pos: [link.sourceNode.left + link.sourceNode.getWidth(true) / 2, link.sourceNode.top + link.sourceNode.getHeight(true) / 2]
+          pos: [link.sourceNode.left + link.sourceNode.getWidth(true) / 2 + _getNodePos(link.sourceNode, 'left'), link.sourceNode.top + link.sourceNode.getHeight(true) / 2 + _getNodePos(link.sourceNode, 'top')]
         };
 
         _targetPoint = {
-          pos: [link.targetNode.left + link.targetNode.getWidth(true) / 2, link.targetNode.top + link.targetNode.getHeight(true) / 2]
+          pos: [link.targetNode.left + link.targetNode.getWidth(true) / 2 + _getNodePos(link.targetNode, 'left'), link.targetNode.top + link.targetNode.getHeight(true) / 2 + _getNodePos(link.targetNode, 'top')]
         };
       }
       link.redraw(_soucePoint, _targetPoint);
