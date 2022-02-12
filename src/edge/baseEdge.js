@@ -106,13 +106,25 @@ class BaseEdge extends Edge {
     }
   }
   _calcPath(sourcePoint, targetPoint) {
+    const _getNodePos = (node, attr) => {
+      let result = 0;
+      let queue = [node._group];
+      while(queue.length > 0) {
+        let group = queue.pop();
+        if (group) {
+          result += group[attr];
+          group._group && queue.push(group._group);
+        }
+      }
+      return result;
+    }
     if (!sourcePoint) {
       sourcePoint = {
         pos: [
           // this.type === 'endpoint' ? this.sourceEndpoint._posLeft + this.sourceEndpoint._width / 2 : this.sourceNode.left + this.sourceNode.dom.offsetWidth / 2,
           // this.type === 'endpoint' ? this.sourceEndpoint._posTop + this.sourceEndpoint._height / 2 : this.sourceNode.top + this.sourceNode.dom.offsetHeight / 2
-          this.type === 'endpoint' ? this.sourceEndpoint._posLeft + this.sourceEndpoint._width / 2 : this.sourceNode.left + this.sourceNode.getWidth(true) / 2,
-          this.type === 'endpoint' ? this.sourceEndpoint._posTop + this.sourceEndpoint._height / 2 : this.sourceNode.top + this.sourceNode.getHeight(true) / 2
+          this.type === 'endpoint' ? this.sourceEndpoint._posLeft + this.sourceEndpoint._width / 2 : this.sourceNode.left + this.sourceNode.getWidth(true) / 2 + _getNodePos(this.sourceNode, 'left'),
+          this.type === 'endpoint' ? this.sourceEndpoint._posTop + this.sourceEndpoint._height / 2 : this.sourceNode.top + this.sourceNode.getHeight(true) / 2 + _getNodePos(this.sourceNode, 'top')
         ],
         orientation: (this.type === 'endpoint' && this.sourceEndpoint.orientation) ? this.sourceEndpoint.orientation : undefined
       };
@@ -123,8 +135,8 @@ class BaseEdge extends Edge {
         pos: [
           // this.type === 'endpoint' ? this.targetEndpoint._posLeft + this.targetEndpoint._width / 2 : this.targetNode.left + this.targetNode.dom.offsetWidth / 2,
           // this.type === 'endpoint' ? this.targetEndpoint._posTop + this.targetEndpoint._height / 2 : this.targetNode.top + this.targetNode.dom.offsetHeight / 2
-          this.type === 'endpoint' ? this.targetEndpoint._posLeft + this.targetEndpoint._width / 2 : this.targetNode.left + this.targetNode.getWidth(true) / 2,
-          this.type === 'endpoint' ? this.targetEndpoint._posTop + this.targetEndpoint._height / 2 : this.targetNode.top + this.targetNode.getHeight(true) / 2
+          this.type === 'endpoint' ? this.targetEndpoint._posLeft + this.targetEndpoint._width / 2 : this.targetNode.left + this.targetNode.getWidth(true) / 2 + _getNodePos(this.targetNode, 'left'),
+          this.type === 'endpoint' ? this.targetEndpoint._posTop + this.targetEndpoint._height / 2 : this.targetNode.top + this.targetNode.getHeight(true) / 2 + _getNodePos(this.targetNode, 'top')
         ],
         orientation: (this.type === 'endpoint' && this.targetEndpoint.orientation) ? this.targetEndpoint.orientation : undefined
       };

@@ -2469,53 +2469,61 @@ class BaseCanvas extends Canvas {
 
       // link不存在的话
       const EdgeClass = link.Class || this.theme.edge.Class;
+      let sourceNode = null;
+      let targetNode = null;
+      let _sourceType = link._sourceType;
+      let _targetType = link._targetType;
+      let _getNode = (link, nodeOrGroup, nodeType) => {
+        let id = (link.type === 'node' || !link.type) ? link[nodeType] : link[`${nodeType}Node`];
+        if (nodeOrGroup === 'node') {
+          return this.getNode(id);
+        } else if (nodeOrGroup === 'group') {
+          return this.getGroup(id);
+        }
+      }
+
+      if (link.sourceNode instanceof Node || _.get(link, 'sourceNode.__type') === 'node') {
+        _sourceType = 'node';
+        sourceNode = link.sourceNode;
+      } else if (link.sourceNode instanceof Group || _.get(link, 'sourceNode.__type') === 'group') {
+        _sourceType = 'group';
+        sourceNode = link.sourceNode;
+      } else {
+        if (link._sourceType) {
+          sourceNode = _sourceType === 'node' ? _getNode(link, 'node', 'source') : _getNode(link, 'group', 'source');
+        } else {
+          let _node = _getNode(link, 'node', 'source');
+          if (_node) {
+            _sourceType = 'node';
+            sourceNode = _node;
+          } else {
+            _sourceType = 'group';
+            sourceNode = _getNode(link, 'group', 'source');
+          }
+        }
+      }
+
+      if (link.targetNode instanceof Node || _.get(link, 'targetNode.__type') === 'node') {
+        _targetType = 'node';
+        targetNode = link.targetNode;
+      } else if (link.targetNode instanceof Group || _.get(link, 'targetNode.__type') === 'group') {
+        _targetType = 'group';
+        targetNode = link.targetNode;
+      } else {
+        if (link._targetType) {
+          targetNode = _targetType === 'node' ? _getNode(link, 'node', 'target') : _getNode(link, 'group', 'target');
+        } else {
+          let _node = _getNode(link, 'node', 'target');
+          if (_node) {
+            _targetType = 'node';
+            targetNode = _node;
+          } else {
+            _targetType = 'group';
+            targetNode = _getNode(link, 'group', 'target');
+          }
+        }
+      }
       if (link.type === 'endpoint') {
-        let sourceNode = null;
-        let targetNode = null;
-        let _sourceType = link._sourceType;
-        let _targetType = link._targetType;
-
-        if (link.sourceNode instanceof Node || link.sourceNode.__type === 'node') {
-          _sourceType = 'node';
-          sourceNode = link.sourceNode;
-        } else if (link.sourceNode instanceof Group || link.sourceNode.__type === 'group') {
-          _sourceType = 'group';
-          sourceNode = link.sourceNode;
-        } else {
-          if (link._sourceType) {
-            sourceNode = _sourceType === 'node' ? this.getNode(link.sourceNode) : this.getGroup(link.sourceNode);
-          } else {
-            let _node = this.getNode(link.sourceNode);
-            if (_node) {
-              _sourceType = 'node';
-              sourceNode = _node;
-            } else {
-              _sourceType = 'group';
-              sourceNode = this.getGroup(link.sourceNode);
-            }
-          }
-        }
-
-        if (link.targetNode instanceof Node || link.targetNode.__type === 'node') {
-          _targetType = 'node';
-          targetNode = link.targetNode;
-        } else if (link.targetNode instanceof Group || link.targetNode.__type === 'group') {
-          _targetType = 'group';
-          targetNode = link.targetNode;
-        } else {
-          if (link._targetType) {
-            targetNode = _targetType === 'node' ? this.getNode(link.targetNode) : this.getGroup(link.targetNode);
-          } else {
-            let _node = this.getNode(link.targetNode);
-            if (_node) {
-              _targetType = 'node';
-              targetNode = _node;
-            } else {
-              _targetType = 'group';
-              targetNode = this.getGroup(link.targetNode);
-            }
-          }
-        }
 
         if (!sourceNode || !targetNode) {
           console.warn(`butterflies error: can not connect edge. link sourceNodeId:${link.sourceNode};link targetNodeId:${link.targetNode}`);
@@ -2621,9 +2629,6 @@ class BaseCanvas extends Canvas {
 
         return edge;
       } else {
-        const sourceNode = this.getNode(link.source);
-        const targetNode = this.getNode(link.target);
-
         if (!sourceNode || !targetNode) {
           console.warn(`butterflies error: can not connect edge. link sourceId:${link.source};link targetId:${link.target}`);
           return;
@@ -2649,6 +2654,8 @@ class BaseCanvas extends Canvas {
           isExpandWidth: this.theme.edge.isExpandWidth,
           defaultAnimate: this.theme.edge.defaultAnimate,
           _global: this.global,
+          _sourceType,
+          _targetType,
           _on: this.on.bind(this),
           _emit: this.emit.bind(this),
         });
