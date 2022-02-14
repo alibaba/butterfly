@@ -16,6 +16,7 @@ import MindMap from './demo/mindMap/index.jsx';
 import CompactBoxTree from './demo/compact-box-tree/index.jsx';
 import EntityRelationship from './demo/entity-relationship/index.jsx';
 import Emergency2 from './demo/emergency2/index.jsx';
+import FishBone from './demo/fishbone/index.jsx';
 import Industry from './demo/industry/index.jsx';
 import Policy from './demo/policy/index.jsx';
 import PluginPanel from './demo/pluginPanel/index.jsx';
@@ -82,6 +83,9 @@ ReactDOM.render((
             <Menu.Item key="emergency2">
               <Link to="/emergency2">Emergency2</Link>
             </Menu.Item>
+            <Menu.Item key="fishbone">
+              <Link to="/fishbone">FishBone</Link>
+            </Menu.Item>
             <Menu.Item key="force">
               <Link to="/force">Force</Link>
             </Menu.Item>
@@ -142,6 +146,7 @@ ReactDOM.render((
           </Menu>
         </Sider>
         <Content>
+          <Route path="/fishbone" component={FishBone} />
           <Route path="/emergency" component={Emergency} />
           <Route path="/diodes" component={Diodes} />
           <Route path="/force" component={Force} />
