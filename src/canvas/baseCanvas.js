@@ -2587,15 +2587,24 @@ class BaseCanvas extends Canvas {
           let _isRepeat = _.some(this.edges, (_edge) => {
             let _result = false;
             if (sourceNode) {
-              _result = sourceNode.id === _edge.sourceNode.id && sourceEndpoint.id === _edge.sourceEndpoint.id && _sourceType === _edge.sourceEndpoint.nodeType;
+              if (_edge.type === 'node') {
+                _result = sourceNode.id === _edge.sourceNode.id;
+              } else {
+                _result = sourceNode.id === _edge.sourceNode.id && sourceEndpoint.id === _edge.sourceEndpoint.id && _sourceType === _edge.sourceEndpoint.nodeType;
+              }
             }
 
             if (targetNode) {
-              _result = _result && (targetNode.id === _edge.targetNode.id && targetEndpoint.id === _edge.targetEndpoint.id && _targetType === _edge.targetEndpoint.nodeType);
+              if (_edge.type === 'node') {
+                _result = targetNode.id === _edge.targetNode.id;
+              } else {
+                _result = targetNode.id === _edge.targetNode.id && targetEndpoint.id === _edge.targetEndpoint.id && targetType === _edge.targetEndpoint.nodeType;
+              }
             }
 
             return _result;
           });
+
           if (_isRepeat) {
             console.warn(`id为${sourceEndpoint.id}-${targetEndpoint.id}的线条连接重复，请检查`);
             return;
