@@ -80,7 +80,7 @@ export default {
 </template>
 
 <script>
-import ButterflyVue from 'butterfly-vue';
+import {ButterflyVue} from 'butterfly-vue';
 import mockData from "./mockData.js";
 
 export default {
@@ -223,7 +223,7 @@ export default {
 </template>
 
 <script>
-import ButterflyVue from 'butterfly-vue';
+import {ButterflyVue} from 'butterfly-vue';
 
 import gridNode from './node/drag-node.vue';
 
@@ -267,7 +267,7 @@ export default {
 </template>
 
 <script>
-import ButterflyVue from 'butterfly-vue';
+import {ButterflyVue} from 'butterfly-vue';
 
 export default {
   name: 'App',

@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import _ from 'lodash';
 
 export default {
   name: "butterfly-vue-endpoint",
@@ -28,8 +29,9 @@ export default {
   methods: {
     findParent(self) {
       if (self.$parent) {
-        if (self.$parent.$butterfly && self.$parent.$butterfly.type) {
-          if (['node'].includes(self.$parent.$butterfly.type) && self.$parent.canvasNode) {
+        let type = _.get(self, '$parent.$butterfly.type', false);
+        if (type) {
+          if (['node'].includes(type) && _.get(self, '$parent.$options.propsData.canvasNode', false)) {
             return self.$parent;
           }
         } else {
@@ -42,8 +44,9 @@ export default {
   },
   mounted() {
     let butterflyParent = this.findParent(this);
-    if(!butterflyParent.canvasNode.getEndpoint('bf_endpoint_' + this.id)) {
-      butterflyParent.canvasNode.addEndpoint({
+    let canvasNode = _.get(butterflyParent, '$options.propsData.canvasNode', false);
+    if (canvasNode && !canvasNode.getEndpoint('bf_endpoint_' + this.id)) {
+      canvasNode.addEndpoint({
         id: 'bf_endpoint_' + this.id,
         dom: this.$el,
         ...this.param

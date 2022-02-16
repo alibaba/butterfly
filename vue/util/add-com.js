@@ -70,6 +70,7 @@ const render = (item, type, parent = null, canvasNodes = null) => {
     propsData.canvasNode = canvasNode;
   
     const nodeCon = new vueCon({
+      parent: parent,
       propsData
     });
     nodeCon.$butterfly = {
@@ -154,8 +155,6 @@ const addNodesCom = (canvasRoot, canvasNodes, nodes, parent) => {
       console.warn(`canvas.addNodes方法出错`);
       return null;
     }
-  
-    let canvasNode = canvasNodes[canvasNodeIndex];
   })
 };
 
