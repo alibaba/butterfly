@@ -3,7 +3,8 @@ import React, {Component} from 'react';
 
 import './index.less';
 import 'butterfly-dag/dist/index.css';
-import { Canvas } from 'butterfly-dag';
+// import { Canvas } from 'butterfly-dag';
+import Canvas from '../../../src/canvas/baseCanvas'
 import mockData from './data';
 class Scene6New extends Component {
   constructor() {
@@ -20,6 +21,7 @@ class Scene6New extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
+          isDoubleArrow: true,
           shapeType: 'AdvancedBezier',
           arrow: true
         }

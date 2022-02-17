@@ -59,6 +59,7 @@ class BaseCanvas extends Canvas {
         isLinkMyself: _.get(options, 'theme.edge.isLinkMyself') || false,
         isExpandWidth: _.get(options, 'theme.edge.isExpandWidth') || false,
         defaultAnimate: _.get(options, 'theme.edge.defaultAnimate') || false,
+        isDoubleArrow: _.get(options, 'theme.edge.isDoubleArrow') || false
       },
       endpoint: {
         // 暂时不支持position
@@ -866,7 +867,8 @@ class BaseCanvas extends Canvas {
                   label: this.theme.edge.label,
                   labelPosition: this.theme.edge.labelPosition,
                   labelOffset: this.theme.edge.labelOffset,
-                  isExpandWidth: this.theme.edge.isExpandWidth
+                  isExpandWidth: this.theme.edge.isExpandWidth,
+                  isDoubleArrow: this.theme.edge.isDoubleArrow
                 };
                 pointObj['options'] = _.assign({}, pointObj, {
                   sourceNode: _sourceNode.id,
@@ -894,6 +896,11 @@ class BaseCanvas extends Canvas {
                 }
                 if (_newEdge.arrowDom) {
                   $(this.svg).append(_newEdge.arrowDom);
+                }
+                if (_newEdge.doubleArrowDom.length !== 0) {
+                  for (let i = 0; i < _newEdge.doubleArrowDom.length; i++) {
+                    $(this.svg).append((_newEdge.doubleArrowDom)[i]);
+                  }
                 }
                 edges.push(_newEdge);
               });
@@ -2405,6 +2412,12 @@ class BaseCanvas extends Canvas {
           _edgeFragment.appendChild(link.arrowDom);
         }
 
+        if (link.doubleArrowDom.length !== 0) {
+          for (let i = 0; i < link.doubleArrowDom.length; i++) {
+            _edgeFragment.appendChild((link.doubleArrowDom)[i]);
+          }
+        }
+
         this.edges.push(link);
 
         link.mounted && link.mounted();
@@ -2518,6 +2531,7 @@ class BaseCanvas extends Canvas {
           targetNode,
           sourceEndpoint,
           targetEndpoint,
+          isDoubleArrow: link.isDoubleArrow === undefined ? _.get(this, 'theme.edge.isDoubleArrow') : link.isDoubleArrow,
           arrow: link.arrow === undefined ? _.get(this, 'theme.edge.arrow') : link.arrow,
           arrowShapeType: link.arrowShapeType === undefined ? _.get(this, 'theme.edge.arrowShapeType') : link.arrowShapeType,
           arrowPosition: link.arrowPosition === undefined ? _.get(this, 'theme.edge.arrowPosition') : link.arrowPosition,
@@ -2547,6 +2561,13 @@ class BaseCanvas extends Canvas {
         if (edge.arrowDom) {
           _edgeFragment.appendChild(edge.arrowDom);
         }
+
+        if (edge.doubleArrowDom.length !== 0) {
+          for (let i=0; i < edge.doubleArrowDom.length; i++) {
+            _edgeFragment.appendChild((edge.doubleArrowDom)[i]);
+          }
+        }
+
 
         this.edges.push(edge);
 
@@ -2582,6 +2603,7 @@ class BaseCanvas extends Canvas {
           type: link.type || this.theme.edge.type,
           shapeType: link.shapeType || this.theme.edge.shapeType,
           orientationLimit: this.theme.endpoint.position,
+          isDoubleArrow: link.isDoubleArrow === undefined ? _.get(this, 'theme.edge.isDoubleArrow') : link.isDoubleArrow,
           arrow: link.arrow === undefined ? _.get(this, 'theme.edge.arrow') : link.arrow,
           arrowShapeType: link.arrowShapeType === undefined ? _.get(this, 'theme.edge.arrowShapeType') : link.arrowShapeType,
           arrowPosition: link.arrowPosition === undefined ? _.get(this, 'theme.edge.arrowPosition') : link.arrowPosition,
@@ -2608,6 +2630,12 @@ class BaseCanvas extends Canvas {
 
         if (edge.arrowDom) {
           _edgeFragment.appendChild(edge.arrowDom);
+        }
+
+        if (edge.doubleArrowDom.length !== 0) {
+          for (let i=0; i < edge.doubleArrowDom.length; i++) {
+            _edgeFragment.appendChild((edge.doubleArrowDom)[i]);
+          }
         }
 
         this.edges.push(edge);
