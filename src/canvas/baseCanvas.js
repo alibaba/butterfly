@@ -2853,9 +2853,9 @@ class BaseCanvas extends Canvas {
 
     return this.edges.filter((item) => {
       if (type === 'node') {
-        return _.get(item, 'sourceNode.id') === node.id || _.get(item, 'targetNode.id') === node.id;
+        return node && (_.get(item, 'sourceNode.id') === node.id || _.get(item, 'targetNode.id') === node.id);
       } else {
-        return _.get(item, 'sourceNode.id') === group.id || _.get(item, 'targetNode.id') === group.id;
+        return group && (_.get(item, 'sourceNode.id') === group.id || _.get(item, 'targetNode.id') === group.id);
       }
     });
   }
