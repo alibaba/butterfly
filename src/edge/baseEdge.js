@@ -32,6 +32,7 @@ class BaseEdge extends Edge {
     this.isExpandWidth = _.get(opts, 'isExpandWidth', false);
     this.defaultAnimate = _.get(opts, 'defaultAnimate', false);
     this.isDoubleArrow = _.get(opts, 'isDoubleArrow');
+    this.doubleArrowConfig = _.get(opts, 'doubleArrowConfig', []);
     this.dom = null;
     this.labelDom = null;
     this.arrowDom = null;
@@ -227,7 +228,7 @@ class BaseEdge extends Edge {
     if(!length) {
       return;
     }
-    doubleArrowObj.arrowFinalPosition = (length * doubleArrowObj.arrowPosition + this.arrowOffset) / length;
+    doubleArrowObj.arrowFinalPosition = (length * doubleArrowObj.arrowPosition + doubleArrowObj.arrowOffset) / length;
     if (doubleArrowObj.arrowFinalPosition > 1) {
       doubleArrowObj.arrowFinalPosition = 1;
     }
@@ -256,7 +257,7 @@ class BaseEdge extends Edge {
       path: path
     });
     let deg = Math.atan2(vector.y, vector.x) / Math.PI * 180;
-    let arrowObj = ArrowUtil.ARROW_TYPE[this.arrowShapeType];
+    let arrowObj = ArrowUtil.ARROW_TYPE[doubleArrowObj.arrowShapeType];
     let arrowWidth = arrowObj.width || 8;
     let arrowHeight = arrowObj.height || 8;
     if (arrowObj.type === 'pathString') {
@@ -277,17 +278,32 @@ class BaseEdge extends Edge {
     let path1 = this._calcPath(null,null,true);
     let dom1 = this.dom.cloneNode(true);
     dom1.setAttribute('d', path1);
+    let doubleArrowConfig = this.doubleArrowConfig;
     let arrow1 = {
       arrowPosition: 1,
+      arrowOffset: 0,
+      arrowShapeType: 'default',
       arrowDom: doubleArrowDom[0],
       dom: dom1
+    };
+    if (doubleArrowConfig[0]) {
+      arrow1.arrowPosition = 1 - doubleArrowConfig[0].arrowPosition || 1;
+      arrow1.arrowOffset = doubleArrowConfig[0].arrowOffset || 0;
+      arrow1.arrowShapeType = doubleArrowConfig[0].arrowShapeType || 'default';
     }
     this.redrawArrow(path1, arrow1);
     
     let arrow2 = {
       arrowPosition: 1,
+      arrowOffset: 0,
+      arrowShapeType: 'default',
       arrowDom: doubleArrowDom[1],
       dom: this.dom
+    }
+    if (doubleArrowConfig[1]) {
+      arrow2.arrowPosition = doubleArrowConfig[1].arrowPosition || 1;
+      arrow2.arrowOffset = doubleArrowConfig[1].arrowOffset || 0;
+      arrow2.arrowShapeType = doubleArrowConfig[1].arrowShapeType || 'default';
     }
     this.redrawArrow(path, arrow2);
   }

@@ -24,6 +24,9 @@ class Edge extends EventEmit3 {
     // arrowPosition      箭头的位置
     // arrowOffset        箭头起始点
 
+    // 双箭头的配置
+    // doubleArrowConfig: [{arrowPosition, arrowOffset, arrowShapeType}, {arrowPosition, arrowOffset, arrowShapeType}]
+
     // 需要优化的
     // isExpandWidth      拓展线条
     // eventHandlerDom    代替绑定事件的dom

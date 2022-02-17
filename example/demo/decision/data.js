@@ -210,6 +210,14 @@ const data= {
       targetNode: '4',
       type: 'endpoint',
       isDoubleArrow: true,
+      doubleArrowConfig: [
+        {
+          arrowPosition: 0.2
+        },
+        {
+          arrowPosition: 0.8
+        }
+      ],
       arrow: true,
       arrowPosition: 0.5,
       Class: Edge
@@ -244,6 +252,14 @@ const data= {
       targetNode: '5',
       type: 'endpoint',
       isDoubleArrow: true,
+      doubleArrowConfig: [
+        {
+          arrowPosition: 0.1
+        },
+        {
+          arrowPosition: 0.9
+        }
+      ],
       Class: Edge
     },
     {
@@ -292,6 +308,14 @@ const data= {
       targetNode: '10',
       type: 'endpoint',
       isDoubleArrow: true,
+      doubleArrowConfig: [
+        {
+          arrowPosition: 0.2
+        },
+        {
+          arrowPosition: 0.9
+        }
+      ],
       Class: Edge
     },
     {
