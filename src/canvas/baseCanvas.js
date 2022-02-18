@@ -2598,7 +2598,7 @@ class BaseCanvas extends Canvas {
               if (_edge.type === 'node') {
                 _result = targetNode.id === _edge.targetNode.id;
               } else {
-                _result = targetNode.id === _edge.targetNode.id && targetEndpoint.id === _edge.targetEndpoint.id && targetType === _edge.targetEndpoint.nodeType;
+                _result = targetNode.id === _edge.targetNode.id && targetEndpoint.id === _edge.targetEndpoint.id && _targetType === _edge.targetEndpoint.nodeType;
               }
             }
 
