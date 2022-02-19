@@ -209,17 +209,19 @@ const data= {
       sourceNode: '1',
       targetNode: '4',
       type: 'endpoint',
-      isDoubleArrow: true,
-      doubleArrowConfig: [
+      arrow: true,
+      arrowConfig: [
         {
-          arrowPosition: 0.2
+          arrowPosition: 0.2,
+          arrowOrientation: -1
         },
         {
           arrowPosition: 0.8
+        },
+        {
+          arrowPosition: 0.5
         }
       ],
-      arrow: true,
-      arrowPosition: 0.5,
       Class: Edge
     },
     {
@@ -228,9 +230,8 @@ const data= {
       sourceNode: '2',
       targetNode: '4',
       type: 'endpoint',
-      isDoubleArrow: true,
       arrow: true,
-      arrowPosition: 0.5,
+      arrowPosition: 1,
       Class: Edge
     },
     {
@@ -239,9 +240,8 @@ const data= {
       sourceNode: '3',
       targetNode: '4',
       type: 'endpoint',
-      isDoubleArrow: true,
       arrow: true,
-      arrowPosition: 0.5,
+      arrowPosition: 1,
       Class: Edge
     },
     {
@@ -251,10 +251,11 @@ const data= {
       sourceNode: '4',
       targetNode: '5',
       type: 'endpoint',
-      isDoubleArrow: true,
-      doubleArrowConfig: [
+      arrow: true,
+      arrowConfig: [
         {
-          arrowPosition: 0.1
+          arrowPosition: 0.1,
+          arrowOrientation: -1
         },
         {
           arrowPosition: 0.9
@@ -269,7 +270,6 @@ const data= {
       sourceNode: '5',
       targetNode: '6',
       type: 'endpoint',
-      isDoubleArrow: true,
       Class: Edge
     },
     {
@@ -278,7 +278,6 @@ const data= {
       sourceNode: '6',
       targetNode: '7',
       type: 'endpoint',
-      isDoubleArrow: true,
       Class: Edge
     },
     {
@@ -287,7 +286,6 @@ const data= {
       sourceNode: '6',
       targetNode: '8',
       type: 'endpoint',
-      isDoubleArrow: true,
       Class: Edge
     },
     {
@@ -297,7 +295,6 @@ const data= {
       sourceNode: '4',
       targetNode: '9',
       type: 'endpoint',
-      isDoubleArrow: true,
       Class: Edge
     },
     {
@@ -307,15 +304,6 @@ const data= {
       sourceNode: '9',
       targetNode: '10',
       type: 'endpoint',
-      isDoubleArrow: true,
-      doubleArrowConfig: [
-        {
-          arrowPosition: 0.2
-        },
-        {
-          arrowPosition: 0.9
-        }
-      ],
       Class: Edge
     },
     {
@@ -325,7 +313,6 @@ const data= {
       sourceNode: '10',
       targetNode: '11',
       type: 'endpoint',
-      isDoubleArrow: true,
       Class: Edge
     },
     {
@@ -334,7 +321,6 @@ const data= {
       sourceNode: '11',
       targetNode: '12',
       type: 'endpoint',
-      isDoubleArrow: true,
       Class: Edge
     },
   ]

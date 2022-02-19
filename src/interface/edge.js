@@ -23,9 +23,10 @@ class Edge extends EventEmit3 {
     // arrow              是否有箭头
     // arrowPosition      箭头的位置
     // arrowOffset        箭头起始点
+    // arrowOrientation   箭头方向(1表示箭头正方向与线段方向一致，-1表示负方向与线段方向相反)
 
-    // 双箭头的配置
-    // doubleArrowConfig: [{arrowPosition, arrowOffset, arrowShapeType}, {arrowPosition, arrowOffset, arrowShapeType}]
+    // 箭头的配置
+    // arrowConfig: [{arrowPosition, arrowOffset, arrowShapeType, arrowOrientation}, {arrowPosition, arrowOffset, arrowShapeType, arrowOrientation}]
 
     // 需要优化的
     // isExpandWidth      拓展线条

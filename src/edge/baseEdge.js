@@ -24,19 +24,19 @@ class BaseEdge extends Edge {
     this.shapeType = _.get(opts, 'shapeType', 'Straight');
     this.label = _.get(opts, 'label');
     this.arrow = _.get(opts, 'arrow');
+    this.arrowConfig = _.get(opts, 'arrowConfig', []);
     this.arrowShapeType = _.get(opts, 'arrowShapeType', 'default');
     this.arrowPosition = _.get(opts, 'arrowPosition', 0.5);
     this.arrowOffset = _.get(opts, 'arrowOffset', 0),
+    this.arrowOrientation = _.get(opts, 'arrowOrientation', 1);
     this.labelPosition = _.get(opts, 'labelPosition', 0.5);
     this.labelOffset = _.get(opts, 'labelOffset', 0),
     this.isExpandWidth = _.get(opts, 'isExpandWidth', false);
     this.defaultAnimate = _.get(opts, 'defaultAnimate', false);
-    this.isDoubleArrow = _.get(opts, 'isDoubleArrow');
-    this.doubleArrowConfig = _.get(opts, 'doubleArrowConfig', []);
     this.dom = null;
     this.labelDom = null;
+    this.arrowsDom = [];
     this.arrowDom = null;
-    this.doubleArrowDom = [];
     this.eventHandlerDom = null;
     this._hasEventListener = false;
     this._coordinateService = null;
@@ -85,13 +85,14 @@ class BaseEdge extends Edge {
       options: this.options
     });
     this.labelDom = this.drawLabel(this.label);
-    if (!this.isDoubleArrow) {
+    if (this.arrow && this.arrowConfig.length !== 0) {
+      this.arrowsDom = this.arrowConfig.map(() => {
+        return this.drawArrow(true);
+      })
+    } else if (this.arrow && this.arrowConfig.length === 0) {
+      this.arrowsDom = [this.drawArrow(true)];
       this.arrowDom = this.drawArrow(this.arrow);
-    } else {
-      this.doubleArrowDom = [this.drawArrow(true), this.drawArrow(true)];
     }
-
-
     if (!this._hasEventListener) {
       this._addEventListener();
       this._hasEventListener = true;
@@ -113,12 +114,12 @@ class BaseEdge extends Edge {
       this.addAnimate();
     }
   }
-  _calcPath(sourcePoint, targetPoint, isDoubleArrowOne = false) {
+  _calcPath(sourcePoint, targetPoint, isOppositeArrow = false) {
     let sourceEndpoint = this.sourceEndpoint;
     let sourceNode = this.sourceNode;
     let targetEndpoint = this.targetEndpoint;
     let targetNode = this.targetNode;
-    if (isDoubleArrowOne) {
+    if (isOppositeArrow) {
       sourceEndpoint = this.targetEndpoint;
       sourceNode = this.targetNode;
       targetEndpoint = this.sourceEndpoint;
@@ -220,31 +221,31 @@ class BaseEdge extends Edge {
       data: this
     });
   }
-  redrawArrow(path, doubleArrowObj){
-    if (!this.isDoubleArrow || !doubleArrowObj) {
-      doubleArrowObj = this;
+  redrawArrow(path, arrowCon){
+    if (!arrowCon || Object.keys(arrowCon).length === 0) {
+      arrowCon = this;
     }
-    const length = doubleArrowObj.dom.getTotalLength();
+    const length = arrowCon.dom.getTotalLength();
     if(!length) {
       return;
     }
-    doubleArrowObj.arrowFinalPosition = (length * doubleArrowObj.arrowPosition + doubleArrowObj.arrowOffset) / length;
-    if (doubleArrowObj.arrowFinalPosition > 1) {
-      doubleArrowObj.arrowFinalPosition = 1;
+    arrowCon.arrowFinalPosition = (length * arrowCon.arrowPosition + arrowCon.arrowOffset) / length;
+    if (arrowCon.arrowFinalPosition > 1) {
+      arrowCon.arrowFinalPosition = 1;
     }
-    if (doubleArrowObj.arrowFinalPosition < 0) {
-      doubleArrowObj.arrowFinalPosition = 0;
+    if (arrowCon.arrowFinalPosition < 0) {
+      arrowCon.arrowFinalPosition = 0;
     }
     // 防止箭头窜出线条
-    if (1 - doubleArrowObj.arrowFinalPosition < ArrowUtil.ARROW_TYPE.length / length) {
-      doubleArrowObj.arrowFinalPosition = (length * doubleArrowObj.arrowFinalPosition - ArrowUtil.ARROW_TYPE.length) / length;
+    if (1 - arrowCon.arrowFinalPosition < ArrowUtil.ARROW_TYPE.length / length) {
+      arrowCon.arrowFinalPosition = (length * arrowCon.arrowFinalPosition - ArrowUtil.ARROW_TYPE.length) / length;
     }
     // 贝塞尔曲线是反着画的，需要调整
     if (this.shapeType === 'Bezier') {
-      doubleArrowObj.arrowFinalPosition = 1 - doubleArrowObj.arrowFinalPosition;
+      arrowCon.arrowFinalPosition = 1 - arrowCon.arrowFinalPosition;
     }
 
-    let point = doubleArrowObj.dom.getPointAtLength(length * doubleArrowObj.arrowFinalPosition);
+    let point = arrowCon.dom.getPointAtLength(length * arrowCon.arrowFinalPosition);
     let x = point.x;
     let y = point.y;
     let _x = x;
@@ -252,16 +253,16 @@ class BaseEdge extends Edge {
 
     let vector = ArrowUtil.calcSlope({
       shapeType: this.shapeType,
-      dom: doubleArrowObj.dom,
-      arrowPosition: doubleArrowObj.arrowFinalPosition,
+      dom: arrowCon.dom,
+      arrowPosition: arrowCon.arrowFinalPosition,
       path: path
     });
     let deg = Math.atan2(vector.y, vector.x) / Math.PI * 180;
-    let arrowObj = ArrowUtil.ARROW_TYPE[doubleArrowObj.arrowShapeType];
+    let arrowObj = ArrowUtil.ARROW_TYPE[arrowCon.arrowShapeType];
     let arrowWidth = arrowObj.width || 8;
     let arrowHeight = arrowObj.height || 8;
     if (arrowObj.type === 'pathString') {
-      doubleArrowObj.arrowDom.setAttribute('d', arrowObj.content);
+      arrowCon.arrowDom.setAttribute('d', arrowObj.content);
     } else if (arrowObj.type === 'svg') {
       if (vector.x === 0) {
         _y -= arrowHeight / 2;
@@ -270,42 +271,48 @@ class BaseEdge extends Edge {
         _y -= arrowHeight / 2;
       }
     }
-    doubleArrowObj.arrowDom.setAttribute('transform', `rotate(${deg}, ${x}, ${y})translate(${_x}, ${_y})`);
+    arrowCon.arrowDom.setAttribute('transform', `rotate(${deg}, ${x}, ${y})translate(${_x}, ${_y})`);
   }
 
-  redrawDoubleArrow(path) {
-    let doubleArrowDom = this.doubleArrowDom;
-    let path1 = this._calcPath(null,null,true);
-    let dom1 = this.dom.cloneNode(true);
-    dom1.setAttribute('d', path1);
-    let doubleArrowConfig = this.doubleArrowConfig;
-    let arrow1 = {
-      arrowPosition: 1,
+  redrawArrows(path) {
+    let arrowCon = {
+      arrowPosition: 0.5,
       arrowOffset: 0,
       arrowShapeType: 'default',
-      arrowDom: doubleArrowDom[0],
-      dom: dom1
-    };
-    if (doubleArrowConfig[0]) {
-      arrow1.arrowPosition = 1 - doubleArrowConfig[0].arrowPosition || 1;
-      arrow1.arrowOffset = doubleArrowConfig[0].arrowOffset || 0;
-      arrow1.arrowShapeType = doubleArrowConfig[0].arrowShapeType || 'default';
-    }
-    this.redrawArrow(path1, arrow1);
-    
-    let arrow2 = {
-      arrowPosition: 1,
-      arrowOffset: 0,
-      arrowShapeType: 'default',
-      arrowDom: doubleArrowDom[1],
+      arrowOrientation: 1,
+      arrowDom: this.arrowsDom[0],
       dom: this.dom
+    }; 
+    if (this.arrowConfig.length === 0) {
+      arrowCon.arrowPosition = this.arrowPosition || 0.5;
+      arrowCon.arrowOffset = this.arrowOffset || 0;
+      arrowCon.arrowShapeType = this.arrowShapeType || 'default';
+      arrowCon.arrowOrientation = 1;
+      arrowCon.arrowDom = this.arrowsDom[0];
+      arrowCon.dom = this.dom;
+      this.redrawArrow(path, arrowCon);
     }
-    if (doubleArrowConfig[1]) {
-      arrow2.arrowPosition = doubleArrowConfig[1].arrowPosition || 1;
-      arrow2.arrowOffset = doubleArrowConfig[1].arrowOffset || 0;
-      arrow2.arrowShapeType = doubleArrowConfig[1].arrowShapeType || 'default';
-    }
-    this.redrawArrow(path, arrow2);
+    this.arrowConfig.forEach((item, index) => {
+      if (!item.arrowOrientation || item.arrowOrientation !== -1) {
+        arrowCon.arrowPosition = item.arrowPosition || 0.5;
+        arrowCon.arrowOffset = item.arrowOffset || 0;
+        arrowCon.arrowShapeType = item.arrowShapeType || 'default';
+        arrowCon.arrowOrientation = 1;
+        arrowCon.arrowDom = this.arrowsDom[index];
+        arrowCon.dom = this.dom;
+        this.redrawArrow(path, arrowCon);
+      } else if (item.arrowOrientation === -1) {
+        let oppositePath = this._calcPath(null,null,true);
+        let oppositeDom = this.dom.cloneNode(true);
+        oppositeDom.setAttribute('d', oppositePath);
+        arrowCon.arrowPosition = 1 - item.arrowPosition || 0.5;
+        arrowCon.arrowOffset = 1 - item.arrowOffset || 0;
+        arrowCon.arrowShapeType = item.arrowShapeType || 'default';
+        arrowCon.arrowDom = this.arrowsDom[index];
+        arrowCon.dom = oppositeDom;
+        this.redrawArrow(path, arrowCon);
+      }
+    });
   }
   drawArrow(arrow) {
     if (arrow) {
@@ -349,8 +356,8 @@ class BaseEdge extends Edge {
         if (this.arrowDom) {
           this.redrawArrow(_newPath);
         }
-        if (this.doubleArrowDom.length !== 0) {
-          this.redrawDoubleArrow(_newPath);
+        if (this.arrowsDom.length !== 0) {
+          this.redrawArrows(_newPath);
         }
         // 重新计算动画path
         if (this.animateDom) {
@@ -405,6 +412,11 @@ class BaseEdge extends Edge {
     }
     if (this.arrowDom) {
       $(this.arrowDom).remove();
+    }
+    if (this.arrowsDom.length !== 0) {
+      for (let i=0; i<this.arrowsDom.length; i++) {
+        $(this.arrowsDom[i]).remove();
+      }
     }
     if (this.eventHandlerDom) {
       $(this.eventHandlerDom).off();

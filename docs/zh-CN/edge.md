@@ -83,14 +83,13 @@ canvas.addEdge({
 
 ### arrow  _`<Boolean>`_    (选填)
 &nbsp;&nbsp;是否加箭头配置: 默认false
-### isDoubleArrow  _`<Boolean>`_    (选填)
-&nbsp;&nbsp;箭头是否为双箭头
-### doubleArrowConfig  _`<Array>`_    (选填)
-&nbsp;&nbsp;双箭头的配置
+### arrowConfig  _`<Array>`_    (选填)
+&nbsp;&nbsp;箭头的配置
 
 ```js
 [{
   arrowPosition: 0.2,
+  arrowOrientation: -1
   arrowOffset: 20
 },{
   arrowPosition: 0.8,
@@ -101,12 +100,15 @@ canvas.addEdge({
 &nbsp;&nbsp;箭头位置: 取值0-1之间, 0代表代表在线段开始处，1代表在线段结束处。 默认值0.5
 ### arrowOffset  _`<Number>`_   (选填)
 &nbsp;&nbsp;箭头位置的偏移值: 距离线段箭头位置的偏移值。 默认值为0，单位是像素
+### arrowOrientation  _`<Number>`_   (选填)
+&nbsp;&nbsp;箭头方向：1表示与线段相同方向，-1表示与线段相反方向
 
 ```js
 // arrowPosition & arrowOffset: 箭头位置在线段中间处，再往结束方向偏移20px
 {
   arrowPosition: 0.5,
-  arrowOffset: 20
+  arrowOffset: 20,
+  arrowOrientation: 1
 }
 ```
 

@@ -21,7 +21,6 @@ class Scene6New extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          isDoubleArrow: true,
           shapeType: 'AdvancedBezier',
           arrow: true
         }

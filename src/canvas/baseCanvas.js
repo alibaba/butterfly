@@ -51,7 +51,8 @@ class BaseCanvas extends Canvas {
         arrowShapeType: _.get(options, 'theme.edge.arrowShapeType', 'default'),
         arrowPosition: _.get(options, 'theme.edge.arrowPosition'),
         arrowOffset: _.get(options, 'theme.edge.arrowOffset'),
-        doubleArrowConfig: _.get(options, 'theme.edge.doubleArrowConfig', []),
+        arrowOrientation: _.get(options, 'theme.edge.arrowOrientation', 1),
+        arrowConfig: _.get(options, 'theme.edge.arrowConfig', []),
         draggable: _.get(options, 'theme.edge.draggable'),
         label: _.get(options, 'theme.edge.label'),
         labelPosition: _.get(options, 'theme.edge.labelPosition'),
@@ -59,8 +60,7 @@ class BaseCanvas extends Canvas {
         isRepeat: _.get(options, 'theme.edge.isRepeat') || false,
         isLinkMyself: _.get(options, 'theme.edge.isLinkMyself') || false,
         isExpandWidth: _.get(options, 'theme.edge.isExpandWidth') || false,
-        defaultAnimate: _.get(options, 'theme.edge.defaultAnimate') || false,
-        isDoubleArrow: _.get(options, 'theme.edge.isDoubleArrow') || false
+        defaultAnimate: _.get(options, 'theme.edge.defaultAnimate') || false
       },
       endpoint: {
         // 暂时不支持position
@@ -864,13 +864,13 @@ class BaseCanvas extends Canvas {
                   arrowShapeType: this.theme.edge.arrowShapeType,
                   arrowPosition: this.theme.edge.arrowPosition,
                   arrowOffset: this.theme.edge.arrowOffset,
-                  doubleArrowConfig: this.theme.edge.doubleArrowConfig,
+                  arrowOrientation: this.theme.edge.arrowOrientation,
+                  arrowConfig: this.theme.edge.arrowConfig,
                   draggable: this.theme.edge.draggable,
                   label: this.theme.edge.label,
                   labelPosition: this.theme.edge.labelPosition,
                   labelOffset: this.theme.edge.labelOffset,
-                  isExpandWidth: this.theme.edge.isExpandWidth,
-                  isDoubleArrow: this.theme.edge.isDoubleArrow
+                  isExpandWidth: this.theme.edge.isExpandWidth
                 };
                 pointObj['options'] = _.assign({}, pointObj, {
                   sourceNode: _sourceNode.id,
@@ -899,9 +899,9 @@ class BaseCanvas extends Canvas {
                 if (_newEdge.arrowDom) {
                   $(this.svg).append(_newEdge.arrowDom);
                 }
-                if (_newEdge.doubleArrowDom.length !== 0) {
-                  for (let i = 0; i < _newEdge.doubleArrowDom.length; i++) {
-                    $(this.svg).append((_newEdge.doubleArrowDom)[i]);
+                if (_newEdge.arrowsDom.length !== 0) {
+                  for (let i = 0; i < _newEdge.arrowsDom.length; i++) {
+                    $(this.svg).append((_newEdge.arrowsDom)[i]);
                   }
                 }
                 edges.push(_newEdge);
@@ -2414,9 +2414,9 @@ class BaseCanvas extends Canvas {
           _edgeFragment.appendChild(link.arrowDom);
         }
 
-        if (link.doubleArrowDom.length !== 0) {
-          for (let i = 0; i < link.doubleArrowDom.length; i++) {
-            _edgeFragment.appendChild((link.doubleArrowDom)[i]);
+        if (link.arrowsDom.length !== 0) {
+          for (let i = 0; i < link.arrowsDom.length; i++) {
+            _edgeFragment.appendChild((link.arrowsDom)[i]);
           }
         }
 
@@ -2533,12 +2533,12 @@ class BaseCanvas extends Canvas {
           targetNode,
           sourceEndpoint,
           targetEndpoint,
-          isDoubleArrow: link.isDoubleArrow === undefined ? _.get(this, 'theme.edge.isDoubleArrow') : link.isDoubleArrow,
           arrow: link.arrow === undefined ? _.get(this, 'theme.edge.arrow') : link.arrow,
           arrowShapeType: link.arrowShapeType === undefined ? _.get(this, 'theme.edge.arrowShapeType') : link.arrowShapeType,
           arrowPosition: link.arrowPosition === undefined ? _.get(this, 'theme.edge.arrowPosition') : link.arrowPosition,
           arrowOffset: link.arrowOffset === undefined ? _.get(this, 'theme.edge.arrowOffset') : link.arrowOffset,
-          doubleArrowConfig: link.doubleArrowConfig === undefined ? _.get(this, 'theme.edge.doubleArrowConfig') : link.doubleArrowConfig,
+          arrowOrientation: link.arrowOrientation === undefined ? _.get(this, 'theme.edge.arrowOrientation') : link.arrowOrientation,
+          arrowConfig: link.arrowConfig === undefined ? _.get(this, 'theme.edge.arrowConfig') : link.arrowConfig,
           draggable: link.draggable === undefined ? _.get(this, 'theme.edge.draggable') : link.draggable,
           labelPosition: link.labelPosition === undefined ? _.get(this, 'theme.edge.labelPosition') : link.labelPosition,
           labelOffset: link.labelOffset === undefined ? _.get(this, 'theme.edge.labelOffset') : link.labelOffset,
@@ -2565,9 +2565,9 @@ class BaseCanvas extends Canvas {
           _edgeFragment.appendChild(edge.arrowDom);
         }
 
-        if (edge.doubleArrowDom.length !== 0) {
-          for (let i=0; i < edge.doubleArrowDom.length; i++) {
-            _edgeFragment.appendChild((edge.doubleArrowDom)[i]);
+        if (edge.arrowsDom.length !== 0) {
+          for (let i=0; i < edge.arrowsDom.length; i++) {
+            _edgeFragment.appendChild((edge.arrowsDom)[i]);
           }
         }
 
@@ -2606,12 +2606,11 @@ class BaseCanvas extends Canvas {
           type: link.type || this.theme.edge.type,
           shapeType: link.shapeType || this.theme.edge.shapeType,
           orientationLimit: this.theme.endpoint.position,
-          isDoubleArrow: link.isDoubleArrow === undefined ? _.get(this, 'theme.edge.isDoubleArrow') : link.isDoubleArrow,
           arrow: link.arrow === undefined ? _.get(this, 'theme.edge.arrow') : link.arrow,
           arrowShapeType: link.arrowShapeType === undefined ? _.get(this, 'theme.edge.arrowShapeType') : link.arrowShapeType,
           arrowPosition: link.arrowPosition === undefined ? _.get(this, 'theme.edge.arrowPosition') : link.arrowPosition,
           arrowOffset: link.arrowOffset === undefined ? _.get(this, 'theme.edge.arrowOffset') : link.arrowOffset,
-          doubleArrowConfig: link.doubleArrowConfig === undefined ? _.get(this, 'theme.edge.doubleArrowConfig') : link.doubleArrowConfig,
+          arrowConfig: link.arrowConfig === undefined ? _.get(this, 'theme.edge.arrowConfig') : link.arrowConfig,
           draggable: link.draggable === undefined ? _.get(this, 'theme.edge.draggable') : link.draggable,
           labelPosition: link.labelPosition === undefined ? _.get(this, 'theme.edge.labelPosition') : link.labelPosition,
           labelOffset: link.labelOffset === undefined ? _.get(this, 'theme.edge.labelOffset') : link.labelOffset,
@@ -2636,9 +2635,9 @@ class BaseCanvas extends Canvas {
           _edgeFragment.appendChild(edge.arrowDom);
         }
 
-        if (edge.doubleArrowDom.length !== 0) {
-          for (let i=0; i < edge.doubleArrowDom.length; i++) {
-            _edgeFragment.appendChild((edge.doubleArrowDom)[i]);
+        if (edge.arrowsDom.length !== 0) {
+          for (let i=0; i < edge.arrowsDom.length; i++) {
+            _edgeFragment.appendChild((edge.arrowsDom)[i]);
           }
         }
 
