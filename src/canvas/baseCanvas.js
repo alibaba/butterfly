@@ -2853,6 +2853,9 @@ class BaseCanvas extends Canvas {
     result.forEach((_rmEdge) => {
       if (_.get(_rmEdge, 'sourceEndpoint._tmpType') === 'source') {
         let isExistEdge = _.some(this.edges, (edge) => {
+          if (edge.type !== _rmEdge.type) {
+            return false;
+          }
           if (edge.type === 'node') {
             return _rmEdge.sourceNode.id === edge.sourceNode.id;
           } else {
@@ -2863,6 +2866,9 @@ class BaseCanvas extends Canvas {
       }
       if (_.get(_rmEdge, 'targetEndpoint._tmpType') === 'target') {
         let isExistEdge = _.some(this.edges, (edge) => {
+          if (edge.type !== _rmEdge.type) {
+            return false;
+          }
           if (edge.type === 'node') {
             return _rmEdge.targetNode.id === edge.targetNode.id;
           } else {
