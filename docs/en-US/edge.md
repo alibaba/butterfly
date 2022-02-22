@@ -11,8 +11,16 @@ canvas.draw({
     targetNode: 'node_2',
     type: 'endpoint',
     arrow: true,
-    arrowPosition: 0.5,
-    arrowOffset: 0,  // final position of the arrow：lineLength * arrowPosition + arrowOffset
+    arrowConfig: [
+      {
+        arrowPosition: 0.2,
+        arrowOffset: 0,  // final position of the arrow：lineLength * arrowPosition + arrowOffset
+        arrowOrientation: -1
+      },
+      {
+        arrowPosition: 0.8
+      }
+    ],
     label: 'I am label'   //Here you can also pass dom, of course, you can also extend the parent class's drawLabel to customize the label.
   }],
   groups: ...
@@ -81,36 +89,31 @@ canvas.addEdge({
 
 ### arrow  _`<Boolean>`_    (Optional)
 &nbsp;&nbsp;whether to add arrow configuration: Default value `false`
-### arrowPosition  _`<Number>`_   (Optional)
-&nbsp;&nbsp;arrow position: value between 0-1, 0 represents the beginning of the edge, and 1 represents the end of the edge. Default value `0.5`
-### arrowOffset  _`<Number>`_   (Optional)
-&nbsp;&nbsp;the position offset of arrow: the offset value from the arrow position of edge. The default value is 0, and the unit is `px`
+### arrowConfig  _`<Array>`_    (选填)
+&nbsp;&nbsp;箭头的配置
 
 ```js
-// arrowPosition & arrowOffset: the arrow position is in the middle of edge，offset 20px to the end
-{
-  arrowPosition: 0.5,
-  arrowOffset: 20
-}
-```
-
-### arrowShapeType _`<String>`_   (Optional)
-&nbsp;&nbsp;arrow shape type: You can use the system integrated arrow or self-registered arrow, only need to ensure that the shape type corresponds.
-
-```js
-// self-registered arrow
-import {Arrow} from 'butterfly-dag';
-Arrow.registerArrow([{
-  key: 'yourArrow1',
-  type: 'svg',
-  width: 10,   // Optional, default 8px
-  height: 10,  // Optional, default 8px
-  content: require('/your_fold/your_arrow.svg') // Reference external svg
-}, {
-  key: 'yourArrow1',
-  type: 'pathString',
-  content: 'M5 0 L0 -2 Q 1.0 0 0 2 Z' // `d` attribute of path
-}]);
+[{
+  arrowPosition: 0.2, //arrow position: value between 0-1, 0 represents the beginning of the edge, and 1 represents the end of the edge. Default value `0.5`
+  arrowOrientation: -1, //arrow direction: 1 indicates the same direction as the line segment, -1 indicates the opposite direction to the line segment. Default value of 1
+  arrowOffset: 20, //the position offset of arrow: the offset value from the arrow position of edge. The default value is 0, and the unit is `px`
+  arrowShapeType: {
+    key: 'yourArrow1',
+    type: 'svg',
+    width: 10,   // Optional, default 8px
+    height: 10,  // Optional, default 8px
+    content: require('/your_fold/your_arrow.svg') // Reference external svg
+  } // arrow shape type: You can use the system integrated arrow or self-registered arrow, only need to ensure that the shape type corresponds.
+},{
+  arrowPosition: 0.8,
+  arrowOrientation: 1,
+  arrowOffset: 20,
+  arrowShapeType: {
+    key: 'yourArrow1',
+    type: 'pathString',
+    content: 'M5 0 L0 -2 Q 1.0 0 0 2 Z' // `d` attribute of path
+  }
+}]
 ```
 
 ### [Manhattan]draggable  _`<Number>`_   (Optional)

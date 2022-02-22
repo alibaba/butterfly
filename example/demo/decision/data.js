@@ -231,7 +231,11 @@ const data= {
       targetNode: '4',
       type: 'endpoint',
       arrow: true,
-      arrowPosition: 1,
+      arrowConfig: [
+        {
+          arrowPosition: 1
+        }
+      ],
       Class: Edge
     },
     {
@@ -241,7 +245,11 @@ const data= {
       targetNode: '4',
       type: 'endpoint',
       arrow: true,
-      arrowPosition: 1,
+      arrowConfig: [
+        {
+          arrowPosition: 1
+        }
+      ],
       Class: Edge
     },
     {
