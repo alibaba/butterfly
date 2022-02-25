@@ -1163,7 +1163,7 @@ class BaseCanvas extends Canvas {
                   }
                 }
 
-                if (_targetEndpoint.nodeId) {
+                if (_result && _targetEndpoint.nodeId) {
                   if (_edge.type === 'node') {
                     _result = _result && (_.get(edge, 'targetNode.id') === _.get(_edge, 'targetNode.id'));
                   } else {
@@ -2594,7 +2594,7 @@ class BaseCanvas extends Canvas {
               }
             }
 
-            if (targetNode) {
+            if (_result && targetNode) {
               if (_edge.type === 'node') {
                 _result = targetNode.id === _edge.targetNode.id;
               } else {
