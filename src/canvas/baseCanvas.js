@@ -1570,7 +1570,7 @@ class BaseCanvas extends Canvas {
       if (!toDom) {
         return;
       }
-      let toDomClassName = toDom.className;
+      let toDomClassName = _.get(toDom, 'className');
       if (toDomClassName && toDomClassName.indexOf('butterfly-tooltip') === -1) {
         mouseLeaveEvent();
       }
