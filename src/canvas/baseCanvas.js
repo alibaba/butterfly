@@ -1571,7 +1571,7 @@ class BaseCanvas extends Canvas {
         return;
       }
       let toDomClassName = _.get(toDom, 'className');
-      if (toDomClassName && toDomClassName.indexOf('butterfly-tooltip') === -1) {
+      if (toDomClassName && (typeof toDomClassName === 'string') && toDomClassName.indexOf('butterfly-tooltip') === -1) {
         mouseLeaveEvent();
       }
     });
