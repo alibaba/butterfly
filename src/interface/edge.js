@@ -16,12 +16,17 @@ class Edge extends EventEmit3 {
     // dom                线条dom
     // labelDom           label的dom
     // arrowDom           箭头的dom
+    // isDoubleArrow      是否开启双箭头
 
     
     // 箭头部分看看需要优化不？
     // arrow              是否有箭头
     // arrowPosition      箭头的位置
     // arrowOffset        箭头起始点
+    // arrowOrientation   箭头方向(1表示箭头正方向与线段方向一致，-1表示负方向与线段方向相反)
+
+    // 箭头的配置
+    // arrowConfig: [{arrowPosition, arrowOffset, arrowShapeType, arrowOrientation}, {arrowPosition, arrowOffset, arrowShapeType, arrowOrientation}]
 
     // 需要优化的
     // isExpandWidth      拓展线条
@@ -55,6 +60,9 @@ class Edge extends EventEmit3 {
 
   // 重回arrow
   redrawArrow() {}
+
+   // 重渲染双箭头
+  redrawDoubleArrow() {}
 
   // 判断是否能连接的方法
   isConnect() {}

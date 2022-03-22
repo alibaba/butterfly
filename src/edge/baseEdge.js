@@ -24,15 +24,18 @@ class BaseEdge extends Edge {
     this.shapeType = _.get(opts, 'shapeType', 'Straight');
     this.label = _.get(opts, 'label');
     this.arrow = _.get(opts, 'arrow');
+    this.arrowConfig = _.get(opts, 'arrowConfig', []);
     this.arrowShapeType = _.get(opts, 'arrowShapeType', 'default');
     this.arrowPosition = _.get(opts, 'arrowPosition', 0.5);
     this.arrowOffset = _.get(opts, 'arrowOffset', 0),
+    this.arrowOrientation = _.get(opts, 'arrowOrientation', 1);
     this.labelPosition = _.get(opts, 'labelPosition', 0.5);
     this.labelOffset = _.get(opts, 'labelOffset', 0),
     this.isExpandWidth = _.get(opts, 'isExpandWidth', false);
     this.defaultAnimate = _.get(opts, 'defaultAnimate', false);
     this.dom = null;
     this.labelDom = null;
+    this.arrowsDom = [];
     this.arrowDom = null;
     this.eventHandlerDom = null;
     this._hasEventListener = false;
@@ -82,8 +85,14 @@ class BaseEdge extends Edge {
       options: this.options
     });
     this.labelDom = this.drawLabel(this.label);
-    this.arrowDom = this.drawArrow(this.arrow);
-
+    if (this.arrow && this.arrowConfig.length !== 0) {
+      this.arrowsDom = this.arrowConfig.map(() => {
+        return this.drawArrow(true);
+      })
+    } else if (this.arrow && this.arrowConfig.length === 0) {
+      this.arrowsDom = [this.drawArrow(true)];
+      this.arrowDom = this.drawArrow(this.arrow);
+    }
     if (!this._hasEventListener) {
       this._addEventListener();
       this._hasEventListener = true;
@@ -105,16 +114,26 @@ class BaseEdge extends Edge {
       this.addAnimate();
     }
   }
-  _calcPath(sourcePoint, targetPoint) {
+  _calcPath(sourcePoint, targetPoint, isOppositeArrow = false) {
+    let sourceEndpoint = this.sourceEndpoint;
+    let sourceNode = this.sourceNode;
+    let targetEndpoint = this.targetEndpoint;
+    let targetNode = this.targetNode;
+    if (isOppositeArrow) {
+      sourceEndpoint = this.targetEndpoint;
+      sourceNode = this.targetNode;
+      targetEndpoint = this.sourceEndpoint;
+      targetNode = this.targetNode;
+    }
     if (!sourcePoint) {
       sourcePoint = {
         pos: [
           // this.type === 'endpoint' ? this.sourceEndpoint._posLeft + this.sourceEndpoint._width / 2 : this.sourceNode.left + this.sourceNode.dom.offsetWidth / 2,
           // this.type === 'endpoint' ? this.sourceEndpoint._posTop + this.sourceEndpoint._height / 2 : this.sourceNode.top + this.sourceNode.dom.offsetHeight / 2
-          this.type === 'endpoint' ? this.sourceEndpoint._posLeft + this.sourceEndpoint._width / 2 : this.sourceNode.left + this.sourceNode.getWidth(true) / 2,
-          this.type === 'endpoint' ? this.sourceEndpoint._posTop + this.sourceEndpoint._height / 2 : this.sourceNode.top + this.sourceNode.getHeight(true) / 2
+          this.type === 'endpoint' ? sourceEndpoint._posLeft + sourceEndpoint._width / 2 : sourceNode.left + sourceNode.getWidth(true) / 2,
+          this.type === 'endpoint' ? sourceEndpoint._posTop + sourceEndpoint._height / 2 : sourceNode.top + sourceNode.getHeight(true) / 2
         ],
-        orientation: (this.type === 'endpoint' && this.sourceEndpoint.orientation) ? this.sourceEndpoint.orientation : undefined
+        orientation: (this.type === 'endpoint' && sourceEndpoint.orientation) ? sourceEndpoint.orientation : undefined
       };
     }
 
@@ -123,10 +142,10 @@ class BaseEdge extends Edge {
         pos: [
           // this.type === 'endpoint' ? this.targetEndpoint._posLeft + this.targetEndpoint._width / 2 : this.targetNode.left + this.targetNode.dom.offsetWidth / 2,
           // this.type === 'endpoint' ? this.targetEndpoint._posTop + this.targetEndpoint._height / 2 : this.targetNode.top + this.targetNode.dom.offsetHeight / 2
-          this.type === 'endpoint' ? this.targetEndpoint._posLeft + this.targetEndpoint._width / 2 : this.targetNode.left + this.targetNode.getWidth(true) / 2,
-          this.type === 'endpoint' ? this.targetEndpoint._posTop + this.targetEndpoint._height / 2 : this.targetNode.top + this.targetNode.getHeight(true) / 2
+          this.type === 'endpoint' ? targetEndpoint._posLeft + targetEndpoint._width / 2 : targetNode.left + targetNode.getWidth(true) / 2,
+          this.type === 'endpoint' ? targetEndpoint._posTop + targetEndpoint._height / 2 : targetNode.top + targetNode.getHeight(true) / 2
         ],
-        orientation: (this.type === 'endpoint' && this.targetEndpoint.orientation) ? this.targetEndpoint.orientation : undefined
+        orientation: (this.type === 'endpoint' && targetEndpoint.orientation) ? targetEndpoint.orientation : undefined
       };
     }
     this._sourcePoint = sourcePoint;
@@ -202,28 +221,31 @@ class BaseEdge extends Edge {
       data: this
     });
   }
-  redrawArrow(path) {
-    const length = this.dom.getTotalLength();
+  redrawArrow(path, arrowCon){
+    if (!arrowCon || Object.keys(arrowCon).length === 0) {
+      arrowCon = this;
+    }
+    const length = arrowCon.dom.getTotalLength();
     if(!length) {
       return;
     }
-    this.arrowFinalPosition = (length * this.arrowPosition + this.arrowOffset) / length;
-    if (this.arrowFinalPosition > 1) {
-      this.arrowFinalPosition = 1;
+    arrowCon.arrowFinalPosition = (length * arrowCon.arrowPosition + arrowCon.arrowOffset) / length;
+    if (arrowCon.arrowFinalPosition > 1) {
+      arrowCon.arrowFinalPosition = 1;
     }
-    if (this.arrowFinalPosition < 0) {
-      this.arrowFinalPosition = 0;
+    if (arrowCon.arrowFinalPosition < 0) {
+      arrowCon.arrowFinalPosition = 0;
     }
     // 防止箭头窜出线条
-    if (1 - this.arrowFinalPosition < ArrowUtil.ARROW_TYPE.length / length) {
-      this.arrowFinalPosition = (length * this.arrowFinalPosition - ArrowUtil.ARROW_TYPE.length) / length;
+    if (1 - arrowCon.arrowFinalPosition < ArrowUtil.ARROW_TYPE.length / length) {
+      arrowCon.arrowFinalPosition = (length * arrowCon.arrowFinalPosition - ArrowUtil.ARROW_TYPE.length) / length;
     }
     // 贝塞尔曲线是反着画的，需要调整
     if (this.shapeType === 'Bezier') {
-      this.arrowFinalPosition = 1 - this.arrowFinalPosition;
+      arrowCon.arrowFinalPosition = 1 - arrowCon.arrowFinalPosition;
     }
 
-    let point = this.dom.getPointAtLength(length * this.arrowFinalPosition);
+    let point = arrowCon.dom.getPointAtLength(length * arrowCon.arrowFinalPosition);
     let x = point.x;
     let y = point.y;
     let _x = x;
@@ -231,16 +253,16 @@ class BaseEdge extends Edge {
 
     let vector = ArrowUtil.calcSlope({
       shapeType: this.shapeType,
-      dom: this.dom,
-      arrowPosition: this.arrowFinalPosition,
+      dom: arrowCon.dom,
+      arrowPosition: arrowCon.arrowFinalPosition,
       path: path
     });
     let deg = Math.atan2(vector.y, vector.x) / Math.PI * 180;
-    let arrowObj = ArrowUtil.ARROW_TYPE[this.arrowShapeType];
+    let arrowObj = ArrowUtil.ARROW_TYPE[arrowCon.arrowShapeType];
     let arrowWidth = arrowObj.width || 8;
     let arrowHeight = arrowObj.height || 8;
     if (arrowObj.type === 'pathString') {
-      this.arrowDom.setAttribute('d', arrowObj.content);
+      arrowCon.arrowDom.setAttribute('d', arrowObj.content);
     } else if (arrowObj.type === 'svg') {
       if (vector.x === 0) {
         _y -= arrowHeight / 2;
@@ -249,7 +271,48 @@ class BaseEdge extends Edge {
         _y -= arrowHeight / 2;
       }
     }
-    this.arrowDom.setAttribute('transform', `rotate(${deg}, ${x}, ${y})translate(${_x}, ${_y})`);
+    arrowCon.arrowDom.setAttribute('transform', `rotate(${deg}, ${x}, ${y})translate(${_x}, ${_y})`);
+  }
+
+  redrawArrows(path) {
+    let arrowCon = {
+      arrowPosition: 0.5,
+      arrowOffset: 0,
+      arrowShapeType: 'default',
+      arrowOrientation: 1,
+      arrowDom: this.arrowsDom[0],
+      dom: this.dom
+    }; 
+    if (this.arrowConfig.length === 0) {
+      arrowCon.arrowPosition = this.arrowPosition || 0.5;
+      arrowCon.arrowOffset = this.arrowOffset || 0;
+      arrowCon.arrowShapeType = this.arrowShapeType || 'default';
+      arrowCon.arrowOrientation = 1;
+      arrowCon.arrowDom = this.arrowsDom[0];
+      arrowCon.dom = this.dom;
+      this.redrawArrow(path, arrowCon);
+    }
+    this.arrowConfig.forEach((item, index) => {
+      if (!item.arrowOrientation || item.arrowOrientation !== -1) {
+        arrowCon.arrowPosition = item.arrowPosition || 0.5;
+        arrowCon.arrowOffset = item.arrowOffset || 0;
+        arrowCon.arrowShapeType = item.arrowShapeType || 'default';
+        arrowCon.arrowOrientation = 1;
+        arrowCon.arrowDom = this.arrowsDom[index];
+        arrowCon.dom = this.dom;
+        this.redrawArrow(path, arrowCon);
+      } else if (item.arrowOrientation === -1) {
+        let oppositePath = this._calcPath(null,null,true);
+        let oppositeDom = this.dom.cloneNode(true);
+        oppositeDom.setAttribute('d', oppositePath);
+        arrowCon.arrowPosition = 1 - item.arrowPosition || 0.5;
+        arrowCon.arrowOffset = 1 - item.arrowOffset || 0;
+        arrowCon.arrowShapeType = item.arrowShapeType || 'default';
+        arrowCon.arrowDom = this.arrowsDom[index];
+        arrowCon.dom = oppositeDom;
+        this.redrawArrow(path, arrowCon);
+      }
+    });
   }
   drawArrow(arrow) {
     if (arrow) {
@@ -292,6 +355,9 @@ class BaseEdge extends Edge {
         // 重新计算arrow
         if (this.arrowDom) {
           this.redrawArrow(_newPath);
+        }
+        if (this.arrowsDom.length !== 0) {
+          this.redrawArrows(_newPath);
         }
         // 重新计算动画path
         if (this.animateDom) {
@@ -346,6 +412,11 @@ class BaseEdge extends Edge {
     }
     if (this.arrowDom) {
       $(this.arrowDom).remove();
+    }
+    if (this.arrowsDom.length !== 0) {
+      for (let i=0; i<this.arrowsDom.length; i++) {
+        $(this.arrowsDom[i]).remove();
+      }
     }
     if (this.eventHandlerDom) {
       $(this.eventHandlerDom).off();

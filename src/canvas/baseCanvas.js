@@ -51,6 +51,8 @@ class BaseCanvas extends Canvas {
         arrowShapeType: _.get(options, 'theme.edge.arrowShapeType', 'default'),
         arrowPosition: _.get(options, 'theme.edge.arrowPosition'),
         arrowOffset: _.get(options, 'theme.edge.arrowOffset'),
+        arrowOrientation: _.get(options, 'theme.edge.arrowOrientation', 1),
+        arrowConfig: _.get(options, 'theme.edge.arrowConfig', []),
         draggable: _.get(options, 'theme.edge.draggable'),
         label: _.get(options, 'theme.edge.label'),
         labelPosition: _.get(options, 'theme.edge.labelPosition'),
@@ -58,7 +60,7 @@ class BaseCanvas extends Canvas {
         isRepeat: _.get(options, 'theme.edge.isRepeat') || false,
         isLinkMyself: _.get(options, 'theme.edge.isLinkMyself') || false,
         isExpandWidth: _.get(options, 'theme.edge.isExpandWidth') || false,
-        defaultAnimate: _.get(options, 'theme.edge.defaultAnimate') || false,
+        defaultAnimate: _.get(options, 'theme.edge.defaultAnimate') || false
       },
       endpoint: {
         // 暂时不支持position
@@ -862,6 +864,8 @@ class BaseCanvas extends Canvas {
                   arrowShapeType: this.theme.edge.arrowShapeType,
                   arrowPosition: this.theme.edge.arrowPosition,
                   arrowOffset: this.theme.edge.arrowOffset,
+                  arrowOrientation: this.theme.edge.arrowOrientation,
+                  arrowConfig: this.theme.edge.arrowConfig,
                   draggable: this.theme.edge.draggable,
                   label: this.theme.edge.label,
                   labelPosition: this.theme.edge.labelPosition,
@@ -894,6 +898,11 @@ class BaseCanvas extends Canvas {
                 }
                 if (_newEdge.arrowDom) {
                   $(this.svg).append(_newEdge.arrowDom);
+                }
+                if (_newEdge.arrowsDom.length !== 0) {
+                  for (let i = 0; i < _newEdge.arrowsDom.length; i++) {
+                    $(this.svg).append((_newEdge.arrowsDom)[i]);
+                  }
                 }
                 edges.push(_newEdge);
               });
@@ -2405,6 +2414,12 @@ class BaseCanvas extends Canvas {
           _edgeFragment.appendChild(link.arrowDom);
         }
 
+        if (link.arrowsDom.length !== 0) {
+          for (let i = 0; i < link.arrowsDom.length; i++) {
+            _edgeFragment.appendChild((link.arrowsDom)[i]);
+          }
+        }
+
         this.edges.push(link);
 
         link.mounted && link.mounted();
@@ -2522,6 +2537,8 @@ class BaseCanvas extends Canvas {
           arrowShapeType: link.arrowShapeType === undefined ? _.get(this, 'theme.edge.arrowShapeType') : link.arrowShapeType,
           arrowPosition: link.arrowPosition === undefined ? _.get(this, 'theme.edge.arrowPosition') : link.arrowPosition,
           arrowOffset: link.arrowOffset === undefined ? _.get(this, 'theme.edge.arrowOffset') : link.arrowOffset,
+          arrowOrientation: link.arrowOrientation === undefined ? _.get(this, 'theme.edge.arrowOrientation') : link.arrowOrientation,
+          arrowConfig: link.arrowConfig === undefined ? _.get(this, 'theme.edge.arrowConfig') : link.arrowConfig,
           draggable: link.draggable === undefined ? _.get(this, 'theme.edge.draggable') : link.draggable,
           labelPosition: link.labelPosition === undefined ? _.get(this, 'theme.edge.labelPosition') : link.labelPosition,
           labelOffset: link.labelOffset === undefined ? _.get(this, 'theme.edge.labelOffset') : link.labelOffset,
@@ -2547,6 +2564,13 @@ class BaseCanvas extends Canvas {
         if (edge.arrowDom) {
           _edgeFragment.appendChild(edge.arrowDom);
         }
+
+        if (edge.arrowsDom.length !== 0) {
+          for (let i=0; i < edge.arrowsDom.length; i++) {
+            _edgeFragment.appendChild((edge.arrowsDom)[i]);
+          }
+        }
+
 
         this.edges.push(edge);
 
@@ -2586,6 +2610,7 @@ class BaseCanvas extends Canvas {
           arrowShapeType: link.arrowShapeType === undefined ? _.get(this, 'theme.edge.arrowShapeType') : link.arrowShapeType,
           arrowPosition: link.arrowPosition === undefined ? _.get(this, 'theme.edge.arrowPosition') : link.arrowPosition,
           arrowOffset: link.arrowOffset === undefined ? _.get(this, 'theme.edge.arrowOffset') : link.arrowOffset,
+          arrowConfig: link.arrowConfig === undefined ? _.get(this, 'theme.edge.arrowConfig') : link.arrowConfig,
           draggable: link.draggable === undefined ? _.get(this, 'theme.edge.draggable') : link.draggable,
           labelPosition: link.labelPosition === undefined ? _.get(this, 'theme.edge.labelPosition') : link.labelPosition,
           labelOffset: link.labelOffset === undefined ? _.get(this, 'theme.edge.labelOffset') : link.labelOffset,
@@ -2608,6 +2633,12 @@ class BaseCanvas extends Canvas {
 
         if (edge.arrowDom) {
           _edgeFragment.appendChild(edge.arrowDom);
+        }
+
+        if (edge.arrowsDom.length !== 0) {
+          for (let i=0; i < edge.arrowsDom.length; i++) {
+            _edgeFragment.appendChild((edge.arrowsDom)[i]);
+          }
         }
 
         this.edges.push(edge);

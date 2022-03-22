@@ -12,8 +12,16 @@ canvas.draw({
     targetNode: 'node_2',
     type: 'endpoint',
     arrow: true,
-    arrowPosition: 0.5,
-    arrowOffset: 0,  // 箭头的最终位置：线条长度 * arrowPosition + arrowOffset
+    arrowConfig: [
+      {
+        arrowPosition: 0.2,
+        arrowOffset: 0,  // 箭头的最终位置：线条长度 * arrowPosition + arrowOffset
+        arrowOrientation: -1
+      },
+      {
+        arrowPosition: 0.8
+      }
+    ],
     label: 'I am label'   //这里也可以传dom，当然也可以拓展父类的drawLabel来自定义label
   }],
   groups: ...
@@ -65,7 +73,7 @@ canvas.addEdge({
 ### orientationLimit  _`<Array>`_    (选填)
 &nbsp;&nbsp;线条进出口的位置限制: Left / Right / Top / Bottom
 ### shapeType  _`<String>`_    (选填)
-&nbsp;&nbsp;线条的类型: Bezier/Flow/Straight/Manhattan/AdvancedBezier
+&nbsp;&nbsp;线条的类型: Bezier/Flow/Straight/Manhattan/AdvancedBezier/Bezier2-1/Bezier2-2/Bezier2-3/BrokenLine
 ### label  _`<String/Dom>`_   (选填)
 &nbsp;&nbsp;线条上注释: 可传字符串和dom
 ### labelPosition  _`<Number>`_   (选填)
@@ -83,36 +91,31 @@ canvas.addEdge({
 
 ### arrow  _`<Boolean>`_    (选填)
 &nbsp;&nbsp;是否加箭头配置: 默认false
-### arrowPosition  _`<Number>`_   (选填)
-&nbsp;&nbsp;箭头位置: 取值0-1之间, 0代表代表在线段开始处，1代表在线段结束处。 默认值0.5
-### arrowOffset  _`<Number>`_   (选填)
-&nbsp;&nbsp;箭头位置的偏移值: 距离线段箭头位置的偏移值。 默认值为0，单位是像素
+### arrowConfig  _`<Array>`_    (选填)
+&nbsp;&nbsp;箭头的配置
 
 ```js
-// arrowPosition & arrowOffset: 箭头位置在线段中间处，再往结束方向偏移20px
-{
-  arrowPosition: 0.5,
-  arrowOffset: 20
-}
-```
-
-### arrowShapeType _`<String>`_   (选填)
-&nbsp;&nbsp;箭头样式类型: 可使用系统集成的和可使用自己注册的，只需要保证类型对应即可。
-
-```js
-// 自行注册的
-import {Arrow} from 'butterfly-dag';
-Arrow.registerArrow([{
-  key: 'yourArrow1',
-  type: 'svg',
-  width: 10,   // 选填，默认8px
-  height: 10,  // 选填，默认8px
-  content: require('/your_fold/your_arrow.svg') // 引用外部svg
-}, {
-  key: 'yourArrow1',
-  type: 'pathString',
-  content: 'M5 0 L0 -2 Q 1.0 0 0 2 Z' // path的d属性
-}]);
+[{
+  arrowPosition: 0.2, //箭头位置: 取值0-1之间, 0代表代表在线段开始处，1代表在线段结束处。 默认值0.5
+  arrowOrientation: -1, //箭头方向：1表示与线段相同方向，-1表示与线段相反方向。默认值1
+  arrowOffset: 20, //箭头位置的偏移值: 距离线段箭头位置的偏移值。 默认值为0，单位是像素
+  arrowShapeType: {
+    key: 'yourArrow1',
+    type: 'svg',
+    width: 10,   // 选填，默认8px
+    height: 10,  // 选填，默认8px
+    content: require('/your_fold/your_arrow.svg') // 引用外部svg
+  } // 箭头样式类型: 可使用系统集成的和可使用自己注册的，只需要保证类型对应即可。
+},{
+  arrowPosition: 0.8,
+  arrowOrientation: 1,
+  arrowOffset: 20,
+  arrowShapeType: {
+    key: 'yourArrow1',
+    type: 'pathString',
+    content: 'M5 0 L0 -2 Q 1.0 0 0 2 Z' // path的d属性
+  }
+}]
 ```
 
 ### [Manhattan]draggable  _`<Number>`_   (选填)
