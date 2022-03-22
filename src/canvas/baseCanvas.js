@@ -234,7 +234,7 @@ class BaseCanvas extends Canvas {
     const edges = opts.edges || [];
 
     // 自动布局需要重新review
-    if (this.layout) {
+    if (this.layout && !opts.isNotRelayout) {
       this._autoLayout({
         groups,
         nodes,
