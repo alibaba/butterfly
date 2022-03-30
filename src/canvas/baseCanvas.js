@@ -3008,6 +3008,9 @@ class BaseCanvas extends Canvas {
             distance: 200,
             // 线条的粗细
             strength: 1
+          },
+          collide: {
+            radius: 20
           }
         }, _.get(this.layout, 'options'), true);
 
