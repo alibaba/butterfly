@@ -38,8 +38,6 @@ function forceLayout(param) {
       }
       return _edge;
     });
-  
-  
     let simulation = d3.forceSimulation(nodes)
       .force('charge', (() => {
         if (opts.chargeStrength) {
@@ -48,6 +46,7 @@ function forceLayout(param) {
           return d3.forceManyBody();
         }
       })())
+      .force('collision', d3.forceCollide().radius(opts.collide.radius))
       .force('center', d3.forceCenter(opts.width / 2, opts.height / 2))
       .force('link', d3.forceLink(edges).id((node) => {
         return node[_.get(opts.link, 'id', 'id')];
