@@ -234,7 +234,7 @@ class BaseCanvas extends Canvas {
     const edges = opts.edges || [];
 
     // 自动布局需要重新review
-    if (this.layout) {
+    if (this.layout && !opts.isNotRelayout) {
       this._autoLayout({
         groups,
         nodes,
@@ -1571,7 +1571,7 @@ class BaseCanvas extends Canvas {
         return;
       }
       let toDomClassName = _.get(toDom, 'className');
-      if (toDomClassName && toDomClassName.indexOf('butterfly-tooltip') === -1) {
+      if (toDomClassName && (typeof toDomClassName === 'string') && toDomClassName.indexOf('butterfly-tooltip') === -1) {
         mouseLeaveEvent();
       }
     });
@@ -3014,6 +3014,9 @@ class BaseCanvas extends Canvas {
             distance: 200,
             // 线条的粗细
             strength: 1
+          },
+          collide: {
+            radius: 20
           }
         }, _.get(this.layout, 'options'), true);
 
