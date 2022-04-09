@@ -2,7 +2,8 @@
 import React, {Component} from 'react';
 
 import './index.less';
-import 'butterfly-dag/dist/index.css';
+//import 'butterfly-dag/dist/index.css';
+import "../../../index"
 import IndustryCanvas from './canvas';
 import mockData from './data';
 class Industry extends Component {
@@ -18,13 +19,15 @@ class Industry extends Component {
       draggable: true,   // 可拖动
       zoomable: true,    // 可放大
       moveable: true,    // 可平移
+     
       css: {
         groupHoverClass: 'datac-group-drag-hover',   // 节点移动到上面新增的class 
         groupActiveClass: 'datac-group-drag-active'   // 节点可移动到上面新增的class
       },
       theme: {
         edge: {
-          shapeType: 'AdvancedBezier'
+          shapeType: 'Manhattan',
+        hasRadius:true,//Manhattan曲线圆角
         },
       }
     });

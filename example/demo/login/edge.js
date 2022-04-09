@@ -3,29 +3,29 @@
 import { Edge } from 'butterfly-dag';
 import $ from 'jquery';
 class BaseEdge extends Edge {
-  draw(obj) {
-    console.log(obj)
-    let path = super.draw(obj);
+    draw(obj) {
+        console.log(obj)
+        let path = super.draw(obj);
 
-    if (this.options.lineType) {
-      $(path).addClass(this.options.lineType);
+        if (this.options.lineType) {
+            $(path).addClass(this.options.lineType);
+        }
+        return path;
     }
-    return path;
-  }
-  drawArrow(isShow) {
-    let dom = super.drawArrow(isShow);
-    if (this.options.color) {
-      $(dom).addClass(this.options.color);
+    drawArrow(isShow) {
+        let dom = super.drawArrow(isShow);
+        if (this.options.color) {
+            $(dom).addClass(this.options.color);
+        }
+        return dom;
     }
-    return dom;
-  }
-  drawLabel(text) {
-    let dom = null;
-    if (!!text) {
-      dom = $(`<span class="account">${text}</span>`)[0];
+    drawLabel(text) {
+        let dom = null;
+        if (!!text) {
+            dom = $(`<span class="account">${text}</span>`)[0];
+        }
+        return dom;
     }
-    return dom;
-  }
 };
 
 export default BaseEdge;
