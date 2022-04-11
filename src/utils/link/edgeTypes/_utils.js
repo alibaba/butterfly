@@ -21,6 +21,7 @@ export const TOP = 'Top';
 export const BOTTOM = 'Bottom';
 
 // 曼哈顿折线路由算法
+
 export function _route(conn, fromPt, fromDir, toPt, toDir) {
   // 防止图上节点隐藏NaN的死循环问题
   fromPt.x = fromPt.x || 0;
@@ -37,102 +38,103 @@ export function _route(conn, fromPt, fromDir, toPt, toDir) {
   conn.push(new Point(fromPt.x, fromPt.y));
 
   if (((xDiff * xDiff) < (TOLxTOL)) && ((yDiff * yDiff) < (TOLxTOL))) {
-      conn.push(new Point(toPt.x, toPt.y));
-      return;
+    conn.push(new Point(toPt.x, toPt.y));
+    return;
   }
 
   if (fromDir === LEFT) {
-      if ((xDiff > 0) && ((yDiff * yDiff) < TOL) && (toDir === RIGHT)) {
-          point = toPt;
-          dir = toDir;
+    if ((xDiff > 0) && ((yDiff * yDiff) < TOL) && (toDir === RIGHT)) {
+      point = toPt;
+      dir = toDir;
+    } else {
+      if (xDiff < 0) {
+        point = new Point(fromPt.x - MINDIST, fromPt.y);
+      } else if (((yDiff > 0) && (toDir === BOTTOM)) || ((yDiff < 0) && (toDir === TOP))) {
+        point = new Point(toPt.x, fromPt.y);
+      } else if (fromDir === toDir) {
+        pos = Math.min(fromPt.x, toPt.x) - MINDIST;
+        point = new Point(pos, fromPt.y);
       } else {
-          if (xDiff < 0) {
-              point = new Point(fromPt.x - MINDIST, fromPt.y);
-          } else if (((yDiff > 0) && (toDir === BOTTOM)) || ((yDiff < 0) && (toDir === TOP))) {
-              point = new Point(toPt.x, fromPt.y);
-          } else if (fromDir === toDir) {
-              pos = Math.min(fromPt.x, toPt.x) - MINDIST;
-              point = new Point(pos, fromPt.y);
-          } else {
-              point = new Point(fromPt.x - (xDiff / 2), fromPt.y);
-          }
-
-          if (yDiff > 0) {
-              dir = TOP;
-          } else {
-              dir = BOTTOM;
-          }
+        point = new Point(fromPt.x - (xDiff / 2), fromPt.y);
       }
+
+      if (yDiff > 0) {
+        dir = TOP;
+      } else {
+        dir = BOTTOM;
+      }
+    }
   } else if (fromDir === RIGHT) {
-      if ((xDiff < 0) && ((yDiff * yDiff) < TOL) && (toDir === LEFT)) {
-          point = toPt;
-          dir = toDir;
+    if ((xDiff < 0) && ((yDiff * yDiff) < TOL) && (toDir === LEFT)) {
+      point = toPt;
+      dir = toDir;
+    } else {
+      if (xDiff > 0) {
+        point = new Point(fromPt.x + MINDIST, fromPt.y);
+      } else if (((yDiff > 0) && (toDir === BOTTOM)) || ((yDiff < 0) && (toDir === TOP))) {
+        point = new Point(toPt.x, fromPt.y);
+      } else if (fromDir === toDir) {
+        pos = Math.max(fromPt.x, toPt.x) + MINDIST;
+        point = new Point(pos, fromPt.y);
       } else {
-          if (xDiff > 0) {
-              point = new Point(fromPt.x + MINDIST, fromPt.y);
-          } else if (((yDiff > 0) && (toDir === BOTTOM)) || ((yDiff < 0) && (toDir === TOP))) {
-              point = new Point(toPt.x, fromPt.y);
-          } else if (fromDir === toDir) {
-              pos = Math.max(fromPt.x, toPt.x) + MINDIST;
-              point = new Point(pos, fromPt.y);
-          } else {
-              point = new Point(fromPt.x - (xDiff / 2), fromPt.y);
-          }
-
-          if (yDiff > 0) {
-              dir = TOP;
-          } else {
-              dir = BOTTOM;
-          }
+        point = new Point(fromPt.x - (xDiff / 2), fromPt.y);
       }
+
+      if (yDiff > 0) {
+        dir = TOP;
+      } else {
+        dir = BOTTOM;
+      }
+    }
   } else if (fromDir === BOTTOM) {
-      if (((xDiff * xDiff) < TOL) && (yDiff < 0) && (toDir === TOP)) {
-          point = toPt;
-          dir = toDir;
+    if (((xDiff * xDiff) < TOL) && (yDiff < 0) && (toDir === TOP)) {
+      point = toPt;
+      dir = toDir;
+    } else {
+      if (yDiff > 0) {
+        point = new Point(fromPt.x, fromPt.y + MINDIST);
+      } else if (((xDiff > 0) && (toDir === RIGHT)) || ((xDiff < 0) && (toDir === LEFT))) {
+        point = new Point(fromPt.x, toPt.y);
+      } else if (fromDir === toDir) {
+        pos = Math.max(fromPt.y, toPt.y) + MINDIST;
+        point = new Point(fromPt.x, pos);
       } else {
-          if (yDiff > 0) {
-              point = new Point(fromPt.x, fromPt.y + MINDIST);
-          } else if (((xDiff > 0) && (toDir === RIGHT)) || ((xDiff < 0) && (toDir === LEFT))) {
-              point = new Point(fromPt.x, toPt.y);
-          } else if (fromDir === toDir) {
-              pos = Math.max(fromPt.y, toPt.y) + MINDIST;
-              point = new Point(fromPt.x, pos);
-          } else {
-              point = new Point(fromPt.x, fromPt.y - (yDiff / 2));
-          }
-
-          if (xDiff > 0) {
-              dir = LEFT;
-          } else {
-              dir = RIGHT;
-          }
+        point = new Point(fromPt.x, fromPt.y - (yDiff / 2));
       }
+
+      if (xDiff > 0) {
+        dir = LEFT;
+      } else {
+        dir = RIGHT;
+      }
+    }
   } else if (fromDir === TOP) {
-      if (((xDiff * xDiff) < TOL) && (yDiff > 0) && (toDir === BOTTOM)) {
-          point = toPt;
-          dir = toDir;
+    if (((xDiff * xDiff) < TOL) && (yDiff > 0) && (toDir === BOTTOM)) {
+      point = toPt;
+      dir = toDir;
+    } else {
+      if (yDiff < 0) {
+        point = new Point(fromPt.x, fromPt.y - MINDIST);
+      } else if (((xDiff > 0) && (toDir === RIGHT)) || ((xDiff < 0) && (toDir === LEFT))) {
+        point = new Point(fromPt.x, toPt.y);
+      } else if (fromDir === toDir) {
+        pos = Math.min(fromPt.y, toPt.y) - MINDIST;
+        point = new Point(fromPt.x, pos);
       } else {
-          if (yDiff < 0) {
-              point = new Point(fromPt.x, fromPt.y - MINDIST);
-          } else if (((xDiff > 0) && (toDir === RIGHT)) || ((xDiff < 0) && (toDir === LEFT))) {
-              point = new Point(fromPt.x, toPt.y);
-          } else if (fromDir === toDir) {
-              pos = Math.min(fromPt.y, toPt.y) - MINDIST;
-              point = new Point(fromPt.x, pos);
-          } else {
-              point = new Point(fromPt.x, fromPt.y - (yDiff / 2));
-          }
-
-          if (xDiff > 0) {
-              dir = LEFT;
-          } else {
-              dir = RIGHT;
-          }
+        point = new Point(fromPt.x, fromPt.y - (yDiff / 2));
       }
+
+      if (xDiff > 0) {
+        dir = LEFT;
+      } else {
+        dir = RIGHT;
+      }
+    }
   }
 
   _route(conn, point, dir, toPt, toDir);
 }
+
 
 export function _calcOrientation(beginX, beginY, endX, endY, orientationLimit) {
 

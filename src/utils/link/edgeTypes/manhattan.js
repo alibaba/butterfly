@@ -112,18 +112,6 @@ function getRadiusPath(pointArr) {
 
   })
   path = path + ['L', end.x, end.y].join(" ")
-      /* const arc1 = getDrawPoint(start, c1, c2, radius);
-       const arc2 = getDrawPoint(c1, c2, end, radius);
-
-       path = [
-           'M', arc1[0].x, arc1[0].y,
-           'L', arc1[1].x, arc1[1].y,
-           'A', radius, radius, 90, 0, arc1[3], arc1[2].x, arc1[2].y,
-           'L', arc2[1].x, arc2[1].y,
-           'M', arc2[1].x, arc2[1].y,
-           'A', radius, radius, 90, 0, arc2[3], arc2[2].x, arc2[2].y,
-           'L', end.x, end.y,
-       ].join(' ');*/
   return {
       path,
       breakPoints: pointArr
