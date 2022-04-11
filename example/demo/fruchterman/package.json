@@ -1,0 +1,13 @@
+{
+  "name": "fruchterman",
+  "cn_name": "fruchterman布局",
+  "description": "a dag to display Layout of fruchterman",
+  "cn_description": "用于展示fruchterman布局的DAG图",
+  "dependencies": {
+    "butterfly-dag": "*",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "jquery": "*",
+    "lodash": "*"
+  }
+}

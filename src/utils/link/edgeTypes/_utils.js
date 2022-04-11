@@ -5,7 +5,11 @@ const MINDIST = 20;
 const TOL = 0.1;
 const TOLxTOL = 0.01;
 const TOGGLE_DIST = 20;
-
+export const DEFAULT_RADIUS = 15;
+export const Point = function(x, y) {
+    this.x = x;
+    this.y = y;
+}
 // const Point = function(x, y) {
 //   this.x = x;
 //   this.y = y;
@@ -18,7 +22,6 @@ export const BOTTOM = 'Bottom';
 
 // 曼哈顿折线路由算法
 export function _route(conn, fromPt, fromDir, toPt, toDir) {
-
   // 防止图上节点隐藏NaN的死循环问题
   fromPt.x = fromPt.x || 0;
   fromPt.y = fromPt.y || 0;
@@ -31,64 +34,54 @@ export function _route(conn, fromPt, fromDir, toPt, toDir) {
   let dir;
   let pos;
 
-  conn.push({x: fromPt.x, y: fromPt.y});
+  conn.push(new Point(fromPt.x, fromPt.y));
 
   if (((xDiff * xDiff) < (TOLxTOL)) && ((yDiff * yDiff) < (TOLxTOL))) {
-    // conn.push({x: toPt.x, y: toPt.y});
+    conn.push(new Point(toPt.x, toPt.y));
     return;
   }
 
   if (fromDir === LEFT) {
     if ((xDiff > 0) && ((yDiff * yDiff) < TOL) && (toDir === RIGHT)) {
-      point = toPt
-      dir = toDir
-    }
-    else {
+      point = toPt;
+      dir = toDir;
+    } else {
       if (xDiff < 0) {
-        point = {x: fromPt.x - MINDIST, y: fromPt.y};
-      }
-      else if (((yDiff > 0) && (toDir === BOTTOM)) || ((yDiff < 0) && (toDir === TOP))) {
-        point = {x: toPt.x, y: fromPt.y};
-      }
-      else if (fromDir === toDir) {
-        pos = Math.min(fromPt.x, toPt.x) - MINDIST
-        point = {x: pos, y: fromPt.y};
-      }
-      else {
-        point = {x: fromPt.x - (xDiff / 2), y: fromPt.y};
-      }
-
-      if (yDiff > 0) {
-        dir = TOP
-      }
-      else {
-        dir = BOTTOM
-      }
-    }
-  } else if (fromDir === RIGHT) {
-    if ((xDiff < 0) && ((yDiff * yDiff) < TOL) && (toDir === LEFT)) {
-      point = toPt
-      dir = toDir
-    }
-    else {
-      if (xDiff > 0) {
-        point = {x: fromPt.x + MINDIST, y: fromPt.y};
-      }
-      else if (((yDiff > 0) && (toDir === BOTTOM)) || ((yDiff < 0) && (toDir === TOP))) {
-        point = {x: toPt.x, y: fromPt.y};
-      }
-      else if (fromDir === toDir) {
-        pos = Math.max(fromPt.x, toPt.x) + MINDIST
-        point = {x: pos, y: fromPt.y};
-      }
-      else {
-        point = {x: fromPt.x - (xDiff / 2), y: fromPt.y};
+        point = new Point(fromPt.x - MINDIST, fromPt.y);
+      } else if (((yDiff > 0) && (toDir === BOTTOM)) || ((yDiff < 0) && (toDir === TOP))) {
+        point = new Point(toPt.x, fromPt.y);
+      } else if (fromDir === toDir) {
+        pos = Math.min(fromPt.x, toPt.x) - MINDIST;
+        point = new Point(pos, fromPt.y);
+      } else {
+        point = new Point(fromPt.x - (xDiff / 2), fromPt.y);
       }
 
       if (yDiff > 0) {
         dir = TOP;
+      } else {
+        dir = BOTTOM;
       }
-      else {
+    }
+  } else if (fromDir === RIGHT) {
+    if ((xDiff < 0) && ((yDiff * yDiff) < TOL) && (toDir === LEFT)) {
+      point = toPt;
+      dir = toDir;
+    } else {
+      if (xDiff > 0) {
+        point = new Point(fromPt.x + MINDIST, fromPt.y);
+      } else if (((yDiff > 0) && (toDir === BOTTOM)) || ((yDiff < 0) && (toDir === TOP))) {
+        point = new Point(toPt.x, fromPt.y);
+      } else if (fromDir === toDir) {
+        pos = Math.max(fromPt.x, toPt.x) + MINDIST;
+        point = new Point(pos, fromPt.y);
+      } else {
+        point = new Point(fromPt.x - (xDiff / 2), fromPt.y);
+      }
+
+      if (yDiff > 0) {
+        dir = TOP;
+      } else {
         dir = BOTTOM;
       }
     }
@@ -96,26 +89,21 @@ export function _route(conn, fromPt, fromDir, toPt, toDir) {
     if (((xDiff * xDiff) < TOL) && (yDiff < 0) && (toDir === TOP)) {
       point = toPt;
       dir = toDir;
-    }
-    else {
+    } else {
       if (yDiff > 0) {
-        point = {x: fromPt.x, y: fromPt.y + MINDIST};
-      }
-      else if (((xDiff > 0) && (toDir === RIGHT)) || ((xDiff < 0) && (toDir === LEFT))) {
-        point = {x: fromPt.x, y: toPt.y};
-      }
-      else if (fromDir === toDir) {
+        point = new Point(fromPt.x, fromPt.y + MINDIST);
+      } else if (((xDiff > 0) && (toDir === RIGHT)) || ((xDiff < 0) && (toDir === LEFT))) {
+        point = new Point(fromPt.x, toPt.y);
+      } else if (fromDir === toDir) {
         pos = Math.max(fromPt.y, toPt.y) + MINDIST;
-        point = {x: fromPt.x, y: pos};
-      }
-      else {
-        point = {x: fromPt.x, y: fromPt.y - (yDiff / 2)};
+        point = new Point(fromPt.x, pos);
+      } else {
+        point = new Point(fromPt.x, fromPt.y - (yDiff / 2));
       }
 
       if (xDiff > 0) {
         dir = LEFT;
-      }
-      else {
+      } else {
         dir = RIGHT;
       }
     }
@@ -123,32 +111,29 @@ export function _route(conn, fromPt, fromDir, toPt, toDir) {
     if (((xDiff * xDiff) < TOL) && (yDiff > 0) && (toDir === BOTTOM)) {
       point = toPt;
       dir = toDir;
-    }
-    else {
+    } else {
       if (yDiff < 0) {
-        point = {x: fromPt.x, y: fromPt.y - MINDIST};
-      }
-      else if (((xDiff > 0) && (toDir === RIGHT)) || ((xDiff < 0) && (toDir === LEFT))) {
-        point = {x: fromPt.x, y: toPt.y};
-      }
-      else if (fromDir === toDir) {
-        pos = Math.min(fromPt.y, toPt.y) - MINDIST
-        point = {x: fromPt.x, y: pos};
-      }
-      else {
-        point = {x: fromPt.x, y: fromPt.y - (yDiff / 2)};
+        point = new Point(fromPt.x, fromPt.y - MINDIST);
+      } else if (((xDiff > 0) && (toDir === RIGHT)) || ((xDiff < 0) && (toDir === LEFT))) {
+        point = new Point(fromPt.x, toPt.y);
+      } else if (fromDir === toDir) {
+        pos = Math.min(fromPt.y, toPt.y) - MINDIST;
+        point = new Point(fromPt.x, pos);
+      } else {
+        point = new Point(fromPt.x, fromPt.y - (yDiff / 2));
       }
 
       if (xDiff > 0) {
         dir = LEFT;
-      }
-      else {
+      } else {
         dir = RIGHT;
       }
     }
   }
+
   _route(conn, point, dir, toPt, toDir);
 }
+
 
 export function _calcOrientation(beginX, beginY, endX, endY, orientationLimit) {
 

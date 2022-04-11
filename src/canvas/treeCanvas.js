@@ -205,76 +205,84 @@ class TreeCanvas extends Canvas {
     });
   }
 
-  redraw() {
-    let rootNode = this.getRootNode();
-    let tree = [];
-    let tmpTreeObj = {};
-    let queue = [rootNode];
-    while (queue.length > 0) {
-      let node = queue.pop();
-      let obj = {
-        id: node.id
-      };
-      if (tmpTreeObj[node.id]) {
-        obj = tmpTreeObj[node.id];
-      } else {
-        tmpTreeObj[obj.id] = obj;
+  redraw(data, params, callback) {
+    if (data) {
+      this.removeNodes(this.nodes.map((item) => item.id) || []);
+      this.clearActionQueue();
+      this.draw(data || {}, params, callback);
+    } else {
+      let rootNode = this.getRootNode();
+      let tree = [];
+      let tmpTreeObj = {};
+      let queue = [rootNode];
+      while (queue.length > 0) {
+        let node = queue.pop();
+        let obj = {
+          id: node.id
+        };
+        if (tmpTreeObj[node.id]) {
+          obj = tmpTreeObj[node.id];
+        } else {
+          tmpTreeObj[obj.id] = obj;
+        }
+        if (node.isRoot) {
+          obj['isRoot'] = node.isRoot;
+        }
+        if (node.collapsed) {
+          obj['collapsed'] = node.collapsed;
+        }
+        tree.push(obj);
+        if (node.children && node.children.length > 0) {
+          obj.children = [];
+          node.children.forEach((child) => {
+            let _childObj = {
+              id: child.id
+            };
+            if (tmpTreeObj[child.id]) {
+              _childObj = tmpTreeObj[child.id];
+            } else {
+              tmpTreeObj[child.id] = _childObj;
+            }
+            if (child.isRoot) {
+              _childObj['isRoot'] = child.isRoot;
+            }
+            if (child.collapsed) {
+              _childObj['collapsed'] = child.collapsed;
+            }
+            obj.children.push(_childObj);
+          });
+          queue = queue.concat(node.children);
+        }
       }
-      if (node.isRoot) {
-        obj['isRoot'] = node.isRoot;
-      }
-      if (node.collapsed) {
-        obj['collapsed'] = node.collapsed;
-      }
-      tree.push(obj);
-      if (node.children && node.children.length > 0) {
-        obj.children = [];
-        node.children.forEach((child) => {
-          let _childObj = {
-            id: child.id
-          };
-          if (tmpTreeObj[child.id]) {
-            _childObj = tmpTreeObj[child.id];
-          } else {
-            tmpTreeObj[child.id] = _childObj;
-          }
-          if (child.isRoot) {
-            _childObj['isRoot'] = child.isRoot;
-          }
-          if (child.collapsed) {
-            _childObj['collapsed'] = child.collapsed;
-          }
-          obj.children.push(_childObj);
-        });
-        queue = queue.concat(node.children);
-      }
-    }
-    let nodes = tree.filter((item) => {
-      return true;
-    });
-    this._autoLayout({
-      nodes: nodes,
-      edges: [],
-      groups: []
-    });
-    this.nodes.forEach((item) => {
-      if (item.subCollapsed) {
-        return;
-      }
-      item?.endpoints?.forEach(endpoint => {
-        endpoint.updatePos();
+      let nodes = tree.filter((item) => {
+        return true;
       });
-      let obj = tmpTreeObj[item.id];
-      if (item.top !== obj.top || item.left !== obj.left) {
-        item.options.top = obj.top;
-        item.options.left = obj.left;
-        item.options.treePos = obj.treePos;
-        item.moveTo(obj.left, obj.top);
+      if (!_.get(params,'isNotRelayout')) {
+        this._autoLayout({
+          nodes: nodes,
+          edges: [],
+          groups: []
+        });
       }
-    });
-    this.edges.forEach((item) => {
-      item.redraw();
-    });
+      this.nodes.forEach((item) => {
+        if (item.subCollapsed) {
+          return;
+        }
+        item?.endpoints?.forEach(endpoint => {
+          endpoint.updatePos();
+        });
+        let obj = tmpTreeObj[item.id];
+        if (item.top !== obj.top || item.left !== obj.left) {
+          item.options.top = obj.top;
+          item.options.left = obj.left;
+          item.options.treePos = obj.treePos;
+          item.moveTo(obj.left, obj.top);
+        }
+      });
+      this.edges.forEach((item) => {
+        item.redraw();
+      });
+    }
     this.emit('system.canvas.redraw');
     this.emit('events', {
       type: 'canvas:redraw'
@@ -329,6 +337,13 @@ class TreeCanvas extends Canvas {
   }
   draw(opts, params, callback) {
     const nodes = this._handleTreeNodes(opts.nodes || [], _.get(params, 'isFlatNode', false));
+    
+    // 配置不重新布局
+    if (!_.get(params,'isNotRelayout')) {
+      this.__layout = this.layout;
+      this.layout = undefined;
+    }
+    
     // 需要过滤掉collapsed的
     super.draw({
       nodes: nodes,
@@ -356,6 +371,12 @@ class TreeCanvas extends Canvas {
         edges: this.edges,
         groups: this.groups
       });
+
+        // 配置不重新布局
+      if (!_.get(params,'isNotRelayout')) {
+        this.layout = this.__layout;
+        this.__layout = undefined;
+      }
     });
   }
   // getDataMap(isFlat) {

@@ -1,11 +1,60 @@
 # 画布(Canvas)
 
 ```js
+// 可选TreeCanvas
 let canvas = new Canvas({
-  root: dom,
-  theme: {},
-  ...
   // 如下属性
+  root: dom,               //canvas的根节点(必传)
+  layout: 'ForceLayout',   //布局设置(选填)，可使用集成的，也可自定义布局
+  zoomable: true,          //可缩放(选填)
+  moveable: true,          //可平移(选填)
+  draggable: true,         //节点可拖动(选填)
+  linkable: true,          //节点可连接(选填)
+  disLinkable: true,       //节点可取消连接(选填)
+  layout: {},              //初始化自动布局(选填)
+  theme: {                 //主题定制(选填) 
+    group: {
+      type: 'normal',       //节点组类型(选填): normal(随意拖入拖出),inner(只能拖入不能拖出)
+      dragGroupZIndex: 50  //节点组的默认z-index（选填，默认值：50）
+    },
+    node: {
+      dragNodeZIndex: 250  //节点的默认z-index/2（选填，默认值250）
+    },
+    edge: {
+      type: 'endpoint',    //线段连接类型
+      shapeType: 'Bezier', //线条默认类型
+      label: 'test',       //线条默认label
+      arrow: true,         //线条默认是否带箭头
+      arrowPosition: 0.5,  //箭头位置(0 ~ 1)
+      arrowOffset: 0.0,    //箭头偏移
+      arrowShapeType: '',  //自定义箭头样式
+      Class: XXClass,      //自己拓展的class,拖动连线的时候会采用该拓展类
+      isExpandWidth: false,//增加线条交互区域
+      defaultAnimate: false,//默认开启线条动画
+      dragEdgeZindex: 499  //线段的默认z-index(选填，默认：499)
+    },
+    endpoint: {
+      position: [],        //限制锚点位置['Top', 'Bottom', 'Left', 'Right'],
+      linkableHighlight: true,//连线时会触发point.linkable的方法，可做高亮
+      limitNum: 10,        //限制锚点的连接数目
+      expandArea: {        //锚点过小时，可扩大连线热区
+        left: 10,
+        right: 10,
+        top: 10,
+        botton: 10
+      }
+    },
+    zoomGap: 0.001,         //鼠标放大缩小间隙设置
+    autoFixCanvas: {     //节点拖动或连线拖动到画布边缘时，画布自动延展
+      enable: false,
+      autoMovePadding: [20, 20, 20, 20] //触发自动延展的画布内边距
+    },
+    autoResizeRootSize: true, // 自动适配root大小，默认为true
+    isMouseMoveStopPropagation: true, // 拖动事件是否阻止冒泡
+  },
+  global: {                //自定义配置，会贯穿所有canvas，group，node，edge，endpoint对象
+    isScopeStrict: false   //scope是否为严格模式(默认为false)
+  }
 });
 canvas.draw({
   // 数据
@@ -35,11 +84,15 @@ canvas.draw({
 
 ### linkable _`<Boolean>`_   (选填)
 
-&nbsp;&nbsp;画布节点是否可拖动；值类型 `boolean`，默认 `false`
+&nbsp;&nbsp;画布锚点是否可以拖动连线；值类型 `boolean`，默认 `false`
 
 ### disLinkable _`<Boolean>`_   (选填)
 
-&nbsp;&nbsp;画布节点是否可拖动；值类型 `boolean`，默认 `false`
+&nbsp;&nbsp;画布锚点是否可以拖动断开线；值类型 `boolean`，默认 `false`
+
+### layout _`<Object>`_   (选填)
+
+&nbsp;&nbsp;画布初始化根据设置的布局来自动排版，[可参考](https://github.com/alibaba/butterfly/blob/master/docs/zh-CN/layout.md)
 
 ### theme
 
@@ -49,9 +102,11 @@ canvas.draw({
 
   *参数*：
 
-  * type _`<String>`_ 标志线条连接到节点还是连接到锚点。默认为`endpoint`
+  * type _`<String>`_ 标志线条连接到节点还是连接到锚点。默认为`node`
 
   * shapeType _`<String>`_  线条类型可以是：Bezier(贝塞尔曲线)，Flow(折线)，Straight(直线)，Manhattan(曼哈顿路由线)，AdvancedBezier(更美丽的贝塞尔曲线)，Bezier2-1，Bezier2-2，Bezier2-3(二阶贝塞尔曲线)，BrokenLine(折线)；默认为`Straight`
+
+  <img width="650" src="https://img.alicdn.com/imgextra/i3/O1CN01sHnesN1SMIhN62CLK_!!6000000002232-2-tps-1418-404.png">
 
   * label _`<String/Dom>`_ 线条注释
 
@@ -89,6 +144,8 @@ canvas.draw({
 
   * expandArea _`<Object>`_ 锚点连接的热区: 由于锚点区域有可能过小，所以提供了热区扩大的属性；默认 `{left: 10, top: 10, right: 10, bottom: 10}`
 
+  * isAllowLinkInSameNode _`<Boolean>`_ 锚点连接限制: 是否允许同一节点中的锚点连接
+
 * group 节点组配置
 
   *参数*：
@@ -107,9 +164,11 @@ canvas.draw({
 
   * autoMovePadding _`<Array>`_ 触发自动延展的画布内边距；默认 `[20,20,20,20]`
 
-<img width="600" src="https://img.alicdn.com/tfs/TB16lUNBG61gK0jSZFlXXXDKFXa-1665-801.gif">
+<img width="650" src="https://img.alicdn.com/tfs/TB16lUNBG61gK0jSZFlXXXDKFXa-1665-801.gif">
   
 * autoResizeRootSize _`<Boolean>`_ 自动适配Root容器大小；默认 `true`
+
+* isMouseMoveStopPropagation _`<Boolean>`_ 拖动事件是否停止冒泡事件；默认 `false`
 
 ### global   (选填)
 
@@ -144,6 +203,19 @@ draw = (data, calllback) => {}
 
 ```js
 redraw = (data, calllback) => {}
+```
+
+### canvas.autoLayout (type, options)
+
+*作用*：手动调用自动布局
+
+*参数*
+
+* `{string} type` 布局类型
+* `{object} options` 布局参数
+
+```js
+autoLayout = (type, options) => {}
 ```
 
 ### canvas.getDataMap (data, calllback)
@@ -227,7 +299,7 @@ addGroup = ([object](./group.md#group-attr) | Group, nodes, options) => {}
 
 此API除了可以新建节点组以外, 还可以做多选成组:
 
-<img width="600" src="https://img.alicdn.com/imgextra/i1/O1CN01S2n8Sy1aayJ8euH7n_!!6000000003347-1-tps-600-400.gif">
+<img width="650" src="https://img.alicdn.com/imgextra/i1/O1CN01S2n8Sy1aayJ8euH7n_!!6000000003347-1-tps-600-400.gif">
 
 ### canvas.removeGroup (string | Group)
 
@@ -573,7 +645,7 @@ focusNodesWithAnimate = (objs, type, options, callback) => {}
 focusCenterWithAnimate = (options, callback) => {}
 ```
 
-<img width="600" src="https://img.alicdn.com/imgextra/i2/O1CN01zrkUqk1SP34Sup0vt_!!6000000002238-1-tps-1661-824.gif">
+<img width="650" src="https://img.alicdn.com/imgextra/i2/O1CN01zrkUqk1SP34Sup0vt_!!6000000002238-1-tps-1661-824.gif">
 
 ### canvas.redo ()
 
@@ -657,7 +729,7 @@ canvas2terminal = (coordinates) => {}
 
 * 如图所示，画布缩放，移动后的坐标和原来画布的坐标并不匹配，需要此方法来转换。特别注意：有拖动添加节点的用户们注意这两个`e.clientX`和`e.clientY`，需要调用此方法进行转换。
 
-<img width="600" src="http://img.alicdn.com/tfs/TB1lWIAFHvpK1RjSZPiXXbmwXXa-973-850.jpg">
+<img width="650" src="http://img.alicdn.com/tfs/TB1lWIAFHvpK1RjSZPiXXbmwXXa-973-850.jpg">
 
 
 ### canvas.setSelectMode (boolean, contents , selecMode)
@@ -751,6 +823,7 @@ canvas.on('type key', (data) => {
 * `system.canvas.zoom`	画布缩放
 * `system.nodes.delete`	删除节点
 * `system.node.move`	移动节点
+* `system.node.click`	点击节点
 * `system.nodes.add`	批量节点添加
 * `system.links.delete`	删除连线
 * `system.link.connect`	连线成功
@@ -761,6 +834,7 @@ canvas.on('type key', (data) => {
 * `system.group.move`	移动节点组
 * `system.group.addMembers`	节点组添加节点
 * `system.group.removeMembers`	节点组删除节点
+* `system.endpoint.limit`	锚点连接数超过上限
 * `system.multiple.select`	框选结束
 * `system.drag.start`	拖动开始
 * `system.drag.move`	拖动
@@ -801,7 +875,7 @@ this.canvas.setGridMode(true, {
     shapeType: 'line',     // 展示的类型，支持line & circle
     gap: 23,               // 网格间隙
     adsorbGap: 8,          // 吸附间距
-    backgroud: '#fff',     // 网格背景颜色
+    background: '#fff',     // 网格背景颜色
     lineColor: '#000',     // 网格线条颜色
     lineWidth: 1,          // 网格粗细
     circleRadiu: 1,        // 圆点半径
@@ -809,6 +883,41 @@ this.canvas.setGridMode(true, {
   }
 });
 ```
+
+### canvas.justifyCoordinate ()
+
+*作用*：把画布上的节点，节点组自动对齐(必须在网格布局下才生效)
+
+```js
+justifyCoordinate = () => {}
+```
+
+### canvas.setGuideLine (show, options)
+
+*作用*：设置辅助线
+
+*参数*
+
+* `{true|false} boolean`  - 是否开启辅助线功能
+* `{array} options` - 辅助线的定制化参数
+
+```js
+setGuideLine = (show, options) => {}
+
+this.canvas.setGuideLine(true, {
+  limit: 1,             // 限制辅助线条数
+  adsorp: {
+    enable: false       // 开启吸附效果
+    gap: 5              // 吸附间隔
+  },
+  theme: {
+    lineColor: 'red',   // 网格线条颜色
+    lineWidth: 1,       // 网格粗细
+  }
+});
+```
+
+<img width="600" src="https://img.alicdn.com/imgextra/i1/O1CN01bBhPsu1b3pH0VD1X9_!!6000000003410-1-tps-1274-600.gif">
 
 ### canvas.setMinimap = (show, options)
 
@@ -849,35 +958,6 @@ this.canvas.save2img({type: 'png', width: 1920, height: 1080, quality: 1})
     link.href = dataUrl;
     link.click();
   });
-```
-
-### canvas.justifyCoordinate ()
-
-*作用*：把画布上的节点，节点组自动对齐(必须在网格布局下才生效)
-
-```js
-justifyCoordinate = () => {}
-```
-
-### canvas.setGuideLine (show, options)
-
-*作用*：设置辅助线
-
-*参数*
-
-* `{true|false} boolean`  - 是否开启辅助线功能
-* `{array} options` - 辅助线的定制化参数
-
-```js
-setGuideLine = (show, options) => {}
-
-this.canvas.setGuideLine(true, {
-  limit: 1,             // 限制辅助线条数
-  theme: {
-    lineColor: 'red',   // 网格线条颜色
-    lineWidth: 1,       // 网格粗细
-  }
-});
 ```
 
 ### canvas.updateRootResize ()

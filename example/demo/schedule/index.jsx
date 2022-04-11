@@ -1,9 +1,11 @@
-'use strict';
 import React, {Component} from 'react';
-import './index.less';
+import ReactDOM from 'react-dom';
+import {Canvas} from 'butterfly-dag';
+import mockData from './data.js';
 import 'butterfly-dag/dist/index.css';
-import { Canvas } from 'butterfly-dag';
-import mockData from './data';
+import './iconfont.css';
+import './index.less';
+
 class Scene4New extends Component {
   constructor() {
     super();
@@ -20,20 +22,10 @@ class Scene4New extends Component {
       theme: {
         edge: {
           shapeType: 'AdvancedBezier',
-        },
-        // 允许group嵌套
-        group: {
-          includeGroups: true
         }
       }
     });
-    this.canvas.draw(mockData, () => {
-      // setTimeout(() => {
-      //   this.canvas.removeGroup('group');
-      //   this.canvas.removeNode('1');
-      // }, 3000);
-
-    });
+    this.canvas.draw(mockData);
     this.canvas.on('events', (data) => {
       // console.log(data);
     });
@@ -41,12 +33,11 @@ class Scene4New extends Component {
   render() {
     return (
       <div className='schedule'>
-        <button className='action-btn undo-btn' onClick={() => { this.canvas.undo(); }}>undo</button>
-        <button className='action-btn redo-btn' onClick={() => { this.canvas.redo(); }}>redo</button>
         <div className="schedule-canvas" id="dag-canvas">
         </div>
       </div>
     );
   }
 }
-export default Scene4New;
+
+ReactDOM.render(<Scene4New />, document.getElementById('root'));

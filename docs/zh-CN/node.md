@@ -4,6 +4,9 @@
 
 ``` js
 const Node = require('butterfly-dag').Node;
+
+// 当canvas为TreeCanvas时可选TreeNode
+// const TreeNode = require('butterfly-dag').TreeNode;
 class ANode extends Node {
   draw(obj) {
     // 这里可以根据业务需要，自己生成dom
@@ -197,6 +200,8 @@ getEndpoint = (id, type) => {}
 
 ```js
 /**
+  * 移动节点
+  * @param {Array} obj 坐标，例如 [0, 1]
   * @param {number} x - 移动位置的x坐标 
   * @param {number} y - 移动位置的y坐标 
   */

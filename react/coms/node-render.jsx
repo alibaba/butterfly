@@ -1,55 +1,13 @@
 import React, {useEffect} from 'react';
-import _ from 'lodash';
 import _debug from 'debug';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
+import Context from '../context';
 import BfNode from '../coms/node';
 import checkRender from '../util/check-render.js';
 
 const debug = _debug('butterflf-react');
-
-const deepWalk = function deepWalk(element) {
-  const childElements = [];
-
-  const walk = function walk(ele) {
-    let PreElement = ele;
-    let children = _.get(PreElement, 'props.children');
-    if (!PreElement) {
-      return;
-    }
-
-    // FIXME: is there a better way？
-    if (typeof PreElement.type === 'function' && !PreElement.props.children) {
-      try {
-        // eslint-disable-next-line
-        PreElement = new PreElement.type(PreElement.props);
-        walk(PreElement.render());
-      } catch (e) {
-        e;
-      }
-
-      return;
-    }
-
-    if (!children) {
-      return;
-    }
-
-    if (Array.isArray(children)) {
-      children.forEach(function (child) {
-        childElements.push(child);
-        walk(child);
-      });
-    }
-
-    childElements.push(children);
-    walk(children);
-  };
-
-  walk(element);
-  return childElements;
-};
 
 const noop = () => null;
 
@@ -99,9 +57,9 @@ const NodeRender = (props) => {
       }
 
       node.addEndpoint({
+        ...endpoint,
         id: endpointId,
         dom: document.getElementById(endpointId),
-        ...endpoint,
       });
     });
 
@@ -145,7 +103,7 @@ const NodeRender = (props) => {
     onRenderFinish();
   });
 
-  return nodes.map(item => {
+  const elements = nodes.map(item => {
     const id = item.id;
 
     if (!id) {
@@ -163,27 +121,26 @@ const NodeRender = (props) => {
 
     checkRender(item.render, 'node');
     const hasRender = !!item.render;
-    const element = hasRender ? item.render() : <BfNode key={id} {...item} />;
+    const element = hasRender ? item.render(item) : <BfNode key={id} {...item} />;
 
-    // ============== Gather React Endpoints ==============
-    deepWalk(element).forEach(child => {
-      if (typeof child !== 'object') {
-        return;
-      }
-
-      if (child?.type?.name === 'Endpoint') {
-        endpoints.push({
-          endpointId: child.props.id,
-          nodeId: item.id
-        });
-      }
-    });
-
-    return ReactDOM.createPortal(
-      element,
-      dom
-    );
+    return ReactDOM.createPortal(element, dom);
   });
+
+  return (
+    <Context.Provider
+      value={{
+        gather: ({id, nodeId, ...rest}) => {
+          endpoints.push({
+            endpointId: id,
+            nodeId,
+            ...rest,
+          });
+        }
+      }}
+    >
+      {elements}
+    </Context.Provider>
+  );
 };
 
 NodeRender.propTypes = {

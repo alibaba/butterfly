@@ -1,9 +1,9 @@
-'use strict';
-
 import React from 'react';
+import i18next from 'i18next';
 import ReactDOM from 'react-dom';
-import {BrowserRouter as Router, Route, Link, Redirect} from 'react-router-dom';
-import {Layout, Menu} from 'antd';
+import {createBrowserHistory} from 'history';
+import LanguageDetector from 'i18next-browser-languagedetector';
+import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom';
 
 import Emergency from './demo/emergency/index.jsx';
 import Diodes from './demo/diodes/index.jsx';
@@ -33,22 +33,39 @@ import Grid from './demo/grid/index.jsx';
 import Fruchterman from './demo/fruchterman/index.jsx';
 import ReactSample from './demo/react/sample/index.jsx';
 
-import DagreLayout from './demo/dagreLayout/index.jsx';
-import ConcentLayout from './demo/concent-layout/index.jsx';
-
-import Radial from './demo/radial/index.jsx';
-
-import 'antd/dist/antd.css';
-import './static/iconfont.css';
-import './static/newIconfont.css';
 import './index.less';
+import 'antd/dist/antd.css';
+const Home = dynamic(() => import('./pages/home'));
+const Gallery = dynamic(() => import('./pages/gallery'));
+const CodeBox = dynamic(() => import('./pages/code-box'));
 
-const {Header, Content, Sider} = Layout;
+window.CONFIG = {
+  // eslint-disable-next-line no-undef
+  prefix: PREFIX
+};
 
-ReactDOM.render((
-  <Router>
-    <Layout>
-      <Header className='header'>小蝴蝶DEMO</Header>
+const prefix = window.CONFIG.prefix;
+
+const main = async () => {
+  try {
+    await i18next.use(LanguageDetector).init({
+      debug: true,
+      resources: {
+        en: {
+          translation: enUS
+        },
+        zh: {
+          translation: zhCN
+        }
+      }
+    });
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.warn('i18n init failed', e.stack);
+  }
+
+  ReactDOM.render((
+    <Router history={createBrowserHistory()}>
       <Layout>
         <Sider>
           <Menu
@@ -179,6 +196,8 @@ ReactDOM.render((
           <Route exact path="/" component={() => <Redirect exact from="/" to="/analysis" />} />
         </Content>
       </Layout>
-    </Layout>
-  </Router>
-), document.getElementById('main'));
+    </Router>
+  ), document.getElementById('main'));
+};
+
+main();

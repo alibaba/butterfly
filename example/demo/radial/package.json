@@ -1,0 +1,13 @@
+{
+  "name": "radial",
+  "cn_name": "radial布局",
+  "description": "a dag to display Layout of radial",
+  "cn_description": "用于展示radial布局的DAG图",
+  "dependencies": {
+    "butterfly-dag": "*",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "jquery": "*",
+    "lodash": "*"
+  }
+}

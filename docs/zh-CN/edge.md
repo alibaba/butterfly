@@ -74,6 +74,9 @@ canvas.addEdge({
 &nbsp;&nbsp;线条进出口的位置限制: Left / Right / Top / Bottom
 ### shapeType  _`<String>`_    (选填)
 &nbsp;&nbsp;线条的类型: Bezier/Flow/Straight/Manhattan/AdvancedBezier/Bezier2-1/Bezier2-2/Bezier2-3/BrokenLine
+
+<img width="650" src="https://img.alicdn.com/imgextra/i3/O1CN01sHnesN1SMIhN62CLK_!!6000000002232-2-tps-1418-404.png">
+
 ### label  _`<String/Dom>`_   (选填)
 &nbsp;&nbsp;线条上注释: 可传字符串和dom
 ### labelPosition  _`<Number>`_   (选填)
@@ -121,7 +124,7 @@ canvas.addEdge({
 ### [Manhattan]draggable  _`<Number>`_   (选填)
 &nbsp;&nbsp;设置类型为Manhattan线段是否能拖动
 
-<img width="600" src="https://img.alicdn.com/imgextra/i3/O1CN01OnHABO1VPSGb0PBbW_!!6000000002645-1-tps-400-300.gif">
+<img width="650" src="https://img.alicdn.com/imgextra/i3/O1CN01OnHABO1VPSGb0PBbW_!!6000000002645-1-tps-400-300.gif">
 
 ### Class  _`<Class>`_    (选填)
 &nbsp;&nbsp;拓展类：一般来说已经满足需要了，因为逻辑较为复杂，不建议拓展线的基类。当传入拓展类的时候，该节点组则会按拓展类的draw方法进行渲染，拓展类的相关方法也会覆盖父类的方法
@@ -135,7 +138,7 @@ canvas.addEdge({
 ```js
 import {Edge} from 'butterfly-dag';
 
-Class YourEdge extends Endpoint {
+Class YourEdge extends Edge {
 
   /**
     * 线段挂载后的回调
@@ -270,9 +273,9 @@ on = (string, function) => {}
 addAnimate = (options) => {}
 ```
 
-<img width="600" src="https://img.alicdn.com/tfs/TB1anoGvkL0gK0jSZFAXXcA9pXa-921-532.gif">
+<img width="650" src="https://img.alicdn.com/tfs/TB1anoGvkL0gK0jSZFAXXcA9pXa-921-532.gif">
 性能: 1000节点+1000条线段，动画完美运行
-<img width="600" src="https://img.alicdn.com/tfs/TB1N4a_wi_1gK0jSZFqXXcpaXXa-662-466.gif">
+<img width="650" src="https://img.alicdn.com/tfs/TB1N4a_wi_1gK0jSZFqXXcpaXXa-662-466.gif">
 
 ### [Manhattan]edge.getBreakPoints ()
 

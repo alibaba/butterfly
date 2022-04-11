@@ -1,0 +1,13 @@
+{
+  "name": "diodes",
+  "cn_name": "二极管模拟",
+  "description": "dag to mock diodes",
+  "cn_description": "一个模拟二极管电路的DAG图",
+  "dependencies": {
+    "butterfly-dag": "*",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "jquery": "*",
+    "lodash": "*"
+  }
+}

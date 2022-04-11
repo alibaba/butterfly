@@ -59,6 +59,38 @@ this.canvas = new Canvas({
 | ranksep | Number | false | 50 |  | 层间距（px）。在rankdir 为 'TB' 或 'BT' 时是竖直方向相邻层间距；在rankdir 为 'LR' 或 'RL' 时代表水平方向相邻层间距
 | controlPoints | Boolean | false | false | |  是否保留布局连线的控制点
 
+
+## Dagre Group Layout
+
+&nbsp;&nbsp;&nbsp;&nbsp;Dagre 是适合有向流程图的布局算法。其根据图数据中边的方向，自动计算节点的层级及位置。
+
+#### 代码演示
+
+``` js
+this.canvas = new Canvas({
+  layout: {
+    type: 'dagreGroupLayout',
+    options: {
+      rankdir: 'TB',
+      nodesep: 40,
+      ranksep: 40,
+      controlPoints: false,
+    },
+  }
+});
+```
+
+#### API
+
+
+| 名称 | 类型 | 是否必须 | 默认值 | 可选值 | 说明  
+| :------ | :------ | :------ | :------ | :------ | :------
+| rankdir | String | false | TB| "TB/BT/LR/RL"  |布局的方向。T：top（上）；B：bottom（下）；L：left（左）；R：right（右）。
+| align | String | false | 'UL'| 'UL' / 'UR' / 'DL' / 'DR' | 节点对齐方式。U：upper（上）；D：down（下）；L：left（左）；R：right（右）
+| nodesep | Number | false | 50 |  | 节点间距（px）。在rankdir 为 'TB' 或 'BT' 时是节点的水平间距；在rankdir 为 'LR' 或 'RL' 时代表节点的竖直方向间距
+| ranksep | Number | false | 50 |  | 层间距（px）。在rankdir 为 'TB' 或 'BT' 时是竖直方向相邻层间距；在rankdir 为 'LR' 或 'RL' 时代表水平方向相邻层间距
+| controlPoints | Boolean | false | false | |  是否保留布局连线的控制点
+
 ## Grid Layout
 
 &nbsp;&nbsp;&nbsp;&nbsp;Grid 网格布局根据参数指定的排序方式对节点进行排序后，将节点排列在网格上。
@@ -66,30 +98,30 @@ this.canvas = new Canvas({
 #### 代码演示
 
 ``` js
-import {TreeCanvas} from 'butterfly-dag';
-this.canvas = new TreeCanvas({
+import {Canvas} from 'butterfly-dag';
+this.canvas = new Canvas({
   layout: {
     type: 'grid',
     options: {
-          // group的渲染方法
-          width: 150,
-          // 布局画布总长度
-          height: 100,
-          // 布局相对起始点
-          begin: [0, 0],
-          // prevents node overlap, may overflow boundingBox if not enough space
-          preventOverlap: true,
-          // extra spacing around nodes when preventOverlap: true
-          preventOverlapPadding: 10,
-          // uses all available space on false, uses minimal space on true
-          condense: false,
-          //行数
-          rows: undefined,
-          // 列数
-          cols: undefined,
-          // 排序方式 
-          sortBy: 'degree',
-          nodeSize: 30,
+      // group的渲染方法
+      width: 150,
+      // 布局画布总长度
+      height: 100,
+      // 布局相对起始点
+      begin: [0, 0],
+      // prevents node overlap, may overflow boundingBox if not enough space
+      preventOverlap: true,
+      // extra spacing around nodes when preventOverlap: true
+      preventOverlapPadding: 10,
+      // uses all available space on false, uses minimal space on true
+      condense: false,
+      //行数
+      rows: undefined,
+      // 列数
+      cols: undefined,
+      // 排序方式 
+      sortBy: 'degree',
+      nodeSize: 30,
     },
   }
 });
@@ -116,33 +148,33 @@ this.canvas = new TreeCanvas({
 #### 代码演示
 
 ``` js
-import {TreeCanvas} from 'butterfly-dag';
+import {Canvas} from 'butterfly-dag';
  this.canvas = new Canvas({
       layout: {
         type: 'fruchterman',
         options: {
-            // 布局画布总宽度
-            width: 500,
-            // 布局画布总长度
-            height: 500,
-            /** 停止迭代的最大迭代数 */
-            // maxIteration: 1000,
-            /** 布局中心 */
-            center: [250, 250],
-            /** 重力大小，影响图的紧凑程度 */
-            gravity: 5,
-            /** 速度 */
-            speed: 5,
-            /** 是否产生聚类力 */
-            clustering: true,
-            /** 聚类力大小 */
-            clusterGravity: 8,
-            link: {
-                // 线条的距离
-                distance: 50,
-                // 线条的粗细
-                strength: 1
-            },
+          // 布局画布总宽度
+          width: 500,
+          // 布局画布总长度
+          height: 500,
+          /** 停止迭代的最大迭代数 */
+          // maxIteration: 1000,
+          /** 布局中心 */
+          center: [250, 250],
+          /** 重力大小，影响图的紧凑程度 */
+          gravity: 5,
+          /** 速度 */
+          speed: 5,
+          /** 是否产生聚类力 */
+          clustering: true,
+          /** 聚类力大小 */
+          clusterGravity: 8,
+          link: {
+              // 线条的距离
+              distance: 50,
+              // 线条的粗细
+              strength: 1
+          }
         },
       },
       theme: {
@@ -175,7 +207,7 @@ import {TreeCanvas} from 'butterfly-dag';
 #### 代码演示
 
 ``` js
-import {TreeCanvas} from 'butterfly-dag';
+import {Canvas} from 'butterfly-dag';
  this.canvas = new Canvas({
       layout: {
         type: 'fruchterman',
@@ -206,26 +238,6 @@ import {TreeCanvas} from 'butterfly-dag';
 | sortBy | String | false | undefined | 指定排序的依据（节点属性名），数值越高则该节点被放置得越中心。若为 undefined，则会计算节点的度数，度数越高，节点将被放置得越中心。
 
 
-## Tree Layout
-
-&nbsp;&nbsp;&nbsp;&nbsp;参考：[antvis/hierarchy](https://github.com/antvis/hierarchy)
-
-``` js
-import {TreeCanvas} from 'butterfly-dag';
-this.canvas = new TreeCanvas({
-  layout: {
-    type: 'dagreLayout',
-    options: {
-      rankdir: 'TB',
-      nodesep: 40,
-      ranksep: 40,
-      controlPoints: false,
-    },
-  }
-});
-```
-
-
 ## Radial Layout
 
 &nbsp;&nbsp;&nbsp;&nbsp;Radial 布局是将图布局成辐射状的布局方法。以一个 focusNode 为中心，其余节点按照与 focusNode 的度数关系排列在不同距离的环上。距离 focusNode 一度的节点布局在与其最近的第一个环上，距离 focusNode 二度的节点布局在第二个环上，以此类推。
@@ -237,36 +249,36 @@ this.canvas = new Canvas({
   layout: {
     type: 'Radial',
     options: {
-        // 布局画布总宽度
-        width:800,
-        // 布局画布总长度
-        height:800,
-        /** 停止迭代的最大迭代数 */
-        maxIteration: 200,
-        /** 布局中心 */
-        center: [400, 400],
-        /** 中心点，默认为数据中第一个点 */
-        focusNode: '0',
-        /** 每一圈半径 */
-        unitRadius: 80,
-        /** 默认边长度 */
-        linkDistance: 100,
-        /** 是否防止重叠 */
-        preventOverlap: true,
-        /** 节点直径 */
-        nodeSize: 20,
-        /** 节点间距，防止节点重叠时节点之间的最小距离（两节点边缘最短距离） */
-        nodeSpacing: undefined,
-        /** 是否必须是严格的 radial 布局，即每一层的节点严格布局在一个环上。preventOverlap 为 true 时生  */
-        strictRadial: true,
-        /** 防止重叠步骤的最大迭代次数 */
-        maxPreventOverlapIteration: 200,
-        link: {
-            // 线条的距离
-            distance: 50,
-            // 线条的粗细
-            strength: 1
-        },
+      // 布局画布总宽度
+      width:800,
+      // 布局画布总长度
+      height:800,
+      /** 停止迭代的最大迭代数 */
+      maxIteration: 200,
+      /** 布局中心 */
+      center: [400, 400],
+      /** 中心点，默认为数据中第一个点 */
+      focusNode: '0',
+      /** 每一圈半径 */
+      unitRadius: 80,
+      /** 默认边长度 */
+      linkDistance: 100,
+      /** 是否防止重叠 */
+      preventOverlap: true,
+      /** 节点直径 */
+      nodeSize: 20,
+      /** 节点间距，防止节点重叠时节点之间的最小距离（两节点边缘最短距离） */
+      nodeSpacing: undefined,
+      /** 是否必须是严格的 radial 布局，即每一层的节点严格布局在一个环上。preventOverlap 为 true 时生  */
+      strictRadial: true,
+      /** 防止重叠步骤的最大迭代次数 */
+      maxPreventOverlapIteration: 200,
+      link: {
+          // 线条的距离
+          distance: 50,
+          // 线条的粗细
+          strength: 1
+      },
     },
   }
 });
@@ -286,3 +298,119 @@ this.canvas = new Canvas({
 | nodeSize | Number | false | 10 | 节点大小（直径, 用于防止节点重叠时的碰撞检测)
 | strictRadial | Boolean | false | true | 是否必须是严格的 radial 布局，即每一层的节点严格布局在一个环上。preventOverlap 为 true 时生效。当 preventOverlap 为 true，且 strictRadial 为 false 时，有重叠的节点严格沿着所在的环展开，但在一个环上若节点过多，可能无法完全避免节点重叠。当 preventOverlap 为 true，且 strictRadial 为 true 时，允许同环上重叠的节点不严格沿着该环布局，可以在该环的前后偏移以避免重叠。
 | maxPreventOverlapIteration | Number | false | 200 | 防止重叠步骤的最大迭代次数
+
+
+## Tree Layout
+
+&nbsp;&nbsp;&nbsp;&nbsp;参考：[antvis/hierarchy](https://github.com/antvis/hierarchy)
+
+### compactBox
+
+``` js
+// 当canvas为TreeCanvas时Node可选TreeNode;
+import {TreeCanvas} from 'butterfly-dag';
+this.canvas = new TreeCanvas({
+  layout: {
+    type: 'compactBox',
+    options: {
+      direction: 'TB', // H / V / LR / RL / TB / BT
+      getHeight(d) {
+        return 60;
+      },
+      getWidth(d) {
+        return 120;
+      },
+      getHGap(d) {
+        return 20;
+      },
+      getVGap(d) {
+        return 80;
+      }
+    },
+  }
+});
+```
+
+### dendrogram
+
+``` js
+// 当canvas为TreeCanvas时Node可选TreeNode;
+import {TreeCanvas} from 'butterfly-dag';
+this.canvas = new TreeCanvas({
+  layout: {
+    type: 'dendrogram',
+    options: {
+      direction: 'TB', // H / V / LR / RL / TB / BT
+      getHeight(d) {
+        return 60;
+      },
+      getWidth(d) {
+        return 120;
+      },
+      getHGap(d) {
+        return 20;
+      },
+      getVGap(d) {
+        return 80;
+      }
+    },
+  }
+});
+```
+
+### indented
+
+``` js
+// 当canvas为TreeCanvas时Node可选TreeNode;
+import {TreeCanvas} from 'butterfly-dag';
+this.canvas = new TreeCanvas({
+  layout: {
+    type: 'indented',
+    options: {
+      direction: 'H', // H / LR / RL
+      getHeight(d) {
+        return 60;
+      },
+      getWidth(d) {
+        return 120;
+      },
+      getHGap(d) {
+        return 20;
+      },
+      getVGap(d) {
+        return 80;
+      }
+    },
+  }
+});
+```
+
+### mindmap
+
+``` js
+// 当canvas为TreeCanvas时Node可选TreeNode;
+import {TreeCanvas} from 'butterfly-dag';
+this.canvas = new TreeCanvas({
+  layout: {
+    type: 'mindmap',
+    options: {
+      direction: 'H',                   // H / LR / RL
+      getSide(d) {
+        return d.data.side || 'right';  // `left` or right
+      },
+      getHeight(d) {
+        return 10;
+      },
+      getWidth(d) {
+        return 40;
+      },
+      getHGap(d) {
+        return 50;
+      },
+      getVGap(d) {
+        return 20;
+      }
+    },
+  }
+});
+```

@@ -1,9 +1,12 @@
+import {Canvas} from 'butterfly-dag';
+import _ from 'lodash';
 import './canvas.less';
+//import { Canvas } from 'butterfly-dag';
+import Canvas from '../../../src/canvas/baseCanvas';
+const EVENTTYPE = {
+    NODECLICK: 'node:click',
+    CANVASCLICK: 'canvas:click'
 
-import { Canvas } from 'butterfly-dag';
-const EVENTTYPE  = {
-  NODECLICK: 'node:click',
-  CANVASCLICK: 'canvas:click'
 };
 
 class IndustryCanvas extends Canvas {
@@ -18,7 +21,7 @@ class IndustryCanvas extends Canvas {
     let targetNode = null;
     let targetEndpoint = null;
     let param = conn.connection.getParameters();
-    _.map(param, (val, key) => {
+    _.map(param, (val) => {
       let node = this.getNode(val.nodeId);
       let endpoint = _.find(node._endpoint, (point) => {
         return point.id = val.id;

@@ -72,6 +72,9 @@ canvas.addEdge({
 &nbsp;&nbsp;position restriction of edge entrance and exit: Left / Right / Top / Bottom
 ### shapeType  _`<String>`_    (Optional)
 &nbsp;&nbsp;edge type: Bezier/Flow/Straight/Manhattan/AdvancedBezier/Bezier2-1/Bezier2-2/Bezier2-3/BrokenLine
+
+<img width="650" src="https://img.alicdn.com/imgextra/i3/O1CN01sHnesN1SMIhN62CLK_!!6000000002232-2-tps-1418-404.png">
+
 ### label  _`<String/Dom>`_   (Optional)
 &nbsp;&nbsp;edge label: can accept string or dom
 ### labelPosition  _`<Number>`_   (Optional)
@@ -119,7 +122,7 @@ canvas.addEdge({
 ### [Manhattan]draggable  _`<Number>`_   (Optional)
 &nbsp;&nbsp;whether the `Manhattan` edge can be dragged
 
-<img width="600" src="https://img.alicdn.com/imgextra/i3/O1CN01OnHABO1VPSGb0PBbW_!!6000000002645-1-tps-400-300.gif">
+<img width="650" src="https://img.alicdn.com/imgextra/i3/O1CN01OnHABO1VPSGb0PBbW_!!6000000002645-1-tps-400-300.gif">
 
 ### Class  _`<Class>`_    (Optional)
 &nbsp;&nbsp; Class：`Generally, the need has been met, because the logic is more complicated, it is not recommended to expand the base class of the line. `When the extension class is passed in, the node group will be rendered according to the draw method of the extension class. The related methods of the extension class will also override the method of the parent class.
@@ -133,7 +136,7 @@ canvas.addEdge({
 ```js
 import {Edge} from 'butterfly-dag';
 
-Class YourEdge extends Endpoint {
+Class YourEdge extends Edge {
 
   /**
     * callback after the edge is mounted
@@ -268,9 +271,9 @@ on = (string, function) => {}
 addAnimate = (options) => {}
 ```
 
-<img width="600" src="https://img.alicdn.com/tfs/TB1anoGvkL0gK0jSZFAXXcA9pXa-921-532.gif">
+<img width="650" src="https://img.alicdn.com/tfs/TB1anoGvkL0gK0jSZFAXXcA9pXa-921-532.gif">
 performance: 1000 nodes + 1000 edge, the animation runs perfectly
-<img width="600" src="https://img.alicdn.com/tfs/TB1N4a_wi_1gK0jSZFqXXcpaXXa-662-466.gif">
+<img width="650" src="https://img.alicdn.com/tfs/TB1N4a_wi_1gK0jSZFqXXcpaXXa-662-466.gif">
 
 ### [Manhattan]edge.getBreakPoints ()
 

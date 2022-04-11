@@ -1,0 +1,72 @@
+.code-box {
+ .editor {
+   float: right;
+   width: calc(100% - 120px);
+   display: flex;
+   height: calc(100vh - 60px);
+   overflow: hidden;
+   position: relative;
+
+  .codebox_open {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 39px;
+    width: 39px;
+    background-color: white;
+    text-align: center;
+    line-height: 39px;
+    box-shadow: 0px 0px 5px #ddd;
+    background: #fefefe;
+    cursor: pointer;
+    z-index: 9;
+  }
+
+   &.fold {
+    width: calc(100% - 1px);
+   }
+
+   &.editor-fold {
+    .code-editor {
+      width: 0;
+    }
+
+    .demo {
+      width: 100%;
+    }
+   }
+
+   .code-editor {
+     width: 50%;
+     border-right: #ebedf0 1px solid;
+   }
+
+   .demo {     
+     width: 50%;
+     background-repeat: no-repeat;
+     background-position: center;
+
+    .playground {
+      height: 100%;
+      width: 100%;
+    }
+
+     #root {
+      height: 100%;
+      width: 100%;
+    }
+   }
+
+   #demo-div {
+     border: none;
+     margin-top: -40px;
+     height: 105%;
+   }
+ } 
+
+ .playground-error {
+    color: red;
+    padding: 100px 50px;
+    white-space: pre-line;
+  }
+}

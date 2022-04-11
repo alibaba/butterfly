@@ -1,0 +1,13 @@
+{
+  "name": "relational-network",
+  "cn_name": "人的网络关系图",
+  "description": "a dag to show to how to make a relational diagram of people",
+  "cn_description": "一个人的网络关系图",
+  "dependencies": {
+    "butterfly-dag": "*",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "jquery": "*",
+    "lodash": "*"
+  }
+}

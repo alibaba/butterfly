@@ -8,7 +8,9 @@ function dagreLayout(param) {
       return {
         id: item.id,
         top: item.top,
-        left: item.left
+        left: item.left,
+        width: item.width,
+        height: item.height
       }
     });
     // 形成新数组后布局失效
@@ -40,8 +42,8 @@ function dagreLayout(param) {
       const size = nodeSizeFunc(node);
       const verti = vertisep(node);
       const hori = horisep(node);
-      const width = size[0] + 2 * hori;
-      const height = size[1] + 2 * verti;
+      const width = node.width || (size[0] + 2 * hori);
+      const height = node.height || (size[1] + 2 * verti);
       g.setNode(node.id, {width, height});
     });
     edges.forEach(edge => {
@@ -83,9 +85,11 @@ function dagreLayout(param) {
       curnode[index].top = item.top;
       curnode[index].posInfo = item.posInfo;
     });
-  }
+
+    return param;
+}
   
-  function getFunc(func, value, defaultValue) {
+function getFunc(func, value, defaultValue) {
     let resultFunc;
     if (func) {
       resultFunc = func;
@@ -95,6 +99,6 @@ function dagreLayout(param) {
       resultFunc = () => defaultValue;
     }
     return resultFunc;
-  }
+}
 
-  module.exports = dagreLayout
+module.exports = dagreLayout;

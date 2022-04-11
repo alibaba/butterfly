@@ -1,7 +1,6 @@
-'use strict';
-
-import { Node } from 'butterfly-dag';
+import {Node} from 'butterfly-dag';
 import $ from 'jquery';
+
 class BaseNode extends Node {
   constructor(opts) {
     super(opts);

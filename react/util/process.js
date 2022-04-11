@@ -1,13 +1,19 @@
-import Node from '../coms/node.js';
-import Edge from '../coms/edge.js';
-import Group from '../coms/group.js';
+import nodeFactory from '../coms/node.js';
+import edgeFactory from '../coms/edge.js';
+import groupFactory from '../coms/group.js';
 
-const process = ({nodes = [], edges = [], groups = []}) => {
+const processFactory = (uniqId = '') => (
+  {
+    nodes = [],
+    edges = [],
+    groups = [],
+  }
+) => {
   return {
     nodes: nodes.map((node) => {
       return {
+        Class: nodeFactory(uniqId),
         ...node,
-        Class: Node,
       };
     }),
     edges: edges.map(edge => {
@@ -15,19 +21,19 @@ const process = ({nodes = [], edges = [], groups = []}) => {
       labelDOM.id = edge.id;
 
       return {
-        ...edge,
         type: 'endpoint',
-        Class: Edge,
+        Class: edgeFactory(uniqId),
+        ...edge,
       };
     }),
     groups: groups.map(group => {
       return {
+        Class: groupFactory(uniqId),
         ...group,
-        Class: Group,
       };
     })
   };
 };
 
-export default process;
+export default processFactory;
 

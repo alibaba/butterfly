@@ -91,6 +91,8 @@ class panelPlugins {
         jqImg.on('dragstart', (e)=>{
           e.originalEvent.dataTransfer.setData('id', item.id + '-' + this.guid());
           e.originalEvent.dataTransfer.setData('originId', item.id);
+          e.originalEvent.dataTransfer.setData('width', item.width);
+          e.originalEvent.dataTransfer.setData('height', item.height);
           e.originalEvent.dataTransfer.setDragImage(img,0,0);
         })
 
@@ -110,6 +112,8 @@ class panelPlugins {
           let coordinates = registerData.canvas.terminal2canvas([clientX, clientY]);
           let id = e.originalEvent.dataTransfer.getData('id');
           let content = e.originalEvent.dataTransfer.getData('originId');
+          let width = e.originalEvent.dataTransfer.getData('width');
+          let height = e.originalEvent.dataTransfer.getData('height');
   
           let node = {
             id,
@@ -117,6 +121,8 @@ class panelPlugins {
             top: coordinates[1],
             Class: Node,
             content,
+            width,
+            height
           }
   
           this.addNode(registerData.canvas, node);

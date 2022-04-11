@@ -66,12 +66,12 @@ group.scope = 'xxx1 xxx2 xxx3';
 ### resize _`<Boolean>`_ (选填)
 &nbsp;&nbsp;节点组大小可变标识。默认可变
 
-<img width="600" src="https://img.alicdn.com/imgextra/i4/O1CN01nb2APF1ZM1lbFNKM1_!!6000000003179-1-tps-400-300.gif">
+<img width="650" src="https://img.alicdn.com/imgextra/i4/O1CN01nb2APF1ZM1lbFNKM1_!!6000000003179-1-tps-400-300.gif">
 
 ### group _`<String>`_ (选填)
 &nbsp;&nbsp;父级group的id: 需要开启canvas.theme.group.includeGroups的属性才能支持group嵌套
   
-<img width="600" src="https://img.alicdn.com/imgextra/i4/O1CN01qmOWWj1CKtcvZZJ7Q_!!6000000000063-2-tps-842-536.png">
+<img width="650" src="https://img.alicdn.com/imgextra/i4/O1CN01qmOWWj1CKtcvZZJ7Q_!!6000000000063-2-tps-842-536.png">
 
 <br>
 <br>
@@ -123,7 +123,22 @@ getWidth = () => {}
 /**
   * @return {number} - 节点组高度
   */
+``` js
 getHeight = () => {}
+```
+
+### group.setSize(width, height)
+
+*作用*： 设置节点组的大小
+
+*参数*
+
+* `{number} width`节点组宽度
+
+* `{number} height`节点组高度
+
+```js
+setSize = (width, height) => {}
 ```
 
 ### group.addNode (node)
@@ -172,6 +187,7 @@ removeNode = (node) => {}
 
 *参数*
 
+```js
 /**
   * group删除节点
   * @param {array} nodes - 节点数组
@@ -202,6 +218,7 @@ removeNodes = (nodes) => {}
   * @param {string} param.dom - 可以把分组内的任意一个子dom作为自定义锚点
   */
 addEndpoint = (obj) => {}
+```
 
 ### group.getEndpoint (id)
 
@@ -245,12 +262,12 @@ moveTo = (obj) => {}
 * `{string} event `发送事件名称
 * `{number} data `发送事件数据
 
-### <a name='group-event'>事件</a>：
 ```js
 /**
   * 发送事件
   */
 emit = (string, obj) => {}
+```
 
 *作用*： 节点组接收事件的方法，能接收画布及任何一个元素的事件。
 

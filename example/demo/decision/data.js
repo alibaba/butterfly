@@ -1,9 +1,7 @@
-'use strict';
-
-import Node from './node';
+import Node from './node.js';
 import Edge from './edge';
 
-const data= {
+export default {
   nodes: [
     {
       id: '1',
@@ -333,4 +331,4 @@ const data= {
     },
   ]
 };
-export default data;
+

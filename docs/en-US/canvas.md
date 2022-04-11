@@ -2,10 +2,57 @@
 
 ```js
 let canvas = new Canvas({
-  root: dom,
-  theme: {},
-  ...
   // the attribute below
+  root: dom,               // canvas root dom (require)
+  layout: 'ForceLayout',   // layout setting , integrated or custom , (optional)
+  zoomable: true,          // enable zoom canvas (optional)
+  moveable: true,          // enable move canvas (optional)
+  draggable: true,         // enable drag nodes (optional)
+  linkable: true,          // enable connect edges (optional)
+  disLinkable: true,       // enable disConnect edges (optional)
+  layout: {},              // initialize auto layout (optional)
+  theme: {                 // theme (optional) 
+    group: {
+      type: 'normal',       // Node group type: normal (drag in and drag out), inner (can only be dragged in and not out)
+      dragGroupZIndex: 50  // Node group z-index: (optional, Default:50)
+    },
+    node: {
+      dragNodeZIndex: 250  //node z-index/2 (optional, Default:250)
+    },
+    edge: {
+      type: 'endpoint',    // edge connection type
+      shapeType: 'Bezier', // edge type：Bezier curve，Polyline ，Straight，Manhattan line，Improved Bezier curve。values ： Bezier/Flow/Straight/Manhattan/AdvancedBezier
+      label: 'test',       // edge label
+      arrow: true,         // whether to show arrow
+      arrowPosition: 0.5,  // arrow position (0 ~ 1)
+      arrowOffset: 0.0,    // arrow offset
+      arrowShapeType: '',  // custom arrow style
+      Class: XXClass,      // custom Class
+      isExpandWidth: false,// expand line interaction area
+      defaultAnimate: false,// turn on line animation by default
+      dragEdgeZindex: 499  // edge z-index (optional, Default:490)
+    },
+    endpoint: {
+      position: [],        // limit endpoint position ['Top', 'Bottom', 'Left', 'Right'],
+      linkableHighlight: true,// point.linkable method is triggered when connecting, can be highlighted
+      limitNum: 10,        // limit the number of anchor connections
+      expandArea: {        // when the anchor point is too small, the connection hot zone can be expanded.
+        left: 10,
+        right: 10,
+        top: 10,
+        botton: 10
+      }
+    },
+    zoomGap: 0.001,       // mouse zoom in and out gap settings
+    autoFixCanvas: {     // auto expand canvas when drag nodes or edges near the edge of canvas.
+      enable: false,
+      autoMovePadding: [20, 20, 20, 20]
+    },
+    autoResizeRootSize: true // automatically adapt to the root size, the default is true
+  },
+  global: {                // custom configuration, will run through all canvas, group, node, edge, endpoint objects
+    isScopeStrict: false   // whether scope is strict mode (default is false)
+  }
 });
 canvas.draw({
   // data
@@ -41,6 +88,10 @@ canvas.draw({
 
 &nbsp;&nbsp;whether the nodes in canvas can be dragged to delete connection; value type `boolean`, Default value `false`
 
+### layout _`<Object>`_   (Optional)
+
+&nbsp;&nbsp;canvas initialization automatically arranges the layout according to what you set, [reference](https://github.com/alibaba/butterfly/blob/master/docs/en-US/layout.md)
+
 ### theme
 
 &nbsp;&nbsp;canvas theme configuration, default initialization style and interaction, mainly:
@@ -49,15 +100,19 @@ canvas.draw({
 
   *params*：
 
-  * type _`<String>`_ whether the edge is connected to a node or to an endpoint. Default value `endpoint`
+  * type _`<String>`_ whether the edge is connected to a node or to an endpoint. Default value `node`
 
   * shapeType _`<String>`_  edge type: Bezier, AdvancedBezier, Flow, Straight, Manhattan, Bezier2-1, Bezier2-2, Bezier2-3, BrokenLine; Default value `Straight`
+
+  <img width="650" src="https://img.alicdn.com/imgextra/i3/O1CN01sHnesN1SMIhN62CLK_!!6000000002232-2-tps-1418-404.png">
 
   * label _`<String/Dom>`_ edge label
 
   * labelPosition _`<Number>`_ edge label position: the value is between 0-1, 0 represents the beginning of the egde, and 1 represents the end of the egde. Default value `0.5`
 
   * labelOffset _`<Number>`_ the position offset of edge label: the offset value from the label position of edge. The default value is 0, and the unit is `px`
+
+  * isAllowLinkInSameNode _`<Boolean>`_ anchor connection restriction: whether to allow anchor connections in the same node
 
   ```js
   // labelPosition & labelOffset: the label position is in the middle of edge，offset 20px to the end
@@ -107,7 +162,7 @@ canvas.draw({
 
   * autoMovePadding _`<Array>`_ inner margin of the canvas that triggers automatic extension; Default value `[20,20,20,20]`
 
-<img width="600" src="https://img.alicdn.com/tfs/TB16lUNBG61gK0jSZFlXXXDKFXa-1665-801.gif">
+<img width="650" src="https://img.alicdn.com/tfs/TB16lUNBG61gK0jSZFlXXXDKFXa-1665-801.gif">
   
 * autoResizeRootSize _`<Boolean>`_ Automatically adapt to the Root container size; Default value `true`
 
@@ -144,6 +199,19 @@ draw = (data, calllback) => {}
 
 ```js
 redraw = (data, calllback) => {}
+```
+
+### canvas.autoLayout (type, options)
+
+*descripition*：manually invoke automatic layout
+
+*params*
+
+* `{string} type` layout tyoe
+* `{object} options` layout params
+
+```js
+autoLayout = (type, options) => {}
 ```
 
 ### canvas.getDataMap (data, calllback)
@@ -227,7 +295,7 @@ addGroup = (object|Group, nodes, options) => {}
 
 This API can not only create new groups, but also select multiple nodes into groups:
 
-<img width="600" src="https://img.alicdn.com/imgextra/i1/O1CN01S2n8Sy1aayJ8euH7n_!!6000000003347-1-tps-600-400.gif">
+<img width="650" src="https://img.alicdn.com/imgextra/i1/O1CN01S2n8Sy1aayJ8euH7n_!!6000000003347-1-tps-600-400.gif">
 
 ### canvas.removeGroup (string | Group)
 
@@ -572,7 +640,7 @@ focusNodesWithAnimate = (objs, type, options, callback) => {}
 focusCenterWithAnimate = (options, callback) => {}
 ```
 
-<img width="600" src="https://img.alicdn.com/imgextra/i2/O1CN01zrkUqk1SP34Sup0vt_!!6000000002238-1-tps-1661-824.gif">
+<img width="650" src="https://img.alicdn.com/imgextra/i2/O1CN01zrkUqk1SP34Sup0vt_!!6000000002238-1-tps-1661-824.gif">
 
 ### canvas.redo ()
 
@@ -656,7 +724,7 @@ canvas2terminal = (coordinates) => {}
 
 * As shown in the figure, the canvas is scaled, and the coordinates after the movement do not match the coordinates of the original canvas. This method is needed to convert. Special Note: Users who drag and drop nodes pay attention to these two `e.clientX` and `e.clientY`, and need to call this method to convert.
 
-<img width="600" src="http://img.alicdn.com/tfs/TB1lWIAFHvpK1RjSZPiXXbmwXXa-973-850.jpg">
+<img width="650" src="http://img.alicdn.com/tfs/TB1lWIAFHvpK1RjSZPiXXbmwXXa-973-850.jpg">
 
 
 ### canvas.setSelectMode (boolean, contents , selecMode)
@@ -751,6 +819,7 @@ canvas.on('type key', (data) => {
 * `system.canvas.zoom`	canvas zoom event
 * `system.nodes.delete`	delete node event
 * `system.node.move`	move node event
+* `system.node.click`	click node event
 * `system.nodes.add`	add multiple nodes event
 * `system.links.delete`	delete edge event
 * `system.link.connect`	connect edge event
@@ -761,6 +830,7 @@ canvas.on('type key', (data) => {
 * `system.group.move`	move group event
 * `system.group.addMembers`	add node to group event
 * `system.group.removeMembers`	delete node from group event
+* `system.endpoint.limit`	connection exceeds the limitNum of Endpoint
 * `system.multiple.select`	multiple select callback event
 * `system.drag.start`	drag start event
 * `system.drag.move`	drag move event
@@ -801,7 +871,7 @@ this.canvas.setGridMode(true, {
     shapeType: 'line',     // show type，support line & circle
     gap: 23,               // grid gap
     adsorbGap: 8,          // adsorb gap
-    backgroud: '#fff',     // grid backgroud
+    background: '#fff',     // grid background
     lineColor: '#000',     // grid line color
     lineWidth: 1,          // grid line thickness
     circleRadiu: 1,        // grid circle radiu
@@ -809,6 +879,41 @@ this.canvas.setGridMode(true, {
   }
 });
 ```
+
+### canvas.justifyCoordinate ()
+
+*descripition*：automatically align nodes / groups on the canvas(must be effective under the grid background)
+
+```js
+justifyCoordinate = () => {}
+```
+
+### canvas.setGuideLine (show, options)
+
+*descripition*：set guide line
+
+*params*
+
+* `{true|false} boolean`  - whether to open
+* `{array} options` - parameters for guide line
+
+```js
+setGuideLine = (show, options) => {}
+
+this.canvas.setGuideLine(true, {
+  limit: 1,             // limit guide line number
+  adsorp: {
+    enable: false       // enable auto adsorp
+    gap: 5              // adsorp gap
+  },
+  theme: {
+    lineColor: 'red',   // guide line color
+    lineWidth: 1,       // guide line thickness
+  }
+});
+```
+
+<img width="600" src="https://img.alicdn.com/imgextra/i1/O1CN01bBhPsu1b3pH0VD1X9_!!6000000003410-1-tps-1274-600.gif">
 
 ### canvas.setMinimap = (show, options)
 
@@ -849,35 +954,6 @@ this.canvas.save2img({type: 'png', width: 1920, height: 1080, quality: 1})
     link.href = dataUrl;
     link.click();
   });
-```
-
-### canvas.justifyCoordinate ()
-
-*descripition*：automatically align nodes / groups on the canvas(must be effective under the grid background)
-
-```js
-justifyCoordinate = () => {}
-```
-
-### canvas.setGuideLine (show, options)
-
-*descripition*：set guide line
-
-*params*
-
-* `{true|false} boolean`  - whether to open
-* `{array} options` - parameters for guide line
-
-```js
-setGuideLine = (show, options) => {}
-
-this.canvas.setGuideLine(true, {
-  limit: 1,             // limit guide line number
-  theme: {
-    lineColor: 'red',   // guide line color
-    lineWidth: 1,       // guide line thickness
-  }
-});
 ```
 
 ### canvas.updateRootResize ()
