@@ -1,10 +1,12 @@
 import {Canvas} from 'butterfly-dag';
 import _ from 'lodash';
 import './canvas.less';
-
+//import { Canvas } from 'butterfly-dag';
+import Canvas from '../../../src/canvas/baseCanvas';
 const EVENTTYPE = {
-  NODECLICK: 'node:click',
-  CANVASCLICK: 'canvas:click'
+    NODECLICK: 'node:click',
+    CANVASCLICK: 'canvas:click'
+
 };
 
 class IndustryCanvas extends Canvas {

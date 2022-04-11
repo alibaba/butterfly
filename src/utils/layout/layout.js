@@ -15,6 +15,7 @@ import dagreLayout from './dagreLayout.js';
 import radial from './radial/radial.js';
 import DagreGroupLayout from './dagreGroupLayout.js';
 import treeLayout from './hierarchy';
+import fishboneLayout from './fishboneLayout.js';
 
 
 // 离散树形布局
@@ -46,6 +47,7 @@ function forceTreeLayout(param) {
 
 
 export default {
+  fishboneLayout,
   forceLayout,
   forceTreeLayout,
   treeLayout,

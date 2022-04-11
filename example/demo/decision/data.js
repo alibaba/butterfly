@@ -208,7 +208,18 @@ export default {
       targetNode: '4',
       type: 'endpoint',
       arrow: true,
-      arrowPosition: 0.5,
+      arrowConfig: [
+        {
+          arrowPosition: 0.2,
+          arrowOrientation: -1
+        },
+        {
+          arrowPosition: 0.8
+        },
+        {
+          arrowPosition: 0.5
+        }
+      ],
       Class: Edge
     },
     {
@@ -218,7 +229,11 @@ export default {
       targetNode: '4',
       type: 'endpoint',
       arrow: true,
-      arrowPosition: 0.5,
+      arrowConfig: [
+        {
+          arrowPosition: 1
+        }
+      ],
       Class: Edge
     },
     {
@@ -228,7 +243,11 @@ export default {
       targetNode: '4',
       type: 'endpoint',
       arrow: true,
-      arrowPosition: 0.5,
+      arrowConfig: [
+        {
+          arrowPosition: 1
+        }
+      ],
       Class: Edge
     },
     {
@@ -239,7 +258,15 @@ export default {
       targetNode: '5',
       type: 'endpoint',
       arrow: true,
-      arrowPosition: 0.2,
+      arrowConfig: [
+        {
+          arrowPosition: 0.1,
+          arrowOrientation: -1
+        },
+        {
+          arrowPosition: 0.9
+        }
+      ],
       Class: Edge
     },
     {
@@ -249,8 +276,6 @@ export default {
       sourceNode: '5',
       targetNode: '6',
       type: 'endpoint',
-      arrow: true,
-      arrowPosition: 0.2,
       Class: Edge
     },
     {
@@ -259,8 +284,6 @@ export default {
       sourceNode: '6',
       targetNode: '7',
       type: 'endpoint',
-      arrow: true,
-      arrowPosition: 0.5,
       Class: Edge
     },
     {
@@ -269,8 +292,6 @@ export default {
       sourceNode: '6',
       targetNode: '8',
       type: 'endpoint',
-      arrow: true,
-      arrowPosition: 0.5,
       Class: Edge
     },
     {
@@ -280,8 +301,6 @@ export default {
       sourceNode: '4',
       targetNode: '9',
       type: 'endpoint',
-      arrow: true,
-      arrowPosition: 0.2,
       Class: Edge
     },
     {
@@ -291,8 +310,6 @@ export default {
       sourceNode: '9',
       targetNode: '10',
       type: 'endpoint',
-      arrow: true,
-      arrowPosition: 0.2,
       Class: Edge
     },
     {
@@ -302,8 +319,6 @@ export default {
       sourceNode: '10',
       targetNode: '11',
       type: 'endpoint',
-      arrow: true,
-      arrowPosition: 0.2,
       Class: Edge
     },
     {
@@ -312,8 +327,6 @@ export default {
       sourceNode: '11',
       targetNode: '12',
       type: 'endpoint',
-      arrow: true,
-      arrowPosition: 0.5,
       Class: Edge
     },
   ]

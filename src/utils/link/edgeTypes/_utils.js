@@ -21,7 +21,6 @@ export const TOP = 'Top';
 export const BOTTOM = 'Bottom';
 
 // 曼哈顿折线路由算法
-
 export function _route(conn, fromPt, fromDir, toPt, toDir) {
   // 防止图上节点隐藏NaN的死循环问题
   fromPt.x = fromPt.x || 0;
