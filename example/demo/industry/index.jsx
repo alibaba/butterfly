@@ -24,7 +24,11 @@ class Industry extends Component {
       },
       theme: {
         edge: {
-          shapeType: 'AdvancedBezier'
+
+          shapeType: 'Manhattan',
+          hasRadius:true,//Manhattan曲线圆角
+
+
         },
       }
     });
