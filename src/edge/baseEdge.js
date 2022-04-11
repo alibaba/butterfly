@@ -62,6 +62,8 @@ class BaseEdge extends Edge {
     this._zIndex = 0;
     // 曼哈顿线可拖动变量
     this.draggable = _.get(opts, 'draggable', false);;
+    //曼哈顿线圆角显示，默认false
+    this.hasRadius = _.get(opts, 'hasRadius', false);
     this._breakPoints = [];
     if (this.options.breakPoints && this.options.breakPoints.length > 0) {
       this._breakPoints = this.options.breakPoints;
@@ -163,7 +165,8 @@ class BaseEdge extends Edge {
       let obj = DrawUtil.drawManhattan(sourcePoint, targetPoint, {
         breakPoints: this._breakPoints,
         hasDragged: this._hasDragged,
-        draggable: this.draggable
+        draggable: this.draggable,
+        hasRadius: this.hasRadius
       });
       path = obj.path;
       obj.breakPoints[0].type = 'start';

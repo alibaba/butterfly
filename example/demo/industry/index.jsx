@@ -25,6 +25,7 @@ class Industry extends Component {
       theme: {
         edge: {
           shapeType: 'Manhattan',
+          hasRadius:true,//Manhattan曲线圆角
         },
       }
     });

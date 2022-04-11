@@ -46,6 +46,7 @@ class BaseCanvas extends Canvas {
       edge: {
         type: _.get(options, 'theme.edge.type') || 'endpoint',
         shapeType: _.get(options, 'theme.edge.shapeType') || 'Straight',
+        hasRadius: _.get(options, 'theme.edge.hasRadius') || false,
         Class: _.get(options, 'theme.edge.Class') || Edge,
         arrow: _.get(options, 'theme.edge.arrow'),
         arrowShapeType: _.get(options, 'theme.edge.arrowShapeType', 'default'),
@@ -856,6 +857,7 @@ class BaseCanvas extends Canvas {
                   type: 'endpoint',
                   type: this.theme.edge.type,
                   shapeType: this.theme.edge.shapeType,
+                  hasRadius: this.theme.edge.hasRadius,
                   orientationLimit: this.theme.endpoint.position,
                   _sourceType: point.nodeType,
                   sourceNode: _sourceNode,
@@ -2526,6 +2528,7 @@ class BaseCanvas extends Canvas {
           label: link.label,
           type: link.type || this.theme.edge.type,
           shapeType: link.shapeType || this.theme.edge.shapeType,
+          hasRadius: this.theme.edge.hasRadius,
           orientationLimit: this.theme.endpoint.position,
           isExpandWidth: this.theme.edge.isExpandWidth,
           defaultAnimate: this.theme.edge.defaultAnimate,
