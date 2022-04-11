@@ -23,7 +23,7 @@ let canvas = new Canvas({
     edge: {
       type: 'endpoint',    //线段连接类型
       shapeType: 'Bezier', //线条默认类型
-      hasRadius: false ,    //默认曼哈顿曲线不为圆角
+      hasRadius: false ,   //默认曼哈顿曲线不为圆角
       label: 'test',       //线条默认label
       arrow: true,         //线条默认是否带箭头
       arrowPosition: 0.5,  //箭头位置(0 ~ 1)
