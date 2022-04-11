@@ -21,7 +21,7 @@ export const TOP = 'Top';
 export const BOTTOM = 'Bottom';
 
 // 曼哈顿折线路由算法
-export function _route(conn, fromPt, fromDir, toPt, toDir) {
+export function _route (conn, fromPt, fromDir, toPt, toDir) {
   // 防止图上节点隐藏NaN的死循环问题
   fromPt.x = fromPt.x || 0;
   fromPt.y = fromPt.y || 0;
@@ -156,7 +156,7 @@ export function _route(conn, fromPt, fromDir, toPt, toDir) {
 }
 
 
-export function _calcOrientation(beginX, beginY, endX, endY, orientationLimit) {
+export function _calcOrientation (beginX, beginY, endX, endY, orientationLimit) {
 
   let _calcWithLimit = (rank) => {
     if (orientationLimit) {
@@ -236,7 +236,7 @@ export function _calcOrientation(beginX, beginY, endX, endY, orientationLimit) {
   }
 }
 
-export function _findControlPoint(point, sourcePoint, targetPoint, _so, _to) {
+export function _findControlPoint (point, sourcePoint, targetPoint, _so, _to) {
 
   // 曲率，可配置的
   let majorAnchor = 10;
@@ -287,7 +287,7 @@ export function _findControlPoint(point, sourcePoint, targetPoint, _so, _to) {
 }
 
 //二阶贝塞尔曲线
-export function _findSecondControlPoint(sourcePoint, targetPoint, _so, _to, shapeType) {
+export function _findSecondControlPoint (sourcePoint, targetPoint, _so, _to, shapeType) {
   //中点
   let midX = (sourcePoint.pos[0] + targetPoint.pos[0]) / 2;
   let midY = (sourcePoint.pos[1] + targetPoint.pos[1]) / 2;
@@ -382,7 +382,7 @@ export function _findSecondControlPoint(sourcePoint, targetPoint, _so, _to, shap
   return ctrlPoint;
 }
 
-export function _findManhattanPoint(points, pos) {
+export function _findManhattanPoint (points, pos) {
   let result = undefined;
   let gap = Infinity;
   for (let i = 0; i < points.length - 1; i++) {
