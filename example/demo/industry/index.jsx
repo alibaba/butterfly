@@ -22,7 +22,9 @@ class Industry extends Component {
       },
       theme: {
         edge: {
+
           shapeType: 'AdvancedBezier'
+
         },
       }
     });
