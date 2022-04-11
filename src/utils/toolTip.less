@@ -1,0 +1,103 @@
+.butterfly-tooltip-container {
+  position: absolute;
+  z-index: 101;
+  font-size: 12px;
+  opacity: 0;
+
+  &.in {
+    transition: all 0.3s;
+    opacity: 0.9;
+  }
+  &.top {
+    padding: 5px 0;
+    margin-top: -3px;
+  }
+  &.right {
+    padding: 0 5px;
+    margin-left: 3px;
+  }
+  &.bottom {
+    padding: 5px 0;
+    margin-top: 3px;
+  }
+  &.left {
+    padding: 0 5px;
+    margin-left: -3px;
+  }
+
+  &.top .butterfly-tooltip-arrow {
+    bottom: 0;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px 5px 0;
+    border-top-color: #000;
+  }
+  &.top-left .butterfly-tooltip-arrow {
+    right: 5px;
+    bottom: 0;
+    margin-bottom: -5px;
+    border-width: 5px 5px 0;
+    border-top-color: #000;
+  }
+  &.top-right .butterfly-tooltip-arrow {
+    bottom: 0;
+    left: 5px;
+    margin-bottom: -5px;
+    border-width: 5px 5px 0;
+    border-top-color: #000;
+  }
+  &.right .butterfly-tooltip-arrow {
+    top: 50%;
+    left: 0;
+    margin-top: -5px;
+    border-width: 5px 5px
+      5px 0;
+    border-right-color: #000;
+  }
+  &.left .butterfly-tooltip-arrow {
+    top: 50%;
+    right: 0;
+    margin-top: -5px;
+    border-width: 5px 0 5px
+      5px;
+    border-left-color: #000;
+  }
+  &.bottom .butterfly-tooltip-arrow {
+    top: 0;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 0 5px 5px;
+    border-bottom-color: #000;
+  }
+  &.bottom-left .butterfly-tooltip-arrow {
+    top: 0;
+    right: 5px;
+    margin-top: -5px;
+    border-width: 0 5px 5px;
+    border-bottom-color: #000;
+  }
+  &.bottom-right .butterfly-tooltip-arrow {
+    top: 0;
+    left: 5px;
+    margin-top: -5px;
+    border-width: 0 5px 5px;
+    border-bottom-color: #000;
+  }
+
+  .butterfly-tooltip-inner {
+    max-width: 200px;
+    padding: 3px 8px;
+    color: #fff;
+    text-align: center;
+    background-color: #000;
+    border-radius: 4px;
+  }
+  
+  .butterfly-tooltip-arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+  }
+}

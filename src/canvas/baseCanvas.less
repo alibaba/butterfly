@@ -1,0 +1,51 @@
+.butterfly-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+}
+
+.butterfly-svg {
+  position: relative;
+  pointer-events: auto!important;
+  overflow: visible!important;
+}
+
+.butterfly-selected-canvas{
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  pointer-events: auto;
+  opacity: 0.5;
+  display: none;
+  &.wrapper-up {
+    z-index: 999;
+    display: block;
+  }
+}
+
+.butterfly-gird-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.butterfly-gird-canvas-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  .butterfly-guideline-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}

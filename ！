@@ -1,0 +1,22 @@
+test
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch dev/v4
+# Your branch is ahead of 'origin/dev/v4' by 2 commits.
+#   (use "git push" to publish your local commits)
+#
+# Last commands done (2 commands done):
+#    pick e0c36fe 123
+#    pick 076a5f3 test
+# Next commands to do (7 remaining commands):
+#    pick c0e8bc5 引用
+#    pick aba29b6 feat:曼哈顿曲线圆角
+# You are currently rebasing branch 'dev/v4' on '3708e6f'.
+#
+# Changes to be committed:
+#	modified:   example/demo/industry/canvas.js
+#	modified:   example/demo/industry/edge.js
+#	modified:   example/demo/industry/index.jsx
+#

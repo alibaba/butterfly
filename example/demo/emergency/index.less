@@ -1,0 +1,104 @@
+.emergency-page {
+  width: 100%;
+  height: 100%;
+  .emergency-canvas {
+    width: 100%;
+    height: 100%;
+  }
+  .butterflies-link {
+    stroke-width: 1px;
+  }
+  .emergency-base-node {
+    position: absolute;
+    text-align: center;
+    background: @butterfly-theme-color;
+    vertical-align: middle;
+    border-radius: 5px;
+    .top{
+      top: -3px;
+      left: -3%;
+    }
+    .right{
+      top: -3px;
+      right: -3px;
+    }
+    .bottom{
+      bottom: -3px;
+      right: -3px;
+    }
+    .left{
+      bottom: -3px;
+      left: -3px;
+    }
+  }
+  .orange {
+    border-width: 1px;
+    border-color: #ef8b5b;
+    color: @butterfly-normal-font-color;
+    stroke: #ef8b5b;
+    line-height: 33px;
+  }
+  .green {
+    border-width: 1px;
+    border-color: #66cdc5;
+    color: @butterfly-normal-font-color;
+    stroke: #66cdc5;
+  }
+  .black {
+    border-width: 1px;
+    border-color: #8f8f8f;
+    color: @butterfly-normal-font-color;
+    stroke: #8f8f8f;
+  }
+  .purple {
+    border-width: 1px;
+    border-color: #776ef3;
+    color: @butterfly-normal-font-color;
+    stroke: #776ef3;
+  }
+  .circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+  }
+  .diamond {
+    width:105px;
+    height:105px;
+    transform: rotate(45deg);
+    .rotate {
+      transform: rotate(-45deg);
+    }
+  }
+  .rect {
+    width:105px;
+    height:75px;
+  }
+  .dashed {
+    border-style: dashed;
+  }
+  .solid {
+    border-style: solid;
+  }
+  .text {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    display: -webkit-box;    
+    -webkit-box-orient: vertical;    
+    -webkit-line-clamp: 3;    
+    overflow: hidden;
+  }
+  .label {
+    position: absolute;
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    border: 1px solid #776ef3;
+    border-radius: 50%;
+    color: @butterfly-normal-font-color;
+    padding: 4px;
+    background: @butterfly-theme-color;
+    text-align: center;
+  }
+}

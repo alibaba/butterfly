@@ -1,0 +1,29 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
+<!--
+2013-9-30: Created.
+-->
+<svg>
+<metadata>
+Created by iconfont
+</metadata>
+<defs>
+
+<font id="butterfly-icon" horiz-adv-x="1024" >
+  <font-face
+    font-family="butterfly-icon"
+    font-weight="500"
+    font-stretch="normal"
+    units-per-em="1024"
+    ascent="896"
+    descent="-128"
+  />
+    <missing-glyph />
+    
+    <glyph glyph-name="drag" unicode="&#58905;" d="M771.669333 643.072a42.666667 42.666667 0 0 0 0-60.330667L313.088 124.16a42.666667 42.666667 0 0 0-60.416 60.330667l458.581333 458.581333a42.666667 42.666667 0 0 0 60.416 0z m4.778667-306.346667a42.666667 42.666667 0 0 0 0-60.330666L619.605333 119.552a42.666667 42.666667 0 1 0-60.330666 60.330667l156.842666 156.842666a42.666667 42.666667 0 0 0 60.330667 0z"  horiz-adv-x="1024" />
+
+    
+
+
+  </font>
+</defs></svg>

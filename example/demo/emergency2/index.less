@@ -1,0 +1,65 @@
+.emergency2-page {
+  width: 100%;
+  height: 100%;
+  .emergency2-canvas {
+    width: 100%;
+    height: 100%;
+  }
+  .emergency2-base-node {
+    position: absolute;
+    text-align: center;
+    background: @butterfly-theme-color;
+    vertical-align: middle;
+    border-radius: 5px;
+    line-height: 28px;
+    color: @butterfly-normal-font-color;
+    .top{
+      top: -3px;
+      left: -3%;
+    }
+    .right{
+      top: -3px;
+      right: -3px;
+    }
+    .bottom{
+      bottom: -3px;
+      right: -3px;
+    }
+    .left{
+      bottom: -3px;
+      left: -3px;
+    }
+    border: @butterfly-box-border;
+    box-shadow: @butterfly-box-shadow;
+  }
+  .rect {
+    border-radius: 80px;
+  }
+
+  .test-base-link{
+    stroke: #4b4f6b;
+    stroke-width: 3px;
+  }
+  .text {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    display: -webkit-box;    
+    -webkit-box-orient: vertical;    
+    -webkit-line-clamp: 3;    
+    overflow: hidden;
+    font-size: 12px;
+  }
+  .label {
+    position: absolute;
+    font-size: 12px;
+    width: 30px;
+    height: 18px;
+    line-height: 18px;
+    color: @butterfly-normal-font-color;
+    text-align: center;
+    background: @butterfly-theme-color;
+    border-radius: 80px;
+  }
+}

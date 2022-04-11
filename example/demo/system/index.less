@@ -1,0 +1,69 @@
+.system-page {
+  width: 100%;
+  height: 100%;
+  .system-canvas {
+    width: 100%;
+    height: 100%;
+    .group {
+      width: 300px;
+      height: 300px;
+      .container {
+        width: 100%;
+        height: 100%;
+        border-radius: 5px;
+        border: 1px solid #66cdc5;
+        background: @butterfly-theme-color;
+      }
+    }
+    .system-base-node {
+      position: absolute;
+      padding: 0;
+      border-width: 1px;
+      border-color: #f4b871;
+      text-align: center;
+      background: @butterfly-theme-color;
+      vertical-align: middle;
+      border-radius: 5px;
+    }
+    .base-link {
+      stroke: #4b4f6b;
+      stroke-width: 1px;
+    }
+    .group {
+      > .text {
+        position: absolute;
+        top: 20px;
+        left: 108px;
+        width: 100px;
+      }
+    }
+    .label {
+      position: absolute;
+      color: @butterfly-normal-font-color;
+      font-size: 12px;
+    }
+    .label:hover {
+      background: @butterfly-primary-color;
+      color: @butterfly-overlay-font-color;
+    }
+    .text {
+      display: inline-block;
+      text-align: center;
+      color: @butterfly-normal-font-color;
+      width: 100%;
+      padding-top: 5px;
+    }
+    .dashed {
+      border-style: dashed;
+    }
+    .solid {
+      border-style: solid;
+    }
+    .purple-point {
+      border: 1px solid #fff;
+      background: #776ef3;
+      width: 10px;
+      height: 10px;
+    }
+  }
+}

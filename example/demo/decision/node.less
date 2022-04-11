@@ -1,0 +1,39 @@
+.decision-node {
+  position: absolute;
+  height: 36px;
+  width: 116px;
+  line-height: 36px;
+  text-align: center;
+  background: @butterfly-theme-color;
+  border-radius: 100px;
+  border: @butterfly-box-border;
+  box-shadow: @butterfly-box-shadow;
+  color:@butterfly-normal-font-color;
+  .icon-box {
+    display: inline-block;
+    height: 30px;
+    line-height: 30px;
+    width: 30px;
+    border-radius: 15px;
+    position: relative;
+    left: 2px;
+    .iconfont {
+      color: @butterfly-overlay-font-color;
+    }
+  }
+  .text-box {
+    display: inline-block;
+    height: 36px;
+    width: 84px;
+    padding: 0 10px;
+    line-height: 36px;
+    font-size: 12px;
+    vertical-align: bottom;
+  }
+  .icon-background{
+    background: @butterfly-primary-color;
+  }
+}
+// .decision-node:hover{
+//   border: @butterfly-box-node-border-hover;
+// }

@@ -1,0 +1,27 @@
+.plugin-panel-page {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  .plugin-container {
+    height: 100%;
+    width: 200px;
+    background: #f3f3f3;
+    border-right: 1px solid #ddd;
+    .basic-panel, .uml-panel {
+      margin-bottom: 10px;
+    }
+    .title {
+      margin: 0;
+      padding: 5px 5px;
+      border-bottom: 1px solid #ddd;
+    }
+    .uml-panel-content {
+      padding-top: 5px;
+    }
+  }
+  .plugin-panel-canvas {
+    height: 100%;
+    flex: 1;
+  }
+}
