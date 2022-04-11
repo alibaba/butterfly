@@ -6,9 +6,9 @@ const TOL = 0.1;
 const TOLxTOL = 0.01;
 const TOGGLE_DIST = 20;
 export const DEFAULT_RADIUS = 15;
-export const Point = function(x, y) {
-    this.x = x;
-    this.y = y;
+export const Point = function (x, y) {
+  this.x = x;
+  this.y = y;
 }
 // const Point = function(x, y) {
 //   this.x = x;
@@ -81,7 +81,7 @@ export function _route(conn, fromPt, fromDir, toPt, toDir) {
 
       if (yDiff > 0) {
         dir = TOP;
-      } 
+      }
       else {
         dir = BOTTOM;
       }
@@ -90,25 +90,25 @@ export function _route(conn, fromPt, fromDir, toPt, toDir) {
     if (((xDiff * xDiff) < TOL) && (yDiff < 0) && (toDir === TOP)) {
       point = toPt;
       dir = toDir;
-    } 
+    }
     else {
       if (yDiff > 0) {
         point = new Point(fromPt.x, fromPt.y + MINDIST);
-      } 
+      }
       else if (((xDiff > 0) && (toDir === RIGHT)) || ((xDiff < 0) && (toDir === LEFT))) {
         point = new Point(fromPt.x, toPt.y);
-      } 
+      }
       else if (fromDir === toDir) {
         pos = Math.max(fromPt.y, toPt.y) + MINDIST;
         point = new Point(fromPt.x, pos);
-      } 
+      }
       else {
         point = new Point(fromPt.x, fromPt.y - (yDiff / 2));
       }
 
       if (xDiff > 0) {
         dir = LEFT;
-      } 
+      }
       else {
         dir = RIGHT;
       }
@@ -117,25 +117,25 @@ export function _route(conn, fromPt, fromDir, toPt, toDir) {
     if (((xDiff * xDiff) < TOL) && (yDiff > 0) && (toDir === BOTTOM)) {
       point = toPt;
       dir = toDir;
-    } 
+    }
     else {
       if (yDiff < 0) {
         point = new Point(fromPt.x, fromPt.y - MINDIST);
-      } 
+      }
       else if (((xDiff > 0) && (toDir === RIGHT)) || ((xDiff < 0) && (toDir === LEFT))) {
         point = new Point(fromPt.x, toPt.y);
-      } 
+      }
       else if (fromDir === toDir) {
         pos = Math.min(fromPt.y, toPt.y) - MINDIST;
         point = new Point(fromPt.x, pos);
-      } 
+      }
       else {
         point = new Point(fromPt.x, fromPt.y - (yDiff / 2));
       }
 
       if (xDiff > 0) {
         dir = LEFT;
-      } 
+      }
       else {
         dir = RIGHT;
       }
@@ -321,16 +321,16 @@ export function _findSecondControlPoint(sourcePoint, targetPoint, _so, _to, shap
   let _sum0 = _so[0] + _to[0];
   let _sum1 = _so[1] + _to[1];
   if (targetPoint.pos[0] < sourcePoint.pos[0] && targetPoint.pos[1] < sourcePoint.pos[1] && ((_sum0 === 0 && _sum1 ===
-      0) || (_sum0 === 1 && _sum1 === -1))) {
+    0) || (_sum0 === 1 && _sum1 === -1))) {
     t = 1;
   } else if (targetPoint.pos[0] > sourcePoint.pos[0] && targetPoint.pos[1] < sourcePoint.pos[1] && (_sum0 === 1 &&
-      _sum1 === 1)) {
+    _sum1 === 1)) {
     t = 1;
   } else if (targetPoint.pos[0] < sourcePoint.pos[0] && targetPoint.pos[1] > sourcePoint.pos[1] && ((_sum0 === 0 &&
-      _sum1 === 0) || (_sum0 === 1 && _sum1 === 1))) {
+    _sum1 === 0) || (_sum0 === 1 && _sum1 === 1))) {
     t = 1;
   } else if (targetPoint.pos[0] > sourcePoint.pos[0] && targetPoint.pos[1] > sourcePoint.pos[1] && (_sum0 === 1 &&
-      _sum1 === -1)) {
+    _sum1 === -1)) {
     t = 1;
   } else {
     t = -1;
@@ -372,10 +372,10 @@ export function _findSecondControlPoint(sourcePoint, targetPoint, _so, _to, shap
   return ctrlPoint;
 }
 
-export function _findManhattanPoint (points, pos) {
+export function _findManhattanPoint(points, pos) {
   let result = undefined;
   let gap = Infinity;
-  for(let i = 0; i < points.length - 1; i++) {
+  for (let i = 0; i < points.length - 1; i++) {
     let _dir = points[i].x === points[i + 1].x ? 'vertical' : 'horizontal';
     let _from = points[i];
     let _to = points[i + 1];

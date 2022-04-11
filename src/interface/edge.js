@@ -11,7 +11,7 @@ class Edge extends EventEmit3 {
     // sourceEndpoint     源锚点
     // type               "node" or "endpoint"，标志类型的
     // shapeType          线条类型
-    //hasRadius           曼哈顿曲线圆角
+    // hasRadius           曼哈顿曲线圆角
     // label              设置线条上的字体
     // options            数据的透传
     // dom                线条dom
