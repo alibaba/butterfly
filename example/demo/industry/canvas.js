@@ -1,6 +1,8 @@
 import './canvas.less';
 
-import { Canvas } from 'butterfly-dag';
+//import { Canvas } from 'butterfly-dag';
+
+import Canvas from '../../../src/canvas/baseCanvas';
 const EVENTTYPE  = {
   NODECLICK: 'node:click',
   CANVASCLICK: 'canvas:click'
