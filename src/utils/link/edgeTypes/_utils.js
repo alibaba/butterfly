@@ -45,15 +45,19 @@ export function _route(conn, fromPt, fromDir, toPt, toDir) {
     if ((xDiff > 0) && ((yDiff * yDiff) < TOL) && (toDir === RIGHT)) {
       point = toPt
       dir = toDir
-    } else {
+    }
+    else {
       if (xDiff < 0) {
         point = new Point(fromPt.x - MINDIST, fromPt.y);
-      } else if (((yDiff > 0) && (toDir === BOTTOM)) || ((yDiff < 0) && (toDir === TOP))) {
+      }
+      else if (((yDiff > 0) && (toDir === BOTTOM)) || ((yDiff < 0) && (toDir === TOP))) {
         point = new Point(toPt.x, fromPt.y);
-      } else if (fromDir === toDir) {
+      }
+      else if (fromDir === toDir) {
         pos = Math.min(fromPt.x, toPt.x) - MINDIST;
         point = new Point(pos, fromPt.y);
-      } else {
+      }
+      else {
         point = new Point(fromPt.x - (xDiff / 2), fromPt.y);
       }
 
@@ -63,19 +67,24 @@ export function _route(conn, fromPt, fromDir, toPt, toDir) {
         dir = BOTTOM
       }
     }
-  } else if (fromDir === RIGHT) {
+  }
+  else if (fromDir === RIGHT) {
     if ((xDiff < 0) && ((yDiff * yDiff) < TOL) && (toDir === LEFT)) {
       point = toPt
       dir = toDir
-    } else {
+    }
+    else {
       if (xDiff > 0) {
         point = new Point(fromPt.x + MINDIST, fromPt.y);
-      } else if (((yDiff > 0) && (toDir === BOTTOM)) || ((yDiff < 0) && (toDir === TOP))) {
+      }
+      else if (((yDiff > 0) && (toDir === BOTTOM)) || ((yDiff < 0) && (toDir === TOP))) {
         point = new Point(toPt.x, fromPt.y);
-      } else if (fromDir === toDir) {
+      }
+      else if (fromDir === toDir) {
         pos = Math.max(fromPt.x, toPt.x) + MINDIST;
         point = new Point(pos, fromPt.y);
-      } else {
+      }
+      else {
         point = new Point(fromPt.x - (xDiff / 2), fromPt.y);
       }
 
@@ -86,7 +95,8 @@ export function _route(conn, fromPt, fromDir, toPt, toDir) {
         dir = BOTTOM;
       }
     }
-  } else if (fromDir === BOTTOM) {
+  }
+  else if (fromDir === BOTTOM) {
     if (((xDiff * xDiff) < TOL) && (yDiff < 0) && (toDir === TOP)) {
       point = toPt;
       dir = toDir;
