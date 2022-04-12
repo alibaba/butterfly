@@ -69,6 +69,8 @@ canvas.addEdge({
 
 <img width="650" src="https://img.alicdn.com/imgextra/i3/O1CN01sHnesN1SMIhN62CLK_!!6000000002232-2-tps-1418-404.png">
 
+### hasRadius  _`<Boolean>`_    (选填)
+&nbsp;&nbsp; 曼哈顿曲线圆角参数: true表示为圆角, false表示为直角。 默认值为false
 ### label  _`<String/Dom>`_   (选填)
 &nbsp;&nbsp;线条上注释: 可传字符串和dom
 ### labelPosition  _`<Number>`_   (选填)
