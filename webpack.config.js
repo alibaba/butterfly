@@ -31,7 +31,15 @@ const common = {
     rules: [
       {
         test: /\.(js|jsx)$/,
-        exclude: /(node_modules|bower_components)/,
+        exclude: content => {
+          if (/(node_modules|bower_components)/.test(content)) {
+            if (/d3/.test(content) || /ml-matrix/.test(content)) {
+              return false;
+            }
+            return true;
+          }
+          return false;
+        },
         use: {
           loader: 'babel-loader',
           options: {

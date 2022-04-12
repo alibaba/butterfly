@@ -23,6 +23,7 @@ let canvas = new Canvas({
     edge: {
       type: 'endpoint',    //线段连接类型
       shapeType: 'Bezier', //线条默认类型
+      hasRadius: false ,   //默认曼哈顿曲线不为圆角
       label: 'test',       //线条默认label
       arrow: true,         //线条默认是否带箭头
       arrowPosition: 0.5,  //箭头位置(0 ~ 1)
@@ -105,9 +106,10 @@ canvas.draw({
   * type _`<String>`_ 标志线条连接到节点还是连接到锚点。默认为`node`
 
   * shapeType _`<String>`_  线条类型可以是：Bezier(贝塞尔曲线)，Flow(折线)，Straight(直线)，Manhattan(曼哈顿路由线)，AdvancedBezier(更美丽的贝塞尔曲线)，Bezier2-1，Bezier2-2，Bezier2-3(二阶贝塞尔曲线)，BrokenLine(折线)；默认为`Straight`
-
+  
   <img width="650" src="https://img.alicdn.com/imgextra/i3/O1CN01sHnesN1SMIhN62CLK_!!6000000002232-2-tps-1418-404.png">
 
+  * hasRadius _`<String>`_  曼哈顿曲线圆角参数: `true`表示为圆角, `false`表示为直角。 默认值为`false`
   * label _`<String/Dom>`_ 线条注释
 
   * labelPosition _`<Number>`_ 线条上注释位置: 取值0-1之间, 0代表代表在线段开始处，1代表在线段结束处。 默认值`0.5`
