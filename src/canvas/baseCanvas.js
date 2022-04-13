@@ -50,6 +50,7 @@ class BaseCanvas extends Canvas {
       edge: {
         type: _.get(options, 'theme.edge.type') || 'node',
         shapeType: _.get(options, 'theme.edge.shapeType') || 'Straight',
+        hasRadius:_.get(options, 'theme.edge.hasRadius') || false,
         Class: _.get(options, 'theme.edge.Class') || Edge,
         arrow: _.get(options, 'theme.edge.arrow'),
         arrowShapeType: _.get(options, 'theme.edge.arrowShapeType', 'default'),
@@ -898,6 +899,7 @@ class BaseCanvas extends Canvas {
                   type: 'endpoint',
                   type: this.theme.edge.type,
                   shapeType: this.theme.edge.shapeType,
+                  hasRadius:this.theme.edge.hasRadius,
                   orientationLimit: this.theme.endpoint.position,
                   _sourceType: point.nodeType,
                   sourceNode: _sourceNode,
