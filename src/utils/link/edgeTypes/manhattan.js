@@ -160,9 +160,8 @@ function drawManhattan(sourcePoint, targetPoint, options) {
   _route(pointArr, fromPt, orientation[sourcePoint.orientation.join('')], toPt, orientation[targetPoint.orientation.join('')]);
   if (pointArr.length < 2) return '';
   if (pointArr.length === 2) {
-    path = `M ${pointArr[0].x} ${pointArr[0].y} L ${pointArr[1].x} ${pointArr[1].y}`;
     return {
-      path,
+      path: `M ${pointArr[0].x} ${pointArr[0].y} L ${pointArr[1].x} ${pointArr[1].y}`,
       breakPoints: pointArr
     };
   }
