@@ -16,13 +16,13 @@ class GridService {
     this.isActive = false;
     this.theme = _.get(opts, 'theme', {}) || {
       shapeType: 'circle',  // 展示的类型，支持line & circle
-      gap: 5,            // 网格间隙
-      adsorbGap: '5px',      // 吸附间距
+      gap: 10,            // 网格间隙
+      adsorbGap: 5,      // 吸附间距
       background: '#fff',  // 网格背景颜色
       lineColor: '#000',  // 网格线条颜色
       lineWidth: '1px',   // 网格粗细
       circleRadiu: 2, // 圆点半径
-      circleColor: '#000' // 断电颜色
+      circleColor: '#000' // 圆点颜色
     };
   }
   _resize() {
@@ -39,11 +39,13 @@ class GridService {
       this._resize();
       $(this.dom).appendTo(this.root); 
     }
-
     if (this.theme.shapeType === 'circle') {
       this.createCircle();
     } else if (this.theme.shapeType === 'line') {
       this.createLine();
+    }
+    if (!!this.theme.background) {
+      $(this.dom).css('background', this.theme.background);
     }
     this.isActive = true;
   }
@@ -87,6 +89,7 @@ class GridService {
     }
     _ctx.stroke();
   }
+
   justifyAllCoordinate() {
     let groups = this.canvas.groups;
     let nodes = this.canvas.nodes;

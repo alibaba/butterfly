@@ -22,7 +22,12 @@ let addAnimate = (targetDom, path, options = {}, animateDom) => {
   }
 
   if (options._isContinue) {
-    $(_animateDom).find('animateMotion').attr('path', path);
+    // $(_animateDom).find('animateMotion').attr('path', path);
+    // 为了适配延迟加载的问题,需要重新replaceWith动画标签
+    let tmpAnimateDom = _animateDom.cloneNode(true);
+    $(tmpAnimateDom).find('animateMotion').attr('path', path);
+    $(_animateDom).replaceWith(tmpAnimateDom);
+    _animateDom = tmpAnimateDom;
   } else {
     let _startTime = (new Date().getTime() - _initTime) / 1000;
 
@@ -52,7 +57,10 @@ let addAnimate = (targetDom, path, options = {}, animateDom) => {
 
   if (!_animateDom) {
     _animateDom = circle;
-    $(_animateDom).insertAfter(targetDom);
+    // 延迟插入
+    setTimeout(() => {
+      $(_animateDom).insertAfter(targetDom);
+    }, 20);
   }
 
   return _animateDom;

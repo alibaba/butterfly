@@ -17,7 +17,7 @@ class CoordinateService {
     this.scrollTop = 0;
     this.scrollLeft = 0;
     this.scrollTimer = undefined;
-    this._calcScrollPos();
+    this._calcScrollPos(true);
 
     // 中心点
     this.originX = undefined;
@@ -166,7 +166,11 @@ class CoordinateService {
     }
   }
 
-  _calcScrollPos() {
+  _calcScrollPos(isRealtime) {
+    if (isRealtime) {
+      clearTimeout(this.scrollTimer);
+      this.scrollTimer = undefined;
+    }
     if (!this.scrollTimer) {
       let root = this.canvas.root;
       let rectSize = root.getBoundingClientRect();

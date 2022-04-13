@@ -2,8 +2,9 @@
 
 const _ = require('lodash');
 const $ = require('jquery');
-const DrawUtil = require('../utils/link');
+
 import ArrowUtil from '../utils/arrow';
+import * as DrawUtil from '../utils/link';
 import LinkAnimateUtil from '../utils/link/link_animate'
 
 import './baseEdge.less';
@@ -166,6 +167,8 @@ class BaseEdge extends Edge {
       path = DrawUtil.drawAdvancedBezier(sourcePoint, targetPoint);
     } else if (/^Bezier2-[1-3]$/.test(this.shapeType)) {
       path = DrawUtil.drawSecondBezier(sourcePoint, targetPoint, this.shapeType);
+    } else if(this.shapeType === 'BrokenLine'){
+      path = DrawUtil.drawBrokenLine(sourcePoint, targetPoint);
     }
     this._path = path;
     return path;
@@ -207,6 +210,10 @@ class BaseEdge extends Edge {
     }
     this.label = label;
     this.labelDom = labelDom;
+    // 防止异步渲染，计算不出label长宽
+    setTimeout(() => {
+      this.redrawLabel();
+    });
     this.emit('InnerEvents', {
       type: 'edge:updateLabel',
       data: this
@@ -323,8 +330,8 @@ class BaseEdge extends Edge {
       color: '#776ef3'
     }, options), this.animateDom);
   }
-  redrawAnimate(path) {
-    LinkAnimateUtil.addAnimate(this.dom, this._path, {
+  redrawAnimate() {
+    this.animateDom = LinkAnimateUtil.addAnimate(this.dom, this._path, {
       _isContinue: true
     }, this.animateDom);
   }
@@ -384,37 +391,39 @@ class BaseEdge extends Edge {
         type: 'link:click',
         edge: this
       });
-      this.emit('InnerEvents', {
-        type: 'link:click',
-        data: this
-      });
     };
+
 
     let _mouseDownEvent = (e) => {
       let clickX = e.clientX;
       let clickY = e.clientY;
-      let x = this._coordinateService._terminal2canvas('x', clickX);
-      let y = this._coordinateService._terminal2canvas('y', clickY);
-      
-      //把 _coordinateService 传进来
-      let targetPath = DrawUtil.findManhattanPoint(this._breakPoints, {x, y});
-      this.emit('InnerEvents', {
-        type: 'link:dragBegin',
-        edge: this,
-        path: targetPath
-      });
+
+      if (this.shapeType === 'Manhattan' && this.draggable) {
+        let x = this._coordinateService._terminal2canvas('x', clickX);
+        let y = this._coordinateService._terminal2canvas('y', clickY);
+        
+        //把 _coordinateService 传进来
+        let targetPath = DrawUtil.findManhattanPoint(this._breakPoints, {x, y});
+        this.emit('InnerEvents', {
+          type: 'link:dragBegin',
+          edge: this,
+          path: targetPath
+        });
+      } else {
+        // 单纯为了抛错事件给canvas，为了让canvas的dragtype不为空，不会触发canvas:click事件
+        this.emit('InnerEvents', {
+          type: 'link:mouseDown',
+          edge: this,
+        });
+      }
     }
     
     if (this.isExpandWidth) {
       $(this.eventHandlerDom).on('click', _clickEvent);
-      if (this.shapeType === 'Manhattan' && this.draggable) {
-        $(this.eventHandlerDom).on('mousedown', _mouseDownEvent);
-      }
+      $(this.eventHandlerDom).on('mousedown', _mouseDownEvent);
     } else {
       $(this.dom).on('click', _clickEvent);
-      if (this.shapeType === 'Manhattan' && this.draggable) {
-        $(this.dom).on('mousedown', _mouseDownEvent);
-      }
+      $(this.dom).on('mousedown', _mouseDownEvent);
     }
   }
   _create(opts) {
@@ -426,6 +435,8 @@ class BaseEdge extends Edge {
     this._sourceType = _.get(opts, '_sourceType') || this._sourceType;
     this.sourceEndpoint = _.get(opts, 'sourceEndpoint') || this.sourceEndpoint;
     this.type = _.get(opts, 'type') || this.type;
+    _.set(this, 'options.sourceNode', _.get(this, 'sourceNode.id'));
+    _.set(this, 'options.sourceEndpoint', _.get(this, 'sourceEndpoint.id'));
     _.set(this, 'options.targetNode', _.get(this, 'targetNode.id'));
     _.set(this, 'options.targetEndpoint', _.get(this, 'targetEndpoint.id'));
     this.redraw();

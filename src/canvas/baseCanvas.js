@@ -234,7 +234,7 @@ class BaseCanvas extends Canvas {
     const edges = opts.edges || [];
 
     // 自动布局需要重新review
-    if (this.layout) {
+    if (this.layout && !opts.isNotRelayout) {
       this._autoLayout({
         groups,
         nodes,
@@ -1570,8 +1570,8 @@ class BaseCanvas extends Canvas {
       if (!toDom) {
         return;
       }
-      let toDomClassName = toDom.className;
-      if (toDomClassName && toDomClassName.indexOf('butterfly-tooltip') === -1) {
+      let toDomClassName = _.get(toDom, 'className');
+      if (toDomClassName && (typeof toDomClassName === 'string') && toDomClassName.indexOf('butterfly-tooltip') === -1) {
         mouseLeaveEvent();
       }
     });
@@ -2616,6 +2616,7 @@ class BaseCanvas extends Canvas {
           label: link.label,
           type: link.type || this.theme.edge.type,
           shapeType: link.shapeType || this.theme.edge.shapeType,
+          hasRadius: link.hasRadius || this.theme.edge.hasRadius,
           orientationLimit: this.theme.endpoint.position,
           isExpandWidth: this.theme.edge.isExpandWidth,
           defaultAnimate: this.theme.edge.defaultAnimate,
@@ -2684,6 +2685,7 @@ class BaseCanvas extends Canvas {
           targetNode,
           type: link.type || this.theme.edge.type,
           shapeType: link.shapeType || this.theme.edge.shapeType,
+          hasRadius: link.hasRadius || this.theme.edge.hasRadius,
           orientationLimit: this.theme.endpoint.position,
           arrow: link.arrow === undefined ? _.get(this, 'theme.edge.arrow') : link.arrow,
           arrowShapeType: link.arrowShapeType === undefined ? _.get(this, 'theme.edge.arrowShapeType') : link.arrowShapeType,
@@ -2853,6 +2855,9 @@ class BaseCanvas extends Canvas {
     result.forEach((_rmEdge) => {
       if (_.get(_rmEdge, 'sourceEndpoint._tmpType') === 'source') {
         let isExistEdge = _.some(this.edges, (edge) => {
+          if (edge.type !== _rmEdge.type) {
+            return false;
+          }
           if (edge.type === 'node') {
             return _rmEdge.sourceNode.id === edge.sourceNode.id;
           } else {
@@ -2863,6 +2868,9 @@ class BaseCanvas extends Canvas {
       }
       if (_.get(_rmEdge, 'targetEndpoint._tmpType') === 'target') {
         let isExistEdge = _.some(this.edges, (edge) => {
+          if (edge.type !== _rmEdge.type) {
+            return false;
+          }
           if (edge.type === 'node') {
             return _rmEdge.targetNode.id === edge.targetNode.id;
           } else {
