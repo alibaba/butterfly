@@ -339,7 +339,7 @@ class TreeCanvas extends Canvas {
     const nodes = this._handleTreeNodes(opts.nodes || [], _.get(params, 'isFlatNode', false));
     
     // 配置不重新布局
-    if (!_.get(params,'isNotRelayout')) {
+    if (_.get(params,'isNotRelayout')) {
       this.__layout = this.layout;
       this.layout = undefined;
     }
@@ -371,9 +371,8 @@ class TreeCanvas extends Canvas {
         edges: this.edges,
         groups: this.groups
       });
-
-        // 配置不重新布局
-      if (!_.get(params,'isNotRelayout')) {
+      // 配置不重新布局
+      if (_.get(params,'isNotRelayout')) {
         this.layout = this.__layout;
         this.__layout = undefined;
       }
