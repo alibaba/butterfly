@@ -35,5 +35,6 @@ Tips.createMenu({
 | x | x坐标  | string | 否 | 无
 | y | y坐标  | string | 否 | 无
 | closable | 点击其他空白处是否关闭 | string | 否 | 无 |
+| viewAppend | tips挂载的dom | dom   | 否 | body
 | targetDom | 出现tips或者menu的dom | HTML DOM | 是 | 无 |
 | genTipDom | 此方法返回一个dom，为提示或菜单的内容展示 | funtion | 是 | 无 |

@@ -72,7 +72,7 @@ const show = (opts, type, tipsDom, targetDom, callback) => {
 
   let tipsContainer = $(DEFUALT.TEMPLATE);
   tipsContainer.find(DEFUALT.$inner).append(tipsDom);
-  $(tipsContainer).appendTo(DEFUALT.$viewAppend);
+  $(tipsContainer).appendTo(opts.viewAppend || DEFUALT.$viewAppend);
 
   let placement = opts.placement || 'top';
 
@@ -92,6 +92,11 @@ const show = (opts, type, tipsDom, targetDom, callback) => {
     actualWidth: $(tipsContainer).outerWidth(),
     actualHeight: $(tipsContainer).outerHeight()
   };
+
+  if (opts.viewAppend) {
+    pos.top -= $(opts.viewAppend).offset().top;
+    pos.left -= $(opts.viewAppend).offset().left;
+  }
 
   let posInit = {}
   if (opts.x || opts.x === 0) {
