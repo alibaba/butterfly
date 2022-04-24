@@ -35,5 +35,6 @@ Tips.createMenu({
 | x | x coordinate | string | no | empty
 | y | y coordinate  | string | no | empty
 | closable | click other blank space to close | string | no | empty |
+| viewAppend | the dom which tips append | dom   | no | body
 | targetDom | the dom of tips or menu appears | HTML DOM | yes | empty |
 | genTipDom | this method returns a DOM to display the contents of the tips or menu | function | yes | empty |
