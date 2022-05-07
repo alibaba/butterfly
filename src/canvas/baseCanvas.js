@@ -3585,8 +3585,8 @@ class BaseCanvas extends Canvas {
     if (!node) {
       return;
     }
-    top = node.top || node.y;
-    left = node.left || node.x;
+    top = node.top || node.y || 0;
+    left = node.left || node.x || 0;
     if (node.height) {
       top += node.height / 2;
     }
@@ -4506,6 +4506,32 @@ class BaseCanvas extends Canvas {
   clearActionQueue() {
     this.actionQueue = [];
     this.actionQueueIndex = -1;
+  }
+  getNodesVisibleStatus() {
+    let result = {
+      inside: [],
+      outside: []
+    };
+    let terminal = [
+      this._coordinateService._terminal2canvas('x', 0 + this._coordinateService.terOffsetX),
+      this._coordinateService._terminal2canvas('x', this._coordinateService.terWidth + this._coordinateService.terOffsetX),
+      this._coordinateService._terminal2canvas('y', 0 + this._coordinateService.terOffsetY),
+      this._coordinateService._terminal2canvas('y', this._coordinateService.terHeight + this._coordinateService.terOffsetY),
+    ];
+
+    this.nodes.forEach((item) => {
+      let x1 = item.left;
+      let x2 = item.left + item.getWidth(true);
+      let y1 = item.top;
+      let y2 = item.top + item.getHeight(true);
+
+      if (x1 >= terminal[0] && x2 <= terminal[1] && y1 >= terminal[2] && y2 <= terminal[3]) {
+        result.inside.push(item);
+      } else {
+        result.outside.push(item);
+      }
+    });
+    return result;
   }
 }
 

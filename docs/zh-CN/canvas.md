@@ -734,6 +734,15 @@ canvas2terminal = (coordinates) => {}
 <img width="650" src="http://img.alicdn.com/tfs/TB1lWIAFHvpK1RjSZPiXXbmwXXa-973-850.jpg">
 
 
+### canvas.getNodesVisibleStatus ()
+
+*作用*：获取节点是否在画布可视区域内的情况
+
+*返回*
+
+* `{inside}` - 在画布区域内的节点
+* `{outside}` - 在画布区域外的节点
+
 ### canvas.setSelectMode (boolean, contents , selecMode)
 
 *作用*：设置框选模式: 注意, 注意框选模式和普通拖动画布模式是互斥的, 没办法同时设置

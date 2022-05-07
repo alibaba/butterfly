@@ -728,6 +728,14 @@ canvas2terminal = (coordinates) => {}
 
 <img width="650" src="http://img.alicdn.com/tfs/TB1lWIAFHvpK1RjSZPiXXbmwXXa-973-850.jpg">
 
+### canvas.getNodesVisibleStatus ()
+
+*descripition*：Get whether the node is within the visible area of the canvas
+
+*return*
+
+* `{inside}` - Nodes inside the canvas area
+* `{outside}` - Nodes outside the canvas area
 
 ### canvas.setSelectMode (boolean, contents , selecMode)
 

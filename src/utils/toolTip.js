@@ -93,6 +93,12 @@ const show = (opts, type, tipsDom, targetDom, callback) => {
     actualHeight: $(tipsContainer).outerHeight()
   };
 
+  if (['path', 'g'].includes($(targetDom)[0].tagName)) {
+    let box = $(targetDom)[0].getBBox();
+    pos.width = box.width;
+    pos.height = box.height;
+  }
+
   if (opts.viewAppend) {
     pos.top -= $(opts.viewAppend).offset().top;
     pos.left -= $(opts.viewAppend).offset().left;
