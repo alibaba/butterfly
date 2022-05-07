@@ -3585,8 +3585,8 @@ class BaseCanvas extends Canvas {
     if (!node) {
       return;
     }
-    top = node.top || node.y;
-    left = node.left || node.x;
+    top = node.top || node.y || 0;
+    left = node.left || node.x || 0;
     if (node.height) {
       top += node.height / 2;
     }
