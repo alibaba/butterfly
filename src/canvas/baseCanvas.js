@@ -142,6 +142,8 @@ class BaseCanvas extends Canvas {
     // 统一处理画布拖动事件
     this._dragType = null;
     this._dragNode = null;
+    // 鼠标是否发生过移动
+    this._mouseMoved = false;
     this._dragEndpoint = null;
     this._dragEdges = [];      // 拖动连线的edge
     this._dragPathEdge = null;     // 拖动edge中的某段path改变路径
@@ -683,6 +685,7 @@ class BaseCanvas extends Canvas {
       this._dragGroup = null;
       this._dragPathEdge = null;
       this._dragEdges = [];
+      this._mouseMoved = false;
       nodeOriginPos = {
         x: 0,
         y: 0
@@ -697,6 +700,8 @@ class BaseCanvas extends Canvas {
 
     const mouseDownEvent = (event) => {
       const LEFT_BUTTON = 0;
+      // 重置_mouseMoved
+      this._mouseMoved = false;
       if (event.button !== LEFT_BUTTON) {
         return;
       }
@@ -765,6 +770,8 @@ class BaseCanvas extends Canvas {
     };
 
     const mouseMoveEvent = (event) => {
+      // 鼠标发生移动
+      this._mouseMoved = true;
       const LEFT_BUTTON = 0;
       if (event.button !== LEFT_BUTTON) {
         return;
@@ -1523,7 +1530,8 @@ class BaseCanvas extends Canvas {
         });
       }
 
-      if (this._dragType === 'node:drag' || this._dragType === 'group:drag') {
+      // 仅鼠标发生过移动，才增加dragNodeEnd事件
+      if (this._mouseMoved && (this._dragType === 'node:drag' || this._dragType === 'group:drag')) {
         this.pushActionQueue({
           type: '_system:dragNodeEnd'
         });
