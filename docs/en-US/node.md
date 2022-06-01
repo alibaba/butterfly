@@ -250,3 +250,63 @@ collapseNode = (string) => {}
 ```js
 expandNode = (string) => {}
 ```
+
+## Event Handling：
+
+### [baseNode]：
+
+#### Mousedown Event：
+
+Support for passing in custom `canMouseDown` function.
+
+*params*
+
+* `event`：DOM event object
+
+*returned value*
+
+* `true`：Indicates that the built-in drag event handling will be performed
+* `false`：Indicates that the built-in drag event handling will not be performed
+
+#### Click Event：
+
+Support for passing in custom `canClick` function.
+
+*params*
+
+* `event`：DOM event object
+
+*returned value*
+
+* `true`：Indicates that the built-in click event handling will be performed
+* `false`：Indicates that the built-in drag event handling will not be performed
+
+### Example：
+```js
+class BaseNode extends Node {
+  constructor(opts) {
+    super(opts);
+  }
+  canMouseDown = (event) => {
+    if (...) {
+      ... // Custom event handling
+      return true;
+    } else {
+      ... // Custom event handling
+      return false;
+    }
+    
+  }
+  canClick = (event) => {
+    if (...) {
+      ... // Custom event handling
+      return true;
+    } else {
+      ... // Custom event handling
+      return false;
+    }
+  }
+  ...
+}
+```
+
