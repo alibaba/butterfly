@@ -3644,8 +3644,16 @@ class BaseCanvas extends Canvas {
       scale: 1
     });
 
+    // 这里要根据scale来判断
+    let scale = scaleX < scaleY ? scaleX : scaleY;
+    if (_.get(options, 'keepPreZoom')) {
+      scale = this._zoomData < scale ? this._zoomData : scale;
+    } else {
+      scale = 1 < scale ? 1 : scale;
+    }
+
     let zoomPromise = new Promise((resolve) => {
-      this.zoom(1, () => {
+      this.zoom(scale, () => {
         resolve();
       });
     });
