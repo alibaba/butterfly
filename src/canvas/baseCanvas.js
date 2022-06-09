@@ -3636,14 +3636,6 @@ class BaseCanvas extends Canvas {
     });
     this._moveData = [targetX, targetY];
 
-    this._coordinateService._changeCanvasInfo({
-      canOffsetX: targetX,
-      canOffsetY: targetY,
-      originX: 50,
-      originY: 50,
-      scale: 1
-    });
-
     // 这里要根据scale来判断
     let scale = scaleX < scaleY ? scaleX : scaleY;
     if (_.get(options, 'keepPreZoom')) {
@@ -3651,6 +3643,14 @@ class BaseCanvas extends Canvas {
     } else {
       scale = 1 < scale ? 1 : scale;
     }
+
+    this._coordinateService._changeCanvasInfo({
+      canOffsetX: targetX,
+      canOffsetY: targetY,
+      originX: 50,
+      originY: 50,
+      scale: scale
+    });
 
     let zoomPromise = new Promise((resolve) => {
       this.zoom(scale, () => {
