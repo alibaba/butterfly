@@ -710,9 +710,10 @@ class BaseCanvas extends Canvas {
         this._dragType = 'canvas:drag';
       }
 
-      // 假如点击在空白地方且在框选模式下
-      if ((event.target === this.svg[0] || event.target === this.root) && this.isSelectMode) {
+      // 如果在框选模式下点击
+      if (this.isSelectMode) {
         this.canvasWrapper.active();
+        this._dragType = 'selectCanvas:drag';
         this.canvasWrapper.dom.dispatchEvent(new MouseEvent('mousedown', {
           clientX: event.clientX,
           clientY: event.clientY
@@ -1058,6 +1059,17 @@ class BaseCanvas extends Canvas {
           let _newHeight = canvasY - pos.top;
 
           this._dragGroup.setSize(_newWidth, _newHeight);
+        }else if(this._dragType ==='selectCanvas:drag'){
+          this._autoMoveCanvas(event.clientX, event.clientY, {
+            type: 'selectCanvas:drag',
+          }, ([gapX, gapY])=>{
+              const { startX, startY } = this.canvasWrapper;
+              this.canvasWrapper._changeCanvasInfo({
+                startX: startX - gapX,
+                startY: startY - gapY
+              });
+              this.canvasWrapper.drawRect();
+          });
         }
       }
     };
