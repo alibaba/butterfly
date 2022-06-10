@@ -10,7 +10,11 @@ let init = (_svg) => {
   svg = _svg;
   _initTime = new Date().getTime();
 }
-
+let removeAnimate = (animateDom) =>{
+  let _animateDom = animateDom;
+  if(!_animateDom) return
+  $(animateDom).remove()
+}
 let addAnimate = (targetDom, path, options = {}, animateDom) => {
   let _animateDom = animateDom;
   let circle = null;
@@ -60,5 +64,6 @@ let addAnimate = (targetDom, path, options = {}, animateDom) => {
 
 export default {
   init,
-  addAnimate
+  addAnimate,
+  removeAnimate
 }

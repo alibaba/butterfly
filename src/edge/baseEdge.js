@@ -311,6 +311,9 @@ class BaseEdge extends Edge {
       color: '#776ef3'
     }, options), this.animateDom);
   }
+  removeAnimate() {
+    this.animateDom = LinkAnimateUtil.removeAnimate(this.animateDom);
+  }
   redrawAnimate(path) {
     LinkAnimateUtil.addAnimate(this.dom, this._path, {
       _isContinue: true
