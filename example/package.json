@@ -18,6 +18,7 @@
     "@babel/standalone": "^7.14.1",
     "@stackblitz/sdk": "^1.5.2",
     "antd": "~3.26.7",
+    "butterfly-plugins-layout": "^0.0.1",
     "axios": "^0.21.1",
     "butterfly-dag": "*",
     "butterfly-react": "^0.0.6",

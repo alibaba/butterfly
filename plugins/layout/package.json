@@ -1,0 +1,37 @@
+{
+  "name": "butterfly-plugins-layout",
+  "version": "0.0.1",
+  "description": "butterfly-plugins-layout,含有各种布局函数",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "unpkg": "dist/index.unpkg.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rollup -c ./rollup.config.js",
+    "start": "cd example && npm start"
+  },
+  "keywords": [
+    "butterfly-dag",
+    "plugin",
+    "panel"
+  ],
+  "type": "module",
+  "author": "sdjalft",
+  "license": "MIT",
+  "dependencies": {
+    "butterfly-dag": "^4.2.10",
+    "jquery": "^3.5.1",
+    "d3-graphviz": "^2.6.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/plugin-transform-runtime": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "@rollup/plugin-babel": "^5.2.2",
+    "rollup": "^2.36.1",
+    "rollup-plugin-commonjs": "^10.1.0"
+  }
+}
