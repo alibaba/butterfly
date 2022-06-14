@@ -1,24 +1,27 @@
 'use strict';
 
-import Node from './node';
-import Edge from './edge';
 import {graphviz} from 'd3-graphviz';
+import Edge from './edge';
 
-const graphvizLayout = (treeData) => {
+const graphvizLayout = (params) => {
   const refactDataToString = (data) => {
     const nodes = {};
     const result = [];
     data.nodes.forEach(n => {
-      nodes[n.id] = n.name;
-      result.push(`${n.name} [width=${n.width ? n.width * 0.010416 * 2.5 : 2.5}]`)
+      nodes[n.id] = n.label;
+      result.push(`${n.label} [width=${n.width ? n.width * 0.010416 * 2.5 : 2.5}, height=${n.height ? n.height * 0.010416 : 1}]`)
     })
     data.edges.forEach(e => {
-      result.push(`${nodes[e.source]} -> ${nodes[e.target]};`)
+      if (e.sourceNode) {
+        result.push(`${nodes[e.sourceNode]} -> ${nodes[e.targetNode]};`)
+      } else {
+        result.push(`${nodes[e.source]} -> ${nodes[e.target]};`)
+      }
     })
     return result;
   }
   
-  const str = refactDataToString(treeData);
+  const str = refactDataToString(params.data);
   const theGraphviz = graphviz(`body`);
   theGraphviz
     .options({
@@ -30,72 +33,50 @@ const graphvizLayout = (treeData) => {
     }`)
   
   const computedData = theGraphviz.data().children[1].children;
-  const nodes = [];
-  const edges = [];
   
   computedData.forEach(d => {
     if (d.attributes.class === 'node') {
-      nodes.push({
-        id: treeData.nodes.find(n => n.name === d.key).id,
-        label: d.key,
-        top: parseFloat(d.children.find((c) => c.tag === 'ellipse').center.y),
-        left: parseFloat(d.children.find((c) => c.tag === 'ellipse').center.x),
-        height: parseFloat(d.children.find((c) => c.tag === 'ellipse').attributes.ry) * 2,
-        width: parseFloat(d.children.find((c) => c.tag === 'ellipse').attributes.rx)
-      });
+      const parseNode = params.data.nodes.find(n => n.label === d.key);
+      parseNode.top = parseFloat(d.children.find((c) => c.tag === 'ellipse').center.y);
+      parseNode.left = parseFloat(d.children.find((c) => c.tag === 'ellipse').center.x);
+      if (!parseNode.width) {
+        parseNode.width = parseFloat(d.children.find((c) => c.tag === 'ellipse').attributes.rx)
+      }
+      if (!parseNode.height) {
+        parseNode.height = parseFloat(d.children.find((c) => c.tag === 'ellipse').attributes.ry) * 2;
+      }
     }
     if (d.attributes.class === 'edge') {
-      edges.push({
-        source: d.key.split('->')[0],
-        target: d.key.split('->')[1],
-        path: d.children.find((c) => c.tag === 'path').attributes.d,
-        totalLength: d.children.find((c) => c.tag === 'path').totalLength
+      const parseEdge = params.data.edges.find(e => {
+        const sourceId = params.data.nodes.find(n => n.label === d.key.split('->')[0]).id;
+        const targetId = params.data.nodes.find(n => n.label === d.key.split('->')[1]).id
+        if ((e.sourceNode === sourceId && e.targetNode === targetId) ||
+          (e.source === sourceId && e.target === targetId)) {
+          return true;
+        }
       });
+      parseEdge.shapeType = 'Bezier';
+      parseEdge.d = d.children.find((c) => c.tag === 'path').attributes.d;
+      if (!parseEdge.Class) {
+        parseEdge.Class = Edge;
+      } else {
+        console.log('边无法正确绘制!');
+        // const originEdge = parseEdge.Class;
+        // class NewEdge extends originEdge {
+        //   constructor(opts) {
+        //     super(opts);
+        //     this.d = opts.options.d;
+        //     this.shapeType = 'Bezier';
+        //   }
+        //   calcPath(sourcePoint, targetPoint) {
+        //     return redrawPath(d.children.find((c) => c.tag === 'path').attributes.d, sourcePoint, targetPoint);
+        //   }
+        // }
+        // parseEdge.Class = NewEdge;
+      }
     }
   })
-  
-  const selfNodes = nodes.map(n => {
-    const res = {};
-    res.draggable = true;
-    res.id = n.id;
-    res.label = n.label;
-    res.top = n.top;
-    res.left = n.left;
-    res.width = n.width;
-    res.height = n.height;
-    res.Class = Node;
-    res.endpoints = [{
-      id: 'down',
-      orientation: [0, 1],
-      pos: [0.5, 1]
-    }, {
-      id: 'up',
-      orientation: [0, -1],
-      pos: [0.5, 1]
-    }];
-    return res;
-  });
-  const selfEdges = edges.map(e => {
-    const res = {};
-    const trueSource = nodes.find(n => n.label === e.source);
-    const trueTarget = nodes.find(n => n.label === e.target);
-    res.type = 'endpoint';
-    res.source = 'down';
-    res.target = 'up';
-    res.trueSource = trueSource;
-    res.trueTarget = trueTarget;
-    res.sourceNode = trueSource.id;
-    res.targetNode = trueTarget.id;
-    res.d = e.path;
-    res.totalLength = e.totalLength;
-    res.arrow = true;
-    res.Class = Edge;
-    return res;
-  });
-  return {
-    nodes: selfNodes,
-    edges: selfEdges
-  };
+  return params;
 }
 
 

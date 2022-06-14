@@ -1,8 +1,36 @@
 import React, {Component} from 'react';
-import { Canvas } from '../../../../index';
+import $ from 'jquery';
+import { Canvas, Node, Edge } from '../../../../index';
 import './app.less';
 import '../../../../static/butterfly.css';
-const mockData = require('./data');
+const treeData = require('./mock_data.json');
+import graphvizLayout from 'butterfly-plugins-layout/graphvizLayout';
+// const {graphvizLayout} = require('../../index');
+
+class BaseNode extends Node {
+  constructor(opts) {
+    super(opts);
+    this.options = opts;
+  }
+  draw (opts) {
+    const container = $('<div class="graphviz-base-node"></div>')
+                    .attr('id', opts.id)
+                    .css('top', opts.top + 'px')
+                    .css('left', (opts.left) + 'px')
+                    .css('width', opts.options.width)
+                    .css('height', opts.options.height);
+    $('<span class="tmpText"></span>').text(this.options.label).appendTo(container);
+
+    // this._createTypeIcon(container);
+    // this._createText(container);
+
+    return container[0];
+  }
+
+  // _createText(dom = this.dom) {
+  //   $('<span class="text-box"></span>').text(this.options.label).appendTo(dom);
+  // }
+}
 
 class Scene extends Component {
   componentDidMount() {
@@ -20,7 +48,42 @@ class Scene extends Component {
         }
       }
     });
-    this.canvas.draw(mockData, () => {
+    // 数据格式转换
+    const nodes = treeData.nodes.map(n => {
+      const res = {};
+      res.draggable = true;
+      res.id = n.id;
+      res.label = n.name;
+      res.Class = BaseNode;
+      res.endpoints = [{
+        id: 'down',
+        orientation: [0, 1],
+        pos: [0.5, 1]
+      }, {
+        id: 'up',
+        orientation: [0, -1],
+        pos: [0.5, 1]
+      }];
+      return res;
+    });
+    const edges = treeData.edges.map(e => {
+      const res = {};
+      res.type = 'endpoint';
+      res.source = 'down';
+      res.target = 'up';
+      res.sourceNode = e.source;
+      res.targetNode = e.target;
+      res.arrow = true;
+      return res;
+    });
+
+    // 布局
+    graphvizLayout({
+      data: {nodes, edges}
+    });
+
+    console.log(edges);
+    this.canvas.draw({nodes, edges}, () => {
 
     });
     this.canvas.on('events', (data) => {

@@ -1,13 +1,10 @@
 {
   "name": "butterfly-plugins-layout",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "butterfly-plugins-layout,含有各种布局函数",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "unpkg": "dist/index.unpkg.js",
-  "files": [
-    "dist"
-  ],
   "scripts": {
     "build": "rollup -c ./rollup.config.js",
     "start": "cd example && npm start"

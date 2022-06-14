@@ -7,8 +7,6 @@ class BaseEdge extends Edge {
   constructor(opts) {
     super(opts);
     this.d = opts.options.d;
-    this.source = opts.options.trueSource;
-    this.target = opts.options.trueTarget;
     this.shapeType = 'Bezier';
   }
   draw(obj) {
@@ -89,46 +87,6 @@ class BaseEdge extends Edge {
       const ccCurrY = ccPrev[1] + startCurr[1] - startPrev[1] + (endCurr[1] - (startCurr[1] - startPrev[1]) - endPrev[1]) * k;
       movedD2[cc] = `${ccCurrX},${ccCurrY}`;
     }
-
-    
-    // const tmovedD2 = movedD.map((ele, idx) => {
-    //   const originX = parseFloat(ele.split(',')[0]);
-    //   const originY = parseFloat(ele.split(',')[1]);
-    //   if (idx === 0) {
-    //     return `${originX},${originY}`;
-    //   }
-
-
-
-    //   if ((originX - startX) * (endX - startX) < 0 && idx < originD.length - 1) {
-    //     return originX
-    //       + ','
-    //       + (originY - endMoveY * Math.sqrt(Math.pow((originX - startX), 2) + Math.pow((originY - startY), 2)) / totalLength)
-    //   } else if (idx === originD.length - 1) {
-    //     return (originX - endMoveX) + ',' + (originY - endMoveY)
-    //   }
-    //   return (originX - endMoveX * Math.sqrt(Math.pow((originX - startX), 2) + Math.pow((originY - startY), 2)) / totalLength)
-    //     + ','
-    //     + (originY - endMoveY * Math.sqrt(Math.pow((originX - startX), 2) + Math.pow((originY - startY), 2)) / totalLength)
-    // })
-    // 优化坐标结构，斜率相同移除
-    // const movedD3 = [];
-    // for (let cc of movedD2) {
-    //   if (movedD3.length < 2) {
-    //     movedD3.push(cc);
-    //   } else {
-    //     const ccX = parseFloat(cc.split(',')[0]);
-    //     const ccY = parseFloat(cc.split(',')[1]);
-    //     const lstX = parseFloat(movedD3[movedD3.length - 1].split(',')[0]);
-    //     const lstY = parseFloat(movedD3[movedD3.length - 1].split(',')[1]);
-    //     const k1 = (ccY - lstY) / (ccX - lstX);
-    //     const k2 = (lstY - parseFloat(movedD3[movedD3.length - 2].split(',')[1])) / (lstX - parseFloat(movedD3[movedD3.length - 2].split(',')[0]));
-    //     if (k2 / k1 <= 1.01 && k1 / k2 <= 1.01) {
-    //       movedD3.pop();
-    //     }
-    //     movedD3.push(cc);
-    //   }
-    // }
     let finalValue = ''
     for (let cc = 0; cc < movedD2.length; cc++) {
       if (cc === 0) {
@@ -142,9 +100,6 @@ class BaseEdge extends Edge {
     return finalValue;
   }
   calcPath(sourcePoint, targetPoint) {
-    if (this.source === this.target) {
-      return '';
-    }
     this.d = this.redrawPath(this.d, sourcePoint, targetPoint);
     return this.d;
   }

@@ -14,9 +14,21 @@ if (!fs.existsSync(dist)) {
   fs.mkdirSync(dist);
 }
 
+const plugins = [
+  commonjs(),
+  babel(
+    {
+      exclude: 'node_modules/**',
+      presets: ['@babel/preset-env'],
+      plugins: [
+        "@babel/plugin-proposal-class-properties",
+      ]
+    }
+  ),
+];
 
-export default {
-  input: './index.js',
+const main = {
+  input: './src/index.js',
   output: [
     {
       file: pkg.main,
@@ -35,16 +47,19 @@ export default {
       name: pkg.name
     }
   ],
-  plugins: [
-    commonjs(),
-    babel(
-      {
-        exclude: 'node_modules/**',
-        presets: ['@babel/preset-env'],
-        plugins: [
-          "@babel/plugin-proposal-class-properties",
-        ]
-      }
-    ),
-  ]
-}
+  plugins: plugins
+};
+
+const graphvizLayout = {
+  input: './src/graphviz/index.js',
+  output: [
+    {
+      file: 'graphvizLayout.js',
+      format: 'es',
+      sourcemap: true
+    }
+  ],
+  plugins: plugins
+};
+
+export default [main, graphvizLayout];
