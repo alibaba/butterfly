@@ -3637,11 +3637,9 @@ class BaseCanvas extends Canvas {
     this._moveData = [targetX, targetY];
 
     // 这里要根据scale来判断
-    let scale = scaleX < scaleY ? scaleX : scaleY;
+    let scale = 1;
     if (_.get(options, 'keepPreZoom')) {
       scale = this._zoomData < scale ? this._zoomData : scale;
-    } else {
-      scale = 1 < scale ? 1 : scale;
     }
 
     this._coordinateService._changeCanvasInfo({
