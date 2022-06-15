@@ -5,7 +5,8 @@
 let canvas = new Canvas({
   // 如下属性
   root: dom,               //canvas的根节点(必传)
-  layout: 'ForceLayout',   //布局设置(选填)，可使用集成的，也可自定义布局
+  layout: {type: 'ForceLayout', options: {}},   //布局设置(选填)，可使用集成的，也可自定义布局
+  layoutOptions: {rankdir: 'TB'}, // 布局配置(选填)，传入集成/自定义布局的参数
   zoomable: true,          //可缩放(选填)
   moveable: true,          //可平移(选填)
   draggable: true,         //节点可拖动(选填)
@@ -91,9 +92,13 @@ canvas.draw({
 
 &nbsp;&nbsp;画布锚点是否可以拖动断开线；值类型 `boolean`，默认 `false`
 
-### layout _`<Object>`_   (选填)
+### layout _`<Object> | <Function>`_   (选填)
 
 &nbsp;&nbsp;画布初始化根据设置的布局来自动排版，[可参考](https://github.com/alibaba/butterfly/blob/master/docs/zh-CN/layout.md)
+
+### layoutOptions _`<Object>`_   (选填)
+
+&nbsp;&nbsp;layout值被设置为Function时使用，用来传入layout布局的自定义属性值，[可参考](https://github.com/alibaba/butterfly/blob/master/docs/zh-CN/layout.md)
 
 ### theme
 
