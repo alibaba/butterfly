@@ -38,6 +38,8 @@ class Scene extends Component {
     this.canvas = new Canvas({
       root: root,
       disLinkable: false, // 可删除连线
+      layout: {type: graphvizLayout, options: {}},
+      layoutOptions: {rankdir: 'LR'},
       linkable: true,    // 可连线
       draggable: false,   // 可拖动
       zoomable: true,    // 可放大
@@ -78,13 +80,6 @@ class Scene extends Component {
       return res;
     });
 
-    // 布局
-    graphvizLayout({
-      data: {nodes, edges},
-      rankdir: 'LR',
-    });
-
-    console.log(edges);
     this.canvas.draw({nodes, edges}, () => {
 
     });
