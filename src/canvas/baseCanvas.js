@@ -33,7 +33,7 @@ class BaseCanvas extends Canvas {
     this.root = options.root;
     this.layout = options.layout; // layout部分也需要重新review
     this.layoutOptions = options.layoutOptions;
-    if (_.isObject(this.layout)) {
+    if (_.isObject(this.layout) && !_.isFunction(this.layout)) {
       this.layout = this.layout.type;
       this.layoutOptions = this.layout.options || this.layoutOptions;
     }
@@ -3020,7 +3020,7 @@ class BaseCanvas extends Canvas {
     const height = this._rootHeight;
 
     if (_.isFunction(_.get(this.layout, 'type'))) {
-      this.layout({
+      this.layout.type({
         width: width,
         height: height,
         data: data,
