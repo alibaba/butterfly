@@ -5,6 +5,7 @@ let canvas = new Canvas({
   // the attribute below
   root: dom,               // canvas root dom (require)
   layout: 'ForceLayout',   // layout setting , integrated or custom , (optional)
+  layoutOptions: {rankdir: 'TB'}, // layout options(optional)
   zoomable: true,          // enable zoom canvas (optional)
   moveable: true,          // enable move canvas (optional)
   draggable: true,         // enable drag nodes (optional)
@@ -92,6 +93,10 @@ canvas.draw({
 ### layout _`<Object>`_   (Optional)
 
 &nbsp;&nbsp;canvas initialization automatically arranges the layout according to what you set, [reference](https://github.com/alibaba/butterfly/blob/master/docs/en-US/layout.md)
+
+### layoutOptions _`<Object>`_   (选填)
+
+&nbsp;&nbsp;Useful when 'layout' value is set.Value of layout options.[reference](https://github.com/alibaba/butterfly/blob/master/docs/zh-CN/layout.md)
 
 ### theme
 

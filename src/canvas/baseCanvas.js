@@ -32,6 +32,11 @@ class BaseCanvas extends Canvas {
     super(options);
     this.root = options.root;
     this.layout = options.layout; // layout部分也需要重新review
+    this.layoutOptions = options.layoutOptions;
+    this.layout = {
+      type: options.layout,
+      options: options.layoutOptions || {}
+    }
     this.zoomable = options.zoomable || false; // 可缩放
     this.moveable = options.moveable || false; // 可平移
     this.draggable = options.draggable || false; // 可拖动
@@ -3014,7 +3019,8 @@ class BaseCanvas extends Canvas {
       this.layout({
         width: width,
         height: height,
-        data: data
+        data: data,
+        ...this.layoutOptions
       });
     } else {
       // 重力布局

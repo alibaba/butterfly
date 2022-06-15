@@ -4,9 +4,16 @@ import {graphviz} from 'd3-graphviz';
 import Edge from './edge';
 
 const graphvizLayout = (params) => {
-  const refactDataToString = (data) => {
+  const refactDataToString = () => {
+    const {data} = params;
     const nodes = {};
     const result = [];
+    for (let cc of Object.keys(params)) {
+      if (cc === 'data') {
+        continue;
+      }
+      result.push(`${cc} = ${params[cc]};`);
+    }
     data.nodes.forEach(n => {
       nodes[n.id] = n.label;
       result.push(`${n.label} [width=${n.width ? n.width * 0.010416 * 2.5 : 2.5}, height=${n.height ? n.height * 0.010416 : 1}]`)
@@ -21,7 +28,7 @@ const graphvizLayout = (params) => {
     return result;
   }
   
-  const str = refactDataToString(params.data);
+  const str = refactDataToString();
   const theGraphviz = graphviz(`body`);
   theGraphviz
     .options({
@@ -57,23 +64,6 @@ const graphvizLayout = (params) => {
       });
       parseEdge.shapeType = 'Bezier';
       parseEdge.d = d.children.find((c) => c.tag === 'path').attributes.d;
-      if (!parseEdge.Class) {
-        parseEdge.Class = Edge;
-      } else {
-        console.log('边无法正确绘制!');
-        // const originEdge = parseEdge.Class;
-        // class NewEdge extends originEdge {
-        //   constructor(opts) {
-        //     super(opts);
-        //     this.d = opts.options.d;
-        //     this.shapeType = 'Bezier';
-        //   }
-        //   calcPath(sourcePoint, targetPoint) {
-        //     return redrawPath(d.children.find((c) => c.tag === 'path').attributes.d, sourcePoint, targetPoint);
-        //   }
-        // }
-        // parseEdge.Class = NewEdge;
-      }
     }
   })
   return params;
@@ -81,3 +71,4 @@ const graphvizLayout = (params) => {
 
 
 export default graphvizLayout;
+export {Edge as GraphvizEdge};

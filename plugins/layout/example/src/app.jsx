@@ -4,7 +4,7 @@ import { Canvas, Node, Edge } from '../../../../index';
 import './app.less';
 import '../../../../static/butterfly.css';
 const treeData = require('./mock_data.json');
-import graphvizLayout from 'butterfly-plugins-layout/graphvizLayout';
+import graphvizLayout, {GraphvizEdge} from 'butterfly-plugins-layout/graphvizLayout';
 // const {graphvizLayout} = require('../../index');
 
 class BaseNode extends Node {
@@ -74,12 +74,14 @@ class Scene extends Component {
       res.sourceNode = e.source;
       res.targetNode = e.target;
       res.arrow = true;
+      res.Class = GraphvizEdge;
       return res;
     });
 
     // 布局
     graphvizLayout({
-      data: {nodes, edges}
+      data: {nodes, edges},
+      rankdir: 'LR',
     });
 
     console.log(edges);
