@@ -39,14 +39,16 @@ class Scene extends Component {
       root: root,
       disLinkable: false, // 可删除连线
       layout: {type: graphvizLayout, options: {}},
-      layoutOptions: {rankdir: 'LR'},
+      layoutOptions: {rankdir: 'TB'},
       linkable: true,    // 可连线
       draggable: false,   // 可拖动
       zoomable: true,    // 可放大
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'Straight'
+          arrow: false,
+          arrowPosition: 0.3,
+          isExpandWidth: true
         }
       }
     });
