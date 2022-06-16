@@ -53,6 +53,14 @@ import graphvizLayout, {GraphvizEdge} from 'butterfly-plugins-layout/graphvizLay
 
 属性遵循graphviz提供的dot语言，可直接传入在dot语言中的dot布局定义的属性来使得布局定制化。
 
+##### nodesep _`<Double>`_   (选填)
+
+&nbsp;&nbsp;节点布局同一等级节点的最小间隔；值类型 `double`，默认0.25，最小0.02
+
 ##### rankdir _`<String>`_   (选填)
 
 &nbsp;&nbsp;布局方向，可选值为'TB','BT','LR','RL'；值类型 `string`，默认 `TB`
+
+##### ranksep _`<Double>`_   (选填)
+
+&nbsp;&nbsp;节点布局不同等级之间的间隔；值类型 `double`，默认0.5，最小0.02

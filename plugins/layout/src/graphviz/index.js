@@ -66,6 +66,44 @@ const graphvizLayout = (params) => {
       parseEdge.d = d.children.find((c) => c.tag === 'path').attributes.d;
     }
   })
+  // 为edge赋予level
+  if (!params.rankdir || params.rankdir === 'TB' || params.rankdir === 'BT') {
+    const levelObj = {};
+    params.data.nodes.forEach(n => {
+      if (!levelObj[n.top]) {
+        levelObj[n.top] = [n];
+      } else {
+        levelObj[n.top].push(n);
+      }
+    });
+    const levelPri = Object.keys(levelObj);
+    levelPri.sort((a, b) => {
+      return parseFloat(a) > parseFloat(b)
+    });
+    for (let cc = 0; cc < levelPri.length; cc++) {
+      levelObj[levelPri[cc]].forEach(n => {
+        n.level = !params.rankdir || params.rankdir === 'TB' ? cc + 1 : levelPri.length - cc;
+      })
+    }
+  } else {
+    const levelObj = {};
+    params.data.nodes.forEach(n => {
+      if (!levelObj[n.left]) {
+        levelObj[n.left] = [n];
+      } else {
+        levelObj[n.left].push(n);
+      }
+    });
+    const levelPri = Object.keys(levelObj);
+    levelPri.sort((a, b) => {
+      return parseFloat(a) > parseFloat(b)
+    });
+    for (let cc = 0; cc < levelPri.length; cc++) {
+      levelObj[levelPri[cc]].forEach(n => {
+        n.level = params.rankdir === 'LR' ? cc + 1 : levelPri.length - cc;
+      })
+    }
+  }
   return params;
 }
 
