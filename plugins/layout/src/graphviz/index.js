@@ -18,11 +18,19 @@ const graphvizLayout = (params) => {
       nodes[n.id] = n.label;
       result.push(`${n.label} [width=${n.width ? n.width * 0.010416 * 2.5 : 2.5}, height=${n.height ? n.height * 0.010416 : 1}]`)
     })
+    // edge去重
+    const pathDic = {};
     data.edges.forEach(e => {
       if (e.sourceNode) {
-        result.push(`${nodes[e.sourceNode]} -> ${nodes[e.targetNode]};`)
+        if (!pathDic[`${nodes[e.sourceNode]} -> ${nodes[e.targetNode]};`]) {
+          pathDic[`${nodes[e.sourceNode]} -> ${nodes[e.targetNode]};`] = true;
+          pathDic[`${nodes[e.sourceNode]} -> ${nodes[e.targetNode]};`] && result.push(`${nodes[e.sourceNode]} -> ${nodes[e.targetNode]};`)
+        }
       } else {
-        result.push(`${nodes[e.source]} -> ${nodes[e.target]};`)
+        if (!pathDic[`${nodes[e.source]} -> ${nodes[e.target]};`]) {
+          pathDic[`${nodes[e.source]} -> ${nodes[e.target]};`] = true;
+          pathDic[`${nodes[e.source]} -> ${nodes[e.target]};`] && result.push(`${nodes[e.source]} -> ${nodes[e.target]};`)
+        }
       }
     })
     return result;
@@ -54,7 +62,7 @@ const graphvizLayout = (params) => {
       }
     }
     if (d.attributes.class === 'edge') {
-      const parseEdge = params.data.edges.find(e => {
+      const parseEdges = params.data.edges.filter(e => {
         const sourceId = params.data.nodes.find(n => n.label === d.key.split('->')[0]).id;
         const targetId = params.data.nodes.find(n => n.label === d.key.split('->')[1]).id
         if ((e.sourceNode === sourceId && e.targetNode === targetId) ||
@@ -62,11 +70,13 @@ const graphvizLayout = (params) => {
           return true;
         }
       });
-      parseEdge.shapeType = 'Bezier';
-      parseEdge.d = d.children.find((c) => c.tag === 'path').attributes.d;
+      parseEdges.forEach(parseEdge => {
+        parseEdge.shapeType = 'Bezier';
+        parseEdge.d = d.children.find((c) => c.tag === 'path').attributes.d;
+      });
     }
   })
-  // 为edge赋予level
+  // 为node赋予level
   if (!params.rankdir || params.rankdir === 'TB' || params.rankdir === 'BT') {
     const levelObj = {};
     params.data.nodes.forEach(n => {
