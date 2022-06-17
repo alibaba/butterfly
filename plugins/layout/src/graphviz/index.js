@@ -14,9 +14,11 @@ const graphvizLayout = (params) => {
       }
       result.push(`${cc} = ${params[cc]};`);
     }
+    const widthBonus = params.rankdir === 'LR' || params.rankdir === 'RL' ? 2 : 2.5;
+    const heightBonus = params.rankdir === 'LR' || params.rankdir === 'RL' ? 2.5 : 2;
     data.nodes.forEach(n => {
       nodes[n.id] = n.label;
-      result.push(`${n.label} [width=${n.width ? n.width * 0.010416 * 2.5 : 2.5}, height=${n.height ? n.height * 0.010416 : 1}]`)
+      result.push(`${n.label} [width=${n.width ? n.width * 0.010416 * widthBonus : widthBonus}, height=${n.height ? n.height * 0.010416 * heightBonus : heightBonus}]`)
     })
     // edge去重
     const pathDic = {};

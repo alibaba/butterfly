@@ -1,6 +1,6 @@
 {
   "name": "butterfly-plugins-layout",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "butterfly-plugins-layout,含有各种布局函数",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
