@@ -54,6 +54,7 @@ class Scene extends Component {
       res.name = n.name;
       res.Class = BaseNode;
       res.layer = n.layer;
+      res.draggable = false;
       res.endpoints = [{
         id: 'down',
         orientation: [0, 1],
@@ -73,6 +74,7 @@ class Scene extends Component {
       res.sourceNode = e.source;
       res.targetNode = e.target;
       res.arrow = true;
+      res.arrowPosition = 1;
       res.Class = KedrovizEdge;
       return res;
     });

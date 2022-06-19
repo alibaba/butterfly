@@ -35,6 +35,8 @@ export const graph = (nodes, edges, layers, options = defaultOptions) => {
   const size = bounds(nodes, options.layout.padding);
 
   nodes.forEach((node) => offsetNode(node, size.min));
+  nodes.forEach((node) => node.x = node.x - (node.width * 0.5));
+  nodes.forEach((node) => node.y = node.y - (node.height * 0.5));
   edges.forEach((edge) => offsetEdge(edge, size.min));
 
   return {
