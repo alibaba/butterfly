@@ -1,0 +1,53 @@
+.butterfly-layers{
+  .butterfly-layer {
+    position: absolute;
+  }
+  .butterfly-layer:hover {
+    background: #eee;
+  }
+  
+// .butterfly-layers-button {
+//   display: inline-block;
+//   border: 1px solid;
+//   line-height: 40px;
+//   border-radius: 20px;
+//   color: #333;
+//   padding: 0px 15px;
+//   margin: 30px 8px;
+//   position: absolute;
+//   top: -10px;
+//   cursor: pointer;
+// }
+  
+  .butterfly-flowchart__layer-names {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 130px;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .butterfly-flowchart__layer-names--visible {
+    opacity: 1;
+  }
+  .butterfly-flowchart__layer-names--no-global-toolbar {
+    left: -80px;
+  }
+  
+  .butterfly-layer-name {
+    position: absolute;
+    top: -10px;
+    display: flex;
+    align-items: center;
+    height: 20px;
+    padding-left: 18px;
+    color: #555;
+    font-weight: bold;
+    font-size: 1.6em;
+    white-space: nowrap;
+  }
+}

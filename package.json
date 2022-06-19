@@ -50,7 +50,8 @@
     "style-loader": "~3.2.0",
     "url-loader": "~4.1.0",
     "webpack": "~5.51.0",
-    "webpack-cli": "~4.8.0"
+    "webpack-cli": "~4.8.0",
+    "d3-shape": "^2.1.0"
   },
   "peerDependencies": {
     "jquery": ">=2.0.0",

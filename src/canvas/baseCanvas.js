@@ -98,6 +98,11 @@ class BaseCanvas extends Canvas {
       // 自动适配父级div大小
       autoResizeRootSize: _.get(options, 'theme.autoResizeRootSize', true),
       isMouseMoveStopPropagation: _.get(options, 'theme.isMouseMoveStopPropagation') || false,
+      layers: {
+        layers: _.get(options, 'theme.layers.layers') || [],
+        Class: _.get(options, 'theme.layers.class'),
+        visible: _.get(options, 'theme.layers.visible') || true,
+      },
     };
 
     // 贯穿所有对象的配置
@@ -244,13 +249,16 @@ class BaseCanvas extends Canvas {
     const groups = opts.groups || [];
     const nodes = opts.nodes || [];
     const edges = opts.edges || [];
+    const layers = opts.layers || {};
+    // console.log("draw----->opts",opts);
 
     // 自动布局需要重新review
     if (this.layout && !opts.isNotRelayout) {
       this._autoLayout({
         groups,
         nodes,
-        edges
+        edges,
+        layers
       });
     }
 
@@ -273,6 +281,14 @@ class BaseCanvas extends Canvas {
         setTimeout(() => {
           // 生成edges
           this.addEdges(edges);
+          resolve();
+        }, 20);
+      });
+    }).then((resolve) => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          // 生成edges
+          this.addLayers(layers, nodes, edges);
           resolve();
         }, 20);
       });
@@ -2492,6 +2508,7 @@ class BaseCanvas extends Canvas {
     return _.find(this.edges, item => item.id === id);
   }
   addEdges(links, isNotEventEmit) {
+    // console.log("links,links,links,",links);
 
     $(this.svg).css('visibility', 'hidden');
 
@@ -2532,6 +2549,7 @@ class BaseCanvas extends Canvas {
 
       // link不存在的话
       const EdgeClass = link.Class || this.theme.edge.Class;
+      // console.log("EdgeClass---->",EdgeClass);
       let sourceNode = null;
       let targetNode = null;
       let _sourceType = link._sourceType;
@@ -3011,6 +3029,17 @@ class BaseCanvas extends Canvas {
     return index;
   }
 
+  //===============================
+  //[ layers渲染 ]
+  //=============================== 
+  addLayers(layers, nodes, edges) {
+    const _layersFragment = document.createDocumentFragment();
+    const LayersClass = layers.class;
+    let _newLayers = new LayersClass({ nodes, edges, layers });
+    _newLayers._init();
+    _layersFragment.appendChild(_newLayers.dom);
+    $(this.wrapper).append(_layersFragment);
+  }
 
   //===============================
   //[ 布局配置 ]
@@ -3065,7 +3094,8 @@ class BaseCanvas extends Canvas {
               edges: data.edges.map(item => ({
                 source: item.type === 'endpoint' ? item.sourceNode : item.source,
                 target: item.type === 'endpoint' ? item.targetNode : item.target
-              }))
+              })),
+              layers: data.layers,
             }
           });
         }

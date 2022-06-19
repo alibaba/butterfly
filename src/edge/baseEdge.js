@@ -254,6 +254,7 @@ class BaseEdge extends Edge {
       arrowPosition: this.arrowFinalPosition,
       path: path
     });
+    // console.log("arrow-----vector---->",vector);
     let deg = Math.atan2(vector.y, vector.x) / Math.PI * 180;
     let arrowObj = ArrowUtil.ARROW_TYPE[this.arrowShapeType];
     let arrowWidth = arrowObj.width || 8;

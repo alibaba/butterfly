@@ -6,6 +6,7 @@ import $ from 'jquery';
 class BaseEdge extends Edge {
   constructor(opts) {
     super(opts);
+    console.log("opts",opts);
     this.d = opts.options.d;
     this.shapeType = 'Bezier';
   }

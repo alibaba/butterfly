@@ -1,0 +1,775 @@
+{
+  "edges": [
+    {
+      "id": "6687aab8-4263-4f5e-b410-661907435c5b",
+      "source": "872981f9",
+      "target": "train_evaluation.random_forest"
+    },
+    {
+      "id": "e50938ab-4a45-4548-8132-87cf10db709a",
+      "source": "aed46479",
+      "target": "f21b4675"
+    },
+    {
+      "id": "872d7b71-4fda-46ee-9d9a-e98b32b315f2",
+      "source": "178d37bb",
+      "target": "23c94afb"
+    },
+    {
+      "id": "761f7b32-c4a0-4ff2-8281-d4a89749a44e",
+      "source": "train_evaluation",
+      "target": "d778abcf"
+    },
+    {
+      "id": "7a098f04-531a-4ace-b353-1dc252108bd0",
+      "source": "9a6ef457",
+      "target": "c08c7708"
+    },
+    {
+      "id": "4112406d-37f1-4b95-9a9f-e926bbc93737",
+      "source": "ingestion",
+      "target": "9f266f06"
+    },
+    {
+      "id": "c37cecd9-cbd5-44d7-bf09-d41052eee499",
+      "source": "7c92a703",
+      "target": "178d37bb"
+    },
+    {
+      "id": "d889a79a-5e76-42e5-a94b-83474c5da166",
+      "source": "cae2d1c7",
+      "target": "train_evaluation"
+    },
+    {
+      "id": "186d068f-6dd9-4726-882a-4c369dfa407a",
+      "source": "98eb115e",
+      "target": "train_evaluation.linear_regression"
+    },
+    {
+      "id": "923fa5a8-2c2a-4dc7-94b2-0b8636eb5fae",
+      "source": "f063cc82",
+      "target": "178d37bb"
+    },
+    {
+      "id": "67f78b19-b790-411e-8105-21a1d8bca975",
+      "source": "98eb115e",
+      "target": "69cc27bb"
+    },
+    {
+      "id": "0b2fa692-fc7d-4da4-8d5e-1be055397fda",
+      "source": "train_evaluation.random_forest",
+      "target": "9774131c"
+    },
+    {
+      "id": "a4b5ce8b-8906-4b1f-9a04-923121d43a09",
+      "source": "9f266f06",
+      "target": "feature_engineering"
+    },
+    {
+      "id": "fc38d90a-1bde-4f3e-9d1b-cd532da6f0b0",
+      "source": "23c94afb",
+      "target": "b85b55e1"
+    },
+    {
+      "id": "d227409f-cc27-4cae-ac03-304dad79dbbb",
+      "source": "cae2d1c7",
+      "target": "train_evaluation.linear_regression"
+    },
+    {
+      "id": "dd754d8e-c66b-4aeb-8663-99a7d8c275ab",
+      "source": "f6d9538c",
+      "target": "140dcc92"
+    },
+    {
+      "id": "98cd2bb2-1bd3-4a92-bc42-964b052a0561",
+      "source": "9c43f772",
+      "target": "8e4f1015"
+    },
+    {
+      "id": "273787c1-f107-422b-957a-e60920083313",
+      "source": "cae2d1c7",
+      "target": "69cc27bb"
+    },
+    {
+      "id": "cdcdfe74-5801-41ba-8778-504728127c2b",
+      "source": "train_evaluation",
+      "target": "a5115a02"
+    },
+    {
+      "id": "ca832b2e-4ac9-47de-ad7c-0c872c87eaf1",
+      "source": "b85b55e1",
+      "target": "9ca016a8"
+    },
+    {
+      "id": "0396e5c6-07b1-46f9-83e1-9b48696f0ffd",
+      "source": "ac62cb68",
+      "target": "9f266f06"
+    },
+    {
+      "id": "1f828d02-7606-4cd4-9d55-1aa17d8116fd",
+      "source": "872981f9",
+      "target": "train_evaluation"
+    },
+    {
+      "id": "622a0a32-0475-483a-b21f-ede5c15aee21",
+      "source": "72baf5c6",
+      "target": "train_evaluation"
+    },
+    {
+      "id": "67cede31-e8bc-42c3-bbda-c58d12c067be",
+      "source": "b5609df0",
+      "target": "e7e37c2b"
+    },
+    {
+      "id": "4484fe9d-06ac-4aa9-9df3-ebe3a1da3fee",
+      "source": "01675921",
+      "target": "140dcc92"
+    },
+    {
+      "id": "3707037c-e142-448a-994b-681dd8cc6aeb",
+      "source": "abed6a4d",
+      "target": "d6abbcff"
+    },
+    {
+      "id": "3707037c-e142-448a-994b-681dd8cc61qa",
+      "source": "reporting",
+      "target": "c6992660"
+    },
+    {
+      "id": "3707037c-e142-448a-994b-sdfghjyt543w",
+      "source": "f063cc82",
+      "target": "d6abbcff"
+    },
+    {
+      "id": "3707037c-e142-448a-994b-3456ydfghjcvb",
+      "source": "f6d9538c",
+      "target": "train_evaluation"
+    },
+    {
+      "id": "3707037c-e142-448a-994b-3456ydfghjcvb",
+      "source": "72baf5c6",
+      "target": "train_evaluation.random_forest"
+    },
+    {
+      "id": "3707037c-e142-asdf-13es-3456ydfghjcvb",
+      "source": "f6d9538c",
+      "target": "train_evaluation.random_forest"
+    },
+    {
+      "id": "3dcvbnrt-e142-448a-994b-3456ysdghjcvb",
+      "source": "aed46479",
+      "target": "ingestion"
+    },
+    {
+      "id": "3dfgsdfs-e142-448a-994b-3dfghjrtycvb",
+      "source": "c0ddbcbf",
+      "target": "ac62cb68"
+    },
+    {
+      "id": "3707037c-e142-448a-fghb-34erty9234xb",
+      "source": "72baf5c6",
+      "target": "f7ca9ac7"
+    },
+    {
+      "id": "37erty8s-e142-448a-994b-3456ydfghjcvb",
+      "source": "f21b4675",
+      "target": "f23ad217"
+    },
+    {
+      "id": "3707037c-dfghjtyuiv124b-3456ydfghjcvb",
+      "source": "9f266f06",
+      "target": "c7646ea1"
+    },
+    {
+      "id": "0ertyh6-07b1-46f9-83e1-9b48696f0ffd",
+      "source": "872981f9",
+      "target": "train_evaluation.linear_regression"
+    },
+    {
+      "id": "0396e5c6-07b1-46f9-83e1-9bxcvbnxcfd",
+      "source": "3fb71518",
+      "target": "8838ca1f"
+    },
+    {
+      "id": "0396e5c6-07b1-4ertyu56-9b48696f0ffd",
+      "source": "a3627e31",
+      "target": "feature_engineering"
+    },
+    {
+      "id": "0396e5c6-07b1-46f9-83e1-9oiuygff1d",
+      "source": "c7646ea1",
+      "target": "d0e9b00f"
+    },
+    {
+      "id": "0396e5c6-07b1-46f9-83e1-oiuytr567fd",
+      "source": "f7ca9ac7",
+      "target": "01675921"
+    },
+    {
+      "id": "039sxdcvbnrtyuiopoiuhg-9b48696f0ffd",
+      "source": "9415091a",
+      "target": "d778abcf"
+    },
+    {
+      "id": "8e4f101vbnrtyuiopoiuhg-9b48696f0ffd",
+      "source": "8e4f1015",
+      "target": "178d37bb"
+    },
+    {
+      "id": "039sxdcvbnreportsdfing-9b48696f0ffd",
+      "source": "reporting",
+      "target": "8838ca1f"
+    },
+    {
+      "id": "train_evaluatio92a8cn-9b48696f0ffd",
+      "source": "train_evaluation",
+      "target": "92a8c757"
+    },
+    {
+      "id": "9f266f06-3fb71518",
+      "source": "9f266f06",
+      "target": "3fb71518"
+    },
+    {
+      "id": "9f266f06-d6abbcff",
+      "source": "9f266f06",
+      "target": "d6abbcff"
+    },
+    {
+      "id": "f23ad217-8de402c1",
+      "source": "f23ad217",
+      "target": "8de402c1"
+    },
+    {
+      "id": "872981f9-9415091a",
+      "source": "872981f9",
+      "target": "9415091a"
+    },
+    {
+      "id": "7b2c6e04-ingestion",
+      "source": "7b2c6e04",
+      "target": "ingestion"
+    },
+    {
+      "id": "7a4baabf-af15a59c",
+      "source": "7a4baabf",
+      "target": "af15a59c"
+    },
+    {
+      "id": "f6d9538c-9415091a",
+      "source": "f6d9538c",
+      "target": "9415091a"
+    },
+    {
+      "id": "reporting-d0e9b00f",
+      "source": "reporting",
+      "target": "d0e9b00f"
+    },
+    {
+      "id": "d6abbcff-7c92a703",
+      "source": "d6abbcff",
+      "target": "7c92a703"
+    },
+    {
+      "id": "b85b55e1-f6d9538c",
+      "source": "b85b55e1",
+      "target": "f6d9538c"
+    },
+    {
+      "id": "9f266f06-reporting",
+      "source": "9f266f06",
+      "target": "reporting"
+    },
+    {
+      "id": "69cc27bb-a5115a02",
+      "source": "69cc27bb",
+      "target": "a5115a02"
+    },
+    {
+      "id": "b85b55e1-872981f9",
+      "source": "b85b55e1",
+      "target": "872981f9"
+    },
+    {
+      "id": "f1d596c2-ingestion",
+      "source": "f1d596c2",
+      "target": "ingestion"
+    },
+    {
+      "id": "train_evaluation-d778abcf",
+      "source": "train_evaluation.linear_regression",
+      "target": "d778abcf"
+    },
+    {
+      "id": "9f266f06-7a4baabf",
+      "source": "9f266f06",
+      "target": "7a4baabf"
+    },
+    {
+      "id": "9ca016a8-train_evaluation",
+      "source": "9ca016a8",
+      "target": "train_evaluation"
+    },
+    {
+      "id": "ingestion-c08c7708",
+      "source": "ingestion",
+      "target": "c08c7708"
+    },
+    {
+      "id": "feature_engineering-23c94afb",
+      "source": "feature_engineering",
+      "target": "23c94afb"
+    },
+    {
+      "id": "8f20d98e-ac62cb68",
+      "source": "8f20d98e",
+      "target": "ac62cb68"
+    },
+    {
+      "id": "9ca016a8-train_evaluationrandom_forest",
+      "source": "9ca016a8",
+      "target": "train_evaluation.random_forest"
+    },
+    {
+      "id": "f6d9538c-train_evaluationlinear_regression",
+      "source": "f6d9538c",
+      "target": "train_evaluation.linear_regression"
+    },
+    {
+      "id": "9f266f06-9c43f772",
+      "source": "9f266f06",
+      "target": "9c43f772"
+    },
+    {
+      "id": "train_evaluation-9774131c",
+      "source": "train_evaluation",
+      "target": "9774131c"
+    },
+    {
+      "id": "9ca016a8-f7ca9ac7",
+      "source": "9ca016a8",
+      "target": "f7ca9ac7"
+    },
+    {
+      "id": "7b2c6e04-e7e37c2b",
+      "source": "7b2c6e04",
+      "target": "e7e37c2b"
+    },
+    {
+      "id": "9db98312-c0ddbcbf",
+      "source": "9db98312",
+      "target": "c0ddbcbf"
+    },
+    {
+      "id": "ac62cb68-f063cc82",
+      "source": "ac62cb68",
+      "target": "f063cc82"
+    },
+    {
+      "id": "train_evaluationlinear_regression-a5115a02",
+      "source": "train_evaluation.linear_regression",
+      "target": "a5115a02"
+    },
+    {
+      "id": "f063cc82-9a6ef457",
+      "source": "f063cc82",
+      "target": "9a6ef457"
+    },
+    {
+      "id": "reporting-af15a59c",
+      "source": "reporting",
+      "target": "af15a59c"
+    },
+    {
+      "id": "40886786-c6992660",
+      "source": "40886786",
+      "target": "c6992660"
+    },
+    {
+      "id": "10e51dea-9415091a",
+      "source": "10e51dea",
+      "target": "9415091a"
+    },
+    {
+      "id": "4f7ffa1b-ac62cb68",
+      "source": "4f7ffa1b",
+      "target": "ac62cb68"
+    },
+    {
+      "id": "e7e37c2b-4f7ffa1b",
+      "source": "e7e37c2b",
+      "target": "4f7ffa1b"
+    },
+    {
+      "id": "69cc27bb-10e51dea",
+      "source": "69cc27bb",
+      "target": "10e51dea"
+    },
+    {
+      "id": "cae2d1c7-train_evaluationrandom_forest",
+      "source": "cae2d1c7",
+      "target": "train_evaluation.random_forest"
+    },
+    {
+      "id": "b85b55e1-cae2d1c7",
+      "source": "b85b55e1",
+      "target": "cae2d1c7"
+    },
+    {
+      "id": "22eec376-b85b55e1",
+      "source": "22eec376",
+      "target": "b85b55e1"
+    },
+    {
+      "id": "cae2d1c7-f7ca9ac7",
+      "source": "cae2d1c7",
+      "target": "f7ca9ac7"
+    },
+    {
+      "id": "872981f9-140dcc92",
+      "source": "872981f9",
+      "target": "140dcc92"
+    },
+    {
+      "id": "9f266f06-40886786",
+      "source": "9f266f06",
+      "target": "40886786"
+    },
+    {
+      "id": "train_evaluationrandom_forest-92a8c757",
+      "source": "train_evaluation.random_forest",
+      "target": "92a8c757"
+    },
+    {
+      "id": "abed6a4d-feature_engineering",
+      "source": "abed6a4d",
+      "target": "feature_engineering"
+    },
+    {
+      "id": "f7ca9ac7-92a8c757",
+      "source": "f7ca9ac7",
+      "target": "92a8c757"
+    },
+    {
+      "id": "140dcc92-9774131c",
+      "source": "140dcc92",
+      "target": "9774131c"
+    },
+    {
+      "id": "a3627e31-9c43f772",
+      "source": "a3627e31",
+      "target": "9c43f772"
+    },
+    {
+      "id": "f063cc82-feature_engineering",
+      "source": "f063cc82",
+      "target": "feature_engineering"
+    },
+    {
+      "id": "8de402c1-8f20d98e",
+      "source": "8de402c1",
+      "target": "8f20d98e"
+    },
+    {
+      "id": "9ca016a8-train_evaluationlinear_regression",
+      "source": "9ca016a8",
+      "target": "train_evaluation.linear_regression"
+    },
+    {
+      "id": "98eb115e-train_evaluation",
+      "source": "98eb115e",
+      "target": "train_evaluation"
+    },
+    {
+      "id": "f1d596c2-9db98312",
+      "source": "f1d596c2",
+      "target": "9db98312"
+    },
+    {
+      "id": "b5609df0-ingestion",
+      "source": "b5609df0",
+      "target": "ingestion"
+    },
+    {
+      "id": "9ca016a8-69cc27bb",
+      "source": "9ca016a8",
+      "target": "69cc27bb"
+    }
+  ],
+  "layers": [
+    "raw",
+    "primary",
+    "model_input",
+    "reporting"
+  ],
+  "nodes": [
+    {
+      "id": "f21b4675",
+      "name": "Apply Types To Companies"
+    },
+    {
+      "id": "aed46479",
+      "layer": "raw",
+      "name": "Companies"
+    },
+    {
+      "id": "f23ad217",
+      "layer": null,
+      "name": "Int Typed Companies"
+    },
+    {
+      "id": "e7e37c2b",
+      "name": "Apply Types To Reviews"
+    },
+    {
+      "id": "7b2c6e04",
+      "layer": "raw",
+      "name": "Reviews"
+    },
+    {
+      "id": "b5609df0",
+      "layer": null,
+      "name": "Params: Columns As Floats"
+    },
+    {
+      "id": "4f7ffa1b",
+      "layer": null,
+      "name": "Int Typed Reviews"
+    },
+    {
+      "id": "9db98312",
+      "name": "Apply Types To Shuttles"
+    },
+    {
+      "id": "f1d596c2",
+      "layer": "raw",
+      "name": "Shuttles"
+    },
+    {
+      "id": "c0ddbcbf",
+      "layer": null,
+      "name": "Int Typed Shuttles"
+    },
+    {
+      "id": "8de402c1",
+      "name": "Company Agg"
+    },
+    {
+      "id": "8f20d98e",
+      "layer": null,
+      "name": "Prm Agg Companies"
+    },
+    {
+      "id": "ac62cb68",
+      "name": "Combine Step"
+    },
+    {
+      "id": "9f266f06",
+      "layer": "primary",
+      "name": "Prm Shuttle Company Reviews"
+    },
+    {
+      "id": "f063cc82",
+      "layer": "primary",
+      "name": "Prm Spine Table"
+    },
+    {
+      "id": "9c43f772",
+      "name": "Create Static Features"
+    },
+    {
+      "id": "a3627e31",
+      "layer": null,
+      "name": "Params: Static"
+    },
+    {
+      "id": "8e4f1015",
+      "layer": null,
+      "name": "Feat Static Features"
+    },
+    {
+      "id": "c7646ea1",
+      "name": "Make Cancel Policy Bar Chart"
+    },
+    {
+      "id": "d0e9b00f",
+      "layer": "reporting",
+      "name": "Cancellation Policy Breakdown"
+    },
+    {
+      "id": "40886786",
+      "name": "Make Price Histogram"
+    },
+    {
+      "id": "c6992660",
+      "layer": "reporting",
+      "name": "Price Histogram"
+    },
+    {
+      "id": "9a6ef457",
+      "name": "<lambda>"
+    },
+    {
+      "id": "c08c7708",
+      "layer": null,
+      "name": "Prm Spine Table Clone"
+    },
+    {
+      "id": "7a4baabf",
+      "name": "Create Matplotlib Chart"
+    },
+    {
+      "id": "af15a59c",
+      "layer": null,
+      "name": "Matplotlib Image"
+    },
+    {
+      "id": "d6abbcff",
+      "name": "Create Derived Features"
+    },
+    {
+      "id": "abed6a4d",
+      "layer": null,
+      "name": "Params: Derived"
+    },
+    {
+      "id": "7c92a703",
+      "layer": null,
+      "name": "Feat Derived Features"
+    },
+    {
+      "id": "3fb71518",
+      "name": "Make Price Analysis Image"
+    },
+    {
+      "id": "8838ca1f",
+      "layer": null,
+      "name": "Cancellation Policy Grid"
+    },
+    {
+      "id": "178d37bb",
+      "name": "Joiner"
+    },
+    {
+      "id": "23c94afb",
+      "layer": "model_input",
+      "name": "Model Input Table"
+    },
+    {
+      "id": "b85b55e1",
+      "name": "Split Data"
+    },
+    {
+      "id": "22eec376",
+      "layer": null,
+      "name": "Params: Split Options"
+    },
+    {
+      "id": "cae2d1c7",
+      "layer": null,
+      "name": "X Train"
+    },
+    {
+      "id": "872981f9",
+      "layer": null,
+      "name": "X Test"
+    },
+    {
+      "id": "9ca016a8",
+      "layer": null,
+      "name": "Y Train"
+    },
+    {
+      "id": "f6d9538c",
+      "layer": null,
+      "name": "Y Test"
+    },
+    {
+      "id": "69cc27bb",
+      "name": "Train Model"
+    },
+    {
+      "id": "98eb115e",
+      "layer": null,
+      "name": "Params: Linear Regression"
+    },
+    {
+      "id": "10e51dea",
+      "layer": null,
+      "name": "Regressor"
+    },
+    {
+      "id": "a5115a02",
+      "layer": null,
+      "name": "Hyperparams Linear Regression"
+    },
+    {
+      "id": "f7ca9ac7",
+      "name": "Train Model"
+    },
+    {
+      "id": "72baf5c6",
+      "layer": null,
+      "name": "Params: Random Forest"
+    },
+    {
+      "id": "01675921",
+      "layer": null,
+      "name": "Regressor"
+    },
+    {
+      "id": "92a8c757",
+      "layer": null,
+      "name": "Hyperparams Random Forest"
+    },
+    {
+      "id": "9415091a",
+      "name": "Evaluate Model"
+    },
+    {
+      "id": "d778abcf",
+      "layer": null,
+      "name": "R2 Score Linear Regression"
+    },
+    {
+      "id": "140dcc92",
+      "name": "Evaluate Model",
+      "parameters": {}
+    },
+    {
+      "id": "9774131c",
+      "layer": null,
+      "name": "R2 Score Random Forest"
+    },
+    {
+      "id": "ingestion",
+      "layer": null,
+      "name": "Ingestion"
+    },
+    {
+      "id": "feature_engineering",
+      "layer": null,
+      "name": "Feature Engineering"
+    },
+    {
+      "id": "reporting",
+      "layer": null,
+      "name": "Reporting"
+    },
+    {
+      "id": "train_evaluation.linear_regression",
+      "layer": null,
+      "name": "Linear Regression"
+    },
+    {
+      "id": "train_evaluation",
+      "layer": null,
+      "name": "Train Evaluation"
+    },
+    {
+      "id": "train_evaluation.random_forest",
+      "layer": null,
+      "name": "Random Forest"
+    }
+  ]
+}
