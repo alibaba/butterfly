@@ -19,7 +19,7 @@ const getNodeTextWidth = (nodeIDs, nodeName) => {
   return nodeTextWidth;
 };
 
-const getNodeSize = (nodeIDs, nodeName) => {
+const getNodeSize = (nodeIDs, nodeName, nodeWidth, nodeHeight) => {
   let nodeTextWidth = getNodeTextWidth(nodeIDs, nodeName);
   return arrayToObject(nodeIDs, (nodeID) => {
     const padding = { x: 20, y: 10 };
@@ -27,8 +27,8 @@ const getNodeSize = (nodeIDs, nodeName) => {
     const textGap = 6;
     const innerWidth = textWidth + textGap;
     return {
-      width: innerWidth + padding.x * 2,
-      height: padding.y * 3,
+      width: nodeWidth[nodeID] || innerWidth + padding.x * 2,
+      height: nodeHeight[nodeID] || padding.y * 3,
     };
   });
 };
@@ -39,7 +39,9 @@ export const getNodes = (nodesOrg, node, layer) => {
   const nodeLayer = node.layer;
   const nodeIndex = node.index;
   const nodeRank = getNodeRank(node, layer);
-  let nodeSize = getNodeSize(nodeIDs, nodeName);
+  const nodeWidth = node.width;
+  const nodeHeight = node.height;
+  let nodeSize = getNodeSize(nodeIDs, nodeName, nodeWidth, nodeHeight);
   let nodes = nodesOrg.map((item) => {
     let {id} = item;
     return {

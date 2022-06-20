@@ -9,7 +9,6 @@ const matchFloats = /\d+\.\d+/g;
 class KedrovizEdge extends BaseEdge {
   constructor(opts) {
     super(opts);
-    console.log("opts",opts);
     this.points = opts.options.points;
     this.lineShape = line()
     .x((d) => d.x)

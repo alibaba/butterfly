@@ -14,14 +14,15 @@ export const getLayers = ({ nodes, edges, layers }) => {
 
     if (layer) {
       const bound = bounds[layer] || (bounds[layer] = [Infinity, -Infinity]);
-      let nodeY = node.y || node.top;
 
-      if (nodeY - node.height < bound[0]) {
-        bound[0] = nodeY - node.height + node.height * 0.5;
+      let nodeX = node.x || node.left;
+
+      if (nodeX - node.width < bound[0]) {
+        bound[0] = nodeX - node.width + node.width * 0.5;
       }
 
-      if (nodeY + node.height > bound[1]) {
-        bound[1] = nodeY + node.height + node.height * 0.5;
+      if (nodeX + node.width > bound[1]) {
+        bound[1] = nodeX + node.width + node.width * 0.5;
       }
     }
   }
@@ -39,15 +40,15 @@ export const getLayers = ({ nodes, edges, layers }) => {
     ];
     const start = (prevBound[1] + currentBound[0]) / 2;
     const end = (currentBound[1] + nextBound[0]) / 2;
-    const rectWidth = Math.max(width, height) * 5;
+    const rectHeight = Math.max(width, height) * 5;
 
     return {
       id,
       name: layerName[id],
-      x: (rectWidth - width) / -2,
-      y: start,
-      width: rectWidth,
-      height: Math.max(end - start, 0),
+      y: (rectHeight - height) / -2,
+      x: start,
+      height: rectHeight,
+      width: Math.max(end - start, 0),
     };
   });
 };

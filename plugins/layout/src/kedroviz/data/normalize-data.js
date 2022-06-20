@@ -3,7 +3,11 @@ let node = {
   ids: [],
   name: {},
   index: {},
-  layer: {}
+  layer: {},
+  width: {},
+  height: {},
+  maxWidth: 0,
+  maxHeight: 0
 };
 
 let edge = {
@@ -19,7 +23,7 @@ let layer = {
 };
 
 function unique (arr) {
-  return Array.from(new Set(arr))
+  return Array.from(new Set(arr));
 }
 
 const addNode = (nodeItem) => {
@@ -31,6 +35,14 @@ const addNode = (nodeItem) => {
   node.index[id] = nodeItem.index;
   node.name[id] = nodeItem.name;
   node.layer[id] = nodeItem.layer;
+  if(nodeItem.width) {
+    maxWidth = Math.max(maxWidth, nodeItem.width);
+    node.width[id] = nodeItem.width;
+  }
+  if(nodeItem.height) {
+    maxHeight = Math.max(maxHeight, nodeItem.height);
+    node.height[id] = nodeItem.height;
+  }
   node.Class = nodeItem.Class;
 };
 

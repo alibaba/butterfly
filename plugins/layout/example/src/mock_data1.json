@@ -505,271 +505,384 @@
   "nodes": [
     {
       "id": "f21b4675",
-      "name": "Apply Types To Companies"
+      "name": "Apply Types To Companies",
+      "width": 250,
+      "height": 30
     },
     {
       "id": "aed46479",
       "layer": "raw",
-      "name": "Companies"
+      "name": "Companies",
+      "width": 120,
+      "height": 30
     },
     {
       "id": "f23ad217",
       "layer": null,
-      "name": "Int Typed Companies"
+      "name": "Int Typed Companies",
+      "width": 220,
+      "height": 30
     },
     {
       "id": "e7e37c2b",
-      "name": "Apply Types To Reviews"
+      "name": "Apply Types To Reviews",
+      "width": 250,
+      "height": 30
     },
     {
       "id": "7b2c6e04",
       "layer": "raw",
-      "name": "Reviews"
+      "name": "Reviews",
+      "width": 100,
+      "height": 30
     },
     {
       "id": "b5609df0",
       "layer": null,
-      "name": "Params: Columns As Floats"
+      "name": "Params: Columns As Floats",
+      "width": 250,
+      "height": 30
     },
     {
       "id": "4f7ffa1b",
       "layer": null,
-      "name": "Int Typed Reviews"
+      "name": "Int Typed Reviews",
+      "width": 200,
+      "height": 30
     },
     {
       "id": "9db98312",
-      "name": "Apply Types To Shuttles"
+      "name": "Apply Types To Shuttles",
+      "width": 250,
+      "height": 30
     },
     {
       "id": "f1d596c2",
       "layer": "raw",
-      "name": "Shuttles"
+      "name": "Shuttles",
+      "width": 100,
+      "height": 30
     },
     {
       "id": "c0ddbcbf",
       "layer": null,
-      "name": "Int Typed Shuttles"
+      "name": "Int Typed Shuttles",
+      "width": 220,
+      "height": 30
     },
     {
       "id": "8de402c1",
-      "name": "Company Agg"
+      "name": "Company Agg",
+      "width": 120,
+      "height": 30
     },
     {
       "id": "8f20d98e",
       "layer": null,
-      "name": "Prm Agg Companies"
+      "name": "Prm Agg Companies",
+      "width": 220,
+      "height": 30
     },
     {
       "id": "ac62cb68",
-      "name": "Combine Step"
+      "name": "Combine Step",
+      "width": 120,
+      "height": 30
     },
     {
       "id": "9f266f06",
       "layer": "primary",
-      "name": "Prm Shuttle Company Reviews"
+      "name": "Prm Shuttle Company Reviews",
+      "width": 250,
+      "height": 30
     },
     {
       "id": "f063cc82",
       "layer": "primary",
-      "name": "Prm Spine Table"
+      "name": "Prm Spine Table",
+      "width": 200,
+      "height": 30
     },
     {
       "id": "9c43f772",
-      "name": "Create Static Features"
+      "name": "Create Static Features",
+      "width": 250,
+      "height": 30
     },
     {
       "id": "a3627e31",
       "layer": null,
-      "name": "Params: Static"
+      "name": "Params: Static",
+      "width": 160,
+      "height": 30
     },
     {
       "id": "8e4f1015",
       "layer": null,
-      "name": "Feat Static Features"
+      "name": "Feat Static Features",
+      "width": 250,
+      "height": 30
     },
     {
       "id": "c7646ea1",
-      "name": "Make Cancel Policy Bar Chart"
+      "name": "Make Cancel Policy Bar Chart",
+      "width": 250,
+      "height": 30
     },
     {
       "id": "d0e9b00f",
       "layer": "reporting",
-      "name": "Cancellation Policy Breakdown"
+      "name": "Cancellation Policy Breakdown",
+      "width": 250,
+      "height": 30
     },
     {
       "id": "40886786",
-      "name": "Make Price Histogram"
+      "name": "Make Price Histogram",
+      "width": 200,
+      "height": 30
     },
     {
       "id": "c6992660",
       "layer": "reporting",
-      "name": "Price Histogram"
+      "name": "Price Histogram",
+      "width": 180,
+      "height": 30
     },
     {
       "id": "9a6ef457",
-      "name": "<lambda>"
+      "name": "<lambda>",
+      "width": 100,
+      "height": 30
     },
     {
       "id": "c08c7708",
       "layer": null,
-      "name": "Prm Spine Table Clone"
+      "name": "Prm Spine Table Clone",
+      "width": 250,
+      "height": 30
     },
     {
       "id": "7a4baabf",
-      "name": "Create Matplotlib Chart"
+      "name": "Create Matplotlib Chart",
+      "width": 250,
+      "height": 30
     },
     {
       "id": "af15a59c",
       "layer": null,
-      "name": "Matplotlib Image"
+      "name": "Matplotlib Image",
+      "width": 200,
+      "height": 30
     },
     {
       "id": "d6abbcff",
-      "name": "Create Derived Features"
+      "name": "Create Derived Features",
+      "width": 250,
+      "height": 30
     },
     {
       "id": "abed6a4d",
       "layer": null,
-      "name": "Params: Derived"
+      "name": "Params: Derived",
+      "width": 200,
+      "height": 30
     },
     {
       "id": "7c92a703",
       "layer": null,
-      "name": "Feat Derived Features"
+      "name": "Feat Derived Features",
+      "width": 250,
+      "height": 30
     },
     {
       "id": "3fb71518",
-      "name": "Make Price Analysis Image"
+      "name": "Make Price Analysis Image",
+      "width": 250,
+      "height": 30
     },
     {
       "id": "8838ca1f",
       "layer": null,
-      "name": "Cancellation Policy Grid"
+      "name": "Cancellation Policy Grid",
+      "width": 250,
+      "height": 30
     },
     {
       "id": "178d37bb",
-      "name": "Joiner"
+      "name": "Joiner",
+      "width": 100,
+      "height": 30
     },
     {
       "id": "23c94afb",
       "layer": "model_input",
-      "name": "Model Input Table"
+      "name": "Model Input Table",
+      "width": 250,
+      "height": 30
     },
     {
       "id": "b85b55e1",
-      "name": "Split Data"
+      "name": "Split Data",
+      "width": 150,
+      "height": 30
     },
     {
       "id": "22eec376",
       "layer": null,
-      "name": "Params: Split Options"
+      "name": "Params: Split Options",
+      "width": 250,
+      "height": 30
     },
     {
       "id": "cae2d1c7",
       "layer": null,
-      "name": "X Train"
+      "name": "X Train",
+      "width": 110,
+      "height": 30
     },
     {
       "id": "872981f9",
       "layer": null,
-      "name": "X Test"
+      "name": "X Test",
+      "width": 100,
+      "height": 30
     },
     {
       "id": "9ca016a8",
       "layer": null,
-      "name": "Y Train"
+      "name": "Y Train",
+      "width": 100,
+      "height": 30
     },
     {
       "id": "f6d9538c",
       "layer": null,
-      "name": "Y Test"
+      "name": "Y Test",
+      "width": 100,
+      "height": 30
     },
     {
       "id": "69cc27bb",
-      "name": "Train Model"
+      "name": "Train Model",
+      "width": 150,
+      "height": 30
     },
     {
       "id": "98eb115e",
       "layer": null,
-      "name": "Params: Linear Regression"
+      "name": "Params: Linear Regression",
+      "width": 250,
+      "height": 30
     },
     {
       "id": "10e51dea",
       "layer": null,
-      "name": "Regressor"
+      "name": "Regressor",
+      "width": 100,
+      "height": 30
     },
     {
       "id": "a5115a02",
       "layer": null,
-      "name": "Hyperparams Linear Regression"
+      "name": "Hyperparams Linear Regression",
+      "width": 250,
+      "height": 30
     },
     {
       "id": "f7ca9ac7",
-      "name": "Train Model"
+      "name": "Train Model",
+      "width": 200,
+      "height": 30
     },
     {
       "id": "72baf5c6",
       "layer": null,
-      "name": "Params: Random Forest"
+      "name": "Params: Random Forest",
+      "width": 250,
+      "height": 30
     },
     {
       "id": "01675921",
       "layer": null,
-      "name": "Regressor"
+      "name": "Regressor",
+      "width": 100,
+      "height": 30
     },
     {
       "id": "92a8c757",
       "layer": null,
-      "name": "Hyperparams Random Forest"
+      "name": "Hyperparams Random Forest",
+      "width": 250,
+      "height": 30
     },
     {
       "id": "9415091a",
-      "name": "Evaluate Model"
+      "name": "Evaluate Model",
+      "width": 150,
+      "height": 30
     },
     {
       "id": "d778abcf",
       "layer": null,
-      "name": "R2 Score Linear Regression"
+      "name": "R2 Score Linear Regression",
+      "width": 250,
+      "height": 30
     },
     {
       "id": "140dcc92",
       "name": "Evaluate Model",
-      "parameters": {}
+      "width": 250,
+      "height": 30
     },
     {
       "id": "9774131c",
       "layer": null,
-      "name": "R2 Score Random Forest"
+      "name": "R2 Score Random Forest",
+      "width": 250,
+      "height": 30
     },
     {
       "id": "ingestion",
       "layer": null,
-      "name": "Ingestion"
+      "name": "Ingestion",
+      "width": 100,
+      "height": 30
     },
     {
       "id": "feature_engineering",
       "layer": null,
-      "name": "Feature Engineering"
+      "name": "Feature Engineering",
+      "width": 250,
+      "height": 30
     },
     {
       "id": "reporting",
       "layer": null,
-      "name": "Reporting"
+      "name": "Reporting",
+      "width": 100,
+      "height": 30
     },
     {
       "id": "train_evaluation.linear_regression",
       "layer": null,
-      "name": "Linear Regression"
+      "name": "Linear Regression",
+      "width": 250,
+      "height": 30
     },
     {
       "id": "train_evaluation",
       "layer": null,
-      "name": "Train Evaluation"
+      "name": "Train Evaluation",
+      "width": 250,
+      "height": 30
     },
     {
       "id": "train_evaluation.random_forest",
       "layer": null,
-      "name": "Random Forest"
+      "name": "Random Forest",
+      "width": 150,
+      "height": 30
     }
   ]
 }
