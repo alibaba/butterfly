@@ -5,7 +5,7 @@ import normalizeData from "../data/normalize-data";
 // direction方向： row (左右)｜ column （上下）
 
 export const kedrovizLayout = (param) => {
-  let { edges, nodes, layers, direction } = param.data;
+  let { edges, nodes, layers, direction = "column" } = param.data;
   let {node, edge, layer} = normalizeData(nodes, edges, layers);
   let _layers = layers.visible ? layers.layers : [];
   let _spaceDirection = node.maxHeight;

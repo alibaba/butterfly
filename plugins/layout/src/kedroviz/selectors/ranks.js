@@ -35,7 +35,9 @@ export const getNodeRank = (node, edges, layer) => {
     nodeDeps[nodeID] = [];
   }
   for (const edge of edges) {
-    nodeDeps[edge.sourceNode].push(edge.targetNode);
+    let sourceNode = edge.sourceNode || edge.source;
+    let targetNode = edge.targetNode || edge.target;
+    nodeDeps[sourceNode].push(targetNode);
   }
 
   for (let i = 1; i < layerNodes.length; i++) {

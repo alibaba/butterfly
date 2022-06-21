@@ -1,12 +1,12 @@
 'use strict';
 
-import BaseEdge from '../../../../../src/edge/baseEdge';
+import {Edge} from 'butterfly-dag';
 import $ from 'jquery';
 import { curveBasis, line } from 'd3-shape';
 
 const matchFloats = /\d+\.\d+/g;
 
-class KedrovizEdge extends BaseEdge {
+class KedrovizEdge extends Edge {
   constructor(opts) {
     super(opts);
     this.points = opts.options.points;

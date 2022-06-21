@@ -10,7 +10,8 @@ npm start
 ```
 ## 快速上手
 ``` js
-import {graphvizLayout} from 'butterfly-plugins-layout';
+import {graphvizLayout, kedrovizLayout, BaseLayers, KedrovizEdge} from 'butterfly-plugins-layout';
+import 'butterfly-plugins-layout/dist/index.css';
 
 // ···
 
@@ -18,7 +19,7 @@ import {graphvizLayout} from 'butterfly-plugins-layout';
 let canvas = new Canvas({
   // 如下属性
   root: dom,               //canvas的根节点(必传)
-  layout: graphvizLayout,   //布局设置(选填)，可使用集成的，也可自定义布局
+  layout: graphvizLayout ｜ kedrovizLayout,   //布局设置(选填)，可使用集成的，也可自定义布局
   zoomable: true,          //可缩放(选填)
   moveable: true,          //可平移(选填)
   draggable: true,         //节点可拖动(选填)
@@ -30,6 +31,20 @@ let canvas = new Canvas({
 // ...
 graphvizLayout({
   data: {nodes, edges}
+});
+
+// edges: 线段的Class为KedrovizEdge
+// layers 对象
+//    layers: 数组
+//    Class: BaseLayers
+//    visible: true | false 是否展示分组，默认为false
+// direction: "row" | "column" 左右布局或上下布局，默认为column
+kedrovizLayout({
+  data: {nodes, edges, layers, direction}
+});
+
+this.canvas.draw({nodes, edges, layers: {layers: treeData.layers, class: BaseLayers, visible: true }, direction: "row"}, () => {
+
 });
 
 // ···
