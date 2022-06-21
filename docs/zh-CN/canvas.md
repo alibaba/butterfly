@@ -5,7 +5,8 @@
 let canvas = new Canvas({
   // 如下属性
   root: dom,               //canvas的根节点(必传)
-  layout: 'ForceLayout',   //布局设置(选填)，可使用集成的，也可自定义布局
+  layout: {type: 'ForceLayout', options: {}},   //布局设置(选填)，可使用集成的，也可自定义布局
+  layoutOptions: {rankdir: 'TB'}, // 布局配置(选填)，传入集成/自定义布局的参数
   zoomable: true,          //可缩放(选填)
   moveable: true,          //可平移(选填)
   draggable: true,         //节点可拖动(选填)
@@ -23,6 +24,7 @@ let canvas = new Canvas({
     edge: {
       type: 'endpoint',    //线段连接类型
       shapeType: 'Bezier', //线条默认类型
+      hasRadius: false ,   //默认曼哈顿曲线不为圆角
       label: 'test',       //线条默认label
       arrow: true,         //线条默认是否带箭头
       arrowPosition: 0.5,  //箭头位置(0 ~ 1)
@@ -90,9 +92,13 @@ canvas.draw({
 
 &nbsp;&nbsp;画布锚点是否可以拖动断开线；值类型 `boolean`，默认 `false`
 
-### layout _`<Object>`_   (选填)
+### layout _`<Object> | <Function>`_   (选填)
 
 &nbsp;&nbsp;画布初始化根据设置的布局来自动排版，[可参考](https://github.com/alibaba/butterfly/blob/master/docs/zh-CN/layout.md)
+
+### layoutOptions _`<Object>`_   (选填)
+
+&nbsp;&nbsp;layout值被设置为Function时使用，用来传入layout布局的自定义属性值，[可参考](https://github.com/alibaba/butterfly/blob/master/docs/zh-CN/layout.md)
 
 ### theme
 
@@ -105,9 +111,10 @@ canvas.draw({
   * type _`<String>`_ 标志线条连接到节点还是连接到锚点。默认为`node`
 
   * shapeType _`<String>`_  线条类型可以是：Bezier(贝塞尔曲线)，Flow(折线)，Straight(直线)，Manhattan(曼哈顿路由线)，AdvancedBezier(更美丽的贝塞尔曲线)，Bezier2-1，Bezier2-2，Bezier2-3(二阶贝塞尔曲线)，BrokenLine(折线)；默认为`Straight`
-
+  
   <img width="650" src="https://img.alicdn.com/imgextra/i3/O1CN01sHnesN1SMIhN62CLK_!!6000000002232-2-tps-1418-404.png">
 
+  * hasRadius _`<String>`_  曼哈顿曲线圆角参数: `true`表示为圆角, `false`表示为直角。 默认值为`false`
   * label _`<String/Dom>`_ 线条注释
 
   * labelPosition _`<Number>`_ 线条上注释位置: 取值0-1之间, 0代表代表在线段开始处，1代表在线段结束处。 默认值`0.5`
@@ -731,6 +738,15 @@ canvas2terminal = (coordinates) => {}
 
 <img width="650" src="http://img.alicdn.com/tfs/TB1lWIAFHvpK1RjSZPiXXbmwXXa-973-850.jpg">
 
+
+### canvas.getNodesVisibleStatus ()
+
+*作用*：获取节点是否在画布可视区域内的情况
+
+*返回*
+
+* `{inside}` - 在画布区域内的节点
+* `{outside}` - 在画布区域外的节点
 
 ### canvas.setSelectMode (boolean, contents , selecMode)
 
