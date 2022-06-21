@@ -2513,7 +2513,6 @@ class BaseCanvas extends Canvas {
     return _.find(this.edges, item => item.id === id);
   }
   addEdges(links, isNotEventEmit) {
-    // console.log("links,links,links,",links);
 
     $(this.svg).css('visibility', 'hidden');
 
@@ -2554,7 +2553,6 @@ class BaseCanvas extends Canvas {
 
       // link不存在的话
       const EdgeClass = link.Class || this.theme.edge.Class;
-      // console.log("EdgeClass---->",EdgeClass);
       let sourceNode = null;
       let targetNode = null;
       let _sourceType = link._sourceType;
