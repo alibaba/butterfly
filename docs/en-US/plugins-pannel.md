@@ -5,7 +5,7 @@
 ### Install
 
 ```
-npm install butterfly-dag butterfly-plugins-panel
+npm install butterfly-dag
 ```
 
 ### Usage
@@ -13,8 +13,8 @@ npm install butterfly-dag butterfly-plugins-panel
 #### Resigter
 
 ``` js
-import {panelPlugins} from 'butterfly-dag/plugins';
-import 'butterfly-dag/plugins/dist/index.css';
+import panelPlugins from 'butterfly-dag/plugins/panel/dist';
+import 'butterfly-dag/plugins/panel/dist/index.css';
 
 import pika from '../img/pikatest.jpg';
 
@@ -53,8 +53,10 @@ panelPlugins.register(
 #### Iitialization
 
 ``` JS
-import panelPlugins from 'butterfly-dag/plugins';
+import panelPlugins from 'butterfly-dag/plugins/panel/dist';
 import {Canvas} from 'butterfly-dag';
+
+import 'butterfly-dag/plugins/panel/dist/index.css';
 
 import pika from '../img/pikatest.jpg';
 
