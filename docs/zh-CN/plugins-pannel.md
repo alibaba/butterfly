@@ -5,7 +5,7 @@
 ### 安装
 
 ```
-npm install butterfly-dag butterfly-plugins-panel
+npm install butterfly-dag
 ```
 
 ### 用法
