@@ -1,3 +1,7 @@
+/*
+* Copyright 2020 QuantumBlack Visual Analytics Limited
+* SPDX-License-Identifier: Apache-2.0
+*/
 import { getNodeRank } from "./ranks";
 import { select } from "d3-selection";
 import { arrayToObject } from "../utils";

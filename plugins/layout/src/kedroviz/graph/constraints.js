@@ -1,3 +1,7 @@
+/*
+* Copyright 2020 QuantumBlack Visual Analytics Limited
+* SPDX-License-Identifier: Apache-2.0
+*/
 import { Constraint, Operator, Strength } from 'kiwi.js';
 
 //上下方向的行约束

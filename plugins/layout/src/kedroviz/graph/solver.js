@@ -1,3 +1,7 @@
+/*
+* Copyright 2020 QuantumBlack Visual Analytics Limited
+* SPDX-License-Identifier: Apache-2.0
+*/
 import { Solver, Variable } from 'kiwi.js';
 
 export const solveLoose = (constraints, iterations, constants) => {

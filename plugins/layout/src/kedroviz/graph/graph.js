@@ -1,3 +1,7 @@
+/*
+* Copyright 2020 QuantumBlack Visual Analytics Limited
+* SPDX-License-Identifier: Apache-2.0
+*/
 import { offsetNode, offsetEdge } from './common';
 import { layout } from './layout';
 import { routing } from './routing';
