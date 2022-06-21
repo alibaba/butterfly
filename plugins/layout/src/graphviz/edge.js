@@ -39,6 +39,9 @@ class BaseEdge extends Edge {
     return dom;
   }
   redrawPath(d, sourcePoint, targetPoint) {
+    if (!d) {
+      return ``;
+    }
     const originD = d.split(/[ MC]/).filter(ele => ele !== '');
     const startX = sourcePoint.pos[0];
     const startY = sourcePoint.pos[1];

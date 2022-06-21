@@ -1,6 +1,6 @@
 {
   "name": "butterfly-vue",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "description": "vue version for butterfly",
   "main": "dist/index.js",
   "module": "dist/index.es.js",

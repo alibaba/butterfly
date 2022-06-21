@@ -4,7 +4,7 @@ import { Canvas, Node, Edge } from '../../../../index';
 import './app.less';
 import '../../../../static/butterfly.css';
 const treeData = require('./mock_data.json');
-import graphvizLayout, {GraphvizEdge} from 'butterfly-plugins-layout/graphvizLayout';
+import graphvizLayout, {GraphvizEdge} from '../../src/graphviz/index';
 // const {graphvizLayout} = require('../../index');
 
 class BaseNode extends Node {

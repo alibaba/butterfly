@@ -26,7 +26,7 @@
     "jquery": "^3.5.1"
   },
   "dependencies": {
-    "butterfly-dag": "4.0.0-beta.8",
+    "butterfly-dag": "*",
     "jquery": "^3.5.1",
     "lodash": "^4.17.20"
   },
