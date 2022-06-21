@@ -287,7 +287,7 @@ class BaseCanvas extends Canvas {
       });
     });
 
-    if(Object.keys(layers).length !== 0) {
+    if(layers.layers.length !== 0) {
       drawPromise.then((resolve) => {
         return new Promise((resolve, reject) => {
           setTimeout(() => {
@@ -2749,6 +2749,7 @@ class BaseCanvas extends Canvas {
           labelUpdateInterval: link.labelUpdateInterval === undefined ? _.get(this, 'theme.edge.labelUpdateInterval') : link.labelUpdateInterval,
           isExpandWidth: this.theme.edge.isExpandWidth,
           defaultAnimate: this.theme.edge.defaultAnimate,
+          options: link,
           _global: this.global,
           _sourceType,
           _targetType,
