@@ -13,8 +13,9 @@ import {
 export const routing = ({
   nodes,
   edges,
-  spaceX,
-  spaceY,
+  direction,
+  spaceDirection,
+  spaceReverseDirection,
   minPassageGap,
   stemUnit,
   stemMinSource,
@@ -23,7 +24,7 @@ export const routing = ({
   stemSpaceSource,
   stemSpaceTarget,
 }) => {
-  const rows = groupByRow(nodes);
+  const rows = groupByRow(nodes, direction);
 
   for (const node of nodes) {
     node.targets.sort((a, b) =>
@@ -39,52 +40,66 @@ export const routing = ({
     const target = edge.targetNodeObj;
 
     edge.points = [];
-    const sourceSeparation = Math.min(
+    const sourceSeparation = direction === 'column' ? Math.min(
       (source.width - stemSpaceSource) / source.targets.length,
+      stemSpaceSource
+    ) : Math.min(
+      (source.height - stemSpaceSource) / source.targets.length,
       stemSpaceSource
     );
 
     const sourceEdgeDistance =
       source.targets.indexOf(edge) - (source.targets.length - 1) * 0.5;
 
-    const sourceOffsetX = sourceSeparation * sourceEdgeDistance;
+    const sourceOffsetDirection = sourceSeparation * sourceEdgeDistance;
 
-    const startPoint = { x: source.x + sourceOffsetX, y: source.y };
+    const startPoint = direction === 'column' ? { x: source.x + sourceOffsetDirection, y: source.y } : { y: source.y + sourceOffsetDirection, x: source.x };
     let currentPoint = startPoint;
 
     for (let i = source.row + 1; i < target.row; i += 1) {
       const firstNode = rows[i][0];
 
-      let nearestPoint = { x: nodeLeft(firstNode) - spaceX, y: firstNode.y };
+      let nearestPoint = direction === 'column' ? { x: nodeLeft(firstNode) - spaceDirection, y: firstNode.y } : { y: nodeTop(firstNode) - spaceDirection, x: firstNode.x };
       let nearestDistance = Infinity;
 
-      const rowExtended = [
+      const rowExtended = direction === 'column' ? [
         { ...firstNode, x: Number.MIN_SAFE_INTEGER },
         ...rows[i],
         { ...firstNode, x: Number.MAX_SAFE_INTEGER },
+      ] : [
+        { ...firstNode, y: Number.MIN_SAFE_INTEGER },
+        ...rows[i],
+        { ...firstNode, y: Number.MAX_SAFE_INTEGER },
       ];
 
       for (let i = 0; i < rowExtended.length - 1; i += 1) {
         const node = rowExtended[i];
         const nextNode = rowExtended[i + 1];
-        const nodeGap = nodeLeft(nextNode) - nodeRight(node);
+        const nodeGap = direction === 'column' ? nodeLeft(nextNode) - nodeRight(node) : nodeTop(nextNode) - nodeBottom(node);
 
         if (nodeGap < minPassageGap) {
           continue;
         }
 
-        const offsetX = Math.min(spaceX, nodeGap * 0.5);
+        const offsetDirection = Math.min(spaceDirection, nodeGap * 0.5);
 
-        const candidatePoint = nearestOnLine(
+        const candidatePoint = direction === 'column' ? nearestOnLine(
           currentPoint.x,
           currentPoint.y,
-          nodeRight(node) + offsetX,
-          nodeTop(node) - spaceY,
-          nodeLeft(nextNode) - offsetX,
-          nodeTop(nextNode) - spaceY
+          nodeRight(node) + offsetDirection,
+          nodeTop(node) - spaceReverseDirection,
+          nodeLeft(nextNode) - offsetDirection,
+          nodeTop(nextNode) - spaceReverseDirection
+        ) : nearestOnLine(
+          currentPoint.x,
+          currentPoint.y,
+          nodeLeft(node) - spaceReverseDirection,
+          nodeBottom(node) + offsetDirection,
+          nodeLeft(nextNode) - spaceReverseDirection,
+          nodeTop(nextNode) - offsetDirection
         );
 
-        const distance = distance1d(currentPoint.x, candidatePoint.x);
+        const distance = direction === 'column' ? distance1d(currentPoint.x, candidatePoint.x) : distance1d(currentPoint.y, candidatePoint.y);
 
         if (distance > nearestDistance) {
           break;
@@ -96,20 +111,37 @@ export const routing = ({
         }
       }
 
-      const offsetY = firstNode.height + spaceY;
-      edge.points.push({
-        x: nearestPoint.x + sourceOffsetX,
-        y: nearestPoint.y,
-      });
-      edge.points.push({
-        x: nearestPoint.x + sourceOffsetX,
-        y: nearestPoint.y + offsetY,
-      });
+      const offsetReverseDirection = direction === 'column' ? firstNode.height + spaceReverseDirection : firstNode.width + spaceReverseDirection;
+      if (direction === 'column') {
+        edge.points.push({
+          x: nearestPoint.x + sourceOffsetDirection,
+          y: nearestPoint.y,
+        });
+        edge.points.push({
+          x: nearestPoint.x + sourceOffsetDirection,
+          y: nearestPoint.y + offsetReverseDirection,
+        });
+  
+        currentPoint = {
+          x: nearestPoint.x,
+          y: nearestPoint.y + offsetReverseDirection,
+        };
+      } else {
+        edge.points.push({
+          y: nearestPoint.y + sourceOffsetDirection,
+          x: nearestPoint.x,
+        });
+        edge.points.push({
+          y: nearestPoint.y + sourceOffsetDirection,
+          x: nearestPoint.x + offsetReverseDirection,
+        });
 
-      currentPoint = {
-        x: nearestPoint.x,
-        y: nearestPoint.y + offsetY,
-      };
+        currentPoint = {
+          y: nearestPoint.y,
+          x: nearestPoint.x + offsetReverseDirection,
+        };
+      }
+      
     }
   }
 
@@ -132,13 +164,19 @@ export const routing = ({
     const source = edge.sourceNodeObj;
     const target = edge.targetNodeObj;
 
-    const sourceSeparation = Math.min(
+    const sourceSeparation = direction === 'column' ? Math.min(
       (source.width - stemSpaceSource) / source.targets.length,
+      stemSpaceSource
+    ) : Math.min(
+      (source.height - stemSpaceSource) / source.targets.length,
       stemSpaceSource
     );
 
-    const targetSeparation = Math.min(
+    const targetSeparation = direction === 'column' ? Math.min(
       (target.width - stemSpaceTarget) / target.sources.length,
+      stemSpaceTarget
+    ) : Math.min(
+      (target.height - stemSpaceTarget) / target.sources.length,
       stemSpaceTarget
     );
 
@@ -147,60 +185,95 @@ export const routing = ({
     const targetEdgeDistance =
       target.sources.indexOf(edge) - (target.sources.length - 1) * 0.5;
 
-    const sourceOffsetX = sourceSeparation * sourceEdgeDistance;
-    const targetOffsetX = targetSeparation * targetEdgeDistance;
+    const sourceOffsetDirection = sourceSeparation * sourceEdgeDistance;
+    const targetOffsetDirection = targetSeparation * targetEdgeDistance;
 
-    const sourceOffsetY =
+    const sourceOffsetReverseDirection =
       stemUnit *
       source.targets.length *
       (1 - Math.abs(sourceEdgeDistance) / source.targets.length);
 
-    const targetOffsetY =
+    const targetOffsetReverseDirection =
       stemUnit *
       target.sources.length *
       (1 - Math.abs(targetEdgeDistance) / target.sources.length);
 
-    const sourceStem = [
+    const sourceStem = direction === 'column' ? [
       {
-        x: source.x + sourceOffsetX,
+        x: source.x + sourceOffsetDirection,
         y: nodeBottom(source),
       },
       {
-        x: source.x + sourceOffsetX,
+        x: source.x + sourceOffsetDirection,
         y: nodeBottom(source) + stemMinSource,
       },
       {
-        x: source.x + sourceOffsetX,
+        x: source.x + sourceOffsetDirection,
         y:
-          nodeBottom(source) + stemMinSource + Math.min(sourceOffsetY, stemMax),
+          nodeBottom(source) + stemMinSource + Math.min(sourceOffsetReverseDirection, stemMax),
+      },
+    ] : [
+      {
+        y: source.y + sourceOffsetDirection,
+        x: nodeRight(source),
+      },
+      {
+        y: source.y + sourceOffsetDirection,
+        x: nodeRight(source) + stemMinSource,
+      },
+      {
+        y: source.y + sourceOffsetDirection,
+        x:
+          nodeRight(source) + stemMinSource + Math.min(sourceOffsetReverseDirection, stemMax),
       },
     ];
 
-    const targetStem = [
+    const targetStem = direction === 'column' ? [
       {
-        x: target.x + targetOffsetX,
-        y: nodeTop(target) - stemMinTarget - Math.min(targetOffsetY, stemMax),
+        x: target.x + targetOffsetDirection,
+        y: nodeTop(target) - stemMinTarget - Math.min(targetOffsetReverseDirection, stemMax),
       },
       {
-        x: target.x + targetOffsetX,
+        x: target.x + targetOffsetDirection,
         y: nodeTop(target) - stemMinTarget,
       },
       {
-        x: target.x + targetOffsetX,
+        x: target.x + targetOffsetDirection,
         y: nodeTop(target),
       },
+    ] : [
+      {
+        y: target.y + targetOffsetDirection,
+        x: nodeLeft(target) - stemMinTarget - Math.min(targetOffsetReverseDirection, stemMax),
+      },
+      {
+        y: target.y + targetOffsetDirection,
+        x: nodeLeft(target) - stemMinTarget,
+      },
+      {
+        y: target.y + targetOffsetDirection,
+        x: nodeLeft(target),
+      },
     ];
-
     const points = [...sourceStem, ...edge.points, ...targetStem];
-    let pointYMax = points[0].y;
+
+    let pointReverseDirectionMax = direction === 'column' ? points[0].y : points[0].x;
 
     for (const point of points) {
-      // point.x = point.x + edge.
-      if (point.y < pointYMax) {
-        point.y = pointYMax;
+      
+      if(direction === "column") {
+        if (point.y < pointReverseDirectionMax) {
+          point.y = pointReverseDirectionMax;
+        } else {
+          pointReverseDirectionMax = point.y;
+        }
       } else {
-        pointYMax = point.y;
-      }
+        if (point.x < pointReverseDirectionMax) {
+          point.x = pointReverseDirectionMax;
+        } else {
+          pointReverseDirectionMax = point.x;
+        }
+      }     
     }
 
     edge.points = points;

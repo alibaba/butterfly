@@ -1,9 +1,14 @@
 import {
   rowConstraint,
-  layerConstraint,
-  parallelConstraint,
-  crossingConstraint,
-  separationConstraint,
+  columnConstraint,
+  columnLayerConstraint,
+  rowLayerConstraint,
+  columnParallelConstraint,
+  rowParallelConstraint,
+  columnCrossingConstraint,
+  rowCrossingConstraint,
+  columnSeparationConstraint,
+  rowSeparationConstraint,
 } from './constraints';
 import { solveLoose, solveStrict } from './solver';
 import { HALF_PI, snap, angle, compare, groupByRow } from './common';
@@ -12,10 +17,11 @@ export const layout = ({
   nodes,
   edges,
   layers,
-  spaceX,
-  spaceY,
-  spreadX,
-  layerSpaceY,
+  direction,
+  spaceDirection,
+  spaceReverseDirection,
+  spreadDirection,
+  layerSpaceReverseDirection,
   iterations,
 }) => {
   for (const node of nodes) {
@@ -24,24 +30,24 @@ export const layout = ({
   }
 
   const constants = {
-    spaceX,
-    spaceY,
-    spreadX,
-    layerSpace: (spaceY + layerSpaceY) * 0.5,
+    spaceDirection,
+    spaceReverseDirection,
+    spreadDirection,
+    layerSpace: (spaceReverseDirection + layerSpaceReverseDirection) * 0.5,
   };
 
-  const rowConstraints = createRowConstraints(edges);
-  const layerConstraints = createLayerConstraints(nodes, layers);
+  const rowConstraints = createRowConstraints(edges, direction);
+  const layerConstraints = createLayerConstraints(nodes, layers, direction);
 
   // 找到给定这些约束的节点位置
   solveStrict([...rowConstraints, ...layerConstraints], constants, 1);
 
   // 求解后，使用节点位置查找已求解的行
-  const rows = groupByRow(nodes);
+  const rows = groupByRow(nodes, direction);
 
   // 避免边交叉并保持平行垂直边的约束
-  const crossingConstraints = createCrossingConstraints(edges, constants);
-  const parallelConstraints = createParallelConstraints(edges, constants);
+  const crossingConstraints = createCrossingConstraints(edges, constants, direction);
+  const parallelConstraints = createParallelConstraints(edges, constants, direction);
 
   for (let i = 0; i < iterations; i += 1) {
     solveLoose(crossingConstraints, 1, constants);
@@ -49,24 +55,23 @@ export const layout = ({
   }
 
   // 保持最小水平节点间距的约束
-  const separationConstraints = createSeparationConstraints(rows, constants);
-  console.log("separationConstraints",separationConstraints);
+  const separationConstraints = createSeparationConstraints(rows, constants, direction);
 
   // 找到给定这些严格约束的最终节点位置
   solveStrict([...separationConstraints, ...parallelConstraints], constants, 1);
 
   // 调整行与行之间的垂直间距以提高可读性
-  expandDenseRows(edges, rows, spaceY);
+  expandDenseRows(edges, rows, spaceReverseDirection, direction);
 };
 
-const createRowConstraints = (edges) =>
+const createRowConstraints = (edges, direction) =>
   edges.map((edge) => ({
-    base: rowConstraint,
+    base: direction === 'column' ? rowConstraint : columnConstraint,
     a: edge.targetNodeObj,
     b: edge.sourceNodeObj,
   }));
 
-const createLayerConstraints = (nodes, layers) => {
+const createLayerConstraints = (nodes, layers, direction) => {
   const layerConstraints = [];
 
   if (!layers) {
@@ -85,7 +90,7 @@ const createLayerConstraints = (nodes, layers) => {
 
     for (const node of layerNodes) {
       layerConstraints.push({
-        base: layerConstraint,
+        base: direction === 'column' ? columnLayerConstraint : rowLayerConstraint,
         a: intermediary,
         b: node,
       });
@@ -94,7 +99,7 @@ const createLayerConstraints = (nodes, layers) => {
     // 将下一层中的每个节点约束到中间层下方
     for (const node of nextLayerNodes) {
       layerConstraints.push({
-        base: layerConstraint,
+        base: direction === 'column' ? columnLayerConstraint : rowLayerConstraint,
         a: node,
         b: intermediary,
       });
@@ -104,8 +109,8 @@ const createLayerConstraints = (nodes, layers) => {
   return layerConstraints;
 };
 
-const createCrossingConstraints = (edges, constants) => {
-  const { spaceX } = constants;
+const createCrossingConstraints = (edges, constants, direction = "column") => {
+  const { spaceDirection } = constants;
   const crossingConstraints = [];
 
   for (let i = 0; i < edges.length; i += 1) {
@@ -132,12 +137,16 @@ const createCrossingConstraints = (edges, constants) => {
         targetB.sources.length +
         targetB.targets.length;
 
+      let sourceADirection = direction === "column" ? sourceA.width : sourceA.height;
+      let sourceBDirection = direction === "column" ? sourceB.width : sourceB.height;
+      let targetADirection = direction === "column" ? targetA.width : targetA.height;
+      let targetBDirection = direction === "column" ? targetB.width : targetB.height;
       crossingConstraints.push({
-        base: crossingConstraint,
+        base: direction === "column" ? columnCrossingConstraint : rowCrossingConstraint,
         edgeA: edgeA,
         edgeB: edgeB,
-        separationA: sourceA.width * 0.5 + spaceX + sourceB.width * 0.5,
-        separationB: targetA.width * 0.5 + spaceX + targetB.width * 0.5,
+        separationA: sourceADirection * 0.5 + spaceDirection + sourceBDirection * 0.5,
+        separationB: targetADirection * 0.5 + spaceDirection + targetBDirection * 0.5,
         strength: 1 / Math.max(1, (edgeADegree + edgeBDegree) / 4),
       });
     }
@@ -146,9 +155,9 @@ const createCrossingConstraints = (edges, constants) => {
   return crossingConstraints;
 };
 
-const createParallelConstraints = (edges) =>
+const createParallelConstraints = (edges, constants, direction) =>
   edges.map(({ sourceNodeObj, targetNodeObj }) => ({
-    base: parallelConstraint,
+    base: direction === 'column' ? columnParallelConstraint : rowParallelConstraint,
     a: sourceNodeObj,
     b: targetNodeObj,
     strength:
@@ -156,14 +165,18 @@ const createParallelConstraints = (edges) =>
       Math.max(1, sourceNodeObj.targets.length + targetNodeObj.sources.length - 2),
   }));
 
-const createSeparationConstraints = (rows, constants) => {
-  const { spaceX } = constants;
+const createSeparationConstraints = (rows, constants, direction) => {
+  const { spaceDirection } = constants;
   const separationConstraints = [];
 
   for (let i = 0; i < rows.length; i += 1) {
     const rowNodes = rows[i];
 
-    rowNodes.sort((a, b) => compare(a.x, b.x, a.id, b.id));
+    if(direction === "column") {
+      rowNodes.sort((a, b) => compare(a.x, b.x, a.id, b.id));
+    } else {
+      rowNodes.sort((a, b) => compare(a.y, b.y, a.id, b.id));
+    }
 
     for (let j = 0; j < rowNodes.length - 1; j += 1) {
       const nodeA = rowNodes[j];
@@ -178,14 +191,16 @@ const createSeparationConstraints = (rows, constants) => {
         nodeB.targets.length + nodeB.sources.length - 2
       );
 
-      const spread = Math.min(10, degreeA * degreeB * constants.spreadX);
-      const space = snap(spread * spaceX, spaceX);
+      const spread = Math.min(10, degreeA * degreeB * constants.spreadDirection);
+      const space = snap(spread * spaceDirection, spaceDirection);
 
+      let nodeADirection = direction === "column" ? nodeA.width : nodeA.height;
+      let nodeBDirection = direction === "column" ? nodeB.width : nodeB.height;
       separationConstraints.push({
-        base: separationConstraint,
+        base: direction === "column" ? columnSeparationConstraint : rowSeparationConstraint,
         a: nodeA,
         b: nodeB,
-        separation: nodeA.width * 0.5 + space + nodeB.width * 0.5,
+        separation: nodeADirection * 0.5 + space + nodeBDirection * 0.5,
       });
     }
   }
@@ -193,19 +208,23 @@ const createSeparationConstraints = (rows, constants) => {
   return separationConstraints;
 };
 
-const expandDenseRows = (edges, rows, spaceY, scale = 1.25, unit = 0.25) => {
+const expandDenseRows = (edges, rows, spaceReverseDirection, direction, scale = 1.25, unit = 0.25) => {
   const densities = rowDensity(edges);
-  const spaceYUnit = Math.round(spaceY * unit);
-  let currentOffsetY = 0;
+  const spaceReverseDirectionUnit = Math.round(spaceReverseDirection * unit);
+  let currentOffsetReverseDirection = 0;
 
   for (let i = 0; i < rows.length - 1; i += 1) {
-    const density = densities[i] || 0;
+    const densitReverseDirection = densities[i] || 0;
 
-    const offsetY = snap(density * scale * spaceY, spaceYUnit);
-    currentOffsetY += offsetY;
+    const offsetReverseDirection = snap(densitReverseDirection * scale * spaceReverseDirection, spaceReverseDirectionUnit);
+    currentOffsetReverseDirection += offsetReverseDirection;
 
     for (const node of rows[i + 1]) {
-      node.y += currentOffsetY;
+      if(direction === 'column') {
+        node.y += currentOffsetReverseDirection;
+      } else {
+        node.x += currentOffsetReverseDirection;
+      }
     }
   }
 };

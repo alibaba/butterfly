@@ -250,7 +250,7 @@ class BaseCanvas extends Canvas {
     const nodes = opts.nodes || [];
     const edges = opts.edges || [];
     const layers = opts.layers || {};
-    // console.log("draw----->opts",opts);
+    const direction = opts.direction || 'column';
 
     // 自动布局需要重新review
     if (this.layout && !opts.isNotRelayout) {
@@ -258,7 +258,8 @@ class BaseCanvas extends Canvas {
         groups,
         nodes,
         edges,
-        layers
+        layers,
+        direction
       });
     }
 
@@ -284,15 +285,19 @@ class BaseCanvas extends Canvas {
           resolve();
         }, 20);
       });
-    }).then((resolve) => {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          // 生成edges
-          this.addLayers(layers, nodes, edges);
-          resolve();
-        }, 20);
-      });
     });
+
+    if(Object.keys(layers).length !== 0) {
+      drawPromise.then((resolve) => {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            // 生成edges
+            this.addLayers(layers, nodes, edges, direction);
+            resolve();
+          }, 20);
+        });
+      });
+    }
     
     drawPromise.then(() => {
       this.actionQueue = [];
@@ -3032,10 +3037,10 @@ class BaseCanvas extends Canvas {
   //===============================
   //[ layers渲染 ]
   //=============================== 
-  addLayers(layers, nodes, edges) {
+  addLayers(layers, nodes, edges, direction) {
     const _layersFragment = document.createDocumentFragment();
     const LayersClass = layers.class;
-    let _newLayers = new LayersClass({ nodes, edges, layers });
+    let _newLayers = new LayersClass({ nodes, edges, layers, direction });
     _newLayers._init();
     _layersFragment.appendChild(_newLayers.dom);
     $(this.wrapper).append(_layersFragment);

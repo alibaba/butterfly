@@ -3,34 +3,13 @@ import { layout } from './layout';
 import { routing } from './routing';
 import { bounds } from '../selectors/size'
 
-const defaultOptions = {
-  layout: {
-    spaceX: 14,
-    spaceY: 110,
-    layerSpaceY: 55,
-    spreadX: 2.2,
-    padding: 100,
-    iterations: 25,
-  },
-  routing: {
-    spaceX: 26,
-    spaceY: 28,
-    minPassageGap: 40,
-    stemUnit: 8,
-    stemMinSource: 5,
-    stemMinTarget: 5,
-    stemMax: 20,
-    stemSpaceSource: 6,
-    stemSpaceTarget: 10,
-  },
-};
 
-export const graph = (nodes, edges, layers, options = defaultOptions) => {
+export const graph = (nodes, edges, layers, direction, options) => {
   addEdgeLinks(nodes, edges);
   addNearestLayers(nodes, layers);
 
-  layout({ nodes, edges, layers, ...options.layout });
-  routing({ nodes, edges, layers, ...options.routing });
+  layout({ nodes, edges, layers, direction, ...options.layout });
+  routing({ nodes, edges, layers, direction, ...options.routing });
 
   const size = bounds(nodes, options.layout.padding);
 

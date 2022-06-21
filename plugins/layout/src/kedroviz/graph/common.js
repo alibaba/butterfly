@@ -17,12 +17,17 @@ export const nodeTop = (node) => node.y - node.height * 0.5;
 
 export const nodeBottom = (node) => node.y + node.height * 0.5;
 
-export const groupByRow = (nodes) => {
+export const groupByRow = (nodes, direction) => {
   const rows = {};
 
   for (const node of nodes) {
-    rows[node.y] = rows[node.y] || [];
-    rows[node.y].push(node);
+    if(direction === "column") {
+      rows[node.y] = rows[node.y] || [];
+      rows[node.y].push(node);
+    } else {
+      rows[node.x] = rows[node.x] || [];
+      rows[node.x].push(node);
+    }
   }
 
   const rowNumbers = Object.keys(rows).map((row) => parseFloat(row));
@@ -30,7 +35,11 @@ export const groupByRow = (nodes) => {
 
   const sortedRows = rowNumbers.map((row) => rows[row]);
   for (let i = 0; i < sortedRows.length; i += 1) {
-    sortedRows[i].sort((a, b) => compare(a.x, b.x, a.id, b.id));
+    if(direction === "column") {
+      sortedRows[i].sort((a, b) => compare(a.x, b.x, a.id, b.id));
+    } else {
+      sortedRows[i].sort((a, b) => compare(a.y, b.y, a.id, b.id));
+    }
 
     for (const node of sortedRows[i]) {
       node.row = i;

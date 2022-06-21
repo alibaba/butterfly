@@ -81,7 +81,7 @@ class Scene extends Component {
       return res;
     });
 
-    this.canvas.draw({nodes, edges, layers: {layers: treeData.layers, class: BaseLayers, visible: true }}, () => {
+    this.canvas.draw({nodes, edges, layers: {layers: treeData.layers, class: BaseLayers, visible: true }, direction: "row"}, () => {
 
     });
     this.canvas.on('events', (data) => {

@@ -33,12 +33,12 @@ const getNodeSize = (nodeIDs, nodeName, nodeWidth, nodeHeight) => {
   });
 };
 
-export const getNodes = (nodesOrg, node, layer) => {
+export const getNodes = (nodesOrg, node, edges, layer) => {
   const nodeIDs = node.ids;
   const nodeName = node.name;
   const nodeLayer = node.layer;
   const nodeIndex = node.index;
-  const nodeRank = getNodeRank(node, layer);
+  const nodeRank = getNodeRank(node, edges, layer);
   const nodeWidth = node.width;
   const nodeHeight = node.height;
   let nodeSize = getNodeSize(nodeIDs, nodeName, nodeWidth, nodeHeight);
