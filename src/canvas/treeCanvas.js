@@ -257,11 +257,13 @@ class TreeCanvas extends Canvas {
       let nodes = tree.filter((item) => {
         return true;
       });
-      this._autoLayout({
-        nodes: nodes,
-        edges: [],
-        groups: []
-      });
+      if (!_.get(params,'isNotRelayout')) {
+        this._autoLayout({
+          nodes: nodes,
+          edges: [],
+          groups: []
+        });
+      }
       this.nodes.forEach((item) => {
         if (item.subCollapsed) {
           return;
@@ -335,6 +337,13 @@ class TreeCanvas extends Canvas {
   }
   draw(opts, params, callback) {
     const nodes = this._handleTreeNodes(opts.nodes || [], _.get(params, 'isFlatNode', false));
+    
+    // 配置不重新布局
+    if (_.get(params,'isNotRelayout')) {
+      this.__layout = this.layout;
+      this.layout = undefined;
+    }
+    
     // 需要过滤掉collapsed的
     super.draw({
       nodes: nodes,
@@ -362,6 +371,11 @@ class TreeCanvas extends Canvas {
         edges: this.edges,
         groups: this.groups
       });
+      // 配置不重新布局
+      if (_.get(params,'isNotRelayout')) {
+        this.layout = this.__layout;
+        this.__layout = undefined;
+      }
     });
   }
   // getDataMap(isFlat) {

@@ -67,6 +67,8 @@ canvas.addEdge({
 
 <img width="650" src="https://img.alicdn.com/imgextra/i3/O1CN01sHnesN1SMIhN62CLK_!!6000000002232-2-tps-1418-404.png">
 
+### hasRadius  _`<Boolean>`_    (Optional)
+&nbsp;&nbsp; the rounded corners of the Manhattan Curve: true represents having rounded corners,false represents having right angle.Default value false
 ### label  _`<String/Dom>`_   (Optional)
 &nbsp;&nbsp;edge label: can accept string or dom
 ### labelPosition  _`<Number>`_   (Optional)

@@ -19,6 +19,7 @@ class SelectCanvas {
     this._on = null;
     this._emit = null;
     this.isDraw = false;
+    this.root = null;
     this.isActive = false;
   }
 
@@ -31,9 +32,11 @@ class SelectCanvas {
     $(this.dom).appendTo(root);
   }
 
-  resize(opts) {
-    const root = opts.root;
-    const offset = $(root).offset();
+  resize(opts = {}) {
+    const root = opts.root || this.root;
+    this.root = root;
+    // root相对于窗口的坐标
+    const offset = root.getBoundingClientRect();
     this.canvasTop = offset.top;
     this.canvasLeft = offset.left;
     this.canvasHeight = $(root).height();
@@ -52,6 +55,11 @@ class SelectCanvas {
   mouseDown(evt) {
     this.startX = evt.clientX;
     this.startY = evt.clientY;
+    /**
+     * 页面会发生滚动、resize时，root相对于窗口的距离会发生变化
+     * 所以每次多选的时候resize一下，以矫正root相对于窗口的距离
+     */
+    this.resize();
     this.isDraw = true;
   }
 
@@ -142,6 +150,13 @@ class SelectCanvas {
     if (data.terScrollY !== undefined) {
       this.canScrollY = data.terScrollY;
     }
+    if(data.startX !== undefined){
+      this.startX = data.startX;
+    }
+    if(data.startY !== undefined){
+      this.startY = data.startY;
+    }
+
   }
 }
 

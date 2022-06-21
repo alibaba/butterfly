@@ -5,7 +5,11 @@ const MINDIST = 20;
 const TOL = 0.1;
 const TOLxTOL = 0.01;
 const TOGGLE_DIST = 20;
-
+export const DEFAULT_RADIUS = 15;
+export const Point = function (x, y) {
+  this.x = x;
+  this.y = y;
+}
 // const Point = function(x, y) {
 //   this.x = x;
 //   this.y = y;
@@ -18,7 +22,6 @@ export const BOTTOM = 'Bottom';
 
 // 曼哈顿折线路由算法
 export function _route(conn, fromPt, fromDir, toPt, toDir) {
-
   // 防止图上节点隐藏NaN的死循环问题
   fromPt.x = fromPt.x || 0;
   fromPt.y = fromPt.y || 0;
@@ -31,10 +34,11 @@ export function _route(conn, fromPt, fromDir, toPt, toDir) {
   let dir;
   let pos;
 
-  conn.push({x: fromPt.x, y: fromPt.y});
+  conn.push(new Point(fromPt.x, fromPt.y));
 
   if (((xDiff * xDiff) < (TOLxTOL)) && ((yDiff * yDiff) < (TOLxTOL))) {
-    // conn.push({x: toPt.x, y: toPt.y});
+    //认为可以是直线情况
+    conn.push(new Point(toPt.x, toPt.y));
     return;
   }
 
@@ -45,17 +49,17 @@ export function _route(conn, fromPt, fromDir, toPt, toDir) {
     }
     else {
       if (xDiff < 0) {
-        point = {x: fromPt.x - MINDIST, y: fromPt.y};
+        point = new Point(fromPt.x - MINDIST, fromPt.y);
       }
       else if (((yDiff > 0) && (toDir === BOTTOM)) || ((yDiff < 0) && (toDir === TOP))) {
-        point = {x: toPt.x, y: fromPt.y};
+        point = new Point(toPt.x, fromPt.y);
       }
       else if (fromDir === toDir) {
-        pos = Math.min(fromPt.x, toPt.x) - MINDIST
-        point = {x: pos, y: fromPt.y};
+        pos = Math.min(fromPt.x, toPt.x) - MINDIST;
+        point = new Point(pos, fromPt.y);
       }
       else {
-        point = {x: fromPt.x - (xDiff / 2), y: fromPt.y};
+        point = new Point(fromPt.x - (xDiff / 2), fromPt.y);
       }
 
       if (yDiff > 0) {
@@ -65,24 +69,25 @@ export function _route(conn, fromPt, fromDir, toPt, toDir) {
         dir = BOTTOM
       }
     }
-  } else if (fromDir === RIGHT) {
+  }
+  else if (fromDir === RIGHT) {
     if ((xDiff < 0) && ((yDiff * yDiff) < TOL) && (toDir === LEFT)) {
       point = toPt
       dir = toDir
     }
     else {
       if (xDiff > 0) {
-        point = {x: fromPt.x + MINDIST, y: fromPt.y};
+        point = new Point(fromPt.x + MINDIST, fromPt.y);
       }
       else if (((yDiff > 0) && (toDir === BOTTOM)) || ((yDiff < 0) && (toDir === TOP))) {
-        point = {x: toPt.x, y: fromPt.y};
+        point = new Point(toPt.x, fromPt.y);
       }
       else if (fromDir === toDir) {
-        pos = Math.max(fromPt.x, toPt.x) + MINDIST
-        point = {x: pos, y: fromPt.y};
+        pos = Math.max(fromPt.x, toPt.x) + MINDIST;
+        point = new Point(pos, fromPt.y);
       }
       else {
-        point = {x: fromPt.x - (xDiff / 2), y: fromPt.y};
+        point = new Point(fromPt.x - (xDiff / 2), fromPt.y);
       }
 
       if (yDiff > 0) {
@@ -92,24 +97,25 @@ export function _route(conn, fromPt, fromDir, toPt, toDir) {
         dir = BOTTOM;
       }
     }
-  } else if (fromDir === BOTTOM) {
+  }
+  else if (fromDir === BOTTOM) {
     if (((xDiff * xDiff) < TOL) && (yDiff < 0) && (toDir === TOP)) {
       point = toPt;
       dir = toDir;
     }
     else {
       if (yDiff > 0) {
-        point = {x: fromPt.x, y: fromPt.y + MINDIST};
+        point = new Point(fromPt.x, fromPt.y + MINDIST);
       }
       else if (((xDiff > 0) && (toDir === RIGHT)) || ((xDiff < 0) && (toDir === LEFT))) {
-        point = {x: fromPt.x, y: toPt.y};
+        point = new Point(fromPt.x, toPt.y);
       }
       else if (fromDir === toDir) {
         pos = Math.max(fromPt.y, toPt.y) + MINDIST;
-        point = {x: fromPt.x, y: pos};
+        point = new Point(fromPt.x, pos);
       }
       else {
-        point = {x: fromPt.x, y: fromPt.y - (yDiff / 2)};
+        point = { x: fromPt.x, y: fromPt.y - (yDiff / 2) };
       }
 
       if (xDiff > 0) {
@@ -126,17 +132,17 @@ export function _route(conn, fromPt, fromDir, toPt, toDir) {
     }
     else {
       if (yDiff < 0) {
-        point = {x: fromPt.x, y: fromPt.y - MINDIST};
+        point = new Point(fromPt.x, fromPt.y - MINDIST);
       }
       else if (((xDiff > 0) && (toDir === RIGHT)) || ((xDiff < 0) && (toDir === LEFT))) {
-        point = {x: fromPt.x, y: toPt.y};
+        point = new Point(fromPt.x, toPt.y);
       }
       else if (fromDir === toDir) {
-        pos = Math.min(fromPt.y, toPt.y) - MINDIST
-        point = {x: fromPt.x, y: pos};
+        pos = Math.min(fromPt.y, toPt.y) - MINDIST;
+        point = new Point(fromPt.x, pos);
       }
       else {
-        point = {x: fromPt.x, y: fromPt.y - (yDiff / 2)};
+        point = { x: fromPt.x, y: fromPt.y - (yDiff / 2) };
       }
 
       if (xDiff > 0) {
@@ -148,7 +154,11 @@ export function _route(conn, fromPt, fromDir, toPt, toDir) {
     }
   }
   _route(conn, point, dir, toPt, toDir);
+
+
+
 }
+
 
 export function _calcOrientation(beginX, beginY, endX, endY, orientationLimit) {
 
@@ -325,16 +335,16 @@ export function _findSecondControlPoint(sourcePoint, targetPoint, _so, _to, shap
   let _sum0 = _so[0] + _to[0];
   let _sum1 = _so[1] + _to[1];
   if (targetPoint.pos[0] < sourcePoint.pos[0] && targetPoint.pos[1] < sourcePoint.pos[1] && ((_sum0 === 0 && _sum1 ===
-      0) || (_sum0 === 1 && _sum1 === -1))) {
+    0) || (_sum0 === 1 && _sum1 === -1))) {
     t = 1;
   } else if (targetPoint.pos[0] > sourcePoint.pos[0] && targetPoint.pos[1] < sourcePoint.pos[1] && (_sum0 === 1 &&
-      _sum1 === 1)) {
+    _sum1 === 1)) {
     t = 1;
   } else if (targetPoint.pos[0] < sourcePoint.pos[0] && targetPoint.pos[1] > sourcePoint.pos[1] && ((_sum0 === 0 &&
-      _sum1 === 0) || (_sum0 === 1 && _sum1 === 1))) {
+    _sum1 === 0) || (_sum0 === 1 && _sum1 === 1))) {
     t = 1;
   } else if (targetPoint.pos[0] > sourcePoint.pos[0] && targetPoint.pos[1] > sourcePoint.pos[1] && (_sum0 === 1 &&
-      _sum1 === -1)) {
+    _sum1 === -1)) {
     t = 1;
   } else {
     t = -1;
@@ -376,10 +386,10 @@ export function _findSecondControlPoint(sourcePoint, targetPoint, _so, _to, shap
   return ctrlPoint;
 }
 
-export function _findManhattanPoint (points, pos) {
+export function _findManhattanPoint(points, pos) {
   let result = undefined;
   let gap = Infinity;
-  for(let i = 0; i < points.length - 1; i++) {
+  for (let i = 0; i < points.length - 1; i++) {
     let _dir = points[i].x === points[i + 1].x ? 'vertical' : 'horizontal';
     let _from = points[i];
     let _to = points[i + 1];

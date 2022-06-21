@@ -4,7 +4,8 @@
 let canvas = new Canvas({
   // the attribute below
   root: dom,               // canvas root dom (require)
-  layout: 'ForceLayout',   // layout setting , integrated or custom , (optional)
+  layout: {type: 'ForceLayout', options: {}},   // layout setting , integrated or custom , (optional)
+  layoutOptions: {rankdir: 'TB'}, // layout options(optional)
   zoomable: true,          // enable zoom canvas (optional)
   moveable: true,          // enable move canvas (optional)
   draggable: true,         // enable drag nodes (optional)
@@ -22,6 +23,7 @@ let canvas = new Canvas({
     edge: {
       type: 'endpoint',    // edge connection type
       shapeType: 'Bezier', // edge type：Bezier curve，Polyline ，Straight，Manhattan line，Improved Bezier curve。values ： Bezier/Flow/Straight/Manhattan/AdvancedBezier
+      hasRadius: false ,   //the rounded corners of the Manhattan Curve: true represents having rounded corners,false represents having right angle. Default value false
       label: 'test',       // edge label
       arrow: true,         // whether to show arrow
       arrowPosition: 0.5,  // arrow position (0 ~ 1)
@@ -88,9 +90,13 @@ canvas.draw({
 
 &nbsp;&nbsp;whether the nodes in canvas can be dragged to delete connection; value type `boolean`, Default value `false`
 
-### layout _`<Object>`_   (Optional)
+### layout _`<Object> | <Function>`_   (Optional)
 
 &nbsp;&nbsp;canvas initialization automatically arranges the layout according to what you set, [reference](https://github.com/alibaba/butterfly/blob/master/docs/en-US/layout.md)
+
+### layoutOptions _`<Object>`_   (Optional)
+
+&nbsp;&nbsp;useful when 'layout' value is set in Function.Value of layout options.[reference](https://github.com/alibaba/butterfly/blob/master/docs/zh-CN/layout.md)
 
 ### theme
 
@@ -106,6 +112,7 @@ canvas.draw({
 
   <img width="650" src="https://img.alicdn.com/imgextra/i3/O1CN01sHnesN1SMIhN62CLK_!!6000000002232-2-tps-1418-404.png">
 
+  * hasRadius _`<String>`_  the rounded corners of the Manhattan Curve: true represents having rounded corners,false represents having right angle. Default value false
   * label _`<String/Dom>`_ edge label
 
   * labelPosition _`<Number>`_ edge label position: the value is between 0-1, 0 represents the beginning of the egde, and 1 represents the end of the egde. Default value `0.5`
@@ -726,6 +733,14 @@ canvas2terminal = (coordinates) => {}
 
 <img width="650" src="http://img.alicdn.com/tfs/TB1lWIAFHvpK1RjSZPiXXbmwXXa-973-850.jpg">
 
+### canvas.getNodesVisibleStatus ()
+
+*descripition*：Get whether the node is within the visible area of the canvas
+
+*return*
+
+* `{inside}` - Nodes inside the canvas area
+* `{outside}` - Nodes outside the canvas area
 
 ### canvas.setSelectMode (boolean, contents , selecMode)
 

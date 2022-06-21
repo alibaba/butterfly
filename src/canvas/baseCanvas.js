@@ -32,6 +32,15 @@ class BaseCanvas extends Canvas {
     super(options);
     this.root = options.root;
     this.layout = options.layout; // layout部分也需要重新review
+    this.layoutOptions = options.layoutOptions;
+    if (_.isObject(this.layout) && !_.isFunction(this.layout)) {
+      this.layout = this.layout.type;
+      this.layoutOptions = this.layout.options || this.layoutOptions;
+    }
+    this.layout = {
+      type: this.layout,
+      options: this.layoutOptions || {}
+    }
     this.zoomable = options.zoomable || false; // 可缩放
     this.moveable = options.moveable || false; // 可平移
     this.draggable = options.draggable || false; // 可拖动
@@ -50,6 +59,7 @@ class BaseCanvas extends Canvas {
       edge: {
         type: _.get(options, 'theme.edge.type') || 'node',
         shapeType: _.get(options, 'theme.edge.shapeType') || 'Straight',
+        hasRadius:_.get(options, 'theme.edge.hasRadius') || false,
         Class: _.get(options, 'theme.edge.Class') || Edge,
         arrow: _.get(options, 'theme.edge.arrow'),
         arrowShapeType: _.get(options, 'theme.edge.arrowShapeType', 'default'),
@@ -141,6 +151,8 @@ class BaseCanvas extends Canvas {
     // 统一处理画布拖动事件
     this._dragType = null;
     this._dragNode = null;
+    // 鼠标是否发生过移动
+    this._mouseMoved = false;
     this._dragEndpoint = null;
     this._dragEdges = [];      // 拖动连线的edge
     this._dragPathEdge = null;     // 拖动edge中的某段path改变路径
@@ -234,7 +246,7 @@ class BaseCanvas extends Canvas {
     const edges = opts.edges || [];
 
     // 自动布局需要重新review
-    if (this.layout) {
+    if (this.layout && !opts.isNotRelayout) {
       this._autoLayout({
         groups,
         nodes,
@@ -682,6 +694,7 @@ class BaseCanvas extends Canvas {
       this._dragGroup = null;
       this._dragPathEdge = null;
       this._dragEdges = [];
+      this._mouseMoved = false;
       nodeOriginPos = {
         x: 0,
         y: 0
@@ -696,6 +709,8 @@ class BaseCanvas extends Canvas {
 
     const mouseDownEvent = (event) => {
       const LEFT_BUTTON = 0;
+      // 重置_mouseMoved
+      this._mouseMoved = false;
       if (event.button !== LEFT_BUTTON) {
         return;
       }
@@ -704,9 +719,10 @@ class BaseCanvas extends Canvas {
         this._dragType = 'canvas:drag';
       }
 
-      // 假如点击在空白地方且在框选模式下
-      if ((event.target === this.svg[0] || event.target === this.root) && this.isSelectMode) {
+      // 如果在框选模式下点击
+      if (this.isSelectMode) {
         this.canvasWrapper.active();
+        this._dragType = 'selectCanvas:drag';
         this.canvasWrapper.dom.dispatchEvent(new MouseEvent('mousedown', {
           clientX: event.clientX,
           clientY: event.clientY
@@ -764,6 +780,8 @@ class BaseCanvas extends Canvas {
     };
 
     const mouseMoveEvent = (event) => {
+      // 鼠标发生移动
+      this._mouseMoved = true;
       const LEFT_BUTTON = 0;
       if (event.button !== LEFT_BUTTON) {
         return;
@@ -898,6 +916,7 @@ class BaseCanvas extends Canvas {
                   type: 'endpoint',
                   type: this.theme.edge.type,
                   shapeType: this.theme.edge.shapeType,
+                  hasRadius:this.theme.edge.hasRadius,
                   orientationLimit: this.theme.endpoint.position,
                   _sourceType: point.nodeType,
                   sourceNode: _sourceNode,
@@ -1049,6 +1068,17 @@ class BaseCanvas extends Canvas {
           let _newHeight = canvasY - pos.top;
 
           this._dragGroup.setSize(_newWidth, _newHeight);
+        }else if(this._dragType ==='selectCanvas:drag'){
+          this._autoMoveCanvas(event.clientX, event.clientY, {
+            type: 'selectCanvas:drag',
+          }, ([gapX, gapY])=>{
+              const { startX, startY } = this.canvasWrapper;
+              this.canvasWrapper._changeCanvasInfo({
+                startX: startX - gapX,
+                startY: startY - gapY
+              });
+              this.canvasWrapper.drawRect();
+          });
         }
       }
     };
@@ -1163,7 +1193,7 @@ class BaseCanvas extends Canvas {
                   }
                 }
 
-                if (_targetEndpoint.nodeId) {
+                if (_result && _targetEndpoint.nodeId) {
                   if (_edge.type === 'node') {
                     _result = _result && (_.get(edge, 'targetNode.id') === _.get(_edge, 'targetNode.id'));
                   } else {
@@ -1521,7 +1551,8 @@ class BaseCanvas extends Canvas {
         });
       }
 
-      if (this._dragType === 'node:drag' || this._dragType === 'group:drag') {
+      // 仅鼠标发生过移动，才增加dragNodeEnd事件
+      if (this._mouseMoved && (this._dragType === 'node:drag' || this._dragType === 'group:drag')) {
         this.pushActionQueue({
           type: '_system:dragNodeEnd'
         });
@@ -1570,8 +1601,8 @@ class BaseCanvas extends Canvas {
       if (!toDom) {
         return;
       }
-      let toDomClassName = toDom.className;
-      if (toDomClassName && toDomClassName.indexOf('butterfly-tooltip') === -1) {
+      let toDomClassName = _.get(toDom, 'className');
+      if (toDomClassName && (typeof toDomClassName === 'string') && toDomClassName.indexOf('butterfly-tooltip') === -1) {
         mouseLeaveEvent();
       }
     });
@@ -2501,53 +2532,62 @@ class BaseCanvas extends Canvas {
 
       // link不存在的话
       const EdgeClass = link.Class || this.theme.edge.Class;
+      let sourceNode = null;
+      let targetNode = null;
+      let _sourceType = link._sourceType;
+      let _targetType = link._targetType;
+      let _getNode = (link, nodeOrGroup, nodeType) => {
+        let id = (link.type === 'node' || !link.type) ? link[nodeType] : link[`${nodeType}Node`];
+        if (nodeOrGroup === 'node') {
+          return this.getNode(id);
+        } else if (nodeOrGroup === 'group') {
+          return this.getGroup(id);
+        }
+      }
+
+      if (link.sourceNode instanceof Node || _.get(link, 'sourceNode.__type') === 'node') {
+        _sourceType = 'node';
+        sourceNode = link.sourceNode;
+      } else if (link.sourceNode instanceof Group || _.get(link, 'sourceNode.__type') === 'group') {
+        _sourceType = 'group';
+        sourceNode = link.sourceNode;
+      } else {
+        if (link._sourceType) {
+          sourceNode = _sourceType === 'node' ? _getNode(link, 'node', 'source') : _getNode(link, 'group', 'source');
+        } else {
+          let _node = _getNode(link, 'node', 'source');
+          if (_node) {
+            _sourceType = 'node';
+            sourceNode = _node;
+          } else {
+            _sourceType = 'group';
+            sourceNode = _getNode(link, 'group', 'source');
+          }
+        }
+      }
+
+      if (link.targetNode instanceof Node || _.get(link, 'targetNode.__type') === 'node') {
+        _targetType = 'node';
+        targetNode = link.targetNode;
+      } else if (link.targetNode instanceof Group || _.get(link, 'targetNode.__type') === 'group') {
+        _targetType = 'group';
+        targetNode = link.targetNode;
+      } else {
+        if (link._targetType) {
+          targetNode = _targetType === 'node' ? _getNode(link, 'node', 'target') : _getNode(link, 'group', 'target');
+        } else {
+          let _node = _getNode(link, 'node', 'target');
+          if (_node) {
+            _targetType = 'node';
+            targetNode = _node;
+          } else {
+            _targetType = 'group';
+            targetNode = _getNode(link, 'group', 'target');
+          }
+        }
+      }
+
       if (link.type === 'endpoint') {
-        let sourceNode = null;
-        let targetNode = null;
-        let _sourceType = link._sourceType;
-        let _targetType = link._targetType;
-
-        if (link.sourceNode instanceof Node || link.sourceNode.__type === 'node') {
-          _sourceType = 'node';
-          sourceNode = link.sourceNode;
-        } else if (link.sourceNode instanceof Group || link.sourceNode.__type === 'group') {
-          _sourceType = 'group';
-          sourceNode = link.sourceNode;
-        } else {
-          if (link._sourceType) {
-            sourceNode = _sourceType === 'node' ? this.getNode(link.sourceNode) : this.getGroup(link.sourceNode);
-          } else {
-            let _node = this.getNode(link.sourceNode);
-            if (_node) {
-              _sourceType = 'node';
-              sourceNode = _node;
-            } else {
-              _sourceType = 'group';
-              sourceNode = this.getGroup(link.sourceNode);
-            }
-          }
-        }
-
-        if (link.targetNode instanceof Node || link.targetNode.__type === 'node') {
-          _targetType = 'node';
-          targetNode = link.targetNode;
-        } else if (link.targetNode instanceof Group || link.targetNode.__type === 'group') {
-          _targetType = 'group';
-          targetNode = link.targetNode;
-        } else {
-          if (link._targetType) {
-            targetNode = _targetType === 'node' ? this.getNode(link.targetNode) : this.getGroup(link.targetNode);
-          } else {
-            let _node = this.getNode(link.targetNode);
-            if (_node) {
-              _targetType = 'node';
-              targetNode = _node;
-            } else {
-              _targetType = 'group';
-              targetNode = this.getGroup(link.targetNode);
-            }
-          }
-        }
         if (!sourceNode || !targetNode) {
           console.warn(`butterflies error: can not connect edge. link sourceNodeId:${link.sourceNode};link targetNodeId:${link.targetNode}`);
           return;
@@ -2578,15 +2618,24 @@ class BaseCanvas extends Canvas {
           let _isRepeat = _.some(this.edges, (_edge) => {
             let _result = false;
             if (sourceNode) {
-              _result = sourceNode.id === _edge.sourceNode.id && sourceEndpoint.id === _edge.sourceEndpoint.id && _sourceType === _edge.sourceEndpoint.nodeType;
+              if (_edge.type === 'node') {
+                _result = sourceNode.id === _edge.sourceNode.id;
+              } else {
+                _result = sourceNode.id === _edge.sourceNode.id && sourceEndpoint.id === _edge.sourceEndpoint.id && _sourceType === _edge.sourceEndpoint.nodeType;
+              }
             }
 
-            if (targetNode) {
-              _result = _result && (targetNode.id === _edge.targetNode.id && targetEndpoint.id === _edge.targetEndpoint.id && _targetType === _edge.targetEndpoint.nodeType);
+            if (_result && targetNode) {
+              if (_edge.type === 'node') {
+                _result = targetNode.id === _edge.targetNode.id;
+              } else {
+                _result = targetNode.id === _edge.targetNode.id && targetEndpoint.id === _edge.targetEndpoint.id && _targetType === _edge.targetEndpoint.nodeType;
+              }
             }
 
             return _result;
           });
+
           if (_isRepeat) {
             console.warn(`id为${sourceEndpoint.id}-${targetEndpoint.id}的线条连接重复，请检查`);
             return;
@@ -2598,6 +2647,7 @@ class BaseCanvas extends Canvas {
           label: link.label,
           type: link.type || this.theme.edge.type,
           shapeType: link.shapeType || this.theme.edge.shapeType,
+          hasRadius: link.hasRadius || this.theme.edge.hasRadius,
           orientationLimit: this.theme.endpoint.position,
           isExpandWidth: this.theme.edge.isExpandWidth,
           defaultAnimate: this.theme.edge.defaultAnimate,
@@ -2653,9 +2703,6 @@ class BaseCanvas extends Canvas {
 
         return edge;
       } else {
-        const sourceNode = this.getNode(link.source);
-        const targetNode = this.getNode(link.target);
-
         if (!sourceNode || !targetNode) {
           console.warn(`butterflies error: can not connect edge. link sourceId:${link.source};link targetId:${link.target}`);
           return;
@@ -2669,6 +2716,7 @@ class BaseCanvas extends Canvas {
           targetNode,
           type: link.type || this.theme.edge.type,
           shapeType: link.shapeType || this.theme.edge.shapeType,
+          hasRadius: link.hasRadius || this.theme.edge.hasRadius,
           orientationLimit: this.theme.endpoint.position,
           arrow: link.arrow === undefined ? _.get(this, 'theme.edge.arrow') : link.arrow,
           arrowShapeType: link.arrowShapeType === undefined ? _.get(this, 'theme.edge.arrowShapeType') : link.arrowShapeType,
@@ -2681,6 +2729,8 @@ class BaseCanvas extends Canvas {
           isExpandWidth: this.theme.edge.isExpandWidth,
           defaultAnimate: this.theme.edge.defaultAnimate,
           _global: this.global,
+          _sourceType,
+          _targetType,
           _on: this.on.bind(this),
           _emit: this.emit.bind(this),
         });
@@ -2724,12 +2774,25 @@ class BaseCanvas extends Canvas {
           orientation: link.targetEndpoint.orientation ? link.targetEndpoint.orientation : undefined
         };
       } else if (link.type === 'node') {
+        let _getNodePos = (node, attr) => {
+          let result = 0;
+          let queue = [node.group];
+          while(queue.length > 0) {
+            let groupId = queue.pop();
+            let group = this.getGroup(groupId);
+            if (group) {
+              result += group[attr];
+              group.group && queue.push(group.group);
+            }
+          }
+          return result;
+        }
         _soucePoint = {
-          pos: [link.sourceNode.left + link.sourceNode.getWidth(true) / 2, link.sourceNode.top + link.sourceNode.getHeight(true) / 2]
+          pos: [link.sourceNode.left + link.sourceNode.getWidth(true) / 2 + _getNodePos(link.sourceNode, 'left'), link.sourceNode.top + link.sourceNode.getHeight(true) / 2 + _getNodePos(link.sourceNode, 'top')]
         };
 
         _targetPoint = {
-          pos: [link.targetNode.left + link.targetNode.getWidth(true) / 2, link.targetNode.top + link.targetNode.getHeight(true) / 2]
+          pos: [link.targetNode.left + link.targetNode.getWidth(true) / 2 + _getNodePos(link.targetNode, 'left'), link.targetNode.top + link.targetNode.getHeight(true) / 2 + _getNodePos(link.targetNode, 'top')]
         };
       }
       link.redraw(_soucePoint, _targetPoint);
@@ -2823,13 +2886,27 @@ class BaseCanvas extends Canvas {
     result.forEach((_rmEdge) => {
       if (_.get(_rmEdge, 'sourceEndpoint._tmpType') === 'source') {
         let isExistEdge = _.some(this.edges, (edge) => {
-          return _rmEdge.sourceNode.id === edge.sourceNode.id && _rmEdge.sourceEndpoint.id === edge.sourceEndpoint.id;
+          if (edge.type !== _rmEdge.type) {
+            return false;
+          }
+          if (edge.type === 'node') {
+            return _rmEdge.sourceNode.id === edge.sourceNode.id;
+          } else {
+            return _rmEdge.sourceNode.id === edge.sourceNode.id && _rmEdge.sourceEndpoint.id === edge.sourceEndpoint.id;
+          }
         });
         !isExistEdge && (_rmEdge.sourceEndpoint._tmpType = undefined);
       }
       if (_.get(_rmEdge, 'targetEndpoint._tmpType') === 'target') {
         let isExistEdge = _.some(this.edges, (edge) => {
-          return _rmEdge.targetNode.id === edge.targetNode.id && _rmEdge.targetEndpoint.id === edge.targetEndpoint.id;
+          if (edge.type !== _rmEdge.type) {
+            return false;
+          }
+          if (edge.type === 'node') {
+            return _rmEdge.targetNode.id === edge.targetNode.id;
+          } else {
+            return _rmEdge.targetNode.id === edge.targetNode.id && _rmEdge.targetEndpoint.id === edge.targetEndpoint.id;
+          }
         });
         !isExistEdge && (_rmEdge.targetEndpoint._tmpType = undefined);
       }
@@ -2856,9 +2933,9 @@ class BaseCanvas extends Canvas {
 
     return this.edges.filter((item) => {
       if (type === 'node') {
-        return _.get(item, 'sourceNode.id') === node.id || _.get(item, 'targetNode.id') === node.id;
+        return node && (_.get(item, 'sourceNode.id') === node.id || _.get(item, 'targetNode.id') === node.id);
       } else {
-        return _.get(item, 'sourceNode.id') === group.id || _.get(item, 'targetNode.id') === group.id;
+        return group && (_.get(item, 'sourceNode.id') === group.id || _.get(item, 'targetNode.id') === group.id);
       }
     });
   }
@@ -2942,11 +3019,12 @@ class BaseCanvas extends Canvas {
     const width = this._rootWidth;
     const height = this._rootHeight;
 
-    if (_.isFunction(this.layout)) {
-      this.layout({
+    if (_.isFunction(_.get(this.layout, 'type'))) {
+      this.layout.type({
         width: width,
         height: height,
-        data: data
+        data: data,
+        ...this.layoutOptions
       });
     } else {
       // 重力布局
@@ -2970,6 +3048,9 @@ class BaseCanvas extends Canvas {
             distance: 200,
             // 线条的粗细
             strength: 1
+          },
+          collide: {
+            radius: 20
           }
         }, _.get(this.layout, 'options'), true);
 
@@ -3534,8 +3615,8 @@ class BaseCanvas extends Canvas {
     if (!node) {
       return;
     }
-    top = node.top || node.y;
-    left = node.left || node.x;
+    top = node.top || node.y || 0;
+    left = node.left || node.x || 0;
     if (node.height) {
       top += node.height / 2;
     }
@@ -3577,16 +3658,22 @@ class BaseCanvas extends Canvas {
     });
     this._moveData = [targetX, targetY];
 
+    // 这里要根据scale来判断
+    let scale = 1;
+    if (_.get(options, 'keepPreZoom')) {
+      scale = this._zoomData < scale ? this._zoomData : scale;
+    }
+
     this._coordinateService._changeCanvasInfo({
       canOffsetX: targetX,
       canOffsetY: targetY,
       originX: 50,
       originY: 50,
-      scale: 1
+      scale: scale
     });
 
     let zoomPromise = new Promise((resolve) => {
-      this.zoom(1, () => {
+      this.zoom(scale, () => {
         resolve();
       });
     });
@@ -4455,6 +4542,32 @@ class BaseCanvas extends Canvas {
   clearActionQueue() {
     this.actionQueue = [];
     this.actionQueueIndex = -1;
+  }
+  getNodesVisibleStatus() {
+    let result = {
+      inside: [],
+      outside: []
+    };
+    let terminal = [
+      this._coordinateService._terminal2canvas('x', 0 + this._coordinateService.terOffsetX),
+      this._coordinateService._terminal2canvas('x', this._coordinateService.terWidth + this._coordinateService.terOffsetX),
+      this._coordinateService._terminal2canvas('y', 0 + this._coordinateService.terOffsetY),
+      this._coordinateService._terminal2canvas('y', this._coordinateService.terHeight + this._coordinateService.terOffsetY),
+    ];
+
+    this.nodes.forEach((item) => {
+      let x1 = item.left;
+      let x2 = item.left + item.getWidth(true);
+      let y1 = item.top;
+      let y2 = item.top + item.getHeight(true);
+
+      if (x1 >= terminal[0] && x2 <= terminal[1] && y1 >= terminal[2] && y2 <= terminal[3]) {
+        result.inside.push(item);
+      } else {
+        result.outside.push(item);
+      }
+    });
+    return result;
   }
 }
 
