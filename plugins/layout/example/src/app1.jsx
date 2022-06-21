@@ -55,6 +55,8 @@ class Scene extends Component {
       res.Class = BaseNode;
       res.layer = n.layer;
       res.draggable = false;
+      res.width = n.width;
+      res.height = n.height;
       res.endpoints = [{
         id: 'down',
         orientation: [0, 1],

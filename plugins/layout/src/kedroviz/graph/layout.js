@@ -50,6 +50,7 @@ export const layout = ({
 
   // 保持最小水平节点间距的约束
   const separationConstraints = createSeparationConstraints(rows, constants);
+  console.log("separationConstraints",separationConstraints);
 
   // 找到给定这些严格约束的最终节点位置
   solveStrict([...separationConstraints, ...parallelConstraints], constants, 1);

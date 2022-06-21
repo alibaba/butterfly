@@ -36,11 +36,11 @@ const addNode = (nodeItem) => {
   node.name[id] = nodeItem.name;
   node.layer[id] = nodeItem.layer;
   if(nodeItem.width) {
-    maxWidth = Math.max(maxWidth, nodeItem.width);
+    node.maxWidth = Math.max(node.maxWidth, nodeItem.width);
     node.width[id] = nodeItem.width;
   }
   if(nodeItem.height) {
-    maxHeight = Math.max(maxHeight, nodeItem.height);
+    node.maxHeight = Math.max(node.maxHeight, nodeItem.height);
     node.height[id] = nodeItem.height;
   }
   node.Class = nodeItem.Class;
