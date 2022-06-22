@@ -6,7 +6,7 @@ import normalizeData from '../data/normalize-data';
 import {getVisibleLayerIDs} from './disabled';
 import { bounds as size } from './size'
 
-export const getLayers = ({ nodes, edges, layers, direction }) => {
+export const getLayers = ({ nodes = [], edges = [], layers = [], direction = "column" }) => {
   let { layer, node } = normalizeData(nodes, edges, layers);
   const layerName = layer.name;
   let _size = size(nodes, 100);

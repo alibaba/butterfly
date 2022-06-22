@@ -33,19 +33,13 @@ class Scene extends Component {
     this.canvas = new Canvas({
       root: root,
       disLinkable: false, // 可删除连线
-      layout: {type: kedrovizLayout, options: {}},
-      layoutOptions: {rankdir: 'LR'},
+      layout: {type: kedrovizLayout, options: {rankdir: 'TB', visible: true, Class: BaseLayers}},
       linkable: true,    // 可连线
       draggable: false,   // 可拖动
       zoomable: true,    // 可放大
       moveable: true,    // 可平移
       theme: {
         // group: treeData.layers,
-        layers: { 
-          layers: treeData.layers, 
-          class: BaseLayers, 
-          visible: true //默认是true
-        },
       }
     });
     // 数据格式转换
@@ -86,7 +80,7 @@ class Scene extends Component {
       return res;
     });
 
-    this.canvas.draw({nodes, edges, layers: {layers: treeData.layers, class: BaseLayers, visible: true }, direction: "row"}, () => {
+    this.canvas.draw({nodes, edges, layers: treeData.layers}, () => {
 
     });
     this.canvas.on('events', (data) => {

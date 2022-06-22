@@ -33,17 +33,8 @@ graphvizLayout({
   data: {nodes, edges}
 });
 
-// edges: 线段的Class为KedrovizEdge
-// layers 对象
-//    layers: 数组
-//    Class: BaseLayers
-//    visible: true | false 是否展示分组，默认为false
-// direction: "row" | "column" 左右布局或上下布局，默认为column
-kedrovizLayout({
-  data: {nodes, edges, layers, direction}
-});
 
-this.canvas.draw({nodes, edges, layers: {layers: treeData.layers, class: BaseLayers, visible: true }, direction: "row"}, () => {
+this.canvas.draw({nodes, edges, layers: treeData.layers}, () => {
 
 });
 
@@ -79,3 +70,32 @@ import graphvizLayout, {GraphvizEdge} from 'butterfly-plugins-layout/graphvizLay
 ##### ranksep _`<Double>`_   (选填)
 
 &nbsp;&nbsp;节点布局不同等级之间的间隔；值类型 `double`，默认0.5，最小0.02
+
+### kedroviz layout
+&nbsp;&nbsp;&nbsp;&nbsp;Kedroviz layout适合节点分组的布局算法。其根据图数据中节点所属组（layer），自动计算节点的层级及位置。
+
+注：使用这个布局方法，Edge需要继承由kedrovizLayout导出的KedrovizEdge类。Layers需要继承由kedrovizLayout导出的BaseLayers类。
+
+#### 代码演示
+
+``` js
+this.canvas = new Canvas({
+  layout: {
+    type: kedrovizLayout,
+    options: {
+      rankdir: 'TB',
+      visible: true,
+      Class: BaseLayers
+    },
+  }
+});
+```
+
+#### API
+
+
+| 名称 | 类型 | 是否必须 | 默认值 | 可选值 | 说明  
+| :------ | :------ | :------ | :------ | :------ | :------
+| rankdir | String | false | TB| "TB/BT/LR/RL"  |布局的方向。T：top（上）；B：bottom（下）；L：left（左）；R：right（右）。
+| visible | Boolean | false | true | true / false | 节点是否显示分组
+| Class | Function | true |  | BaseLayers | 分组（layers）的类

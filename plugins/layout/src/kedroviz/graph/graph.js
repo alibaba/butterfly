@@ -8,12 +8,12 @@ import { routing } from './routing';
 import { bounds } from '../selectors/size'
 
 
-export const graph = (nodes, edges, layers, direction, options) => {
+export const graph = (nodes, edges, layers, rankdir, options) => {
   addEdgeLinks(nodes, edges);
   addNearestLayers(nodes, layers);
 
-  layout({ nodes, edges, layers, direction, ...options.layout });
-  routing({ nodes, edges, layers, direction, ...options.routing });
+  layout({ nodes, edges, layers, rankdir, ...options.layout });
+  routing({ nodes, edges, layers, rankdir, ...options.routing });
 
   const size = bounds(nodes, options.layout.padding);
 

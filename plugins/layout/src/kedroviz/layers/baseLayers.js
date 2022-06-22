@@ -8,11 +8,12 @@ const EventEmit3 = require('eventemitter3');
 class BaseLayers extends EventEmit3 {
   constructor(opts) {
     super(opts);
-    this.layers = getLayers({ nodes: opts.nodes, edges: opts.edges, layers: opts.layers, direction: opts.direction });
-    this.direction = opts.direction;
+    this.rankdir = opts.layout && opts.layout.options && opts.layout.options.rankdir || "TB";
+    this.direction = (this.rankdir === 'TB' || this.rankdir === 'BT') ? 'column' : 'row';
+    this.layers = getLayers({ nodes: opts.nodes, edges: opts.edges, layers: opts.layers || [], direction: this.direction });
     this.el = {};
     this.dom = null;
-    this.visible = opts.layers.visible;
+    this.visible = opts.layout && opts.layout.options && opts.layout.options.visible || true;
   }
 
 

@@ -2,12 +2,11 @@ import { graph } from "./graph";
 import { getNodes } from "../selectors/nodes";
 import normalizeData from "../data/normalize-data";
 
-// direction方向： row (左右)｜ column （上下）
-
 export const kedrovizLayout = (param) => {
-  let { edges, nodes, layers, direction = "column" } = param.data;
-  let {node, edge, layer} = normalizeData(nodes, edges, layers);
-  let _layers = layers.visible ? layers.layers : [];
+  let { visible = true, rankdir = "TB" } = param;
+  let { edges = [], nodes = [], layers = [] } = param.data;
+  let {node, edge, layer} = normalizeData(nodes, edges, layers, visible);
+  let _layers = visible ? layers : [];
   let _spaceDirection = node.maxHeight;
   let _spaceReverseDirection = node.maxWidth;
 
@@ -32,7 +31,8 @@ export const kedrovizLayout = (param) => {
       stemSpaceTarget: 10,
     },
   };
-  const result = graph(getNodes(nodes, node, edges, layer), edges, _layers, direction, defaultOptions);
+  let _rankdir = (rankdir === 'TB' || rankdir === 'BT') ? 'column' : 'row'
+  const result = graph(getNodes(nodes, node, edges, layer), edges, _layers, _rankdir, defaultOptions);
 
   param.data.nodes.forEach((item, index) => {
     item.nearestLayer = result.nodes[index].nearestLayer;

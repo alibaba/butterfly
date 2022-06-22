@@ -64,11 +64,11 @@ const toggleLayers = () => {
   layer.visible = !layer.visible;
 }
 
-const normalizeData = (nodes, edges, layers) => {
+const normalizeData = (nodes = [], edges = [], layers = [], visible = true) => {
   nodes.forEach(item => addNode(item));
   edges.forEach(item => addEdge(item));
-  layers.layers.forEach(item => addLayer(item));
-  layer.visible = layers.visible;
+  layers.forEach(item => addLayer(item));
+  layer.visible = visible;
   node.ids = unique(node.ids);
   edge.ids = unique(edge.ids);
   layer.ids = unique(layer.ids);

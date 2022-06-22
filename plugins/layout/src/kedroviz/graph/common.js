@@ -21,11 +21,11 @@ export const nodeTop = (node) => node.y - node.height * 0.5;
 
 export const nodeBottom = (node) => node.y + node.height * 0.5;
 
-export const groupByRow = (nodes, direction) => {
+export const groupByRow = (nodes, rankdir) => {
   const rows = {};
 
   for (const node of nodes) {
-    if(direction === "column") {
+    if(rankdir === "column") {
       rows[node.y] = rows[node.y] || [];
       rows[node.y].push(node);
     } else {
@@ -39,7 +39,7 @@ export const groupByRow = (nodes, direction) => {
 
   const sortedRows = rowNumbers.map((row) => rows[row]);
   for (let i = 0; i < sortedRows.length; i += 1) {
-    if(direction === "column") {
+    if(rankdir === "column") {
       sortedRows[i].sort((a, b) => compare(a.x, b.x, a.id, b.id));
     } else {
       sortedRows[i].sort((a, b) => compare(a.y, b.y, a.id, b.id));

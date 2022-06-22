@@ -21,7 +21,7 @@ export const layout = ({
   nodes,
   edges,
   layers,
-  direction,
+  rankdir,
   spaceDirection,
   spaceReverseDirection,
   spreadDirection,
@@ -40,18 +40,18 @@ export const layout = ({
     layerSpace: (spaceReverseDirection + layerSpaceReverseDirection) * 0.5,
   };
 
-  const rowConstraints = createRowConstraints(edges, direction);
-  const layerConstraints = createLayerConstraints(nodes, layers, direction);
+  const rowConstraints = createRowConstraints(edges, rankdir);
+  const layerConstraints = createLayerConstraints(nodes, layers, rankdir);
 
   // 找到给定这些约束的节点位置
   solveStrict([...rowConstraints, ...layerConstraints], constants, 1);
 
   // 求解后，使用节点位置查找已求解的行
-  const rows = groupByRow(nodes, direction);
+  const rows = groupByRow(nodes, rankdir);
 
   // 避免边交叉并保持平行垂直边的约束
-  const crossingConstraints = createCrossingConstraints(edges, constants, direction);
-  const parallelConstraints = createParallelConstraints(edges, constants, direction);
+  const crossingConstraints = createCrossingConstraints(edges, constants, rankdir);
+  const parallelConstraints = createParallelConstraints(edges, constants, rankdir);
 
   for (let i = 0; i < iterations; i += 1) {
     solveLoose(crossingConstraints, 1, constants);
@@ -59,23 +59,23 @@ export const layout = ({
   }
 
   // 保持最小水平节点间距的约束
-  const separationConstraints = createSeparationConstraints(rows, constants, direction);
+  const separationConstraints = createSeparationConstraints(rows, constants, rankdir);
 
   // 找到给定这些严格约束的最终节点位置
   solveStrict([...separationConstraints, ...parallelConstraints], constants, 1);
 
   // 调整行与行之间的垂直间距以提高可读性
-  expandDenseRows(edges, rows, spaceReverseDirection, direction);
+  expandDenseRows(edges, rows, spaceReverseDirection, rankdir);
 };
 
-const createRowConstraints = (edges, direction) =>
+const createRowConstraints = (edges, rankdir) =>
   edges.map((edge) => ({
-    base: direction === 'column' ? rowConstraint : columnConstraint,
+    base: rankdir === 'column' ? rowConstraint : columnConstraint,
     a: edge.targetNodeObj,
     b: edge.sourceNodeObj,
   }));
 
-const createLayerConstraints = (nodes, layers, direction) => {
+const createLayerConstraints = (nodes, layers, rankdir) => {
   const layerConstraints = [];
 
   if (!layers) {
@@ -94,7 +94,7 @@ const createLayerConstraints = (nodes, layers, direction) => {
 
     for (const node of layerNodes) {
       layerConstraints.push({
-        base: direction === 'column' ? columnLayerConstraint : rowLayerConstraint,
+        base: rankdir === 'column' ? columnLayerConstraint : rowLayerConstraint,
         a: intermediary,
         b: node,
       });
@@ -103,7 +103,7 @@ const createLayerConstraints = (nodes, layers, direction) => {
     // 将下一层中的每个节点约束到中间层下方
     for (const node of nextLayerNodes) {
       layerConstraints.push({
-        base: direction === 'column' ? columnLayerConstraint : rowLayerConstraint,
+        base: rankdir === 'column' ? columnLayerConstraint : rowLayerConstraint,
         a: node,
         b: intermediary,
       });
@@ -113,7 +113,7 @@ const createLayerConstraints = (nodes, layers, direction) => {
   return layerConstraints;
 };
 
-const createCrossingConstraints = (edges, constants, direction = "column") => {
+const createCrossingConstraints = (edges, constants, rankdir = "column") => {
   const { spaceDirection } = constants;
   const crossingConstraints = [];
 
@@ -141,12 +141,12 @@ const createCrossingConstraints = (edges, constants, direction = "column") => {
         targetB.sources.length +
         targetB.targets.length;
 
-      let sourceADirection = direction === "column" ? sourceA.width : sourceA.height;
-      let sourceBDirection = direction === "column" ? sourceB.width : sourceB.height;
-      let targetADirection = direction === "column" ? targetA.width : targetA.height;
-      let targetBDirection = direction === "column" ? targetB.width : targetB.height;
+      let sourceADirection = rankdir === "column" ? sourceA.width : sourceA.height;
+      let sourceBDirection = rankdir === "column" ? sourceB.width : sourceB.height;
+      let targetADirection = rankdir === "column" ? targetA.width : targetA.height;
+      let targetBDirection = rankdir === "column" ? targetB.width : targetB.height;
       crossingConstraints.push({
-        base: direction === "column" ? columnCrossingConstraint : rowCrossingConstraint,
+        base: rankdir === "column" ? columnCrossingConstraint : rowCrossingConstraint,
         edgeA: edgeA,
         edgeB: edgeB,
         separationA: sourceADirection * 0.5 + spaceDirection + sourceBDirection * 0.5,
@@ -159,9 +159,9 @@ const createCrossingConstraints = (edges, constants, direction = "column") => {
   return crossingConstraints;
 };
 
-const createParallelConstraints = (edges, constants, direction) =>
+const createParallelConstraints = (edges, constants, rankdir) =>
   edges.map(({ sourceNodeObj, targetNodeObj }) => ({
-    base: direction === 'column' ? columnParallelConstraint : rowParallelConstraint,
+    base: rankdir === 'column' ? columnParallelConstraint : rowParallelConstraint,
     a: sourceNodeObj,
     b: targetNodeObj,
     strength:
@@ -169,14 +169,14 @@ const createParallelConstraints = (edges, constants, direction) =>
       Math.max(1, sourceNodeObj.targets.length + targetNodeObj.sources.length - 2),
   }));
 
-const createSeparationConstraints = (rows, constants, direction) => {
+const createSeparationConstraints = (rows, constants, rankdir) => {
   const { spaceDirection } = constants;
   const separationConstraints = [];
 
   for (let i = 0; i < rows.length; i += 1) {
     const rowNodes = rows[i];
 
-    if(direction === "column") {
+    if(rankdir === "column") {
       rowNodes.sort((a, b) => compare(a.x, b.x, a.id, b.id));
     } else {
       rowNodes.sort((a, b) => compare(a.y, b.y, a.id, b.id));
@@ -198,10 +198,10 @@ const createSeparationConstraints = (rows, constants, direction) => {
       const spread = Math.min(10, degreeA * degreeB * constants.spreadDirection);
       const space = snap(spread * spaceDirection, spaceDirection);
 
-      let nodeADirection = direction === "column" ? nodeA.width : nodeA.height;
-      let nodeBDirection = direction === "column" ? nodeB.width : nodeB.height;
+      let nodeADirection = rankdir === "column" ? nodeA.width : nodeA.height;
+      let nodeBDirection = rankdir === "column" ? nodeB.width : nodeB.height;
       separationConstraints.push({
-        base: direction === "column" ? columnSeparationConstraint : rowSeparationConstraint,
+        base: rankdir === "column" ? columnSeparationConstraint : rowSeparationConstraint,
         a: nodeA,
         b: nodeB,
         separation: nodeADirection * 0.5 + space + nodeBDirection * 0.5,
@@ -212,7 +212,7 @@ const createSeparationConstraints = (rows, constants, direction) => {
   return separationConstraints;
 };
 
-const expandDenseRows = (edges, rows, spaceReverseDirection, direction, scale = 1.25, unit = 0.25) => {
+const expandDenseRows = (edges, rows, spaceReverseDirection, rankdir, scale = 1.25, unit = 0.25) => {
   const densities = rowDensity(edges);
   const spaceReverseDirectionUnit = Math.round(spaceReverseDirection * unit);
   let currentOffsetReverseDirection = 0;
@@ -224,7 +224,7 @@ const expandDenseRows = (edges, rows, spaceReverseDirection, direction, scale = 
     currentOffsetReverseDirection += offsetReverseDirection;
 
     for (const node of rows[i + 1]) {
-      if(direction === 'column') {
+      if(rankdir === 'column') {
         node.y += currentOffsetReverseDirection;
       } else {
         node.x += currentOffsetReverseDirection;
