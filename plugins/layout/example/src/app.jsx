@@ -4,7 +4,7 @@ import { Canvas, Node, Edge } from '../../../../index';
 import './app.less';
 import '../../../../static/butterfly.css';
 const treeData = require('./mock_data.json');
-import graphvizLayout, {GraphvizEdge} from 'butterfly-plugins-layout/graphvizLayout';
+import graphvizLayout, {GraphvizEdge} from '../../src/graphviz/index';
 // const {graphvizLayout} = require('../../index');
 
 class BaseNode extends Node {
@@ -39,14 +39,16 @@ class Scene extends Component {
       root: root,
       disLinkable: false, // 可删除连线
       layout: {type: graphvizLayout, options: {}},
-      layoutOptions: {rankdir: 'LR'},
+      layoutOptions: {rankdir: 'TB'},
       linkable: true,    // 可连线
       draggable: false,   // 可拖动
       zoomable: true,    // 可放大
       moveable: true,    // 可平移
       theme: {
         edge: {
-          type: 'Straight'
+          arrow: false,
+          arrowPosition: 0.3,
+          isExpandWidth: true
         }
       }
     });
