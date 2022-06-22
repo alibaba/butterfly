@@ -1795,20 +1795,20 @@ class BaseCanvas extends Canvas {
     };
   }
   getNeighborNodes(nodeId) {
-    const result = [];
+    const result = {};
     const node = _.find(this.nodes, item => nodeId === item.id);
     if (!node) {
       console.warn(`找不到id为${nodeId}的节点`);
     }
     this.edges.forEach((item) => {
       if (item.sourceNode && item.sourceNode.id === nodeId) {
-        result.push(item.targetNode.id);
+        result[item.targetNode.id] = true;
       } else if (item.targetNode && item.targetNode.id === nodeId) {
-        result.push(item.sourceNode.id);
+        result[item.sourceNode.id] = true;
       }
     });
 
-    return result.map(id => this.getNode(id));
+    return Object.keys(result).map(id => this.getNode(id));
   }
   /**
    * 查找 N 层节点
