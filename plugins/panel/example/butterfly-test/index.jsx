@@ -65,7 +65,7 @@ class Test extends Component {
               id: 'pika0',
               type: 'jpg',
               content: pika0,
-              width: 40,
+              width: 100,
               height: 40,
             },
             {

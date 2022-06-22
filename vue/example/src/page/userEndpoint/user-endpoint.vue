@@ -12,6 +12,7 @@
       @onDeleteEdge="logDeleteEdge"
       @onOtherEvent="logOtherEvent"
       @onLoaded="finishLoaded"
+      className='userEndpoint'
       key="userEndpoint"
     />
   </div>
@@ -95,5 +96,12 @@ export default {
 <style scope>
   .control {
     padding-left: 10px;
+  }
+  .userEndpoint {
+    height: 700px;
+    min-width: 500px;
+    width: 100%;
+    display: block;
+    position: relative;
   }
 </style>

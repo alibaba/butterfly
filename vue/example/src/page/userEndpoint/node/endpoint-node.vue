@@ -1,13 +1,13 @@
 <template>
   <div class="endpoint-node">
     <butterfly-vue-endpoint id="1" v-if="judge('1')" :param="{scope:'endpoint-1', limitNum: 2}"/>
-    <butterfly-vue-endpoint id="2" className="endpoint-2" v-if="judge('2')"/>
+    <butterfly-vue-endpoint id="2" className="endpoint-2" v-if="judge('2')" @click="handleClick"/>
     <butterfly-vue-endpoint id="3" className="endpoint-3" v-if="judge('3')">
-      <el-tag>endpoint</el-tag>
+      <el-tag @click="handleClick1">endpoint</el-tag>
     </butterfly-vue-endpoint>
     <el-row v-if="judge('4')">
       <butterfly-vue-endpoint id="4" className="endpoint-4">
-        <el-tag>endpoint</el-tag>
+        <el-button @click="handleClick1">endpoint</el-button>
       </butterfly-vue-endpoint>
     </el-row>
     <v-card max-width="344" v-if="judge('5')">
@@ -38,7 +38,13 @@ export default {
   methods: {
     judge(id){
       return this.itemData.userData.endpoints.includes(id)
-    }
+    },
+    handleClick() {
+      console.log(1);
+    },
+    handleClick1() {
+      console.log(2);
+    },
   },
   created() {
     // console.log(this.canvasNode);
