@@ -11,7 +11,8 @@
     "release": "rollup -c && npm publish",
     "coverage": "nyc npm run test",
     "compile": "./node_modules/webpack/bin/webpack.js",
-    "build": "webpack && rollup -c && cp -r static ./es/ && cp -r static ./dist"
+    "build": "webpack && rollup -c && cp -r static ./es/ && cp -r static ./dist && npm run build-plugins-panel",
+    "build-plugins-panel":"cd plugins/panel && tnpm i && npm run build"
   },
   "repository": {
     "type": "git",

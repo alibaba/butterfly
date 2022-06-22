@@ -1,6 +1,6 @@
 {
   "name": "butterfly-vue",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "vue version for butterfly",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -30,7 +30,7 @@
     "@babel/plugin-transform-runtime": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
     "@rollup/plugin-babel": "^5.2.2",
-    "butterfly-dag": "^4.0.0",
+    "butterfly-dag": "*",
     "lodash": "^4.17.20",
     "rollup": "^2.36.1",
     "rollup-plugin-commonjs": "^10.1.0",
