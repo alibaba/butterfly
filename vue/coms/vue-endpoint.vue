@@ -1,5 +1,5 @@
 <template>
-  <div :id="'bf_endpoint_'+id" :class="className">
+  <div v-on="$listeners" :id="'bf_endpoint_'+id" :class="className">
     <slot>
       <div>
         {{id}}
