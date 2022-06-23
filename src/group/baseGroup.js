@@ -306,6 +306,9 @@ class BaseGroup extends Group {
   _addEventListener() {
     // 节点组点击事件
     $(this.dom).on('click', (e) => {
+      if (_.isFunction(this.canClick) && !this.canClick(e)) {
+        return;
+      }
       e.preventDefault();
       e.stopPropagation();
       this.emit('system.group.click', {
@@ -333,12 +336,16 @@ class BaseGroup extends Group {
         return;
       }
       // 兼容resize按钮冒泡上来的事件
-      if($(e.target).attr('class').indexOf('butterfly-group-icon-resize') !== -1) {
+      const classAttr = $(e.target).attr('class');
+      if(classAttr && classAttr.indexOf('butterfly-group-icon-resize') !== -1) {
         return;
       }
 
       const LEFT_KEY = 0;
       if (e.button !== LEFT_KEY) {
+        return;
+      }
+      if (_.isFunction(this.canMousedown) && !this.canMousedown(e)) {
         return;
       }
       e.preventDefault();

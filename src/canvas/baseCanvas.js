@@ -214,6 +214,7 @@ class BaseCanvas extends Canvas {
     };
 
     this._NodeClass = Node;
+    this._GroupClass = Group;
 
     // undo & redo队列
     this.actionQueue = [];
@@ -2012,7 +2013,7 @@ class BaseCanvas extends Canvas {
   }
   addGroup(group, unionItems, options, isNotEventEmit) {
     const container = $(this.wrapper);
-    const GroupClass = group.Class || Group;
+    const GroupClass = group.Class || this._GroupClass;
     let _addUnionItem = [];
     // unionItems元素的坐标都是绝对坐标，不需要进行计算
     let _isAbsolutePos = _.get(options, 'posType') === 'absolute';
