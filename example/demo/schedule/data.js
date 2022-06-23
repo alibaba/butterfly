@@ -409,17 +409,6 @@ const data = {
     width: 800,
     height: 400,
     resize: true
-  }, {
-    id: 'group2',
-    options: {
-      title: '测试2'
-    },
-    draggable:true,
-    top: 410,
-    left: 900,
-    width: 300,
-    height: 200,
-    resize: true
   }],
 };
 export default data;
