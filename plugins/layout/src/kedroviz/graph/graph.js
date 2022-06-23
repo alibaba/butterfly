@@ -4,7 +4,7 @@
 */
 import { offsetNode, offsetEdge } from './common';
 import { layout } from './layout';
-import { routing } from './routing';
+// import { routing } from './routing';
 import { bounds } from '../selectors/size'
 
 
@@ -13,14 +13,13 @@ export const graph = (nodes, edges, layers, rankdir, options) => {
   addNearestLayers(nodes, layers);
 
   layout({ nodes, edges, layers, rankdir, ...options.layout });
-  routing({ nodes, edges, layers, rankdir, ...options.routing });
-
   const size = bounds(nodes, options.layout.padding);
-
   nodes.forEach((node) => offsetNode(node, size.min));
+
+  // routing({ nodes, edges, layers, rankdir, ...options.routing });
+
   nodes.forEach((node) => node.x = node.x - (node.width * 0.5));
   nodes.forEach((node) => node.y = node.y - (node.height * 0.5));
-  edges.forEach((edge) => offsetEdge(edge, size.min));
 
   return {
     nodes,

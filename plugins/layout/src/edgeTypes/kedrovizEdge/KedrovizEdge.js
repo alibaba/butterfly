@@ -1,12 +1,15 @@
 'use strict';
 
 import {Edge} from 'butterfly-dag';
-// import BaseEdge from '../../../../../src/edge/baseEdge';
+// import BaseEdge from '../../../../src/edge/baseEdge';
 import $ from 'jquery';
 import { curveBasis, line } from 'd3-shape';
 
 const matchFloats = /\d+\.\d+/g;
 
+/**
+ * 避障贝塞尔曲线
+ */
 class KedrovizEdge extends Edge {
   constructor(opts) {
     super(opts);

@@ -22,21 +22,21 @@ export const getLayers = ({ nodes = [], edges = [], layers = [], direction = "co
         let nodeY = node.y || node.top;
 
         if (nodeY - node.height < bound[0]) {
-          bound[0] = nodeY - node.height + node.height * 0.5;
+          bound[0] = nodeY - node.height;
         }
   
         if (nodeY + node.height > bound[1]) {
-          bound[1] = nodeY + node.height + node.height * 0.5;
+          bound[1] = nodeY + node.height;
         }
       } else {
         let nodeX = node.x || node.left;
 
         if (nodeX - node.width < bound[0]) {
-          bound[0] = nodeX - node.width + node.width * 0.5;
+          bound[0] = nodeX - node.width;
         }
 
         if (nodeX + node.width > bound[1]) {
-          bound[1] = nodeX + node.width + node.width * 0.5;
+          bound[1] = nodeX + node.width;
         }
       }
       

@@ -4,9 +4,11 @@ import { Canvas, Node, Edge } from '../../../../index';
 import './app1.less';
 import '../../../../static/butterfly.css';
 const treeData = require('./mock_data1.json');
-import {kedrovizLayout, KedrovizEdge, BaseLayers} from 'butterfly-plugins-layout';
+import {kedrovizLayout, KedrovizEdge, BaseLayers, obstacleAvoidancePoints} from 'butterfly-plugins-layout';
 import 'butterfly-plugins-layout/dist/index.css';
-// import {kedrovizLayout, KedrovizEdge, BaseLayers} from '../../../../plugins/layout/src/kedroviz';
+// import obstacleAvoidancePoints from '../../src/edgeTypes/kedrovizEdge/obstacleAvoidancePoints';
+// import {kedrovizLayout, BaseLayers} from '../../../../plugins/layout/src/kedroviz';
+// import KedrovizEdge from '../../src/edgeTypes/kedrovizEdge/KedrovizEdge';
 
 class BaseNode extends Node {
   constructor(opts) {
@@ -33,14 +35,14 @@ class Scene extends Component {
     this.canvas = new Canvas({
       root: root,
       disLinkable: false, // 可删除连线
-      layout: {type: kedrovizLayout, options: {rankdir: 'TB', visible: true, Class: BaseLayers}},
+      layout: {type: kedrovizLayout, options: {rankdir: 'LR', visible: true, Class: BaseLayers}},
       linkable: true,    // 可连线
       draggable: false,   // 可拖动
       zoomable: true,    // 可放大
       moveable: true,    // 可平移
       theme: {
-        // group: treeData.layers,
-      }
+      },
+      avoidPoints: obstacleAvoidancePoints
     });
     // 数据格式转换
     const nodes = treeData.nodes.map(n => {

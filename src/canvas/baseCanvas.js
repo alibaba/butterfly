@@ -46,7 +46,7 @@ class BaseCanvas extends Canvas {
     this.draggable = options.draggable || false; // 可拖动
     this.linkable = options.linkable || false; // 可连线
     this.disLinkable = options.disLinkable || false; // 可拆线
-
+    this.avoidPoints = options.avoidPoints;
     this.theme = {
       group: {
         type: _.get(options, 'theme.group.type') || 'normal',
@@ -245,7 +245,6 @@ class BaseCanvas extends Canvas {
     const nodes = opts.nodes || [];
     const edges = opts.edges || [];
     const layers = opts.layers || [];
-    const direction = opts.direction || 'column';
 
     // 自动布局需要重新review
     if (this.layout && !opts.isNotRelayout) {
@@ -253,9 +252,13 @@ class BaseCanvas extends Canvas {
         groups,
         nodes,
         edges,
-        layers,
-        direction
+        layers
       });
+    }
+
+    // 计算避障点
+    if(this.avoidPoints) {
+      this.avoidPoints({nodes, edges, layout: this.layout});
     }
 
     let drawPromise = new Promise((resolve, reject) => {
