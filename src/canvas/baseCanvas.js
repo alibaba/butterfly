@@ -34,8 +34,8 @@ class BaseCanvas extends Canvas {
     this.layout = options.layout; // layout部分也需要重新review
     this.layoutOptions = options.layoutOptions;
     if (_.isObject(this.layout) && !_.isFunction(this.layout)) {
-      this.layout = this.layout.type;
       this.layoutOptions = this.layout.options || this.layoutOptions;
+      this.layout = this.layout.type;
     }
     this.layout = {
       type: this.layout,
@@ -46,6 +46,11 @@ class BaseCanvas extends Canvas {
     this.draggable = options.draggable || false; // 可拖动
     this.linkable = options.linkable || false; // 可连线
     this.disLinkable = options.disLinkable || false; // 可拆线
+    const drawPath = _.get(options, 'drawPath');
+
+    if (drawPath && _.isFunction(drawPath)) {
+      this.drawPath = drawPath;
+    }
 
     this.theme = {
       group: {
@@ -244,14 +249,21 @@ class BaseCanvas extends Canvas {
     const groups = opts.groups || [];
     const nodes = opts.nodes || [];
     const edges = opts.edges || [];
+    const layers = opts.layers || [];
 
     // 自动布局需要重新review
     if (this.layout && !opts.isNotRelayout) {
       this._autoLayout({
         groups,
         nodes,
-        edges
+        edges,
+        layers
       });
+    }
+
+    // 计算避障点
+    if(this.drawPath) {
+      this.drawPath({nodes, edges, layout: this.layout});
     }
 
     let drawPromise = new Promise((resolve, reject) => {
@@ -277,6 +289,18 @@ class BaseCanvas extends Canvas {
         }, 20);
       });
     });
+
+    if(layers.length !== 0) {
+      drawPromise.then((resolve) => {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            // 生成edges
+            this.addLayers(layers, nodes, edges, this.layout);
+            resolve();
+          }, 20);
+        });
+      });
+    }
     
     drawPromise.then(() => {
       this.actionQueue = [];
@@ -329,6 +353,7 @@ class BaseCanvas extends Canvas {
     //   this.groups[index].moveTo(item.left, iten.top);
     // });
   }
+
   _genSvgWrapper() {
     function _detectMob() {
       const toMatch = [
@@ -2728,6 +2753,7 @@ class BaseCanvas extends Canvas {
           labelUpdateInterval: link.labelUpdateInterval === undefined ? _.get(this, 'theme.edge.labelUpdateInterval') : link.labelUpdateInterval,
           isExpandWidth: this.theme.edge.isExpandWidth,
           defaultAnimate: this.theme.edge.defaultAnimate,
+          options: link,
           _global: this.global,
           _sourceType,
           _targetType,
@@ -3011,6 +3037,18 @@ class BaseCanvas extends Canvas {
     return index;
   }
 
+  //===============================
+  //[ layers渲染 ]
+  //=============================== 
+  addLayers(layers, nodes, edges, layout) {
+    const _layersFragment = document.createDocumentFragment();
+    const LayersClass = layout.options && layout.options.Class;
+    let _newLayers = new LayersClass({ nodes, edges, layers, layout });
+    _newLayers._init();
+    _layersFragment.appendChild(_newLayers.dom);
+    $(this.wrapper).append(_layersFragment);
+  }
+
 
   //===============================
   //[ 布局配置 ]
@@ -3065,7 +3103,8 @@ class BaseCanvas extends Canvas {
               edges: data.edges.map(item => ({
                 source: item.type === 'endpoint' ? item.sourceNode : item.source,
                 target: item.type === 'endpoint' ? item.targetNode : item.target
-              }))
+              })),
+              layers: data.layers,
             }
           });
         }
