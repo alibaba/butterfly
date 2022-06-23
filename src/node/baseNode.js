@@ -200,6 +200,9 @@ class BaseNode extends Node {
       if (e.button !== LEFT_KEY) {
         return;
       }
+      if(_.isFunction(this.canMouseDown) && !this.canMouseDown(e)) {
+        return;
+      }
       if (!['SELECT', 'INPUT', 'RADIO', 'CHECKBOX', 'TEXTAREA'].includes(e.target.nodeName)) {
         e.preventDefault();
       }
@@ -219,6 +222,9 @@ class BaseNode extends Node {
     });
 
     $(this.dom).on('click', (e) => {
+      if(_.isFunction(this.canClick) && !this.canClick(e)) {
+        return;
+      }
       e.preventDefault();
       e.stopPropagation();
       this.emit('system.node.click', {

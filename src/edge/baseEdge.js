@@ -23,6 +23,7 @@ class BaseEdge extends Edge {
     this.type = _.get(opts, 'type', 'endpoint');
     this.orientationLimit = _.get(opts, 'orientationLimit');
     this.shapeType = _.get(opts, 'shapeType', 'Straight');
+    this.hasRadius=_.get(opts, "hasRadius", false),
     this.label = _.get(opts, 'label');
     this.arrow = _.get(opts, 'arrow');
     this.arrowShapeType = _.get(opts, 'arrowShapeType', 'default');
@@ -70,21 +71,20 @@ class BaseEdge extends Edge {
     this._hasDragged = false;
   }
   _init(obj) {
-    if (this._isInited) {
-      return;
+    if (!this._isInited) {
+      if (obj._coordinateService) {
+        this._coordinateService = obj._coordinateService;
+      }
+      this._isInited = true;
+      this.dom = this.draw({
+        id: this.id,
+        dom: this.dom,
+        options: this.options
+      });
+      this.labelDom = this.drawLabel(this.label);
+      this.arrowDom = this.drawArrow(this.arrow);
     }
-    if (obj._coordinateService) {
-      this._coordinateService = obj._coordinateService;
-    }
-    this._isInited = true;
-    this.dom = this.draw({
-      id: this.id,
-      dom: this.dom,
-      options: this.options
-    });
-    this.labelDom = this.drawLabel(this.label);
-    this.arrowDom = this.drawArrow(this.arrow);
-
+    // destory后，undo时调用init会复用edge事例，但需要重新绑定事件
     if (!this._hasEventListener) {
       this._addEventListener();
       this._hasEventListener = true;
@@ -157,7 +157,8 @@ class BaseEdge extends Edge {
       let obj = DrawUtil.drawManhattan(sourcePoint, targetPoint, {
         breakPoints: this._breakPoints,
         hasDragged: this._hasDragged,
-        draggable: this.draggable
+        draggable: this.draggable,
+        hasRadius: this.hasRadius
       });
       path = obj.path;
       obj.breakPoints[0].type = 'start';
@@ -372,6 +373,8 @@ class BaseEdge extends Edge {
       $(this.animateDom).remove();
     }
     $(this.dom).remove();
+    // edge被destory后，undo的时候会复用edge实例，需要重新绑定事件，所以这里置为false
+    this._hasEventListener = false;
     if (this.id && !isNotEventEmit) {
       this.removeAllListeners();
     }

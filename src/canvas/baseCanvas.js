@@ -32,6 +32,15 @@ class BaseCanvas extends Canvas {
     super(options);
     this.root = options.root;
     this.layout = options.layout; // layout部分也需要重新review
+    this.layoutOptions = options.layoutOptions;
+    if (_.isObject(this.layout) && !_.isFunction(this.layout)) {
+      this.layout = this.layout.type;
+      this.layoutOptions = this.layout.options || this.layoutOptions;
+    }
+    this.layout = {
+      type: this.layout,
+      options: this.layoutOptions || {}
+    }
     this.zoomable = options.zoomable || false; // 可缩放
     this.moveable = options.moveable || false; // 可平移
     this.draggable = options.draggable || false; // 可拖动
@@ -50,6 +59,7 @@ class BaseCanvas extends Canvas {
       edge: {
         type: _.get(options, 'theme.edge.type') || 'node',
         shapeType: _.get(options, 'theme.edge.shapeType') || 'Straight',
+        hasRadius:_.get(options, 'theme.edge.hasRadius') || false,
         Class: _.get(options, 'theme.edge.Class') || Edge,
         arrow: _.get(options, 'theme.edge.arrow'),
         arrowShapeType: _.get(options, 'theme.edge.arrowShapeType', 'default'),
@@ -141,6 +151,8 @@ class BaseCanvas extends Canvas {
     // 统一处理画布拖动事件
     this._dragType = null;
     this._dragNode = null;
+    // 鼠标是否发生过移动
+    this._mouseMoved = false;
     this._dragEndpoint = null;
     this._dragEdges = [];      // 拖动连线的edge
     this._dragPathEdge = null;     // 拖动edge中的某段path改变路径
@@ -682,6 +694,7 @@ class BaseCanvas extends Canvas {
       this._dragGroup = null;
       this._dragPathEdge = null;
       this._dragEdges = [];
+      this._mouseMoved = false;
       nodeOriginPos = {
         x: 0,
         y: 0
@@ -696,6 +709,8 @@ class BaseCanvas extends Canvas {
 
     const mouseDownEvent = (event) => {
       const LEFT_BUTTON = 0;
+      // 重置_mouseMoved
+      this._mouseMoved = false;
       if (event.button !== LEFT_BUTTON) {
         return;
       }
@@ -704,9 +719,10 @@ class BaseCanvas extends Canvas {
         this._dragType = 'canvas:drag';
       }
 
-      // 假如点击在空白地方且在框选模式下
-      if ((event.target === this.svg[0] || event.target === this.root) && this.isSelectMode) {
+      // 如果在框选模式下点击
+      if (this.isSelectMode) {
         this.canvasWrapper.active();
+        this._dragType = 'selectCanvas:drag';
         this.canvasWrapper.dom.dispatchEvent(new MouseEvent('mousedown', {
           clientX: event.clientX,
           clientY: event.clientY
@@ -764,6 +780,8 @@ class BaseCanvas extends Canvas {
     };
 
     const mouseMoveEvent = (event) => {
+      // 鼠标发生移动
+      this._mouseMoved = true;
       const LEFT_BUTTON = 0;
       if (event.button !== LEFT_BUTTON) {
         return;
@@ -898,6 +916,7 @@ class BaseCanvas extends Canvas {
                   type: 'endpoint',
                   type: this.theme.edge.type,
                   shapeType: this.theme.edge.shapeType,
+                  hasRadius:this.theme.edge.hasRadius,
                   orientationLimit: this.theme.endpoint.position,
                   _sourceType: point.nodeType,
                   sourceNode: _sourceNode,
@@ -1049,6 +1068,17 @@ class BaseCanvas extends Canvas {
           let _newHeight = canvasY - pos.top;
 
           this._dragGroup.setSize(_newWidth, _newHeight);
+        }else if(this._dragType ==='selectCanvas:drag'){
+          this._autoMoveCanvas(event.clientX, event.clientY, {
+            type: 'selectCanvas:drag',
+          }, ([gapX, gapY])=>{
+              const { startX, startY } = this.canvasWrapper;
+              this.canvasWrapper._changeCanvasInfo({
+                startX: startX - gapX,
+                startY: startY - gapY
+              });
+              this.canvasWrapper.drawRect();
+          });
         }
       }
     };
@@ -1385,6 +1415,7 @@ class BaseCanvas extends Canvas {
                   rmTargetData.group = targetGroup.id;
                   rmTargetData._isDeleteGroup = false;
                   this.popActionQueue();
+                  debugger;
                   this.pushActionQueue({
                     type: 'system:groupAddMembers',
                     data: {
@@ -1521,7 +1552,8 @@ class BaseCanvas extends Canvas {
         });
       }
 
-      if (this._dragType === 'node:drag' || this._dragType === 'group:drag') {
+      // 仅鼠标发生过移动，才增加dragNodeEnd事件
+      if (this._mouseMoved && (this._dragType === 'node:drag' || this._dragType === 'group:drag')) {
         this.pushActionQueue({
           type: '_system:dragNodeEnd'
         });
@@ -1546,6 +1578,7 @@ class BaseCanvas extends Canvas {
       });
 
       _clearDraging();
+
     };
 
     const mouseLeaveEvent = (event) => {
@@ -1764,20 +1797,20 @@ class BaseCanvas extends Canvas {
     };
   }
   getNeighborNodes(nodeId) {
-    const result = [];
+    const result = {};
     const node = _.find(this.nodes, item => nodeId === item.id);
     if (!node) {
       console.warn(`找不到id为${nodeId}的节点`);
     }
     this.edges.forEach((item) => {
       if (item.sourceNode && item.sourceNode.id === nodeId) {
-        result.push(item.targetNode.id);
+        result[item.targetNode.id] = true;
       } else if (item.targetNode && item.targetNode.id === nodeId) {
-        result.push(item.sourceNode.id);
+        result[item.sourceNode.id] = true;
       }
     });
 
-    return result.map(id => this.getNode(id));
+    return Object.keys(result).map(id => this.getNode(id));
   }
   /**
    * 查找 N 层节点
@@ -2988,11 +3021,12 @@ class BaseCanvas extends Canvas {
     const width = this._rootWidth;
     const height = this._rootHeight;
 
-    if (_.isFunction(this.layout)) {
-      this.layout({
+    if (_.isFunction(_.get(this.layout, 'type'))) {
+      this.layout.type({
         width: width,
         height: height,
-        data: data
+        data: data,
+        ...this.layoutOptions
       });
     } else {
       // 重力布局
@@ -3583,8 +3617,8 @@ class BaseCanvas extends Canvas {
     if (!node) {
       return;
     }
-    top = node.top || node.y;
-    left = node.left || node.x;
+    top = node.top || node.y || 0;
+    left = node.left || node.x || 0;
     if (node.height) {
       top += node.height / 2;
     }
@@ -3626,21 +3660,19 @@ class BaseCanvas extends Canvas {
     });
     this._moveData = [targetX, targetY];
 
+    // 这里要根据scale来判断
+    let scale = 1;
+    if (_.get(options, 'keepPreZoom')) {
+      scale = this._zoomData < scale ? this._zoomData : scale;
+    }
+
     this._coordinateService._changeCanvasInfo({
       canOffsetX: targetX,
       canOffsetY: targetY,
       originX: 50,
       originY: 50,
-      scale: 1
+      scale: scale
     });
-
-    // 这里要根据scale来判断
-    let scale = scaleX < scaleY ? scaleX : scaleY;
-    if (_.get(options, 'keepPreZoom')) {
-      scale = this._zoomData < scale ? this._zoomData : scale;
-    } else {
-      scale = 1 < scale ? 1 : scale;
-    }
 
     let zoomPromise = new Promise((resolve) => {
       this.zoom(scale, () => {
@@ -4441,6 +4473,7 @@ class BaseCanvas extends Canvas {
   pushActionQueue(option) {
 
     let step = option;
+
     //移动节点需要合并堆栈
     if (option.type === 'system:moveNodes' || option.type === 'system:moveGroups') {
 
@@ -4500,10 +4533,12 @@ class BaseCanvas extends Canvas {
       this.actionQueue.splice(this.actionQueueIndex - 1, 1);
       this.actionQueueIndex--;
     }
+    
   }
   popActionQueue() {
     if (this.actionQueue.length > 0) {
       let action = this.actionQueue.pop();
+      this.actionQueueIndex--;
       return action;
     } else {
       console.warn('操作队列已为空，请确认');

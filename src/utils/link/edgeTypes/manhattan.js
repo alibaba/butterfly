@@ -3,7 +3,7 @@
 import _ from 'lodash';
 import { _calcOrientation, _route, LEFT, RIGHT, TOP, BOTTOM, DEFAULT_RADIUS, Point } from './_utils.js';
 const getDefaultPath = (pointArr) => {
-  return pointArr.reduce((path, point) => {
+  let path = pointArr.reduce((path, point) => {
     path.push([
       'L',
       point.x,
@@ -17,6 +17,7 @@ const getDefaultPath = (pointArr) => {
       pointArr[0].y
     ].join(' ')
   ]).join(' ');
+  return path
 };
 // 获得靠近end的点
 const getThatPoint = (start, end, radius) => {
@@ -156,6 +157,7 @@ function drawManhattan(sourcePoint, targetPoint, options) {
     '0-1': TOP,
     '01': BOTTOM,
   };
+  ;
   // link:connect 中 orientation = undefined
   _route(pointArr, fromPt, orientation[sourcePoint.orientation.join('')], toPt, orientation[targetPoint.orientation.join('')]);
   if (pointArr.length < 2) return '';
@@ -165,7 +167,6 @@ function drawManhattan(sourcePoint, targetPoint, options) {
       breakPoints: pointArr
     };
   }
-
   pointArr.pop();
   if (options.hasRadius) {
     if (pointArr.length < 3) {

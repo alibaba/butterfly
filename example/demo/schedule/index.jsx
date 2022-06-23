@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import './index.less';
 import 'butterfly-dag/dist/index.css';
-import { Canvas } from 'butterfly-dag';
+import { Canvas } from '../../../index.js';
 import mockData from './data';
 class Scene4New extends Component {
   constructor() {

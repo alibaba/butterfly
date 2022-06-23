@@ -34,10 +34,11 @@ export function _route(conn, fromPt, fromDir, toPt, toDir) {
   let dir;
   let pos;
 
-  conn.push({ x: fromPt.x, y: fromPt.y });
+  conn.push(new Point(fromPt.x, fromPt.y));
 
   if (((xDiff * xDiff) < (TOLxTOL)) && ((yDiff * yDiff) < (TOLxTOL))) {
-    // conn.push({x: toPt.x, y: toPt.y});
+    //认为可以是直线情况
+    conn.push(new Point(toPt.x, toPt.y));
     return;
   }
 
@@ -153,6 +154,9 @@ export function _route(conn, fromPt, fromDir, toPt, toDir) {
     }
   }
   _route(conn, point, dir, toPt, toDir);
+
+
+
 }
 
 
