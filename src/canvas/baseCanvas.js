@@ -1577,6 +1577,7 @@ class BaseCanvas extends Canvas {
       });
 
       _clearDraging();
+
     };
 
     const mouseLeaveEvent = (event) => {
@@ -4471,6 +4472,7 @@ class BaseCanvas extends Canvas {
   pushActionQueue(option) {
 
     let step = option;
+
     //移动节点需要合并堆栈
     if (option.type === 'system:moveNodes' || option.type === 'system:moveGroups') {
 
@@ -4530,10 +4532,12 @@ class BaseCanvas extends Canvas {
       this.actionQueue.splice(this.actionQueueIndex - 1, 1);
       this.actionQueueIndex--;
     }
+    
   }
   popActionQueue() {
     if (this.actionQueue.length > 0) {
       let action = this.actionQueue.pop();
+      this.actionQueueIndex--;
       return action;
     } else {
       console.warn('操作队列已为空，请确认');
