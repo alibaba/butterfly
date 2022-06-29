@@ -236,6 +236,10 @@ class BaseCanvas extends Canvas {
     this._cache = {
       nodes: {}
     }
+
+    // redraw的promise
+    this._redrawPromises = [];
+    this._isRedraw = false;
   }
 
   //===============================
@@ -291,10 +295,37 @@ class BaseCanvas extends Canvas {
     });
   }
   redraw (opts, callback) {
-    this.removeNodes(this.nodes.map((item) => item.id) || []);
-    this.removeGroups(this.groups.map((item) => item.id) || []);
-    this.clearActionQueue();
-    this.draw(opts || {}, callback);
+
+    this._redrawPromises.push({
+      opts,
+      callback
+    });
+
+    if (this._isRedraw) {
+      return;
+    }
+
+    const _run = (promise) => {
+      promise.then((data) => {
+        const {opts, callback} = data;
+        this.removeNodes(this.nodes.map((item) => item.id) || []);
+        this.removeGroups(this.groups.map((item) => item.id) || []);
+        this.clearActionQueue();
+        this.draw(opts || {}, () => {
+          callback && callback();
+          if (this._redrawPromises.length > 0) {
+            let nextData = this._redrawPromises.shift();
+            _run(Promise.resolve(nextData));
+          } else {
+            this._isRedraw = false;
+          }
+        });
+      })
+    };
+
+    let data = this._redrawPromises.shift();
+    _run(Promise.resolve(data));
+
   }
   getDataMap() {
     return {
