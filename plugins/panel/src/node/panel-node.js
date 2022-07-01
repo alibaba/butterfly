@@ -314,7 +314,7 @@ class PanelNode extends Node {
     this._update();
   }
 
-  unfocus = () => {
+  unFocus = () => {
     this.actived = false;
     this._update();
   }
