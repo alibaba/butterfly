@@ -748,7 +748,7 @@ canvas2terminal = (coordinates) => {}
 * `{inside}` - 在画布区域内的节点
 * `{outside}` - 在画布区域外的节点
 
-### canvas.setSelectMode (boolean, contents , selecMode)
+### canvas.setSelectMode (boolean, contents , selectMode)
 
 *作用*：设置框选模式: 注意, 注意框选模式和普通拖动画布模式是互斥的, 没办法同时设置
 
@@ -756,10 +756,10 @@ canvas2terminal = (coordinates) => {}
 
 * `{true|false} boolean`  - 是否开启框选功能
 * `{array} contents` - 可接受框选的内容(node|endpoint|edge),默认'node')
-* `{string} selecMode` - 可接受框选的内容(include|touch|senior),默认'include',include:全部包含才可选中，touch:触碰就选中，senior:从左到右需要全部包含，从右到左只需触碰就能选中)
+* `{string} selectMode` - 可接受框选的内容(include|touch|senior),默认'include',include:全部包含才可选中，touch:触碰就选中，senior:从左到右需要全部包含，从右到左只需触碰就能选中)
 
 ```js
-setSelectMode = (boolean, contents , selecMode) => {}
+setSelectMode = (boolean, contents , selectMode) => {}
 ```
 
 ### canvas.getUnion (name)

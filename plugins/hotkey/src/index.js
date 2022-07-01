@@ -28,10 +28,10 @@ class HotKeyPlugins {
 
   _unfocus = () => {
     if(this.selectedItems.nodes.length !== 0){
-      this.selectedItems.nodes.forEach(ele=>ele.unfocus())
+      this.selectedItems.nodes.forEach(ele=>ele.unFocus())
     }
     if(this.selectedItems.edges.length !== 0){
-      this.selectedItems.edges.forEach(ele=>ele.unfocus())
+      this.selectedItems.edges.forEach(ele=>ele.unFocus())
     }
     if(this.selectedItems.groups.length !== 0){
       this.selectedItems.groups.forEach(ele=>ele.unFocus())

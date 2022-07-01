@@ -354,12 +354,12 @@ panelPlugins.register(
 panelNode.focus();
 ```
 
-##### panelNode.unfocus ()
+##### panelNode.unFocus ()
 
 *descripition*： Node becomes unselected
 
 ```js
-panelNode.unfocus();
+panelNode.unFocus();
 ```
 
 ##### panelNode.rotate (angle)
