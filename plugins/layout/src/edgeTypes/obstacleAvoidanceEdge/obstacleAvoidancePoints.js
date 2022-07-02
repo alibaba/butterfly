@@ -1,15 +1,9 @@
 'use strict';
-import { 
-  compare,
+import {
   distance1d,
   angle,
   nearestOnLine,
-  nearestOnLine1,
   groupByRow,
-  nodeLeft,
-  nodeRight,
-  nodeTop,
-  nodeBottom
 } from './utils.js';
 
 const routing = ({
@@ -26,261 +20,178 @@ const routing = ({
   stemSpaceSource,
   stemSpaceTarget,
 }) => {
-  nodes.forEach((node) => {
-    node.width = node.options.width;
-    node.x = node.left + (node.width * 0.5);
-    node.height = node.options.height;
-    node.y = node.top + (node.height * 0.5);
-    node.nodeLeft = node.x - node.width * 0.5;
-    node.nodeRight = node.x + node.width * 0.5;
-    node.nodeTop = node.y - node.height * 0.5;
-    node.nodeBottom = node.y + node.height * 0.5;
-  });
-
   const rows = groupByRow(nodes, rankdir);
-  console.log(rows);
+
 
   for (const node of nodes) {
     node.targets.sort((a, b) =>
-      compare(
-        angle(b.sourceNodeObj, b.targetNodeObj),
-        angle(a.sourceNodeObj, a.targetNodeObj)
-      )
+      angle(b.sourceNodeObj, b.targetNodeObj) - angle(a.sourceNodeObj, a.targetNodeObj)
     );
   }
   for (const edge of edges) {
     const source = edge.sourceNodeObj;
     const target = edge.targetNodeObj;
-    source.x = source.left + (source.width * 0.5);
-    source.y = source.top + (source.height * 0.5);
-    target.x = target.left + (target.width * 0.5);
-    target.y = target.top + (target.height * 0.5);
     edge.points = [];
 
+    const sourceSeparation = rankdir === 'column' ? Math.min(
+      (source.width - stemSpaceSource) / source.targets.length,
+      stemSpaceSource
+    ) : Math.min(
+      (source.height - stemSpaceSource) / source.targets.length,
+      stemSpaceSource
+    );
 
+    const sourceEdgeDistance =
+      source.targets.indexOf(edge) - (source.targets.length - 1) * 0.5;
 
-    // if(source.row < target.row) {
-      const sourceSeparation = rankdir === 'column' ? Math.min(
-        (source.width - stemSpaceSource) / source.targets.length,
-        stemSpaceSource
-      ) : Math.min(
-        (source.height - stemSpaceSource) / source.targets.length,
-        stemSpaceSource
-      );
-  
-      const sourceEdgeDistance =
-        source.targets.indexOf(edge) - (source.targets.length - 1) * 0.5;
-  
-      const sourceOffsetDirection = sourceSeparation * sourceEdgeDistance;
-      const startPoint = rankdir === 'column' ? { x: source.x + sourceOffsetDirection, y: source.y } : { x: source.x, y: source.y + sourceOffsetDirection };
-      let currentPoint = startPoint;
-      if(source.row <= target.row) {
-        for (let i = source.row + 1; i < target.row; i += 1) {
-          const firstNode = rows[i][0];
-          if(rankdir === 'column' && (distance1d(target.y, firstNode.y) <= Math.max(firstNode.height, target.height) || distance1d(source.y, firstNode.y) <= Math.max(firstNode.height, source.height))) {
-            continue;
-          }
-          if(rankdir === 'row' && (distance1d(target.x, firstNode.x) <= Math.max(firstNode.width, target.width) || distance1d(source.x, firstNode.x) <= Math.max(firstNode.width, source.width))) {
-            continue;
-          }
+    const sourceOffsetDirection = sourceSeparation * sourceEdgeDistance;
+    const startPoint = rankdir === 'column' ? { x: source.x + sourceOffsetDirection, y: source.y } : { x: source.x, y: source.y + sourceOffsetDirection };
+    let currentPoint = startPoint;
 
-          let nearestPoint = rankdir === 'column' ? { x: firstNode.nodeLeft - spaceDirection, y: firstNode.y } : { x: firstNode.x , y: firstNode.nodeTop - spaceDirection};
-          let nearestDistance = Infinity;
+    const getOffsetReverseDirection = (i) => {
+      const firstNode = rows[i][0];
+      if(rankdir === 'column' && (distance1d(target.y, firstNode.y) <= Math.max(firstNode.height, target.height) || distance1d(source.y, firstNode.y) <= Math.max(firstNode.height, source.height))) {
+        return 0;
+      }
+      if(rankdir === 'row' && (distance1d(target.x, firstNode.x) <= Math.max(firstNode.width, target.width) || distance1d(source.x, firstNode.x) <= Math.max(firstNode.width, source.width))) {
+        return 0;
+      }
 
-          const rowExtended = rankdir === 'column' ? [
-            { ...firstNode, x: Number.MIN_SAFE_INTEGER },
-            ...rows[i],
-            { ...firstNode, x: Number.MAX_SAFE_INTEGER },
-          ] : [
-            { ...firstNode, y: Number.MIN_SAFE_INTEGER },
-            ...rows[i],
-            { ...firstNode, y: Number.MAX_SAFE_INTEGER },
-          ];
+      let nearestPoint = rankdir === 'column' ? { x: firstNode.nodeLeft - spaceDirection, y: firstNode.y } : { x: firstNode.x , y: firstNode.nodeTop - spaceDirection};
+      let nearestDistance = Infinity;
 
-          for (let i = 0; i < rowExtended.length - 1; i += 1) {
-            const node = rowExtended[i];
-            const nextNode = rowExtended[i + 1];
-            const nodeGap = rankdir === 'column' ? nextNode.nodeLeft - node.nodeRight : nextNode.nodeTop - node.nodeBottom;
+      const rowExtended = rankdir === 'column' ? [
+        { ...firstNode, x: Number.MIN_SAFE_INTEGER, nodeLeft: Number.MIN_SAFE_INTEGER - firstNode.width * 0.5, nodeRight: Number.MIN_SAFE_INTEGER + firstNode.width * 0.5 },
+        ...rows[i],
+        { ...firstNode, x: Number.MAX_SAFE_INTEGER, nodeLeft: Number.MAX_SAFE_INTEGER - firstNode.width * 0.5, nodeRight: Number.MAX_SAFE_INTEGER + firstNode.width * 0.5 },
+      ] : [
+        { ...firstNode, y: Number.MIN_SAFE_INTEGER, nodeTop: Number.MIN_SAFE_INTEGER - firstNode.height * 0.5, nodeBottom: Number.MIN_SAFE_INTEGER + firstNode.height * 0.5 },
+        ...rows[i],
+        { ...firstNode, y: Number.MAX_SAFE_INTEGER, nodeTop: Number.MAX_SAFE_INTEGER - firstNode.height * 0.5, nodeBottom: Number.MAX_SAFE_INTEGER + firstNode.height * 0.5 },
+      ];
 
-            if (nodeGap < minPassageGap) {
-              continue;
-            }
+      for (let i = 0; i < rowExtended.length - 1; i += 1) {
+        const node = rowExtended[i];
+        const nextNode = rowExtended[i + 1];
+        const nodeGap = rankdir === 'column' ? nextNode.nodeLeft - node.nodeRight : nextNode.nodeTop - node.nodeBottom;
 
-            const offsetDirection = Math.min(spaceDirection, nodeGap * 0.5);
-
-            const candidatePoint = rankdir === 'column' ? nearestOnLine(
-              currentPoint.x,
-              currentPoint.y,
-              node.nodeRight + offsetDirection,
-              node.nodeTop - spaceReverseDirection,
-              nextNode.nodeLeft - offsetDirection,
-              nextNode.nodeTop - spaceReverseDirection
-            ) : nearestOnLine(
-              currentPoint.x,
-              currentPoint.y,
-              node.nodeLeft - spaceReverseDirection,
-              node.nodeBottom + offsetDirection,
-              nextNode.nodeLeft - spaceReverseDirection,
-              nextNode.nodeTop - offsetDirection
-            );
-
-            const distance = rankdir === 'column' ? distance1d(currentPoint.x, candidatePoint.x) : distance1d(currentPoint.y, candidatePoint.y);
-
-            if (distance > nearestDistance) {
-              break;
-            }
-
-            if (distance < nearestDistance) {
-              nearestDistance = distance;
-              nearestPoint = candidatePoint;
-            }
-          }
-
-          const offsetReverseDirection = rankdir === 'column' ? firstNode.height + spaceReverseDirection : firstNode.width + spaceReverseDirection;
-
-
-          if (rankdir === 'column') {
-            edge.points.push({
-              x: nearestPoint.x + sourceOffsetDirection,
-              y: nearestPoint.y,
-            });
-            edge.points.push({
-              x: nearestPoint.x + sourceOffsetDirection,
-              y: nearestPoint.y + offsetReverseDirection,
-            });
-      
-            currentPoint = {
-              x: nearestPoint.x,
-              y: nearestPoint.y + offsetReverseDirection,
-            };
-          } else {
-            edge.points.push({
-              x: nearestPoint.x,
-              y: nearestPoint.y + sourceOffsetDirection,
-            });
-            edge.points.push({
-              x: nearestPoint.x + offsetReverseDirection,
-              y: nearestPoint.y + sourceOffsetDirection,
-            });
-
-            currentPoint = {
-              x: nearestPoint.x + offsetReverseDirection,
-              y: nearestPoint.y,
-            };
-          }
-          
+        if (nodeGap < minPassageGap) {
+          continue;
         }
-      } else if (source.row > target.row) {
-        for (let i = source.row - 1 ; i > target.row; i -= 1) {
-          const firstNode = rows[i][0];
-          if(rankdir === 'column' && (distance1d(target.y, firstNode.y) <= Math.max(firstNode.height, target.height) || distance1d(source.y, firstNode.y) <= Math.max(firstNode.height, source.height))) {
-            continue;
-          }
-          if(rankdir === 'row' && (distance1d(target.x, firstNode.x) <= Math.max(firstNode.width, target.width) || distance1d(source.x, firstNode.x) <= Math.max(firstNode.width, source.width))) {
-            continue;
-          }
 
-          let nearestPoint = rankdir === 'column' ? { x: firstNode.nodeLeft - spaceDirection, y: firstNode.y } : { x: firstNode.x , y: firstNode.nodeTop - spaceDirection};
-          let nearestDistance = Infinity;
+        const offsetDirection = Math.min(spaceDirection, nodeGap * 0.5);
 
-          const rowExtended = rankdir === 'column' ? [
-            { ...firstNode, x: Number.MIN_SAFE_INTEGER },
-            ...rows[i],
-            { ...firstNode, x: Number.MAX_SAFE_INTEGER },
-          ] : [
-            { ...firstNode, y: Number.MIN_SAFE_INTEGER },
-            ...rows[i],
-            { ...firstNode, y: Number.MAX_SAFE_INTEGER },
-          ];
+        const candidatePoint = rankdir === 'column' ? nearestOnLine(
+          currentPoint.x,
+          currentPoint.y,
+          node.nodeRight + offsetDirection,
+          node.nodeTop - spaceReverseDirection,
+          nextNode.nodeLeft - offsetDirection,
+          nextNode.nodeTop - spaceReverseDirection
+        ) : nearestOnLine(
+          currentPoint.x,
+          currentPoint.y,
+          node.nodeLeft - spaceReverseDirection,
+          node.nodeBottom + offsetDirection,
+          nextNode.nodeLeft - spaceReverseDirection,
+          nextNode.nodeTop - offsetDirection
+        );
 
-          for (let i = 0; i < rowExtended.length - 1; i += 1) {
-            const node = rowExtended[i];
-            const nextNode = rowExtended[i + 1];
-            const nodeGap = rankdir === 'column' ? nextNode.nodeLeft - node.nodeRight : nextNode.nodeTop - node.nodeBottom;
+        const distance = rankdir === 'column' ? distance1d(currentPoint.x, candidatePoint.x) : distance1d(currentPoint.y, candidatePoint.y);
 
-            if (nodeGap < minPassageGap) {
-              continue;
-            }
+        if (distance > nearestDistance) {
+          break;
+        }
 
-            const offsetDirection = Math.min(spaceDirection, nodeGap * 0.5);
-
-            const candidatePoint = rankdir === 'column' ? nearestOnLine1(
-              currentPoint.x,
-              currentPoint.y,
-              node.nodeRight + offsetDirection,
-              node.nodeTop - spaceReverseDirection,
-              nextNode.nodeLeft - offsetDirection,
-              nextNode.nodeTop - spaceReverseDirection
-            ) : nearestOnLine(
-              currentPoint.x,
-              currentPoint.y,
-              node.nodeLeft - spaceReverseDirection,
-              node.nodeBottom + offsetDirection,
-              nextNode.nodeLeft - spaceReverseDirection,
-              nextNode.nodeTop - offsetDirection
-            );
-
-            const distance = rankdir === 'column' ? distance1d(currentPoint.x, candidatePoint.x) : distance1d(currentPoint.y, candidatePoint.y);
-
-            if (distance > nearestDistance) {
-              break;
-            }
-
-            if (distance < nearestDistance) {
-              nearestDistance = distance;
-              nearestPoint = candidatePoint;
-            }
-          }
-
-          const offsetReverseDirection = rankdir === 'column' ? firstNode.height + spaceReverseDirection : firstNode.width + spaceReverseDirection;
-          if (rankdir === 'column') {
-            edge.points.push({
-              x: nearestPoint.x - sourceOffsetDirection,
-              y: nearestPoint.y,
-            });
-            edge.points.push({
-              x: nearestPoint.x - sourceOffsetDirection,
-              y: nearestPoint.y - offsetReverseDirection,
-            });
-      
-            currentPoint = {
-              x: nearestPoint.x,
-              y: nearestPoint.y - offsetReverseDirection,
-            };
-          } else {
-            edge.points.push({
-              x: nearestPoint.x,
-              y: nearestPoint.y - sourceOffsetDirection,
-            });
-            edge.points.push({
-              x: nearestPoint.x - offsetReverseDirection,
-              y: nearestPoint.y - sourceOffsetDirection,
-            });
-
-            currentPoint = {
-              x: nearestPoint.x - offsetReverseDirection,
-              y: nearestPoint.y,
-            };
-          }
-          
+        if (distance < nearestDistance) {
+          nearestDistance = distance;
+          nearestPoint = candidatePoint;
         }
       }
 
+      const offsetReverseDirection = rankdir === 'column' ? firstNode.height + spaceReverseDirection : firstNode.width + spaceReverseDirection;
+      return {offsetReverseDirection, nearestPoint};
+    }
+    if(source.row <= target.row) {
+      for (let i = source.row + 1; i < target.row; i += 1) {
+        const {offsetReverseDirection, nearestPoint} = getOffsetReverseDirection(i);
+        if(offsetReverseDirection) {
+          if (rankdir === 'column') {
+            edge.points.push({
+              x: nearestPoint.x + sourceOffsetDirection,
+              y: nearestPoint.y,
+            });
+            edge.points.push({
+              x: nearestPoint.x + sourceOffsetDirection,
+              y: nearestPoint.y + offsetReverseDirection,
+            });
+      
+            currentPoint = {
+              x: nearestPoint.x,
+              y: nearestPoint.y + offsetReverseDirection,
+            };
+          } else {
+            edge.points.push({
+              x: nearestPoint.x,
+              y: nearestPoint.y + sourceOffsetDirection,
+            });
+            edge.points.push({
+              x: nearestPoint.x + offsetReverseDirection,
+              y: nearestPoint.y + sourceOffsetDirection,
+            });
+
+            currentPoint = {
+              x: nearestPoint.x + offsetReverseDirection,
+              y: nearestPoint.y,
+            };
+          }
+        }
+      }
+    } else if (source.row > target.row) {
+      for (let i = source.row - 1 ; i > target.row; i -= 1) {
+        const {offsetReverseDirection, nearestPoint} = getOffsetReverseDirection(i);
+        if(offsetReverseDirection) {
+          if (rankdir === 'column') {
+            edge.points.push({
+              x: nearestPoint.x - sourceOffsetDirection,
+              y: nearestPoint.y,
+            });
+            edge.points.push({
+              x: nearestPoint.x - sourceOffsetDirection,
+              y: nearestPoint.y - offsetReverseDirection,
+            });
+      
+            currentPoint = {
+              x: nearestPoint.x,
+              y: nearestPoint.y - offsetReverseDirection,
+            };
+          } else {
+            edge.points.push({
+              x: nearestPoint.x,
+              y: nearestPoint.y - sourceOffsetDirection,
+            });
+            edge.points.push({
+              x: nearestPoint.x - offsetReverseDirection,
+              y: nearestPoint.y - sourceOffsetDirection,
+            });
+
+            currentPoint = {
+              x: nearestPoint.x - offsetReverseDirection,
+              y: nearestPoint.y,
+            };
+          }
+        }
+      }
+    }
   }
 
 
   for (const node of nodes) {
     node.targets.sort((a, b) =>
-      compare(
-        angle(b.sourceNodeObj, b.points[0] || b.targetNodeObj),
-        angle(a.sourceNodeObj, a.points[0] || a.targetNodeObj)
-      )
+      angle(b.sourceNodeObj, b.points[0] || b.targetNodeObj) - angle(a.sourceNodeObj, a.points[0] || a.targetNodeObj)
     );
     node.sources.sort((a, b) =>
-      compare(
-        angle(a.points[a.points.length - 1] || a.sourceNodeObj, a.targetNodeObj),
-        angle(b.points[b.points.length - 1] || b.sourceNodeObj, b.targetNodeObj)
-      )
+      angle(a.points[a.points.length - 1] || a.sourceNodeObj, a.targetNodeObj) - angle(b.points[b.points.length - 1] || b.sourceNodeObj, b.targetNodeObj)
     );
   }
 
@@ -382,25 +293,6 @@ const routing = ({
 
     const points = [...sourceStem, ...edge.points, ...targetStem];
 
-    // let pointReverseDirectionMax = rankdir === 'column' ? points[0].y : points[0].x;
-
-    // for (const point of points) {
-      
-    //   if(rankdir === "column") {
-    //     if (point.y < pointReverseDirectionMax) {
-    //       point.y = pointReverseDirectionMax;
-    //     } else {
-    //       pointReverseDirectionMax = point.y;
-    //     }
-    //   } else {
-    //     if (point.x < pointReverseDirectionMax) {
-    //       point.x = pointReverseDirectionMax;
-    //     } else {
-    //       pointReverseDirectionMax = point.x;
-    //     }
-    //   }     
-    // }
-
     edge.points = points;
   }
 };
@@ -409,6 +301,14 @@ const addEdgeLinks = (nodes, edges) => {
   const nodeById = {};
 
   for (const node of nodes) {
+    node.width = node.options.width;
+    node.x = node.left + (node.width * 0.5);
+    node.height = node.options.height;
+    node.y = node.top + (node.height * 0.5);
+    node.nodeLeft = node.x - node.width * 0.5;
+    node.nodeRight = node.x + node.width * 0.5;
+    node.nodeTop = node.y - node.height * 0.5;
+    node.nodeBottom = node.y + node.height * 0.5;
     nodeById[node.id] = node;
     node.targets = [];
     node.sources = [];

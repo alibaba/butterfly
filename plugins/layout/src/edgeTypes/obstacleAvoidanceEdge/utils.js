@@ -19,11 +19,13 @@ export const nodeBottom = (node) => node.y + node.height * 0.5;
 export const groupByRow = (nodes, rankdir) => {
   const rows = {};
 
-  for (const node of nodes) {
-    if(rankdir === "column") {
+  if(rankdir === "column") {
+    for (const node of nodes) {
       rows[node.y] = rows[node.y] || [];
       rows[node.y].push(node);
-    } else {
+    }
+  } else {
+    for (const node of nodes) {
       rows[node.x] = rows[node.x] || [];
       rows[node.x].push(node);
     }
@@ -33,18 +35,22 @@ export const groupByRow = (nodes, rankdir) => {
   rowNumbers.sort((a, b) => a - b);
 
   const sortedRows = rowNumbers.map((row) => rows[row]);
-  for (let i = 0; i < sortedRows.length; i += 1) {
-    if(rankdir === "column") {
+  if(rankdir === "column") {
+    for (let i = 0; i < sortedRows.length; i += 1) {
       sortedRows[i].sort((a, b) => compare(a.x, b.x, a.id, b.id));
-    } else {
-      sortedRows[i].sort((a, b) => compare(a.y, b.y, a.id, b.id));
+      for (const node of sortedRows[i]) {
+        node.row = i;
+      }
     }
-
-    for (const node of sortedRows[i]) {
-      node.row = i;
+  } else {
+    for (let i = 0; i < sortedRows.length; i += 1) {
+      sortedRows[i].sort((a, b) => compare(a.y, b.y, a.id, b.id));
+      for (const node of sortedRows[i]) {
+        node.row = i;
+      }
     }
   }
-  // console.log("sortedRows",sortedRows);
+
   return sortedRows;
 };
 
@@ -54,23 +60,6 @@ export const compare = (a, b, ...values) => {
 };
 
 export const nearestOnLine = (x, y, ax, ay, bx, by) => {
-  const dx = bx - ax;
-  const dy = by - ay;
-  const position = ((x - ax) * dx + (y - ay) * dy) / (dx * dx + dy * dy || 1);
-  // console.log("position------",position);
-  const positionClamped = clamp(position, 0, 1);
-
-  return {
-    x: ax + dx * positionClamped,
-    y: ay + dy * positionClamped,
-    ax,
-    ay,
-    bx,
-    by,
-  };
-};
-
-export const nearestOnLine1 = (x, y, ax, ay, bx, by) => {
   const dx = bx - ax;
   const dy = by - ay;
   const position = ((x - ax) * dx + (y - ay) * dy) / (dx * dx + dy * dy || 1);
