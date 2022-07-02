@@ -25,30 +25,50 @@ class CoordinateService {
     // 当前鼠标在容器内的坐标
     this._currentTerX = 0;
     this._currentTerY = 0;
+
+    this.virtualScroll = opts.virtualScroll;
+    // 虚拟滚动计算坐标
+    if (this.virtualScroll.enable) {
+      this.virtualScrollCoordinate = {
+        left: this._terminal2canvas('x', this.terOffsetX),
+        top: this._terminal2canvas('y', this.terOffsetY),
+        right: this._terminal2canvas('x', this.terOffsetX + this.terWidth),
+        bottom: this._terminal2canvas('y', this.terOffsetY + this.terHeight),
+      }
+    }
   }
 
   _changeCanvasInfo(data) {
+
+    let _isChangeTer = false;
     if (data.terOffsetX !== undefined) {
       this.terOffsetX = data.terOffsetX;
+      _isChangeTer = true;
     }
     if (data.terOffsetY !== undefined) {
       this.terOffsetY = data.terOffsetY;
+      _isChangeTer = true;
     }
     if (data.terWidth !== undefined) {
       this.terWidth = data.terWidth;
+      _isChangeTer = true;
     }
     if (data.terHeight !== undefined) {
       this.terHeight = data.terHeight;
+      _isChangeTer = true;
     }
     if (data.canOffsetX !== undefined) {
       this.canOffsetX = data.canOffsetX;
+      _isChangeTer = true;
     }
     if (data.canOffsetY !== undefined) {
       this.canOffsetY = data.canOffsetY;
+      _isChangeTer = true;
     }
     if (data.scale !== undefined) {
       this._lastScale = this.scale;
       this.scale = data.scale;
+      _isChangeTer = true;
     }
     if (data.canvas) {
       this.canvas = data.canvas;
@@ -118,6 +138,16 @@ class CoordinateService {
       this.canvas.move([_newLeft, _newTop]);
       this.originX = newOriginX;
       this.originY = newOriginY;
+      
+    }
+
+    if (_isChangeTer && this.virtualScroll.enable) {
+      this.virtualScrollCoordinate = {
+        left: this._terminal2canvas('x', this.terOffsetX - this.virtualScroll.paddingLeft),
+        top: this._terminal2canvas('y', this.terOffsetY - this.virtualScroll.paddingTop),
+        right: this._terminal2canvas('x', this.terOffsetX + this.terWidth + this.virtualScroll.paddingRight),
+        bottom: this._terminal2canvas('y', this.terOffsetY + this.terHeight + this.virtualScroll.paddingBottom),
+      }
     }
   }
   canvas2terminal(coordinates, options) {
@@ -181,6 +211,7 @@ class CoordinateService {
       }, 100);
     }
   }
+
 }
 
 export default CoordinateService;
