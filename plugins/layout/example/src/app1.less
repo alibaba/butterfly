@@ -1,0 +1,42 @@
+.App {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  .kedroviz {
+    width: 100%;
+    height: 100%;
+    .kedroviz-canvas {
+      width: 100%;
+      height: 100%;
+    }
+  
+    .kedroviz-base-node {
+      position: absolute;
+      border: 1px gray solid;
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .tmpText {
+      text-align: center;
+    }
+  
+    .label {
+      position: absolute;
+      font-size: 20px;
+      background: none;
+      border: none;
+      box-shadow: none;
+      line-height: 23px;
+    }
+    .label:hover {
+      background: none;
+      border: none;
+    }
+    .rotate-down {
+      transform: rotate(90deg);
+    }
+  }
+}

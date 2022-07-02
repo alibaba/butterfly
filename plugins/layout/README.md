@@ -9,6 +9,7 @@ npm install
 npm start
 ```
 ## 快速上手
+### graphviz layout
 ``` js
 import {graphvizLayout} from 'butterfly-plugins-layout';
 
@@ -41,6 +42,35 @@ graphvizLayout({
 import graphvizLayout, {GraphvizEdge} from 'butterfly-plugins-layout/graphvizLayout';
 ```
 
+### kedroviz layout
+``` js
+import {kedrovizLayout, KedrovizEdge, BaseLayers, obstacleAvoidancePoints} from 'butterfly-plugins-layout';
+
+// ···
+
+// 可以在画布初始化的时候传入layout参数作为布局方法
+let canvas = new Canvas({
+  // 如下属性
+  root: dom,               //canvas的根节点(必传)
+  layout: {
+    type: kedrovizLayout, 
+    options: {rankdir: 'TB', visible: true, Class: BaseLayers}
+  },                       //布局设置(选填)，可使用集成的，也可自定义布局
+  zoomable: true,          //可缩放(选填)
+  moveable: true,          //可平移(选填)
+  draggable: true,         //节点可拖动(选填)
+  linkable: true,          //节点可连接(选填)
+  disLinkable: true,       //节点可取消连接(选填)
+  avoidPoints: obstacleAvoidancePoints //避障贝塞尔曲线
+});
+
+this.canvas.draw({nodes, edges, layers}, () => {
+
+});
+// ···
+
+```
+
 ## 布局算法
 
 ### graphviz layout
@@ -64,3 +94,56 @@ import graphvizLayout, {GraphvizEdge} from 'butterfly-plugins-layout/graphvizLay
 ##### ranksep _`<Double>`_   (选填)
 
 &nbsp;&nbsp;节点布局不同等级之间的间隔；值类型 `double`，默认0.5，最小0.02
+
+### kedroviz layout
+&nbsp;&nbsp;&nbsp;&nbsp;Kedroviz layout适合节点分组的布局算法。其根据图数据中节点所属组（layer），自动计算节点的层级及位置。
+
+注：使用这个布局方法，Edge需要继承由kedrovizLayout导出的KedrovizEdge类。Layers需要继承由kedrovizLayout导出的BaseLayers类。
+
+#### 代码演示
+
+``` js
+this.canvas = new Canvas({
+  layout: {
+    type: kedrovizLayout,
+    options: {
+      rankdir: 'TB',
+      visible: true,
+      Class: BaseLayers
+    },
+  },
+  avoidPoints: obstacleAvoidancePoints
+});
+```
+
+#### API
+
+
+| 名称 | 类型 | 是否必须 | 默认值 | 可选值 | 说明  
+| :------ | :------ | :------ | :------ | :------ | :------
+| rankdir | String | false | TB| "TB/BT/LR/RL"  |布局的方向。T：top（上）；B：bottom（下）；L：left（左）；R：right（右）。
+| visible | Boolean | false | true | true / false | 节点是否显示分组
+| Class | Function | true |  | BaseLayers | 分组（layers）的类
+
+### 避障贝塞尔曲线
+&nbsp;&nbsp;&nbsp;&nbsp;避障贝塞尔曲线在节点连线时会自动避开中间节点。
+
+注：使用该曲线时，Edge需要继承KedrovizEdge类。需要在Canvas中传入avoidPoints参数
+
+#### 代码演示
+
+``` js
+
+import {KedrovizEdge, obstacleAvoidancePoints} from 'butterfly-plugins-layout';
+
+this.canvas = new Canvas({
+  avoidPoints: obstacleAvoidancePoints
+});
+
+```
+
+#### API
+
+| 名称 | 类型 | 是否必须 | 默认值 | 可选值 | 说明  
+| :------ | :------ | :------ | :------ | :------ | :------
+| avoidPoints | Function | 是 | | obstacleAvoidancePoints | 计算避障节点的方法

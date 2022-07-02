@@ -1,6 +1,6 @@
 {
   "name": "butterfly-plugins-layout",
-  "version": "0.0.6",
+  "version": "0.0.10",
   "description": "butterfly-plugins-layout,含有各种布局函数",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -20,7 +20,11 @@
   "dependencies": {
     "butterfly-dag": "^4.2.10",
     "jquery": "^3.5.1",
-    "d3-graphviz": "^2.6.1"
+    "classnames": "^2.3.1",
+    "d3-graphviz": "^2.6.1",
+    "d3-shape": "^2.1.0",
+    "kiwi.js": "^1.1.3",
+    "batching-toposort": "^1.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
@@ -29,6 +33,7 @@
     "@babel/preset-env": "^7.12.11",
     "@rollup/plugin-babel": "^5.2.2",
     "rollup": "^2.36.1",
-    "rollup-plugin-commonjs": "^10.1.0"
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-postcss": "^4.0.2"
   }
 }
