@@ -1,14 +1,15 @@
 import React, {Component} from 'react';
 import $ from 'jquery';
-import { Canvas, Node, Edge } from '../../../../index';
+import { Node } from '../../../../index';
+import KedrovizCanvas from '../../src/canvas/baseCanvas';
 import './app1.less';
 import '../../../../static/butterfly.css';
 const treeData = require('./mock_data1.json');
-import {kedrovizLayout, KedrovizEdge, BaseLayers, obstacleAvoidancePoints} from 'butterfly-plugins-layout';
+// import {kedrovizLayout, KedrovizEdge, BaseLayers, obstacleAvoidancePoints} from 'butterfly-plugins-layout';
 import 'butterfly-plugins-layout/dist/index.css';
-// import obstacleAvoidancePoints from '../../src/edgeTypes/kedrovizEdge/obstacleAvoidancePoints';
-// import {kedrovizLayout, BaseLayers} from '../../../../plugins/layout/src/kedroviz';
-// import KedrovizEdge from '../../src/edgeTypes/kedrovizEdge/KedrovizEdge';
+import obstacleAvoidancePoints from '../../src/edgeTypes/obstacleAvoidanceEdge/obstacleAvoidancePoints';
+import {kedrovizLayout, BaseLayers} from '../../../../plugins/layout/src/kedroviz';
+import KedrovizEdge from '../../src/edgeTypes/obstacleAvoidanceEdge/ObstacleAvoidanceEdge';
 
 class BaseNode extends Node {
   constructor(opts) {
@@ -32,10 +33,10 @@ class BaseNode extends Node {
 class Scene extends Component {
   componentDidMount() {
     let root = document.getElementById('dag-canvas');
-    this.canvas = new Canvas({
+    this.canvas = new KedrovizCanvas({
       root: root,
       disLinkable: false, // 可删除连线
-      layout: {type: kedrovizLayout, options: {rankdir: 'LR', visible: true, Class: BaseLayers}},
+      layout: {type: kedrovizLayout, options: {rankdir: 'TB', visible: true, Class: BaseLayers}},
       linkable: true,    // 可连线
       draggable: false,   // 可拖动
       zoomable: true,    // 可放大
@@ -52,7 +53,7 @@ class Scene extends Component {
       res.name = n.name;
       res.Class = BaseNode;
       res.layer = n.layer;
-      res.draggable = false;
+      res.draggable = true;
       res.width = n.width;
       res.height = n.height;
       // res.endpoints = [{
@@ -66,6 +67,7 @@ class Scene extends Component {
       // }];
       return res;
     });
+    // console.log(nodes.length);
     const edges = treeData.edges.map(e => {
       const res = {};
       // res.type = 'endpoint';
@@ -76,18 +78,17 @@ class Scene extends Component {
       res.target = e.target;
       // res.sourceNode = e.source;
       // res.targetNode = e.target;
+      // res.shapeType = "Custom";
       res.arrow = true;
       res.arrowPosition = 1;
       res.Class = KedrovizEdge;
       return res;
     });
+    // console.log(edges.length);
 
     this.canvas.draw({nodes, edges, layers: treeData.layers}, () => {
 
     });
-
-    // console.log("this.canvas",this.canvas,this.canvas.drawPath);
-    // this.canvas.drawPath(obstacleAvoidancePoints);
 
     this.canvas.on('events', (data) => {
     });

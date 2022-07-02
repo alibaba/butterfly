@@ -46,11 +46,6 @@ class BaseCanvas extends Canvas {
     this.draggable = options.draggable || false; // 可拖动
     this.linkable = options.linkable || false; // 可连线
     this.disLinkable = options.disLinkable || false; // 可拆线
-    const drawPath = _.get(options, 'drawPath');
-
-    if (drawPath && _.isFunction(drawPath)) {
-      this.drawPath = drawPath;
-    }
 
     this.theme = {
       group: {
@@ -249,21 +244,14 @@ class BaseCanvas extends Canvas {
     const groups = opts.groups || [];
     const nodes = opts.nodes || [];
     const edges = opts.edges || [];
-    const layers = opts.layers || [];
 
     // 自动布局需要重新review
     if (this.layout && !opts.isNotRelayout) {
       this._autoLayout({
         groups,
         nodes,
-        edges,
-        layers
+        edges
       });
-    }
-
-    // 计算避障点
-    if(this.drawPath) {
-      this.drawPath({nodes, edges, layout: this.layout});
     }
 
     let drawPromise = new Promise((resolve, reject) => {
@@ -290,17 +278,6 @@ class BaseCanvas extends Canvas {
       });
     });
 
-    if(layers.length !== 0) {
-      drawPromise.then((resolve) => {
-        return new Promise((resolve, reject) => {
-          setTimeout(() => {
-            // 生成edges
-            this.addLayers(layers, nodes, edges, this.layout);
-            resolve();
-          }, 20);
-        });
-      });
-    }
     
     drawPromise.then(() => {
       this.actionQueue = [];
@@ -3037,17 +3014,6 @@ class BaseCanvas extends Canvas {
     return index;
   }
 
-  //===============================
-  //[ layers渲染 ]
-  //=============================== 
-  addLayers(layers, nodes, edges, layout) {
-    const _layersFragment = document.createDocumentFragment();
-    const LayersClass = layout.options && layout.options.Class;
-    let _newLayers = new LayersClass({ nodes, edges, layers, layout });
-    _newLayers._init();
-    _layersFragment.appendChild(_newLayers.dom);
-    $(this.wrapper).append(_layersFragment);
-  }
 
 
   //===============================

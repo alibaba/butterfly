@@ -44,7 +44,7 @@ export const groupByRow = (nodes, rankdir) => {
       node.row = i;
     }
   }
-
+  // console.log("sortedRows",sortedRows);
   return sortedRows;
 };
 
@@ -54,6 +54,23 @@ export const compare = (a, b, ...values) => {
 };
 
 export const nearestOnLine = (x, y, ax, ay, bx, by) => {
+  const dx = bx - ax;
+  const dy = by - ay;
+  const position = ((x - ax) * dx + (y - ay) * dy) / (dx * dx + dy * dy || 1);
+  // console.log("position------",position);
+  const positionClamped = clamp(position, 0, 1);
+
+  return {
+    x: ax + dx * positionClamped,
+    y: ay + dy * positionClamped,
+    ax,
+    ay,
+    bx,
+    by,
+  };
+};
+
+export const nearestOnLine1 = (x, y, ax, ay, bx, by) => {
   const dx = bx - ax;
   const dy = by - ay;
   const position = ((x - ax) * dx + (y - ay) * dy) / (dx * dx + dy * dy || 1);
@@ -68,4 +85,3 @@ export const nearestOnLine = (x, y, ax, ay, bx, by) => {
     by,
   };
 };
-

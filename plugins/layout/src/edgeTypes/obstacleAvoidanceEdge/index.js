@@ -1,3 +1,3 @@
 import obstacleAvoidancePoints from './obstacleAvoidancePoints';
-import KedrovizEdge from './KedrovizEdge';
+import KedrovizEdge from './ObstacleAvoidanceEdge';
 export { obstacleAvoidancePoints, KedrovizEdge };

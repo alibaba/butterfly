@@ -2,9 +2,8 @@
 * Copyright 2020 QuantumBlack Visual Analytics Limited
 * SPDX-License-Identifier: Apache-2.0
 */
-import { offsetNode, offsetEdge } from './common';
+import { offsetNode } from './common';
 import { layout } from './layout';
-// import { routing } from './routing';
 import { bounds } from '../selectors/size'
 
 
@@ -15,8 +14,6 @@ export const graph = (nodes, edges, layers, rankdir, options) => {
   layout({ nodes, edges, layers, rankdir, ...options.layout });
   const size = bounds(nodes, options.layout.padding);
   nodes.forEach((node) => offsetNode(node, size.min));
-
-  // routing({ nodes, edges, layers, rankdir, ...options.routing });
 
   nodes.forEach((node) => node.x = node.x - (node.width * 0.5));
   nodes.forEach((node) => node.y = node.y - (node.height * 0.5));

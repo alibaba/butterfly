@@ -56,7 +56,7 @@ export const layout = ({
   for (let i = 0; i < iterations; i += 1) {
     solveLoose(crossingConstraints, 1, constants);
     solveLoose(parallelConstraints, 50, constants);
-  }
+  } 
 
   // 保持最小水平节点间距的约束
   const separationConstraints = createSeparationConstraints(rows, constants, rankdir);

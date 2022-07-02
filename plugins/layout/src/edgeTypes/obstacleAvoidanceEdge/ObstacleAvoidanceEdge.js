@@ -19,27 +19,6 @@ class KedrovizEdge extends Edge {
     .y((d) => d.y)
     .curve(curveBasis);
   }
-  draw(obj) {
-    let path = super.draw(obj);
-    if (this.options.color) {
-      $(path).addClass(this.options.color);
-    }
-    return path;
-  }
-  redraw(obj) {
-    let path = super.redraw(obj);
-    if (this.options.color) {
-      $(path).addClass(this.options.color);
-    }
-    return path;
-  }
-  drawArrow(isShow) {
-    let dom = super.drawArrow(isShow);
-    if (this.options.color) {
-      $(dom).addClass(this.options.color);
-    }
-    return dom;
-  }
   drawLabel(text) {
     let dom = null;
     if (text) {
@@ -54,6 +33,11 @@ class KedrovizEdge extends Edge {
   toSinglePoint(value) {return parseFloat(value).toFixed(1);}
   limitPrecision(path){ return path.replace(matchFloats, this.toSinglePoint)};
   calcPath(sourcePoint, targetPoint) {
+    // console.log("opts",this);
+    this.emit('custom',{
+      type: "edge:calcPath",
+      data: this
+    });
     return this.redrawPath(this.points);
   }
 }
