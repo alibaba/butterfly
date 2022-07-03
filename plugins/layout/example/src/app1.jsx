@@ -4,7 +4,7 @@ import { Node } from '../../../../index';
 import KedrovizCanvas from '../../src/canvas/baseCanvas';
 import './app1.less';
 import '../../../../static/butterfly.css';
-const treeData = require('./mock_data1.json');
+const treeData = require('./mock_data2.json');
 // import {kedrovizLayout, KedrovizEdge, BaseLayers, obstacleAvoidancePoints} from 'butterfly-plugins-layout';
 import 'butterfly-plugins-layout/dist/index.css';
 import obstacleAvoidancePoints from '../../src/edgeTypes/obstacleAvoidanceEdge/obstacleAvoidancePoints';
@@ -36,7 +36,7 @@ class Scene extends Component {
     this.canvas = new KedrovizCanvas({
       root: root,
       disLinkable: false, // 可删除连线
-      layout: {type: kedrovizLayout, options: {rankdir: 'TB', visible: true, Class: BaseLayers}},
+      layout: {type: kedrovizLayout, options: {rankdir: 'LR', visible: true, Class: BaseLayers}},
       linkable: true,    // 可连线
       draggable: false,   // 可拖动
       zoomable: true,    // 可放大
@@ -67,7 +67,6 @@ class Scene extends Component {
       // }];
       return res;
     });
-    // console.log(nodes.length);
     const edges = treeData.edges.map(e => {
       const res = {};
       // res.type = 'endpoint';
@@ -84,7 +83,6 @@ class Scene extends Component {
       res.Class = KedrovizEdge;
       return res;
     });
-    // console.log(edges.length);
 
     this.canvas.draw({nodes, edges, layers: treeData.layers}, () => {
 

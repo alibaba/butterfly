@@ -37,14 +37,14 @@ export const groupByRow = (nodes, rankdir) => {
   const sortedRows = rowNumbers.map((row) => rows[row]);
   if(rankdir === "column") {
     for (let i = 0; i < sortedRows.length; i += 1) {
-      sortedRows[i].sort((a, b) => compare(a.x, b.x, a.id, b.id));
+      sortedRows[i].sort((a, b) => a.x - b.x);
       for (const node of sortedRows[i]) {
         node.row = i;
       }
     }
   } else {
     for (let i = 0; i < sortedRows.length; i += 1) {
-      sortedRows[i].sort((a, b) => compare(a.y, b.y, a.id, b.id));
+      sortedRows[i].sort((a, b) => a.y - b.y);
       for (const node of sortedRows[i]) {
         node.row = i;
       }
@@ -54,10 +54,10 @@ export const groupByRow = (nodes, rankdir) => {
   return sortedRows;
 };
 
-export const compare = (a, b, ...values) => {
-  const delta = typeof a === "string" ? a.localeCompare(b) : a - b;
-  return delta !== 0 || values.length === 0 ? delta : compare(...values);
-};
+// export const compare = (a, b, ...values) => {
+//   const delta = typeof a === "string" ? a.localeCompare(b) : a - b;
+//   return delta !== 0 || values.length === 0 ? delta : compare(...values);
+// };
 
 export const nearestOnLine = (x, y, ax, ay, bx, by) => {
   const dx = bx - ax;

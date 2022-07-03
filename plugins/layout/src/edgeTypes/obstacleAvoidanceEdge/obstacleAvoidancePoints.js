@@ -7,8 +7,8 @@ import {
 } from './utils.js';
 
 const routing = ({
-  nodes,
-  edges,
+  _nodes: nodes,
+  _edges: edges,
   rankdir,
   spaceDirection,
   spaceReverseDirection,
@@ -50,6 +50,30 @@ const routing = ({
 
     const getOffsetReverseDirection = (i) => {
       const firstNode = rows[i][0];
+      let _rowExtended = [];
+      if(rankdir === 'column') {
+        _rowExtended.push({ nodeTop: firstNode.nodeTop, nodeLeft: Number.MIN_SAFE_INTEGER - firstNode.width * 0.5, nodeRight: Number.MIN_SAFE_INTEGER + firstNode.width * 0.5 });
+        for(let j=0; j<rows[i].length; j++) {
+          _rowExtended.push({
+            nodeLeft: rows[i][j].nodeLeft,
+            nodeRight: rows[i][j].nodeRight,
+            nodeTop: rows[i][j].nodeTop
+          });
+        }
+        _rowExtended.push({ nodeTop: firstNode.nodeTop, nodeLeft: Number.MAX_SAFE_INTEGER - firstNode.width * 0.5, nodeRight: Number.MAX_SAFE_INTEGER + firstNode.width * 0.5 });
+      } else {
+        _rowExtended.push({ nodeLeft: firstNode.nodeLeft, nodeTop: Number.MIN_SAFE_INTEGER - firstNode.height * 0.5, nodeBottom: Number.MIN_SAFE_INTEGER + firstNode.height * 0.5 });
+        for(let j=0; j<rows[i].length; j++) {
+          _rowExtended.push({
+            nodeLeft: rows[i][j].nodeLeft,
+            nodeBottom: rows[i][j].nodeBottom,
+            nodeTop: rows[i][j].nodeTop
+          });
+        }
+        _rowExtended.push({ nodeLeft: firstNode.nodeLeft, nodeTop: Number.MAX_SAFE_INTEGER - firstNode.height * 0.5, nodeBottom: Number.MAX_SAFE_INTEGER + firstNode.height * 0.5 });
+      }
+      
+
       if(rankdir === 'column' && (distance1d(target.y, firstNode.y) <= Math.max(firstNode.height, target.height) || distance1d(source.y, firstNode.y) <= Math.max(firstNode.height, source.height))) {
         return 0;
       }
@@ -60,19 +84,9 @@ const routing = ({
       let nearestPoint = rankdir === 'column' ? { x: firstNode.nodeLeft - spaceDirection, y: firstNode.y } : { x: firstNode.x , y: firstNode.nodeTop - spaceDirection};
       let nearestDistance = Infinity;
 
-      const rowExtended = rankdir === 'column' ? [
-        { ...firstNode, x: Number.MIN_SAFE_INTEGER, nodeLeft: Number.MIN_SAFE_INTEGER - firstNode.width * 0.5, nodeRight: Number.MIN_SAFE_INTEGER + firstNode.width * 0.5 },
-        ...rows[i],
-        { ...firstNode, x: Number.MAX_SAFE_INTEGER, nodeLeft: Number.MAX_SAFE_INTEGER - firstNode.width * 0.5, nodeRight: Number.MAX_SAFE_INTEGER + firstNode.width * 0.5 },
-      ] : [
-        { ...firstNode, y: Number.MIN_SAFE_INTEGER, nodeTop: Number.MIN_SAFE_INTEGER - firstNode.height * 0.5, nodeBottom: Number.MIN_SAFE_INTEGER + firstNode.height * 0.5 },
-        ...rows[i],
-        { ...firstNode, y: Number.MAX_SAFE_INTEGER, nodeTop: Number.MAX_SAFE_INTEGER - firstNode.height * 0.5, nodeBottom: Number.MAX_SAFE_INTEGER + firstNode.height * 0.5 },
-      ];
-
-      for (let i = 0; i < rowExtended.length - 1; i += 1) {
-        const node = rowExtended[i];
-        const nextNode = rowExtended[i + 1];
+      for (let i = 0; i < _rowExtended.length - 1; i += 1) {
+        const node = _rowExtended[i];
+        const nextNode = _rowExtended[i + 1];
         const nodeGap = rankdir === 'column' ? nextNode.nodeLeft - node.nodeRight : nextNode.nodeTop - node.nodeBottom;
 
         if (nodeGap < minPassageGap) {
@@ -301,20 +315,51 @@ const addEdgeLinks = (nodes, edges) => {
   const nodeById = {};
 
   for (const node of nodes) {
-    node.width = node.options.width;
-    node.x = node.left + (node.width * 0.5);
-    node.height = node.options.height;
-    node.y = node.top + (node.height * 0.5);
-    node.nodeLeft = node.x - node.width * 0.5;
-    node.nodeRight = node.x + node.width * 0.5;
-    node.nodeTop = node.y - node.height * 0.5;
-    node.nodeBottom = node.y + node.height * 0.5;
     nodeById[node.id] = node;
     node.targets = [];
     node.sources = [];
   }
 
   for (const edge of edges) {
+    edge.sourceNodeObj = nodeById[edge.sourceNode];
+    edge.targetNodeObj = nodeById[edge.targetNode];
+    edge.sourceNodeObj.targets.push(edge);
+    edge.targetNodeObj.sources.push(edge);
+  }
+};
+
+
+const obstacleAvoidancePoints = (opts) => {
+  let {nodes = [], edges = [], layout = {}} = opts;
+  let rankdir = layout.options && layout.options.rankdir || 'TB';
+  let _rankdir = rankdir === 'TB' || rankdir === 'BT' ? 'column' : 'row';
+  const defaultOptions = {
+    spaceDirection: 26,
+    spaceReverseDirection: 30,
+    minPassageGap: 40,
+    stemUnit: 8,
+    stemMinSource: 5,
+    stemMinTarget: 5,
+    stemMax: 20,
+    stemSpaceSource: 5,
+    stemSpaceTarget: 10
+  };
+  let _nodes = nodes.map(node => {
+    let x = node.left + (node.options.width * 0.5);
+    let y = node.top + (node.options.height * 0.5);
+    return {
+      id: node.id,
+      width: node.options.width,
+      x: x,
+      height: node.options.height,
+      y: y,
+      nodeLeft: x - node.options.width * 0.5,
+      nodeRight: x + node.options.width * 0.5,
+      nodeTop: y - node.options.height * 0.5,
+      nodeBottom: y + node.options.height * 0.5
+    }
+  });
+  let _edges = edges.map(edge => {
     let sourceNode;
     let targetNode;
     if(edge.sourceNode) {
@@ -335,31 +380,16 @@ const addEdgeLinks = (nodes, edges) => {
     } else {
       targetNode = edge.target;
     }
-    edge.sourceNodeObj = nodeById[sourceNode];
-    edge.targetNodeObj = nodeById[targetNode];
-    edge.sourceNodeObj.targets.push(edge);
-    edge.targetNodeObj.sources.push(edge);
-  }
-};
-
-
-const obstacleAvoidancePoints = (opts) => {
-  let {nodes = [], edges = [], layout = {}} = opts;
-  let rankdir = layout.options && layout.options.rankdir || 'TB';
-  let _rankdir = rankdir === 'TB' || rankdir === 'BT' ? 'column' : 'row';
-  const defaultOptions = {
-    spaceDirection: 26,
-    spaceReverseDirection: 30,
-    minPassageGap: 40,
-    stemUnit: 8,
-    stemMinSource: 5,
-    stemMinTarget: 5,
-    stemMax: 20,
-    stemSpaceSource: 6,
-    stemSpaceTarget: 10
-  };
-  addEdgeLinks(nodes, edges);
-  routing({nodes, edges, rankdir: _rankdir, ...defaultOptions});
+    return {
+      sourceNode,
+      targetNode,
+    }
+  })
+  addEdgeLinks(_nodes, _edges);
+  routing({_nodes, _edges, rankdir: _rankdir, ...defaultOptions});
+  edges.forEach((item, index) => {
+    item.points = _edges[index].points;
+  });
 }
 
 export default obstacleAvoidancePoints;
