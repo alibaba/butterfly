@@ -18,7 +18,7 @@
   "author": "sdjalft",
   "license": "MIT",
   "dependencies": {
-    "butterfly-dag": "^4.2.10",
+    "butterfly-dag": "^4.3.6",
     "jquery": "^3.5.1",
     "classnames": "^2.3.1",
     "d3-graphviz": "^2.6.1",
