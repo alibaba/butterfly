@@ -1,9 +1,10 @@
 'use strict';
 
-import BaseCanvas from '../../../../src/canvas/baseCanvas';
+// import BaseCanvas from '../../../../src/canvas/baseCanvas';
+import {Canvas} from 'butterfly-dag';
 import $ from 'jquery';
 
-class KedrovizCanvas extends BaseCanvas {
+class KedrovizCanvas extends Canvas {
   constructor(opts) {
     super(opts);
     const drawPath = _.get(opts, 'drawPath');

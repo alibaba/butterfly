@@ -1,6 +1,7 @@
 /*
 * Copyright 2020 QuantumBlack Visual Analytics Limited
 * SPDX-License-Identifier: Apache-2.0
+* Modifications Copyright 2022 butterfly-dag
 */
 import {
   rowConstraint,
