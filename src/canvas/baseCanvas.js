@@ -34,8 +34,8 @@ class BaseCanvas extends Canvas {
     this.layout = options.layout; // layout部分也需要重新review
     this.layoutOptions = options.layoutOptions;
     if (_.isObject(this.layout) && !_.isFunction(this.layout)) {
-      this.layout = this.layout.type;
       this.layoutOptions = this.layout.options || this.layoutOptions;
+      this.layout = this.layout.type;
     }
     this.layout = {
       type: this.layout,
@@ -118,8 +118,8 @@ class BaseCanvas extends Canvas {
 
     // 框选模式，需要重新考虑(默认单选)
     this.isSelectMode = false;
-    this.selecContents = [];
-    this.selecMode = 'include';
+    this.selectContents = [];
+    this.selectMode = 'include';
     this.selectItem = {
       nodes: [],
       edges: [],
@@ -282,6 +282,7 @@ class BaseCanvas extends Canvas {
         }, 20);
       });
     });
+
     
     drawPromise.then(() => {
       this.actionQueue = [];
@@ -361,6 +362,7 @@ class BaseCanvas extends Canvas {
     //   this.groups[index].moveTo(item.left, iten.top);
     // });
   }
+
   _genSvgWrapper() {
     function _detectMob() {
       const toMatch = [
@@ -2761,6 +2763,7 @@ class BaseCanvas extends Canvas {
           labelUpdateInterval: link.labelUpdateInterval === undefined ? _.get(this, 'theme.edge.labelUpdateInterval') : link.labelUpdateInterval,
           isExpandWidth: this.theme.edge.isExpandWidth,
           defaultAnimate: this.theme.edge.defaultAnimate,
+          options: link,
           _global: this.global,
           _sourceType,
           _targetType,
@@ -3045,6 +3048,7 @@ class BaseCanvas extends Canvas {
   }
 
 
+
   //===============================
   //[ 布局配置 ]
   //===============================
@@ -3098,7 +3102,8 @@ class BaseCanvas extends Canvas {
               edges: data.edges.map(item => ({
                 source: item.type === 'endpoint' ? item.sourceNode : item.source,
                 target: item.type === 'endpoint' ? item.targetNode : item.target
-              }))
+              })),
+              layers: data.layers,
             }
           });
         }
@@ -3721,12 +3726,12 @@ class BaseCanvas extends Canvas {
   //===============================
   //[ 框选处理 ]
   //===============================
-  setSelectMode(flat = true, contents = ['node'], selecMode = 'include') {
+  setSelectMode(flat = true, contents = ['node'], selectMode = 'include') {
     if (flat) {
       this.isSelectMode = true;
       this._rmSystemUnion();
-      this.selecContents = contents;
-      this.selecMode = selecMode;
+      this.selectContents = contents;
+      this.selectMode = selectMode;
       this.canvasWrapper.active();
       this._remarkMove = this.moveable;
       this._remarkZoom = this.zoomable;
@@ -3846,19 +3851,19 @@ class BaseCanvas extends Canvas {
     const endX = this._coordinateService._terminal2canvas('x', range[2]);
     const endY = this._coordinateService._terminal2canvas('y', range[3]);
 
-    const includeNode = _.includes(this.selecContents, 'node');
-    const includeEdge = _.includes(this.selecContents, 'edge');
-    const includeEndpoint = _.includes(this.selecContents, 'endpoint');
+    const includeNode = _.includes(this.selectContents, 'node');
+    const includeEdge = _.includes(this.selectContents, 'edge');
+    const includeEndpoint = _.includes(this.selectContents, 'endpoint');
 
     let _isSelected = (option) => {
       let _itemLeft = option.left;
       let _itemRight = option.right;
       let _itemTop = option.top;
       let _itemBottom = option.bottom;
-      if (this.selecMode === 'include' || (this.selecMode === 'senior' && toDirection === 'right')) {
+      if (this.selectMode === 'include' || (this.selectMode === 'senior' && toDirection === 'right')) {
         return startX < _itemLeft && endX > _itemRight && startY < _itemTop && endY > _itemBottom;
       }
-      if (this.selecMode === 'touch' || (this.selecMode === 'senior' && toDirection === 'left')) {
+      if (this.selectMode === 'touch' || (this.selectMode === 'senior' && toDirection === 'left')) {
         let result = true;
         if (endX < _itemLeft) {
           result = false;

@@ -1,5 +1,6 @@
 {
-	"nodes": [{
+	"nodes": [
+    {
 		"id": "187bf4c7-10ee-4a60-9501-e1acb39eda8a",
 		"name": "table_14",
 		"index": 14
@@ -88,7 +89,8 @@
 		"name": "table_12",
 		"index": 12
 	}],
-	"edges": [{
+	"edges": [
+    {
 		"id": "6687aab8-4263-4f5e-b410-661907435c5b",
 		"source": "70d33391-dbe0-4e83-8832-4084cb1ea01e",
 		"target": "6c2f8b8a-aa10-4e7d-96f9-d408852810fd"

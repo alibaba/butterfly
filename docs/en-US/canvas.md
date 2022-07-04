@@ -742,7 +742,7 @@ canvas2terminal = (coordinates) => {}
 * `{inside}` - Nodes inside the canvas area
 * `{outside}` - Nodes outside the canvas area
 
-### canvas.setSelectMode (boolean, contents , selecMode)
+### canvas.setSelectMode (boolean, contents , selectMode)
 
 *descripition*: set select mode: Note that select mode and normal drag canvas mode are mutually exclusive and cannot be set at the same time
 
@@ -750,10 +750,10 @@ canvas2terminal = (coordinates) => {}
 
 * `{true|false} boolean`  - enable multiple select
 * `{array} contents` - accept select contents(node/endpoint/edge, default `node`)
-* `{string} selecMode` - accept selec mode(include|touch|senior),default 'include',include:You can select only if the element all included; touch: You can select only if you touch the element; senior: needs to include all from left to right,select only touch from right to left)
+* `{string} selectMode` - accept selec mode(include|touch|senior),default 'include',include:You can select only if the element all included; touch: You can select only if you touch the element; senior: needs to include all from left to right,select only touch from right to left)
 
 ```js
-setSelectMode = (boolean, contents , selecMode) => {}
+setSelectMode = (boolean, contents , selectMode) => {}
 ```
 
 ### canvas.getUnion (name)
