@@ -33,7 +33,6 @@ class KedrovizEdge extends Edge {
   toSinglePoint(value) {return parseFloat(value).toFixed(1);}
   limitPrecision(path){ return path.replace(matchFloats, this.toSinglePoint)};
   calcPath(sourcePoint, targetPoint) {
-    // console.log("opts",this);
     this.emit('custom',{
       type: "edge:calcPath",
       data: this

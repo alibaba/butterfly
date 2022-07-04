@@ -1,4 +1,7 @@
-
+/*
+* Copyright 2020 QuantumBlack Visual Analytics Limited
+* SPDX-License-Identifier: Apache-2.0
+*/
 export const clamp = (value, min, max) =>
   value < min ? min : value > max ? max : value;
 
@@ -7,14 +10,6 @@ export const snap = (value, unit) => Math.round(value / unit) * unit;
 export const distance1d = (a, b) => Math.abs(a - b);
 
 export const angle = (a, b) => Math.atan2(a.y - b.y, a.x - b.x);
-
-export const nodeLeft = (node) => node.x - node.width * 0.5;
-
-export const nodeRight = (node) => node.x + node.width * 0.5;
-
-export const nodeTop = (node) => node.y - node.height * 0.5;
-
-export const nodeBottom = (node) => node.y + node.height * 0.5;
 
 export const groupByRow = (nodes, rankdir) => {
   const rows = {};

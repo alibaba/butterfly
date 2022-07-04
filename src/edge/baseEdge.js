@@ -170,11 +170,6 @@ class BaseEdge extends Edge {
       path = DrawUtil.drawSecondBezier(sourcePoint, targetPoint, this.shapeType);
     } else if(this.shapeType === 'BrokenLine'){
       path = DrawUtil.drawBrokenLine(sourcePoint, targetPoint);
-    } else if(this.shapeType === 'Custom') {
-      console.log("this.options----->",this.options);
-      this.emit('custom.edge.calcPath', {
-        data: this.options
-      })
     }
     this._path = path;
     return path;

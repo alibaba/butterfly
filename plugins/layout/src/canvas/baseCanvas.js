@@ -1,6 +1,5 @@
 'use strict';
 
-// import {Edge} from 'butterfly-dag';
 import BaseCanvas from '../../../../src/canvas/baseCanvas';
 import $ from 'jquery';
 
@@ -33,10 +32,6 @@ class KedrovizCanvas extends BaseCanvas {
       });
     }
 
-    // 计算避障点
-    // if(this.drawPath) {
-    //   this.drawPath({nodes, edges, layout: this.layout});
-    // }
 
     let drawPromise = new Promise((resolve, reject) => {
       setTimeout(() => {

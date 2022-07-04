@@ -1,3 +1,7 @@
+/*
+* Copyright 2020 QuantumBlack Visual Analytics Limited
+* SPDX-License-Identifier: Apache-2.0
+*/
 'use strict';
 import {
   distance1d,
