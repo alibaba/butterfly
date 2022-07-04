@@ -23,7 +23,8 @@ import GuidelineService from '../utils/guidelineService';
 import Minimap from '../utils/minimap';
 // 线段动画
 import LinkAnimateUtil from '../utils/link/link_animate';
-
+// 虚拟滚动辅助方法
+import virtualScrollUtil from '../utils/virtualScroll';
 
 import './baseCanvas.less';
 
@@ -46,6 +47,19 @@ class BaseCanvas extends Canvas {
     this.draggable = options.draggable || false; // 可拖动
     this.linkable = options.linkable || false; // 可连线
     this.disLinkable = options.disLinkable || false; // 可拆线
+
+    this.virtualScroll = {
+      enable: _.get(options, 'virtualScroll.enable', false),
+      paddingLeft: _.get(options, 'virtualScroll.paddingLeft', 20),
+      paddingRight: _.get(options, 'virtualScroll.paddingRight', 20),
+      paddingTop: _.get(options, 'virtualScroll.paddingTop', 20),
+      paddingBottom: _.get(options, 'virtualScroll.paddingBottom', 20)
+    };
+    this.virtualHideItem = {
+      nodes: [],
+      groups: [],
+      edges: []
+    };  
 
     this.theme = {
       group: {
@@ -199,8 +213,19 @@ class BaseCanvas extends Canvas {
       terHeight: $(this.root).height(),
       canOffsetX: this._moveData[0],
       canOffsetY: this._moveData[1],
-      scale: this._zoomData
+      scale: this._zoomData,
+      virtualScroll: this.virtualScroll
     });
+
+    // 虚拟滚动
+    this._virtualScrollUtil = virtualScrollUtil;
+    if (this.virtualScroll.enable) {
+      this._virtualScrollUtil.init({
+        info: this.virtualScroll,
+        canvas: this,
+        coordinate: this._coordinateService
+      });
+    }
 
     this._addEventListener();
 
@@ -240,6 +265,9 @@ class BaseCanvas extends Canvas {
     // redraw的promise
     this._redrawPromises = [];
     this._isRedraw = false;
+
+    // 判断浏览器是否高于chrome 64
+    this._isHightVerChrome = true;
   }
 
   //===============================
@@ -261,15 +289,28 @@ class BaseCanvas extends Canvas {
 
     let drawPromise = new Promise((resolve, reject) => {
       setTimeout(() => {
+
+        // chrome版本太低，没有触发ResizeObserver的回调，所以draw之前需要更新下坐标
+        if (!this._isHightVerChrome || !window.ResizeObserver || !this.theme.autoResizeRootSize) {
+          this._rootWidth = $(this.root).width();
+          this._rootHeight = $(this.root).height();
+          this._coordinateService._changeCanvasInfo({
+            terOffsetX: $(this.root).offset().left,
+            terOffsetY: $(this.root).offset().top,
+            terWidth: this._rootWidth,
+            terHeight: this._rootHeight
+          });
+        }
+        
         // 生成groups
-        this.addGroups(groups);
+        this.addGroups(groups, false, true);
         resolve();
       });
     }).then(() => {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           // 生成nodes
-          this.addNodes(nodes);
+          this.addNodes(nodes, false, true);
           resolve();
         }, 10);
       });
@@ -284,6 +325,9 @@ class BaseCanvas extends Canvas {
     });
     
     drawPromise.then(() => {
+      if (this.virtualScroll.enable) {
+        this._virtualScrollUtil.redraw(true);
+      }
       this.actionQueue = [];
       this.actionQueueIndex = -1;
       callback && callback({
@@ -464,10 +508,11 @@ class BaseCanvas extends Canvas {
       var raw = window.navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
       return raw ? parseInt(raw[2], 10) : false;
     };
-    let _isHightVerChrome = _isChrome && _getChromeVersion() >= 64;
+
+    this._isHightVerChrome = _isChrome && _getChromeVersion() >= 64;
 
     // todo：chrome64版本ResizeObserver对象不存在，但官方文档说64支持，所以加强判断下
-    if (_isHightVerChrome && window.ResizeObserver && this.theme.autoResizeRootSize) {
+    if (this._isHightVerChrome && window.ResizeObserver && this.theme.autoResizeRootSize) {
       // 监听某个dom的resize事件
       const _resizeObserver = new ResizeObserver(entries => {
         this._rootWidth = $(this.root).width();
@@ -475,11 +520,14 @@ class BaseCanvas extends Canvas {
         this._coordinateService._changeCanvasInfo({
           terOffsetX: $(this.root).offset().left,
           terOffsetY: $(this.root).offset().top,
-          terWidth: $(this.root).width(),
-          terHeight: $(this.root).height()
+          terWidth: this._rootWidth,
+          terHeight: this._rootHeight
         });
         this.canvasWrapper.resize({root: this.root});
         this.setGridMode(true, undefined , true);
+        if (this.virtualScroll.enable) {
+          this._virtualScrollUtil.redraw();
+        }
       });
       _resizeObserver.observe(this.root);
     } else {
@@ -490,11 +538,14 @@ class BaseCanvas extends Canvas {
         this._coordinateService._changeCanvasInfo({
           terOffsetX: $(this.root).offset().left,
           terOffsetY: $(this.root).offset().top,
-          terWidth: $(this.root).width(),
-          terHeight: $(this.root).height()
+          terWidth: this._rootWidth,
+          terHeight: this._rootHeight
         });
         this.canvasWrapper.resize({root: this.root});
         this.setGridMode(true, undefined, true);
+        if (this.virtualScroll.enable) {
+          this._virtualScrollUtil.redraw();
+        }
       })
     }
 
@@ -1654,7 +1705,7 @@ class BaseCanvas extends Canvas {
     }
     return result;
   }
-  addNodes(nodes, isNotEventEmit) {
+  addNodes(nodes, isNotEventEmit, isNotRedrawByVirtuvalScroll) {
     const _canvasFragment = document.createDocumentFragment();
     const container = $(this.wrapper);
     const result = nodes.filter((node) => {
@@ -1698,6 +1749,12 @@ class BaseCanvas extends Canvas {
 
       // 一定要比group的addNode执行的之前，不然会重复把node加到this.nodes里面
       this.nodes.push(_nodeObj);
+
+      // 虚拟滚动开启
+      if (this.virtualScroll.enable) {
+        _nodeObj.virtualHidden = true;
+        $(_nodeObj.dom).css('visibility', 'hidden');
+      }
 
       // 假如节点存在group，即放进对应的节点组里
       const existGroup = _nodeObj.group ? this.getGroup(_nodeObj.group) : null;
@@ -1746,6 +1803,11 @@ class BaseCanvas extends Canvas {
         nodes: result
       });
     }
+
+    if (this.virtualScroll.enable && !isNotRedrawByVirtuvalScroll) {
+      this._virtualScrollUtil.redraw();
+    }
+
     return result;
   }
   addNode(node, isNotEventEmit) {
@@ -2082,6 +2144,12 @@ class BaseCanvas extends Canvas {
 
     _groupObj._init();
 
+    // 虚拟滚动开启
+    if (this.virtualScroll.enable) {
+      _groupObj.virtualHidden = true;
+      $(_groupObj.dom).css('visibility', 'hidden');
+    }
+
     // group嵌套
     if (_groupObj.group) {
       let praentGroup = this.getGroup(_groupObj.group);
@@ -2260,7 +2328,7 @@ class BaseCanvas extends Canvas {
 
     return _groupObj;
   }
-  addGroups(datas) {
+  addGroups(datas, isNotEventEmit, isNotRedrawByVirtuvalScroll) {
     // group排序，有可能会有group依赖渲染的问题
     let _sortGroup = (groups) => {
       let tmpObj = {};
@@ -2285,7 +2353,13 @@ class BaseCanvas extends Canvas {
 
     let result = _sortGroup(datas);
 
-    return result.map(item => this.addGroup(item)).filter(item => item);
+    result = result.map(item => this.addGroup(item)).filter(item => item);
+
+    if (this.virtualScroll.enable && !isNotRedrawByVirtuvalScroll) {
+      this._virtualScrollUtil.redraw();
+    }
+
+    return result;
   }
   removeGroup(data, isNotEventEmit) {
     let groupId = undefined;
@@ -2790,10 +2864,6 @@ class BaseCanvas extends Canvas {
       }
     }).filter(item => item);
 
-    $(this.svg).append(_edgeFragment);
-
-    $(this.wrapper).append(_labelFragment);
-
     result.forEach((link) => {
       let _soucePoint = {};
       let _targetPoint = {};
@@ -2830,6 +2900,17 @@ class BaseCanvas extends Canvas {
       }
       link.redraw(_soucePoint, _targetPoint);
     });
+
+    // 虚拟滚动开启
+    if (this.virtualScroll.enable) {
+      this._virtualScrollUtil.addEdges(result, {
+        edgeFragment: _edgeFragment,
+        labelFragment: _labelFragment
+      });
+    }
+
+    $(this.svg).append(_edgeFragment);
+    $(this.wrapper).append(_labelFragment);
 
     if (!isNotEventEmit) {
       this.pushActionQueue({

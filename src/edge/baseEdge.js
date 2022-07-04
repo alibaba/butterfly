@@ -106,6 +106,25 @@ class BaseEdge extends Edge {
       this.addAnimate();
     }
   }
+  // 计算线段斜率公式
+  _calcK() {
+    let source = this._sourcePoint.pos;
+    let target = this._targetPoint.pos;
+    
+    let k = (target[1] - source[1]) / (target[0] - source[0]);
+    let a = 0;
+
+    if (target[0] === source[0]) {
+      a = target[0];
+    } else {
+      a = source[1] - k * source[0];
+    }
+
+    return {
+      k,
+      a
+    }
+  }
   _calcPath(sourcePoint, targetPoint) {
     const _getNodePos = (node, attr) => {
       let result = 0;
