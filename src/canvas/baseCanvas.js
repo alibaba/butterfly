@@ -118,8 +118,8 @@ class BaseCanvas extends Canvas {
 
     // 框选模式，需要重新考虑(默认单选)
     this.isSelectMode = false;
-    this.selecContents = [];
-    this.selecMode = 'include';
+    this.selectContents = [];
+    this.selectMode = 'include';
     this.selectItem = {
       nodes: [],
       edges: [],
@@ -214,6 +214,7 @@ class BaseCanvas extends Canvas {
     };
 
     this._NodeClass = Node;
+    this._GroupClass = Group;
 
     // undo & redo队列
     this.actionQueue = [];
@@ -1579,6 +1580,7 @@ class BaseCanvas extends Canvas {
       });
 
       _clearDraging();
+
     };
 
     const mouseLeaveEvent = (event) => {
@@ -2013,7 +2015,7 @@ class BaseCanvas extends Canvas {
   }
   addGroup(group, unionItems, options, isNotEventEmit) {
     const container = $(this.wrapper);
-    const GroupClass = group.Class || Group;
+    const GroupClass = group.Class || this._GroupClass;
     let _addUnionItem = [];
     // unionItems元素的坐标都是绝对坐标，不需要进行计算
     let _isAbsolutePos = _.get(options, 'posType') === 'absolute';
@@ -3693,12 +3695,12 @@ class BaseCanvas extends Canvas {
   //===============================
   //[ 框选处理 ]
   //===============================
-  setSelectMode(flat = true, contents = ['node'], selecMode = 'include') {
+  setSelectMode(flat = true, contents = ['node'], selectMode = 'include') {
     if (flat) {
       this.isSelectMode = true;
       this._rmSystemUnion();
-      this.selecContents = contents;
-      this.selecMode = selecMode;
+      this.selectContents = contents;
+      this.selectMode = selectMode;
       this.canvasWrapper.active();
       this._remarkMove = this.moveable;
       this._remarkZoom = this.zoomable;
@@ -3818,19 +3820,19 @@ class BaseCanvas extends Canvas {
     const endX = this._coordinateService._terminal2canvas('x', range[2]);
     const endY = this._coordinateService._terminal2canvas('y', range[3]);
 
-    const includeNode = _.includes(this.selecContents, 'node');
-    const includeEdge = _.includes(this.selecContents, 'edge');
-    const includeEndpoint = _.includes(this.selecContents, 'endpoint');
+    const includeNode = _.includes(this.selectContents, 'node');
+    const includeEdge = _.includes(this.selectContents, 'edge');
+    const includeEndpoint = _.includes(this.selectContents, 'endpoint');
 
     let _isSelected = (option) => {
       let _itemLeft = option.left;
       let _itemRight = option.right;
       let _itemTop = option.top;
       let _itemBottom = option.bottom;
-      if (this.selecMode === 'include' || (this.selecMode === 'senior' && toDirection === 'right')) {
+      if (this.selectMode === 'include' || (this.selectMode === 'senior' && toDirection === 'right')) {
         return startX < _itemLeft && endX > _itemRight && startY < _itemTop && endY > _itemBottom;
       }
-      if (this.selecMode === 'touch' || (this.selecMode === 'senior' && toDirection === 'left')) {
+      if (this.selectMode === 'touch' || (this.selectMode === 'senior' && toDirection === 'left')) {
         let result = true;
         if (endX < _itemLeft) {
           result = false;
@@ -4476,6 +4478,7 @@ class BaseCanvas extends Canvas {
   pushActionQueue(option) {
 
     let step = option;
+
     //移动节点需要合并堆栈
     if (option.type === 'system:moveNodes' || option.type === 'system:moveGroups') {
 
@@ -4535,10 +4538,12 @@ class BaseCanvas extends Canvas {
       this.actionQueue.splice(this.actionQueueIndex - 1, 1);
       this.actionQueueIndex--;
     }
+    
   }
   popActionQueue() {
     if (this.actionQueue.length > 0) {
       let action = this.actionQueue.pop();
+      this.actionQueueIndex--;
       return action;
     } else {
       console.warn('操作队列已为空，请确认');
