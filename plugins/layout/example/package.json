@@ -10,7 +10,7 @@
     "react": "~16.12.0",
     "react-dom": "~16.12.0",
     "jquery": "^3.4.1",
-    "butterfly-plugins-layout": "^0.0.3"
+    "butterfly-plugins-layout": "^0.0.10"
   },
   "devDependencies": {
     "@babel/core": "^7.8.7",

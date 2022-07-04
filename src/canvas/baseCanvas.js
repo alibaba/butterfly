@@ -34,8 +34,8 @@ class BaseCanvas extends Canvas {
     this.layout = options.layout; // layout部分也需要重新review
     this.layoutOptions = options.layoutOptions;
     if (_.isObject(this.layout) && !_.isFunction(this.layout)) {
-      this.layout = this.layout.type;
       this.layoutOptions = this.layout.options || this.layoutOptions;
+      this.layout = this.layout.type;
     }
     this.layout = {
       type: this.layout,
@@ -278,6 +278,7 @@ class BaseCanvas extends Canvas {
         }, 20);
       });
     });
+
     
     drawPromise.then(() => {
       this.actionQueue = [];
@@ -330,6 +331,7 @@ class BaseCanvas extends Canvas {
     //   this.groups[index].moveTo(item.left, iten.top);
     // });
   }
+
   _genSvgWrapper() {
     function _detectMob() {
       const toMatch = [
@@ -2730,6 +2732,7 @@ class BaseCanvas extends Canvas {
           labelUpdateInterval: link.labelUpdateInterval === undefined ? _.get(this, 'theme.edge.labelUpdateInterval') : link.labelUpdateInterval,
           isExpandWidth: this.theme.edge.isExpandWidth,
           defaultAnimate: this.theme.edge.defaultAnimate,
+          options: link,
           _global: this.global,
           _sourceType,
           _targetType,
@@ -3014,6 +3017,7 @@ class BaseCanvas extends Canvas {
   }
 
 
+
   //===============================
   //[ 布局配置 ]
   //===============================
@@ -3067,7 +3071,8 @@ class BaseCanvas extends Canvas {
               edges: data.edges.map(item => ({
                 source: item.type === 'endpoint' ? item.sourceNode : item.source,
                 target: item.type === 'endpoint' ? item.targetNode : item.target
-              }))
+              })),
+              layers: data.layers,
             }
           });
         }

@@ -3,6 +3,7 @@ import path from 'path';
 
 import { babel } from '@rollup/plugin-babel';
 import commonjs from 'rollup-plugin-commonjs';
+import postcss from 'rollup-plugin-postcss';
 
 import pkg from './package.json';
 
@@ -25,6 +26,18 @@ const plugins = [
       ]
     }
   ),
+  postcss({
+    extract: true,
+    modules: false,
+    use: [
+      [
+        'less',
+        {
+          javascriptEnabled: true,
+        }
+      ]
+    ]
+  }),
 ];
 
 const main = {
@@ -62,4 +75,16 @@ const graphvizLayout = {
   plugins: plugins
 };
 
-export default [main, graphvizLayout];
+const kedroLayout = {
+  input: './src/kedroviz/index.js',
+  output: [
+    {
+      file: 'kedrovizLayout.js',
+      format: 'es',
+      sourcemap: true
+    }
+  ],
+  plugins: plugins
+};
+
+export default [main, graphvizLayout, kedroLayout];
