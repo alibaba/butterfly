@@ -353,12 +353,12 @@ panelPlugins.register(
 panelNode.focus();
 ```
 
-##### panelNode.unfocus ()
+##### panelNode.unFocus ()
 
 *作用*： 节点变为未选中状态
 
 ```js
-panelNode.unfocus();
+panelNode.unFocus();
 ```
 
 ##### panelNode.rotate (angle)
