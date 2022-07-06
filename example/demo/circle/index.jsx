@@ -1,14 +1,15 @@
-import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
-
-import Edge from './edge';
-import mockData from './data.js';
-import Canvas from './circleCanvas.js';
-
+'use strict';
+import React, { Component } from 'react';
 import './index.less';
 import 'butterfly-dag/dist/index.css';
 
+import Canvas from './circleCanvas';
+import Edge from './edge';
+import mockData from './data';
 class Circle extends Component {
+  constructor() {
+    super();
+  }
   componentDidMount() {
     let root = document.getElementById('dag-canvas');
     this.canvas = new Canvas({
@@ -28,7 +29,7 @@ class Circle extends Component {
           getHeight: () => {
             return 15;
           },
-
+          
         },
       },
       theme: {
@@ -41,33 +42,28 @@ class Circle extends Component {
     this.canvas.draw(mockData, () => {
       this.canvas.focusCenterWithAnimate();
     });
-    this.canvas.on('system.link.connect', ({links}) => {
+    this.canvas.on('system.link.connect', ({ links }) => {
       links.forEach(link => {
-        link.targetNode.active && link.targetNode.active(link.targetNode.dom);
-      });
+        link.targetNode.active && link.targetNode.active(link.targetNode.dom)
+      })
     });
-
     // 节点点击事件
-    this.canvas.on('clickCircleNode', () => {
+    this.canvas.on('clickCircleNode', (event) => {
       this.canvas.addEdge({
         id: 3,
         source: 'centerNode',
         target: 13,
         Class: Edge
       });
-    });
-
+    })
     // 左箭头点击事件
     this.canvas.on('clickArrowLeft', (event) => {
-      // eslint-disable-next-line no-console
-      console.log(event, 'left');
-    });
-
+      console.log(event, 'left')
+    })
     // 右箭头点击事件
     this.canvas.on('clickArrowRight', (event) => {
-      // eslint-disable-next-line no-console
-      console.log(event, 'right');
-    });
+      console.log(event, 'right')
+    })
   }
   render() {
     return (
@@ -79,4 +75,4 @@ class Circle extends Component {
   }
 }
 
-ReactDOM.render(<Circle />, document.getElementById('root'));
+export default Circle;

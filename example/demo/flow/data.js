@@ -1,6 +1,6 @@
+
 import Node from './node';
 import Edge from './edge';
-
 const mockData = {
   nodes: [
     {
@@ -95,7 +95,7 @@ const mockData = {
         orientation: [1, 0],
         pos: [0, 0.5]
       }]
-    },
+    }, 
     {
       id: '6',
       label: '首次入系统',
@@ -115,7 +115,7 @@ const mockData = {
         id: 'bottom2',
         orientation: [0, 1],
         pos: [0.7, 0]
-      }]
+      },]
     },
     {
       id: '7',

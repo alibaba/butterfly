@@ -1,12 +1,15 @@
+'use strict';
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
-
-import {Canvas} from 'butterfly-dag';
-import mockData from './data.js';
 
 import './index.less';
 import 'butterfly-dag/dist/index.css';
-class Decision extends Component {
+// import { Canvas } from 'butterfly-dag';
+import { Canvas } from '../../../index.js';
+import mockData from './data';
+class Scene6New extends Component {
+  constructor() {
+    super();
+  }
   componentDidMount() {
     let root = document.getElementById('dag-canvas');
     this.canvas = new Canvas({
@@ -16,6 +19,9 @@ class Decision extends Component {
       draggable: true,   // 可拖动
       zoomable: true,    // 可放大
       moveable: true,    // 可平移
+      virtualScroll: {
+        enable: true
+      },
       theme: {
         edge: {
           shapeType: 'AdvancedBezier',
@@ -24,8 +30,10 @@ class Decision extends Component {
       }
     });
     this.canvas.draw(mockData);
+    this.canvas.on('events', (data) => {
+      // console.log(data);
+    });
   }
-
   render() {
     return (
       <div className='decision'>
@@ -36,4 +44,4 @@ class Decision extends Component {
   }
 }
 
-ReactDOM.render(<Decision />, document.getElementById('root'));
+export default Scene6New;

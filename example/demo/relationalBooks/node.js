@@ -1,13 +1,15 @@
-import {Node} from 'butterfly-dag';
-import $ from 'jquery';
-// import '../../static/iconfont.css';
+'use strict';
 
+import { Node } from 'butterfly-dag';
+import { uniqueId } from 'lodash';
+import '../../static/iconfont.css';
+import $ from 'jquery';
 let getAttrObj = (namedNodeMap) => {
-  return Array.prototype.reduce.call(namedNodeMap, function (pre, item, index, arr) {
+  return Array.prototype.reduce.call(namedNodeMap,function (pre, item,index,arr) {            
     pre[item.nodeName] = item.value;
     return pre;
-  }, {});
-};
+  },{});
+}
 
 class BaseNode extends Node {
   constructor(opts) {
@@ -41,7 +43,7 @@ class BaseNode extends Node {
     this._onAddNode(title);
     this._onRemovedNode(title);
   }
-
+  
   _createChildNode(dom) {
     $.each(this.childData, (i, {id, content, sourceNodeId, targetNodeId}) => {
       dom.append(`
@@ -61,7 +63,7 @@ class BaseNode extends Node {
   }
 
   mounted = () => {
-    this.childData.forEach((({sourceNodeId, targetNodeId}) => {
+    this.childData.forEach((({sourceNodeId, targetNodeId})=>{
       this.addEndpoint({
         id: sourceNodeId,
         type: 'source',
@@ -72,14 +74,14 @@ class BaseNode extends Node {
         type: 'target',
         dom: document.getElementById(targetNodeId)
       });
-    }));
+    }))
   }
 
   _onRemovedNode(dom) {
     const _this = this;
     dom.find('.remove').on('click', function () {
       const attr = getAttrObj(this.parentNode.attributes);
-      _this.childData = _this.childData.filter(item => item.id !== attr['data-id']);
+      _this.childData = _this.childData.filter(item=>item.id !== attr['data-id']);
       this.parentNode.remove();
       _this.endpoints.forEach((_point) => {
         _point.updatePos();
@@ -94,7 +96,7 @@ class BaseNode extends Node {
       const oldNode = $(this).prev('.text');
       const oldNodeText = $(this).prev('.text').text();
 
-      if ($(oldNode.html()).attr('type') !== 'text') {
+      if ($(oldNode.html()).attr("type") !== 'text') {
         oldNode.html(`<input type=text class=input-text />`);
         $(oldNode).find('input').focus().val(oldNodeText);
         oldNode.children().keyup(function (event) {
@@ -105,14 +107,14 @@ class BaseNode extends Node {
           }
         });
       }
-    });
+    })
   }
 
   _onAddNode(dom) {
     dom.find('.add-node').click(() => {
       let code = '';
       const codeLength = 4;
-      const random = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+      const random = new Array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
 
       for (let i = 0; i < codeLength; i++) {
         const index = Math.floor(Math.random() * 36);

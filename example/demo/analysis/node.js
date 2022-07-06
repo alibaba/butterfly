@@ -1,5 +1,7 @@
 'use strict';
-import {Node} from 'butterfly-dag';
+
+//import { Node } from '../../../index.js';
+import { Node } from 'butterfly-dag';
 import $ from 'jquery';
 import './node.less';
 class BaseNode extends Node {
@@ -7,23 +9,22 @@ class BaseNode extends Node {
     super(opts);
     this.options = opts;
   }
-
   draw = (opts) => {
     if (opts.options.type === 'circle') {
       const container = $('<div class="analysis-circle-base-node"></div>')
-        .attr('id', opts.id)
-        .css('top', opts.top + 'px')
-        .css('left', opts.left + 'px');
+                      .attr('id', opts.id)
+                      .css('top', opts.top + 'px')
+                      .css('left', opts.left + 'px');
       const icon = $(`<i class="iconfont icon-shujuji"></i>`);
 
-      container.append(icon);
-
-      return container[0];
+      container.append(icon);           
+      
+      return container[0];            
     }
     const container = $('<div class="analysis-base-node"></div>')
-      .attr('id', opts.id)
-      .css('top', opts.top + 'px')
-      .css('left', opts.left + 'px');
+                    .attr('id', opts.id)
+                    .css('top', opts.top + 'px')
+                    .css('left', opts.left + 'px')
 
     // this._createTypeIcon(container);
     this._createText(container);

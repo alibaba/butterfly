@@ -1,6 +1,7 @@
-import {Endpoint, Tips} from 'butterfly-dag';
-import $ from 'jquery';
+'use strict';
 
+import { Endpoint,Tips } from 'butterfly-dag';
+import $ from 'jquery';
 class BaseEndpoint extends Endpoint {
   mounted() {
     Tips.createTip({
@@ -16,6 +17,6 @@ class BaseEndpoint extends Endpoint {
     $(point).addClass('purple-point');
     return point;
   }
-}
+};
 
 export default BaseEndpoint;

@@ -47,16 +47,23 @@ export default {
     return result;
   },
   // 向画布中删除节点组
-  removeGroups: (groups, opts) => {
-
+  removeGroup: (group) => {
+    delete hideGroups[group.id];
   },
   // 向画布中删除节点
-  removeNodes: (nodes, opts) => {
-
+  removeNodes: (data) => {
+    data.nodes.forEach((item) => {
+      delete hideNodes[item.id];
+    });
+    data.edges.forEach((item) => {
+      delete hideEdges[`${item.options.sourceNode}-${item.options.source}-${item.options.targetNode}-${item.options.target}`];
+    });
   },
   // 向画布中删除线段
-  removeEdges: (edges, opts) => {
-
+  removeEdges: (edges) => {
+    edges.forEach((item) => {
+      delete hideEdges[`${item.options.sourceNode}-${item.options.source}-${item.options.targetNode}-${item.options.target}`];
+    });
   },
   // 移动、缩放时重绘画布
   redraw: (isInit) => {
@@ -95,18 +102,35 @@ const _redraw = () => {
 const redraw = (isInit) => {
 
   canvas.groups.forEach((group) => {
+    // 处理在节点组上的节点
+    if (group.group) {
+      return;
+    }
+
     if (getNodeVisibleStatus(group)) {
       group.virtualHidden = false;
       $(group.dom).css('visibility', 'visible');
       if (hideGroups[group.id]) {
         delete hideGroups[group.id];
         $(canvas.wrapper).prepend(group.dom);
+        group.groups.forEach((item) => {
+          delete hideGroups[item.id];
+        });
+        group.nodes.forEach((item) => {
+          delete hideNodes[item.id];
+        });
       }
     } else {
       if (!hideGroups[group.id]) {
         group.virtualHidden = true;
         $(group.dom).detach();
         hideGroups[group.id] = group;
+        group.groups.forEach((item) => {
+          hideGroups[item.id] = item;
+        });
+        group.nodes.forEach((item) => {
+          hideNodes[item.id] = item;
+        });
       }
     }
   });
@@ -115,9 +139,11 @@ const redraw = (isInit) => {
   const _pointFragment = document.createDocumentFragment();
   canvas.nodes.forEach((node) => {
     // 处理在节点组上的节点
-    if (node.group && node._group.virtualHidden) {
-      node.virtualHidden = true;
-      hideNodes[node.id] = node;
+    if (node.group) {
+      if (node._group.virtualHidden) {
+        node.virtualHidden = true;
+        hideNodes[node.id] = node;
+      }
       return;
     }
 

@@ -1,7 +1,9 @@
+'use strict';
+
 import Node from './node';
 import Edge from './edge';
 
-export default {
+const data = {
   nodes: [
     {
       id: '1',
@@ -306,6 +308,6 @@ export default {
     arrow: true,
     arrowPosition: 0.5,
     Class: Edge
-  }],
+  },],
 };
-
+export default data;

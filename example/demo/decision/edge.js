@@ -1,6 +1,8 @@
-import {Edge} from 'butterfly-dag';
-import $ from 'jquery';
+'use strict';
 
+// import { Edge } from 'butterfly-dag';
+import { Edge } from '../../../index.js';
+import $ from 'jquery';
 class BaseEdge extends Edge {
   draw(obj) {
     let path = super.draw(obj);
@@ -18,11 +20,11 @@ class BaseEdge extends Edge {
   }
   drawLabel(text) {
     let dom = null;
-    if (text) {
+    if (!!text) {
       dom = $(`<span class="label">${text}</span>`)[0];
     }
     return dom;
   }
-}
+};
 
 export default BaseEdge;

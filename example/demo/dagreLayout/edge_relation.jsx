@@ -1,6 +1,7 @@
-import $ from 'jquery';
-import {Edge} from 'butterfly-dag';
+'use strict';
 
+import { Edge } from 'butterfly-dag';
+import $ from 'jquery';
 class RelationEdge extends Edge {
   draw(obj) {
     let path = super.draw(obj);
@@ -18,11 +19,10 @@ class RelationEdge extends Edge {
   }
   drawLabel(text) {
     let dom = null;
-    if (text) {
+    if (!!text) {
       dom = $(`<span class="butterflies-label">${text}</span>`)[0];
     }
     return dom;
   }
 };
-
 export default RelationEdge;

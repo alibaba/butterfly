@@ -1,21 +1,19 @@
+'use strict';
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
-
-import {Canvas} from 'butterfly-dag';
-
-// !!! in webpack use below !!!
-// import panelPlugins from 'butterfly-dag/plugins/panel/dist/index.js';
-
-import panelPlugins from 'butterfly-dag/plugins/panel/dist/index.unpkg.js';
-import 'butterfly-dag/plugins/panel/dist/index.css';
-
 import './index.less';
 import 'butterfly-dag/dist/index.css';
+import { Canvas } from 'butterfly-dag';
+// import mockData from './data';
+import panelPlugins from '../../../plugins/panel/src/index.js';
 
 class PluginPanel extends Component {
+  constructor() {
+    super();
+  }
   componentDidMount() {
-    let root = document.getElementById('dag-canvas');
 
+    // 画布渲染
+    let root = document.getElementById('dag-canvas');
     this.canvas = new Canvas({
       root: root,
       disLinkable: true, // 可删除连线
@@ -25,6 +23,7 @@ class PluginPanel extends Component {
       moveable: true,    // 可平移
     });
 
+    
     let basicRoot = document.getElementById('basic-panel-content');
     let umlRoot = document.getElementById('uml-panel-content');
     // 注册panel
@@ -42,15 +41,18 @@ class PluginPanel extends Component {
         width: 40,
         height: 40
       }
-    ]);
+    ])
 
+    // this.canvas.draw(mockData);
+    // this.canvas.on('events', (data) => {
+    //   console.log(data);
+    // });
     this.canvas.on('system.canvas.click', () => {
       this.canvas.nodes.forEach((item) => {
         item.unfocus && item.unfocus();
       });
     });
   }
-
   render() {
     return (
       <div className='plugin-panel-page'>
@@ -71,4 +73,4 @@ class PluginPanel extends Component {
   }
 }
 
-ReactDOM.render(<PluginPanel />, document.getElementById('root'));
+export default PluginPanel;

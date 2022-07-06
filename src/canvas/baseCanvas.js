@@ -1707,7 +1707,7 @@ class BaseCanvas extends Canvas {
     }
     return result;
   }
-  addNodes(nodes, isNotEventEmit, isNotRedrawByVirtuvalScroll) {
+  addNodes(nodes, isNotEventEmit, isNotRedrawByVirtualScroll) {
     const _canvasFragment = document.createDocumentFragment();
     const container = $(this.wrapper);
     const result = nodes.filter((node) => {
@@ -1753,7 +1753,7 @@ class BaseCanvas extends Canvas {
       this.nodes.push(_nodeObj);
 
       // 虚拟滚动开启
-      if (this.virtualScroll.enable) {
+      if (this.virtualScroll.enable && !_nodeObj.group) {
         _nodeObj.virtualHidden = true;
         $(_nodeObj.dom).css('visibility', 'hidden');
       }
@@ -1806,7 +1806,7 @@ class BaseCanvas extends Canvas {
       });
     }
 
-    if (this.virtualScroll.enable && !isNotRedrawByVirtuvalScroll) {
+    if (this.virtualScroll.enable && !isNotRedrawByVirtualScroll) {
       this._virtualScrollUtil.redraw();
     }
 
@@ -1884,6 +1884,13 @@ class BaseCanvas extends Canvas {
           edges: rmEdges
         });
       }
+    }
+
+    if( this.virtualScroll.enable) {
+      this._virtualScrollUtil.removeNodes({
+        nodes: rmNodes,
+        edges: rmEdges
+      });
     }
 
     return {
@@ -2106,7 +2113,7 @@ class BaseCanvas extends Canvas {
   getGroup(id) {
     return _.find(this.groups, item => item.id === id);
   }
-  addGroup(group, unionItems, options, isNotEventEmit) {
+  addGroup(group, unionItems, options, isNotEventEmit, isNotRedrawByVirtualScroll) {
     const container = $(this.wrapper);
     const GroupClass = group.Class || this._GroupClass;
     let _addUnionItem = [];
@@ -2147,7 +2154,7 @@ class BaseCanvas extends Canvas {
     _groupObj._init();
 
     // 虚拟滚动开启
-    if (this.virtualScroll.enable) {
+    if (this.virtualScroll.enable && !_groupObj.group) {
       _groupObj.virtualHidden = true;
       $(_groupObj.dom).css('visibility', 'hidden');
     }
@@ -2328,9 +2335,13 @@ class BaseCanvas extends Canvas {
       });
     }
 
+    if (this.virtualScroll.enable && !isNotRedrawByVirtualScroll) {
+      this._virtualScrollUtil.redraw();
+    }
+
     return _groupObj;
   }
-  addGroups(datas, isNotEventEmit, isNotRedrawByVirtuvalScroll) {
+  addGroups(datas, isNotEventEmit, isNotRedrawByVirtualScroll) {
     // group排序，有可能会有group依赖渲染的问题
     let _sortGroup = (groups) => {
       let tmpObj = {};
@@ -2355,9 +2366,9 @@ class BaseCanvas extends Canvas {
 
     let result = _sortGroup(datas);
 
-    result = result.map(item => this.addGroup(item)).filter(item => item);
+    result = result.map(item => this.addGroup(item, [], null , isNotEventEmit, true)).filter(item => item);
 
-    if (this.virtualScroll.enable && !isNotRedrawByVirtuvalScroll) {
+    if (this.virtualScroll.enable && !isNotRedrawByVirtualScroll) {
       this._virtualScrollUtil.redraw();
     }
 
@@ -2437,6 +2448,11 @@ class BaseCanvas extends Canvas {
         }
       });
     }
+
+    if (this.virtualScroll.enable) {
+      this._virtualScrollUtil.removeGroup(group);
+    }
+
     return {
       group: group,
       nodes: insideNodes || [],
@@ -3028,6 +3044,11 @@ class BaseCanvas extends Canvas {
         !isExistEdge && (_rmEdge.targetEndpoint._tmpType = undefined);
       }
     });
+
+    if( this.virtualScroll.enable) {
+      this._virtualScrollUtil.removeEdges(result);
+    }
+
     return result;
   }
   removeEdge(edge, isNotEventEmit, isNotPushActionQueue) {
