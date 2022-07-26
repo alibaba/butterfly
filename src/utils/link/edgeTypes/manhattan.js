@@ -62,10 +62,15 @@ const getDrawPoint = (start, control, end, radius) => {
 function getRadiusPath(pointArr) {
   let path = ""
   let radius = DEFAULT_RADIUS;
-  const [start, c1, c2] = pointArr;
-  const end = pointArr[pointArr.length - 1]
-  if (Math.abs(start.y - end.y) < 2 * DEFAULT_RADIUS) {
-    radius = Math.abs(start.y - end.y) / 2;
+  const end = pointArr[pointArr.length - 1];
+  
+  for (let i = 1; i < pointArr.length; i++) {
+    const curr = pointArr[i];
+    const prev = pointArr[i - 1];
+
+    const length = Math.max(Math.abs(prev.x - curr.x), Math.abs(prev.y - curr.y));
+
+    radius = Math.min(radius, length / 2);
   }
 
   if (
