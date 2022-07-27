@@ -262,3 +262,15 @@ const getEdgeVisibleStatus = (edge) => {
 
   return true;
 }
+
+export const isHiddenNode = (id) => {
+  return !!hideNodes[id];
+}
+
+export const isHiddenGroup = (id) => {
+  return !!hideGroups[id];
+}
+
+export const isHiddenEdge = (id) => {
+  return !!hideEdges[id];
+}

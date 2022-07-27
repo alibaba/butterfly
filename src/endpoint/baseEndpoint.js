@@ -7,6 +7,8 @@ import './baseEndpoint.less';
 
 import Endpoint from '../interface/endpoint';
 
+import {isHiddenNode, isHiddenGroup} from '../utils/virtualScroll';
+
 class BaseEndpoint extends Endpoint {
   constructor(opts) {
     super(opts);
@@ -96,6 +98,12 @@ class BaseEndpoint extends Endpoint {
   }
 
   updatePos(dom = this.dom, orientation = this.orientation, pos = this.pos) {
+
+    let _isVirtualHidden = this._node.__type === 'node' ? isHiddenNode(this._node.id) : isHiddenGroup(this._node.id);
+    if (_isVirtualHidden) {
+      return;
+    }
+
     if (this._isInitedDom) {
       // 计算width,height,left,top
       this._width = $(this.dom).outerWidth();
