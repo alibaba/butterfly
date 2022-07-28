@@ -53,6 +53,8 @@ class BaseEndpoint extends Endpoint {
       this.dom = opts.dom;
       this._isInitedDom = true;
     }
+    // 判断是否初始化过位置
+    this._isInitPos = false;
   }
 
   _init(obj) {
@@ -101,6 +103,10 @@ class BaseEndpoint extends Endpoint {
 
     let _isVirtualHidden = this._node.__type === 'node' ? isHiddenNode(this._node.id) : isHiddenGroup(this._node.id);
     if (_isVirtualHidden) {
+      if (!this._isInitPos) {
+        this._posTop = this._top = this._node.top;
+        this._posLeft = this._left = this._node.left;
+      }
       return;
     }
 
@@ -196,6 +202,8 @@ class BaseEndpoint extends Endpoint {
 
       this.updated && this.updated();
     }
+
+    this._isInitPos = true;
 
     this.emit('InnerEvents', {
       type: 'endpoint:updatePos',

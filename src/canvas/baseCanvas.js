@@ -3692,38 +3692,72 @@ class BaseCanvas extends Canvas {
     offsetX = -offsetX + customOffset[0];
     offsetY = -offsetY + customOffset[1];
 
-    const time = 500;
-    let animatePromise = new Promise((resolve) => {
-      $(this.wrapper).animate({
+    if (options && options.animate === false) {
+      this._zoomData = scale;
+      this._moveData = [offsetX, offsetY];
+      this._coordinateService._changeCanvasInfo({
+        canOffsetX: offsetX,
+        canOffsetY: offsetY,
+        scale: scale,
+        originX: 50,
+        originY: 50
+      });
+      $(this.wrapper).css({
         top: offsetY,
         left: offsetX,
-      }, time, () => {
-        resolve();
+        transform: `scale(${scale})`
       });
-    });
-    this._moveData = [offsetX, offsetY];
-
-    this._coordinateService._changeCanvasInfo({
-      canOffsetX: offsetX,
-      canOffsetY: offsetY,
-      scale: scale,
-      originX: 50,
-      originY: 50
-    });
-
-
-    let zoomPromise = new Promise((resolve) => {
-      this.zoom(scale, () => {
-        resolve();
-      });
-    });
-
-    Promise.all([animatePromise, zoomPromise]).then(() => {
       if (this.virtualScroll.enable) {
         this._virtualScrollUtil.redraw();
       }
       callback && callback();
-    });
+    } else {
+      const time = 500;
+      let animatePromise = new Promise((resolve) => {
+        let frame = 1;
+        let originX = this._moveData[0];
+        let originY = this._moveData[1];
+        let gap_X = (offsetX - originX) / 20;
+        let gap_Y = (offsetY - originY) / 20;
+        let timer = setInterval(() => {
+          originX += gap_X;
+          originY += gap_Y;
+          $(this.wrapper).css({
+            top: originY,
+            left: originX
+          });
+          if (frame === 20) {
+            clearInterval(timer);
+            resolve();
+          }
+          frame++;
+        }, time / 20);
+      });
+      
+      this._moveData = [offsetX, offsetY];
+
+      this._coordinateService._changeCanvasInfo({
+        canOffsetX: offsetX,
+        canOffsetY: offsetY,
+        scale: scale,
+        originX: 50,
+        originY: 50
+      });
+
+
+      let zoomPromise = new Promise((resolve) => {
+        this.zoom(scale, () => {
+          resolve();
+        });
+      });
+
+      Promise.all([animatePromise, zoomPromise]).then(() => {
+        if (this.virtualScroll.enable) {
+          this._virtualScrollUtil.redraw();
+        }
+        callback && callback();
+      });
+    }
   }
   focusCenterWithAnimate(options, callback) {
     let nodeIds = this.nodes.map((item) => {
@@ -3792,12 +3826,25 @@ class BaseCanvas extends Canvas {
 
     // animate不支持scale，使用setInterval自己实现
     let animatePromise = new Promise((resolve) => {
-      $(this.wrapper).animate({
-        top: targetY,
-        left: targetX
-      }, time, () => {
-        resolve()
-      });
+      let frame = 1;
+      let originX = this._moveData[0];
+      let originY = this._moveData[1];
+      let gap_X = (targetX - originX) / 20;
+      let gap_Y = (targetY - originY) / 20;
+      let timer = setInterval(() => {
+        originX += gap_X;
+        originY += gap_Y;
+        $(this.wrapper).css({
+          top: originY,
+          left: originX
+        });
+        frame++;
+        debugger;
+        if (frame === 20) {
+          clearInterval(timer);
+          resolve();
+        }
+      }, time / 20);
     });
     this._moveData = [targetX, targetY];
 

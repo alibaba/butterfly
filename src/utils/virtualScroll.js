@@ -99,6 +99,7 @@ const _redraw = () => {
 }
 
 // 移动、缩放、初始化时重绘画布
+let updatePosTimer = null;
 const redraw = (isInit) => {
 
   canvas.groups.forEach((group) => {
@@ -113,6 +114,13 @@ const redraw = (isInit) => {
       if (hideGroups[group.id]) {
         delete hideGroups[group.id];
         $(canvas.wrapper).prepend(group.dom);
+        group.endpoints.forEach((item) => {
+          item.updatePos();
+          let edges = canvas.getNeighborEdgesByEndpoint(group.id, item.id);
+          edges.forEach((_edge) => {
+            _edge.redraw();
+          });
+        });
         group.groups.forEach((item) => {
           delete hideGroups[item.id];
         });
@@ -137,6 +145,7 @@ const redraw = (isInit) => {
 
   const _nodesFragment = document.createDocumentFragment();
   const _pointFragment = document.createDocumentFragment();
+  // let _addNodes = [];
   canvas.nodes.forEach((node) => {
     // 处理在节点组上的节点
     if (node.group) {
@@ -156,6 +165,7 @@ const redraw = (isInit) => {
         node.endpoints.forEach((item) => {
           !item._isInitedDom && _pointFragment.appendChild(item.dom);
         });
+        // _addNodes.push(node);
       }
     } else {
       if (!hideNodes[node.id]) {
@@ -168,6 +178,7 @@ const redraw = (isInit) => {
       }
     }
   });
+
   $(canvas.wrapper).append(_nodesFragment);
   $(canvas.wrapper).prepend(_pointFragment);
 
@@ -200,6 +211,21 @@ const redraw = (isInit) => {
     $(canvas.svg).append(_edgeFragment);
     $(canvas.wrapper).append(_labelFragment);
   }
+  
+  clearTimeout(updatePosTimer);
+  updatePosTimer = setTimeout(() => {
+    canvas.nodes.forEach((node) => {
+      if (!hideNodes[node.id]) {
+        node.endpoints.forEach((item) => {
+          item.updatePos();
+        });
+      }
+    });
+  
+    canvas.edges.forEach((edge) => {
+      edge.redraw();
+    });
+  }, 300);
 }
 
 // 判断节点是否在可视区域
