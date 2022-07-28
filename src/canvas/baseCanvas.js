@@ -3719,6 +3719,9 @@ class BaseCanvas extends Canvas {
     });
 
     Promise.all([animatePromise, zoomPromise]).then(() => {
+      if (this.virtualScroll.enable) {
+        this._virtualScrollUtil.redraw();
+      }
       callback && callback();
     });
   }
