@@ -34,6 +34,7 @@ class BaseCanvas extends Canvas {
     this.layout = options.layout; // layout部分也需要重新review
     this.layoutOptions = options.layoutOptions;
     if (_.isObject(this.layout) && !_.isFunction(this.layout)) {
+      this.previousIsFlatNode = this.layout.isFlatNode; // 之后5.0废弃
       this.layoutOptions = this.layout.options || this.layoutOptions;
       this.layout = this.layout.type;
     }

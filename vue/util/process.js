@@ -48,7 +48,7 @@ const processNodes = (canvas, nodes, oldNodes, parent) => {
   // 判断是TreeCanvas
   if (canvas.constructor === TreeCanvas) {
     // 对nodes进行拆解
-    if(canvas.layout && canvas.layout.isFlatNode) {
+    if(canvas.layout && canvas.previousIsFlatNode) {
       nodes = canvas._handleTreeNodes(nodes || [], _.get({}, 'isFlatNode', false))
     }
     relayout(canvas, nodes);
