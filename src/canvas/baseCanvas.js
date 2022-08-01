@@ -3120,13 +3120,15 @@ class BaseCanvas extends Canvas {
     // 插入dom
     let beforeEdge = this.edges[addIndex];
     let afterEdge = this.edges[addIndex + 1];
-    
-    if (beforeEdge) {
+
+    let hideEdges = virtualScrollUtil.getHideEdges();
+
+    if (beforeEdge && !hideEdges[beforeEdge.id]) {
       let targetDom = beforeEdge.dom;
       beforeEdge.eventHandlerDom && (targetDom = beforeEdge.eventHandlerDom);
       beforeEdge.arrowDom && (targetDom = beforeEdge.arrowDom);
       $(targetDom).after(addEdgesDom);
-    } else if (afterEdge) {
+    } else if (afterEdge && !hideEdges[afterEdge.id]) {
       $(afterEdge.dom).before(addEdgesDom);
     } else {
       $(this.svg).append(addEdgesDom);
