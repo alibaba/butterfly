@@ -88,7 +88,8 @@ class BaseCanvas extends Canvas {
         isLinkMyself: _.get(options, 'theme.edge.isLinkMyself') || false,
         isExpandWidth: _.get(options, 'theme.edge.isExpandWidth') || false,
         defaultAnimate: _.get(options, 'theme.edge.defaultAnimate') || false,
-        dragEdgeZindex: _.get(options, 'theme.edge.dragEdgeZindex', 499)
+        dragEdgeZindex: _.get(options, 'theme.edge.dragEdgeZindex', 499),
+        overlapGap: _.get(options, 'theme.edge.overlapGap', 1)
       },
       endpoint: {
         // 暂时不支持position
@@ -2947,6 +2948,8 @@ class BaseCanvas extends Canvas {
 
     $(this.svg).css('visibility', 'visible');
 
+    this._checkEdgesOverlapping();
+
     return result;
   }
   addEdge(link, isNotEventEmit) {
@@ -3121,14 +3124,12 @@ class BaseCanvas extends Canvas {
     let beforeEdge = this.edges[addIndex];
     let afterEdge = this.edges[addIndex + 1];
 
-    let hideEdges = virtualScrollUtil.getHideEdges();
-
-    if (beforeEdge && !hideEdges[beforeEdge.id]) {
+    if (beforeEdge && !beforeEdge.virtualHidden) {
       let targetDom = beforeEdge.dom;
       beforeEdge.eventHandlerDom && (targetDom = beforeEdge.eventHandlerDom);
       beforeEdge.arrowDom && (targetDom = beforeEdge.arrowDom);
       $(targetDom).after(addEdgesDom);
-    } else if (afterEdge && !hideEdges[afterEdge.id]) {
+    } else if (afterEdge && !afterEdge.virtualHidden) {
       $(afterEdge.dom).before(addEdgesDom);
     } else {
       $(this.svg).append(addEdgesDom);
@@ -3149,6 +3150,57 @@ class BaseCanvas extends Canvas {
       }
     });
     return index;
+  }
+  // 防止互相反向的线段重叠
+  _checkEdgesOverlapping () {
+    let edgesObjs = {};
+    let changeEdgesObjs = {};
+    this.edges.forEach((item) => {
+      if (item.type === 'endpoint') {
+        edgesObjs[`${item.sourceNode.id}-${item.sourceEndpoint.id}-${item.targetNode.id}-${item.targetEndpoint.id}`] = item;
+      } else {
+        edgesObjs[`${item.sourceNode.id}-${item.targetNode.id}`] = item;
+      }
+    });
+    this.edges.forEach((item) => {
+      let isExist = false;
+      let checkId = '';
+      if (item.type === 'endpoint') {
+        checkId = `${item.targetNode.id}-${item.targetEndpoint.id}-${item.sourceNode.id}-${item.sourceEndpoint.id}`;
+        isExist = !!edgesObjs[checkId] && !changeEdgesObjs[checkId];
+        if (isExist) {
+          let sourceEdge = edgesObjs[`${item.sourceNode.id}-${item.sourceEndpoint.id}-${item.targetNode.id}-${item.targetEndpoint.id}`];
+          let targetEdge = edgesObjs[`${item.targetNode.id}-${item.targetEndpoint.id}-${item.sourceNode.id}-${item.sourceEndpoint.id}`];
+          changeEdgesObjs[`${item.sourceNode.id}-${item.sourceEndpoint.id}-${item.targetNode.id}-${item.targetEndpoint.id}`] = sourceEdge;
+          changeEdgesObjs[`${item.targetNode.id}-${item.targetEndpoint.id}-${item.sourceNode.id}-${item.sourceEndpoint.id}`] = targetEdge;
+          let sourceOri = sourceEdge.sourceEndpoint.orientation || [];
+          if (sourceOri[0] === 0) {
+            sourceEdge._offsetPosLeft -= this.theme.edge.overlapGap;
+            targetEdge._offsetPosLeft += this.theme.edge.overlapGap;
+          } else {
+            sourceEdge._offsetPosTop -= this.theme.edge.overlapGap;
+            targetEdge._offsetPosTop += this.theme.edge.overlapGap;
+          }
+        }
+      } else {
+        checkId = `${item.targetNode.id}-${item.targetNode.id}`;
+        isExist = !!edgesObjs[checkId] && !changeEdgesObjs[checkId];
+        if (isExist) {
+          let sourceEdge = edgesObjs[`${item.sourceNode.id}-${item.targetNode.id}`];
+          let targetEdge = edgesObjs[`${item.targetNode.id}-${item.sourceNode.id}`];
+          changeEdgesObjs[`${item.sourceNode.id}-${item.targetNode.id}`] = sourceEdge;
+          changeEdgesObjs[`${item.targetNode.id}-${item.sourceNode.id}`] = targetEdge;
+          !sourceEdge._offsetPosLeft && (sourceEdge._offsetPosLeft = 0);
+          !targetEdge._offsetPosLeft && (targetEdge._offsetPosLeft = 0);
+          sourceEdge._offsetPosLeft -= this.theme.edge.overlapGap;
+          targetEdge._offsetPosLeft += this.theme.edge.overlapGap;
+        }
+      }
+    });
+
+    Object.keys(changeEdgesObjs).forEach((key) => {
+      changeEdgesObjs[key].redraw();
+    });
   }
 
 

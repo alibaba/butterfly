@@ -182,7 +182,7 @@ class BaseNode extends Node {
 
   getHeight(useCache) {
     if (this.virtualHidden) {
-      return this.width;
+      return this.height;
     }
     if (!useCache || !this.height || this._isForceUpdateSize) {
       this.height = $(this.dom).outerHeight();

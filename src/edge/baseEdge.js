@@ -69,6 +69,10 @@ class BaseEdge extends Edge {
       delete this.options.breakPoints;
     }
     this._hasDragged = false;
+
+    // 偏移防止互相反向的线段重叠
+    this._offsetPosLeft = 0;
+    this._offsetPosTop = 0;
   }
   _init(obj) {
     if (!this._isInited) {
@@ -163,6 +167,16 @@ class BaseEdge extends Edge {
     }
     this._sourcePoint = sourcePoint;
     this._targetPoint = targetPoint;
+
+    if (this._offsetPosTop) {
+      this._sourcePoint.pos[1] += this._offsetPosTop;
+      this._targetPoint.pos[1] += this._offsetPosTop;
+    }
+    if (this._offsetPosLeft) {
+      this._sourcePoint.pos[0] += this._offsetPosLeft;
+      this._targetPoint.pos[0] += this._offsetPosLeft;
+    }
+
     let path = '';
     if (this.calcPath) {
       path = this.calcPath(sourcePoint, targetPoint);

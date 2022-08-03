@@ -30,10 +30,10 @@ class CoordinateService {
     // 虚拟滚动计算坐标
     if (this.virtualScroll.enable) {
       this.virtualScrollCoordinate = {
-        left: this._terminal2canvas('x', this.terOffsetX),
-        top: this._terminal2canvas('y', this.terOffsetY),
-        right: this._terminal2canvas('x', this.terOffsetX + this.terWidth),
-        bottom: this._terminal2canvas('y', this.terOffsetY + this.terHeight),
+        left: this._terminal2canvas('x', this.terOffsetX - this.virtualScroll.paddingLeft),
+        top: this._terminal2canvas('y', this.terOffsetY - this.virtualScroll.paddingTop),
+        right: this._terminal2canvas('x', this.terOffsetX + this.terWidth + this.virtualScroll.paddingRight ),
+        bottom: this._terminal2canvas('y', this.terOffsetY + this.terHeight + this.virtualScroll.paddingBottom),
       }
     }
   }

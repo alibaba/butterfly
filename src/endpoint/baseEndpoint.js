@@ -14,7 +14,7 @@ class BaseEndpoint extends Endpoint {
     super(opts);
     this.id = opts.id;
     this.options = opts;
-    this.orientation = opts.orientation;
+    this.orientation = opts.orientation || [0,-1];
     this.pos = opts.pos;
     this.type = opts.type;
     this.nodeType = _.get(opts, 'nodeType', 'node');
