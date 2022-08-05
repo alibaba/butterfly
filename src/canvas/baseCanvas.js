@@ -357,8 +357,8 @@ class BaseCanvas extends Canvas {
         this.removeNodes(this.nodes.map((item) => item.id) || []);
         this.removeGroups(this.groups.map((item) => item.id) || []);
         this.clearActionQueue();
-        this.draw(opts || {}, () => {
-          callback && callback();
+        this.draw(opts || {}, (data) => {
+          callback && callback(data);
           if (this._redrawPromises.length > 0) {
             let nextData = this._redrawPromises.shift();
             _run(Promise.resolve(nextData));
@@ -3161,6 +3161,8 @@ class BaseCanvas extends Canvas {
       } else {
         edgesObjs[`${item.sourceNode.id}-${item.targetNode.id}`] = item;
       }
+      item._offsetPosLeft = 0;
+      item._offsetPosTop = 0;
     });
     this.edges.forEach((item) => {
       let isExist = false;
