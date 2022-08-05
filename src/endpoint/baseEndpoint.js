@@ -99,7 +99,7 @@ class BaseEndpoint extends Endpoint {
     return _dom[0];
   }
 
-  updatePos(dom = this.dom, orientation = this.orientation, pos = this.pos) {
+  updatePos(dom = this.dom, orientation = this.orientation, pos = this.pos, isNotEmitEvent) {
 
     let _isVirtualHidden = this._node.__type === 'node' ? isHiddenNode(this._node.id) : isHiddenGroup(this._node.id);
     if (_isVirtualHidden) {
@@ -205,10 +205,12 @@ class BaseEndpoint extends Endpoint {
 
     this._isInitPos = true;
 
-    this.emit('InnerEvents', {
-      type: 'endpoint:updatePos',
-      point: this
-    });
+    if (isNotEmitEvent) {
+      this.emit('InnerEvents', {
+        type: 'endpoint:updatePos',
+        point: this
+      });
+    }
   }
   _getGroupPos(group) {
     let targetGroup = group;
