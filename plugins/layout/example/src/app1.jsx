@@ -56,28 +56,27 @@ class Scene extends Component {
       res.draggable = true;
       res.width = n.width;
       res.height = n.height;
-      // res.endpoints = [{
-      //   id: 'down',
-      //   orientation: [0, 1],
-      //   pos: [0.5, 1]
-      // }, {
-      //   id: 'up',
-      //   orientation: [0, -1],
-      //   pos: [0.5, 1]
-      // }];
+      res.endpoints = [{
+        id: 'down',
+        orientation: [0, 1],
+        pos: [0.5, 1]
+      }, {
+        id: 'up',
+        orientation: [0, -1],
+        pos: [0.5, 1]
+      }];
       return res;
     });
     const edges = treeData.edges.map(e => {
       const res = {};
-      // res.type = 'endpoint';
-      // res.source = 'down';
-      // res.target = 'up';
-      res.type = 'node';
-      res.source = e.source;
-      res.target = e.target;
-      // res.sourceNode = e.source;
-      // res.targetNode = e.target;
-      // res.shapeType = "Custom";
+      // res.type = 'node';
+      // res.source = e.source;
+      // res.target = e.target;
+      res.type = 'endpoint';
+      res.source = 'down';
+      res.target = 'up';
+      res.sourceNode = e.source;
+      res.targetNode = e.target;
       res.arrow = true;
       res.arrowPosition = 1;
       res.Class = KedrovizEdge;

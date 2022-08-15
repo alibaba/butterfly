@@ -37,8 +37,8 @@ export const addEdgeLinks = (nodes, edges) => {
   }
 
   for (const edge of edges) {
-    let sourceNode = edge.sourceNode || edge.source;
-    let targetNode = edge.targetNode || edge.target;
+    let sourceNode = typeof(edge.sourceNode) !== 'undefined' ? edge.sourceNode : edge.source;
+    let targetNode = typeof(edge.targetNode) !== 'undefined' ? edge.targetNode : edge.target;
     edge.sourceNodeObj = nodeById[sourceNode];
     edge.targetNodeObj = nodeById[targetNode];
     edge.sourceNodeObj.targets.push(edge);
