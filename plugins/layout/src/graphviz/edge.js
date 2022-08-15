@@ -38,16 +38,16 @@ class BaseEdge extends Edge {
     return dom;
   }
   redrawPath(d, sourcePoint, targetPoint) {
-    if (!d) {
-      return ``;
-    }
-    const originD = d.split(/[ MC]/).filter(ele => ele !== '');
     const startX = sourcePoint.pos[0];
     const startY = sourcePoint.pos[1];
     const endX = targetPoint.pos[0];
     const endY = targetPoint.pos[1];
+    if (!d) {
+      return `M${startX},${startY}C${startX},${startY+1} ${startX},${startY+2} ${startX},${startY+3}`;
+    }
+    const originD = d.split(/[ MC]/).filter(ele => ele !== '');
     if (startX === endX && startY === endY) {
-      return ``;
+      return `M${startX},${startY}C${startX},${startY+1} ${startX},${startY+2} ${startX},${startY+3}`;
     }
     const startMoveX = parseFloat(originD[0].split(',')[0]) - startX;
     const startMoveY = parseFloat(originD[0].split(',')[1]) - startY;
