@@ -34,14 +34,14 @@ const graphvizLayout = (params) => {
     data.nodes.forEach(n => {
       const newId = stringFilter(n.id);
       nodes[n.id] = newId;
-      let newWidth = n.width ? n.width * 0.010416 * widthBonus : widthBonus;
-      let newHeight = n.height ? n.height * 0.010416 * heightBonus : heightBonus;
       if (n.width && newWidth - n.width < (widthBonus === 2 ? 30 : 50)) {
-        newWidth = n.width + (widthBonus === 2 ? 30 : 50);
+        n.width = n.width + (widthBonus === 2 ? 30 : 50);
       }
       if (n.height && newHeight - n.height < (widthBonus === 2.5 ? 30 : 50)) {
-        newHeight = n.height + (widthBonus === 2.5 ? 30 : 50);
+        n.height = n.height + (widthBonus === 2.5 ? 30 : 50);
       }
+      let newWidth = n.width ? n.width * 0.010416 * widthBonus : widthBonus;
+      let newHeight = n.height ? n.height * 0.010416 * heightBonus : heightBonus;
       result.push(`${newId} [width=${newWidth}, height=${newHeight}]`)
     })
     // edge去重

@@ -1,9 +1,12 @@
 "use strict";
 import { getLayers } from "../selectors/layers";
-const $ = require('jquery');
-const _ = require("lodash");
+// const $ = require('jquery');
+import $ from 'jquery';
+// const _ = require("lodash");
+import _ from 'lodash';
 import "./baseLayers.less";
-const EventEmit3 = require('eventemitter3');
+// const EventEmit3 = require('eventemitter3');
+import EventEmit3 from 'eventemitter3';
 
 class BaseLayers extends EventEmit3 {
   constructor(opts) {
