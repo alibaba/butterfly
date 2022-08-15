@@ -46,6 +46,9 @@ class BaseEdge extends Edge {
     const startY = sourcePoint.pos[1];
     const endX = targetPoint.pos[0];
     const endY = targetPoint.pos[1];
+    if (startX === endX && startY === endY) {
+      return ``;
+    }
     const startMoveX = parseFloat(originD[0].split(',')[0]) - startX;
     const startMoveY = parseFloat(originD[0].split(',')[1]) - startY;
     // 将edge移动到起点

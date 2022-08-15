@@ -4,6 +4,21 @@ import {graphviz} from 'd3-graphviz';
 import Edge from './edge';
 
 const graphvizLayout = (params) => {
+  const stringFilter = (str) => {
+    str = str.toString();
+    let result = "";
+    for (let cc of str) {
+      const ccAscll = cc.charCodeAt();
+      if (ccAscll >= 48 && ccAscll <= 57) {
+        result += String.fromCharCode(ccAscll + 17);
+      } else if (cc === '-') {
+        continue;
+      } else {
+        result += cc;
+      }
+    }
+    return result;
+  }
   const refactDataToString = () => {
     const {data} = params;
     const nodes = {};
@@ -17,13 +32,22 @@ const graphvizLayout = (params) => {
     const widthBonus = params.rankdir === 'LR' || params.rankdir === 'RL' ? 2 : 2.5;
     const heightBonus = params.rankdir === 'LR' || params.rankdir === 'RL' ? 2.5 : 2;
     data.nodes.forEach(n => {
-      nodes[n.id] = n.label;
-      result.push(`${n.label} [width=${n.width ? n.width * 0.010416 * widthBonus : widthBonus}, height=${n.height ? n.height * 0.010416 * heightBonus : heightBonus}]`)
+      const newId = stringFilter(n.id);
+      nodes[n.id] = newId;
+      let newWidth = n.width ? n.width * 0.010416 * widthBonus : widthBonus;
+      let newHeight = n.height ? n.height * 0.010416 * heightBonus : heightBonus;
+      if (n.width && newWidth - n.width < (widthBonus === 2 ? 30 : 50)) {
+        newWidth = n.width + (widthBonus === 2 ? 30 : 50);
+      }
+      if (n.height && newHeight - n.height < (widthBonus === 2.5 ? 30 : 50)) {
+        newHeight = n.height + (widthBonus === 2.5 ? 30 : 50);
+      }
+      result.push(`${newId} [width=${newWidth}, height=${newHeight}]`)
     })
     // edge去重
     const pathDic = {};
     data.edges.forEach(e => {
-      if (e.sourceNode) {
+      if (e.sourceNode !== undefined) {
         if (!pathDic[`${nodes[e.sourceNode]} -> ${nodes[e.targetNode]};`]) {
           pathDic[`${nodes[e.sourceNode]} -> ${nodes[e.targetNode]};`] = true;
           pathDic[`${nodes[e.sourceNode]} -> ${nodes[e.targetNode]};`] && result.push(`${nodes[e.sourceNode]} -> ${nodes[e.targetNode]};`)
@@ -50,10 +74,14 @@ const graphvizLayout = (params) => {
     }`)
   
   const computedData = theGraphviz.data().children[1].children;
+  const tmpDic = {};
+  params.data.nodes.forEach(n => {
+    tmpDic[stringFilter(n.id)] = n;
+  })
   
   computedData.forEach(d => {
     if (d.attributes.class === 'node') {
-      const parseNode = params.data.nodes.find(n => n.label === d.key);
+      const parseNode = tmpDic[d.key];
       parseNode.top = parseFloat(d.children.find((c) => c.tag === 'ellipse').center.y);
       parseNode.left = parseFloat(d.children.find((c) => c.tag === 'ellipse').center.x);
       if (!parseNode.width) {
@@ -65,8 +93,8 @@ const graphvizLayout = (params) => {
     }
     if (d.attributes.class === 'edge') {
       const parseEdges = params.data.edges.filter(e => {
-        const sourceId = params.data.nodes.find(n => n.label === d.key.split('->')[0]).id;
-        const targetId = params.data.nodes.find(n => n.label === d.key.split('->')[1]).id
+        const sourceId = tmpDic[d.key.split('->')[0]].id;
+        const targetId = tmpDic[d.key.split('->')[1]].id;
         if ((e.sourceNode === sourceId && e.targetNode === targetId) ||
           (e.source === sourceId && e.target === targetId)) {
           return true;
