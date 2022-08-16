@@ -11,6 +11,14 @@ let ARROW_TYPE = {
       type: 'pathString',
       content: 'M5 0 L0 -2 Q 1.0 0 0 2 Z'
     },
+    large: {
+      type: 'pathString',
+      content: 'M5 0 L0 -5 Q 1.0 0 0 5 Z'
+    },
+    large1: {
+      type: 'pathString',
+      content: 'M0 0 L-5 5 L2 0 L-5 -5 Z'
+    },
     length: 5,
 
     //自定义

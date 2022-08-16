@@ -32,7 +32,7 @@ canvas.setMinimap(false)
 &nbsp;&nbsp;视口 css
 ### backgroudStyle _`<Object>`_ (选填)
 &nbsp;&nbsp;背景 css
-### nodeColor _`<String>`_ (选填)
+### nodeColor _`<String|Function>`_ (选填)
 &nbsp;&nbsp;节点颜色，默认值：`rgba(255, 103, 101, 1)`
 ### groupColor _`<String>`_ (选填)
 &nbsp;&nbsp;节点组颜色，默认值：`rgba(0, 193, 222, 1)`
@@ -90,7 +90,7 @@ interface Cvs2TermFn {
 ```
 ### safeDistance _`<Number>`_ (选填)
 &nbsp;&nbsp;安全距离，用于限制用户将视口拖出minimap，默认值：`20`
-### activeNodeColor _`<String>`_ (选填)
+### activeNodeColor _`<String|Function>`_ (选填)
 &nbsp;&nbsp;高亮的节点的颜色，默认值：`rgba(255, 253, 76, 1)`
 ### activeGroupColor _`<String>`_ (选填)
 &nbsp;&nbsp;高亮的节点组的颜色，默认值：`rgba(255, 253, 76, 1)`
