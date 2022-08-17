@@ -8,11 +8,11 @@ import { layout } from './layout';
 import { bounds } from '../selectors/size'
 
 
-export const graph = (nodes, edges, layers, rankdir, options) => {
+export const graph = (nodes, edges, layers, rankdir, isRankReverse, options) => {
   addEdgeLinks(nodes, edges);
   addNearestLayers(nodes, layers);
 
-  layout({ nodes, edges, layers, rankdir, ...options.layout });
+  layout({ nodes, edges, layers, rankdir, isRankReverse, ...options.layout });
   const size = bounds(nodes, options.layout.padding);
   nodes.forEach((node) => offsetNode(node, size.min));
 
@@ -31,6 +31,13 @@ export const addEdgeLinks = (nodes, edges) => {
   const nodeById = {};
 
   for (const node of nodes) {
+    // if (node.fields) {
+    //   node.fields.forEach(item => {
+    //     item.targets = [];
+    //     item.sources = [];
+    //     nodeById[item.id] = item;
+    //   });
+    // }
     nodeById[node.id] = node;
     node.targets = [];
     node.sources = [];
@@ -39,8 +46,14 @@ export const addEdgeLinks = (nodes, edges) => {
   for (const edge of edges) {
     let sourceNode = typeof(edge.sourceNode) !== 'undefined' ? edge.sourceNode : edge.source;
     let targetNode = typeof(edge.targetNode) !== 'undefined' ? edge.targetNode : edge.target;
-    edge.sourceNodeObj = nodeById[sourceNode];
-    edge.targetNodeObj = nodeById[targetNode];
+    // if (edge._sourceEndPoint && edge._targetEndPoint) {
+    //   sourceNode = edge._sourceEndPoint.replace(/[^\d]/g, " ");
+    //   targetNode = edge._targetEndPoint.replace(/[^\d]/g, " ");
+    //   edge.sourceNode = parseInt(sourceNode);
+    //   edge.targetNode = parseInt(targetNode);
+    // }
+    edge.sourceNodeObj = nodeById[parseInt(sourceNode)];
+    edge.targetNodeObj = nodeById[parseInt(targetNode)];
     edge.sourceNodeObj.targets.push(edge);
     edge.targetNodeObj.sources.push(edge);
   }

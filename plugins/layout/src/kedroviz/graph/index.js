@@ -31,8 +31,9 @@ export const kedrovizLayout = (param) => {
       stemSpaceTarget: 10,
     },
   };
-  let _rankdir = (rankdir === 'TB' || rankdir === 'BT') ? 'column' : 'row'
-  const result = graph(getNodes(nodes, node, edges, layer), edges, _layers, _rankdir, defaultOptions);
+  let _rankdir = (rankdir === 'TB' || rankdir === 'BT') ? 'column' : 'row';
+  let isRankReverse = (rankdir === 'BT' || rankdir === 'RL') ? true : false;
+  const result = graph(getNodes(nodes, node, edges, layer), edges, _layers, _rankdir, isRankReverse, defaultOptions);
 
   param.data.nodes.forEach((item, index) => {
     item.nearestLayer = result.nodes[index].nearestLayer;

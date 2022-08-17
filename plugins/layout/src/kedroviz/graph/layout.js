@@ -23,6 +23,7 @@ export const layout = ({
   edges,
   layers,
   rankdir,
+  isRankReverse,
   spaceDirection,
   spaceReverseDirection,
   spreadDirection,
@@ -41,8 +42,8 @@ export const layout = ({
     layerSpace: (spaceReverseDirection + layerSpaceReverseDirection) * 0.5,
   };
 
-  const rowConstraints = createRowConstraints(edges, rankdir);
-  const layerConstraints = createLayerConstraints(nodes, layers, rankdir);
+  const rowConstraints = createRowConstraints(edges, rankdir, isRankReverse);
+  const layerConstraints = createLayerConstraints(nodes, layers, rankdir, isRankReverse);
 
   // 找到给定这些约束的节点位置
   solveStrict([...rowConstraints, ...layerConstraints], constants, 1);
@@ -51,8 +52,8 @@ export const layout = ({
   const rows = groupByRow(nodes, rankdir);
 
   // 避免边交叉并保持平行垂直边的约束
-  const crossingConstraints = createCrossingConstraints(edges, constants, rankdir);
-  const parallelConstraints = createParallelConstraints(edges, constants, rankdir);
+  const crossingConstraints = createCrossingConstraints(edges, constants, rankdir, isRankReverse);
+  const parallelConstraints = createParallelConstraints(edges, constants, rankdir, isRankReverse);
 
   for (let i = 0; i < iterations; i += 1) {
     solveLoose(crossingConstraints, 1, constants);
@@ -60,7 +61,7 @@ export const layout = ({
   } 
 
   // 保持最小水平节点间距的约束
-  const separationConstraints = createSeparationConstraints(rows, constants, rankdir);
+  const separationConstraints = createSeparationConstraints(rows, constants, rankdir, isRankReverse);
 
   // 找到给定这些严格约束的最终节点位置
   solveStrict([...separationConstraints, ...parallelConstraints], constants, 1);
@@ -69,14 +70,15 @@ export const layout = ({
   expandDenseRows(edges, rows, spaceReverseDirection, rankdir);
 };
 
-const createRowConstraints = (edges, rankdir) =>
+const createRowConstraints = (edges, rankdir, isRankReverse) =>
   edges.map((edge) => ({
     base: rankdir === 'column' ? rowConstraint : columnConstraint,
-    a: edge.targetNodeObj,
-    b: edge.sourceNodeObj,
-  }));
+    a: !isRankReverse ? edge.targetNodeObj : edge.sourceNodeObj,
+    b: !isRankReverse ? edge.sourceNodeObj : edge.targetNodeObj ,
+  })
+);
 
-const createLayerConstraints = (nodes, layers, rankdir) => {
+const createLayerConstraints = (nodes, layers, rankdir, isRankReverse) => {
   const layerConstraints = [];
 
   if (!layers) {
@@ -114,7 +116,7 @@ const createLayerConstraints = (nodes, layers, rankdir) => {
   return layerConstraints;
 };
 
-const createCrossingConstraints = (edges, constants, rankdir = "column") => {
+const createCrossingConstraints = (edges, constants, rankdir = "column", isRankReverse) => {
   const { spaceDirection } = constants;
   const crossingConstraints = [];
 
@@ -148,8 +150,8 @@ const createCrossingConstraints = (edges, constants, rankdir = "column") => {
       let targetBDirection = rankdir === "column" ? targetB.width : targetB.height;
       crossingConstraints.push({
         base: rankdir === "column" ? columnCrossingConstraint : rowCrossingConstraint,
-        edgeA: edgeA,
-        edgeB: edgeB,
+        edgeA: !isRankReverse ? edgeA : edgeB,
+        edgeB: !isRankReverse ? edgeB : edgeA,
         separationA: sourceADirection * 0.5 + spaceDirection + sourceBDirection * 0.5,
         separationB: targetADirection * 0.5 + spaceDirection + targetBDirection * 0.5,
         strength: 1 / Math.max(1, (edgeADegree + edgeBDegree) / 4),
@@ -160,17 +162,17 @@ const createCrossingConstraints = (edges, constants, rankdir = "column") => {
   return crossingConstraints;
 };
 
-const createParallelConstraints = (edges, constants, rankdir) =>
+const createParallelConstraints = (edges, constants, rankdir, isRankReverse) =>
   edges.map(({ sourceNodeObj, targetNodeObj }) => ({
     base: rankdir === 'column' ? columnParallelConstraint : rowParallelConstraint,
-    a: sourceNodeObj,
-    b: targetNodeObj,
+    a: !isRankReverse ? sourceNodeObj : targetNodeObj,
+    b: !isRankReverse ? targetNodeObj : sourceNodeObj,
     strength:
       0.6 /
       Math.max(1, sourceNodeObj.targets.length + targetNodeObj.sources.length - 2),
   }));
 
-const createSeparationConstraints = (rows, constants, rankdir) => {
+const createSeparationConstraints = (rows, constants, rankdir, isRankReverse) => {
   const { spaceDirection } = constants;
   const separationConstraints = [];
 
@@ -203,8 +205,8 @@ const createSeparationConstraints = (rows, constants, rankdir) => {
       let nodeBDirection = rankdir === "column" ? nodeB.width : nodeB.height;
       separationConstraints.push({
         base: rankdir === "column" ? columnSeparationConstraint : rowSeparationConstraint,
-        a: nodeA,
-        b: nodeB,
+        a: !isRankReverse ? nodeA : nodeB,
+        b: !isRankReverse ? nodeB : nodeA,
         separation: nodeADirection * 0.5 + space + nodeBDirection * 0.5,
       });
     }
