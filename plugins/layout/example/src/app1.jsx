@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import $ from 'jquery';
 import { Node } from '../../../../index';
-import KedrovizCanvas from '../../src/canvas/baseCanvas';
 import './app1.less';
 import '../../../../static/butterfly.css';
 const treeData = require('./mock_data2.json');
-// import {kedrovizLayout, KedrovizEdge, BaseLayers, obstacleAvoidancePoints} from 'butterfly-plugins-layout';
+// import {kedrovizLayout, KedrovizEdge, BaseLayers, obstacleAvoidancePoints, KedrovizCanvas} from 'butterfly-plugins-layout';
 import 'butterfly-plugins-layout/dist/index.css';
+import KedrovizCanvas from '../../src/canvas/baseCanvas';
 import obstacleAvoidancePoints from '../../src/edgeTypes/obstacleAvoidanceEdge/obstacleAvoidancePoints';
 import {kedrovizLayout, BaseLayers} from '../../../../plugins/layout/src/kedroviz';
 import KedrovizEdge from '../../src/edgeTypes/obstacleAvoidanceEdge/ObstacleAvoidanceEdge';
@@ -75,8 +75,8 @@ class Scene extends Component {
       res.type = 'endpoint';
       res.source = 'down';
       res.target = 'up';
-      res.sourceNode = e.source;
-      res.targetNode = e.target;
+      res.sourceNode = e.sourceNode;
+      res.targetNode = e.targetNode;
       res.arrow = true;
       res.arrowPosition = 1;
       res.Class = KedrovizEdge;

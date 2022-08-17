@@ -46,7 +46,7 @@ class Scene extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          arrow: false,
+          arrow: true,
           arrowPosition: 0.3,
           isExpandWidth: true
         }
