@@ -7,6 +7,7 @@ import $ from 'jquery';
 class KedrovizCanvas extends Canvas {
   constructor(opts) {
     super(opts);
+    this.layers = opts.layers;
     const drawPath = _.get(opts, 'drawPath');
 
     if (drawPath && _.isFunction(drawPath)) {

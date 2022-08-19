@@ -69,7 +69,6 @@ export const getNodeRank = (node, edges, layer) => {
   //   }
   // }
 
-  console.log('nodeDeps---->', nodeDeps,layerNodes);
   const toposortedNodes = batchingToposort(nodeDeps);
 
   const nodeRanks = {};
@@ -78,6 +77,7 @@ export const getNodeRank = (node, edges, layer) => {
       nodeRanks[nodeID] = rank;
     }
   }
+  console.log('nodeDeps---->', nodeDeps,layerNodes, toposortedNodes,nodeRanks);
 
   return nodeRanks;
 }
