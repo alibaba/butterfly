@@ -34,7 +34,7 @@ class KedrovizCanvas extends Canvas {
     }
 
 
-    let drawPromise = new Promise((resolve, reject) => {
+  let drawPromise = new Promise((resolve, reject) => {
       setTimeout(() => {
         // 生成groups
         this.addGroups(groups);

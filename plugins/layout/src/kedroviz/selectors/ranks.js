@@ -34,20 +34,42 @@ export const getNodeRank = (node, edges, layer) => {
   for (const nodeID of nodeIDs) {
     nodeDeps[nodeID] = [];
   }
-  for (const edge of edges) {
+  // 去环
+  let loopEdges = [];
+  for (let edge of edges) {
+    let sourceNode = edge.sourceNode || edge.source;
+    let targetNode = edge.targetNode || edge.target;
+    for (let _edge of edges) {
+      let _sourceNode = _edge.sourceNode || _edge.source;
+      let _targetNode = _edge.targetNode || _edge.target;
+      if (sourceNode === _targetNode && targetNode === _sourceNode) {
+        loopEdges.push(_edge.id);
+      }
+    }
+  }
+  let _edges = [];
+  for (let edge of edges) {
+    if (!loopEdges.includes(edge.id)) {
+      _edges.push(edge);
+    }
+  }
+  console.log('loopEdges--->',loopEdges, _edges,layerNodes);
+
+  for (const edge of _edges) {
     let sourceNode = edge.sourceNode || edge.source;
     let targetNode = edge.targetNode || edge.target;
     nodeDeps[sourceNode].push(targetNode);
   }
 
-  for (let i = 1; i < layerNodes.length; i++) {
-    for (const sourceID of layerNodes[i - 1]) {
-      for (const targetID of layerNodes[i]) {
-        nodeDeps[sourceID].push(targetID);
-      }
-    }
-  }
+  // for (let i = 1; i < layerNodes.length; i++) {
+  //   for (const sourceID of layerNodes[i - 1]) {
+  //     for (const targetID of layerNodes[i]) {
+  //       nodeDeps[sourceID].push(targetID);
+  //     }
+  //   }
+  // }
 
+  console.log('nodeDeps---->', nodeDeps,layerNodes);
   const toposortedNodes = batchingToposort(nodeDeps);
 
   const nodeRanks = {};

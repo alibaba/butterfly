@@ -4,7 +4,6 @@
 * Modifications Copyright 2022 butterfly-dag
 */
 'use strict';
-import { curveBasis, line } from 'd3-shape';
 import {
   distance1d,
   angle,
@@ -13,8 +12,7 @@ import {
 } from './utils.js';
 
 const routing = ({
-  _nodes: nodes,
-  _edges: edges,
+  edge,
   rankdir,
   isRankReverse,
   spaceDirection,
@@ -27,14 +25,7 @@ const routing = ({
   stemSpaceSource,
   stemSpaceTarget,
 }) => {
-  const rows = groupByRow(nodes, rankdir);
 
-  // for (const node of nodes) {
-  //   node.targets.sort((a, b) =>
-  //     angle(b.sourceNodeObj, b.targetNodeObj) - angle(a.sourceNodeObj, a.targetNodeObj)
-  //   );
-  // }
-  for (const edge of edges) {
     const source = edge.sourceNodeObj;
     const target = edge.targetNodeObj;
     edge.points = [];
@@ -53,8 +44,11 @@ const routing = ({
 
     const sourceEdgeDistance =
       reverseSourceTargets.indexOf(edge) - (reverseSourceTargets.length - 1) * 0.5;
+    const targetEdgeDistance =
+      reverseTargetSources.indexOf(edge) - (reverseTargetSources.length - 1) * 0.5;
 
     const sourceOffsetDirection = sourceSeparation * sourceEdgeDistance;
+    const targetOffsetDirection = targetSeparation * targetEdgeDistance;
     const startPoint = rankdir === 'column' ? { x: reverseSource.x + sourceOffsetDirection, y: reverseSource.y } : { x: reverseSource.x, y: reverseSource.y + sourceOffsetDirection };
     let currentPoint = startPoint;
 
@@ -207,34 +201,6 @@ const routing = ({
         }
       }
     }
-  }
-
-
-  // for (const node of nodes) {
-  //   node.targets.sort((a, b) =>
-  //     angle(b.sourceNodeObj, b.points[0] || b.targetNodeObj) - angle(a.sourceNodeObj, a.points[0] || a.targetNodeObj)
-  //   );
-  //   node.sources.sort((a, b) =>
-  //     angle(a.points[a.points.length - 1] || a.sourceNodeObj, a.targetNodeObj) - angle(b.points[b.points.length - 1] || b.sourceNodeObj, b.targetNodeObj)
-  //   );
-  // }
-
-  for (const edge of edges) {
-    const source = edge.sourceNodeObj;
-    const target = edge.targetNodeObj;
-
-    const reverseSource = !isRankReverse ? source : target;
-    const reverseTarget = !isRankReverse ? target : source;
-    const reverseSourceTargets = !isRankReverse ? reverseSource.targets : reverseSource.sources;
-    const reverseTargetSources = !isRankReverse ? reverseTarget.sources : reverseTarget.targets;
-
-    const sourceSeparation = rankdir === 'column' ? Math.min(
-      (reverseSource.width - stemSpaceSource) / reverseSourceTargets.length,
-      stemSpaceSource
-    ) : Math.min(
-      (reverseSource.height - stemSpaceSource) / reverseSourceTargets.length,
-      stemSpaceSource
-    );
 
     const targetSeparation = rankdir === 'column' ? Math.min(
       (reverseTarget.width - stemSpaceTarget) / reverseTargetSources.length,
@@ -243,14 +209,6 @@ const routing = ({
       (reverseTarget.height - stemSpaceTarget) / reverseTargetSources.length,
       stemSpaceTarget
     );
-
-    const sourceEdgeDistance =
-      reverseSourceTargets.indexOf(edge) - (reverseSourceTargets.length - 1) * 0.5;
-    const targetEdgeDistance =
-      reverseTargetSources.indexOf(edge) - (reverseTargetSources.length - 1) * 0.5;
-
-    const sourceOffsetDirection = sourceSeparation * sourceEdgeDistance;
-    const targetOffsetDirection = targetSeparation * targetEdgeDistance;
 
     const sourceOffsetReverseDirection =
       stemUnit *
@@ -323,197 +281,14 @@ const routing = ({
     const points = [...sourceStem, ...edge.points, ...targetStem];
 
     edge.points = points;
-  }
 };
-
-const addEdgeLinks = (nodes, edges) => {
-  const nodeById = {};
-
-  for (const node of nodes) {
-    // if (node.fields) {
-    //   node.fields.forEach(item => {
-    //     item.targets = [];
-    //     item.sources = [];
-    //     nodeById[item.id] = item;
-    //   });
-    // }
-    nodeById[node.id] = node;
-    node.targets = [];
-    node.sources = [];
-  }
-
-  for (const edge of edges) {
-    let sourceNode = typeof(edge.sourceNode) !== 'undefined' ? edge.sourceNode : edge.source;
-    let targetNode = typeof(edge.targetNode) !== 'undefined' ? edge.targetNode : edge.target;
-    edge.sourceNodeObj = nodeById[parseInt(sourceNode)];
-    edge.targetNodeObj = nodeById[parseInt(targetNode)];
-    if (edge.isColEdge && edge.sourceNodeObj.endpoints && edge.targetNodeObj.endpoints) {
-      // console.log('edge------->',edge);
-      // let _sourceEndPoint = edge._sourceEndPoint;
-      // let _targetEndPoint = parseInt(edge._targetEndPoint.replace(/[^\d]/g, " "));
-      // let _targetEndPoint = edge._targetEndPoint;
-      // edge.sourceNodeObj.endpoints.forEach(endpoint => {
-      //   if (_sourceEndPoint === endpoint.id) {
-      //     edge.sourceNodeObj.nodeLeft = endpoint._posLeft;
-      //     edge.sourceNodeObj.nodeTop = endpoint._posTop;
-      //   }
-      // });
-      // edge.targetNodeObj.endpoints.forEach(endpoint => {
-      //   if (_targetEndPoint === endpoint.id) {
-      //     edge.targetNodeObj.nodeRight = endpoint._posLeft;
-      //     edge.targetNodeObj.nodeTop = endpoint._posTop;
-      //   }
-      // });
-    }
-    edge.sourceNodeObj.targets.push(edge);
-    edge.targetNodeObj.sources.push(edge);
-  }
-};
-
-const toSinglePoint = (value) => {return parseFloat(value).toFixed(1);}
-
-const limitPrecision = (path) => { return path.replace(/\d+\.\d+/g, toSinglePoint)};
-
-const lineShape = line().x((d) => d.x).y((d) => d.y).curve(curveBasis);
 
 
 const obstacleAvoidancePoints = (opts) => {
-  let {nodes = [], edges = [], layout = {}} = opts;
+  let {edge = {}} = opts;
 
-  nodes.forEach(item => {
-    if (!item.options) {
-      item.options = item;
-    }
-  });
-  let rankdir = layout.options && layout.options.rankdir || 'TB';
-  let _rankdir = rankdir === 'TB' || rankdir === 'BT' ? 'column' : 'row';
-  let isRankReverse = (rankdir === 'BT' || rankdir === 'RL') ? true : false;;
-  const defaultOptions = {
-    spaceDirection: 26,
-    spaceReverseDirection: 30,
-    minPassageGap: 40,
-    stemUnit: 8,
-    stemMinSource: 5,
-    stemMinTarget: 5,
-    stemMax: 20,
-    stemSpaceSource: 5,
-    stemSpaceTarget: 10
-  };
-  let _nodes = nodes.map(node => {
-    let x = node.left + (node.options.width * 0.5);
-    let y = node.top + (node.options.height * 0.5);
-    let _nodeLeft = x - node.options.width * 0.5;
-    let _nodeRight = x + node.options.width * 0.5;
-    let _nodeTop = y - node.options.height * 0.5;
-    let _nodeBottom = y + node.options.height * 0.5;
-    let _endpoints = node.endpoints;
-    // if (_endpoints) {
-    //   if(_endpoints[0]._posLeft !== _endpoints[0]._left) {
-    //     console.log("node---->",node);
-    //   }
-    //   _nodeLeft = _endpoints[0]._posLeft;
-    //   _nodeTop = _endpoints[0]._posTop;
-    //   _nodeRight = _endpoints[1]._posLeft;
-    //   _nodeBottom = _endpoints[1]._posTop;
-    // } else {
-    //   // console.log(node,'=========',nodes, '======edges',edges);
-    // }
-    return {
-      id: node.id,
-      width: node.options.width,
-      x: x,
-      height: node.options.height,
-      y: y,
-      nodeLeft: _nodeLeft,
-      nodeRight: _nodeRight,
-      nodeTop: _nodeTop,
-      nodeBottom: _nodeBottom,
-      endpoints: node.endpoints,
-      fields: node.options.fields
-    }
-  });
-  let _edges = edges.map(edge => {
-    let sourceNode;
-    let targetNode;
-    if(edge.sourceNode) {
-      if(Object.prototype.toString.call(edge.sourceNode) === '[object Object]'){
-        sourceNode = edge.sourceNode.id;
-      } else {
-        sourceNode = edge.sourceNode;
-      }
-    } else {
-      sourceNode = edge.source;
-    }
-    if(edge.targetNode) {
-      if(Object.prototype.toString.call(edge.targetNode) === '[object Object]'){
-        targetNode = edge.targetNode.id;
-      } else {
-        targetNode = edge.targetNode;
-      }
-    } else {
-      targetNode = edge.target;
-    }
-    return {
-      sourceNode,
-      targetNode,
-      _sourceEndPoint: edge._sourceEndPoint,
-      _targetEndPoint: edge._targetEndPoint,
-      isColEdge: edge.isColEdge,
-    }
-  })
-  addEdgeLinks(_nodes, _edges);
-  routing({_nodes, _edges, rankdir: _rankdir, isRankReverse, ...defaultOptions});
-  edges.forEach((item, index) => {
-    let _points = _edges[index].points;
-    let sourceXEndpoint = item.sourceEndpoint && item.sourceEndpoint._posLeft;
-    let sourceYEndpoint = item.sourceEndpoint && item.sourceEndpoint._posTop;
-    let targetXEndpoint = item.targetEndpoint && item.targetEndpoint._posLeft;
-    let targetYEndpoint = item.targetEndpoint && item.targetEndpoint._posTop;
-    let sourceXDistant = 0;
-    let sourceYDistant = 0;
-    let targetXDistant = 0;
-    let targetYDistant = 0;
-    
-    if (sourceXEndpoint && sourceYEndpoint && targetXEndpoint && targetYEndpoint) {
-      targetXDistant = targetXEndpoint - _points[0].x;
-      targetYDistant = targetYEndpoint - _points[0].y;
-      sourceXDistant = sourceXEndpoint - _points[_points.length-1].x;
-      sourceYDistant = sourceYEndpoint - _points[_points.length-1].y;
-    } else {
-      // console.log('====================',item);
-    }
-    _points.forEach((item, index) => {
-      if (index < _points.length / 2) {
-        item.x = item.x + targetXDistant;
-        item.y = item.y + targetYDistant;
-      } else {
-        item.x = item.x + sourceXDistant;
-        item.y = item.y + sourceYDistant;
-      }
-    });
-    let reversePoints = _points.reverse();
-    item.points = reversePoints;
-  });
-  edges.forEach((item) => {
-    let _points = item.points;
-    let path = _points && limitPrecision(lineShape(_points));
-    let resD = '';
-    // 为了兼容graphviz
-    let pathArr = path.split(/[L ]/);
-    let lPath = pathArr[1].substring(0, pathArr[1].indexOf('C'));
-    let cPath = pathArr[1].substring(pathArr[1].indexOf('C'));
-
-    let cPathArr = cPath.replace(/([C,])/g,' ').split(' ');
-    let resCPath = '';
-    for (let cc = 1; cc < cPathArr.length; cc++) {
-      resCPath += `${cc % 2 === 0 ? ',' : ' '}${cPathArr[cc]}`;
-    }
-    resD = `${pathArr[0]}L${lPath}C${resCPath.substring(1)}L${pathArr[2]}`;
-    if (_points.length === 6) {
-      resD = `M${_points[0].x},${_points[0].y}L${_points[5].x},${_points[5].y}`
-    }
-    item.d = resD;
-  });
+  routing({ edge, rankdir: _rankdir, isRankReverse, ...defaultOptions});
+  
 }
 
 export default obstacleAvoidancePoints;

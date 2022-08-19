@@ -4,6 +4,7 @@ import {Edge} from 'butterfly-dag';
 // import BaseEdge from '../../../../../src/edge/baseEdge';
 import $ from 'jquery';
 import { curveBasis, line } from 'd3-shape';
+import obstacleAvoidancePoints from './obstacleAvoidancePoints';
 
 const matchFloats = /\d+\.\d+/g;
 
@@ -21,16 +22,11 @@ class KedrovizEdge extends Edge {
     this.d = '';
     this.shapeType = 'Bezier';
   }
-  drawLabel(text) {
-    let dom = null;
-    if (text) {
-      dom = $(`<i class="newIconfont iconjiandao-tianchong label ${text}"></i>`)[0];
-    }
-    return dom;
-  }
+
   redrawPath(points) {
     let path = points && this.limitPrecision(this.lineShape(points));
-    // console.log("path", path);
+    // console.log("path",points, path);
+    let resD = '';
     // 为了兼容graphviz
     let pathArr = path.split(/[L ]/);
     let lPath = pathArr[1].substring(0, pathArr[1].indexOf('C'));
@@ -41,7 +37,10 @@ class KedrovizEdge extends Edge {
     for (let cc = 1; cc < cPathArr.length; cc++) {
       resCPath += `${cc % 2 === 0 ? ',' : ' '}${cPathArr[cc]}`;
     }
-    let resD = `${pathArr[0]}L${lPath}C${resCPath.substring(1)}L${pathArr[2]}`;
+    resD = `${pathArr[0]}L${lPath}C${resCPath.substring(1)}L${pathArr[2]}`;
+    if (points.length === 6) {
+      resD = `M${points[0].x},${points[0].y}L${points[5].x},${points[5].y}`
+    }
     this.d = resD;
 
     return resD;
@@ -56,25 +55,26 @@ class KedrovizEdge extends Edge {
     });
    
     let _points = this.points;
-    let sourceOrientation = (sourcePoint.orientation)[0] + (sourcePoint.orientation)[1];
-    // console.log(sourcePoint, targetPoint,sourceOrientation, _points);
-    let sourceXDistant = 0;
-    let sourceYDistant = 0;
-    let targetXDistant = 0;
-    let targetYDistant = 0;
-    targetXDistant = (targetPoint.pos)[0] - _points[0].x;
-    targetYDistant = (targetPoint.pos)[1] - _points[0].y;
-    sourceXDistant = (sourcePoint.pos)[0] - _points[_points.length-1].x;
-    sourceYDistant = (sourcePoint.pos)[1] - _points[_points.length-1].y;
-    _points.forEach((item, index) => {
-      if (index < _points.length / 2) {
-        item.x = item.x + targetXDistant;
-        item.y = item.y + targetYDistant;
-      } else {
-        item.x = item.x + sourceXDistant;
-        item.y = item.y + sourceYDistant;
-      }
-    });
+    // let sourceOrientation = (sourcePoint.orientation)[0] + (sourcePoint.orientation)[1];
+    // let sourceXDistant = 0;
+    // let sourceYDistant = 0;
+    // let targetXDistant = 0;
+    // let targetYDistant = 0;
+    // targetXDistant = (targetPoint.pos)[0] - _points[0].x;
+    // targetYDistant = (targetPoint.pos)[1] - _points[0].y;
+    // sourceXDistant = (sourcePoint.pos)[0] - _points[_points.length-1].x;
+    // sourceYDistant = (sourcePoint.pos)[1] - _points[_points.length-1].y;
+    // _points.forEach((item, index) => {
+    //   if (index < _points.length / 2) {
+    //     item.x = item.x + targetXDistant;
+    //     item.y = item.y + targetYDistant;
+    //   } else {
+    //     item.x = item.x + sourceXDistant;
+    //     item.y = item.y + sourceYDistant;
+    //   }
+    // });
+
+    // _points.reverse();
 
     return this.redrawPath(_points);
   }
