@@ -23,7 +23,7 @@ export const getLayerNodes = (node, layer) => {
   return layerIDs.map((layerID) => layerNodes[layerID]);
 }
 
-export const getNodeRank = (node, edges, layer) => {
+export const getNodeRank = (node, edges, layer, nodes) => {
   const layerIDs = getVisibleLayerIDs(node, layer);
   let layerNodes = getLayerNodes(node, layer);
   let nodeIDs = node.ids;
@@ -34,40 +34,64 @@ export const getNodeRank = (node, edges, layer) => {
   for (const nodeID of nodeIDs) {
     nodeDeps[nodeID] = [];
   }
-  // 去环
-  let loopEdges = [];
-  for (let edge of edges) {
-    let sourceNode = edge.sourceNode || edge.source;
-    let targetNode = edge.targetNode || edge.target;
-    for (let _edge of edges) {
-      let _sourceNode = _edge.sourceNode || _edge.source;
-      let _targetNode = _edge.targetNode || _edge.target;
-      if (sourceNode === _targetNode && targetNode === _sourceNode) {
-        loopEdges.push(_edge.id);
-      }
-    }
-  }
-  let _edges = [];
-  for (let edge of edges) {
-    if (!loopEdges.includes(edge.id)) {
-      _edges.push(edge);
-    }
-  }
-  console.log('loopEdges--->',loopEdges, _edges,layerNodes);
 
-  for (const edge of _edges) {
-    let sourceNode = edge.sourceNode || edge.source;
-    let targetNode = edge.targetNode || edge.target;
+  // 去环
+  let noLoopEdges = [];
+  const dfs = (node) => {
+    let targetEdges = node.targets || [];
+    let sourceEdges = node.sources || [];
+    targetEdges.forEach(item => {
+      let targetNode = item.targetNodeObj || {};
+      if (!targetNode._flagNode) {
+        targetNode._flagNode = 1;
+        if (!item._flagedge) {
+          item._flagedge = 1;
+          noLoopEdges.push(item);
+        }
+        dfs(targetNode);
+      }
+    });
+    sourceEdges.forEach(item => {
+      let sourceNode = item.sourceNodeObj || {};
+      if (!sourceNode._flagNode) {
+        sourceNode._flagNode = 1;
+        if (!item._flagedge) {
+          item._flagedge = 1;
+          noLoopEdges.push(item);
+        }
+        dfs(sourceNode);
+      }
+    });
+  }
+  const loopEdges = (nodes) => {
+    nodes.forEach((item) => {
+        if (!item._flagNode) {
+          dfs(item);
+        }
+    });
+  }
+  loopEdges(nodes);
+  nodes.forEach(item => {
+    item._flagNode = 0;
+  });
+  edges.forEach(item => {
+    item._flagedge = 0;
+  })
+
+  for (const edge of noLoopEdges) {
+    let sourceNode = typeof(edge.sourceNode) !== 'undefined' ? edge.sourceNode : edge.source;
+    let targetNode = typeof(edge.targetNode) !== 'undefined' ? edge.targetNode : edge.target;
     nodeDeps[sourceNode].push(targetNode);
   }
 
-  // for (let i = 1; i < layerNodes.length; i++) {
-  //   for (const sourceID of layerNodes[i - 1]) {
-  //     for (const targetID of layerNodes[i]) {
-  //       nodeDeps[sourceID].push(targetID);
-  //     }
-  //   }
-  // }
+  // 因为是RL方向所以需要逆向
+  for (let i = layerNodes.length - 1; i > 0; i--) {
+    for (const sourceID of layerNodes[i]) {
+      for (const targetID of layerNodes[i - 1]) {
+        nodeDeps[sourceID].push(targetID);
+      }
+    }
+  }
 
   const toposortedNodes = batchingToposort(nodeDeps);
 
@@ -77,7 +101,6 @@ export const getNodeRank = (node, edges, layer) => {
       nodeRanks[nodeID] = rank;
     }
   }
-  console.log('nodeDeps---->', nodeDeps,layerNodes, toposortedNodes,nodeRanks);
 
   return nodeRanks;
 }

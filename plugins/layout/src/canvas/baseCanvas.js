@@ -33,6 +33,7 @@ class KedrovizCanvas extends Canvas {
         layers
       });
     }
+    this.drawPath({nodes: this.nodes, edges: this.edges, layout: this.layout});
 
 
   let drawPromise = new Promise((resolve, reject) => {

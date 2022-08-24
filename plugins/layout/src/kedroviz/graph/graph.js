@@ -9,15 +9,14 @@ import { bounds } from '../selectors/size'
 
 
 export const graph = (nodes, edges, layers, rankdir, isRankReverse, options) => {
-  addEdgeLinks(nodes, edges);
   addNearestLayers(nodes, layers);
 
   layout({ nodes, edges, layers, rankdir, isRankReverse, ...options.layout });
   const size = bounds(nodes, options.layout.padding);
   nodes.forEach((node) => offsetNode(node, size.min));
 
-  nodes.forEach((node) => node.x = node.x - (node.width * 0.5));
-  nodes.forEach((node) => node.y = node.y - (node.height * 0.5));
+  // nodes.forEach((node) => node.x = node.x - (node.width * 0.5));
+  // nodes.forEach((node) => node.y = node.y - (node.height * 0.5));
 
   return {
     nodes,
@@ -31,27 +30,18 @@ export const addEdgeLinks = (nodes, edges) => {
   const nodeById = {};
 
   for (const node of nodes) {
-    // if (node.fields) {
-    //   node.fields.forEach(item => {
-    //     item.targets = [];
-    //     item.sources = [];
-    //     nodeById[item.id] = item;
-    //   });
-    // }
-    nodeById[node.id] = node;
+    node.x = 0;
+    node.y = 0;
+    node.left = 0;
+    node.top = 0;
     node.targets = [];
     node.sources = [];
+    nodeById[node.id] = node;
   }
 
   for (const edge of edges) {
     let sourceNode = typeof(edge.sourceNode) !== 'undefined' ? edge.sourceNode : edge.source;
     let targetNode = typeof(edge.targetNode) !== 'undefined' ? edge.targetNode : edge.target;
-    // if (edge._sourceEndPoint && edge._targetEndPoint) {
-    //   sourceNode = edge._sourceEndPoint.replace(/[^\d]/g, " ");
-    //   targetNode = edge._targetEndPoint.replace(/[^\d]/g, " ");
-    //   edge.sourceNode = parseInt(sourceNode);
-    //   edge.targetNode = parseInt(targetNode);
-    // }
     edge.sourceNodeObj = nodeById[parseInt(sourceNode)];
     edge.targetNodeObj = nodeById[parseInt(targetNode)];
     edge.sourceNodeObj.targets.push(edge);

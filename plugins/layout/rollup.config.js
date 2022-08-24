@@ -16,7 +16,6 @@ if (!fs.existsSync(dist)) {
 }
 
 const plugins = [
-  commonjs(),
   babel(
     {
       exclude: 'node_modules/**',
@@ -26,6 +25,7 @@ const plugins = [
       ]
     }
   ),
+  commonjs(),
   postcss({
     extract: true,
     modules: false,

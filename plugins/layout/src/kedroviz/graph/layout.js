@@ -34,7 +34,8 @@ export const layout = ({
     node.x = 0;
     node.y = 0;
   }
-
+  // console.log('layout=======================');
+  // console.log('edges==============',nodes, edges);
   const constants = {
     spaceDirection,
     spaceReverseDirection,
@@ -43,13 +44,16 @@ export const layout = ({
   };
 
   const rowConstraints = createRowConstraints(edges, rankdir, isRankReverse);
+  // console.log('rowConstraints000------->', rowConstraints);
   const layerConstraints = createLayerConstraints(nodes, layers, rankdir, isRankReverse);
+  // console.log('layerConstraints11111------->', layerConstraints);
 
   // 找到给定这些约束的节点位置
   solveStrict([...rowConstraints, ...layerConstraints], constants, 1);
 
   // 求解后，使用节点位置查找已求解的行
   const rows = groupByRow(nodes, rankdir);
+  // console.log('rows22222------->', rows);
 
   // 避免边交叉并保持平行垂直边的约束
   const crossingConstraints = createCrossingConstraints(edges, constants, rankdir, isRankReverse);
@@ -62,12 +66,13 @@ export const layout = ({
 
   // 保持最小水平节点间距的约束
   const separationConstraints = createSeparationConstraints(rows, constants, rankdir, isRankReverse);
+  // console.log('separationConstraints--->', );
 
   // 找到给定这些严格约束的最终节点位置
   solveStrict([...separationConstraints, ...parallelConstraints], constants, 1);
 
   // 调整行与行之间的垂直间距以提高可读性
-  expandDenseRows(edges, rows, spaceReverseDirection, rankdir);
+  expandDenseRows(edges, rows, spaceReverseDirection, rankdir, isRankReverse);
 };
 
 const createRowConstraints = (edges, rankdir, isRankReverse) =>
@@ -88,6 +93,7 @@ const createLayerConstraints = (nodes, layers, rankdir, isRankReverse) => {
   const layerGroups = layers.map((item) =>
     nodes.filter((node) => node.nearestLayer === item)
   );
+  // console.log('layerGroups---->',layerGroups);
 
   for (let i = 0; i < layerGroups.length - 1; i += 1) {
     const layerNodes = layerGroups[i];
@@ -122,7 +128,10 @@ const createCrossingConstraints = (edges, constants, rankdir = "column", isRankR
 
   for (let i = 0; i < edges.length; i += 1) {
     const edgeA = edges[i];
-    const { sourceNodeObj: sourceA, targetNodeObj: targetA } = edgeA;
+    const { sourceNodeObj, targetNodeObj } = edgeA;
+    let sourceA = !isRankReverse ? sourceNodeObj : targetNodeObj;
+    let targetA = !isRankReverse ? targetNodeObj : sourceNodeObj;
+    // let sourceATarget = !isRankReverse ? sourceA
 
     const edgeADegree =
       sourceA.sources.length +
@@ -150,8 +159,8 @@ const createCrossingConstraints = (edges, constants, rankdir = "column", isRankR
       let targetBDirection = rankdir === "column" ? targetB.width : targetB.height;
       crossingConstraints.push({
         base: rankdir === "column" ? columnCrossingConstraint : rowCrossingConstraint,
-        edgeA: !isRankReverse ? edgeA : edgeB,
-        edgeB: !isRankReverse ? edgeB : edgeA,
+        edgeA:  edgeA,
+        edgeB:  edgeB,
         separationA: sourceADirection * 0.5 + spaceDirection + sourceBDirection * 0.5,
         separationB: targetADirection * 0.5 + spaceDirection + targetBDirection * 0.5,
         strength: 1 / Math.max(1, (edgeADegree + edgeBDegree) / 4),
@@ -215,8 +224,8 @@ const createSeparationConstraints = (rows, constants, rankdir, isRankReverse) =>
   return separationConstraints;
 };
 
-const expandDenseRows = (edges, rows, spaceReverseDirection, rankdir, scale = 1.25, unit = 0.25) => {
-  const densities = rowDensity(edges);
+const expandDenseRows = (edges, rows, spaceReverseDirection, rankdir, scale = 1.25, unit = 0.25, isRankReverse) => {
+  const densities = rowDensity(edges, isRankReverse);
   const spaceReverseDirectionUnit = Math.round(spaceReverseDirection * unit);
   let currentOffsetReverseDirection = 0;
 
@@ -236,15 +245,18 @@ const expandDenseRows = (edges, rows, spaceReverseDirection, rankdir, scale = 1.
   }
 };
 
-const rowDensity = (edges) => {
+const rowDensity = (edges, isRankReverse) => {
   const rows = {};
 
   for (const edge of edges) {
-    const edgeAngle =
-      Math.abs(angle(edge.targetNodeObj, edge.sourceNodeObj) - HALF_PI) / HALF_PI;
+    let _sourceNodeObj = !isRankReverse ? edge.sourceNodeObj : edge.targetNodeObj;
+    let _targetNodeObj = !isRankReverse ? edge.targetNodeObj : edge.sourceNodeObj;
 
-    const sourceRow = edge.sourceNodeObj.row;
-    const targetRow = edge.targetNodeObj.row - 1;
+    const edgeAngle =
+      Math.abs(angle(_targetNodeObj, _sourceNodeObj) - HALF_PI) / HALF_PI;
+
+    const sourceRow = _sourceNodeObj.row;
+    const targetRow = _targetNodeObj.row - 1;
 
     rows[sourceRow] = rows[sourceRow] || [0, 0];
     rows[sourceRow][0] += edgeAngle;

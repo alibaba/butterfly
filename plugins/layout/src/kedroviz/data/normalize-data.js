@@ -65,6 +65,26 @@ const toggleLayers = () => {
 }
 
 const normalizeData = (nodes = [], edges = [], layers = [], visible = true) => {
+  node = {
+    ids: [],
+    name: {},
+    index: {},
+    layer: {},
+    width: {},
+    height: {},
+    maxWidth: 0,
+    maxHeight: 0
+  };
+  edge = {
+    ids: [],
+    sources: {},
+    targets: {},  
+  };
+  layer = {
+    ids: [],
+    name: {},
+    visible: true,
+  };
   nodes.forEach(item => addNode(item));
   edges.forEach(item => addEdge(item));
   layers.forEach(item => addLayer(item));

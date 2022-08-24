@@ -4,7 +4,6 @@ import {Edge} from 'butterfly-dag';
 // import BaseEdge from '../../../../../src/edge/baseEdge';
 import $ from 'jquery';
 import { curveBasis, line } from 'd3-shape';
-import obstacleAvoidancePoints from './obstacleAvoidancePoints';
 
 const matchFloats = /\d+\.\d+/g;
 

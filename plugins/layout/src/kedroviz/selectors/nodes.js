@@ -20,7 +20,7 @@ export const getNodes = (nodesOrg, node, edges, layer) => {
   const nodeName = node.name;
   const nodeLayer = node.layer;
   const nodeIndex = node.index;
-  const nodeRank = getNodeRank(node, edges, layer);
+  const nodeRank = getNodeRank(node, edges, layer, nodesOrg);
   const nodeWidth = node.width;
   const nodeHeight = node.height;
   let nodeSize = getNodeSize(nodeIDs, nodeWidth, nodeHeight);
