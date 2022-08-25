@@ -1,6 +1,6 @@
 'use strict';
 
-import Edge from '../../../../src/edge/baseEdge';
+import {Edge} from 'butterfly-dag';
 import $ from 'jquery';
 
 class BaseEdge extends Edge {
