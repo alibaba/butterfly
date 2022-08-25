@@ -24,7 +24,6 @@ class KedrovizEdge extends Edge {
 
   redrawPath(points) {
     let path = points && this.limitPrecision(this.lineShape(points));
-    // console.log("path",points, path);
     let resD = '';
     // 为了兼容graphviz
     let pathArr = path.split(/[L ]/);

@@ -30,7 +30,7 @@ export const groupByRow = (nodes, rankdir) => {
   let rowNumbers = Object.keys(rows).map((row) => parseInt(row));
   rowNumbers.sort((a, b) => a - b);
   let tag;
-  let dis = 30;
+  let dis = 15;
   let resRows = {};
   for (let i = 0; i < rowNumbers.length; i++){
     if (i === 0 && !tag) {

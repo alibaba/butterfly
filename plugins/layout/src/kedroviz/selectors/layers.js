@@ -6,7 +6,7 @@ import normalizeData from '../data/normalize-data';
 import {getVisibleLayerIDs} from './disabled';
 import { bounds as size } from './size'
 
-export const getLayers = ({ nodes = [], edges = [], layers = [], direction = "column" }) => {
+export const getLayers = ({ nodes = [], edges = [], layers = [], direction = "row" }) => {
   let { layer, node } = normalizeData(nodes, edges, layers);
   const layerName = layer.name;
   let _size = size(nodes, 100);
@@ -29,7 +29,7 @@ export const getLayers = ({ nodes = [], edges = [], layers = [], direction = "co
           bound[1] = nodeY + node.height;
         }
       } else {
-        let nodeX = node.x || node.left;
+        let nodeX = node.x || node.left + node.width * 0.5;
 
         if (nodeX - node.width < bound[0]) {
           bound[0] = nodeX - node.width;

@@ -45,18 +45,23 @@ const routing = ({
     );
   }
   for (const edge of edges) {
-    if (edge.id === '42716to6180') {
-      // console.log(edge);
-    }
     const source = edge.sourceNodeObj;
     const target = edge.targetNodeObj;
     let _source = source;
     let _target = target;
 
     edge.points = [];
-    const reverseSource = !isRankReverse ? _source : _target;
-    const reverseTarget = !isRankReverse ? _target : _source;
+    let reverseSource = !isRankReverse ? _source : _target;
+    let reverseTarget = !isRankReverse ? _target : _source;
     let reverseSourceTargets = !isRankReverse ? reverseSource.targets : reverseSource.sources;
+    let reverseTargetSources = !isRankReverse ? reverseTarget.sources : reverseTarget.targets;
+
+    if(reverseSource.row > reverseTarget.row) {
+      reverseSource = reverseTarget;
+      reverseTarget = reverseSource;
+      reverseSourceTargets = reverseTargetSources;
+    }
+
 
     const sourceSeparation = rankdir === 'column' ? Math.min(
       (reverseSource.width - stemSpaceSource) / reverseSourceTargets.length,
@@ -66,8 +71,9 @@ const routing = ({
       stemSpaceSource
     );
 
+    // 0.5 -> 0.7
     const sourceEdgeDistance =
-      reverseSourceTargets.indexOf(edge) - (reverseSourceTargets.length - 1) * 0.5;
+      reverseSourceTargets.indexOf(edge) - (reverseSourceTargets.length - 1) * 0.7;
 
     const sourceOffsetDirection = sourceSeparation * sourceEdgeDistance;
     const startPoint = rankdir === 'column' ? { x: reverseSource.x + sourceOffsetDirection, y: reverseSource.y } : { x: reverseSource.x, y: reverseSource.y + sourceOffsetDirection };
@@ -92,7 +98,6 @@ const routing = ({
           _rowExtended.push({
             nodeLeft: rows[i][j].nodeLeft,
             nodeBottom: rows[i][j].nodeBottom,
-            nodeRight: rows[i][j].nodeRight,
             nodeTop: rows[i][j].nodeTop
           });
         }
@@ -119,7 +124,7 @@ const routing = ({
             continue;
           }
 
-          const offsetDirection = Math.min(spaceDirection, nodeGap * 0.5);
+          const offsetDirection = Math.min(spaceDirection, nodeGap * 0.8);
 
 
           const candidatePoint = rankdir === 'column' ? nearestOnLine(
@@ -192,7 +197,6 @@ const routing = ({
     // } else if (reverseSource.row > reverseTarget.row) {
     //   for (let i = reverseSource.row - 1 ; i > reverseTarget.row; i -= 1) {
     //     const {offsetReverseDirection, nearestPoint} = getOffsetReverseDirection(i);
-    //     console.log(reverseSource, reverseTarget, '=========',offsetReverseDirection, nearestPoint, sourceOffsetDirection);
     //     if(offsetReverseDirection) {
     //       if (rankdir === 'column') {
     //         edge.points.push({
@@ -209,11 +213,11 @@ const routing = ({
     //           y: nearestPoint.y - offsetReverseDirection,
     //         };
     //       } else {
-    //         edge.points.unshift({
+    //         edge.points.push({
     //           x: nearestPoint.x,
     //           y: nearestPoint.y - sourceOffsetDirection,
     //         });
-    //         edge.points.unshift({
+    //         edge.points.push({
     //           x: nearestPoint.x - offsetReverseDirection,
     //           y: nearestPoint.y - sourceOffsetDirection,
     //         });
@@ -248,14 +252,21 @@ const routing = ({
     //   _target = source;
     // }
 
-    const reverseSource = !isRankReverse ? _source : _target;
-    const reverseTarget = !isRankReverse ? _target : _source;
+    let reverseSource = !isRankReverse ? _source : _target;
+    let reverseTarget = !isRankReverse ? _target : _source;
     let reverseSourceTargets = !isRankReverse ? reverseSource.targets : reverseSource.sources;
     let reverseTargetSources = !isRankReverse ? reverseTarget.sources : reverseTarget.targets;
     // if (source.x < target.x) {
     //   reverseSourceTargets = !isRankReverse ? reverseSource.sources : reverseSource.targets;
     //   reverseTargetSources = !isRankReverse ? reverseTarget.targets : reverseTarget.sources;
     // }
+
+    if(reverseSource.row > reverseTarget.row) {
+      reverseSource = reverseTarget;
+      reverseTarget = reverseSource;
+      reverseSourceTargets = reverseTargetSources;
+      reverseTargetSources = reverseSourceTargets;
+    }
 
     const sourceSeparation = rankdir === 'column' ? Math.min(
       (reverseSource.width - stemSpaceSource) / reverseSourceTargets.length,
@@ -273,10 +284,11 @@ const routing = ({
       stemSpaceTarget
     );
 
+    // 0.5 -> 0.7
     const sourceEdgeDistance =
-      reverseSourceTargets.indexOf(edge) - (reverseSourceTargets.length - 1) * 0.5;
+      reverseSourceTargets.indexOf(edge) - (reverseSourceTargets.length - 1) * 0.7;
     const targetEdgeDistance =
-      reverseTargetSources.indexOf(edge) - (reverseTargetSources.length - 1) * 0.5;
+      reverseTargetSources.indexOf(edge) - (reverseTargetSources.length - 1) * 0.7;
 
     const sourceOffsetDirection = sourceSeparation * sourceEdgeDistance;
     const targetOffsetDirection = targetSeparation * targetEdgeDistance;
@@ -376,7 +388,6 @@ const addEdgeLinks = (nodes, edges) => {
     let targetNode = typeof(edge.targetNode) !== 'undefined' ? edge.targetNode : edge.target;
     let _sourceNode = nodeById[parseInt(sourceNode)];
     let _targetNode = nodeById[parseInt(targetNode)];
-    // console.log(_sourceNode,_targetNode);
 
     // RL且箭头方向逆向
     // let _isReverse = false;
@@ -388,7 +399,6 @@ const addEdgeLinks = (nodes, edges) => {
     edge.sourceNodeObj = _sourceNode;
     edge.targetNodeObj = _targetNode;
     // if (edge.isColEdge && edge.sourceNodeObj.endpoints && edge.targetNodeObj.endpoints) {
-      // console.log('edge------->',edge);
       // let _sourceEndPoint = edge._sourceEndPoint;
       // let _targetEndPoint = parseInt(edge._targetEndPoint.replace(/[^\d]/g, " "));
       // let _targetEndPoint = edge._targetEndPoint;
@@ -435,7 +445,7 @@ const obstacleAvoidancePoints = (opts) => {
   let _rankdir = rankdir === 'TB' || rankdir === 'BT' ? 'column' : 'row';
   let isRankReverse = (rankdir === 'BT' || rankdir === 'RL') ? true : false;;
   const defaultOptions = {
-    spaceDirection: 30,
+    spaceDirection: 50,
     spaceReverseDirection: 30,
     minPassageGap: 40,
     stemUnit: 8,
@@ -477,7 +487,7 @@ const obstacleAvoidancePoints = (opts) => {
       width: node.width,
       x: x - (node.width * 0.5),
       height: node.height,
-      y: y - (node.width * 0.5),
+      y: y - (node.height * 0.5),
       nodeLeft: _nodeLeft,
       nodeRight: _nodeRight,
       nodeTop: _nodeTop,
