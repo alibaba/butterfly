@@ -9,8 +9,8 @@ export const bounds = (nodes, padding) => {
   };
 
   for (const node of nodes) {
-    const x = node.x || node.left;
-    const y = node.y || node.top;
+    const x = typeof(node.x) !== 'undefined' ? node.x : node.left;
+    const y = typeof(node.y) !== 'undefined' ? node.y : node.top;
 
     if (x < size.min.x) {
       size.min.x = x;

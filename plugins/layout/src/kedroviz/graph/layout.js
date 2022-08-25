@@ -23,6 +23,7 @@ export const layout = ({
   edges,
   layers,
   rankdir,
+  isRankReverse,
   spaceDirection,
   spaceReverseDirection,
   spreadDirection,
@@ -33,7 +34,6 @@ export const layout = ({
     node.x = 0;
     node.y = 0;
   }
-
   const constants = {
     spaceDirection,
     spaceReverseDirection,
@@ -41,8 +41,8 @@ export const layout = ({
     layerSpace: (spaceReverseDirection + layerSpaceReverseDirection) * 0.5,
   };
 
-  const rowConstraints = createRowConstraints(edges, rankdir);
-  const layerConstraints = createLayerConstraints(nodes, layers, rankdir);
+  const rowConstraints = createRowConstraints(edges, rankdir, isRankReverse);
+  const layerConstraints = createLayerConstraints(nodes, layers, rankdir, isRankReverse);
 
   // 找到给定这些约束的节点位置
   solveStrict([...rowConstraints, ...layerConstraints], constants, 1);
@@ -51,8 +51,8 @@ export const layout = ({
   const rows = groupByRow(nodes, rankdir);
 
   // 避免边交叉并保持平行垂直边的约束
-  const crossingConstraints = createCrossingConstraints(edges, constants, rankdir);
-  const parallelConstraints = createParallelConstraints(edges, constants, rankdir);
+  const crossingConstraints = createCrossingConstraints(edges, constants, rankdir, isRankReverse);
+  const parallelConstraints = createParallelConstraints(edges, constants, rankdir, isRankReverse);
 
   for (let i = 0; i < iterations; i += 1) {
     solveLoose(crossingConstraints, 1, constants);
@@ -60,23 +60,24 @@ export const layout = ({
   } 
 
   // 保持最小水平节点间距的约束
-  const separationConstraints = createSeparationConstraints(rows, constants, rankdir);
+  const separationConstraints = createSeparationConstraints(rows, constants, rankdir, isRankReverse);
 
   // 找到给定这些严格约束的最终节点位置
   solveStrict([...separationConstraints, ...parallelConstraints], constants, 1);
 
   // 调整行与行之间的垂直间距以提高可读性
-  expandDenseRows(edges, rows, spaceReverseDirection, rankdir);
+  expandDenseRows(edges, rows, spaceReverseDirection, rankdir, isRankReverse);
 };
 
-const createRowConstraints = (edges, rankdir) =>
+const createRowConstraints = (edges, rankdir, isRankReverse) =>
   edges.map((edge) => ({
     base: rankdir === 'column' ? rowConstraint : columnConstraint,
-    a: edge.targetNodeObj,
-    b: edge.sourceNodeObj,
-  }));
+    a: !isRankReverse ? edge.targetNodeObj : edge.sourceNodeObj,
+    b: !isRankReverse ? edge.sourceNodeObj : edge.targetNodeObj ,
+  })
+);
 
-const createLayerConstraints = (nodes, layers, rankdir) => {
+const createLayerConstraints = (nodes, layers, rankdir, isRankReverse) => {
   const layerConstraints = [];
 
   if (!layers) {
@@ -114,13 +115,16 @@ const createLayerConstraints = (nodes, layers, rankdir) => {
   return layerConstraints;
 };
 
-const createCrossingConstraints = (edges, constants, rankdir = "column") => {
+const createCrossingConstraints = (edges, constants, rankdir = "column", isRankReverse) => {
   const { spaceDirection } = constants;
   const crossingConstraints = [];
 
   for (let i = 0; i < edges.length; i += 1) {
     const edgeA = edges[i];
-    const { sourceNodeObj: sourceA, targetNodeObj: targetA } = edgeA;
+    const { sourceNodeObj, targetNodeObj } = edgeA;
+    let sourceA = !isRankReverse ? sourceNodeObj : targetNodeObj;
+    let targetA = !isRankReverse ? targetNodeObj : sourceNodeObj;
+    // let sourceATarget = !isRankReverse ? sourceA
 
     const edgeADegree =
       sourceA.sources.length +
@@ -142,14 +146,18 @@ const createCrossingConstraints = (edges, constants, rankdir = "column") => {
         targetB.sources.length +
         targetB.targets.length;
 
-      let sourceADirection = rankdir === "column" ? sourceA.width : sourceA.height;
-      let sourceBDirection = rankdir === "column" ? sourceB.width : sourceB.height;
-      let targetADirection = rankdir === "column" ? targetA.width : targetA.height;
-      let targetBDirection = rankdir === "column" ? targetB.width : targetB.height;
+      // let sourceADirection = rankdir === "column" ? sourceA.width : sourceA.height;
+      // let sourceBDirection = rankdir === "column" ? sourceB.width : sourceB.height;
+      // let targetADirection = rankdir === "column" ? targetA.width : targetA.height;
+      // let targetBDirection = rankdir === "column" ? targetB.width : targetB.height;
+      let sourceADirection = 100;
+      let sourceBDirection = 100;
+      let targetADirection = 100;
+      let targetBDirection = 100;
       crossingConstraints.push({
         base: rankdir === "column" ? columnCrossingConstraint : rowCrossingConstraint,
-        edgeA: edgeA,
-        edgeB: edgeB,
+        edgeA:  edgeA,
+        edgeB:  edgeB,
         separationA: sourceADirection * 0.5 + spaceDirection + sourceBDirection * 0.5,
         separationB: targetADirection * 0.5 + spaceDirection + targetBDirection * 0.5,
         strength: 1 / Math.max(1, (edgeADegree + edgeBDegree) / 4),
@@ -160,17 +168,17 @@ const createCrossingConstraints = (edges, constants, rankdir = "column") => {
   return crossingConstraints;
 };
 
-const createParallelConstraints = (edges, constants, rankdir) =>
+const createParallelConstraints = (edges, constants, rankdir, isRankReverse) =>
   edges.map(({ sourceNodeObj, targetNodeObj }) => ({
     base: rankdir === 'column' ? columnParallelConstraint : rowParallelConstraint,
-    a: sourceNodeObj,
-    b: targetNodeObj,
+    a: !isRankReverse ? sourceNodeObj : targetNodeObj,
+    b: !isRankReverse ? targetNodeObj : sourceNodeObj,
     strength:
       0.6 /
       Math.max(1, sourceNodeObj.targets.length + targetNodeObj.sources.length - 2),
   }));
 
-const createSeparationConstraints = (rows, constants, rankdir) => {
+const createSeparationConstraints = (rows, constants, rankdir, isRankReverse) => {
   const { spaceDirection } = constants;
   const separationConstraints = [];
 
@@ -199,12 +207,14 @@ const createSeparationConstraints = (rows, constants, rankdir) => {
       const spread = Math.min(10, degreeA * degreeB * constants.spreadDirection);
       const space = snap(spread * spaceDirection, spaceDirection);
 
-      let nodeADirection = rankdir === "column" ? nodeA.width : nodeA.height;
-      let nodeBDirection = rankdir === "column" ? nodeB.width : nodeB.height;
+      // let nodeADirection = rankdir === "column" ? nodeA.width : nodeA.height;
+      // let nodeBDirection = rankdir === "column" ? nodeB.width : nodeB.height;
+      let nodeADirection = 100;
+      let nodeBDirection = 100;
       separationConstraints.push({
         base: rankdir === "column" ? columnSeparationConstraint : rowSeparationConstraint,
-        a: nodeA,
-        b: nodeB,
+        a: !isRankReverse ? nodeA : nodeB,
+        b: !isRankReverse ? nodeB : nodeA,
         separation: nodeADirection * 0.5 + space + nodeBDirection * 0.5,
       });
     }
@@ -213,8 +223,8 @@ const createSeparationConstraints = (rows, constants, rankdir) => {
   return separationConstraints;
 };
 
-const expandDenseRows = (edges, rows, spaceReverseDirection, rankdir, scale = 1.25, unit = 0.25) => {
-  const densities = rowDensity(edges);
+const expandDenseRows = (edges, rows, spaceReverseDirection, rankdir, scale = 1.25, unit = 0.25, isRankReverse) => {
+  const densities = rowDensity(edges, isRankReverse);
   const spaceReverseDirectionUnit = Math.round(spaceReverseDirection * unit);
   let currentOffsetReverseDirection = 0;
 
@@ -234,15 +244,18 @@ const expandDenseRows = (edges, rows, spaceReverseDirection, rankdir, scale = 1.
   }
 };
 
-const rowDensity = (edges) => {
+const rowDensity = (edges, isRankReverse) => {
   const rows = {};
 
   for (const edge of edges) {
-    const edgeAngle =
-      Math.abs(angle(edge.targetNodeObj, edge.sourceNodeObj) - HALF_PI) / HALF_PI;
+    let _sourceNodeObj = !isRankReverse ? edge.sourceNodeObj : edge.targetNodeObj;
+    let _targetNodeObj = !isRankReverse ? edge.targetNodeObj : edge.sourceNodeObj;
 
-    const sourceRow = edge.sourceNodeObj.row;
-    const targetRow = edge.targetNodeObj.row - 1;
+    const edgeAngle =
+      Math.abs(angle(_targetNodeObj, _sourceNodeObj) - HALF_PI) / HALF_PI;
+
+    const sourceRow = _sourceNodeObj.row;
+    const targetRow = _targetNodeObj.row - 1;
 
     rows[sourceRow] = rows[sourceRow] || [0, 0];
     rows[sourceRow][0] += edgeAngle;

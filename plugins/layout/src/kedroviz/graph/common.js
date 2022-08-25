@@ -24,29 +24,85 @@ export const nodeBottom = (node) => node.y + node.height * 0.5;
 export const groupByRow = (nodes, rankdir) => {
   const rows = {};
 
-  for (const node of nodes) {
-    if(rankdir === "column") {
-      rows[node.y] = rows[node.y] || [];
-      rows[node.y].push(node);
-    } else {
-      rows[node.x] = rows[node.x] || [];
-      rows[node.x].push(node);
+  if(rankdir === "column") {
+    for (const node of nodes) {
+      rows[parseInt(node.y)] = rows[parseInt(node.y)] || [];
+      rows[parseInt(node.y)].push(node);
+    }
+  } else {
+    for (const node of nodes) {
+      rows[parseInt(node.x)] = rows[parseInt(node.x)] || [];
+      rows[parseInt(node.x)].push(node);
     }
   }
 
-  const rowNumbers = Object.keys(rows).map((row) => parseFloat(row));
+  //这里不应该是node.x，需要设置一个区间值 - 8
+  let rowNumbers = Object.keys(rows).map((row) => parseInt(row));
   rowNumbers.sort((a, b) => a - b);
-
-  const sortedRows = rowNumbers.map((row) => rows[row]);
-  for (let i = 0; i < sortedRows.length; i += 1) {
-    if(rankdir === "column") {
-      sortedRows[i].sort((a, b) => compare(a.x, b.x, a.id, b.id));
-    } else {
-      sortedRows[i].sort((a, b) => compare(a.y, b.y, a.id, b.id));
+  let tag;
+  let dis = 15;
+  let resRows = {};
+  for (let i = 0; i < rowNumbers.length; i++){
+    if (i === 0 && !tag) {
+      tag = rowNumbers[i];
+    }else {
+      if (Math.abs(rowNumbers[i] - tag) > dis) {
+        tag=rowNumbers[i];   
+      }
     }
+    resRows[tag] = !resRows[tag] ? rows[tag] : [...resRows[tag], ...rows[rowNumbers[i]]];
+  }
 
-    for (const node of sortedRows[i]) {
-      node.row = i;
+  // for (let i = 0; i < rowNumbers.length; i++){
+  //   for (let j = i+1; j < rowNumbers.length - 1; j++) {
+  //     if ( Math.abs(rowNumbers[j] - rowNumbers[i]) < 30) {
+  //       rowNumbers.splice(j, 1);
+  //       j--;
+
+  //     }
+  //   }
+  // }
+ 
+  // let _rows = {};
+  // let flag = [];
+  // for (let rowItem in rows) {
+  //   rowNumbers.forEach((item) => {
+  //     if (Math.abs(rowItem - item) < 30 && !flag.includes(rowItem)) {
+  //       flag.push(rowItem);
+  //       _rows[item] = _rows[item] ? [..._rows[item], ...rows[rowItem]] : rows[rowItem];
+  //     }
+  //   });
+  // }
+  // const sortedRows = rowNumbers.map((row) => {
+  //   if (!!resRows[row]) {
+  //     return resRows[row];
+  //   }
+  // });
+
+  let sortedRows = [];
+  rowNumbers.forEach(item => {
+    if (resRows[item]) {
+      sortedRows.push(resRows[item]);
+    }
+  });
+
+  if(rankdir === "column") {
+    for (let i = 0; i < sortedRows.length; i += 1) {
+      if (!!sortedRows[i]) {
+        sortedRows[i].sort((a, b) => a.x - b.x);
+        for (const node of sortedRows[i]) {
+          node.row = i;
+        }
+      }
+    }
+  } else {
+    for (let i = 0; i < sortedRows.length; i += 1) {
+      if (!!sortedRows[i]) {
+        sortedRows[i].sort((a, b) => a.y - b.y);
+        for (const node of sortedRows[i]) {
+          node.row = i;
+        }
+      }
     }
   }
 

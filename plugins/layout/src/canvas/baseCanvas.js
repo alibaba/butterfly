@@ -7,6 +7,7 @@ import $ from 'jquery';
 class KedrovizCanvas extends Canvas {
   constructor(opts) {
     super(opts);
+    this.layers = opts.layers;
     const drawPath = _.get(opts, 'drawPath');
 
     if (drawPath && _.isFunction(drawPath)) {
@@ -32,9 +33,10 @@ class KedrovizCanvas extends Canvas {
         layers
       });
     }
+    this.drawPath({nodes: this.nodes, edges: this.edges, layout: this.layout});
 
 
-    let drawPromise = new Promise((resolve, reject) => {
+  let drawPromise = new Promise((resolve, reject) => {
       setTimeout(() => {
         // 生成groups
         this.addGroups(groups);

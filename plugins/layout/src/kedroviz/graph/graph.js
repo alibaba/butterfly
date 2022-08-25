@@ -8,16 +8,15 @@ import { layout } from './layout';
 import { bounds } from '../selectors/size'
 
 
-export const graph = (nodes, edges, layers, rankdir, options) => {
-  addEdgeLinks(nodes, edges);
+export const graph = (nodes, edges, layers, rankdir, isRankReverse, options) => {
   addNearestLayers(nodes, layers);
 
-  layout({ nodes, edges, layers, rankdir, ...options.layout });
+  layout({ nodes, edges, layers, rankdir, isRankReverse, ...options.layout });
   const size = bounds(nodes, options.layout.padding);
   nodes.forEach((node) => offsetNode(node, size.min));
 
-  nodes.forEach((node) => node.x = node.x - (node.width * 0.5));
-  nodes.forEach((node) => node.y = node.y - (node.height * 0.5));
+  // nodes.forEach((node) => node.x = node.x - (node.width * 0.5));
+  // nodes.forEach((node) => node.y = node.y - (node.height * 0.5));
 
   return {
     nodes,
@@ -31,16 +30,20 @@ export const addEdgeLinks = (nodes, edges) => {
   const nodeById = {};
 
   for (const node of nodes) {
-    nodeById[node.id] = node;
+    node.x = 0;
+    node.y = 0;
+    node.left = 0;
+    node.top = 0;
     node.targets = [];
     node.sources = [];
+    nodeById[node.id] = node;
   }
 
   for (const edge of edges) {
-    let sourceNode = edge.sourceNode || edge.source;
-    let targetNode = edge.targetNode || edge.target;
-    edge.sourceNodeObj = nodeById[sourceNode];
-    edge.targetNodeObj = nodeById[targetNode];
+    let sourceNode = typeof(edge.sourceNode) !== 'undefined' ? edge.sourceNode : edge.source;
+    let targetNode = typeof(edge.targetNode) !== 'undefined' ? edge.targetNode : edge.target;
+    edge.sourceNodeObj = nodeById[parseInt(sourceNode)];
+    edge.targetNodeObj = nodeById[parseInt(targetNode)];
     edge.sourceNodeObj.targets.push(edge);
     edge.targetNodeObj.sources.push(edge);
   }
