@@ -170,6 +170,9 @@ class BaseNode extends Node {
   }
 
   getWidth(useCache) {
+    if (this.virtualHidden) {
+      return this.width;
+    }
     if (!useCache || !this.width || this._isForceUpdateSize) {
       this.width = $(this.dom).outerWidth();
       this._isForceUpdateSize = false;
@@ -178,6 +181,9 @@ class BaseNode extends Node {
   }
 
   getHeight(useCache) {
+    if (this.virtualHidden) {
+      return this.height;
+    }
     if (!useCache || !this.height || this._isForceUpdateSize) {
       this.height = $(this.dom).outerHeight();
       this._isForceUpdateSize = false;

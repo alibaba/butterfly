@@ -32,7 +32,7 @@ canvas.setMinimap(false)
 &nbsp;&nbsp;minimap view css
 ### backgroudStyle _`<Object>`_ (Optional)
 &nbsp;&nbsp;minimap backgroud css
-### nodeColor _`<String>`_ (Optional)
+### nodeColor _`<String|Function>`_ (Optional)
 &nbsp;&nbsp;node color，default：`rgba(255, 103, 101, 1)`
 ### groupColor _`<String>`_ (Optional)
 &nbsp;&nbsp;group color，default：`rgba(0, 193, 222, 1)`
@@ -90,7 +90,7 @@ interface Cvs2TermFn {
 ```
 ### safeDistance _`<Number>`_ (Optional)
 &nbsp;&nbsp;safe distance to protect user from moving viewport window outside of minimap，default：`20`
-### activeNodeColor _`<String>`_ (Optional)
+### activeNodeColor _`<String|Function>`_ (Optional)
 &nbsp;&nbsp;active node color，default：`rgba(255, 253, 76, 1)`
 ### activeGroupColor _`<String>`_ (Optional)
 &nbsp;&nbsp;active group color，default：`rgba(255, 253, 76, 1)`

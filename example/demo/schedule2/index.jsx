@@ -1,12 +1,9 @@
+'use strict';
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
-import {Canvas} from 'butterfly-dag';
-import mockData from './data.js';
-
 import './index.less';
-import './iconfont.css';
 import 'butterfly-dag/dist/index.css';
-
+import { Canvas } from 'butterfly-dag';
+import mockData from './data';
 class Scene4New extends Component {
   constructor() {
     super();
@@ -27,6 +24,9 @@ class Scene4New extends Component {
       }
     });
     this.canvas.draw(mockData);
+    this.canvas.on('events', (data) => {
+      console.log(data);
+    });
   }
   render() {
     return (
@@ -38,4 +38,4 @@ class Scene4New extends Component {
   }
 }
 
-ReactDOM.render(<Scene4New />, document.getElementById('root'));
+export default Scene4New;

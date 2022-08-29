@@ -1,18 +1,20 @@
-import {TreeNode} from 'butterfly-dag';
+'use strict';
+
+import { Node } from 'butterfly-dag';
 import $ from 'jquery';
 import './node.less';
-class BaseNode extends TreeNode {
+class BaseNode extends Node {
   constructor(opts) {
     super(opts);
     this.addIcon = null;
     this.expandBtn = null;
-    this.indexExpandNode = null;
+    this.indexExpandNode=null
   }
   draw = (opts) => {
     let container = $('<div class="rule-node"></div>')
-      .css('top', opts.top + 'px')
-      .css('left', opts.left + 'px')
-      .attr('id', opts.id);
+                    .css('top', opts.top + 'px')
+                    .css('left', opts.left+ 'px')
+                    .attr('id', opts.id);
 
     let textDom = $(`<span class="rule-text">${opts.options.desc}</span>`);
     this.indexExpandNode = $(`<div class="index-expand-node"></div>`);
@@ -30,7 +32,7 @@ class BaseNode extends TreeNode {
       this.indexExpandNode.append(iconBox);
       this.indexExpandNode.append(textDom);
       container.append(this.indexExpandNode);
-    } else {
+    }else{
       textDom.addClass('text-normal');
       container.append(textDom);
       container.append(this.addIcon);
@@ -45,13 +47,12 @@ class BaseNode extends TreeNode {
     $(this.expandBtn).on('click', (e) => {
       e.stopPropagation();
       e.preventDefault();
-      // TODO: 这里存在问题
-      // if (this.collapsed) {
-      //   // 可以在这里向后端请求数据,把node穿进去expand里面
-      //   this.expand();
-      // } else {
-      //   this.collapse();
-      // }
+      if (this.collapsed) {
+        // 可以在这里向后端请求数据,把node穿进去expand里面
+        this.expand();
+      } else {
+        this.collapse();
+      }
     });
 
     $(this.addIcon).on('click', (e) => {

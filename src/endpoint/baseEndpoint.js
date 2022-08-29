@@ -7,12 +7,14 @@ import './baseEndpoint.less';
 
 import Endpoint from '../interface/endpoint';
 
+import {isHiddenNode, isHiddenGroup} from '../utils/virtualScroll';
+
 class BaseEndpoint extends Endpoint {
   constructor(opts) {
     super(opts);
     this.id = opts.id;
     this.options = opts;
-    this.orientation = opts.orientation;
+    this.orientation = opts.orientation || [0,-1];
     this.pos = opts.pos;
     this.type = opts.type;
     this.nodeType = _.get(opts, 'nodeType', 'node');
@@ -51,6 +53,8 @@ class BaseEndpoint extends Endpoint {
       this.dom = opts.dom;
       this._isInitedDom = true;
     }
+    // 判断是否初始化过位置
+    this._isInitPos = false;
   }
 
   _init(obj) {
@@ -95,7 +99,17 @@ class BaseEndpoint extends Endpoint {
     return _dom[0];
   }
 
-  updatePos(dom = this.dom, orientation = this.orientation, pos = this.pos) {
+  updatePos(dom = this.dom, orientation = this.orientation, pos = this.pos, isNotEmitEvent) {
+
+    let _isVirtualHidden = this._node.__type === 'node' ? isHiddenNode(this._node.id) : isHiddenGroup(this._node.id);
+    if (_isVirtualHidden) {
+      if (!this._isInitPos) {
+        this._posTop = this._top = this._node.top;
+        this._posLeft = this._left = this._node.left;
+      }
+      return;
+    }
+
     if (this._isInitedDom) {
       // 计算width,height,left,top
       this._width = $(this.dom).outerWidth();
@@ -189,10 +203,14 @@ class BaseEndpoint extends Endpoint {
       this.updated && this.updated();
     }
 
-    this.emit('InnerEvents', {
-      type: 'endpoint:updatePos',
-      point: this
-    });
+    this._isInitPos = true;
+
+    if (!isNotEmitEvent) {
+      this.emit('InnerEvents', {
+        type: 'endpoint:updatePos',
+        point: this
+      });
+    }
   }
   _getGroupPos(group) {
     let targetGroup = group;

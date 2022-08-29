@@ -1,8 +1,10 @@
-import {Edge} from 'butterfly-dag';
-import $ from 'jquery';
+'use strict';
 
+import { Edge } from 'butterfly-dag';
+import $ from 'jquery';
 class BaseEdge extends Edge {
   draw(obj) {
+    console.log(obj)
     let path = super.draw(obj);
 
     if (this.options.lineType) {
@@ -17,6 +19,6 @@ class BaseEdge extends Edge {
     }
     return dom;
   }
-}
+};
 
 export default BaseEdge;

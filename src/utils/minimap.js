@@ -57,7 +57,7 @@ const checkOpts = (options) => {
  *  containerStyle {Object} 外层css
  *  viewportStyle {Object} 视口css
  *  backgroudStyle {Object} 底层css
- *  nodeColor {String} 节点颜色
+ *  nodeColor {String | Function} 节点颜色
  *  groupColor {String} 节点组颜色
  *  root {Element} 画布容器节点
  *  containerWidth {Number} 画布的宽度, 可自定义
@@ -71,7 +71,7 @@ const checkOpts = (options) => {
  *  move {Function} 缩略图互动函数, 用于移动画布, 参考小蝴蝶的move
  *  terminal2canvas {Function} 互动函数, 屏幕坐标到画布坐标的转换
  *  safeDistance {Number} 画布视口在minimap距离边距的安全距离，默认20
- *  activeNodeColor {String} 选中的节点颜色
+ *  activeNodeColor {String | Function} 选中的节点颜色
  *  activeGroupColor {String} 选中的节点组颜色
  *  events {String[]} 补充的监听事件
  */
@@ -476,10 +476,24 @@ class Minimap {
       const width = node.width * this.ratio;
       const height = node.height * this.ratio;
 
+      let _activeNodeColor = null;
+      let _nodeColor = null;
+      if (typeof(activeNodeColor) === 'string') {
+        _activeNodeColor = activeNodeColor;
+      } else if (typeof(activeNodeColor) === 'function') {
+        _activeNodeColor = activeNodeColor(node);
+      }
+
+      if (typeof(nodeColor) === 'string') {
+        _nodeColor = nodeColor;
+      } else if (typeof(nodeColor) === 'function') {
+        _nodeColor = nodeColor(node);
+      }
+
       if(node.minimapActive) {
-        cvsCtx.fillStyle = activeNodeColor;
+        cvsCtx.fillStyle = _activeNodeColor;
       } else {
-        cvsCtx.fillStyle = nodeColor;
+        cvsCtx.fillStyle = _nodeColor;
       }
 
       // cvsCtx.beginPath();

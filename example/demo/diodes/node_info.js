@@ -1,14 +1,13 @@
-import _ from 'lodash';
-import $ from 'jquery';
-import {Node} from 'butterfly-dag';
+'use strict';
 
+import { Node } from 'butterfly-dag';
+import $ from 'jquery'
 class Input extends Node {
   constructor(opts) {
     super(opts);
     // 自定义变量
     this.endpointDom = null;
   }
-
   mounted() {
     this.addEndpoint({
       id: '0',
@@ -16,7 +15,6 @@ class Input extends Node {
       dom: this.endpointDom
     });
   }
-
   draw = (data) => {
     let container = $(`<div class="diodes-base-node info-node ${data.options.type}-node"></div>`)
       .css('top', data.top)
@@ -24,14 +22,14 @@ class Input extends Node {
       .attr('id', data.id);
 
     container.append($(`<span class="text">${_.get(data, 'options.type').toUpperCase()}</span>`));
-
+    
     container.append($(`<div class="line ${data.options.type}-line"></div>`));
 
     this.endpointDom = $(`<div class="point ${data.options.type}-point"></div>`);
 
     container.append(this.endpointDom);
-
-    return container[0];
+    
+    return container[0]
   }
 }
 

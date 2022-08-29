@@ -1,8 +1,10 @@
+'use strict';
+
 import Info from './node_info';
 import Semiconductor from './node_semiconductor';
 import Edge from './edge';
 
-export default {
+const data = {
   nodes: [{
     id: '0',
     top: 50,
@@ -15,7 +17,7 @@ export default {
     left: 150,
     type: 'semiconductor_1',
     Class: Semiconductor,
-    inputs: [{
+    inputs:[{
       id: '0'
     }],
     outputs: [{
@@ -27,7 +29,7 @@ export default {
     left: 380,
     type: 'semiconductor_2',
     Class: Semiconductor,
-    inputs: [{
+    inputs:[{
       id: '0'
     }, {
       id: '1'
@@ -41,7 +43,7 @@ export default {
     left: 590,
     type: 'semiconductor_3',
     Class: Semiconductor,
-    inputs: [{
+    inputs:[{
       id: '0'
     }],
     outputs: [{
@@ -53,7 +55,7 @@ export default {
     left: 780,
     type: 'semiconductor_4',
     Class: Semiconductor,
-    inputs: [{
+    inputs:[{
       id: '0'
     }, {
       id: '1'
@@ -67,7 +69,7 @@ export default {
     left: 780,
     type: 'semiconductor_5',
     Class: Semiconductor,
-    inputs: [{
+    inputs:[{
       id: '0'
     }, {
       id: '1'
@@ -81,7 +83,7 @@ export default {
     left: 780,
     type: 'semiconductor_6',
     Class: Semiconductor,
-    inputs: [{
+    inputs:[{
       id: '0'
     }, {
       id: '1'
@@ -95,7 +97,7 @@ export default {
     left: 780,
     type: 'semiconductor_7',
     Class: Semiconductor,
-    inputs: [{
+    inputs:[{
       id: '0'
     }, {
       id: '1'
@@ -109,7 +111,7 @@ export default {
     left: 780,
     type: 'semiconductor_8',
     Class: Semiconductor,
-    inputs: [{
+    inputs:[{
       id: '0'
     }, {
       id: '1'
@@ -162,5 +164,6 @@ export default {
     type: 'endpoint',
     Class: Edge
   }]
-};
+}
 
+export default data;

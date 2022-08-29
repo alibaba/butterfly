@@ -23,7 +23,8 @@ import GuidelineService from '../utils/guidelineService';
 import Minimap from '../utils/minimap';
 // 线段动画
 import LinkAnimateUtil from '../utils/link/link_animate';
-
+// 虚拟滚动辅助方法
+import virtualScrollUtil from '../utils/virtualScroll';
 
 import './baseCanvas.less';
 
@@ -46,6 +47,19 @@ class BaseCanvas extends Canvas {
     this.draggable = options.draggable || false; // 可拖动
     this.linkable = options.linkable || false; // 可连线
     this.disLinkable = options.disLinkable || false; // 可拆线
+
+    this.virtualScroll = {
+      enable: _.get(options, 'virtualScroll.enable', false),
+      paddingLeft: _.get(options, 'virtualScroll.paddingLeft', 20),
+      paddingRight: _.get(options, 'virtualScroll.paddingRight', 20),
+      paddingTop: _.get(options, 'virtualScroll.paddingTop', 20),
+      paddingBottom: _.get(options, 'virtualScroll.paddingBottom', 20)
+    };
+    this.virtualHideItem = {
+      nodes: [],
+      groups: [],
+      edges: []
+    };  
 
     this.theme = {
       group: {
@@ -74,7 +88,8 @@ class BaseCanvas extends Canvas {
         isLinkMyself: _.get(options, 'theme.edge.isLinkMyself') || false,
         isExpandWidth: _.get(options, 'theme.edge.isExpandWidth') || false,
         defaultAnimate: _.get(options, 'theme.edge.defaultAnimate') || false,
-        dragEdgeZindex: _.get(options, 'theme.edge.dragEdgeZindex', 499)
+        dragEdgeZindex: _.get(options, 'theme.edge.dragEdgeZindex', 499),
+        overlapGap: _.get(options, 'theme.edge.overlapGap', 1)
       },
       endpoint: {
         // 暂时不支持position
@@ -199,8 +214,19 @@ class BaseCanvas extends Canvas {
       terHeight: $(this.root).height(),
       canOffsetX: this._moveData[0],
       canOffsetY: this._moveData[1],
-      scale: this._zoomData
+      scale: this._zoomData,
+      virtualScroll: this.virtualScroll
     });
+
+    // 虚拟滚动
+    this._virtualScrollUtil = virtualScrollUtil;
+    if (this.virtualScroll.enable) {
+      this._virtualScrollUtil.init({
+        info: this.virtualScroll,
+        canvas: this,
+        coordinate: this._coordinateService
+      });
+    }
 
     this._addEventListener();
 
@@ -240,6 +266,9 @@ class BaseCanvas extends Canvas {
     // redraw的promise
     this._redrawPromises = [];
     this._isRedraw = false;
+
+    // 判断浏览器是否高于chrome 64
+    this._isHightVerChrome = true;
   }
 
   //===============================
@@ -261,15 +290,28 @@ class BaseCanvas extends Canvas {
 
     let drawPromise = new Promise((resolve, reject) => {
       setTimeout(() => {
+
+        // chrome版本太低，没有触发ResizeObserver的回调，所以draw之前需要更新下坐标
+        if (!this._isHightVerChrome || !window.ResizeObserver || !this.theme.autoResizeRootSize) {
+          this._rootWidth = $(this.root).width();
+          this._rootHeight = $(this.root).height();
+          this._coordinateService._changeCanvasInfo({
+            terOffsetX: $(this.root).offset().left,
+            terOffsetY: $(this.root).offset().top,
+            terWidth: this._rootWidth,
+            terHeight: this._rootHeight
+          });
+        }
+        
         // 生成groups
-        this.addGroups(groups);
+        this.addGroups(groups, false, true);
         resolve();
       });
     }).then(() => {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           // 生成nodes
-          this.addNodes(nodes);
+          this.addNodes(nodes, false, true);
           resolve();
         }, 10);
       });
@@ -285,6 +327,9 @@ class BaseCanvas extends Canvas {
 
     
     drawPromise.then(() => {
+      if (this.virtualScroll.enable) {
+        this._virtualScrollUtil.redraw(true);
+      }
       this.actionQueue = [];
       this.actionQueueIndex = -1;
       callback && callback({
@@ -312,8 +357,8 @@ class BaseCanvas extends Canvas {
         this.removeNodes(this.nodes.map((item) => item.id) || []);
         this.removeGroups(this.groups.map((item) => item.id) || []);
         this.clearActionQueue();
-        this.draw(opts || {}, () => {
-          callback && callback();
+        this.draw(opts || {}, (data) => {
+          callback && callback(data);
           if (this._redrawPromises.length > 0) {
             let nextData = this._redrawPromises.shift();
             _run(Promise.resolve(nextData));
@@ -466,10 +511,11 @@ class BaseCanvas extends Canvas {
       var raw = window.navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
       return raw ? parseInt(raw[2], 10) : false;
     };
-    let _isHightVerChrome = _isChrome && _getChromeVersion() >= 64;
+
+    this._isHightVerChrome = _isChrome && _getChromeVersion() >= 64;
 
     // todo：chrome64版本ResizeObserver对象不存在，但官方文档说64支持，所以加强判断下
-    if (_isHightVerChrome && window.ResizeObserver && this.theme.autoResizeRootSize) {
+    if (this._isHightVerChrome && window.ResizeObserver && this.theme.autoResizeRootSize) {
       // 监听某个dom的resize事件
       const _resizeObserver = new ResizeObserver(entries => {
         this._rootWidth = $(this.root).width();
@@ -477,11 +523,14 @@ class BaseCanvas extends Canvas {
         this._coordinateService._changeCanvasInfo({
           terOffsetX: $(this.root).offset().left,
           terOffsetY: $(this.root).offset().top,
-          terWidth: $(this.root).width(),
-          terHeight: $(this.root).height()
+          terWidth: this._rootWidth,
+          terHeight: this._rootHeight
         });
         this.canvasWrapper.resize({root: this.root});
         this.setGridMode(true, undefined , true);
+        if (this.virtualScroll.enable) {
+          this._virtualScrollUtil.redraw();
+        }
       });
       _resizeObserver.observe(this.root);
     } else {
@@ -492,11 +541,14 @@ class BaseCanvas extends Canvas {
         this._coordinateService._changeCanvasInfo({
           terOffsetX: $(this.root).offset().left,
           terOffsetY: $(this.root).offset().top,
-          terWidth: $(this.root).width(),
-          terHeight: $(this.root).height()
+          terWidth: this._rootWidth,
+          terHeight: this._rootHeight
         });
         this.canvasWrapper.resize({root: this.root});
         this.setGridMode(true, undefined, true);
+        if (this.virtualScroll.enable) {
+          this._virtualScrollUtil.redraw();
+        }
       })
     }
 
@@ -1656,7 +1708,7 @@ class BaseCanvas extends Canvas {
     }
     return result;
   }
-  addNodes(nodes, isNotEventEmit) {
+  addNodes(nodes, isNotEventEmit, isNotRedrawByVirtualScroll) {
     const _canvasFragment = document.createDocumentFragment();
     const container = $(this.wrapper);
     const result = nodes.filter((node) => {
@@ -1700,6 +1752,12 @@ class BaseCanvas extends Canvas {
 
       // 一定要比group的addNode执行的之前，不然会重复把node加到this.nodes里面
       this.nodes.push(_nodeObj);
+
+      // 虚拟滚动开启
+      if (this.virtualScroll.enable && !_nodeObj.group) {
+        _nodeObj.virtualHidden = true;
+        $(_nodeObj.dom).css('visibility', 'hidden');
+      }
 
       // 假如节点存在group，即放进对应的节点组里
       const existGroup = _nodeObj.group ? this.getGroup(_nodeObj.group) : null;
@@ -1748,6 +1806,11 @@ class BaseCanvas extends Canvas {
         nodes: result
       });
     }
+
+    if (this.virtualScroll.enable && !isNotRedrawByVirtualScroll) {
+      this._virtualScrollUtil.redraw();
+    }
+
     return result;
   }
   addNode(node, isNotEventEmit) {
@@ -1822,6 +1885,13 @@ class BaseCanvas extends Canvas {
           edges: rmEdges
         });
       }
+    }
+
+    if( this.virtualScroll.enable) {
+      this._virtualScrollUtil.removeNodes({
+        nodes: rmNodes,
+        edges: rmEdges
+      });
     }
 
     return {
@@ -2044,7 +2114,7 @@ class BaseCanvas extends Canvas {
   getGroup(id) {
     return _.find(this.groups, item => item.id === id);
   }
-  addGroup(group, unionItems, options, isNotEventEmit) {
+  addGroup(group, unionItems, options, isNotEventEmit, isNotRedrawByVirtualScroll) {
     const container = $(this.wrapper);
     const GroupClass = group.Class || this._GroupClass;
     let _addUnionItem = [];
@@ -2083,6 +2153,12 @@ class BaseCanvas extends Canvas {
     }
 
     _groupObj._init();
+
+    // 虚拟滚动开启
+    if (this.virtualScroll.enable && !_groupObj.group) {
+      _groupObj.virtualHidden = true;
+      $(_groupObj.dom).css('visibility', 'hidden');
+    }
 
     // group嵌套
     if (_groupObj.group) {
@@ -2260,9 +2336,13 @@ class BaseCanvas extends Canvas {
       });
     }
 
+    if (this.virtualScroll.enable && !isNotRedrawByVirtualScroll) {
+      this._virtualScrollUtil.redraw();
+    }
+
     return _groupObj;
   }
-  addGroups(datas) {
+  addGroups(datas, isNotEventEmit, isNotRedrawByVirtualScroll) {
     // group排序，有可能会有group依赖渲染的问题
     let _sortGroup = (groups) => {
       let tmpObj = {};
@@ -2287,7 +2367,13 @@ class BaseCanvas extends Canvas {
 
     let result = _sortGroup(datas);
 
-    return result.map(item => this.addGroup(item)).filter(item => item);
+    result = result.map(item => this.addGroup(item, [], null , isNotEventEmit, true)).filter(item => item);
+
+    if (this.virtualScroll.enable && !isNotRedrawByVirtualScroll) {
+      this._virtualScrollUtil.redraw();
+    }
+
+    return result;
   }
   removeGroup(data, isNotEventEmit) {
     let groupId = undefined;
@@ -2363,6 +2449,11 @@ class BaseCanvas extends Canvas {
         }
       });
     }
+
+    if (this.virtualScroll.enable) {
+      this._virtualScrollUtil.removeGroup(group);
+    }
+
     return {
       group: group,
       nodes: insideNodes || [],
@@ -2793,10 +2884,6 @@ class BaseCanvas extends Canvas {
       }
     }).filter(item => item);
 
-    $(this.svg).append(_edgeFragment);
-
-    $(this.wrapper).append(_labelFragment);
-
     result.forEach((link) => {
       let _soucePoint = {};
       let _targetPoint = {};
@@ -2834,6 +2921,17 @@ class BaseCanvas extends Canvas {
       link.redraw(_soucePoint, _targetPoint);
     });
 
+    // 虚拟滚动开启
+    if (this.virtualScroll.enable) {
+      this._virtualScrollUtil.addEdges(result, {
+        edgeFragment: _edgeFragment,
+        labelFragment: _labelFragment
+      });
+    }
+
+    $(this.svg).append(_edgeFragment);
+    $(this.wrapper).append(_labelFragment);
+
     if (!isNotEventEmit) {
       this.pushActionQueue({
         type: 'system:addEdges',
@@ -2849,6 +2947,8 @@ class BaseCanvas extends Canvas {
     }
 
     $(this.svg).css('visibility', 'visible');
+
+    this._checkEdgesOverlapping();
 
     return result;
   }
@@ -2947,6 +3047,11 @@ class BaseCanvas extends Canvas {
         !isExistEdge && (_rmEdge.targetEndpoint._tmpType = undefined);
       }
     });
+
+    if( this.virtualScroll.enable) {
+      this._virtualScrollUtil.removeEdges(result);
+    }
+
     return result;
   }
   removeEdge(edge, isNotEventEmit, isNotPushActionQueue) {
@@ -3018,13 +3123,13 @@ class BaseCanvas extends Canvas {
     // 插入dom
     let beforeEdge = this.edges[addIndex];
     let afterEdge = this.edges[addIndex + 1];
-    
-    if (beforeEdge) {
+
+    if (beforeEdge && !beforeEdge.virtualHidden) {
       let targetDom = beforeEdge.dom;
       beforeEdge.eventHandlerDom && (targetDom = beforeEdge.eventHandlerDom);
       beforeEdge.arrowDom && (targetDom = beforeEdge.arrowDom);
       $(targetDom).after(addEdgesDom);
-    } else if (afterEdge) {
+    } else if (afterEdge && !afterEdge.virtualHidden) {
       $(afterEdge.dom).before(addEdgesDom);
     } else {
       $(this.svg).append(addEdgesDom);
@@ -3045,6 +3150,59 @@ class BaseCanvas extends Canvas {
       }
     });
     return index;
+  }
+  // 防止互相反向的线段重叠
+  _checkEdgesOverlapping () {
+    let edgesObjs = {};
+    let changeEdgesObjs = {};
+    this.edges.forEach((item) => {
+      if (item.type === 'endpoint') {
+        edgesObjs[`${item.sourceNode.id}-${item.sourceEndpoint.id}-${item.targetNode.id}-${item.targetEndpoint.id}`] = item;
+      } else {
+        edgesObjs[`${item.sourceNode.id}-${item.targetNode.id}`] = item;
+      }
+      item._offsetPosLeft = 0;
+      item._offsetPosTop = 0;
+    });
+    this.edges.forEach((item) => {
+      let isExist = false;
+      let checkId = '';
+      if (item.type === 'endpoint') {
+        checkId = `${item.targetNode.id}-${item.targetEndpoint.id}-${item.sourceNode.id}-${item.sourceEndpoint.id}`;
+        isExist = !!edgesObjs[checkId] && !changeEdgesObjs[checkId];
+        if (isExist) {
+          let sourceEdge = edgesObjs[`${item.sourceNode.id}-${item.sourceEndpoint.id}-${item.targetNode.id}-${item.targetEndpoint.id}`];
+          let targetEdge = edgesObjs[`${item.targetNode.id}-${item.targetEndpoint.id}-${item.sourceNode.id}-${item.sourceEndpoint.id}`];
+          changeEdgesObjs[`${item.sourceNode.id}-${item.sourceEndpoint.id}-${item.targetNode.id}-${item.targetEndpoint.id}`] = sourceEdge;
+          changeEdgesObjs[`${item.targetNode.id}-${item.targetEndpoint.id}-${item.sourceNode.id}-${item.sourceEndpoint.id}`] = targetEdge;
+          let sourceOri = sourceEdge.sourceEndpoint.orientation || [];
+          if (sourceOri[0] === 0) {
+            sourceEdge._offsetPosLeft -= this.theme.edge.overlapGap;
+            targetEdge._offsetPosLeft += this.theme.edge.overlapGap;
+          } else {
+            sourceEdge._offsetPosTop -= this.theme.edge.overlapGap;
+            targetEdge._offsetPosTop += this.theme.edge.overlapGap;
+          }
+        }
+      } else {
+        checkId = `${item.targetNode.id}-${item.targetNode.id}`;
+        isExist = !!edgesObjs[checkId] && !changeEdgesObjs[checkId];
+        if (isExist) {
+          let sourceEdge = edgesObjs[`${item.sourceNode.id}-${item.targetNode.id}`];
+          let targetEdge = edgesObjs[`${item.targetNode.id}-${item.sourceNode.id}`];
+          changeEdgesObjs[`${item.sourceNode.id}-${item.targetNode.id}`] = sourceEdge;
+          changeEdgesObjs[`${item.targetNode.id}-${item.sourceNode.id}`] = targetEdge;
+          !sourceEdge._offsetPosLeft && (sourceEdge._offsetPosLeft = 0);
+          !targetEdge._offsetPosLeft && (targetEdge._offsetPosLeft = 0);
+          sourceEdge._offsetPosLeft -= this.theme.edge.overlapGap;
+          targetEdge._offsetPosLeft += this.theme.edge.overlapGap;
+        }
+      }
+    });
+
+    Object.keys(changeEdgesObjs).forEach((key) => {
+      changeEdgesObjs[key].redraw();
+    });
   }
 
 
@@ -3590,35 +3748,72 @@ class BaseCanvas extends Canvas {
     offsetX = -offsetX + customOffset[0];
     offsetY = -offsetY + customOffset[1];
 
-    const time = 500;
-    let animatePromise = new Promise((resolve) => {
-      $(this.wrapper).animate({
+    if (options && options.animate === false) {
+      this._zoomData = scale;
+      this._moveData = [offsetX, offsetY];
+      this._coordinateService._changeCanvasInfo({
+        canOffsetX: offsetX,
+        canOffsetY: offsetY,
+        scale: scale,
+        originX: 50,
+        originY: 50
+      });
+      $(this.wrapper).css({
         top: offsetY,
         left: offsetX,
-      }, time, () => {
-        resolve();
+        transform: `scale(${scale})`
       });
-    });
-    this._moveData = [offsetX, offsetY];
-
-    this._coordinateService._changeCanvasInfo({
-      canOffsetX: offsetX,
-      canOffsetY: offsetY,
-      scale: scale,
-      originX: 50,
-      originY: 50
-    });
-
-
-    let zoomPromise = new Promise((resolve) => {
-      this.zoom(scale, () => {
-        resolve();
-      });
-    });
-
-    Promise.all([animatePromise, zoomPromise]).then(() => {
+      if (this.virtualScroll.enable) {
+        this._virtualScrollUtil.redraw();
+      }
       callback && callback();
-    });
+    } else {
+      const time = 500;
+      let animatePromise = new Promise((resolve) => {
+        let frame = 1;
+        let originX = this._moveData[0];
+        let originY = this._moveData[1];
+        let gap_X = (offsetX - originX) / 20;
+        let gap_Y = (offsetY - originY) / 20;
+        let timer = setInterval(() => {
+          originX += gap_X;
+          originY += gap_Y;
+          $(this.wrapper).css({
+            top: originY,
+            left: originX
+          });
+          if (frame === 20) {
+            clearInterval(timer);
+            resolve();
+          }
+          frame++;
+        }, time / 20);
+      });
+      
+      this._moveData = [offsetX, offsetY];
+
+      this._coordinateService._changeCanvasInfo({
+        canOffsetX: offsetX,
+        canOffsetY: offsetY,
+        scale: scale,
+        originX: 50,
+        originY: 50
+      });
+
+
+      let zoomPromise = new Promise((resolve) => {
+        this.zoom(scale, () => {
+          resolve();
+        });
+      });
+
+      Promise.all([animatePromise, zoomPromise]).then(() => {
+        if (this.virtualScroll.enable) {
+          this._virtualScrollUtil.redraw();
+        }
+        callback && callback();
+      });
+    }
   }
   focusCenterWithAnimate(options, callback) {
     let nodeIds = this.nodes.map((item) => {
@@ -3687,12 +3882,25 @@ class BaseCanvas extends Canvas {
 
     // animate不支持scale，使用setInterval自己实现
     let animatePromise = new Promise((resolve) => {
-      $(this.wrapper).animate({
-        top: targetY,
-        left: targetX
-      }, time, () => {
-        resolve()
-      });
+      let frame = 1;
+      let originX = this._moveData[0];
+      let originY = this._moveData[1];
+      let gap_X = (targetX - originX) / 20;
+      let gap_Y = (targetY - originY) / 20;
+      let timer = setInterval(() => {
+        originX += gap_X;
+        originY += gap_Y;
+        $(this.wrapper).css({
+          top: originY,
+          left: originX
+        });
+        frame++;
+        debugger;
+        if (frame === 20) {
+          clearInterval(timer);
+          resolve();
+        }
+      }, time / 20);
     });
     this._moveData = [targetX, targetY];
 
