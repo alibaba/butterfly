@@ -7,7 +7,7 @@ import $ from 'jquery';
 class KedrovizCanvas extends Canvas {
   constructor(opts) {
     super(opts);
-    this.layers = opts.layers;
+    this.layers = null;
     const drawPath = _.get(opts, 'drawPath');
 
     if (drawPath && _.isFunction(drawPath)) {
@@ -91,18 +91,26 @@ class KedrovizCanvas extends Canvas {
     const _layersFragment = document.createDocumentFragment();
     const LayersClass = layout.options && layout.options.Class;
     let _newLayers = new LayersClass({ nodes, edges, layers, layout });
-    _newLayers._init();
+    _newLayers._init({
+      _coordinateService: this._coordinateService
+    });
     _layersFragment.appendChild(_newLayers.dom);
     $(this.wrapper).append(_layersFragment);
+    this.layers = _newLayers;
   }
-
+  
   _addEventListener() {
     super._addEventListener();
     this.on('custom', (data) => {
       if(data.type === 'edge:calcPath') {
         this.drawPath({nodes: this.nodes, edges: this.edges, layout: this.layout});
       }
-    })
+    });
+    this.on('events', (data) => {
+      if (data.type === 'system.canvas.move' || data.type === 'canvas.zoom') {
+        this.layers.updateLayerName();
+      }
+    });
   }
 }
 

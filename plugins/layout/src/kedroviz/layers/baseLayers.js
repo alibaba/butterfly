@@ -14,9 +14,14 @@ class BaseLayers extends EventEmit3 {
     this.el = {};
     this.dom = null;
     this.visible = opts.layout && opts.layout.options && opts.layout.options.visible || true;
+    this._coordinateService = null;
+    this._updateLayerNameTimer = null;
   }
 
-  _init() {
+  _init(opts) {
+    if (opts._coordinateService) {
+      this._coordinateService = opts._coordinateService;
+    }
     this.dom = this.draw(this.layoutOptions);
   }
 
@@ -73,25 +78,39 @@ class BaseLayers extends EventEmit3 {
 
   drawLayerNames(layer, nodes) {
     let layers = this.layers;
-    let minNode = Infinity;
-    nodes.forEach(item => {
-      if (item.top < minNode) {
-        minNode = item.top;
-      }
-    });
+    let minNode = this._coordinateService._terminal2canvas('y', this._coordinateService.terOffsetY + 20);
     let layerNameDom = $(layer).find('.butterfly-flowchart__layer-names');
     for (let i=0;i<layers.length;i++){
       let dom;
       if(this.direction === 'column') {
         let updateY = (layers[i].y + layers[i].height / 2);
-        dom = $(`<li class='butterfly-layer-name' style='opacity: 1;transform: translateY(${updateY}px);'>${layers[i].name}</li>`);
+        layers[i]._nameY = updateY;
+        layers[i]._layerNameDom = dom = $(`<li class='butterfly-layer-name' style='opacity: 1;transform: translateY(${updateY}px);'>${layers[i].name}</li>`);
       } else {
         let updateX = (layers[i].x + layers[i].width / 2);
-        dom = $(`<li class='butterfly-layer-name' style='opacity: 1;transform: translateX(${updateX}px) translateY(${minNode - 150}px)'>${layers[i].name}</li>`);
+        layers[i]._nameX = updateX;
+        layers[i]._nameY = minNode;
+        layers[i]._layerNameDom = dom = $(`<li class='butterfly-layer-name' style='opacity: 1;transform: translateX(${updateX}px) translateY(${minNode}px)'>${layers[i].name}</li>`);
       }
       layerNameDom.append(dom);
     }
-  };
+  }
+
+  updateLayerName() {
+    if (this._updateLayerNameTimer) {
+      return;
+    } else {
+      this._updateLayerNameTimer = setTimeout(() => {
+        let updateY = this._coordinateService._terminal2canvas('y', this._coordinateService.terOffsetY + 20);
+        this.layers.forEach((item) => {
+          let layerNameDom = item._layerNameDom;
+          layerNameDom.css('transform', `translateX(${item._nameX}px) translateY(${updateY}px)`)
+        });
+        clearTimeout(this._updateLayerNameTimer);
+        this._updateLayerNameTimer = null;
+      }, 200);
+    }
+  }
 
   selectD3Elements() {
     this.el = {
