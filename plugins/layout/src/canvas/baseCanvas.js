@@ -13,6 +13,8 @@ class KedrovizCanvas extends Canvas {
     if (drawPath && _.isFunction(drawPath)) {
       this.drawPath = drawPath;
     }
+
+    this._edgeCage = {};
   }
 
   //===============================
@@ -98,9 +100,37 @@ class KedrovizCanvas extends Canvas {
 
   _addEventListener() {
     super._addEventListener();
-    this.on('custom', (data) => {
-      if(data.type === 'edge:calcPath') {
+    this.on('custom', (edge) => {
+      if(edge.type === 'edge:calcPath') {
+        let _edge = (edge && edge.data) || {};
+
+        // 防止重复计算避障
+        let cacheEdge = this._edgeCage[_edge.id];
+        if (cacheEdge) {
+          if (_edge.sourceNode.top === cacheEdge.source.y && _edge.sourceNode.left === cacheEdge.source.x && _edge.sourceNode.width === cacheEdge.source.w && _edge.sourceNode.height === cacheEdge.source.h
+            && _edge.targetNode.top === cacheEdge.target.y && _edge.targetNode.left === cacheEdge.target.x && _edge.targetNode.width === cacheEdge.target.w && _edge.targetNode.height === cacheEdge.target.h) {
+            return;
+          }
+        }
         this.drawPath({nodes: this.nodes, edges: this.edges, layout: this.layout});
+
+        this.edges.forEach((item) => {
+          this._edgeCage[item.id] = {
+            source: {
+              x: item.sourceNode.left,
+              y: item.sourceNode.top,
+              w: item.sourceNode.width,
+              h: item.sourceNode.height
+            },
+            target: {
+              x: item.targetNode.left,
+              y: item.targetNode.top,
+              w: item.targetNode.width,
+              h: item.targetNode.height
+            },
+            d: item.d
+          }
+        });
       }
     })
   }

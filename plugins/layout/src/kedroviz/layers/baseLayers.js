@@ -26,7 +26,7 @@ class BaseLayers extends EventEmit3 {
     let layer = $(_dom);
     let layersDom = $(`<div class="butterfly-flowchart__layers"></div>`);
     layer.append(layersDom);
-    let layersNameDom = $(`<ul style='height: ${this.layers[0].height}px;'></ul>`)
+    let layersNameDom = $(`<ul style='height: ${this.layers.length && this.layers[0].height}px;'></ul>`)
       .attr(
         "class",
         `butterfly-flowchart__layer-names ${
