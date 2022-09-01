@@ -23,30 +23,33 @@ class KedrovizEdge extends Edge {
   }
 
   redrawPath(points) {
-    let path = points && this.limitPrecision(this.lineShape(points));
-    let resD = '';
-    // 为了兼容graphviz
-    let pathArr = path.split(/[L ]/);
-    let lPath = pathArr[1].substring(0, pathArr[1].indexOf('C'));
-    let cPath = pathArr[1].substring(pathArr[1].indexOf('C'));
+    if (points) {
+      let path = this.limitPrecision(this.lineShape(points));
+      let resD = '';
 
-    let cPathArr = cPath.replace(/([C,])/g,' ').split(' ');
-    let resCPath = '';
-    for (let cc = 1; cc < cPathArr.length; cc++) {
-      resCPath += `${cc % 2 === 0 ? ',' : ' '}${cPathArr[cc]}`;
-    }
-    resD = `${pathArr[0]}L${lPath}C${resCPath.substring(1)}L${pathArr[2]}`;
-    if (points.length === 6) {
-      resD = `M${points[0].x},${points[0].y}L${points[5].x},${points[5].y}`
-    }
-    this.d = resD;
+      // 为了兼容graphviz
+      let pathArr = path.split(/[L ]/);
+      let lPath = pathArr[1].substring(0, pathArr[1].indexOf('C'));
+      let cPath = pathArr[1].substring(pathArr[1].indexOf('C'));
 
-    return resD;
-    // return path.replace(/,/g," ").replace(/([A-Z])/g,' $1 ').trim();
+      let cPathArr = cPath.replace(/([C,])/g,' ').split(' ');
+      let resCPath = '';
+      for (let cc = 1; cc < cPathArr.length; cc++) {
+        resCPath += `${cc % 2 === 0 ? ',' : ' '}${cPathArr[cc]}`;
+      }
+      resD = `${pathArr[0]}L${lPath}C${resCPath.substring(1)}L${pathArr[2]}`;
+      if (points.length === 6) {
+        resD = `M${points[0].x},${points[0].y}L${points[5].x},${points[5].y}`
+      }
+      this.d = resD;
+
+      return resD;
+    }
+    return this.d;
   }
   toSinglePoint(value) {return parseFloat(value).toFixed(1);}
   limitPrecision(path){ return path.replace(matchFloats, this.toSinglePoint)};
-  calcPath(sourcePoint, targetPoint) {    
+  calcPath(sourcePoint, targetPoint) {   
     this.emit('custom',{
       type: "edge:calcPath",
       data: this

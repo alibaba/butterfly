@@ -66,7 +66,7 @@ class BaseLayers extends EventEmit3 {
         label = 'app';
       } else if (layers[i].name === 'API') {
         label = 'api';
-      } else if (layers[i].name === '逻辑表') {
+      } else if (layers[i].name === '物理表') {
         label = 'physical-table';
       } else {
         label = layerItem;
@@ -108,7 +108,7 @@ class BaseLayers extends EventEmit3 {
         });
         clearTimeout(this._updateLayerNameTimer);
         this._updateLayerNameTimer = null;
-      }, 200);
+      }, 300);
     }
   }
 

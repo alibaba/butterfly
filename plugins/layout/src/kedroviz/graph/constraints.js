@@ -23,12 +23,14 @@ export const columnConstraint = {
   property: 'x',
 
   strict: (constraint, constants, variableA, variableB) =>
-    new Constraint(
+    {  
+      // console.log(constants, variableA, variableB);
+      return new Constraint(
       variableA.minus(variableB),
       Operator.Ge,
       constants.spaceReverseDirection,
       Strength.required
-    ),
+    )}
 };
 
 //上下方向的layer约束
