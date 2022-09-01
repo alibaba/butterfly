@@ -78,13 +78,17 @@ export const groupByRow = (nodes, rankdir) => {
 //   return delta !== 0 || values.length === 0 ? delta : compare(...values);
 // };
 
-export const nearestOnLine = (x, y, ax, ay, bx, by) => {
+export const nearestOnLine = (x, y, ax, ay, bx, by, isReverseEdge) => {
+  // const dx =!isReverseEdge ? bx - ax : ax - bx;
+  // const dy =!isReverseEdge ? by - ay : ay - by;
   const dx = bx - ax;
   const dy = by - ay;
   const position = ((x - ax) * dx + (y - ay) * dy) / (dx * dx + dy * dy || 1);
   const positionClamped = clamp(position, 0, 1);
 
   return {
+    // x: !isReverseEdge ? ax + dx * positionClamped : ax - dx * positionClamped,
+    // y: !isReverseEdge ? ay + dy * positionClamped : ay - dy * positionClamped,
     x: ax + dx * positionClamped,
     y: ay + dy * positionClamped,
     ax,

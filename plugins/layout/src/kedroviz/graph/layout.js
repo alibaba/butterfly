@@ -73,7 +73,7 @@ const createRowConstraints = (edges, rankdir, isRankReverse) =>
   edges.map((edge) => ({
     base: rankdir === 'column' ? rowConstraint : columnConstraint,
     a: !isRankReverse ? edge.targetNodeObj : edge.sourceNodeObj,
-    b: !isRankReverse ? edge.sourceNodeObj : edge.targetNodeObj ,
+    b: !isRankReverse ? edge.sourceNodeObj : edge.targetNodeObj
   })
 );
 
@@ -134,7 +134,9 @@ const createCrossingConstraints = (edges, constants, rankdir = "column", isRankR
 
     for (let j = i + 1; j < edges.length; j += 1) {
       const edgeB = edges[j];
-      const { sourceNodeObj: sourceB, targetNodeObj: targetB } = edgeB;
+      const { sourceNodeObj: sourceBNodeObj, targetNodeObj: targetBNodeObj } = edgeB;
+      let sourceB = !isRankReverse ? sourceBNodeObj : targetBNodeObj;
+      let targetB = !isRankReverse ? targetBNodeObj : sourceBNodeObj;
 
       if (sourceA.row >= targetB.row || targetA.row <= sourceB.row) {
         continue;
@@ -146,14 +148,14 @@ const createCrossingConstraints = (edges, constants, rankdir = "column", isRankR
         targetB.sources.length +
         targetB.targets.length;
 
-      // let sourceADirection = rankdir === "column" ? sourceA.width : sourceA.height;
-      // let sourceBDirection = rankdir === "column" ? sourceB.width : sourceB.height;
-      // let targetADirection = rankdir === "column" ? targetA.width : targetA.height;
-      // let targetBDirection = rankdir === "column" ? targetB.width : targetB.height;
-      let sourceADirection = 100;
-      let sourceBDirection = 100;
-      let targetADirection = 100;
-      let targetBDirection = 100;
+      let sourceADirection = rankdir === "column" ? sourceA.width : sourceA.height;
+      let sourceBDirection = rankdir === "column" ? sourceB.width : sourceB.height;
+      let targetADirection = rankdir === "column" ? targetA.width : targetA.height;
+      let targetBDirection = rankdir === "column" ? targetB.width : targetB.height;
+      // let sourceADirection = 100;
+      // let sourceBDirection = 100;
+      // let targetADirection = 100;
+      // let targetBDirection = 100;
       crossingConstraints.push({
         base: rankdir === "column" ? columnCrossingConstraint : rowCrossingConstraint,
         edgeA:  edgeA,
@@ -207,10 +209,10 @@ const createSeparationConstraints = (rows, constants, rankdir, isRankReverse) =>
       const spread = Math.min(10, degreeA * degreeB * constants.spreadDirection);
       const space = snap(spread * spaceDirection, spaceDirection);
 
-      // let nodeADirection = rankdir === "column" ? nodeA.width : nodeA.height;
-      // let nodeBDirection = rankdir === "column" ? nodeB.width : nodeB.height;
-      let nodeADirection = 100;
-      let nodeBDirection = 100;
+      let nodeADirection = rankdir === "column" ? nodeA.width : nodeA.height;
+      let nodeBDirection = rankdir === "column" ? nodeB.width : nodeB.height;
+      // let nodeADirection = 100;
+      // let nodeBDirection = 100;
       separationConstraints.push({
         base: rankdir === "column" ? columnSeparationConstraint : rowSeparationConstraint,
         a: !isRankReverse ? nodeA : nodeB,

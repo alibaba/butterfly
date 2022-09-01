@@ -31,7 +31,7 @@ class BaseLayers extends EventEmit3 {
     let layer = $(_dom);
     let layersDom = $(`<div class="butterfly-flowchart__layers"></div>`);
     layer.append(layersDom);
-    let layersNameDom = $(`<ul style='height: ${this.layers[0].height}px;'></ul>`)
+    let layersNameDom = $(`<ul style='height: ${this.layers.length && this.layers[0].height}px;'></ul>`)
       .attr(
         "class",
         `butterfly-flowchart__layer-names ${
@@ -66,7 +66,7 @@ class BaseLayers extends EventEmit3 {
         label = 'app';
       } else if (layers[i].name === 'API') {
         label = 'api';
-      } else if (layers[i].name === '逻辑表') {
+      } else if (layers[i].name === '物理表') {
         label = 'physical-table';
       } else {
         label = layerItem;
@@ -108,7 +108,7 @@ class BaseLayers extends EventEmit3 {
         });
         clearTimeout(this._updateLayerNameTimer);
         this._updateLayerNameTimer = null;
-      }, 200);
+      }, 300);
     }
   }
 

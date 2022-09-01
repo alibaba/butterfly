@@ -56,10 +56,23 @@ const routing = ({
     let reverseSourceTargets = !isRankReverse ? reverseSource.targets : reverseSource.sources;
     let reverseTargetSources = !isRankReverse ? reverseTarget.sources : reverseTarget.targets;
 
+    //反向线
     if(reverseSource.row > reverseTarget.row) {
+      //planA
+      let tmp = reverseSource;
       reverseSource = reverseTarget;
-      reverseTarget = reverseSource;
+      reverseTarget = tmp;
       reverseSourceTargets = reverseTargetSources;
+      //planB
+      // reverseSource.x = reverseSource.x - reverseSource.width;
+      // reverseSource.nodeLeft = reverseSource.nodeLeft - reverseSource.width;
+      // reverseSource.nodeRight = reverseSource.nodeRight - reverseSource.width;
+      // reverseSource.isReverseEdge = true;
+      // reverseTarget.x = reverseTarget.x + reverseTarget.width;
+      // reverseTarget.nodeLeft = reverseTarget.nodeLeft + reverseTarget.width;
+      // reverseTarget.nodeRight = reverseTarget.nodeRight + reverseTarget.width;
+      // reverseTarget.isReverseEdge = true;
+      // edge.isReverseEdge = true;
     }
 
 
@@ -70,20 +83,36 @@ const routing = ({
       (reverseSource.height - stemSpaceSource) / reverseSourceTargets.length,
       stemSpaceSource
     );
+    //反向线
+    const targetSeparation = rankdir === 'column' ? Math.min(
+      (reverseTarget.width - stemSpaceTarget) / reverseTargetSources.length,
+      stemSpaceSource
+    ) : Math.min(
+      (reverseTarget.height - stemSpaceTarget) / reverseTargetSources.length,
+      stemSpaceSource
+    );
 
     // 0.5 -> 0.7
     const sourceEdgeDistance =
-      reverseSourceTargets.indexOf(edge) - (reverseSourceTargets.length - 1) * 0.7;
+      reverseSourceTargets.indexOf(edge) - (reverseSourceTargets.length - 1) * 0.5;
+    //反向线
+    const targetEdgeDistance =
+      reverseTargetSources.indexOf(edge) - (reverseTargetSources.length - 1) * 0.5;
 
     const sourceOffsetDirection = sourceSeparation * sourceEdgeDistance;
+    const targetOffsetDirection = targetSeparation * targetEdgeDistance;
     const startPoint = rankdir === 'column' ? { x: reverseSource.x + sourceOffsetDirection, y: reverseSource.y } : { x: reverseSource.x, y: reverseSource.y + sourceOffsetDirection };
+    //反向线
+    const startReservePoint = rankdir === 'column' ? { x: reverseTarget.x + targetOffsetDirection, y: reverseTarget.y } : { x: reverseTarget.x, y: reverseTarget.y + targetOffsetDirection };
+    //planB
+    // let currentPoint = !edge.isReverseEdge ? startPoint : startReservePoint;
     let currentPoint = startPoint;
 
     const getOffsetReverseDirection = (i) => {
       const firstNode = rows[i][0];
       let _rowExtended = [];
       if(rankdir === 'column') {
-        _rowExtended.push({ nodeTop: firstNode.nodeTop, nodeLeft: Number.MIN_SAFE_INTEGER - firstNode.width * 0.5, nodeRight: Number.MIN_SAFE_INTEGER + firstNode.width * 0.5 });
+        _rowExtended.push({ nodeTop: firstNode.nodeTop, nodeLeft: Number.MIN_SAFE_INTEGER, nodeRight: Number.MIN_SAFE_INTEGER });
         for(let j=0; j<rows[i].length; j++) {
           _rowExtended.push({
             nodeLeft: rows[i][j].nodeLeft,
@@ -91,17 +120,18 @@ const routing = ({
             nodeTop: rows[i][j].nodeTop
           });
         }
-        _rowExtended.push({ nodeTop: firstNode.nodeTop, nodeLeft: Number.MAX_SAFE_INTEGER - firstNode.width * 0.5, nodeRight: Number.MAX_SAFE_INTEGER + firstNode.width * 0.5 });
+        _rowExtended.push({ nodeTop: firstNode.nodeTop, nodeLeft: Number.MAX_SAFE_INTEGER, nodeRight: Number.MAX_SAFE_INTEGER });
       } else {
-        _rowExtended.push({ nodeLeft: firstNode.nodeLeft, nodeTop: Number.MIN_SAFE_INTEGER, nodeBottom: Number.MIN_SAFE_INTEGER});
+        _rowExtended.push({ nodeLeft: firstNode.nodeLeft, nodeRight: firstNode.nodeRight, nodeTop: Number.MIN_SAFE_INTEGER, nodeBottom: Number.MIN_SAFE_INTEGER});
         for(let j=0; j<rows[i].length; j++) {
           _rowExtended.push({
             nodeLeft: rows[i][j].nodeLeft,
             nodeBottom: rows[i][j].nodeBottom,
-            nodeTop: rows[i][j].nodeTop
+            nodeTop: rows[i][j].nodeTop,
+            nodeRight: rows[i][j].nodeRight,
           });
         }
-        _rowExtended.push({ nodeLeft: firstNode.nodeLeft, nodeTop: Number.MAX_SAFE_INTEGER, nodeBottom: Number.MAX_SAFE_INTEGER });
+        _rowExtended.push({ nodeLeft: firstNode.nodeLeft,nodeRight: firstNode.nodeRight, nodeTop: Number.MAX_SAFE_INTEGER, nodeBottom: Number.MAX_SAFE_INTEGER });
       }
       
 
@@ -127,7 +157,7 @@ const routing = ({
           const offsetDirection = Math.min(spaceDirection, nodeGap * 0.8);
 
 
-          const candidatePoint = rankdir === 'column' ? nearestOnLine(
+          let candidatePoint = rankdir === 'column' ? nearestOnLine(
             currentPoint.x,
             currentPoint.y,
             node.nodeRight + offsetDirection,
@@ -140,8 +170,28 @@ const routing = ({
             node.nodeLeft + spaceReverseDirection,
             node.nodeBottom + offsetDirection,
             nextNode.nodeLeft + spaceReverseDirection,
-            nextNode.nodeTop - offsetDirection
+            nextNode.nodeTop - offsetDirection,
           );
+          //planB
+          //反向
+          // if (edge.isReverseEdge) {
+          //   candidatePoint = rankdir === 'column' ? nearestOnLine(
+          //     currentPoint.x,
+          //     currentPoint.y,
+          //     node.nodeRight + offsetDirection,
+          //     node.nodeTop - spaceReverseDirection,
+          //     nextNode.nodeLeft - offsetDirection,
+          //     nextNode.nodeTop - spaceReverseDirection
+          //   ) : nearestOnLine(
+          //     currentPoint.x,
+          //     currentPoint.y,
+          //     node.nodeRight + spaceReverseDirection,
+          //     node.nodeBottom + offsetDirection,
+          //     nextNode.nodeRight + spaceReverseDirection,
+          //     nextNode.nodeTop - offsetDirection,
+          //   );
+          // }
+          
 
           const distance = rankdir === 'column' ? distance1d(currentPoint.x, candidatePoint.x) : distance1d(currentPoint.y, candidatePoint.y);
 
@@ -159,7 +209,7 @@ const routing = ({
       const offsetReverseDirection = rankdir === 'column' ? firstNode.height + spaceReverseDirection : firstNode.width + spaceReverseDirection;
       return {offsetReverseDirection, nearestPoint};
     }
-    // if(reverseSource.row <= reverseTarget.row) {
+    if(reverseSource.row <= reverseTarget.row) {
       for (let i = reverseSource.row + 1; i < reverseTarget.row; i += 1) {
         const {offsetReverseDirection, nearestPoint} = getOffsetReverseDirection(i);
         if(offsetReverseDirection) {
@@ -194,8 +244,11 @@ const routing = ({
           }
         }
       }
-    // } else if (reverseSource.row > reverseTarget.row) {
-    //   for (let i = reverseSource.row - 1 ; i > reverseTarget.row; i -= 1) {
+    }
+    //  else if (reverseSource.row > reverseTarget.row) {
+    //   //planB
+    //   for (let i = reverseSource.row - 1; i > reverseTarget.row; i -= 1) {
+    //   // for (let i = reverseTarget.row + 1; i < reverseSource.row; i += 1) {
     //     const {offsetReverseDirection, nearestPoint} = getOffsetReverseDirection(i);
     //     if(offsetReverseDirection) {
     //       if (rankdir === 'column') {
@@ -215,11 +268,11 @@ const routing = ({
     //       } else {
     //         edge.points.push({
     //           x: nearestPoint.x,
-    //           y: nearestPoint.y - sourceOffsetDirection,
+    //           y: nearestPoint.y - targetOffsetDirection,
     //         });
     //         edge.points.push({
     //           x: nearestPoint.x - offsetReverseDirection,
-    //           y: nearestPoint.y - sourceOffsetDirection,
+    //           y: nearestPoint.y - targetOffsetDirection,
     //         });
 
     //         currentPoint = {
@@ -261,12 +314,28 @@ const routing = ({
     //   reverseTargetSources = !isRankReverse ? reverseTarget.targets : reverseTarget.sources;
     // }
 
+    //planA
+    let _isReverse = false;
     if(reverseSource.row > reverseTarget.row) {
+      let tmp = reverseSource;
       reverseSource = reverseTarget;
-      reverseTarget = reverseSource;
+      reverseTarget = tmp;
+      let _tmp = reverseSourceTargets;
       reverseSourceTargets = reverseTargetSources;
-      reverseTargetSources = reverseSourceTargets;
+      reverseTargetSources = _tmp;
+      _isReverse = true;
     }
+
+    //planB
+    // if(reverseSource.row > reverseTarget.row) {
+    //   reverseSource.x = reverseSource.x - reverseSource.width;
+    //   reverseSource.nodeLeft = reverseSource.nodeLeft - reverseSource.width;
+    //   reverseSource.nodeRight = reverseSource.nodeRight - reverseSource.width;
+    //   reverseTarget.x = reverseTarget.x + reverseTarget.width;
+    //   reverseTarget.nodeLeft = reverseTarget.nodeLeft + reverseTarget.width;
+    //   reverseTarget.nodeRight = reverseTarget.nodeRight + reverseTarget.width;
+    //   edge.isReverseEdge = true;
+    // }
 
     const sourceSeparation = rankdir === 'column' ? Math.min(
       (reverseSource.width - stemSpaceSource) / reverseSourceTargets.length,
@@ -286,9 +355,9 @@ const routing = ({
 
     // 0.5 -> 0.7
     const sourceEdgeDistance =
-      reverseSourceTargets.indexOf(edge) - (reverseSourceTargets.length - 1) * 0.7;
+      reverseSourceTargets.indexOf(edge) - (reverseSourceTargets.length - 1) * 0.5;
     const targetEdgeDistance =
-      reverseTargetSources.indexOf(edge) - (reverseTargetSources.length - 1) * 0.7;
+      reverseTargetSources.indexOf(edge) - (reverseTargetSources.length - 1) * 0.5;
 
     const sourceOffsetDirection = sourceSeparation * sourceEdgeDistance;
     const targetOffsetDirection = targetSeparation * targetEdgeDistance;
@@ -360,8 +429,22 @@ const routing = ({
         y: reverseTarget.y + targetOffsetDirection,
       },   
     ];
+    //planB
+    // if (edge.isReverseEdge) {
+    //   sourceStem = sourceStem.reverse();
+    //   targetStem = targetStem.reverse();
+    //   // edge.points.reverse();
+    // }
+   
 
-    const points = [...sourceStem, ...edge.points, ...targetStem];
+    let points = [...sourceStem, ...edge.points, ...targetStem];
+
+    //planA
+    if(_isReverse) {
+      // console.log('points--->',points);
+      points = points.reverse();
+    }
+
 
     edge.points = points;
   }
@@ -476,18 +559,26 @@ const obstacleAvoidancePoints = (opts) => {
   //   }
   // });
   let _nodes = nodes.map(node => {
-    let x = node.left + (node.width * 0.5);
-    let y = node.top + (node.height * 0.5);
-    let _nodeLeft = x - node.width * 0.5;
-    let _nodeRight = x + node.width * 0.5;
-    let _nodeTop = y - node.height * 0.5;
-    let _nodeBottom = y + node.height * 0.5;
+    // let x = node.left + (node.width * 0.5);
+    // let y = node.top + (node.height * 0.5);
+    // let _nodeLeft = x - node.width * 0.5;
+    // let _nodeRight = x + node.width * 0.5;
+    // let _nodeTop = y - node.height * 0.5;
+    // let _nodeBottom = y + node.height * 0.5;
+    let x = node.left;
+    let y = node.top;
+    let _nodeLeft = x;
+    let _nodeRight = x + node.width;
+    let _nodeTop = y;
+    let _nodeBottom = y + node.height;
     return {
       id: node.id,
       width: node.width,
-      x: x - (node.width * 0.5),
+      // x: x - (node.width * 0.5),
+      x: x,
       height: node.height,
-      y: y - (node.height * 0.5),
+      // y: y - (node.height * 0.5),
+      y: y,
       nodeLeft: _nodeLeft,
       nodeRight: _nodeRight,
       nodeTop: _nodeTop,
