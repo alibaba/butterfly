@@ -790,6 +790,12 @@ class BaseCanvas extends Canvas {
       this._guidelineService.isActive && this._guidelineService.clearCanvas();
     };
 
+    let _beforeStatus = {
+      timer: 0,
+      x: 0,
+      y: 0
+    };
+
     const mouseDownEvent = (event) => {
       const LEFT_BUTTON = 0;
       // 重置_mouseMoved
@@ -800,6 +806,11 @@ class BaseCanvas extends Canvas {
 
       if (!this._dragType && this.moveable) {
         this._dragType = 'canvas:drag';
+        _beforeStatus = {
+          timer: new Date().getTime(),
+          x: this._moveData[0],
+          y: this._moveData[1]
+        };
       }
 
       // 如果在框选模式下点击
@@ -1628,10 +1639,18 @@ class BaseCanvas extends Canvas {
 
       // 点击空白处触发canvas click，并且框选模式下不触发
       if ((this._dragType === 'canvas:drag' || !this._dragType) && !this.isSelectMode) {
-        this.emit('system.canvas.click');
-        this.emit('events', {
-          type: 'canvas:click'
-        });
+        let _currentStatus = {
+          timer: new Date().getTime(),
+          x: this._moveData[0],
+          y: this._moveData[1]
+        }
+        // 区分canvas拖动和点击事件
+        if (_currentStatus.timer - _beforeStatus.timer < 300 || (Math.abs(_beforeStatus.x - _currentStatus.x) < 20  && Math.abs(_beforeStatus.y - _currentStatus.y) < 20)) {
+          this.emit('system.canvas.click');
+          this.emit('events', {
+            type: 'canvas:click'
+          });
+        } 
       }
 
       // 仅鼠标发生过移动，才增加dragNodeEnd事件
