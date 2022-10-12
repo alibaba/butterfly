@@ -364,6 +364,15 @@ class BaseGroup extends Group {
     });
 
     $(this.dom).on('mouseup', (e) => {
+      // 判断是否点击节点组内的节点
+      let _eventChain = e.originalEvent.path || [];
+      let _isClickNode = _.some(this.nodes, (n) => {
+        return _.some(_eventChain, (p) => n.dom === p);
+      });
+      if (_isClickNode) { 
+        return;
+      }
+
       if(_.isFunction(this.canMouseUp) && !this.canMouseUp(e)) {
         return;
       }
