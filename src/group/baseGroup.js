@@ -38,6 +38,8 @@ class BaseGroup extends Group {
     this._endpointsData = opts.endpoints;
     // 标识是否在移动做，兼容冒泡
     this._isMoving = false;
+    // 标志是否在拖动resize
+    this._isResizing = false;
   }
   _init(obj = {}) {
     if (this._isInited) {
@@ -197,6 +199,7 @@ class BaseGroup extends Group {
       if (event.button !== LEFT_KEY) {
         return;
       }
+      this._isResizing = true;
       event.preventDefault();
       // event.stopPropagation();
       this.emit('InnerEvents', {
@@ -304,21 +307,13 @@ class BaseGroup extends Group {
     });
   }
   _addEventListener() {
-    // 节点组点击事件
-    $(this.dom).on('click', (e) => {
-      if (_.isFunction(this.canClick) && !this.canClick(e)) {
-        return;
-      }
-      e.preventDefault();
-      e.stopPropagation();
-      this.emit('system.group.click', {
-        group: this
-      });
-      this.emit('events', {
-        type: 'group:click',
-        group: this
-      });
-    });
+    
+    let _beforeStatus = {
+      timer: 0,
+      x: 0, 
+      y: 0
+    };
+
     // 节点组鼠标点下事件
     $(this.dom).on('mousedown', (e) => {
       // 兼容节点冒泡上来的事件
@@ -352,6 +347,13 @@ class BaseGroup extends Group {
       if (this._group) {
         e.stopPropagation();
       }
+
+      _beforeStatus = {
+        timer: new Date().getTime(),
+        x: this.left,
+        y: this.top
+      }
+      
       if (this.draggable) {
         this._isMoving = true;
         this.emit('InnerEvents', {
@@ -360,6 +362,43 @@ class BaseGroup extends Group {
         });
       }
     });
+
+    $(this.dom).on('mouseup', (e) => {
+      if(_.isFunction(this.canMouseUp) && !this.canMouseUp(e)) {
+        return;
+      }
+      let _currentStatus = {
+        timer: new Date().getTime(),
+        x: this.left,
+        y: this.top
+      };
+      if (!this._isResizing && (_currentStatus.timer - _beforeStatus.timer < 300 || (Math.abs(_beforeStatus.x - _currentStatus.x) < 20  && Math.abs(_beforeStatus.y - _currentStatus.y) < 20))) {
+        this.emit('system.group.click', {
+          group: this
+        });
+        this.emit('events', {
+          type: 'group:click',
+          group: this
+        });
+      } 
+      this._isResizing = false;
+    });
+
+    // todo: 尝试使用上面mouseup的机制来代替click的机制
+    // $(this.dom).on('click', (e) => {
+    //   if (_.isFunction(this.canClick) && !this.canClick(e)) {
+    //     return;
+    //   }
+    //   e.preventDefault();
+    //   e.stopPropagation();
+    //   this.emit('system.group.click', {
+    //     group: this
+    //   });
+    //   this.emit('events', {
+    //     type: 'group:click',
+    //     group: this
+    //   });
+    // });
   }
   _createEndpoint(isInited) {
     if (isInited) {
