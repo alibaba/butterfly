@@ -1589,7 +1589,7 @@ class BaseCanvas extends Canvas {
       }
 
       // 点击空白处触发canvas click，并且框选模式下不触发
-      if ((this._dragType === 'canvas:drag' || !this._dragType) && !this.isSelectMode) {
+      if (!this.isSelectMode && this._dragType === 'canvas:drag') {
         let _currentStatus = {
           timer: new Date().getTime(),
           x: this._moveData[0],
