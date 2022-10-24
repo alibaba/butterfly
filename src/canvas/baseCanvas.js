@@ -270,6 +270,9 @@ class BaseCanvas extends Canvas {
 
     // 判断浏览器是否高于chrome 64
     this._isHightVerChrome = true;
+    
+    // focus的动画执行中
+    this._isFocusing = false;
   }
 
   //===============================
@@ -805,6 +808,11 @@ class BaseCanvas extends Canvas {
       // 重置_mouseMoved
       this._mouseMoved = false;
       if (event.button !== LEFT_BUTTON) {
+        return;
+      }
+
+      // 动画移动中不能触发mousedown东西，不然会导致坐标计算错误
+      if (this._isFocusing) {
         return;
       }
 
@@ -3827,6 +3835,7 @@ class BaseCanvas extends Canvas {
         });
       });
 
+<<<<<<< HEAD
       Promise.all([animatePromise, zoomPromise]).then(() => {
         if (this.virtualScroll.enable) {
           this._virtualScrollUtil.redraw();
@@ -3834,6 +3843,14 @@ class BaseCanvas extends Canvas {
         callback && callback();
       });
     }
+=======
+    this._isFocusing = true;
+
+    Promise.all([animatePromise, zoomPromise]).then(() => {
+      this._isFocusing = false;
+      callback && callback();
+    });
+>>>>>>> v4.3
   }
   focusCenterWithAnimate(options, callback) {
     let nodeIds = this.nodes.map((item) => {
@@ -3902,6 +3919,7 @@ class BaseCanvas extends Canvas {
 
     // animate不支持scale，使用setInterval自己实现
     let animatePromise = new Promise((resolve) => {
+<<<<<<< HEAD
       let frame = 1;
       let originX = this._moveData[0];
       let originY = this._moveData[1];
@@ -3921,6 +3939,14 @@ class BaseCanvas extends Canvas {
           resolve();
         }
       }, time / 20);
+=======
+      $(this.wrapper).animate({
+        top: targetY,
+        left: targetX
+      }, time, () => {
+        resolve();
+      });
+>>>>>>> v4.3
     });
     this._moveData = [targetX, targetY];
 
@@ -3944,7 +3970,10 @@ class BaseCanvas extends Canvas {
       });
     });
 
+    this._isFocusing = true;
+
     Promise.all([animatePromise, zoomPromise]).then(() => {
+      this._isFocusing = false;
       callback && callback();
     });
 
