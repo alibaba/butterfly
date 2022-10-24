@@ -248,7 +248,7 @@ import {Canvas} from 'butterfly-dag';
 ``` js
 this.canvas = new Canvas({
   layout: {
-    type: 'Radial',
+    type: 'radial',
     options: {
       // total width of layout canvas
       width:800,

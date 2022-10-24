@@ -35,6 +35,7 @@ class BaseCanvas extends Canvas {
     this.layout = options.layout; // layout部分也需要重新review
     this.layoutOptions = options.layoutOptions;
     if (_.isObject(this.layout) && !_.isFunction(this.layout)) {
+      this.previousIsFlatNode = this.layout.isFlatNode; // 之后5.0废弃
       this.layoutOptions = this.layout.options || this.layoutOptions;
       this.layout = this.layout.type;
     }
@@ -269,6 +270,9 @@ class BaseCanvas extends Canvas {
 
     // 判断浏览器是否高于chrome 64
     this._isHightVerChrome = true;
+
+    // focus的动画执行中
+    this._isFocusing = false;
   }
 
   //===============================
@@ -793,6 +797,12 @@ class BaseCanvas extends Canvas {
       this._guidelineService.isActive && this._guidelineService.clearCanvas();
     };
 
+    let _beforeStatus = {
+      timer: 0,
+      x: 0,
+      y: 0
+    };
+
     const mouseDownEvent = (event) => {
       const LEFT_BUTTON = 0;
       // 重置_mouseMoved
@@ -801,8 +811,18 @@ class BaseCanvas extends Canvas {
         return;
       }
 
+      // 动画移动中不能触发mousedown东西，不然会导致坐标计算错误
+      if (this._isFocusing) {
+        return;
+      }
+
       if (!this._dragType && this.moveable) {
         this._dragType = 'canvas:drag';
+        _beforeStatus = {
+          timer: new Date().getTime(),
+          x: this._moveData[0],
+          y: this._moveData[1]
+        };
       }
 
       // 如果在框选模式下点击
@@ -1630,11 +1650,19 @@ class BaseCanvas extends Canvas {
       }
 
       // 点击空白处触发canvas click，并且框选模式下不触发
-      if ((this._dragType === 'canvas:drag' || !this._dragType) && !this.isSelectMode) {
-        this.emit('system.canvas.click');
-        this.emit('events', {
-          type: 'canvas:click'
-        });
+      if (!this.isSelectMode && this._dragType === 'canvas:drag') {
+        let _currentStatus = {
+          timer: new Date().getTime(),
+          x: this._moveData[0],
+          y: this._moveData[1]
+        }
+        // 区分canvas拖动和点击事件
+        if (_currentStatus.timer - _beforeStatus.timer < 300 || (Math.abs(_beforeStatus.x - _currentStatus.x) < 20  && Math.abs(_beforeStatus.y - _currentStatus.y) < 20)) {
+          this.emit('system.canvas.click');
+          this.emit('events', {
+            type: 'canvas:click'
+          });
+        } 
       }
 
       // 仅鼠标发生过移动，才增加dragNodeEnd事件
@@ -3807,10 +3835,12 @@ class BaseCanvas extends Canvas {
         });
       });
 
+      this._isFocusing = true;
       Promise.all([animatePromise, zoomPromise]).then(() => {
         if (this.virtualScroll.enable) {
           this._virtualScrollUtil.redraw();
         }
+        this._isFocusing = false;
         callback && callback();
       });
     }
@@ -3882,25 +3912,12 @@ class BaseCanvas extends Canvas {
 
     // animate不支持scale，使用setInterval自己实现
     let animatePromise = new Promise((resolve) => {
-      let frame = 1;
-      let originX = this._moveData[0];
-      let originY = this._moveData[1];
-      let gap_X = (targetX - originX) / 20;
-      let gap_Y = (targetY - originY) / 20;
-      let timer = setInterval(() => {
-        originX += gap_X;
-        originY += gap_Y;
-        $(this.wrapper).css({
-          top: originY,
-          left: originX
-        });
-        frame++;
-        debugger;
-        if (frame === 20) {
-          clearInterval(timer);
-          resolve();
-        }
-      }, time / 20);
+      $(this.wrapper).animate({
+        top: targetY,
+        left: targetX
+      }, time, () => {
+        resolve();
+      });
     });
     this._moveData = [targetX, targetY];
 
@@ -3924,7 +3941,10 @@ class BaseCanvas extends Canvas {
       });
     });
 
+    this._isFocusing = true;
+
     Promise.all([animatePromise, zoomPromise]).then(() => {
+      this._isFocusing = false;
       callback && callback();
     });
 
