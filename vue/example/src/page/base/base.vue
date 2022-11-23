@@ -7,6 +7,7 @@
       <el-button @click="redraw">重绘</el-button>
       <el-button @click="logData">log数据</el-button>
       <el-button @click="addEdge" :disabled="addEdgeEnable">添加连线1-4</el-button>
+      <el-button @click="editEdge">修改连线1-2到1-4左</el-button>
     </div>
     <el-divider></el-divider>
     <butterfly-vue
@@ -108,13 +109,23 @@ export default {
     },
     addEdge() {
       this.mockData.edges.push({
+        id: '1.right-4.right',
+        sourceNode: '1',
+        targetNode: '4',
+        source: 'right',
+        target: 'right',
+      })
+      this.addEdgeEnable = true;
+    },
+    editEdge() {
+      this.mockData.edges.splice(0, 1, {
         id: '1.right-4.left',
         sourceNode: '1',
         targetNode: '4',
         source: 'right',
         target: 'left',
+        render: '<div>编辑线</div>'
       })
-      this.addEdgeEnable = true;
     },
     logCreateEdge(e) {
       console.log('---------CreateEdge---------');
