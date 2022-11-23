@@ -345,7 +345,7 @@ class ButterflyReact extends React.Component {
     const oldGroups = canvas.groups;
 
     const processNodes = () => {
-      const {created, deleted} = diff(nodes, oldNodes);
+      const {created, deleted, updated} = diff(nodes, oldNodes);
 
       canvas.addNodes(this.process({nodes: created}).nodes);
 
@@ -358,10 +358,16 @@ class ButterflyReact extends React.Component {
       }
 
       canvas.removeNodes(deleteNodesIds);
+      canvas.nodes.forEach(cvsNode => {
+        const userNode = updated.find(e => e.id === cvsNode.id);
+        if (userNode) {
+          cvsNode.moveTo(userNode.left, userNode.top);
+        }
+      });
     };
 
     const processGroups = () => {
-      const {created, deleted} = diff(groups, oldGroups);
+      const {created, deleted, updated} = diff(groups, oldGroups);
 
       this.process({groups: created}).groups.forEach(group => {
         canvas.addGroup(group);
@@ -369,6 +375,12 @@ class ButterflyReact extends React.Component {
 
       this.process({groups: deleted}).groups.forEach(group => {
         canvas.removeGroup(group.id);
+      });
+      canvas.groups.forEach(cvsGroup => {
+        const userGroup = updated.find(e => e.id === cvsGroup.id);
+        if (userGroup) {
+          cvsGroup.moveTo(userGroup.left, userGroup.top);
+        }
       });
     };
 
