@@ -194,6 +194,11 @@ class BaseNode extends Node {
   }
 
   _addEventListener() {
+    let _beforeStatus = {
+      timer: 0,
+      x: 0, 
+      y: 0
+    };
     // todo 做事件代理的形式
     $(this.dom).on('mousedown', (e) => {
       const LEFT_KEY = 0;
@@ -205,6 +210,11 @@ class BaseNode extends Node {
       }
       if (!['SELECT', 'INPUT', 'RADIO', 'CHECKBOX', 'TEXTAREA'].includes(e.target.nodeName)) {
         e.preventDefault();
+      }
+      _beforeStatus = {
+        timer: new Date().getTime(),
+        x: this.left,
+        y: this.top
       }
       if (this.draggable) {
         this._isMoving = true;
@@ -221,20 +231,41 @@ class BaseNode extends Node {
       }
     });
 
-    $(this.dom).on('click', (e) => {
-      if(_.isFunction(this.canClick) && !this.canClick(e)) {
+    $(this.dom).on('mouseup', (e) => {
+      if(_.isFunction(this.canMouseUp) && !this.canMouseUp(e)) {
         return;
       }
-      e.preventDefault();
-      e.stopPropagation();
-      this.emit('system.node.click', {
-        node: this
-      });
-      this.emit('events', {
-        type: 'node:click',
-        node: this
-      });
+      let _currentStatus = {
+        timer: new Date().getTime(),
+        x: this.left,
+        y: this.top
+      };
+      if (_currentStatus.timer - _beforeStatus.timer < 300 || (Math.abs(_beforeStatus.x - _currentStatus.x) < 20  && Math.abs(_beforeStatus.y - _currentStatus.y) < 20)) {
+        this.emit('system.node.click', {
+          node: this
+        });
+        this.emit('events', {
+          type: 'node:click',
+          node: this
+        });
+      } 
     });
+
+    // todo: 尝试使用上面mouseup的机制来代替click的机制
+    // $(this.dom).on('click', (e) => {
+    //   if(_.isFunction(this.canClick) && !this.canClick(e)) {
+    //     return;
+    //   }
+    //   e.preventDefault();
+    //   e.stopPropagation();
+    //   this.emit('system.node.click', {
+    //     node: this
+    //   });
+    //   this.emit('events', {
+    //     type: 'node:click',
+    //     node: this
+    //   });
+    // });
 
     this.setDraggable(this.draggable);
   }
