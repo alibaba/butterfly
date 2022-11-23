@@ -22,11 +22,17 @@ export default (canvas) => {
       e.redraw();
     });
 
-    this.groups.forEach(e => {
-      if (!_.isFunction(e.redraw)) {
+    this.groups.forEach(group => {
+      group.endpoints.forEach(p => {
+        if (!_.isFunction(p.updatePos)) {
+          return;
+        }
+        p.updatePos();
+      });
+      if (!_.isFunction(group.redraw)) {
         return;
       }
-      e.redraw();
+      group.redraw();
     });
   };
 

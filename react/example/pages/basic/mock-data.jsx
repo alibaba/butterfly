@@ -19,6 +19,7 @@ export const data = {
     {
       id: '1',
       top: 100,
+      left: 0,
       endpoints: endpoints,
       isHighlight1: false,
       render(item) {
@@ -68,4 +69,12 @@ export const data = {
       }
     }
   ],
+  groups: [
+    {
+      id: '1',
+      top: 200,
+      left: 300,
+      endpoints: endpoints,
+    },
+  ]
 };
