@@ -48,7 +48,7 @@ function dagreLayout(param) {
     });
     edges.forEach(edge => {
       // dagrejs Wiki https://github.com/dagrejs/dagre/wiki#configuring-the-layout
-      g.setEdge(edge.source.id, edge.target.id, {
+      g.setEdge(edge.source, edge.target, {
         weight: edge.weight || 1
       });
     });
