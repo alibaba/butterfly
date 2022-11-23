@@ -241,6 +241,9 @@ class BaseCanvas extends Canvas {
     // redraw的promise
     this._redrawPromises = [];
     this._isRedraw = false;
+
+    // focus的动画执行中
+    this._isFocusing = false;
   }
 
   //===============================
@@ -753,6 +756,11 @@ class BaseCanvas extends Canvas {
       // 重置_mouseMoved
       this._mouseMoved = false;
       if (event.button !== LEFT_BUTTON) {
+        return;
+      }
+
+      // 动画移动中不能触发mousedown东西，不然会导致坐标计算错误
+      if (this._isFocusing) {
         return;
       }
 
@@ -3636,7 +3644,10 @@ class BaseCanvas extends Canvas {
       });
     });
 
+    this._isFocusing = true;
+
     Promise.all([animatePromise, zoomPromise]).then(() => {
+      this._isFocusing = false;
       callback && callback();
     });
   }
@@ -3711,7 +3722,7 @@ class BaseCanvas extends Canvas {
         top: targetY,
         left: targetX
       }, time, () => {
-        resolve()
+        resolve();
       });
     });
     this._moveData = [targetX, targetY];
@@ -3736,7 +3747,10 @@ class BaseCanvas extends Canvas {
       });
     });
 
+    this._isFocusing = true;
+
     Promise.all([animatePromise, zoomPromise]).then(() => {
+      this._isFocusing = false;
       callback && callback();
     });
 
