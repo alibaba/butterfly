@@ -336,7 +336,7 @@ class TreeCanvas extends Canvas {
     })[0];
   }
   draw(opts, params, callback) {
-    const nodes = this._handleTreeNodes(opts.nodes || [], _.get(params, 'isFlatNode', false));
+    const nodes = this._handleTreeNodes(opts.nodes || [], this.previousIsFlatNode);
     
     // 配置不重新布局
     if (_.get(params,'isNotRelayout')) {
