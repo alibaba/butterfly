@@ -1394,30 +1394,26 @@ class BaseCanvas extends Canvas {
           let _itemBottom = dragItem.top + dragItem.getHeight();
 
           if (dragItem.group) {
-            const _group = this.getGroup(dragItem.group);
-            const _groupLeft = _group.left;
-            const _groupTop = _group.top;
-            if (_itemRight < 0 || _itemLeft > _group.getWidth() || _itemBottom < 0 || _itemTop > _group.getHeight()) {
-              // 拖动到节点组外
+            const _rootGroup = this.getGroup(dragItem.group);
+            sourceGroup = _rootGroup;
+
+            let tmpItem = dragItem;
+            while (tmpItem.group) {
+              let _tmpGroup = this.getGroup(tmpItem.group);
+              let _groupLeft = _tmpGroup.left;
+              let _groupTop = _tmpGroup.top;
               _itemLeft += _groupLeft;
               _itemTop += _groupTop;
               _itemRight += _groupLeft;
               _itemBottom += _groupTop;
-              sourceGroup = _group;
-            } else {
-              // 节点组内拖动
-              sourceGroup = _group;
-              targetGroup = _group;
+              tmpItem = _tmpGroup;
             }
           }
 
           this._hoverGroup(_dragItem);
 
           if (!targetGroup) {
-            // 没开启group嵌套功能
-            if (_dragItem.__type !== 'group' || this.theme.group.includeGroups) {
-              targetGroup = this._findGroupByCoordinates(dragItem, _itemLeft, _itemTop, _itemRight, _itemBottom);
-            }
+            targetGroup = this._findGroupByCoordinates(dragItem, _itemLeft, _itemTop, _itemRight, _itemBottom);
           }
 
           let neighborEdges = [];
@@ -1512,9 +1508,10 @@ class BaseCanvas extends Canvas {
                 const rmResult = _dragType === 'node' ? this.removeNode(_dragItem.id, true, true) : this.removeGroup(_dragItem.id, true);
                 const rmTarget = _dragType === 'node' ? rmResult.nodes[0] : rmResult.group;
                 neighborEdges = rmResult.edges;
+                const targetGroupPos = this._getGroupPos(targetGroup);
                 rmTarget._init({
-                  top: _itemTop - targetGroup.top,
-                  left: _itemLeft - targetGroup.left,
+                  top: _itemTop - targetGroupPos.top,
+                  left: _itemLeft - targetGroupPos.left,
                   dom: rmTarget.dom,
                   group: targetGroup.id
                 });
@@ -2470,6 +2467,7 @@ class BaseCanvas extends Canvas {
         return _group.id !== item.id;
       });
     }
+    let result = [];
     for (let i = 0; i < groups.length; i++) {
       const _group = groups[i];
       const _pos = this._getGroupPos(_group);
@@ -2483,9 +2481,24 @@ class BaseCanvas extends Canvas {
       } else {
         isInGroup = lx >= _groupLeft && lx <= _groupRight && ty >= _groupTop && ty <= _groupBottom;
       }
-      if (isInGroup && _group.id !== item.group) {
-        return _group;
+      if (isInGroup) {
+        result.push(_group);
       }
+    }
+    if (result.length <= 1) {
+      return result[0];
+    } else {
+      // 最里面的group,left值最大
+      let insideGroup = undefined;
+      let maxLeft = -Infinity;
+      result.forEach((item) => {
+        const _pos = this._getGroupPos(item);
+        if (_pos.left > maxLeft) {
+          maxLeft = _pos.left;
+          insideGroup = item;
+        }
+      });
+      return insideGroup;
     }
   }
   // 拖动节点移动节点组高亮, 节流500ms检测一次
