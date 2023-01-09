@@ -23,6 +23,8 @@ import GuidelineService from '../utils/guidelineService';
 import Minimap from '../utils/minimap';
 // 线段动画
 import LinkAnimateUtil from '../utils/link/link_animate';
+// 线段工具
+import {prepareAvoidObstaclesInfo} from '../utils/link/edgeTypes/_utils';
 // 虚拟滚动辅助方法
 import virtualScrollUtil from '../utils/virtualScroll';
 
@@ -273,6 +275,9 @@ class BaseCanvas extends Canvas {
 
     // focus的动画执行中
     this._isFocusing = false;
+
+    // 初始化线段信息，为了避障碍线段计算
+    prepareAvoidObstaclesInfo(this);
   }
 
   //===============================

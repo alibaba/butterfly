@@ -5,15 +5,32 @@ const MINDIST = 20;
 const TOL = 0.1;
 const TOLxTOL = 0.01;
 const TOGGLE_DIST = 20;
+
+let canvas = null;
+
+export function prepareAvoidObstaclesInfo(_canvas) {
+  canvas = _canvas;
+}
+export function getAvoidObstaclesInfo() {
+  return {
+    nodes: _.get(canvas, 'nodes', []).map((item) => {
+      return {
+        id: item.id,
+        left: item.left,
+        top: item.top,
+        width: item.options.width,
+        height: item.options.height
+      }
+    }),
+    edges: _.get(canvas, 'nodes', []).map((item) => item.options)
+  }
+}
+
 export const DEFAULT_RADIUS = 15;
 export const Point = function (x, y) {
   this.x = x;
   this.y = y;
 }
-// const Point = function(x, y) {
-//   this.x = x;
-//   this.y = y;
-// }
 
 export const LEFT = 'Left';
 export const RIGHT = 'Right';
@@ -154,8 +171,6 @@ export function _route(conn, fromPt, fromDir, toPt, toDir) {
     }
   }
   _route(conn, point, dir, toPt, toDir);
-
-
 
 }
 

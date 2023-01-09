@@ -203,6 +203,8 @@ class BaseEdge extends Edge {
       path = DrawUtil.drawSecondBezier(sourcePoint, targetPoint, this.shapeType);
     } else if(this.shapeType === 'BrokenLine'){
       path = DrawUtil.drawBrokenLine(sourcePoint, targetPoint);
+    } else if(this.shapeType === 'AdvancedManhattan'){
+      path = DrawUtil.drawAdvancedManhattan(sourcePoint, targetPoint);
     }
     this._path = path;
     return path;
