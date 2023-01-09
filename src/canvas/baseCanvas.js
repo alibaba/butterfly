@@ -1512,8 +1512,12 @@ class BaseCanvas extends Canvas {
 
               if (targetGroup) {
                 if (ScopeCompare(_dragItem.scope, targetGroup.scope, _.get(this, 'global.isScopeStrict'))) {
-                  rmTargetData.top -= targetGroup.top;
-                  rmTargetData.left -= targetGroup.left;
+                  let _tmpGroup = targetGroup;
+                  while(_tmpGroup) {
+                    rmTargetData.top -= _tmpGroup.top;
+                    rmTargetData.left -= _tmpGroup.left;
+                    _tmpGroup = this.getGroup(_tmpGroup.group);
+                  }
                   rmTargetData.group = targetGroup.id;
                   rmTargetData._isDeleteGroup = false;
                   this.popActionQueue();
