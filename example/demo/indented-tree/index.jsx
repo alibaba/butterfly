@@ -58,6 +58,13 @@ const mockData = {
     sourceNode: '0',
     targetNode: '1',
     type: 'endpoint'
+  }, {
+    id: '1',
+    source: 'bottom',
+    target: 'left',
+    sourceNode: '1',
+    targetNode: '2',
+    type: 'endpoint'
   }]
 };
 

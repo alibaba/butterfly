@@ -1,7 +1,7 @@
 'use strict';
 import React, {Component} from 'react';
 import './index.less';
-import { TreeCanvas } from '../../../index.js';
+import { TreeCanvas } from 'butterfly-dag';
 import mockData from './data';
 class CompactBoxTree extends Component {
   constructor() {
@@ -19,8 +19,7 @@ class CompactBoxTree extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          shapeType: 'AdvancedManhattan',
-          // shapeType: 'Manhattan',
+          shapeType: 'Manhattan',
           arrow: true
         }
       },
@@ -47,7 +46,7 @@ class CompactBoxTree extends Component {
       this.canvas.focusCenterWithAnimate();
     });
     this.canvas.on('events', (data) => {
-      // console.log(data);
+      console.log(data);
     });
   }
   render() {
