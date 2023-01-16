@@ -136,7 +136,6 @@ const leftLine = (r) => {
 function _intersectionWithLine (line, shape) {
   var r = shape;
   var rectLines = [topLine(r), rightLine(r), bottomLine(r), leftLine(r)];
-  // console.log(rectLines)
   var points = [];
   var dedupeArr = [];
   var pt, i;
@@ -254,14 +253,15 @@ ObstacleMap.prototype.build = function(pointArr, link) {
   // Exclude any embedded elements from the source and the target element.
   var excludedAncestors = [];
 
-  // Builds a map of all elements for quicker obstacle queries (i.e. is a point contained
-  // in any obstacle?) (a simplified grid search).
-  // The paper is divided into smaller cells, where each holds information about which
-  // elements belong to it. When we query whether a point lies inside an obstacle we
-  // don't need to go through all obstacles, we check only those in a particular cell.
+// 构建所有元素的地图，以便更快地查询障碍物（即是否包含一个点
+// 在任何障碍物中？）（简化的网格搜索）。
+// 论文被分成更小的单元格，每个单元格都包含关于哪个单元格的信息
+// 元素属于它。当我们查询一个点是否位于障碍物内时，我们
+// 不需要通过所有障碍，我们只检查特定单元格中的障碍。
   var mapGridSize = this.mapGridSize;
   pointArr.reduce(function(map, element) {
-
+      element.x = element.left;
+      element.y = element.top;
       var isExcluded = false;
       if (!isExcluded) {
         var bbox = moveAndExpand(element, opt.paddingBox);
@@ -325,7 +325,7 @@ function align(point, grid, precision) {
   return round(_snapToGrid(point, grid), precision);
 }
 
-// get grid size in x and y dimensions, adapted to source and target positions
+// 获取 x 和 y 维度的网格大小，source和target位置
 function getGrid(step, source, target) {
   return {
       source: source,
@@ -372,7 +372,7 @@ const squaredLength = function(start, end) {
   return (x0 -= x1) * x0 + (y0 -= y1) * y0;
 };
 
-// fix direction offsets according to current grid
+// 根据当前网格固定方向偏移
 function getGridOffsets(directions, grid, opt) {
 
   var step = opt.step || 10;
@@ -399,10 +399,10 @@ function estimateCost(from, endPoints) {
 function theta (p, data) {
   p = new Point(p.x, p.y);
 
-  // Invert the y-axis.
-  var y = -(p.y - data.y);
+ // 反转 y 轴。
+ var y = -(p.y - data.y);
   var x = p.x - data.x;
-  var rad = Math.atan2(y, x); // defined for all 0 corner cases
+  var rad = Math.atan2(y, x); // 为所有 0 角情况定义
 
   // Correction for III. and IV. quadrant.
   if (rad < 0) {
@@ -411,8 +411,8 @@ function theta (p, data) {
   return 180 * rad / Math.PI;
 }
 
-// returns a direction index from start point to end point
-// corrects for grid deformation between start and end
+// 返回从起点到终点的方向索引
+// 更正开始和结束之间的网格变形
 function getDirectionAngle(start, end, numDirections, grid, opt) {
   var quadrant = 360 / numDirections;
   var angleTheta = theta(fixAngleEnd(start, end, grid, opt), start);
@@ -437,8 +437,8 @@ function fixAngleEnd(start, end, grid, opt) {
   return new Point(start.x + distanceX, start.y + distanceY);
 }
 
-// return a normalized vector from given point
-// used to determine the direction of a difference of two points
+// 从给定点返回归一化向量
+// 用于判断两点之差的方向
 function normalizePoint(point) {
 
   return new Point(
@@ -447,7 +447,8 @@ function normalizePoint(point) {
   );
 }
 
-// reconstructs a route by concatenating points with their parents
+// 通过将点与其父母连接来重建路线
+// 核心代码 重新计算路线点
 function reconstructRoute(parents, points, tailPoint, from, to, grid, opt) {
 
     var route = [];
@@ -482,21 +483,18 @@ function reconstructRoute(parents, points, tailPoint, from, to, grid, opt) {
     if (!equals(prevDiff, fromDiff)) {
         route.unshift(leadPoint);
     }
-    console.log(route, 'route');
     return route;
 }
 
 
-// find points around the bbox taking given directions into account
-// lines are drawn from anchor in given directions, intersections recorded
-// if anchor is outside bbox, only those directions that intersect get a rect point
-// the anchor itself is returned as rect point (representing some directions)
-// (since those directions are unobstructed by the bbox)
+// 考虑到给定的方向，找到 bbox 周围的点
+// 从给定方向的锚点绘制线，记录交叉点
+// 如果 anchor 在 bbox 之外，只有那些相交的方向才能得到一个直角点
+// 锚点本身作为矩形点返回（代表一些方向）
+// （因为这些方向不受 bbox 的阻碍）
 function getRectPoints(anchor, bbox, directionList, grid, opt) {
   var precision = opt.precision;
   var directionMap = opt.directionMap;
-  // let _bbox = new Point(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2);
-  // var anchorCenterVector = difference(_bbox, anchor);
   let anchorCenterVector = new Point(0,0)
   var keys = _.isObject(directionMap) ? Object.keys(directionMap) : [];
   var dirList = _.toArray(directionList);
@@ -505,19 +503,17 @@ function getRectPoints(anchor, bbox, directionList, grid, opt) {
     if (dirList.includes(key)) {
       var direction = directionMap[key];
       
-      // create a line that is guaranteed to intersect the bbox if bbox is in the direction
-      // even if anchor lies outside of bbox
+      // 如果 bbox 在方向上，则创建一条保证与 bbox 相交的线
+      // 即使锚位于 bbox 之外
       let _anchor = new Point(anchor.x, anchor.y)
       var endpoint = new Point(
         anchor.x + direction.x * (Math.abs(anchorCenterVector.x) + bbox.width),
         anchor.y + direction.y * (Math.abs(anchorCenterVector.y) + bbox.height)
         );
         var intersectionLine = new Line(_anchor, endpoint)
-        // console.log(intersectionLine, bbox)
-          // get the farther intersection, in case there are two
-          // (that happens if anchor lies next to bbox)
+          // 获得更远的路口，以防有两个
+          // （如果锚点位于 bbox 旁边，就会发生这种情况
           var intersections = intersectionLine.intersect(bbox) || []
-          // console.log(intersections, 'intersections')
           var numIntersections = intersections.length;
           var farthestIntersectionDistance;
           var farthestIntersection = null;
@@ -530,10 +526,11 @@ function getRectPoints(anchor, bbox, directionList, grid, opt) {
               }
           }
 
-          // if an intersection was found in this direction, it is our rectPoint
+        // 如果在这个方向上发现了交叉点
+
           if (farthestIntersection) {
               var point = align(farthestIntersection, grid, precision);
-              // if the rectPoint lies inside the bbox, offset it by one more step
+              // 如果当前位置位于 bbox 内，重新计算偏移量
               if (containsPoint(point, bbox)) {
                   point = align(offset(direction.x * grid.x, direction.y * grid.y, point), grid, precision);
               }
@@ -566,7 +563,7 @@ function equals(p, data) {
   data.y === p.y;
 }
 
-// return the change in direction between two direction angles
+// 返回两个方向角之间的方向变化
 function getDirectionChange(angle1, angle2) {
 
   var directionChange = Math.abs(angle1 - angle2);
@@ -628,13 +625,13 @@ function getTargetAnchor(linkView, opt) {
   return center(targetBBox); // default
 }
 
-// finds the route between two points/rectangles (`from`, `to`) implementing A* algorithm
-// rectangles get rect points assigned by getRectPoints()
+// 找到实现 A*算法的两个点/矩形（`from`、`to`）之间的路线
+// 矩形得到由 getRectPoints() 分配的矩形点
 function findRoute(from, to, isPointObstacle, opt, sourcePoint) {
   var precision = opt.precision;
   
 
-  // Get grid for this route.
+ // 获取这条路线的网格
 
   var sourceAnchor, targetAnchor;
 
@@ -642,8 +639,6 @@ function findRoute(from, to, isPointObstacle, opt, sourcePoint) {
   opt.sourceAnchor = sourceAnchor;
   targetAnchor = round( getTargetAnchor(to, opt), precision);
   opt.targetAnchor = targetAnchor;
-  // sourceAnchor = {x: 120, y: 85}
-  // targetAnchor = {x: 870, y: 485}
   // 获取 x 和 y 维度的网格大小，源和目标
   var grid = getGrid(opt.step, sourceAnchor, targetAnchor);
   // Get pathfinding points. 获取路径点
@@ -663,15 +658,14 @@ function findRoute(from, to, isPointObstacle, opt, sourcePoint) {
   startPoints = startPoints.filter(p => !isPointObstacle(p));
   endPoints = endPoints.filter(p => !isPointObstacle(p));
 
-  // Check that there is an accessible route point on both sides.
-  // Otherwise, use fallbackRoute()
-  // console.log(startPoints, endPoints);
+  // 检查两侧是否有可到达的路线点。
+ // 否则，使用不返回任何数据点 依旧用曼哈顿的逻辑
   if (startPoints.length > 0 && endPoints.length > 0) {
 
-      // The set of tentative points to be evaluated, initially containing the start points.
-      // Rounded to nearest integer for simplicity.
+      // 要评估的暂定点集，最初包含起点。
+     // 为简单起见四舍五入到最接近的整数。
       var openSet = new SortedSet();
-      // Keeps reference to actual points for given elements of the open set.
+      // 保持对开放集中给定元素的实际点的引用。
       var points = {};
       // Keeps reference to a point that is immediate predecessor of given element.
       var parents = {};
@@ -686,10 +680,10 @@ function findRoute(from, to, isPointObstacle, opt, sourcePoint) {
           points[key] = startPoint;
           costs[key] = 0;
         }
-      var previousRouteDirectionAngle = opt.previousDirectionAngle; // undefined for first route
+      var previousRouteDirectionAngle = opt.previousDirectionAngle; // 路线没有定义的话 就是null
       var isPathBeginning = (previousRouteDirectionAngle === undefined);
 
-      // directions
+      // 确定方向
       var direction, directionChange;
       var directions = opt.directions;
       directions = getGridOffsets(directions, grid, opt); // 获取网格偏移
@@ -704,25 +698,22 @@ function findRoute(from, to, isPointObstacle, opt, sourcePoint) {
           return res;
       }, []);
 
-      // main route finding loop
+      // main route finding loop 主路径查找循环
       var loopsRemaining = opt.maximumLoops;
       while (!openSet.isEmpty() && loopsRemaining > 0) {
-        // remove current from the open list
+        // 删除当前拖拽的节点
         var currentKey = openSet.pop();
-        // let currentKey = sourcePoint.pos[0] + '@' + sourcePoint.pos[1]
         var currentPoint = points[currentKey];
         var currentParent = parents[currentKey];
         var currentCost = costs[currentKey];
         
-        var isRouteBeginning = (currentParent === undefined); // undefined for route starts
-        // console.log(start, currentPoint, 'ssss')
-        var isStart = equals(start, currentPoint); // (is source anchor or `from` point) = can leave in any direction
-        // console.log(isRouteBeginning, isPathBeginning, isStart)
+        var isRouteBeginning = (currentParent === undefined); // undefined for route starts 未定义路线起点
+        var isStart = equals(start, currentPoint); // 如果是源锚点或“起始点”  可以向任何方向离开
           var previousDirectionAngle;
-          if (!isRouteBeginning) previousDirectionAngle = getDirectionAngle(currentParent, currentPoint, numDirections, grid, opt); // a vertex on the route
-          else if (!isPathBeginning) previousDirectionAngle = previousRouteDirectionAngle; // beginning of route on the path
-          else if (!isStart) previousDirectionAngle = getDirectionAngle(start, currentPoint, numDirections, grid, opt); // beginning of path, start rect point
-          else previousDirectionAngle = null; // beginning of path, source anchor or `from` point
+          if (!isRouteBeginning) previousDirectionAngle = getDirectionAngle(currentParent, currentPoint, numDirections, grid, opt); // 路线上的一个顶点
+          else if (!isPathBeginning) previousDirectionAngle = previousRouteDirectionAngle; // 路线的起点
+          else if (!isStart) previousDirectionAngle = getDirectionAngle(start, currentPoint, numDirections, grid, opt); // 路径的开始，开始矩形点
+          else previousDirectionAngle = null; // beginning of path, source anchor or `from` point 路径的起点、源锚点或“起始点”
 
           // check if we reached any endpoint
           var samePoints = startPoints.length === endPoints.length;
@@ -735,33 +726,33 @@ function findRoute(from, to, isPointObstacle, opt, sourcePoint) {
               }
           }
           var skipEndCheck = (isRouteBeginning && samePoints);
-          // console.log(endPointsKeys, currentKey)
+          // 满足条件开始计算新节点
           if (!skipEndCheck && (endPointsKeys.indexOf(currentKey) >= 0)) {
               opt.previousDirectionAngle = previousDirectionAngle;
               return reconstructRoute(parents, points, currentPoint, start, end, grid, opt);
           }
 
-          // go over all possible directions and find neighbors
+          // 遍历所有可能的方向并找到邻居
           for (i = 0; i < numDirections; i++) {
               direction = directions[i];
 
               var directionAngle = direction.angle;
               directionChange = getDirectionChange(previousDirectionAngle, directionAngle);
 
-              // if the direction changed rapidly, don't use this point
-              // any direction is allowed for starting points
+              // 如果方向变化很快，不要用这个点
+              // 起点可以任意方向 
               if (!(isPathBeginning && isStart) && directionChange > opt.maxAllowedDirectionChange) continue;
               let _currentPoint = new Point(currentPoint.x, currentPoint.y);
               var neighborPoint = align(offset(direction.gridOffsetX, direction.gridOffsetY, _currentPoint), grid, precision);
               var neighborKey = getKey(neighborPoint);
 
-              // Closed points from the openSet were already evaluated.
+              // Closed points from the openSet were already evaluated.来自 openSet 的闭合点已经被评估。
               if (openSet.isClose(neighborKey) || isPointObstacle(neighborPoint)) continue;
 
-              // We can only enter end points at an acceptable angle.
+              // We can only enter end points at an acceptable angle. // 我们只能以可接受的角度输入端点。
               if (endPointsKeys.indexOf(neighborKey) >= 0) { // neighbor is an end point
 
-                  var isNeighborEnd = equals(end, neighborPoint); // (is target anchor or `to` point) = can be entered in any direction
+                  var isNeighborEnd = equals(end, neighborPoint); // (is target anchor or `to` point) = 可以在任何方向输入
 
                   if (!isNeighborEnd) {
                       var endDirectionAngle = getDirectionAngle(neighborPoint, end, numDirections, grid, opt);
@@ -784,6 +775,7 @@ function findRoute(from, to, isPointObstacle, opt, sourcePoint) {
                   points[neighborKey] = neighborPoint;
                   parents[neighborKey] = currentPoint;
                   costs[neighborKey] = costFromStart;
+                  // 最终完成openSet中的数据 用于计算节点
                   openSet.add(neighborKey, costFromStart + estimateCost(neighborPoint, endPoints));
               }
           }
@@ -794,16 +786,14 @@ function findRoute(from, to, isPointObstacle, opt, sourcePoint) {
 
   // no route found (`to` point either wasn't accessible or finding route took
   // way too much calculation)
-  // return _route(pointArr, fromPt, orientation[sourcePoint.orientation.join('')], toPt, orientation[targetPoint.orientation.join('')]);
   return null;
-  // return opt.fallbackRoute.call(this, start, end, opt);
 }
 
 var normalizeAngle = function(angle) {
   return (angle % 360) + (angle < 0 ? 360 : 0);
 };
 
-// resolve some of the options
+// 初始化options 
 function resolveOptions(opt) {
     opt.directions = _.result(opt, 'directions');
     opt.penalties = _.result(opt, 'penalties');
@@ -815,7 +805,7 @@ function resolveOptions(opt) {
         var sides = util.normalizeSides(opt.padding);
        
     }
-
+    // 这里的数据后续用得到
     _.toArray(opt.directions).forEach(function(direction) {
 
         var point1 = new Point(0, 0);
@@ -849,7 +839,7 @@ function drawAdvancedManhattan(sourcePoint, targetPoint, options) {
     }
 
     const pointArr = [];
-    const fromPt = {
+    const fromPt = { // 先写死
       x: 80,
       y: 10,
       width: 160,
