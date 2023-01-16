@@ -22,24 +22,6 @@ const getDefaultPath = (pointArr) => {
   return path
 };
 
-var Rect = function(x, y, w, h) {
-
-  if (!(this instanceof Rect)) {
-      return new Rect(x, y, w, h);
-  }
-
-  if ((Object(x) === x)) {
-      y = x.y;
-      w = x.width;
-      h = x.height;
-      x = x.x;
-  }
-
-  this.x = x === undefined ? 0 : x;
-  this.y = y === undefined ? 0 : y;
-  this.width = w === undefined ? 0 : w;
-  this.height = h === undefined ? 0 : h;
-};
 const Line = function(p1, p2) {
   if (!(this instanceof Line)) {
       return new Line(p1, p2);

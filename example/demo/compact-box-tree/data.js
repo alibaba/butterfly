@@ -139,7 +139,8 @@ const mockData = {
     sourceNode: 'Root',
     targetNode: 'subNode1',
     type: 'endpoint'
-  }, {
+  }, 
+  {
     id: '1',
     source: '1',
     target: '1',
@@ -181,6 +182,7 @@ const mockData = {
     sourceNode: 'subNode2',
     targetNode: 'subNode2-2',
     type: 'endpoint'
-  }]
+  }
+]
 };
  export default mockData;
