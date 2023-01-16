@@ -204,7 +204,46 @@ class BaseEdge extends Edge {
     } else if(this.shapeType === 'BrokenLine'){
       path = DrawUtil.drawBrokenLine(sourcePoint, targetPoint);
     } else if(this.shapeType === 'AdvancedManhattan'){
-      path = DrawUtil.drawAdvancedManhattan(sourcePoint, targetPoint);
+      let obj = DrawUtil.drawAdvancedManhattan(sourcePoint, targetPoint, {
+        breakPoints: this._breakPoints,
+        hasDragged: this._hasDragged,
+        draggable: this.draggable,
+        hasRadius: this.hasRadius,
+        excludeEnds: [],
+        paddingBox: { // 初始化矩阵位置 加padding值
+          x: -10,
+          y: -10,
+          width: 20,
+          height: 20
+      },
+      directionMap: { // 方向
+        bottom: {x: 0, y: 1},
+        left: {x: -1, y: 0},
+        right: {x: 1, y: 0},
+        top: {x: 0, y: -1}
+      },
+      directions: [ // 偏移量
+            { offsetX: 10, offsetY: 0, cost: 10 },
+            { offsetX: -10, offsetY: 0, cost: 10 },
+            { offsetX: 0, offsetY: 10, cost: 10 },
+            { offsetX: 0, offsetY: -10, cost: 10 }
+      ],
+      penalties: { // 判断是否为起点时用到的参数
+            0: 0,
+            45: 5,
+            90: 5
+        },
+      maximumLoops: 2000, // 最大计算量
+      maxAllowedDirectionChange: 90, // 最大允许方向变化
+      step: 10, // 计算的一个数值
+      startDirections: ['top', 'right', 'bottom', 'left'], // 开始方向
+      endDirections: ['top', 'right', 'bottom', 'left'], // 结束方向
+      precision: 1
+      });
+      path = obj.path;
+      obj.breakPoints[0].type = 'start';
+      obj.breakPoints[obj.breakPoints.length - 1].type = 'end';
+      this._breakPoints = obj.breakPoints;
     }
     this._path = path;
     return path;

@@ -78,7 +78,6 @@ export function _route(conn, fromPt, fromDir, toPt, toDir) {
       else {
         point = new Point(fromPt.x - (xDiff / 2), fromPt.y);
       }
-
       if (yDiff > 0) {
         dir = TOP
       }
