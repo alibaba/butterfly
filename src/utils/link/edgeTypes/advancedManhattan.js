@@ -828,7 +828,6 @@ function resolveOptions(opt) {
 function drawAdvancedManhattan(sourcePoint, targetPoint, options) {
 
   //sourcePoint、targetPoint就是开始、结束坐标
-
   // 画布所有节点、线段数据
   let canvasData = getAvoidObstaclesInfo();
   resolveOptions(options); 
