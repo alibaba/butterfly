@@ -1,7 +1,7 @@
 import Node from './node';
 
 const mockData = {
-  nodes: {
+  nodes: { // 保留两个节点的原因是 一个节点会导致拖拽监听不到
     isRoot: true,
     id: 'Root',
     title: '根节点',
