@@ -18,6 +18,8 @@ export function getAvoidObstaclesInfo() {
         id: item.id,
         left: item.left,
         top: item.top,
+        x: item.left,
+        y: item.top,
         width: item.options.width,
         height: item.options.height
       }
@@ -78,7 +80,6 @@ export function _route(conn, fromPt, fromDir, toPt, toDir) {
       else {
         point = new Point(fromPt.x - (xDiff / 2), fromPt.y);
       }
-
       if (yDiff > 0) {
         dir = TOP
       }

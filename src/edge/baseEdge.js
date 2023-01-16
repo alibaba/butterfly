@@ -204,7 +204,47 @@ class BaseEdge extends Edge {
     } else if(this.shapeType === 'BrokenLine'){
       path = DrawUtil.drawBrokenLine(sourcePoint, targetPoint);
     } else if(this.shapeType === 'AdvancedManhattan'){
-      path = DrawUtil.drawAdvancedManhattan(sourcePoint, targetPoint);
+      // path = DrawUtil.drawAdvancedManhattan(sourcePoint, targetPoint);
+      let obj = DrawUtil.drawAdvancedManhattan(sourcePoint, targetPoint, {
+        breakPoints: this._breakPoints,
+        hasDragged: this._hasDragged,
+        draggable: this.draggable,
+        hasRadius: this.hasRadius,
+        excludeEnds: [],
+        paddingBox: {
+          x: -10,
+          y: -10,
+          width: 20,
+          height: 20
+      },
+      directionMap: {
+        bottom: {x: 0, y: 1},
+        left: {x: -1, y: 0},
+        right: {x: 1, y: 0},
+        top: {x: 0, y: -1}
+      },
+      directions: [
+            { offsetX: 10, offsetY: 0, cost: 10 },
+            { offsetX: -10, offsetY: 0, cost: 10 },
+            { offsetX: 0, offsetY: 10, cost: 10 },
+            { offsetX: 0, offsetY: -10, cost: 10 }
+      ],
+      penalties: {
+            0: 0,
+            45: 10 / 2,
+            90: 10 / 2
+        },
+      maximumLoops: 2000,
+      maxAllowedDirectionChange: 90,
+      step: 10,
+      startDirections: ['top', 'right', 'bottom', 'left'],
+      endDirections: ['top', 'right', 'bottom', 'left'],
+      precision: 1
+      });
+      path = obj.path;
+      obj.breakPoints[0].type = 'start';
+      obj.breakPoints[obj.breakPoints.length - 1].type = 'end';
+      this._breakPoints = obj.breakPoints;
     }
     this._path = path;
     return path;

@@ -139,48 +139,50 @@ const mockData = {
     sourceNode: 'Root',
     targetNode: 'subNode1',
     type: 'endpoint'
-  }, {
-    id: '1',
-    source: '1',
-    target: '1',
-    sourceNode: 'Root',
-    targetNode: 'subNode2',
-    type: 'endpoint'
-  }, {
-    id: '2',
-    source: '1',
-    target: '1',
-    sourceNode: 'Root',
-    targetNode: 'subNode3',
-    type: 'endpoint'
-  }, {
-    id: '3',
-    source: '2',
-    target: '1',
-    sourceNode: 'subNode1',
-    targetNode: 'subNode1-1',
-    type: 'endpoint'
-  }, {
-    id: '4',
-    source: '2',
-    target: '1',
-    sourceNode: 'subNode1',
-    targetNode: 'subNode1-2',
-    type: 'endpoint'
-  }, {
-    id: '5',
-    source: '2',
-    target: '1',
-    sourceNode: 'subNode2',
-    targetNode: 'subNode2-1',
-    type: 'endpoint'
-  }, {
-    id: '6',
-    source: '2',
-    target: '1',
-    sourceNode: 'subNode2',
-    targetNode: 'subNode2-2',
-    type: 'endpoint'
-  }]
+  }, 
+  // {
+  //   id: '1',
+  //   source: '1',
+  //   target: '1',
+  //   sourceNode: 'Root',
+  //   targetNode: 'subNode2',
+  //   type: 'endpoint'
+  // }, {
+  //   id: '2',
+  //   source: '1',
+  //   target: '1',
+  //   sourceNode: 'Root',
+  //   targetNode: 'subNode3',
+  //   type: 'endpoint'
+  // }, {
+  //   id: '3',
+  //   source: '2',
+  //   target: '1',
+  //   sourceNode: 'subNode1',
+  //   targetNode: 'subNode1-1',
+  //   type: 'endpoint'
+  // }, {
+  //   id: '4',
+  //   source: '2',
+  //   target: '1',
+  //   sourceNode: 'subNode1',
+  //   targetNode: 'subNode1-2',
+  //   type: 'endpoint'
+  // }, {
+  //   id: '5',
+  //   source: '2',
+  //   target: '1',
+  //   sourceNode: 'subNode2',
+  //   targetNode: 'subNode2-1',
+  //   type: 'endpoint'
+  // }, {
+  //   id: '6',
+  //   source: '2',
+  //   target: '1',
+  //   sourceNode: 'subNode2',
+  //   targetNode: 'subNode2-2',
+  //   type: 'endpoint'
+  // }
+]
 };
  export default mockData;
