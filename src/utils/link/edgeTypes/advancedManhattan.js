@@ -1,6 +1,5 @@
 'use strict';
 
-import { options } from 'less';
 import {getAvoidObstaclesInfo, _calcOrientation, _route, LEFT, RIGHT, TOP, BOTTOM, DEFAULT_RADIUS, Point } from './_utils';
 import _ from 'lodash';
 const sortedIndex = _.sortedIndexBy || _.sortedIndex;
@@ -189,8 +188,8 @@ return item;
 };
 
 const moveAndExpand = (obj,r) => {
-  obj.width = 110; // 先写死
-  obj.height = 65;
+  obj.width = obj.width || 150;
+  obj.height = obj.height || 65;
   obj.x += r.x || 0;
   obj.y += r.y || 0;
   obj.width += r.width || 0;
@@ -821,17 +820,25 @@ function drawAdvancedManhattan(sourcePoint, targetPoint, options) {
     }
 
     const pointArr = [];
-    const fromPt = { // 先写死
-      x: 80,
-      y: 10,
-      width: 160,
-      height: 90
+    // const fromPt = { // 先写死
+    //   x: 80,
+    //   y: 10,
+    //   width: 160,
+    //   height: 90
+    // };
+    // const toPt = {
+    //   x: 790,
+    //   y: 440,
+    //   width: 160,
+    //   height: 90
+    // };
+    const fromPt = {
+      x: sourcePoint.pos[0],
+      y: sourcePoint.pos[1]
     };
     const toPt = {
-      x: 790,
-      y: 440,
-      width: 160,
-      height: 90
+      x: targetPoint.pos[0],
+      y: targetPoint.pos[1]
     };
     const orientation = {
       '-10': LEFT,

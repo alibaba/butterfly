@@ -18,8 +18,8 @@ export function getAvoidObstaclesInfo() {
         id: item.id,
         left: item.left,
         top: item.top,
-        width: item.options.width,
-        height: item.options.height
+        width: item.width || item.options.width,
+        height: item.height || item.options.height
       }
     }),
     edges: _.get(canvas, 'nodes', []).map((item) => item.options)
