@@ -126,7 +126,8 @@ const data = {
     type: 'output',
     Class: Info
   }],
-  edges: [{
+  edges: [
+  {
     source: '0',
     target: '1',
     sourceNode: '0',
@@ -134,7 +135,8 @@ const data = {
     color: 'purple',
     type: 'endpoint',
     Class: Edge
-  }, {
+  }
+  , {
     source: '0',
     target: '1',
     sourceNode: '1',
@@ -155,15 +157,17 @@ const data = {
     targetNode: '9',
     type: 'endpoint',
     Class: Edge
-  }, {
-    source: '0',
-    target: '2',
-    sourceNode: '3',
-    targetNode: '2',
-    color: 'purple',
-    type: 'endpoint',
-    Class: Edge
-  }]
+  }, 
+  // {
+  //   source: '0',
+  //   target: '2',
+  //   sourceNode: '3',
+  //   targetNode: '2',
+  //   color: 'purple',
+  //   type: 'endpoint',
+  //   Class: Edge
+  // }
+  ]
 }
 
 export default data;

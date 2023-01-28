@@ -262,6 +262,7 @@ ObstacleMap.prototype.build = function(pointArr, link) {
   return this;
 };
 
+// 判断point是否在网格内
 ObstacleMap.prototype.isPointAccessible = function(point) {
   var mapData = snapToGrid(this.mapGridSize, 'clone', point);
   var mapKey = mapData.x + '@' + mapData.y
@@ -271,7 +272,7 @@ ObstacleMap.prototype.isPointAccessible = function(point) {
   });
 };
  
- const round = (data, precision) => {
+const round = (data, precision) => {
   var f = 1; // case 0
   if (precision) {
       switch (precision) {
@@ -608,7 +609,7 @@ function getTargetAnchor(linkView, opt) {
 
 // 找到实现 A*算法的两个点/矩形（`from`、`to`）之间的路线
 // 矩形得到由 getRectPoints() 分配的矩形点
-function findRoute(from, to, isPointObstacle, opt, sourcePoint) {
+function findRoute(from, to, isPointObstacle, opt) {
   var precision = opt.precision;
   
 
@@ -620,6 +621,7 @@ function findRoute(from, to, isPointObstacle, opt, sourcePoint) {
   opt.sourceAnchor = sourceAnchor;
   targetAnchor = round( getTargetAnchor(to, opt), precision);
   opt.targetAnchor = targetAnchor;
+
   // 获取 x 和 y 维度的网格大小，源和目标
   var grid = getGrid(opt.step, sourceAnchor, targetAnchor);
   // Get pathfinding points. 获取路径点
@@ -832,6 +834,7 @@ function drawAdvancedManhattan(sourcePoint, targetPoint, options) {
     //   width: 160,
     //   height: 90
     // };
+    // console.log(options);
     const fromPt = {
       x: sourcePoint.pos[0],
       y: sourcePoint.pos[1]
@@ -846,8 +849,11 @@ function drawAdvancedManhattan(sourcePoint, targetPoint, options) {
       '0-1': TOP,
       '01': BOTTOM,
     };
-    _route(pointArr, fromPt, orientation[sourcePoint.orientation.join('')], toPt, orientation[targetPoint.orientation.join('')]);
+    // 这个确认一下？为啥要用到这个？这个要删除掉
+    // _route(pointArr, fromPt, orientation[sourcePoint.orientation.join('')], toPt, orientation[targetPoint.orientation.join('')]);
+
     let isPointObstacle;
+    
     if (typeof options.isPointObstacle === 'function') {
         isPointObstacle = options.isPointObstacle;
     } else {
@@ -855,16 +861,18 @@ function drawAdvancedManhattan(sourcePoint, targetPoint, options) {
         map.build(canvasData.nodes);
         isPointObstacle = (point) => !map.isPointAccessible(point);
     }
-      const _point = findRoute( fromPt, toPt, isPointObstacle, options, sourcePoint)
-      if (_point) {
-        const _data = pointArr.splice(1, pointArr.length - 2);
-        pointArr.splice(1, 0 ,..._point)
-        console.log(pointArr, _data);
-      }
-      return {
-        path: getDefaultPath(pointArr),
-        breakPoints: pointArr
-      };
+
+    const _point = findRoute(fromPt, toPt, isPointObstacle, options);
+    // console.log(_point);
+    if (_point) {
+      const _data = pointArr.splice(1, pointArr.length - 2);
+      pointArr.splice(1, 0 ,..._point)
+      console.log(pointArr, _data);
+    }
+    return {
+      path: getDefaultPath(pointArr),
+      breakPoints: pointArr
+    };
 }
 
 export default drawAdvancedManhattan;
