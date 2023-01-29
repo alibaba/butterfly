@@ -250,9 +250,9 @@ class BaseEdge extends Edge {
       precision: 1
       });
       path = obj.path;
-      obj.breakPoints[0].type = 'start';
-      obj.breakPoints[obj.breakPoints.length - 1].type = 'end';
-      this._breakPoints = obj.breakPoints;
+      // obj.breakPoints[0].type = 'start';
+      // obj.breakPoints[obj.breakPoints.length - 1].type = 'end';
+      // this._breakPoints = obj.breakPoints;
     }
     this._path = path;
     return path;

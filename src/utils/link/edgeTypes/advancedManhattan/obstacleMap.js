@@ -1,52 +1,119 @@
 'use strict';
 
-import { moveAndExpand, snapToGrid } from './_utils';
+'use strict';
 
-import Point from './point';
-
-const containsPoint = (p, data) => {
-  p = new Point(p.x, p.y);
-  return p.x >= data.x && p.x <= data.x + data.w && p.y >= data.y && p.y <= data.y + data.h;
-}
+import _ from 'lodash';
 
 export default class ObstacleMap {
-  constructor(opt) {
+  constructor(options) {
     this.map = {};
-    this.options = opt;
-    // tells how to divide the paper when creating the elements map
-    this.mapGridSize = 100;
+    this.options = _.assign({
+      girdGap: 10, // 网格间隔
+      padding:  10// 
+    }, options);
+    this.MAP_CONST = {
+      'HAS_WALK': 1, // 已经走过的路
+      'HAS_NODE': 2  // 节点已经占用的网格
+    }
   }
+  // 建立网格地图
   build(nodes) {
-    var opt = this.options;
-    // 构建所有元素的地图，以便更快地查询障碍物（即是否包含一个点
-    // 在任何障碍物中？）（简化的网格搜索）。
-    // 论文被分成更小的单元格，每个单元格都包含关于哪个单元格的信息
-    // 元素属于它。当我们查询一个点是否位于障碍物内时，我们
-    // 不需要通过所有障碍，我们只检查特定单元格中的障碍。
-    var mapGridSize = this.mapGridSize;
-    nodes.reduce(function(map, element) {
-      element.x = element.left;
-      element.y = element.top;
-      var bbox = moveAndExpand(element, opt.paddingBox);
-      var origin = snapToGrid(mapGridSize, 'origin', bbox);
-      var corner = snapToGrid(mapGridSize, 'corner', bbox);
-      for (var x = origin.x; x <= corner.x; x += mapGridSize) {
-          for (var y = origin.y; y <= corner.y; y += mapGridSize) {
-              var gridKey = x + '@' + y;
-              map[gridKey] = map[gridKey] || [];
-              map[gridKey].push(bbox);
-          }
+    let minleft = Infinity;
+    let maxRight = -Infinity;
+    let minTop = Infinity;
+    let maxBottom = -Infinity;
+
+    // 寻找出地图最边缘的坐标
+    nodes.forEach((item) => {
+      if (item.left < minleft) {
+        minleft = item.left - this.options.padding;
       }
-      return map;
-    }, this.map);
-    return this;
-  }
-  // 判断point是否在网格内
-  isPointAccessible(point) {
-    var mapKey = point.clone().snapToGrid(this.mapGridSize).toString();
-    return _.toArray(this.map[mapKey]).every(function(obstacle) {
-      obstacle.containsPoint = containsPoint;
-      return !obstacle.containsPoint(point, obstacle);
+      let _right = item.left + item.width;
+      if (_right > maxRight) {
+        maxRight = _right + this.options.padding;
+      }
+      if (item.top < minTop) {
+        minTop = item.top - this.options.padding;
+      }
+      let _bottom = item.top + item.height;
+      if (_bottom > maxBottom) {
+        maxBottom = _bottom + this.options.padding;
+      }
     });
+
+    minleft = this.fix(minleft, -1);
+    maxRight = this.fix(maxRight);
+    minTop = this.fix(minTop, -1);
+    maxBottom = this.fix(maxBottom);
+    
+    // 建立空白地图
+    for(let i = minTop; i <= maxBottom; i+=this.options.girdGap) {
+      for(let j = minleft; j <= maxRight; j+=this.options.girdGap) {
+        this.map[`${j}@${i}`] = 0;
+      }
+    }
+
+    // 建立节点地图
+    nodes.forEach((node) => {
+      let nl = node.left;
+      let nr = node.left + node.width;
+      let nt = node.top;
+      let nb = node.top + node.height;
+ 
+      // 计算节点边缘的网格
+      let ltGirdInfo = this.getGirdCell(nl, nt);
+      let rtGirdInfo = this.getGirdCell(nr, nt);
+      let lbGirdInfo = this.getGirdCell(nl, nb);
+      let rbGirdInfo = this.getGirdCell(nr, nb);
+      
+      for(let i = ltGirdInfo.yCell; i <= lbGirdInfo.yCell; i+=this.options.girdGap) {
+        for(let j = ltGirdInfo.xCell; j <= rtGirdInfo.xCell; j+=this.options.girdGap) {
+          this.map[`${j}@${i}`] = this.MAP_CONST['HAS_NODE'];
+        }
+      }
+    });
+
+  }
+  // 传入一个坐标获取单元格
+  getGirdCell(x, y) {
+    let _x = this.round(x);
+    let _y = this.round(y);
+    return {
+      x,
+      y,
+      xCell: _x,
+      yCell: _y,
+      key: `${_x}@${_y}`
+    }
+  }
+  // 节点坐标发生变化时需要更新地图
+  updateMap(nodes) {
+
+  }
+  // 找出路径后清理地图，为下一次计算做准备
+  clearPath() {
+
+  }
+  // 按照网格来四舍五入
+  round(num) {
+    let tmp = num % this.options.girdGap;
+    if (tmp -  this.options.girdGap / 2 >= 0) {
+      return num - tmp + this.options.girdGap;
+    } else {
+      return num - tmp;
+    }
+  }
+  // 按照girdGap进位
+  fix(num, isPositive = 1) {
+    let tmp = num % this.options.girdGap;
+    let res = num;
+    if (tmp !== 0) {
+      res = (num - tmp) + this.options.girdGap * isPositive;
+    }
+    return res;
+  }
+  // 清楚地图，防止内存泄漏
+  clear() {
+    this.map = {};
   }
 }

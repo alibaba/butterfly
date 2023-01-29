@@ -1,7 +1,7 @@
 'use strict';
 
 export default class Point {
-  constructor(x, y, w, h) {
+  constructor(x, y, w, h, o) {
     if (typeof x === 'string') {
       const xy = x.split(x.indexOf('@') === -1 ? ' ' : '@');
       x = parseFloat(xy[0]);
@@ -16,6 +16,7 @@ export default class Point {
     this.y = y === undefined ? 0 : y;
     this.w = w === undefined ? 0 : w;
     this.h = h === undefined ? 0 : h;
+    this.o = o;
   }
   difference (dx, dy) {
     if ((Object(dx) === dx)) {

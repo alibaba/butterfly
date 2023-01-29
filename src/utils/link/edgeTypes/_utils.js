@@ -1,6 +1,6 @@
 'use strict';
 import _ from 'lodash';
-import _Point from './advancedManhattan/point';
+// import _Point from './advancedManhattan/point';
 
 const MINDIST = 20;
 const TOL = 0.1;
@@ -19,8 +19,8 @@ export function getAvoidObstaclesInfo() {
         id: item.id,
         left: item.left,
         top: item.top,
-        width: item.width || item.options.width,
-        height: item.height || item.options.height
+        width: item.width || item.options.width || 100,
+        height: item.height || item.options.height || 45
       }
     }),
     edges: _.get(canvas, 'nodes', []).map((item) => item.options)
@@ -28,11 +28,11 @@ export function getAvoidObstaclesInfo() {
 }
 
 export const DEFAULT_RADIUS = 15;
-export const Point = _Point;
-// export const Point = function (x, y) {
-//   this.x = x;
-//   this.y = y;
-// }
+// export const Point = _Point;
+export const Point = function (x, y) {
+  this.x = x;
+  this.y = y;
+}
 
 export const LEFT = 'Left';
 export const RIGHT = 'Right';

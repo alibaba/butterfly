@@ -136,28 +136,29 @@ const data = {
     type: 'endpoint',
     Class: Edge
   }
-  , {
-    source: '0',
-    target: '1',
-    sourceNode: '1',
-    targetNode: '2',
-    type: 'endpoint',
-    Class: Edge
-  }, {
-    source: '0',
-    target: '1',
-    sourceNode: '2',
-    targetNode: '3',
-    type: 'endpoint',
-    Class: Edge
-  }, {
-    source: '0',
-    target: '0',
-    sourceNode: '2',
-    targetNode: '9',
-    type: 'endpoint',
-    Class: Edge
-  }, 
+  // , {
+  //   source: '0',
+  //   target: '1',
+  //   sourceNode: '1',
+  //   targetNode: '2',
+  //   type: 'endpoint',
+  //   Class: Edge
+  // }, {
+  //   source: '0',
+  //   target: '1',
+  //   sourceNode: '2',
+  //   targetNode: '3',
+  //   type: 'endpoint',
+  //   Class: Edge
+  // }, 
+  // {
+  //   source: '0',
+  //   target: '0',
+  //   sourceNode: '2',
+  //   targetNode: '9',
+  //   type: 'endpoint',
+  //   Class: Edge
+  // }, 
   // {
   //   source: '0',
   //   target: '2',
