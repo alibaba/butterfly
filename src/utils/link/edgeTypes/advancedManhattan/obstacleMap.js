@@ -1,7 +1,5 @@
 'use strict';
 
-'use strict';
-
 import _ from 'lodash';
 
 export default class ObstacleMap {
@@ -73,6 +71,10 @@ export default class ObstacleMap {
       }
     });
 
+  }
+  // 是否被占用
+  hasObstacles(key) {
+    return this.map[key] !== 0;
   }
   // 传入一个坐标获取单元格
   getGirdCell(x, y) {
