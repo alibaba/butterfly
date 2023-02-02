@@ -1,7 +1,7 @@
 'use strict';
 
 import _ from 'lodash';
-import { _calcOrientation} from './_utils.js';
+import { _calcOrientation} from '../_utils.js';
 import { _route, LEFT, RIGHT, TOP, BOTTOM, getRadiusPath, getDefaultPath } from './_utils.js';
 
 function drawManhattan(sourcePoint, targetPoint, options) {
