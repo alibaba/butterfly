@@ -203,6 +203,29 @@ class BaseEdge extends Edge {
       path = DrawUtil.drawSecondBezier(sourcePoint, targetPoint, this.shapeType);
     } else if(this.shapeType === 'BrokenLine'){
       path = DrawUtil.drawBrokenLine(sourcePoint, targetPoint);
+    } else if(this.shapeType === 'AdvancedManhattan'){
+      _.assign(sourcePoint, {
+        nodePos: [this.sourceNode.left, this.sourceNode.top],
+        nodeSize: [this.sourceNode.width, this.sourceNode.height]
+      });
+      _.assign(targetPoint, {
+        nodePos: [this.targetNode.left, this.targetNode.top],
+        nodeSize: [this.targetNode.width, this.targetNode.height]
+      });
+
+      let obj = DrawUtil.drawAdvancedManhattan(sourcePoint, targetPoint, {
+        sourceNodeId: this.sourceNode.id,
+        targetNodeId: this.targetNode.id,
+        breakPoints: this._breakPoints,
+        hasDragged: this._hasDragged,
+        draggable: this.draggable,
+        hasRadius: this.hasRadius
+      });
+      path = obj.path;
+      // 后续再支持拖动
+      // obj.breakPoints[0].type = 'start';
+      // obj.breakPoints[obj.breakPoints.length - 1].type = 'end';
+      // this._breakPoints = obj.breakPoints;
     }
     this._path = path;
     return path;

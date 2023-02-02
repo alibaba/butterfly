@@ -1,8 +1,8 @@
 'use strict';
 import React, {Component} from 'react';
 import './index.less';
+import { Canvas } from '../../../index.js';
 // import { Canvas } from 'butterfly-dag';
-import { Canvas } from 'butterfly-dag';
 import mockData from './data';
 class Diodes extends Component {
   constructor() {
@@ -19,7 +19,9 @@ class Diodes extends Component {
       moveable: true,    // 可平移
       theme: {
         edge: {
-          shapeType: 'Manhattan',
+          shapeType: 'AdvancedManhattan',
+          // shapeType: 'Manhattan',
+          hasRadius: true,
           defaultAnimate: true,
           draggable: true // 只有曼哈顿线段可拖动
         }
