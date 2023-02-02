@@ -1,7 +1,7 @@
 'use strict';
 
 import _ from 'lodash';
-import {getAvoidObstaclesInfo, _calcOrientation, Point, _route} from '../_utils'; 
+import {getAvoidObstaclesInfo, _calcOrientation, Point, _route, DEFAULT_RADIUS} from '../_utils'; 
 import ObstacleMap from './obstacleMap';
 
 let MINDIST = 20;
@@ -36,9 +36,9 @@ const _isMerge = (point1, point2, obstacleMap) => {
     canMerge: false
   };
 
-  console.log(point1);
-  console.log(point2);
-  console.log('-------');
+  // console.log(point1);
+  // console.log(point2);
+  // console.log('-------');
 
   if (point1.x !== point2.x && point1.y !== point2.y) {
 
@@ -63,8 +63,8 @@ const _isMerge = (point1, point2, obstacleMap) => {
     for(let i = minY; i < maxY; i+= girdGap) {
       let key = `${point3Cell.xCell}@${i}`;
       if (obstacleMap.hasObstacles(key)) {
-        console.log(1);
-        console.log(key);
+        // console.log(1);
+        // console.log(key);
         point1And3 = false;
         break;
       }
@@ -75,8 +75,8 @@ const _isMerge = (point1, point2, obstacleMap) => {
     for(let i = minX; i < maxX; i+= girdGap) {
       let key = `${i}@${point3Cell.yCell}`;
       if (obstacleMap.hasObstacles(key)) {
-        console.log(2);
-        console.log(key);
+        // console.log(2);
+        // console.log(key);
         point2And3 = false;
         break;
       }
@@ -96,8 +96,8 @@ const _isMerge = (point1, point2, obstacleMap) => {
     for(let i = minX; i < maxX; i+= girdGap) {
       let key = `${i}@${point4Cell.yCell}`;
       if (obstacleMap.hasObstacles(key)) {
-        console.log(3);
-        console.log(key);
+        // console.log(3);
+        // console.log(key);
         point1And4 = false;
         break;
       }
@@ -108,8 +108,8 @@ const _isMerge = (point1, point2, obstacleMap) => {
     for(let i = minY; i < maxY; i+= girdGap) {
       let key = `${point4Cell.xCell}@${i}`;
       if (obstacleMap.hasObstacles(key)) {
-        console.log(4);
-        console.log(key);
+        // console.log(4);
+        // console.log(key);
         point2And4 = false;
         break;
       }
@@ -191,13 +191,120 @@ const getDefaultPath = (pointArr) => {
   return path
 };
 
+function getRadiusPath(pointArr) {
+  let path = ""
+  let radius = DEFAULT_RADIUS;
+  const [start, c1, c2] = pointArr;
+  const end = pointArr[pointArr.length - 1]
+  if (Math.abs(start.y - end.y) < 2 * DEFAULT_RADIUS) {
+    radius = Math.abs(start.y - end.y) / 2;
+  }
+
+  if (
+    _.first(pointArr).x === _.last(pointArr).x ||
+    _.first(pointArr).y === _.last(pointArr).y
+  ) {
+    path = [
+      'M', _.first(pointArr).x, _.first(pointArr).y,
+      'L', _.last(pointArr).x, _.last(pointArr).y
+    ].join(' ');
+    return {
+      path,
+      breakPoints: pointArr
+    };
+  }
+
+  if (_.first(pointArr).x > _.last(pointArr).x) {
+    //pointArr = pointArr.reverse();
+  }
+  let arc = []
+  for (let i = 0; i < pointArr.length - 2; i++) {
+    console.log(i);
+    console.log(getDrawPoint(pointArr[i], pointArr[i + 1], pointArr[i + 2], radius, i));
+    arc = [...arc, getDrawPoint(pointArr[i], pointArr[i + 1], pointArr[i + 2], radius, i)]
+  }
+  arc.forEach((e, index) => {
+    if (index % 2 == 0) {
+      if (index === 2) {
+        path = path + " " + [
+          'L', e[1].x, e[1].y,
+          'M', e[1].x, e[1].y,
+          'A', radius, radius, 90, 0, e[3], e[2].x, e[2].y
+        ].join(" ")
+      }
+      else {
+        path = path + " " + ((index === 0 ? ['M', e[0].x, e[0].y] : []).concat([
+          'L', e[1].x, e[1].y,
+          'A', radius, radius, 90, 0, e[3], e[2].x, e[2].y
+        ])).join(" ");
+      }
+    }
+    else {
+      path = path + " " + [
+        'L', e[1].x, e[1].y,
+        'M', e[1].x, e[1].y,
+        'A', radius, radius, 90, 0, e[3], e[2].x, e[2].y
+      ].join(" ")
+    }
+
+  })
+  path = path + ['L', end.x, end.y].join(" ")
+  return {
+    path,
+    breakPoints: pointArr
+  };
+}
+const getDrawPoint = (start, control, end, radius, i) => {
+  let p1 = getThatPoint(start, control, radius);
+  let p2 = getThatPoint(end, control, radius);
+  let flag = 0;
+  let center = new Point(
+    (start.x + end.x) / 2,
+    (start.y + end.y) / 2
+  );
+
+  // 逆时针
+  if (control.y < center.y) {
+    // if (i === 4) console.log('123');
+    flag = 1;
+  }
+  else {
+    // if (i === 4) console.log('234');
+    flag = 0;
+  }
+  if (start["x"] > end["x"]) {
+    // if (i === 4) console.log('345');
+    flag = flag === 1 ? 0 : 1
+  }
+  // if (i === 4) console.log('567');
+  return [start, p1, p2, flag];
+};
+// 获得靠近end的点
+const getThatPoint = (start, end, radius) => {
+  let p = new Point();
+
+  ['x', 'y'].forEach(key => {
+    if (start[key] > end[key]) {
+      p[key] = end[key] + radius;
+    }
+    else if (start[key] < end[key]) {
+      p[key] = end[key] - radius;
+    }
+    else {
+      p[key] = start[key];
+    }
+  });
+
+  return p;
+};
+
 // 避开整个节点
 const _avoidObstaclesLen = (currentCell, obstacleMap, dir, girdGap) => {
   let cell = _.cloneDeep(currentCell);
   let map = obstacleMap.map;
   let key = `${cell.x}@${cell.y}`;
   let cnt = 1;
-  while(map[key] !== 0) {
+  while(map[key] !== obstacleMap.MAP_CONST.EMPTY && map[key] !== undefined) {
     if (dir === BOTTOM) {
       cell.y += girdGap;
     } else if (dir === TOP) {
@@ -219,7 +326,7 @@ const _avoidObstaclesLen = (currentCell, obstacleMap, dir, girdGap) => {
 }
 
 // 避障算法
-const avoidObstacles = (conn, fromPt, fromDir, midPt, midDir, toPt, toDir, map) => {
+const avoidObstacles = (conn, fromPt, fromDir, midPt, midDir, toPt, toDir, map, count) => {
 
   let resultPt = midPt, resultDir = midDir;
 
@@ -277,9 +384,9 @@ const avoidObstacles = (conn, fromPt, fromDir, midPt, midDir, toPt, toDir, map) 
     if (hasObstacles) {
       let expectDir = toPt.y > midPt.y ? 1 : -1;
       
-      // 预测垂直2格外是否有阻碍
-      let positiveDirObstacles = !map.hasObstacles(index + _dirIndex * girdGap, fromGridInfo.yCell + expectDir * girdGap) && !map.hasObstacles(index + _dirIndex * girdGap, fromGridInfo.yCell + expectDir * girdGap * 2);
-      let oppositeDirObstacles = !map.hasObstacles(index + _dirIndex * girdGap, fromGridInfo.yCell - expectDir * girdGap) && !map.hasObstacles(index + _dirIndex * girdGap, fromGridInfo.yCell - expectDir * girdGap * 2);
+      // 预测垂直外侧1格是否有阻碍
+      let positiveDirObstacles = map.hasObstacles(`${index + _dirIndex * girdGap}@${fromGridInfo.yCell + expectDir * girdGap}`);
+      let oppositeDirObstacles = map.hasObstacles(`${index + _dirIndex * girdGap}@${fromGridInfo.yCell - expectDir * girdGap}`);
       // todo: 坐标需要修正
       if (!positiveDirObstacles) {
         resultPt = {
@@ -347,9 +454,9 @@ const avoidObstacles = (conn, fromPt, fromDir, midPt, midDir, toPt, toDir, map) 
     // 拐弯
     if (hasObstacles) {
       let expectDir = toPt.x > midPt.x ? 1 : -1;
-      // 预测垂直2格外是否有阻碍
-      let positiveDirObstacles = !map.hasObstacles(fromGridInfo.xCell + expectDir * girdGap, index + _dirIndex * girdGap) && !map.hasObstacles(fromGridInfo.xCell + expectDir * girdGap * 2, index + _dirIndex * girdGap);
-      let oppositeDirObstacles = !map.hasObstacles(fromGridInfo.xCell - expectDir * girdGap, index + _dirIndex * girdGap) && !map.hasObstacles(fromGridInfo.xCell - expectDir * girdGap * 2, index + _dirIndex * girdGap);
+      // 预测水平外侧1格是否有阻碍
+      let positiveDirObstacles = map.hasObstacles(`${fromGridInfo.xCell + expectDir * girdGap}@${index + _dirIndex * girdGap}`);
+      let oppositeDirObstacles = map.hasObstacles(`${fromGridInfo.xCell - expectDir * girdGap}@${index + _dirIndex * girdGap}`);
       if (!positiveDirObstacles) {
         resultPt = {
           x: fromGridInfo.x,
@@ -540,7 +647,7 @@ const route = (conn, fromPt, fromDir, toPt, toDir, map, count) => {
   }
 
   // 避开障碍物
-  let avoidAction = avoidObstacles(conn, fromPt, fromDir, point, dir, toPt, toDir, map);
+  let avoidAction = avoidObstacles(conn, fromPt, fromDir, point, dir, toPt, toDir, map, count);
   if (avoidAction && avoidAction.code === 'CHANGE_DIR') {
     point = avoidAction.correctPt;
     dir = avoidAction.correctDir;
@@ -558,6 +665,7 @@ function drawAdvancedManhattan (sourcePoint, targetPoint, options) {
   // 后续可以优化这个内存
   let obstacleMap = new ObstacleMap();
   obstacleMap.build(canvasData.nodes);
+  obstacleMap.initStatus(sourcePoint, targetPoint, options.sourceNodeId, options.targetNodeId);
 
   MINDIST = obstacleMap.options.girdGap * 2;
 
@@ -576,7 +684,7 @@ function drawAdvancedManhattan (sourcePoint, targetPoint, options) {
   route(pointArray, fromPt, fromDir, toPt, toDir, obstacleMap, 1);
 
   // 避障失败
-  if (pointArray.length === 0 || pointArray.filter((item) => !item).length > 1) {
+  if (pointArray.length === 0 || pointArray.filter((item) => !item).length > 0) {
     pointArray = [];
     _route(pointArray, fromPt, fromDir, toPt, toDir);
   } else {
@@ -601,10 +709,23 @@ function drawAdvancedManhattan (sourcePoint, targetPoint, options) {
   // console.log(startPoint);
   // console.log(endPoint);
   console.log(pointArray);
-  return {
-    path: getDefaultPath(pointArray),
-    breakPoints: pointArray
-  };
+
+  if (options.hasRadius) {
+    if (pointArray.length < 3) {
+      return {
+        path: getDefaultPath(pointArray),
+        breakPoints: pointArray
+      };
+    }
+
+    return getRadiusPath(pointArray)
+  }
+  else {
+    return {
+      path: getDefaultPath(pointArray),
+      breakPoints: pointArray
+    };
+  }
 }
 
 export default drawAdvancedManhattan;

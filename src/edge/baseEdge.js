@@ -214,6 +214,8 @@ class BaseEdge extends Edge {
       });
 
       let obj = DrawUtil.drawAdvancedManhattan(sourcePoint, targetPoint, {
+        sourceNodeId: this.sourceNode.id,
+        targetNodeId: this.targetNode.id,
         breakPoints: this._breakPoints,
         hasDragged: this._hasDragged,
         draggable: this.draggable,

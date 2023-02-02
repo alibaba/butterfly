@@ -10,9 +10,19 @@ export default class ObstacleMap {
       padding:  10// 
     }, options);
     this.MAP_CONST = {
-      'HAS_WALK': 1, // 已经走过的路
-      'HAS_NODE': 2  // 节点已经占用的网格
+      'EMPTY': '1@1', // 空的key
     }
+    this.sourceCell = {};
+    this.targetCell = {};
+    this.sourceNodeId = '';
+    this.targetNodeId = '';
+  }
+  // 初始化开始、结束点
+  initStatus(sourcePoint, targetPoint, sourceNodeId, targetNodeId) {
+    this.sourceCell = this.getGirdCell(sourcePoint.pos[0], sourcePoint.pos[1]);
+    this.targetCell = this.getGirdCell(targetPoint.pos[0], targetPoint.pos[1]);
+    this.sourceNodeId = sourceNodeId;
+    this.targetNodeId = targetNodeId;
   }
   // 建立网格地图
   build(nodes) {
@@ -47,7 +57,7 @@ export default class ObstacleMap {
     // 建立空白地图
     for(let i = minTop; i <= maxBottom; i+=this.options.girdGap) {
       for(let j = minleft; j <= maxRight; j+=this.options.girdGap) {
-        this.map[`${j}@${i}`] = 0;
+        this.map[`${j}@${i}`] = this.MAP_CONST.EMPTY;
       }
     }
 
@@ -66,7 +76,7 @@ export default class ObstacleMap {
       
       for(let i = ltGirdInfo.yCell; i <= lbGirdInfo.yCell; i+=this.options.girdGap) {
         for(let j = ltGirdInfo.xCell; j <= rtGirdInfo.xCell; j+=this.options.girdGap) {
-          this.map[`${j}@${i}`] = this.MAP_CONST['HAS_NODE'];
+          this.map[`${j}@${i}`] = node.id;
         }
       }
     });
@@ -74,7 +84,16 @@ export default class ObstacleMap {
   }
   // 是否被占用
   hasObstacles(key) {
-    return this.map[key] !== 0;
+    let moveNodeId = this.map[key];
+    if (this.map[key] !== this.MAP_CONST.EMPTY) {
+      let cell = key.toString().split('@').map((item) => parseInt(item));
+      if (moveNodeId === this.sourceNodeId && (cell[0] === this.sourceCell.xCell || cell[1] === this.sourceCell.yCell)) {
+        return false;
+      } else if (moveNodeId === this.targetNodeId && (cell[0] === this.targetCell.xCell || cell[1] === this.targetCell.yCell)) {
+        return false;
+      }
+    }
+    return this.map[key] !== this.MAP_CONST.EMPTY;
   }
   // 传入一个坐标获取单元格
   getGirdCell(x, y) {

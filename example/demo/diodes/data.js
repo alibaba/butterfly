@@ -108,7 +108,7 @@ const data = {
   }, {
     id: '8',
     top: 120,
-    left: 500,
+    left: 100,
     type: 'semiconductor_8',
     Class: Semiconductor,
     inputs:[{

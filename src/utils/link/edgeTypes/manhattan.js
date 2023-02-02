@@ -100,11 +100,10 @@ function getRadiusPath(pointArr) {
         ].join(" ")
       }
       else {
-        path = path + " " + [
-          'M', e[0].x, e[0].y,
+        path = path + " " + ((index === 0 ? ['M', e[0].x, e[0].y] : []).concat([
           'L', e[1].x, e[1].y,
           'A', radius, radius, 90, 0, e[3], e[2].x, e[2].y
-        ].join(" ")
+        ])).join(" ");
       }
 
     }

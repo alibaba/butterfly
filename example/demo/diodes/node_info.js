@@ -14,6 +14,11 @@ class Input extends Node {
       type: this.options.type === 'input' ? 'source' : 'target',
       dom: this.endpointDom
     });
+    $(this.dom).find('.text').on('click', (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      console.log('11111');
+    })
   }
   draw = (data) => {
     let container = $(`<div class="diodes-base-node info-node ${data.options.type}-node"></div>`)
