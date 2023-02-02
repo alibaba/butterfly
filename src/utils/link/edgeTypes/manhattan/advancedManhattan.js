@@ -1,33 +1,11 @@
 'use strict';
 
 import _ from 'lodash';
-import {getAvoidObstaclesInfo, _calcOrientation, Point, _route, DEFAULT_RADIUS} from '../_utils'; 
+import {_calcOrientation, getAvoidObstaclesInfo} from '../_utils'; 
+import {Point, _route, getDefaultPath, getRadiusPath, LEFT, RIGHT, TOP, BOTTOM, TOL, TOLxTOL} from './_utils'; 
 import ObstacleMap from './obstacleMap';
 
 let MINDIST = 20;
-const TOL = 0.1;
-const TOLxTOL = 0.01;
-const LEFT = 'Left';
-const RIGHT = 'Right';
-const TOP = 'Top';
-const BOTTOM = 'Bottom';
-
-
-// const orientationOffet = (pos, orientation, girdGap) => {
-//   let _ori = orientation.toString();
-//   let res = pos;
-//   if (_ori === '0,1') {
-//     res[1] += girdGap;
-//   } else if (_ori === '0,-1') {
-//     res[1] -= girdGap;
-//   } else if (_ori === '1,0') {
-//     res[0] += girdGap;
-//   } else if (_ori === '-1,0') {
-//     res[0] -= girdGap;
-//   }
-//   return res;
-// }
-
 
 // 寻找两点直线能否合并，无障碍即可合并
 const _isMerge = (point1, point2, obstacleMap) => {
@@ -35,10 +13,6 @@ const _isMerge = (point1, point2, obstacleMap) => {
   let info = {
     canMerge: false
   };
-
-  // console.log(point1);
-  // console.log(point2);
-  // console.log('-------');
 
   if (point1.x !== point2.x && point1.y !== point2.y) {
 
@@ -170,133 +144,6 @@ const mergePoint = (pointArr, obstacleMap) => {
 
   return pointArr;
 }
-
-
-// 根据节点生成最终路线
-const getDefaultPath = (pointArr) => {
-  let path = pointArr.reduce((path, point) => {
-    path.push([
-      'L',
-      point.x,
-      point.y
-    ].join(' '));
-    return path;
-  }, [
-    [
-      'M',
-      pointArr[0].x,
-      pointArr[0].y
-    ].join(' ')
-  ]).join(' ');
-  return path
-};
-
-function getRadiusPath(pointArr) {
-  let path = ""
-  let radius = DEFAULT_RADIUS;
-  const [start, c1, c2] = pointArr;
-  const end = pointArr[pointArr.length - 1]
-  if (Math.abs(start.y - end.y) < 2 * DEFAULT_RADIUS) {
-    radius = Math.abs(start.y - end.y) / 2;
-  }
-
-  if (
-    _.first(pointArr).x === _.last(pointArr).x ||
-    _.first(pointArr).y === _.last(pointArr).y
-  ) {
-    path = [
-      'M', _.first(pointArr).x, _.first(pointArr).y,
-      'L', _.last(pointArr).x, _.last(pointArr).y
-    ].join(' ');
-    return {
-      path,
-      breakPoints: pointArr
-    };
-  }
-
-  if (_.first(pointArr).x > _.last(pointArr).x) {
-    //pointArr = pointArr.reverse();
-  }
-  let arc = []
-  for (let i = 0; i < pointArr.length - 2; i++) {
-    console.log(i);
-    console.log(getDrawPoint(pointArr[i], pointArr[i + 1], pointArr[i + 2], radius, i));
-    arc = [...arc, getDrawPoint(pointArr[i], pointArr[i + 1], pointArr[i + 2], radius, i)]
-  }
-  arc.forEach((e, index) => {
-    if (index % 2 == 0) {
-      if (index === 2) {
-        path = path + " " + [
-          'L', e[1].x, e[1].y,
-          'M', e[1].x, e[1].y,
-          'A', radius, radius, 90, 0, e[3], e[2].x, e[2].y
-        ].join(" ")
-      }
-      else {
-        path = path + " " + ((index === 0 ? ['M', e[0].x, e[0].y] : []).concat([
-          'L', e[1].x, e[1].y,
-          'A', radius, radius, 90, 0, e[3], e[2].x, e[2].y
-        ])).join(" ");
-      }
-    }
-    else {
-      path = path + " " + [
-        'L', e[1].x, e[1].y,
-        'M', e[1].x, e[1].y,
-        'A', radius, radius, 90, 0, e[3], e[2].x, e[2].y
-      ].join(" ")
-    }
-
-  })
-  path = path + ['L', end.x, end.y].join(" ")
-  return {
-    path,
-    breakPoints: pointArr
-  };
-}
-const getDrawPoint = (start, control, end, radius, i) => {
-  let p1 = getThatPoint(start, control, radius);
-  let p2 = getThatPoint(end, control, radius);
-  let flag = 0;
-  let center = new Point(
-    (start.x + end.x) / 2,
-    (start.y + end.y) / 2
-  );
-
-  // 逆时针
-  if (control.y < center.y) {
-    // if (i === 4) console.log('123');
-    flag = 1;
-  }
-  else {
-    // if (i === 4) console.log('234');
-    flag = 0;
-  }
-  if (start["x"] > end["x"]) {
-    // if (i === 4) console.log('345');
-    flag = flag === 1 ? 0 : 1
-  }
-  // if (i === 4) console.log('567');
-  return [start, p1, p2, flag];
-};
-// 获得靠近end的点
-const getThatPoint = (start, end, radius) => {
-  let p = new Point();
-
-  ['x', 'y'].forEach(key => {
-    if (start[key] > end[key]) {
-      p[key] = end[key] + radius;
-    }
-    else if (start[key] < end[key]) {
-      p[key] = end[key] - radius;
-    }
-    else {
-      p[key] = start[key];
-    }
-  });
-
-  return p;
-};
 
 // 避开整个节点
 const _avoidObstaclesLen = (currentCell, obstacleMap, dir, girdGap) => {

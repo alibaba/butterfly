@@ -5,7 +5,6 @@ import ReactDOM from 'react-dom';
 import {BrowserRouter as Router, Route, Link, Redirect} from 'react-router-dom';
 import {Layout, Menu} from 'antd';
 import Emergency from './demo/emergency/index.jsx';
-import Advanced from './demo/advanced/index.jsx';
 import Diodes from './demo/diodes/index.jsx';
 import Force from './demo/force/index.jsx';
 import RelationalNetwork from './demo/relationalNetwork/index.jsx';
@@ -55,9 +54,6 @@ ReactDOM.render((
             mode='inline'
             theme="dark"
           >
-            <Menu.Item key="advanced">
-             <Link to="/advanced">Advanced</Link>
-            </Menu.Item>
             <Menu.Item key="analysis">
               <Link to="/analysis">Analysis</Link>
             </Menu.Item>
@@ -145,7 +141,6 @@ ReactDOM.render((
           </Menu>
         </Sider>
         <Content>
-          <Route path="/advanced" component={Advanced} />
           <Route path="/emergency" component={Emergency} />
           <Route path="/diodes" component={Diodes} />
           <Route path="/force" component={Force} />

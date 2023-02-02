@@ -13,7 +13,7 @@ const data = {
     Class: Info
   }, {
     id: '1',
-    top: 300,
+    top: 170,
     left: 150,
     type: 'semiconductor_1',
     Class: Semiconductor,
@@ -107,8 +107,8 @@ const data = {
     }]
   }, {
     id: '8',
-    top: 120,
-    left: 100,
+    top: 325,
+    left: 780,
     type: 'semiconductor_8',
     Class: Semiconductor,
     inputs:[{
@@ -126,8 +126,7 @@ const data = {
     type: 'output',
     Class: Info
   }],
-  edges: [
-  {
+  edges: [{
     source: '0',
     target: '1',
     sourceNode: '0',
@@ -135,32 +134,28 @@ const data = {
     color: 'purple',
     type: 'endpoint',
     Class: Edge
-  }
-  , {
+  }, {
     source: '0',
     target: '1',
     sourceNode: '1',
     targetNode: '2',
     type: 'endpoint',
     Class: Edge
-  }, 
-  {
+  }, {
     source: '0',
     target: '1',
     sourceNode: '2',
     targetNode: '3',
     type: 'endpoint',
     Class: Edge
-  }, 
-  {
+  }, {
     source: '0',
     target: '0',
     sourceNode: '2',
     targetNode: '9',
     type: 'endpoint',
     Class: Edge
-  }, 
-  {
+  }, {
     source: '0',
     target: '2',
     sourceNode: '3',
@@ -168,8 +163,7 @@ const data = {
     color: 'purple',
     type: 'endpoint',
     Class: Edge
-  }
-  ]
+  }]
 }
 
 export default data;
