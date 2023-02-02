@@ -142,6 +142,22 @@ const mergePoint = (pointArr, obstacleMap) => {
     }
   }
 
+  // 水平、垂直的线段可合并
+  let tmpPoint2 = pointArr.map((item) => item);
+  let canMerge = true;
+  while(canMerge) {
+    canMerge = false;
+
+    for(let i = 0; i < tmpPoint2.length - 2; i++) {
+      let point1 = tmpPoint2[0], point2 = tmpPoint2[1], point3 = tmpPoint2[2];
+      if ((point1[0] === point2[0] && point2[0] === point3[0]) || (point1[1] === point2[1] && point2[1] === point3[1])) {
+        tmpPoint2.splice(i + 1, 1);
+        canMerge = true;
+        break;
+      }
+    }
+  }
+
   return pointArr;
 }
 
@@ -534,6 +550,8 @@ function drawAdvancedManhattan (sourcePoint, targetPoint, options) {
   if (pointArray.length === 0 || pointArray.filter((item) => !item).length > 0) {
     pointArray = [];
     _route(pointArray, fromPt, fromDir, toPt, toDir);
+    console.log('避障失败了:');
+    console.log(pointArray);
   } else {
     // 去除重复节点
     pointArray = _.uniqWith(pointArray, _.isEqual);
@@ -555,7 +573,7 @@ function drawAdvancedManhattan (sourcePoint, targetPoint, options) {
 
   // console.log(startPoint);
   // console.log(endPoint);
-  console.log(pointArray);
+  // console.log(pointArray);
 
   if (options.hasRadius) {
     if (pointArray.length < 3) {
