@@ -195,6 +195,7 @@ const redraw = (isInit) => {
           edge.eventHandlerDom && _edgeFragment.appendChild(edge.eventHandlerDom);
           edge.arrowDom && _edgeFragment.appendChild(edge.arrowDom);
           edge.labelDom && _labelFragment.appendChild(edge.labelDom);
+          edge.defaultAnimate && edge.addAnimate();
         }
       } else {
         if (!hideEdges[`${edge.options.sourceNode}-${edge.options.source}-${edge.options.targetNode}-${edge.options.target}`]) {
@@ -203,6 +204,7 @@ const redraw = (isInit) => {
           edge.eventHandlerDom && $(edge.eventHandlerDom).detach();
           edge.labelDom && $(edge.labelDom).detach();
           edge.arrowDom && $(edge.arrowDom).detach();
+          edge.defaultAnimate && edge.removeAnimate();
           hideEdges[`${edge.options.sourceNode}-${edge.options.source}-${edge.options.targetNode}-${edge.options.target}`] = edge;
         }
       }

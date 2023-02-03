@@ -369,6 +369,9 @@ class BaseEdge extends Edge {
       _isContinue: true
     }, this.animateDom);
   }
+  removeAnimate() {
+    $(this.animateDom).remove();
+  }
   emit(type, data) {
     super.emit(type, data);
     this._emit(type, data);
