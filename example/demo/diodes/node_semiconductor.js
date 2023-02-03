@@ -1,6 +1,7 @@
 'use strict';
 
-import { Node } from 'butterfly-dag';
+// import { Node } from 'butterfly-dag';
+import { Node } from '../../../index.js';
 import $ from 'jquery';
 class Semiconductor extends Node {
   constructor(opts) {

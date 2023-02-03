@@ -32,10 +32,10 @@ class Scene4New extends Component {
       }
     });
     this.canvas.draw(mockData, () => {
-      setTimeout(() => {
-        this.canvas.removeGroup('group');
-        // this.canvas.removeNode('2');
-      }, 5000);
+      // setTimeout(() => {
+      //   this.canvas.removeGroup('group');
+      //   this.canvas.removeNode('2');
+      // }, 5000);
 
     });
     this.canvas.on('events', (data) => {

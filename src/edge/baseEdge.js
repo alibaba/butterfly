@@ -73,6 +73,9 @@ class BaseEdge extends Edge {
     // 偏移防止互相反向的线段重叠
     this._offsetPosLeft = 0;
     this._offsetPosTop = 0;
+
+    // 动画的promise
+    this.animatePromise = null;
   }
   _init(obj) {
     if (!this._isInited) {
@@ -203,6 +206,29 @@ class BaseEdge extends Edge {
       path = DrawUtil.drawSecondBezier(sourcePoint, targetPoint, this.shapeType);
     } else if(this.shapeType === 'BrokenLine'){
       path = DrawUtil.drawBrokenLine(sourcePoint, targetPoint);
+    } else if(this.shapeType === 'AdvancedManhattan'){
+      _.assign(sourcePoint, {
+        nodePos: [this.sourceNode.left, this.sourceNode.top],
+        nodeSize: [this.sourceNode.width, this.sourceNode.height]
+      });
+      _.assign(targetPoint, {
+        nodePos: [this.targetNode.left, this.targetNode.top],
+        nodeSize: [this.targetNode.width, this.targetNode.height]
+      });
+
+      let obj = DrawUtil.drawAdvancedManhattan(sourcePoint, targetPoint, {
+        sourceNodeId: this.sourceNode.id,
+        targetNodeId: this.targetNode.id,
+        breakPoints: this._breakPoints,
+        hasDragged: this._hasDragged,
+        draggable: this.draggable,
+        hasRadius: this.hasRadius
+      });
+      path = obj.path;
+      // 后续再支持拖动
+      // obj.breakPoints[0].type = 'start';
+      // obj.breakPoints[obj.breakPoints.length - 1].type = 'end';
+      // this._breakPoints = obj.breakPoints;
     }
     this._path = path;
     return path;
@@ -358,19 +384,32 @@ class BaseEdge extends Edge {
     return true;
   }
   addAnimate(options) {
-    this.animateDom = LinkAnimateUtil.addAnimate(this.dom, this._path, _.assign({},{
+    this.animatePromise = LinkAnimateUtil.addAnimate(this.dom, this._path, _.assign({},{
       num: 1, // 现在只支持1个点点
       radius: 3,
       color: '#776ef3'
     }, options), this.animateDom);
+
+    this.animatePromise.then((data) => {
+      this.animateDom = data;
+    })
   }
   redrawAnimate() {
-    this.animateDom = LinkAnimateUtil.addAnimate(this.dom, this._path, {
+    this.animatePromise = LinkAnimateUtil.addAnimate(this.dom, this._path, {
       _isContinue: true
     }, this.animateDom);
+    this.animatePromise.then((data) => {
+      this.animateDom = data;
+    });
   }
   removeAnimate() {
-    $(this.animateDom).remove();
+    if (this.animatePromise) {
+      this.animatePromise.then(() => {
+        $(this.animateDom).remove();
+        this.animateDom = null;
+      });
+      this.animatePromise = null;
+    }
   }
   emit(type, data) {
     super.emit(type, data);
@@ -407,6 +446,7 @@ class BaseEdge extends Edge {
     }
     if (this.animateDom) {
       $(this.animateDom).remove();
+      this.animateDom = null;
     }
     $(this.dom).remove();
     // edge被destory后，undo的时候会复用edge实例，需要重新绑定事件，所以这里置为false

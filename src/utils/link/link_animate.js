@@ -12,58 +12,61 @@ let init = (_svg) => {
 }
 
 let addAnimate = (targetDom, path, options = {}, animateDom) => {
-  let _animateDom = animateDom;
-  let circle = null;
-  let motion = null;
-  if (!_animateDom) {
-    circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    motion = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion');
-    circle.append(motion);
-  }
 
-  if (options._isContinue) {
-    // $(_animateDom).find('animateMotion').attr('path', path);
-    // 为了适配延迟加载的问题,需要重新replaceWith动画标签
-    let tmpAnimateDom = _animateDom.cloneNode(true);
-    $(tmpAnimateDom).find('animateMotion').attr('path', path);
-    $(_animateDom).replaceWith(tmpAnimateDom);
-    _animateDom = tmpAnimateDom;
-  } else {
-    let _startTime = (new Date().getTime() - _initTime) / 1000;
-
-    if (_animateDom) {
-      circle = _animateDom;
-      motion = $(_animateDom).find('animateMotion')[0];
-      $(circle).css('display', 'block');
+  return new Promise((resolve, reject) => {
+    let _animateDom = animateDom;
+    let circle = null;
+    let motion = null;
+    if (!_animateDom) {
+      circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      motion = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion');
+      circle.append(motion);
     }
 
-    circle.setAttribute('cx', 0);
-    circle.setAttribute('cy', 0);
-    circle.setAttribute('r', options.radius || 2);
-    circle.setAttribute('fill', options.color || '#999');
+    if (options._isContinue) {
+      // $(_animateDom).find('animateMotion').attr('path', path);
+      // 为了适配延迟加载的问题,需要重新replaceWith动画标签
+      let tmpAnimateDom = _animateDom.cloneNode(true);
+      $(tmpAnimateDom).find('animateMotion').attr('path', path);
+      $(_animateDom).replaceWith(tmpAnimateDom);
+      _animateDom = tmpAnimateDom;
+    } else {
+      let _startTime = (new Date().getTime() - _initTime) / 1000;
 
-    motion.setAttribute('path', path);
-    motion.setAttribute('begin', `${_startTime}s`);
-    motion.setAttribute('dur', options.dur || '8s');
-    motion.setAttribute('fill', 'freeze');
-    motion.setAttribute('repeatCount', options.repeatCount || 'indefinite');
+      if (_animateDom) {
+        circle = _animateDom;
+        motion = $(_animateDom).find('animateMotion')[0];
+        $(circle).css('display', 'block');
+      }
 
-    if (options.repeatCount && options.repeatCount !== 'indefinite') {
+      circle.setAttribute('cx', 0);
+      circle.setAttribute('cy', 0);
+      circle.setAttribute('r', options.radius || 2);
+      circle.setAttribute('fill', options.color || '#999');
+
+      motion.setAttribute('path', path);
+      motion.setAttribute('begin', `${_startTime}s`);
+      motion.setAttribute('dur', options.dur || '8s');
+      motion.setAttribute('fill', 'freeze');
+      motion.setAttribute('repeatCount', options.repeatCount || 'indefinite');
+
+      if (options.repeatCount && options.repeatCount !== 'indefinite') {
+        setTimeout(() => {
+          $(circle).css('display', 'none');
+        }, parseFloat(options.dur) * parseInt(options.repeatCount) * 1000);
+      }
+    }
+
+    if (!_animateDom) {
+      _animateDom = circle;
+      // 延迟插入
       setTimeout(() => {
-        $(circle).css('display', 'none');
-      }, parseFloat(options.dur) * parseInt(options.repeatCount) * 1000);
+        $(_animateDom).insertAfter(targetDom);
+        resolve(_animateDom);
+      }, 20);
     }
-  }
 
-  if (!_animateDom) {
-    _animateDom = circle;
-    // 延迟插入
-    setTimeout(() => {
-      $(_animateDom).insertAfter(targetDom);
-    }, 20);
-  }
-
-  return _animateDom;
+  });
 }
 
 export default {

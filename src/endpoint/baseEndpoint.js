@@ -4,10 +4,8 @@ const $ = require('jquery');
 const _ = require('lodash');
 
 import './baseEndpoint.less';
-
 import Endpoint from '../interface/endpoint';
-
-import {isHiddenNode, isHiddenGroup} from '../utils/virtualScroll';
+import virtualScroll from '../utils/virtualScroll';
 
 class BaseEndpoint extends Endpoint {
   constructor(opts) {
@@ -101,7 +99,7 @@ class BaseEndpoint extends Endpoint {
 
   updatePos(dom = this.dom, orientation = this.orientation, pos = this.pos, isNotEmitEvent) {
 
-    let _isVirtualHidden = this._node.__type === 'node' ? isHiddenNode(this._node.id) : isHiddenGroup(this._node.id);
+    let _isVirtualHidden = this._node.__type === 'node' ? virtualScroll.isHiddenNode(this._node.id) : virtualScroll.isHiddenGroup(this._node.id);
     if (_isVirtualHidden) {
       if (!this._isInitPos) {
         this._posTop = this._top = this._node.top;
