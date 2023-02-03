@@ -38,9 +38,9 @@ class KedrovizEdge extends Edge {
         resCPath += `${cc % 2 === 0 ? ',' : ' '}${cPathArr[cc]}`;
       }
       resD = `${pathArr[0]}L${lPath}C${resCPath.substring(1)}L${pathArr[2]}`;
-      if (points.length === 6) {
-        resD = `M${points[0].x},${points[0].y}L${points[5].x},${points[5].y}`
-      }
+      // if (points.length === 6) {
+      //   resD = `M${points[0].x},${points[0].y}L${points[5].x},${points[5].y}`
+      // }
       this.d = resD;
 
       return resD;

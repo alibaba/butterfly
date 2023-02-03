@@ -27,6 +27,7 @@ export const kedrovizLayout = (param) => {
     }
   };
 
+  // addEdgeLinks(_nodes, edges);
   let nodesData = getNodes(_nodes, node, edges, layer);
   addEdgeLinks(nodesData, edges);
 
@@ -37,6 +38,8 @@ export const kedrovizLayout = (param) => {
     item.rank = result.nodes[index].rank;
     item.top = result.nodes[index].y;
     item.left = result.nodes[index].x;
+    item.sources = result.nodes[index].sources;
+    item.targets = result.nodes[index].targets;
   });
 };
 

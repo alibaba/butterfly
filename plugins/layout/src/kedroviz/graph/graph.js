@@ -28,7 +28,6 @@ export const graph = (nodes, edges, layers, rankdir, isRankReverse, options) => 
 
 export const addEdgeLinks = (nodes, edges) => {
   const nodeById = {};
-
   for (const node of nodes) {
     node.x = 0;
     node.y = 0;
@@ -44,8 +43,26 @@ export const addEdgeLinks = (nodes, edges) => {
     let targetNode = typeof(edge.targetNode) !== 'undefined' ? edge.targetNode : edge.target;
     edge.sourceNodeObj = nodeById[parseInt(sourceNode)];
     edge.targetNodeObj = nodeById[parseInt(targetNode)];
-    edge.sourceNodeObj.targets.push(edge);
-    edge.targetNodeObj.sources.push(edge);
+    edge.sourceNodeObj.targets.push({
+      id: edge.id,
+      nodeInfo: edge.nodeInfo,
+      source: edge.source,
+      sourceNode: edge.sourceNode,
+      sourceNodeObj: edge.sourceNodeObj,
+      target: edge.target,
+      targetNode: edge.targetNode,
+      targetNodeObj: edge.targetNodeObj
+    });
+    edge.targetNodeObj.sources.push({
+      id: edge.id,
+      nodeInfo: edge.nodeInfo,
+      source: edge.source,
+      sourceNode: edge.sourceNode,
+      sourceNodeObj: edge.sourceNodeObj,
+      target: edge.target,
+      targetNode: edge.targetNode,
+      targetNodeObj: edge.targetNodeObj
+    });
   }
 };
 
