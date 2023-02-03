@@ -100,6 +100,41 @@ const _isMerge = (point1, point2, obstacleMap) => {
   return info;
 }
 
+
+// 水平、垂直的线段可合并
+const _mergeOverlapPoint = (_pointArr) => {
+  let tmpPoint2 = _pointArr.map((item) => item);
+  let canMerge = true;
+  while(canMerge) {
+    canMerge = false;
+
+    for(let i = 0; i < tmpPoint2.length - 2; i++) {
+      let point1 = {
+        x: parseInt(tmpPoint2[i].x),
+        y: parseInt(tmpPoint2[i].y),
+      }, point2 = {
+        x: parseInt(tmpPoint2[i + 1].x),
+        y: parseInt(tmpPoint2[i + 1].y)
+      }, point3 = {
+        x: parseInt(tmpPoint2[i + 2].x),
+        y: parseInt(tmpPoint2[i + 2].y)
+      };
+      if ((point1.x === point2.x && point2.x === point3.x) || (point1.y === point2.y && point2.y === point3.y)) {
+        // console.log('-----');
+        // console.log(point1);
+        // console.log(point2);
+        // console.log(point3);
+        // console.log(`${(point1[0] === point2[0] && point2[0] === point3[0])} ${point1[1] === point2[1] && point2[1] === point3[1]}`)
+        tmpPoint2.splice(i + 1, 1);
+        // console.log(JSON.stringify(tmpPoint2));
+        canMerge = true;
+        break;
+      }
+    }
+  }
+  return tmpPoint2;
+}
+
 const mergePoint = (pointArr, obstacleMap) => {
   let tmpPoint = pointArr.slice(1, pointArr.length - 1);
   if (tmpPoint.length <= 3) {
@@ -141,23 +176,7 @@ const mergePoint = (pointArr, obstacleMap) => {
       break;
     }
   }
-
-  // 水平、垂直的线段可合并
-  let tmpPoint2 = pointArr.map((item) => item);
-  let canMerge = true;
-  while(canMerge) {
-    canMerge = false;
-
-    for(let i = 0; i < tmpPoint2.length - 2; i++) {
-      let point1 = tmpPoint2[0], point2 = tmpPoint2[1], point3 = tmpPoint2[2];
-      if ((point1[0] === point2[0] && point2[0] === point3[0]) || (point1[1] === point2[1] && point2[1] === point3[1])) {
-        tmpPoint2.splice(i + 1, 1);
-        canMerge = true;
-        break;
-      }
-    }
-  }
-
+  
   return pointArr;
 }
 
@@ -550,8 +569,10 @@ function drawAdvancedManhattan (sourcePoint, targetPoint, options) {
   if (pointArray.length === 0 || pointArray.filter((item) => !item).length > 0) {
     pointArray = [];
     _route(pointArray, fromPt, fromDir, toPt, toDir);
-    console.log('避障失败了:');
-    console.log(pointArray);
+
+    // 去除重复节点
+    pointArray = _.uniqWith(pointArray, _.isEqual);
+
   } else {
     // 去除重复节点
     pointArray = _.uniqWith(pointArray, _.isEqual);
@@ -560,6 +581,8 @@ function drawAdvancedManhattan (sourcePoint, targetPoint, options) {
     pointArray = mergePoint(pointArray, obstacleMap);
   }
 
+  // 合并同一方向的水平、垂直线段
+  pointArray = _mergeOverlapPoint(pointArray)
 
   // 寻找start、end的网格节点
   // let startPoint = [obstacleMap.round(sourcePoint.pos[0]), obstacleMap.round(sourcePoint.pos[1])];
@@ -582,7 +605,6 @@ function drawAdvancedManhattan (sourcePoint, targetPoint, options) {
         breakPoints: pointArray
       };
     }
-
     return getRadiusPath(pointArray)
   }
   else {

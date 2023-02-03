@@ -73,6 +73,9 @@ class BaseEdge extends Edge {
     // 偏移防止互相反向的线段重叠
     this._offsetPosLeft = 0;
     this._offsetPosTop = 0;
+
+    // 动画的promise
+    this.animatePromise = null;
   }
   _init(obj) {
     if (!this._isInited) {
@@ -381,19 +384,32 @@ class BaseEdge extends Edge {
     return true;
   }
   addAnimate(options) {
-    this.animateDom = LinkAnimateUtil.addAnimate(this.dom, this._path, _.assign({},{
+    this.animatePromise = LinkAnimateUtil.addAnimate(this.dom, this._path, _.assign({},{
       num: 1, // 现在只支持1个点点
       radius: 3,
       color: '#776ef3'
     }, options), this.animateDom);
+
+    this.animatePromise.then((data) => {
+      this.animateDom = data;
+    })
   }
   redrawAnimate() {
-    this.animateDom = LinkAnimateUtil.addAnimate(this.dom, this._path, {
+    this.animatePromise = LinkAnimateUtil.addAnimate(this.dom, this._path, {
       _isContinue: true
     }, this.animateDom);
+    this.animatePromise.then((data) => {
+      this.animateDom = data;
+    });
   }
   removeAnimate() {
-    $(this.animateDom).remove();
+    if (this.animatePromise) {
+      this.animatePromise.then(() => {
+        $(this.animateDom).remove();
+        this.animateDom = null;
+      });
+      this.animatePromise = null;
+    }
   }
   emit(type, data) {
     super.emit(type, data);
@@ -430,6 +446,7 @@ class BaseEdge extends Edge {
     }
     if (this.animateDom) {
       $(this.animateDom).remove();
+      this.animateDom = null;
     }
     $(this.dom).remove();
     // edge被destory后，undo的时候会复用edge实例，需要重新绑定事件，所以这里置为false
