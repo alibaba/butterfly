@@ -38,8 +38,8 @@ export const getRadiusPath = (pointArr) => {
   }
 
   if (
-    _.first(pointArr).x === _.last(pointArr).x ||
-    _.first(pointArr).y === _.last(pointArr).y
+    (_.first(pointArr).x === _.last(pointArr).x ||
+    _.first(pointArr).y === _.last(pointArr).y) && pointArr.length <=2
   ) {
     path = [
       'M', _.first(pointArr).x, _.first(pointArr).y,

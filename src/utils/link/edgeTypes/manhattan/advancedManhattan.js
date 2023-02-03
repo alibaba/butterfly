@@ -225,12 +225,12 @@ const avoidObstacles = (conn, fromPt, fromDir, midPt, midDir, toPt, toDir, map, 
   //   }
   // }
   
-  // console.log(map.map);
-  // console.log(fromPt);
-  // console.log(fromDir);
-  // console.log(midPt);
-  // console.log(midDir);
-  // console.log('----------');
+  console.log(map.map);
+  console.log(fromPt);
+  console.log(fromDir);
+  console.log(midPt);
+  console.log(midDir);
+  console.log('----------');
 
   // 检查中途是否有障碍，有的话开始拐弯
   if(fromGridInfo.yCell === midGridInfo.yCell) { // 水平走向
@@ -245,7 +245,7 @@ const avoidObstacles = (conn, fromPt, fromDir, midPt, midDir, toPt, toDir, map, 
 
     if (fromGridInfo.xCell < midGridInfo.xCell) {
       for(let i = _leftGridInfo.xCell; i <= _rightGridInfo.xCell; i+= girdGap) {
-        if (map.hasObstacles(`${i}@${fromGridInfo.yCell}`)) {
+        if (map.hasObstacles(`${i}@${fromGridInfo.yCell}`, count)) {
           hasObstacles = true;
           index = i;
           break;
@@ -253,7 +253,7 @@ const avoidObstacles = (conn, fromPt, fromDir, midPt, midDir, toPt, toDir, map, 
       }
     } else {
       for(let i = fromGridInfo.xCell; i >= midGridInfo.xCell; i-= girdGap) {
-        if (map.hasObstacles(`${i}@${fromGridInfo.yCell}`)) {
+        if (map.hasObstacles(`${i}@${fromGridInfo.yCell}`, count)) {
           hasObstacles = true;
           index = i;
           break;
@@ -261,7 +261,6 @@ const avoidObstacles = (conn, fromPt, fromDir, midPt, midDir, toPt, toDir, map, 
       }
     }
 
-    // console.log(hasObstacles);
     // 拐弯
     if (hasObstacles) {
       let expectDir = toPt.y > midPt.y ? 1 : -1;
@@ -534,7 +533,6 @@ const route = (conn, fromPt, fromDir, toPt, toDir, map, count) => {
     point = avoidAction.correctPt;
     dir = avoidAction.correctDir;
   }
-
   route(conn, point, dir, toPt, toDir, map, count + 1);
 
 }
@@ -565,11 +563,11 @@ function drawAdvancedManhattan (sourcePoint, targetPoint, options) {
   
   route(pointArray, fromPt, fromDir, toPt, toDir, obstacleMap, 1);
 
+  console.log(pointArray);
   // 避障失败
   if (pointArray.length === 0 || pointArray.filter((item) => !item).length > 0) {
     pointArray = [];
     _route(pointArray, fromPt, fromDir, toPt, toDir);
-
     // 去除重复节点
     pointArray = _.uniqWith(pointArray, _.isEqual);
 
@@ -582,7 +580,7 @@ function drawAdvancedManhattan (sourcePoint, targetPoint, options) {
   }
 
   // 合并同一方向的水平、垂直线段
-  pointArray = _mergeOverlapPoint(pointArray)
+  pointArray = _mergeOverlapPoint(pointArray);
 
   // 寻找start、end的网格节点
   // let startPoint = [obstacleMap.round(sourcePoint.pos[0]), obstacleMap.round(sourcePoint.pos[1])];

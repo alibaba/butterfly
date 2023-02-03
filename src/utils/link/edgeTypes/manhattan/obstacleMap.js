@@ -83,9 +83,9 @@ export default class ObstacleMap {
 
   }
   // 是否被占用
-  hasObstacles(key) {
+  hasObstacles(key, step) {
     let moveNodeId = this.map[key];
-    if (this.map[key] !== this.MAP_CONST.EMPTY) {
+    if (this.map[key] !== this.MAP_CONST.EMPTY && (step !== undefined && step === 1)) {
       let cell = key.toString().split('@').map((item) => parseInt(item));
       if (moveNodeId === this.sourceNodeId && (cell[0] === this.sourceCell.xCell || cell[1] === this.sourceCell.yCell)) {
         return false;
