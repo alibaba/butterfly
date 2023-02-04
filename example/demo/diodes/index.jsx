@@ -22,6 +22,7 @@ class Diodes extends Component {
           shapeType: 'AdvancedManhattan',
           // shapeType: 'Manhattan',
           hasRadius: true,
+          radius: 10,
           defaultAnimate: true,
           draggable: true // 只有曼哈顿线段可拖动
         }

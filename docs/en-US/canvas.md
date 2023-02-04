@@ -24,6 +24,7 @@ let canvas = new Canvas({
       type: 'endpoint',    // edge connection type
       shapeType: 'Bezier', // edge type：Bezier curve，Polyline ，Straight，Manhattan line，Improved Bezier curve。values ： Bezier/Flow/Straight/Manhattan/AdvancedBezier
       hasRadius: false ,   //the rounded corners of the Manhattan Curve: true represents having rounded corners,false represents having right angle. Default value false
+      radius: 15 ,         //the default Manhattan curve fillet curvature is 15px
       label: 'test',       // edge label
       arrow: true,         // whether to show arrow
       arrowPosition: 0.5,  // arrow position (0 ~ 1)
@@ -113,7 +114,10 @@ canvas.draw({
   <img width="650" src="https://img.alicdn.com/imgextra/i3/O1CN01sHnesN1SMIhN62CLK_!!6000000002232-2-tps-1418-404.png">
 
   * hasRadius _`<String>`_  the rounded corners of the Manhattan Curve: true represents having rounded corners,false represents having right angle. Default value false
-  * label _`<String/Dom>`_ edge label
+
+  * radius _`<Boolean>`_  the rounded corners of the Manhattan Curve. Default value `15px`
+  
+  _`<String/Dom>`_ edge label
 
   * labelPosition _`<Number>`_ edge label position: the value is between 0-1, 0 represents the beginning of the egde, and 1 represents the end of the egde. Default value `0.5`
 

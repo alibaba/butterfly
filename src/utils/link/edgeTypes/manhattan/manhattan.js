@@ -56,7 +56,7 @@ function drawManhattan(sourcePoint, targetPoint, options) {
       };
     }
 
-    return getRadiusPath(pointArr)
+    return getRadiusPath(pointArr, options.radius)
   }
   else {
     return {

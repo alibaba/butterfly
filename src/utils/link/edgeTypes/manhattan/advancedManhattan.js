@@ -601,7 +601,7 @@ function drawAdvancedManhattan (sourcePoint, targetPoint, options) {
         breakPoints: pointArray
       };
     }
-    return getRadiusPath(pointArray)
+    return getRadiusPath(pointArray, options.radius)
   }
   else {
     return {
