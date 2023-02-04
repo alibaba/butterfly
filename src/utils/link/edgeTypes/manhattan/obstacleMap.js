@@ -62,10 +62,11 @@ export default class ObstacleMap {
       }
     });
 
-    minleft = this.fix(minleft, -1);
-    maxRight = this.fix(maxRight);
-    minTop = this.fix(minTop, -1);
-    maxBottom = this.fix(maxBottom);
+    // 边缘加10个网格的padding
+    minleft = this.fix(minleft, -1) - this.options.girdGap * 10;
+    maxRight = this.fix(maxRight) + this.options.girdGap * 10;
+    minTop = this.fix(minTop, -1) - this.options.girdGap * 10;
+    maxBottom = this.fix(maxBottom) + this.options.girdGap * 10;
     
     // 建立空白地图
     for(let i = minTop; i <= maxBottom; i+=this.options.girdGap) {
