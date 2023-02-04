@@ -12,6 +12,9 @@ export default class ObstacleMap {
     this.MAP_CONST = {
       'EMPTY': '1@1', // 空的key
     }
+
+    this.sourcePoint = {};
+    this.targetPoint = {};
     this.sourceCell = {};
     this.targetCell = {};
     this.sourceNodeId = '';
@@ -19,6 +22,16 @@ export default class ObstacleMap {
   }
   // 初始化开始、结束点
   initStatus(sourcePoint, targetPoint, sourceNodeId, targetNodeId) {
+    this.sourcePoint = {
+      x: sourcePoint.pos[0],
+      y: sourcePoint.pos[1],
+      orientation: sourcePoint.orientation
+    }
+    this.targetPoint = {
+      x: targetPoint.pos[0],
+      y: targetPoint.pos[1],
+      orientation: targetPoint.orientation
+    }
     this.sourceCell = this.getGirdCell(sourcePoint.pos[0], sourcePoint.pos[1]);
     this.targetCell = this.getGirdCell(targetPoint.pos[0], targetPoint.pos[1]);
     this.sourceNodeId = sourceNodeId;
@@ -83,13 +96,25 @@ export default class ObstacleMap {
 
   }
   // 是否被占用
-  hasObstacles(key, step) {
+  hasObstaclesWithKey(key) {
+    // let moveNodeId = this.map[key];
+    // if (this.map[key] !== this.MAP_CONST.EMPTY && (step !== undefined && step === 1)) {
+    //   let cell = key.toString().split('@').map((item) => parseInt(item));
+    //   if (moveNodeId === this.sourceNodeId && (cell[0] === this.sourceCell.xCell || cell[1] === this.sourceCell.yCell)) {
+    //     return false;
+    //   } else if (moveNodeId === this.targetNodeId && (cell[0] === this.targetCell.xCell || cell[1] === this.targetCell.yCell)) {
+    //     return false;
+    //   }
+    // }
+    return this.map[key] !== this.MAP_CONST.EMPTY;
+  }
+  hasObstaclesWithDir(key, fromCell, toCell, step) {
     let moveNodeId = this.map[key];
-    if (this.map[key] !== this.MAP_CONST.EMPTY && (step !== undefined && step === 1)) {
-      let cell = key.toString().split('@').map((item) => parseInt(item));
-      if (moveNodeId === this.sourceNodeId && (cell[0] === this.sourceCell.xCell || cell[1] === this.sourceCell.yCell)) {
+    if (this.map[key] !== this.MAP_CONST.EMPTY) {
+      if (moveNodeId === this.sourceNodeId && fromCell.x === this.sourcePoint.x && fromCell.y === this.sourcePoint.y) {
         return false;
-      } else if (moveNodeId === this.targetNodeId && (cell[0] === this.targetCell.xCell || cell[1] === this.targetCell.yCell)) {
+      }
+      if (moveNodeId === this.targetNodeId && toCell.x === this.targetPoint.x && toCell.y === this.targetPoint.y) {
         return false;
       }
     }
