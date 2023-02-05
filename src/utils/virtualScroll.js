@@ -294,4 +294,4 @@ class VirtualScroll {
 }
 
 
-export default new VirtualScroll();
+export default VirtualScroll;

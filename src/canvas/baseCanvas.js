@@ -26,7 +26,7 @@ import LinkAnimateUtil from '../utils/link/link_animate';
 // 线段工具
 import {prepareAvoidObstaclesInfo} from '../utils/link/edgeTypes/_utils';
 // 虚拟滚动辅助方法
-import virtualScrollUtil from '../utils/virtualScroll';
+import VirtualScrollUtil from '../utils/virtualScroll';
 
 import './baseCanvas.less';
 
@@ -223,7 +223,7 @@ class BaseCanvas extends Canvas {
     });
 
     // 虚拟滚动
-    this._virtualScrollUtil = virtualScrollUtil;
+    this._virtualScrollUtil = new VirtualScrollUtil();
     if (this.virtualScroll.enable) {
       this._virtualScrollUtil.init({
         info: this.virtualScroll,
@@ -1767,6 +1767,7 @@ class BaseCanvas extends Canvas {
             _global: this.global,
             _on: this.on.bind(this),
             _emit: this.emit.bind(this),
+            _virtualScrollUtil: this._virtualScrollUtil,
             _endpointLimitNum: this.theme.endpoint.limitNum,
             draggable: node.draggable !== undefined ? node.draggable : this.draggable
           })
@@ -2170,6 +2171,7 @@ class BaseCanvas extends Canvas {
           _global: this.global,
           _emit: this.emit.bind(this),
           _on: this.on.bind(this),
+          _virtualScrollUtil: this._virtualScrollUtil,
           _endpointLimitNum: this.theme.endpoint.limitNum,
           draggable: group.draggable !== undefined ? group.draggable : this.draggable
         })
@@ -2267,6 +2269,7 @@ class BaseCanvas extends Canvas {
                   _global: this.global,
                   _on: this.on.bind(this),
                   _emit: this.emit.bind(this),
+                  _virtualScrollUtil: this._virtualScrollUtil,
                   _endpointLimitNum: this.theme.endpoint.limitNum,
                   draggable: item.draggable !== undefined ? item.draggable : this.draggable
                 })
@@ -2307,6 +2310,7 @@ class BaseCanvas extends Canvas {
                   _global: this.global,
                   _on: this.on.bind(this),
                   _emit: this.emit.bind(this),
+                  _virtualScrollUtil: this._virtualScrollUtil,
                   _endpointLimitNum: this.theme.endpoint.limitNum,
                   draggable: item.draggable !== undefined ? item.draggable : this.draggable
                 })
