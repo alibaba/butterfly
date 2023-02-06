@@ -561,7 +561,7 @@ function drawAdvancedManhattan (sourcePoint, targetPoint, options) {
   
   route(pointArray, fromPt, fromDir, toPt, toDir, obstacleMap, 1);
 
-  console.log(pointArray);
+  // console.log(pointArray);
   // 避障失败
   if (pointArray.length === 0 || pointArray.filter((item) => !item).length > 0) {
     pointArray = [];

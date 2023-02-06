@@ -2,6 +2,10 @@
 
 import _ from 'lodash';
 
+let mapCache = {};
+let timer = null;
+
+
 export default class ObstacleMap {
   constructor(options) {
     this.map = {};
@@ -39,6 +43,12 @@ export default class ObstacleMap {
   }
   // 建立网格地图
   build(nodes) {
+
+    if (timer) {
+      this.map = mapCache;
+      return;
+    }
+
     let minleft = Infinity;
     let maxRight = -Infinity;
     let minTop = Infinity;
@@ -95,6 +105,12 @@ export default class ObstacleMap {
       }
     });
 
+    // 50ms内使用缓存
+    mapCache = this.map;
+    timer = setTimeout(() => {
+      clearTimeout(timer);
+      timer = null;
+    }, 50);
   }
   // 是否被占用
   hasObstaclesWithKey(key) {
