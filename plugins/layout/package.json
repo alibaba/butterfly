@@ -1,6 +1,6 @@
 {
   "name": "butterfly-plugins-layout",
-  "version": "0.0.29-beta.5",
+  "version": "0.0.29-beta.6",
   "description": "butterfly-plugins-layout,含有各种布局函数",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -18,7 +18,7 @@
   "author": "sdjalft",
   "license": "MIT",
   "dependencies": {
-    "butterfly-dag": "5.1.0-beta.12",
+    "butterfly-dag": "5.1.0-beta.20",
     "jquery": "^3.5.1",
     "classnames": "^2.3.1",
     "d3-graphviz": "^2.6.1",

@@ -58,7 +58,7 @@ const routing = ({
     let reverseTargetSources = !isRankReverse ? reverseTarget.sources : reverseTarget.targets;
 
     //反向线
-    if(reverseSource.row > reverseTarget.row) {
+    if(reverseSource.row >= reverseTarget.row) {
       //planA
       let tmp = reverseSource;
       reverseSource = reverseTarget;
