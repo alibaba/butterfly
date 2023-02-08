@@ -266,6 +266,7 @@ on = (string, function) => {}
 * `{number} options.radius (可选参数)`动画节点半径
 * `{string} options.color (可选参数) `动画节点颜色
 * `{string} options.dur (可选参数)`动画运行时间，如：1s
+* `{number} options.speed (可选参数)`动画运行速度，如：100,代表100px每秒
 * `{number|string} options.repeatCount (可选参数)`动画重复次数，如：1 或者 'indefinite'
 
 ```js

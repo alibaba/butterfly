@@ -37,6 +37,7 @@ class BaseEdge extends Edge {
     this.dom = null;
     this.labelDom = null;
     this.arrowDom = null;
+    this.totalLen = -1;
     this.eventHandlerDom = null;
     this._hasEventListener = false;
     this._coordinateService = null;
@@ -237,7 +238,7 @@ class BaseEdge extends Edge {
     return path;
   }
   redrawLabel() {
-    const length = this.dom.getTotalLength();
+    const length = this.getTotalLength();
     if(!length) {
       return;
     }
@@ -283,7 +284,7 @@ class BaseEdge extends Edge {
     });
   }
   redrawArrow(path) {
-    const length = this.dom.getTotalLength();
+    const length = this.getTotalLength();
     if(!length) {
       return;
     }
@@ -365,6 +366,7 @@ class BaseEdge extends Edge {
     // 函数节流
     if (!this._updateTimer) {
       this._updateTimer = setTimeout(() => {
+        this.getTotalLength(true);
         // 重新计算label
         if (this.labelDom) {
           this.redrawLabel();
@@ -387,10 +389,17 @@ class BaseEdge extends Edge {
     return true;
   }
   addAnimate(options) {
+    // speed的单位是，px/s
+    let _dur = options.dur;
+    if(options.speed) {
+      let len = this.getTotalLength();
+      _dur = len / options.speed; 
+    }
     this.animatePromise = LinkAnimateUtil.addAnimate(this.dom, this._path, _.assign({},{
       num: 1, // 现在只支持1个点点
       radius: 3,
-      color: '#776ef3'
+      dur: _dur,
+      color: '#776ef3',
     }, options), this.animateDom);
 
     this.animatePromise.then((data) => {
@@ -461,6 +470,13 @@ class BaseEdge extends Edge {
   // 曼哈顿线的拐点
   getBreakPoints() {
     return this._breakPoints;
+  }
+  // 获取线段长度
+  getTotalLength(isUpdate) {
+    if (this.totalLen < 0 || isUpdate) {
+      this.totalLen = this.dom.getTotalLength();
+    }
+    return this.totalLen;
   }
   _addEventListener() {
     let _clickEvent = (e) => {

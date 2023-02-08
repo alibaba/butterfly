@@ -264,6 +264,7 @@ on = (string, function) => {}
 * `{number} options.radius (Optional)`animation node radius
 * `{string} options.color (Optional) `animation node color
 * `{string} options.dur (Optional)`animation running time, such as: 1s
+* `{number} options.speed (Optional)` animation running speed, such as: 100, representing 100px per second
 * `{number|string} options.repeatCount (Optional)`animation repeat times, such as: 1 or'indefinite'
 
 ```js
