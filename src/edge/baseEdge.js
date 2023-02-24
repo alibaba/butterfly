@@ -250,7 +250,7 @@ class BaseEdge extends Edge {
     } else {
       labelOffsetX = labelOffsetY = this.labelOffset;
     }
-    let labelLenth = length * this.labelPosition + this.labelOffsetX;
+    let labelLenth = length * this.labelPosition + labelOffsetX;
     let point = this.dom.getPointAtLength(labelLenth);
     $(this.labelDom)
       .css('left', point.x - this.labelDom.offsetWidth / 2)
