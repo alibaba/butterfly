@@ -242,11 +242,18 @@ class BaseEdge extends Edge {
     if(!length) {
       return;
     }
-    let labelLenth = length * this.labelPosition + this.labelOffset;
+    let labelOffsetX = labelOffsetY = 0;
+    if (_.isArray(this.labelOffset)) {
+      labelOffsetX = this.labelOffset[0];
+      labelOffsetY = this.labelOffset[1];
+    } else {
+      labelOffsetX = labelOffsetY = this.labelOffset;
+    }
+    let labelLenth = length * this.labelPosition + this.labelOffsetX;
     let point = this.dom.getPointAtLength(labelLenth);
     $(this.labelDom)
       .css('left', point.x - this.labelDom.offsetWidth / 2)
-      .css('top', point.y - this.labelDom.offsetHeight / 2);
+      .css('top', point.y - this.labelDom.offsetHeight / 2 + labelOffsetY);
   }
   drawLabel(label) {
     let isDom = typeof HTMLElement === 'object' ? (obj) => {

@@ -163,6 +163,9 @@ class BaseNode extends Node {
     this.left = x;
   }
   moveTo(x, y, isNotEventEmit) {
+    if (x === this.left && y === this.top) {
+      return;
+    }
     this.emit('InnerEvents', {
       type: 'node:move',
       node: this,
