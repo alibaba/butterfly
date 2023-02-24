@@ -73,7 +73,7 @@ canvas.addEdge({
 &nbsp;&nbsp;edge label: can accept string or dom
 ### labelPosition  _`<Number>`_   (Optional)
 &nbsp;&nbsp;the position of edge label: the value is between 0-1, 0 represents the beginning of the edge, and 1 represents the end of the edge. Default value 0.5
-### labelOffset  _`<Number>`_   (Optional)
+### labelOffset  _`<Number | Array>`_   (Optional)
 &nbsp;&nbsp;the position offset of edge label: the offset value from the label position of edge. The default value is 0, and the unit is `px`
 
 ```js

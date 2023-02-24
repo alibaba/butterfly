@@ -75,7 +75,7 @@ canvas.addEdge({
 &nbsp;&nbsp;线条上注释: 可传字符串和dom
 ### labelPosition  _`<Number>`_   (选填)
 &nbsp;&nbsp;线条上注释的位置: 取值0-1之间, 0代表代表在线段开始处，1代表在线段结束处。 默认值0.5
-### labelOffset  _`<Number>`_   (选填)
+### labelOffset  _`<Number | Array>`_   (选填)
 &nbsp;&nbsp;线条上注释的位置的偏移值: 距离线段注释位置的偏移值。 默认值为0，单位是像素
 
 ```js

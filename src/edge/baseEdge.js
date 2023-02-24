@@ -242,7 +242,8 @@ class BaseEdge extends Edge {
     if(!length) {
       return;
     }
-    let labelOffsetX = labelOffsetY = 0;
+    let labelOffsetX = 0;
+    let labelOffsetY = 0;
     if (_.isArray(this.labelOffset)) {
       labelOffsetX = this.labelOffset[0];
       labelOffsetY = this.labelOffset[1];
