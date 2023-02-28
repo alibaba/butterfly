@@ -64,6 +64,8 @@ let addAnimate = (targetDom, path, options = {}, animateDom) => {
         $(_animateDom).insertAfter(targetDom);
         resolve(_animateDom);
       }, 20);
+    } else {
+      resolve(_animateDom);
     }
 
   });
