@@ -1501,7 +1501,7 @@ class BaseCanvas extends Canvas {
 
               let step = this.actionQueue[this.actionQueueIndex];
               // todo：这块需要考虑下system:moveGroups
-              if (step.type === 'system:moveNodes') {
+              if (step && step.type === 'system:moveNodes') {
                 step.data._isDraging = true;
               }
               this.pushActionQueue({
@@ -1598,7 +1598,7 @@ class BaseCanvas extends Canvas {
                 }
                 let step = this.actionQueue[this.actionQueueIndex];
                 // todo：这块需要考虑下system:moveGroups
-                if (step.type === 'system:moveNodes') {
+                if (step && step.type === 'system:moveNodes') {
                   step.data._isDraging = true;
                 }
                 this.pushActionQueue({
