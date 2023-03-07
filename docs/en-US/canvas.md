@@ -836,6 +836,7 @@ canvas.on('type key', (data) => {
 
 * `system.canvas.click` click on the blank space of the canvas event
 * `system.canvas.zoom`	canvas zoom event
+* `system.canvas.resize`	canvas container size changes
 * `system.nodes.delete`	delete node event
 * `system.node.move`	move node event
 * `system.node.click`	click node event

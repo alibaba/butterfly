@@ -839,6 +839,7 @@ canvas.on('type key', (data) => {
 
 * `system.canvas.click` 点击画布空白处
 * `system.canvas.zoom`	画布缩放
+* `system.canvas.resize`	画布容器大小发生变化
 * `system.nodes.delete`	删除节点
 * `system.node.move`	移动节点
 * `system.node.click`	点击节点

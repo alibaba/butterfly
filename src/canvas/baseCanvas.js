@@ -541,6 +541,10 @@ class BaseCanvas extends Canvas {
         if (this.virtualScroll.enable) {
           this._virtualScrollUtil.redraw();
         }
+        this.emit('system.canvas.resize');
+        this.emit('events', {
+          type: 'canvas:resize'
+        });
       });
       _resizeObserver.observe(this.root);
     } else {
@@ -559,6 +563,10 @@ class BaseCanvas extends Canvas {
         if (this.virtualScroll.enable) {
           this._virtualScrollUtil.redraw();
         }
+        this.emit('system.canvas.resize');
+        this.emit('events', {
+          type: 'canvas:resize'
+        });
       })
     }
 
