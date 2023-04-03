@@ -325,7 +325,8 @@ class BaseEdge extends Edge {
       path: path
     });
     let deg = Math.atan2(vector.y, vector.x) / Math.PI * 180;
-    let arrowObj = ArrowUtil.ARROW_TYPE[this.arrowShapeType];
+    // 因为ArrowUtil是单例模式，防止高低版本不兼容，做一个保底的兼容
+    let arrowObj = ArrowUtil.ARROW_TYPE[this.arrowShapeType] || ArrowUtil.ARROW_TYPE['default'];
     let arrowWidth = arrowObj.width || 8;
     let arrowHeight = arrowObj.height || 8;
     if (arrowObj.type === 'pathString') {
@@ -342,7 +343,8 @@ class BaseEdge extends Edge {
   }
   drawArrow(arrow) {
     if (arrow) {
-      let arrowObj = ArrowUtil.ARROW_TYPE[this.arrowShapeType];
+      // 因为ArrowUtil是单例模式，防止高低版本不兼容，做一个保底的兼容
+      let arrowObj = ArrowUtil.ARROW_TYPE[this.arrowShapeType] || ArrowUtil.ARROW_TYPE['default'];
       let arrowWidth = arrowObj.width || 8;
       let arrowHeight = arrowObj.height || 8;
       let dom = undefined;
