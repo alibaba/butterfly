@@ -21,7 +21,8 @@ import GridService from '../utils/gridService';
 import GuidelineService from '../utils/guidelineService';
 // 小地图模式
 import Minimap from '../utils/minimap';
-// 线段动画
+// 线段工具
+import ArrowUtil from '../utils/arrow';
 import LinkAnimateUtil from '../utils/link/link_animate';
 // 线段工具
 import {prepareAvoidObstaclesInfo} from '../utils/link/edgeTypes/_utils';
@@ -124,6 +125,7 @@ class BaseCanvas extends Canvas {
       isScopeStrict: _.get(options, 'global.isScopeStrict'), // 是否为scope的严格模式
       limitQueueLen: 5, // 默认操作队列只有5步
       isCloneDeep: _.get(options, 'global.isCloneDeep', true), // addNode,addEdge,addGroup传入的数据是否深拷贝一份
+      arrowUtil: new ArrowUtil()
     });
     
     // 放大缩小和平移的数值

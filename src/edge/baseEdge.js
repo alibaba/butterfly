@@ -3,7 +3,7 @@
 const _ = require('lodash');
 const $ = require('jquery');
 
-import ArrowUtil from '../utils/arrow';
+// import ArrowUtil from '../utils/arrow';
 import * as DrawUtil from '../utils/link';
 import LinkAnimateUtil from '../utils/link/link_animate'
 
@@ -304,8 +304,8 @@ class BaseEdge extends Edge {
       this.arrowFinalPosition = 0;
     }
     // 防止箭头窜出线条
-    if (1 - this.arrowFinalPosition < ArrowUtil.ARROW_TYPE.length / length) {
-      this.arrowFinalPosition = (length * this.arrowFinalPosition - ArrowUtil.ARROW_TYPE.length) / length;
+    if (1 - this.arrowFinalPosition < this._global.ArrowUtil.ARROW_TYPE.length / length) {
+      this.arrowFinalPosition = (length * this.arrowFinalPosition - this._global.ArrowUtil.ARROW_TYPE.length) / length;
     }
     // 贝塞尔曲线是反着画的，需要调整
     if (this.shapeType === 'Bezier') {
@@ -318,7 +318,7 @@ class BaseEdge extends Edge {
     let _x = x;
     let _y = y;
 
-    let vector = ArrowUtil.calcSlope({
+    let vector = this._global.ArrowUtil.calcSlope({
       shapeType: this.shapeType,
       dom: this.dom,
       arrowPosition: this.arrowFinalPosition,
@@ -326,7 +326,7 @@ class BaseEdge extends Edge {
     });
     let deg = Math.atan2(vector.y, vector.x) / Math.PI * 180;
     // 因为ArrowUtil是单例模式，防止高低版本不兼容，做一个保底的兼容
-    let arrowObj = ArrowUtil.ARROW_TYPE[this.arrowShapeType] || ArrowUtil.ARROW_TYPE['default'];
+    let arrowObj = this._global.ArrowUtil.ARROW_TYPE[this.arrowShapeType] || this._global.ArrowUtil.ARROW_TYPE['default'];
     let arrowWidth = arrowObj.width || 8;
     let arrowHeight = arrowObj.height || 8;
     if (arrowObj.type === 'pathString') {
@@ -344,7 +344,7 @@ class BaseEdge extends Edge {
   drawArrow(arrow) {
     if (arrow) {
       // 因为ArrowUtil是单例模式，防止高低版本不兼容，做一个保底的兼容
-      let arrowObj = ArrowUtil.ARROW_TYPE[this.arrowShapeType] || ArrowUtil.ARROW_TYPE['default'];
+      let arrowObj = this._global.ArrowUtil.ARROW_TYPE[this.arrowShapeType] || this._global.ArrowUtil.ARROW_TYPE['default'];
       let arrowWidth = arrowObj.width || 8;
       let arrowHeight = arrowObj.height || 8;
       let dom = undefined;
@@ -398,7 +398,7 @@ class BaseEdge extends Edge {
   isConnect() {
     return true;
   }
-  addAnimate(options) {
+  addAnimate(options = {}) {
     // speed的单位是，px/s
     let _dur = options.dur;
     if(options.speed) {

@@ -197,4 +197,4 @@ class ArrowUtil {
   }
 }
 
-export default new ArrowUtil();
+export default ArrowUtil;
