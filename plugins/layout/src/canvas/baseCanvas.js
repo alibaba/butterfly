@@ -101,6 +101,11 @@ class KedrovizCanvas extends Canvas {
     $(this.wrapper).append(_layersFragment);
     this.layer = _newLayers;
   }
+
+  removeLayers() {
+    var layersDom = document.getElementsByClassName('butterfly-layers')[0];
+    layersDom.remove();
+  }
   
   _addEventListener() {
     super._addEventListener();

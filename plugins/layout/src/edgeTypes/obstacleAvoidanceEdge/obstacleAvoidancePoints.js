@@ -622,7 +622,7 @@ const obstacleAvoidancePoints = (opts) => {
       targetNode,
       _sourceEndPoint: edge._sourceEndPoint,
       _targetEndPoint: edge._targetEndPoint,
-      isColEdge: edge.isColEdge,
+      isColEdge: edge.isColEdge
     }
   })
   addEdgeLinks(_nodes, _edges);
