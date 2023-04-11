@@ -75,7 +75,7 @@ canvas.addEdge({
 &nbsp;&nbsp;线条上注释: 可传字符串和dom
 ### labelPosition  _`<Number>`_   (选填)
 &nbsp;&nbsp;线条上注释的位置: 取值0-1之间, 0代表代表在线段开始处，1代表在线段结束处。 默认值0.5
-### labelOffset  _`<Number>`_   (选填)
+### labelOffset  _`<Number | Array>`_   (选填)
 &nbsp;&nbsp;线条上注释的位置的偏移值: 距离线段注释位置的偏移值。 默认值为0，单位是像素
 
 ```js
@@ -266,6 +266,7 @@ on = (string, function) => {}
 * `{number} options.radius (可选参数)`动画节点半径
 * `{string} options.color (可选参数) `动画节点颜色
 * `{string} options.dur (可选参数)`动画运行时间，如：1s
+* `{number} options.speed (可选参数)`动画运行速度，如：100,代表100px每秒
 * `{number|string} options.repeatCount (可选参数)`动画重复次数，如：1 或者 'indefinite'
 
 ```js

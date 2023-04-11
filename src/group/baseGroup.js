@@ -40,6 +40,8 @@ class BaseGroup extends Group {
     this._isMoving = false;
     // 标志是否在拖动resize
     this._isResizing = false;
+    // 虚拟滚动对象
+    this._virtualScrollUtil = opts._virtualScrollUtil;
   }
   _init(obj = {}) {
     if (this._isInited) {
@@ -449,6 +451,7 @@ class BaseGroup extends Group {
     const endpoint = new EndpointClass(_.assign({
       _on: this._on,
       _emit: this._emit,
+      _virtualScrollUtil: this._virtualScrollUtil,
       _node: this,
       _global: this._global,
     }, obj));

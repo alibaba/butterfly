@@ -15,9 +15,9 @@ export const BOTTOM = 'Bottom';
 
 // manhattan线段加圆角函数
 const DEFAULT_RADIUS = 15;
-export const getRadiusPath = (pointArr) => {
+export const getRadiusPath = (pointArr, _radius = DEFAULT_RADIUS) => {
   let path = ""
-  let radius = DEFAULT_RADIUS;
+  let radius = _radius;
 
   // radius优化前
   // const [start, c1, c2] = pointArr;

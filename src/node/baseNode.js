@@ -30,6 +30,8 @@ class BaseNode extends Node {
     this.width = undefined;
     this.height = undefined;
     this._isForceUpdateSize = false;
+    // 虚拟滚动对象
+    this._virtualScrollUtil = opts._virtualScrollUtil;
   }
 
   draw(obj) {
@@ -69,6 +71,7 @@ class BaseNode extends Node {
       limitNum: obj.limitNum || this._endpointLimitNum,
       _on: this._on,
       _emit: this._emit,
+      _virtualScrollUtil: this._virtualScrollUtil,
       _node: this,
       _global: this.global
     }, obj));
@@ -160,6 +163,9 @@ class BaseNode extends Node {
     this.left = x;
   }
   moveTo(x, y, isNotEventEmit) {
+    if (x === this.left && y === this.top) {
+      return;
+    }
     this.emit('InnerEvents', {
       type: 'node:move',
       node: this,

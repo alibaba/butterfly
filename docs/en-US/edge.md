@@ -73,7 +73,7 @@ canvas.addEdge({
 &nbsp;&nbsp;edge label: can accept string or dom
 ### labelPosition  _`<Number>`_   (Optional)
 &nbsp;&nbsp;the position of edge label: the value is between 0-1, 0 represents the beginning of the edge, and 1 represents the end of the edge. Default value 0.5
-### labelOffset  _`<Number>`_   (Optional)
+### labelOffset  _`<Number | Array>`_   (Optional)
 &nbsp;&nbsp;the position offset of edge label: the offset value from the label position of edge. The default value is 0, and the unit is `px`
 
 ```js
@@ -264,6 +264,7 @@ on = (string, function) => {}
 * `{number} options.radius (Optional)`animation node radius
 * `{string} options.color (Optional) `animation node color
 * `{string} options.dur (Optional)`animation running time, such as: 1s
+* `{number} options.speed (Optional)` animation running speed, such as: 100, representing 100px per second
 * `{number|string} options.repeatCount (Optional)`animation repeat times, such as: 1 or'indefinite'
 
 ```js

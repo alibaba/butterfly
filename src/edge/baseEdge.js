@@ -3,7 +3,7 @@
 const _ = require('lodash');
 const $ = require('jquery');
 
-import ArrowUtil from '../utils/arrow';
+// import ArrowUtil from '../utils/arrow';
 import * as DrawUtil from '../utils/link';
 import LinkAnimateUtil from '../utils/link/link_animate'
 
@@ -24,6 +24,7 @@ class BaseEdge extends Edge {
     this.orientationLimit = _.get(opts, 'orientationLimit');
     this.shapeType = _.get(opts, 'shapeType', 'Straight');
     this.hasRadius=_.get(opts, "hasRadius", false),
+    this.radius=_.get(opts, "radius", false),
     this.label = _.get(opts, 'label');
     this.arrow = _.get(opts, 'arrow');
     this.arrowShapeType = _.get(opts, 'arrowShapeType', 'default');
@@ -36,6 +37,7 @@ class BaseEdge extends Edge {
     this.dom = null;
     this.labelDom = null;
     this.arrowDom = null;
+    this.totalLen = -1;
     this.eventHandlerDom = null;
     this._hasEventListener = false;
     this._coordinateService = null;
@@ -194,7 +196,8 @@ class BaseEdge extends Edge {
         breakPoints: this._breakPoints,
         hasDragged: this._hasDragged,
         draggable: this.draggable,
-        hasRadius: this.hasRadius
+        hasRadius: this.hasRadius,
+        radius: this.radius
       });
       path = obj.path;
       obj.breakPoints[0].type = 'start';
@@ -222,7 +225,8 @@ class BaseEdge extends Edge {
         breakPoints: this._breakPoints,
         hasDragged: this._hasDragged,
         draggable: this.draggable,
-        hasRadius: this.hasRadius
+        hasRadius: this.hasRadius,
+        radius: this.radius
       });
       path = obj.path;
       // 后续再支持拖动
@@ -234,15 +238,23 @@ class BaseEdge extends Edge {
     return path;
   }
   redrawLabel() {
-    const length = this.dom.getTotalLength();
+    const length = this.getTotalLength();
     if(!length) {
       return;
     }
-    let labelLenth = length * this.labelPosition + this.labelOffset;
+    let labelOffsetX = 0;
+    let labelOffsetY = 0;
+    if (_.isArray(this.labelOffset)) {
+      labelOffsetX = this.labelOffset[0];
+      labelOffsetY = this.labelOffset[1];
+    } else {
+      labelOffsetX = labelOffsetY = this.labelOffset;
+    }
+    let labelLenth = length * this.labelPosition + labelOffsetX;
     let point = this.dom.getPointAtLength(labelLenth);
     $(this.labelDom)
       .css('left', point.x - this.labelDom.offsetWidth / 2)
-      .css('top', point.y - this.labelDom.offsetHeight / 2);
+      .css('top', point.y - this.labelDom.offsetHeight / 2 + labelOffsetY);
   }
   drawLabel(label) {
     let isDom = typeof HTMLElement === 'object' ? (obj) => {
@@ -280,7 +292,7 @@ class BaseEdge extends Edge {
     });
   }
   redrawArrow(path) {
-    const length = this.dom.getTotalLength();
+    const length = this.getTotalLength();
     if(!length) {
       return;
     }
@@ -292,8 +304,8 @@ class BaseEdge extends Edge {
       this.arrowFinalPosition = 0;
     }
     // 防止箭头窜出线条
-    if (1 - this.arrowFinalPosition < ArrowUtil.ARROW_TYPE.length / length) {
-      this.arrowFinalPosition = (length * this.arrowFinalPosition - ArrowUtil.ARROW_TYPE.length) / length;
+    if (1 - this.arrowFinalPosition < this._global.ArrowUtil.ARROW_TYPE.length / length) {
+      this.arrowFinalPosition = (length * this.arrowFinalPosition - this._global.ArrowUtil.ARROW_TYPE.length) / length;
     }
     // 贝塞尔曲线是反着画的，需要调整
     if (this.shapeType === 'Bezier') {
@@ -306,14 +318,15 @@ class BaseEdge extends Edge {
     let _x = x;
     let _y = y;
 
-    let vector = ArrowUtil.calcSlope({
+    let vector = this._global.ArrowUtil.calcSlope({
       shapeType: this.shapeType,
       dom: this.dom,
       arrowPosition: this.arrowFinalPosition,
       path: path
     });
     let deg = Math.atan2(vector.y, vector.x) / Math.PI * 180;
-    let arrowObj = ArrowUtil.ARROW_TYPE[this.arrowShapeType];
+    // 因为ArrowUtil是单例模式，防止高低版本不兼容，做一个保底的兼容
+    let arrowObj = this._global.ArrowUtil.ARROW_TYPE[this.arrowShapeType] || this._global.ArrowUtil.ARROW_TYPE['default'];
     let arrowWidth = arrowObj.width || 8;
     let arrowHeight = arrowObj.height || 8;
     if (arrowObj.type === 'pathString') {
@@ -330,7 +343,8 @@ class BaseEdge extends Edge {
   }
   drawArrow(arrow) {
     if (arrow) {
-      let arrowObj = ArrowUtil.ARROW_TYPE[this.arrowShapeType];
+      // 因为ArrowUtil是单例模式，防止高低版本不兼容，做一个保底的兼容
+      let arrowObj = this._global.ArrowUtil.ARROW_TYPE[this.arrowShapeType] || this._global.ArrowUtil.ARROW_TYPE['default'];
       let arrowWidth = arrowObj.width || 8;
       let arrowHeight = arrowObj.height || 8;
       let dom = undefined;
@@ -362,6 +376,7 @@ class BaseEdge extends Edge {
     // 函数节流
     if (!this._updateTimer) {
       this._updateTimer = setTimeout(() => {
+        this.getTotalLength(true);
         // 重新计算label
         if (this.labelDom) {
           this.redrawLabel();
@@ -383,11 +398,18 @@ class BaseEdge extends Edge {
   isConnect() {
     return true;
   }
-  addAnimate(options) {
+  addAnimate(options = {}) {
+    // speed的单位是，px/s
+    let _dur = options.dur;
+    if(options.speed) {
+      let len = this.getTotalLength();
+      _dur = len / options.speed; 
+    }
     this.animatePromise = LinkAnimateUtil.addAnimate(this.dom, this._path, _.assign({},{
       num: 1, // 现在只支持1个点点
       radius: 3,
-      color: '#776ef3'
+      dur: _dur,
+      color: '#776ef3',
     }, options), this.animateDom);
 
     this.animatePromise.then((data) => {
@@ -458,6 +480,13 @@ class BaseEdge extends Edge {
   // 曼哈顿线的拐点
   getBreakPoints() {
     return this._breakPoints;
+  }
+  // 获取线段长度
+  getTotalLength(isUpdate) {
+    if (this.totalLen < 0 || isUpdate) {
+      this.totalLen = this.dom.getTotalLength();
+    }
+    return this.totalLen;
   }
   _addEventListener() {
     let _clickEvent = (e) => {

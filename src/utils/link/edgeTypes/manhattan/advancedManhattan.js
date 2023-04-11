@@ -36,7 +36,7 @@ const _isMerge = (point1, point2, obstacleMap) => {
     maxY = point1Cell.yCell > point3Cell.yCell ? point1Cell.yCell : point3Cell.yCell;
     for(let i = minY; i < maxY; i+= girdGap) {
       let key = `${point3Cell.xCell}@${i}`;
-      if (obstacleMap.hasObstacles(key)) {
+      if (obstacleMap.hasObstaclesWithKey(key)) {
         // console.log(1);
         // console.log(key);
         point1And3 = false;
@@ -48,7 +48,7 @@ const _isMerge = (point1, point2, obstacleMap) => {
     maxX = point2Cell.xCell > point3Cell.xCell ? point2Cell.xCell : point3Cell.xCell;
     for(let i = minX; i < maxX; i+= girdGap) {
       let key = `${i}@${point3Cell.yCell}`;
-      if (obstacleMap.hasObstacles(key)) {
+      if (obstacleMap.hasObstaclesWithKey(key)) {
         // console.log(2);
         // console.log(key);
         point2And3 = false;
@@ -69,7 +69,7 @@ const _isMerge = (point1, point2, obstacleMap) => {
     maxX = point1Cell.xCell > point4Cell.xCell ? point1Cell.xCell : point4Cell.xCell;
     for(let i = minX; i < maxX; i+= girdGap) {
       let key = `${i}@${point4Cell.yCell}`;
-      if (obstacleMap.hasObstacles(key)) {
+      if (obstacleMap.hasObstaclesWithKey(key)) {
         // console.log(3);
         // console.log(key);
         point1And4 = false;
@@ -81,7 +81,7 @@ const _isMerge = (point1, point2, obstacleMap) => {
     maxY = point2Cell.yCell > point4Cell.yCell ? point2Cell.yCell : point4Cell.yCell;
     for(let i = minY; i < maxY; i+= girdGap) {
       let key = `${point4Cell.xCell}@${i}`;
-      if (obstacleMap.hasObstacles(key)) {
+      if (obstacleMap.hasObstaclesWithKey(key)) {
         // console.log(4);
         // console.log(key);
         point2And4 = false;
@@ -225,18 +225,16 @@ const avoidObstacles = (conn, fromPt, fromDir, midPt, midDir, toPt, toDir, map, 
   //   }
   // }
   
-  console.log(map.map);
-  console.log(fromPt);
-  console.log(fromDir);
-  console.log(midPt);
-  console.log(midDir);
-  console.log('----------');
+  // console.log(map.map);
+  // console.log(fromPt);
+  // console.log(fromDir);
+  // console.log(midPt);
+  // console.log(midDir);
+  // console.log('----------');
 
   // 检查中途是否有障碍，有的话开始拐弯
   if(fromGridInfo.yCell === midGridInfo.yCell) { // 水平走向
     
-    let _leftGridInfo = fromGridInfo.xCell < midGridInfo.xCell ? fromGridInfo : midGridInfo;
-    let _rightGridInfo = fromGridInfo.xCell < midGridInfo.xCell ? midGridInfo : fromGridInfo;
     let _dirIndex = fromGridInfo.xCell < midGridInfo.xCell ? -1 : 1;
     
     // 检测障碍
@@ -244,8 +242,8 @@ const avoidObstacles = (conn, fromPt, fromDir, midPt, midDir, toPt, toDir, map, 
     let index = undefined;
 
     if (fromGridInfo.xCell < midGridInfo.xCell) {
-      for(let i = _leftGridInfo.xCell; i <= _rightGridInfo.xCell; i+= girdGap) {
-        if (map.hasObstacles(`${i}@${fromGridInfo.yCell}`, count)) {
+      for(let i = fromGridInfo.xCell; i <= midGridInfo.xCell; i+= girdGap) {
+        if (map.hasObstaclesWithDir(`${i}@${fromGridInfo.yCell}`,fromGridInfo, midGridInfo, count)) {
           hasObstacles = true;
           index = i;
           break;
@@ -253,7 +251,7 @@ const avoidObstacles = (conn, fromPt, fromDir, midPt, midDir, toPt, toDir, map, 
       }
     } else {
       for(let i = fromGridInfo.xCell; i >= midGridInfo.xCell; i-= girdGap) {
-        if (map.hasObstacles(`${i}@${fromGridInfo.yCell}`, count)) {
+        if (map.hasObstaclesWithDir(`${i}@${fromGridInfo.yCell}`,fromGridInfo, midGridInfo, count)) {
           hasObstacles = true;
           index = i;
           break;
@@ -266,8 +264,8 @@ const avoidObstacles = (conn, fromPt, fromDir, midPt, midDir, toPt, toDir, map, 
       let expectDir = toPt.y > midPt.y ? 1 : -1;
       
       // 预测垂直外侧1格是否有阻碍
-      let positiveDirObstacles = map.hasObstacles(`${index + _dirIndex * girdGap}@${fromGridInfo.yCell + expectDir * girdGap}`);
-      let oppositeDirObstacles = map.hasObstacles(`${index + _dirIndex * girdGap}@${fromGridInfo.yCell - expectDir * girdGap}`);
+      let positiveDirObstacles = map.hasObstaclesWithKey(`${index + _dirIndex * girdGap}@${fromGridInfo.yCell + expectDir * girdGap}`);
+      let oppositeDirObstacles = map.hasObstaclesWithKey(`${index + _dirIndex * girdGap}@${fromGridInfo.yCell - expectDir * girdGap}`);
       // todo: 坐标需要修正
       if (!positiveDirObstacles) {
         resultPt = {
@@ -297,7 +295,7 @@ const avoidObstacles = (conn, fromPt, fromDir, midPt, midDir, toPt, toDir, map, 
       return {
         code: 'CHANGE_DIR',
         correctPt: resultPt,
-        correctDir: midDir
+        correctDir: fromPt.x < midPt.x ? RIGHT : LEFT
       }
     }
 
@@ -309,7 +307,7 @@ const avoidObstacles = (conn, fromPt, fromDir, midPt, midDir, toPt, toDir, map, 
     let index = undefined;
     if (fromGridInfo.yCell < midGridInfo.yCell) {
       for(let i = fromGridInfo.yCell; i <= midGridInfo.yCell; i+= girdGap) {
-        if (map.hasObstacles(`${fromGridInfo.xCell}@${i}`)) {
+        if (map.hasObstaclesWithDir(`${fromGridInfo.xCell}@${i}`, fromGridInfo, midGridInfo, count)) {
           hasObstacles = true;
           index = i;
           break;
@@ -317,7 +315,7 @@ const avoidObstacles = (conn, fromPt, fromDir, midPt, midDir, toPt, toDir, map, 
       }
     } else {
       for(let i = fromGridInfo.yCell; i >= midGridInfo.yCell; i-= girdGap) {
-        if (map.hasObstacles(`${fromGridInfo.xCell}@${i}`)) {
+        if (map.hasObstaclesWithDir(`${fromGridInfo.xCell}@${i}`, fromGridInfo, midGridInfo, count)) {
           hasObstacles = true;
           index = i;
           break;
@@ -336,8 +334,8 @@ const avoidObstacles = (conn, fromPt, fromDir, midPt, midDir, toPt, toDir, map, 
     if (hasObstacles) {
       let expectDir = toPt.x > midPt.x ? 1 : -1;
       // 预测水平外侧1格是否有阻碍
-      let positiveDirObstacles = map.hasObstacles(`${fromGridInfo.xCell + expectDir * girdGap}@${index + _dirIndex * girdGap}`);
-      let oppositeDirObstacles = map.hasObstacles(`${fromGridInfo.xCell - expectDir * girdGap}@${index + _dirIndex * girdGap}`);
+      let positiveDirObstacles = map.hasObstaclesWithKey(`${fromGridInfo.xCell + expectDir * girdGap}@${index + _dirIndex * girdGap}`);
+      let oppositeDirObstacles = map.hasObstaclesWithKey(`${fromGridInfo.xCell - expectDir * girdGap}@${index + _dirIndex * girdGap}`);
       if (!positiveDirObstacles) {
         resultPt = {
           x: fromGridInfo.x,
@@ -365,7 +363,7 @@ const avoidObstacles = (conn, fromPt, fromDir, midPt, midDir, toPt, toDir, map, 
       return {
         code: 'CHANGE_DIR',
         correctPt: resultPt,
-        correctDir: midDir
+        correctDir: fromPt.y < midPt.y ? BOTTOM : TOP
       }
     }
 
@@ -390,8 +388,8 @@ const avoidObstacles = (conn, fromPt, fromDir, midPt, midDir, toPt, toDir, map, 
  
 const route = (conn, fromPt, fromDir, toPt, toDir, map, count) => {
 
-  // 超过100个关键点直接返回
-  if (count > 10) {
+  // 超过15个关键点直接返回
+  if (count > 15) {
     conn.push(undefined);
     return;
   }
@@ -563,7 +561,7 @@ function drawAdvancedManhattan (sourcePoint, targetPoint, options) {
   
   route(pointArray, fromPt, fromDir, toPt, toDir, obstacleMap, 1);
 
-  console.log(pointArray);
+  // console.log(pointArray);
   // 避障失败
   if (pointArray.length === 0 || pointArray.filter((item) => !item).length > 0) {
     pointArray = [];
@@ -603,7 +601,7 @@ function drawAdvancedManhattan (sourcePoint, targetPoint, options) {
         breakPoints: pointArray
       };
     }
-    return getRadiusPath(pointArray)
+    return getRadiusPath(pointArray, options.radius)
   }
   else {
     return {

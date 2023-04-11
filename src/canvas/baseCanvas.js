@@ -21,12 +21,13 @@ import GridService from '../utils/gridService';
 import GuidelineService from '../utils/guidelineService';
 // 小地图模式
 import Minimap from '../utils/minimap';
-// 线段动画
+// 线段工具
+import ArrowUtil from '../utils/arrow';
 import LinkAnimateUtil from '../utils/link/link_animate';
 // 线段工具
 import {prepareAvoidObstaclesInfo} from '../utils/link/edgeTypes/_utils';
 // 虚拟滚动辅助方法
-import virtualScrollUtil from '../utils/virtualScroll';
+import VirtualScrollUtil from '../utils/virtualScroll';
 
 import './baseCanvas.less';
 
@@ -77,6 +78,7 @@ class BaseCanvas extends Canvas {
         type: _.get(options, 'theme.edge.type') || 'node',
         shapeType: _.get(options, 'theme.edge.shapeType') || 'Straight',
         hasRadius:_.get(options, 'theme.edge.hasRadius') || false,
+        radius:_.get(options, 'theme.edge.radius'),
         Class: _.get(options, 'theme.edge.Class') || Edge,
         arrow: _.get(options, 'theme.edge.arrow'),
         arrowShapeType: _.get(options, 'theme.edge.arrowShapeType', 'default'),
@@ -123,6 +125,7 @@ class BaseCanvas extends Canvas {
       isScopeStrict: _.get(options, 'global.isScopeStrict'), // 是否为scope的严格模式
       limitQueueLen: 5, // 默认操作队列只有5步
       isCloneDeep: _.get(options, 'global.isCloneDeep', true), // addNode,addEdge,addGroup传入的数据是否深拷贝一份
+      arrowUtil: new ArrowUtil()
     });
     
     // 放大缩小和平移的数值
@@ -222,7 +225,7 @@ class BaseCanvas extends Canvas {
     });
 
     // 虚拟滚动
-    this._virtualScrollUtil = virtualScrollUtil;
+    this._virtualScrollUtil = new VirtualScrollUtil();
     if (this.virtualScroll.enable) {
       this._virtualScrollUtil.init({
         info: this.virtualScroll,
@@ -540,6 +543,10 @@ class BaseCanvas extends Canvas {
         if (this.virtualScroll.enable) {
           this._virtualScrollUtil.redraw();
         }
+        this.emit('system.canvas.resize');
+        this.emit('events', {
+          type: 'canvas:resize'
+        });
       });
       _resizeObserver.observe(this.root);
     } else {
@@ -558,6 +565,10 @@ class BaseCanvas extends Canvas {
         if (this.virtualScroll.enable) {
           this._virtualScrollUtil.redraw();
         }
+        this.emit('system.canvas.resize');
+        this.emit('events', {
+          type: 'canvas:resize'
+        });
       })
     }
 
@@ -1028,6 +1039,7 @@ class BaseCanvas extends Canvas {
                   type: this.theme.edge.type,
                   shapeType: this.theme.edge.shapeType,
                   hasRadius:this.theme.edge.hasRadius,
+                  radius:this.theme.edge.radius,
                   orientationLimit: this.theme.endpoint.position,
                   _sourceType: point.nodeType,
                   sourceNode: _sourceNode,
@@ -1491,7 +1503,7 @@ class BaseCanvas extends Canvas {
 
               let step = this.actionQueue[this.actionQueueIndex];
               // todo：这块需要考虑下system:moveGroups
-              if (step.type === 'system:moveNodes') {
+              if (step && step.type === 'system:moveNodes') {
                 step.data._isDraging = true;
               }
               this.pushActionQueue({
@@ -1588,7 +1600,7 @@ class BaseCanvas extends Canvas {
                 }
                 let step = this.actionQueue[this.actionQueueIndex];
                 // todo：这块需要考虑下system:moveGroups
-                if (step.type === 'system:moveNodes') {
+                if (step && step.type === 'system:moveNodes') {
                   step.data._isDraging = true;
                 }
                 this.pushActionQueue({
@@ -1765,6 +1777,7 @@ class BaseCanvas extends Canvas {
             _global: this.global,
             _on: this.on.bind(this),
             _emit: this.emit.bind(this),
+            _virtualScrollUtil: this._virtualScrollUtil,
             _endpointLimitNum: this.theme.endpoint.limitNum,
             draggable: node.draggable !== undefined ? node.draggable : this.draggable
           })
@@ -2168,6 +2181,7 @@ class BaseCanvas extends Canvas {
           _global: this.global,
           _emit: this.emit.bind(this),
           _on: this.on.bind(this),
+          _virtualScrollUtil: this._virtualScrollUtil,
           _endpointLimitNum: this.theme.endpoint.limitNum,
           draggable: group.draggable !== undefined ? group.draggable : this.draggable
         })
@@ -2265,6 +2279,7 @@ class BaseCanvas extends Canvas {
                   _global: this.global,
                   _on: this.on.bind(this),
                   _emit: this.emit.bind(this),
+                  _virtualScrollUtil: this._virtualScrollUtil,
                   _endpointLimitNum: this.theme.endpoint.limitNum,
                   draggable: item.draggable !== undefined ? item.draggable : this.draggable
                 })
@@ -2305,6 +2320,7 @@ class BaseCanvas extends Canvas {
                   _global: this.global,
                   _on: this.on.bind(this),
                   _emit: this.emit.bind(this),
+                  _virtualScrollUtil: this._virtualScrollUtil,
                   _endpointLimitNum: this.theme.endpoint.limitNum,
                   draggable: item.draggable !== undefined ? item.draggable : this.draggable
                 })
@@ -2824,6 +2840,7 @@ class BaseCanvas extends Canvas {
           type: link.type || this.theme.edge.type,
           shapeType: link.shapeType || this.theme.edge.shapeType,
           hasRadius: link.hasRadius || this.theme.edge.hasRadius,
+          radius: link.radius || this.theme.edge.radius,
           orientationLimit: this.theme.endpoint.position,
           isExpandWidth: this.theme.edge.isExpandWidth,
           defaultAnimate: this.theme.edge.defaultAnimate,
@@ -2893,6 +2910,7 @@ class BaseCanvas extends Canvas {
           type: link.type || this.theme.edge.type,
           shapeType: link.shapeType || this.theme.edge.shapeType,
           hasRadius: link.hasRadius || this.theme.edge.hasRadius,
+          radius: link.radius || this.theme.edge.radius,
           orientationLimit: this.theme.endpoint.position,
           arrow: link.arrow === undefined ? _.get(this, 'theme.edge.arrow') : link.arrow,
           arrowShapeType: link.arrowShapeType === undefined ? _.get(this, 'theme.edge.arrowShapeType') : link.arrowShapeType,

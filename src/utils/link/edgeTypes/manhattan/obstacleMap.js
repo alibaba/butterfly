@@ -2,6 +2,10 @@
 
 import _ from 'lodash';
 
+let mapCache = {};
+let timer = null;
+
+
 export default class ObstacleMap {
   constructor(options) {
     this.map = {};
@@ -12,6 +16,9 @@ export default class ObstacleMap {
     this.MAP_CONST = {
       'EMPTY': '1@1', // 空的key
     }
+
+    this.sourcePoint = {};
+    this.targetPoint = {};
     this.sourceCell = {};
     this.targetCell = {};
     this.sourceNodeId = '';
@@ -19,6 +26,16 @@ export default class ObstacleMap {
   }
   // 初始化开始、结束点
   initStatus(sourcePoint, targetPoint, sourceNodeId, targetNodeId) {
+    this.sourcePoint = {
+      x: sourcePoint.pos[0],
+      y: sourcePoint.pos[1],
+      orientation: sourcePoint.orientation
+    }
+    this.targetPoint = {
+      x: targetPoint.pos[0],
+      y: targetPoint.pos[1],
+      orientation: targetPoint.orientation
+    }
     this.sourceCell = this.getGirdCell(sourcePoint.pos[0], sourcePoint.pos[1]);
     this.targetCell = this.getGirdCell(targetPoint.pos[0], targetPoint.pos[1]);
     this.sourceNodeId = sourceNodeId;
@@ -26,6 +43,12 @@ export default class ObstacleMap {
   }
   // 建立网格地图
   build(nodes) {
+
+    if (timer) {
+      this.map = mapCache;
+      return;
+    }
+
     let minleft = Infinity;
     let maxRight = -Infinity;
     let minTop = Infinity;
@@ -49,10 +72,11 @@ export default class ObstacleMap {
       }
     });
 
-    minleft = this.fix(minleft, -1);
-    maxRight = this.fix(maxRight);
-    minTop = this.fix(minTop, -1);
-    maxBottom = this.fix(maxBottom);
+    // 边缘加10个网格的padding
+    minleft = this.fix(minleft, -1) - this.options.girdGap * 10;
+    maxRight = this.fix(maxRight) + this.options.girdGap * 10;
+    minTop = this.fix(minTop, -1) - this.options.girdGap * 10;
+    maxBottom = this.fix(maxBottom) + this.options.girdGap * 10;
     
     // 建立空白地图
     for(let i = minTop; i <= maxBottom; i+=this.options.girdGap) {
@@ -81,15 +105,33 @@ export default class ObstacleMap {
       }
     });
 
+    // 50ms内使用缓存
+    mapCache = this.map;
+    timer = setTimeout(() => {
+      clearTimeout(timer);
+      timer = null;
+    }, 50);
   }
   // 是否被占用
-  hasObstacles(key, step) {
+  hasObstaclesWithKey(key) {
+    // let moveNodeId = this.map[key];
+    // if (this.map[key] !== this.MAP_CONST.EMPTY && (step !== undefined && step === 1)) {
+    //   let cell = key.toString().split('@').map((item) => parseInt(item));
+    //   if (moveNodeId === this.sourceNodeId && (cell[0] === this.sourceCell.xCell || cell[1] === this.sourceCell.yCell)) {
+    //     return false;
+    //   } else if (moveNodeId === this.targetNodeId && (cell[0] === this.targetCell.xCell || cell[1] === this.targetCell.yCell)) {
+    //     return false;
+    //   }
+    // }
+    return this.map[key] !== this.MAP_CONST.EMPTY;
+  }
+  hasObstaclesWithDir(key, fromCell, toCell, step) {
     let moveNodeId = this.map[key];
-    if (this.map[key] !== this.MAP_CONST.EMPTY && (step !== undefined && step === 1)) {
-      let cell = key.toString().split('@').map((item) => parseInt(item));
-      if (moveNodeId === this.sourceNodeId && (cell[0] === this.sourceCell.xCell || cell[1] === this.sourceCell.yCell)) {
+    if (this.map[key] !== this.MAP_CONST.EMPTY) {
+      if (moveNodeId === this.sourceNodeId && fromCell.x === this.sourcePoint.x && fromCell.y === this.sourcePoint.y) {
         return false;
-      } else if (moveNodeId === this.targetNodeId && (cell[0] === this.targetCell.xCell || cell[1] === this.targetCell.yCell)) {
+      }
+      if (moveNodeId === this.targetNodeId && toCell.x === this.targetPoint.x && toCell.y === this.targetPoint.y) {
         return false;
       }
     }
