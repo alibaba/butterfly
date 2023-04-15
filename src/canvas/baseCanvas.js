@@ -1721,6 +1721,13 @@ class BaseCanvas extends Canvas {
             edge.destroy(!edge._isDeletingEdge);
           }
         });
+        this.emit('system.drag.mouseleave', {
+          edges: this._dragEdges
+        });
+        this.emit('events', {
+          type: 'drag:mouseleave',
+          edges: this._dragEdges
+        });
       }
       _clearDraging();
     }
