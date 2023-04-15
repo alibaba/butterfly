@@ -73,7 +73,7 @@ class BaseNode extends Node {
       _emit: this._emit,
       _virtualScrollUtil: this._virtualScrollUtil,
       _node: this,
-      _global: this.global
+      _global: this._global
     }, obj));
     this.emit('InnerEvents', {
       type: 'node:addEndpoint',
