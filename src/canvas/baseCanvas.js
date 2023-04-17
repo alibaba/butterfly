@@ -1561,7 +1561,7 @@ class BaseCanvas extends Canvas {
                   });
                   this._clearHoverGroup(targetGroup);
                 } else {
-                  console.warn(`nodeId为${dragNode.id}的节点和groupId${targetGroup.id}的节点组scope值不符，无法加入`);
+                  console.warn(`nodeId为${this._dragNode.id}的节点和groupId${targetGroup.id}的节点组scope值不符，无法加入`);
                 }
               }
               rmTarget._init(rmTargetData);
