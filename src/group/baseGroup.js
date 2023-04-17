@@ -383,7 +383,18 @@ class BaseGroup extends Group {
         x: this.left,
         y: this.top
       };
-      if (!this._isResizing && (_currentStatus.timer - _beforeStatus.timer < 300 || (Math.abs(_beforeStatus.x - _currentStatus.x) < 20  && Math.abs(_beforeStatus.y - _currentStatus.y) < 20))) {
+
+      // 判断是否点击节点
+      let isClickNode = false;
+      for(let i = 0; i < this.nodes.length; i++) {
+        let node = this.nodes[i];
+        if ($(node.dom).find(e.target).length > 0) {
+          isClickNode = true;
+          break;
+        }
+      }
+
+      if (!this._isResizing && !isClickNode && (_currentStatus.timer - _beforeStatus.timer < 300 || (Math.abs(_beforeStatus.x - _currentStatus.x) < 20  && Math.abs(_beforeStatus.y - _currentStatus.y) < 20))) {
         this.emit('system.group.click', {
           group: this
         });
