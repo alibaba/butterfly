@@ -1,5 +1,5 @@
-const $ = require('jquery');
-const _ = require('lodash');
+const $ = require('../utils/tiny-jquery');
+const _ = require('../utils/tiny-lodash');
 
 import Node from '../interface/node';
 import Endpoint from '../endpoint/baseEndpoint';
@@ -77,7 +77,7 @@ class BaseNode extends Node {
       data: endpoint
     });
 
-    let nodeZindex = $(this.dom).css('z-index');
+    let nodeZindex = $(this.dom).style('z-index');
 
     if (nodeZindex !== 'auto') {
       $(endpoint.dom).css('z-index', Number(nodeZindex) + 1);
@@ -151,7 +151,7 @@ class BaseNode extends Node {
   // drag的时候移动的api
   _moveTo(x, y) {
     // 自身移动
-    $(this.dom).css('top', y).css('left', x);
+    $(this.dom).css({top: y, left: x});
     // 所在的点移动
     this.endpoints.forEach((item) => {
       item.moveTo(x - this.left + item._left, y - this.top + item._top);

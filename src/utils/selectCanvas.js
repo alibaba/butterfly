@@ -1,6 +1,6 @@
 'use strict';
 
-const $ = require('jquery');
+const $ = require('./tiny-jquery');
 
 class SelectCanvas {
   constructor() {

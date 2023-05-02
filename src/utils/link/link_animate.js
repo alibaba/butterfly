@@ -25,7 +25,7 @@ let addAnimate = (targetDom, path, options = {}, animateDom) => {
     // $(_animateDom).find('animateMotion').attr('path', path);
     // 为了适配延迟加载的问题,需要重新replaceWith动画标签
     let tmpAnimateDom = _animateDom.cloneNode(true);
-    $(tmpAnimateDom).find('animateMotion').attr('path', path);
+    $(tmpAnimateDom).find('animateMotion').each((node)=>{node.attr('path', path)});
     $(_animateDom).replaceWith(tmpAnimateDom);
     _animateDom = tmpAnimateDom;
   } else {

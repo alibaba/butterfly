@@ -54,7 +54,6 @@
     "webpack-cli": "~4.8.0"
   },
   "peerDependencies": {
-    "jquery": ">=2.0.0",
     "lodash": ">=4.0.0"
   },
   "dependencies": {

@@ -1,7 +1,7 @@
 'use strict';
 
 import Canvas from "./baseCanvas";
-const _ = require('lodash');
+const _ = require('../utils/tiny-lodash');
 import TreeNode from '../node/treeNode';
 import Node from '../node/baseNode';
 import Hierarchy from '../utils/layout/hierarchy';

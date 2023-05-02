@@ -1,4 +1,5 @@
 const dagre = require('dagre');
+const _ = require('../tiny-lodash');
 //drage布局
 function dagreLayout(param) {
     const {nodeSize, rankdir, nodesepFunc, ranksepFunc, nodesep, ranksep, controlPoints} = param;
@@ -20,14 +21,14 @@ function dagreLayout(param) {
     if (!nodeSize) {
       nodeSizeFunc = (d) => {
         if (d.size) {
-          if (_.isArray(d.size)) {
+          if (Array.isArray(d.size)) {
             return d.size;
           }
           return [d.size, d.size];
         }
         return [40, 40];
       };
-    } else if (_.isArray(nodeSize)) {
+    } else if (Array.isArray(nodeSize)) {
       nodeSizeFunc = () => nodeSize;
     } else {
       nodeSizeFunc = () => [nodeSize, nodeSize];

@@ -1,7 +1,7 @@
 
 
-const $ = require('jquery');
-const _ = require('lodash');
+const $ = require('../utils/tiny-jquery');
+const _ = require('../utils/tiny-lodash');
 
 import './baseEndpoint.less';
 
@@ -88,7 +88,13 @@ class BaseEndpoint extends Endpoint {
   draw(obj) {
     let _dom = obj.dom;
     if (!_dom) {
-      _dom = $('<div class="butterflie-circle-endpoint"></div>').attr('id', this.id);
+      _dom = $.create({
+        tag: 'div',
+        classNames: ['butterflie-circle-endpoint'],
+        attr: {
+          id: this.id
+        }
+      });
     } else {
       _dom = $(_dom);
     }
@@ -182,9 +188,7 @@ class BaseEndpoint extends Endpoint {
         this._posTop += _groupPos.top;
         this._posLeft += _groupPos.left;
       }
-      $(dom)
-        .css('top', this._top)
-        .css('left', this._left);
+      $(dom).css({'top': this._top, 'left': this._left});
 
       this.updated && this.updated();
     }

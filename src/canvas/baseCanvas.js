@@ -1,7 +1,7 @@
 'use strict';
 
-const $ = require('jquery');
-const _ = require('lodash');
+const $ = require('../utils/tiny-jquery');
+const _ = require('../utils/tiny-lodash');
 const domtoimage = require('dom-to-image');
 
 import Canvas from "../interface/canvas";
@@ -190,14 +190,15 @@ class BaseCanvas extends Canvas {
     this._guideObj = undefined;
     this._guideTimer = undefined;
     
-
+    let rootNode = $(this.root)
+    let rootOffset = rootNode.offset()
     // 坐标转换服务
     this._coordinateService = new CoordinateService({
       canvas: this,
-      terOffsetX: $(this.root).offset().left,
-      terOffsetY: $(this.root).offset().top,
-      terWidth: $(this.root).width(),
-      terHeight: $(this.root).height(),
+      terOffsetX: rootOffset.left,
+      terOffsetY: rootOffset.top,
+      terWidth: rootNode.width(),
+      terHeight: rootNode.height(),
       canOffsetX: this._moveData[0],
       canOffsetY: this._moveData[1],
       scale: this._zoomData
@@ -419,13 +420,14 @@ class BaseCanvas extends Canvas {
 
     // 生成svg的wrapper
     const svg = $(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
-      .attr('class', 'butterfly-svg')
-      .attr('width', _SVGWidth)
-      .attr('height', _SVGHeight)
-      .attr('version', '1.1')
-      .attr('xmlns', 'http://www.w3.org/2000/svg')
-      .css('z-index', this._dragEdgeZindex)
-      .appendTo(this.wrapper);
+      .attr({
+        'class': 'butterfly-svg',
+        'width': _SVGWidth,
+        'height': _SVGHeight,
+        'version': '1.1',
+        'xmlns': 'http://www.w3.org/2000/svg'
+      }).css('z-index', this._dragEdgeZindex)
+        .appendTo(this.wrapper);
 
     if(!_isMobi) {
       // hack 监听浏览器的缩放比例并适配
@@ -476,13 +478,17 @@ class BaseCanvas extends Canvas {
     if (_isHightVerChrome && window.ResizeObserver && this.theme.autoResizeRootSize) {
       // 监听某个dom的resize事件
       const _resizeObserver = new ResizeObserver(entries => {
-        this._rootWidth = $(this.root).width();
-        this._rootHeight = $(this.root).height();
+        let rootN = $(this.root)
+        let rootOffset = rootN.offset();
+        let rootW = rootN.width();
+        let rootH = rootN.height();
+        this._rootWidth = rootW;
+        this._rootHeight = rootH;
         this._coordinateService._changeCanvasInfo({
-          terOffsetX: $(this.root).offset().left,
-          terOffsetY: $(this.root).offset().top,
-          terWidth: $(this.root).width(),
-          terHeight: $(this.root).height()
+          terOffsetX: rootOffset.left,
+          terOffsetY: rootOffset.top,
+          terWidth: rootW,
+          terHeight: rootH
         });
         this.canvasWrapper.resize({root: this.root});
         this.setGridMode(true, undefined , true);
@@ -491,13 +497,17 @@ class BaseCanvas extends Canvas {
     } else {
       //  降级处理，监控窗口的resize事件
       window.addEventListener('resize', () => {
-        this._rootWidth = $(this.root).width();
-        this._rootHeight = $(this.root).height();
+        let rootN = $(this.root)
+        let rootOffset = rootN.offset();
+        let rootW = rootN.width();
+        let rootH = rootN.height();
+        this._rootWidth = rootW;
+        this._rootHeight = rootH;
         this._coordinateService._changeCanvasInfo({
-          terOffsetX: $(this.root).offset().left,
-          terOffsetY: $(this.root).offset().top,
-          terWidth: $(this.root).width(),
-          terHeight: $(this.root).height()
+          terOffsetX: rootOffset.left,
+          terOffsetY: rootOffset.top,
+          terWidth: rootW,
+          terHeight: rootH
         });
         this.canvasWrapper.resize({root: this.root});
         this.setGridMode(true, undefined, true);
@@ -2933,7 +2943,7 @@ class BaseCanvas extends Canvas {
               );
           }
         });
-      } else if (_.isString(_edge)) {
+      } else if (typeof _edge === 'string') {
         edgeIndex = _.findIndex(this.edges, (item) => {
           return _edge === item.id;
         });
@@ -3118,7 +3128,7 @@ class BaseCanvas extends Canvas {
     } else {
       // 重力布局
       if (_.get(this.layout, 'type') === 'forceLayout') {
-        const _opts = $.extend({
+        const _opts = _.merge({
           // 布局画布总宽度
           width,
           // 布局画布总长度
@@ -3253,7 +3263,7 @@ class BaseCanvas extends Canvas {
           }
         });
       } else if(_.get(this.layout, 'type') === 'gridLayout') {
-        const _opts = $.extend({
+        const _opts = _.merge({
           // 布局画布总宽度
           width:  _.get(this.layout, 'width') || 150,
           // 布局画布总长度
@@ -3297,7 +3307,7 @@ class BaseCanvas extends Canvas {
           })
         }
       } else if(_.get(this.layout, 'type') === 'fruchterman') {
-        const _opts = $.extend({
+        const _opts = _.merge({
            // 布局画布总宽度
            width,
            // 布局画布总长度
@@ -3340,7 +3350,7 @@ class BaseCanvas extends Canvas {
           })
         }
       } else if(_.get(this.layout, 'type') === 'radial') {
-        const _opts = $.extend({
+        const _opts = _.merge({
           // 布局画布总宽度
           width: _.get(this.layout, 'options.width') || 500,
           // 布局画布总长度
@@ -3835,8 +3845,7 @@ class BaseCanvas extends Canvas {
     let _data = this._unionData[name];
     if (obj.nodes) {
       obj.nodes.forEach((item) => {
-        let isId = _.isString(item);
-        let node = isId ? this.getNode(item) : item;
+        let node = typeof item === 'string' ? this.getNode(item) : item;
         _data.nodes.push(node);
       });
       _data.nodes = _.uniqBy(_data.nodes, 'id');
@@ -3844,8 +3853,7 @@ class BaseCanvas extends Canvas {
 
     if (obj.groups) {
       obj.groups.forEach((item) => {
-        let isId = _.isString(item);
-        let group = isId ? this.getGroup(item) : item;
+        let group = typeof item === 'string' ? this.getGroup(item) : item;
         _data.groups.push(group);
       });
       _data.groups = _.uniqBy(_data.groups, 'id');
@@ -3853,8 +3861,7 @@ class BaseCanvas extends Canvas {
 
     if (obj.edges) {
       obj.edges.forEach((item) => {
-        let isId = _.isString(item);
-        let edge = isId ? this.getEdge(item) : item;
+        let edge = typeof item === 'string' ? this.getEdge(item) : item;
         _data.edges.push(edge);
       });
       _data.edges = _.uniqBy(_data.edges, 'id');
@@ -4175,9 +4182,10 @@ class BaseCanvas extends Canvas {
     }
   }
   move(position) {
-    $(this.wrapper)
-      .css('left', position[0])
-      .css('top', position[1]);
+    $(this.wrapper).css({
+      'left': position[0],
+      'top': position[1]
+    });
     this._coordinateService._changeCanvasInfo({
       canOffsetX: position[0],
       canOffsetY: position[1]
