@@ -2383,7 +2383,7 @@ class BaseCanvas extends Canvas {
 
     // 删除邻近的线条
     const neighborEdges = this.getNeighborEdges(group.id, 'group');
-    this.removeEdges(neighborEdges, isNotEventEmit, true);
+    neighborEdges.length > 0 && this.removeEdges(neighborEdges, isNotEventEmit, true);
     // 删除group
     const index = _.findIndex(this.groups, _group => _group.id === groupId);
     this.groups.splice(index, 1)[0];
