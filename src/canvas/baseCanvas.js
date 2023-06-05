@@ -1492,7 +1492,7 @@ class BaseCanvas extends Canvas {
                   });
                   this._clearHoverGroup(targetGroup);
                 } else {
-                  console.warn(`nodeId为${dragNode.id}的节点和groupId${targetGroup.id}的节点组scope值不符，无法加入`);
+                  console.warn(`nodeId为${this._dragNode.id}的节点和groupId${targetGroup.id}的节点组scope值不符，无法加入`);
                 }
               }
               rmTarget._init(rmTargetData);
@@ -2383,7 +2383,7 @@ class BaseCanvas extends Canvas {
 
     // 删除邻近的线条
     const neighborEdges = this.getNeighborEdges(group.id, 'group');
-    this.removeEdges(neighborEdges, isNotEventEmit, true);
+    neighborEdges.length > 0 && this.removeEdges(neighborEdges, isNotEventEmit, true);
     // 删除group
     const index = _.findIndex(this.groups, _group => _group.id === groupId);
     this.groups.splice(index, 1)[0];
