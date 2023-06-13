@@ -134,7 +134,7 @@ function drawManhattan(sourcePoint, targetPoint, options) {
   // 不需要计算，直接使用传入的拐点画线
   if (options.draggable && options.hasDragged) {
     return {
-      path: _drawPath(options.breakPoints),
+      path: getDefaultPath(options.breakPoints),
       breakPoints: options.breakPoints
     }
   }
