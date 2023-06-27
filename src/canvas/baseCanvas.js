@@ -1468,6 +1468,7 @@ class BaseCanvas extends Canvas {
                   }
                   rmTargetData.group = targetGroup.id;
                   rmTargetData._isDeleteGroup = false;
+                  targetGroup.nodes.push(rmTarget);
                   this.popActionQueue();
                   this.pushActionQueue({
                     type: 'system:groupAddMembers',
