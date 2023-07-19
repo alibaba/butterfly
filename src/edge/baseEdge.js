@@ -509,7 +509,7 @@ class BaseEdge extends Edge {
       if (this.shapeType === 'Manhattan' && this.draggable) {
         let x = this._coordinateService._terminal2canvas('x', clickX);
         let y = this._coordinateService._terminal2canvas('y', clickY);
-        
+
         //把 _coordinateService 传进来
         let targetPath = DrawUtil.findManhattanPoint(this._breakPoints, {x, y});
         this.emit('InnerEvents', {
