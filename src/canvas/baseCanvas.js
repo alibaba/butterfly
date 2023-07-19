@@ -2025,16 +2025,20 @@ class BaseCanvas extends Canvas {
         const isLink = _.find(node.endpoints, (point) => {
           return (point.nodeId === edge.sourceNode.id && !!edge.sourceNode.getEndpoint(point.id, 'source')) || (point.nodeId === edge.targetNode.id && !!edge.targetNode.getEndpoint(point.id, 'target'));
         });
-        // 曼哈顿线拖动状态清除
-        edge._hasDragged = false;
-        edge._breakPoints = [];
-        isLink && edge.redraw();
+        if(isLink) {
+          // 曼哈顿线拖动状态清除
+          edge._hasDragged = false;
+          edge._breakPoints = [];
+          edge.redraw();
+        }
       } else if (edge.type === 'node') {
         const isLink = edge.sourceNode.id === node.id || edge.targetNode.id === node.id;
-        // 曼哈顿线拖动状态清除
-        edge._hasDragged = false;
-        edge._breakPoints = [];
-        isLink && edge.redraw();
+        if(isLink) {
+          // 曼哈顿线拖动状态清除
+          edge._hasDragged = false;
+          edge._breakPoints = [];
+          edge.redraw();
+        }
       }
     });
   }
