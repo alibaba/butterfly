@@ -61,7 +61,7 @@ function dagreLayout(param) {
     g.nodes().forEach((node) => {
       coord = g.node(node);
       if (coord) {
-        const i = nodes.findIndex(it => it.id === node);
+        const i = nodes.findIndex(it => String(it.id) === String(node));
         nodes[i].left = coord.x;
         nodes[i].top = coord.y;
         nodes[i].posInfo = {
