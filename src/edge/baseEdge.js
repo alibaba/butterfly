@@ -62,13 +62,14 @@ class BaseEdge extends Edge {
     // 曼哈顿线可拖动变量
     this.draggable = _.get(opts, 'draggable', false);;
     this._breakPoints = [];
+    this._hasDragged = false;
     if (this.options.breakPoints && this.options.breakPoints.length > 0) {
       this._breakPoints = this.options.breakPoints;
       this._breakPoints[0].type === 'start';
       this._breakPoints[this._breakPoints.length - 1].type === 'end';
       delete this.options.breakPoints;
+      this._hasDragged = true;
     }
-    this._hasDragged = false;
   }
   _init(obj) {
     if (!this._isInited) {
