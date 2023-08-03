@@ -63,14 +63,15 @@ class BaseEdge extends Edge {
     this._zIndex = 0;
     // 曼哈顿线可拖动变量
     this.draggable = _.get(opts, 'draggable', false);;
+    this._hasDragged = false;
     this._breakPoints = [];
     if (this.options.breakPoints && this.options.breakPoints.length > 0) {
       this._breakPoints = this.options.breakPoints;
       this._breakPoints[0].type === 'start';
       this._breakPoints[this._breakPoints.length - 1].type === 'end';
       delete this.options.breakPoints;
+      this._hasDragged = true;
     }
-    this._hasDragged = false;
 
     // 偏移防止互相反向的线段重叠
     this._offsetPosLeft = 0;
