@@ -17,6 +17,26 @@ class DefaultEdge extends Edge {
 
     return div;
   }
+  draw(obj) {
+    const target = super.draw(obj)
+    if(target){
+      target.addEventListener('mouseover',(e)=>{
+        this.emit('events', {
+          type: 'link:mouseover',
+          edge: this,
+          event:e
+        });
+      })
+      target.addEventListener('mouseout',(e)=>{
+        this.emit('events', {
+          type: 'link:mouseout',
+          edge: this,
+          event:e
+        });
+      })
+    }
+    return target 
+  }
 }
 
 export default DefaultEdge;
