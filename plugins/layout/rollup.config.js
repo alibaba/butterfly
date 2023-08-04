@@ -75,16 +75,16 @@ const graphvizLayout = {
   plugins: plugins
 };
 
-const kedroLayout = {
-  input: './src/kedroviz/index.js',
-  output: [
-    {
-      file: 'kedrovizLayout.js',
-      format: 'es',
-      sourcemap: true
-    }
-  ],
-  plugins: plugins
-};
+// const kedroLayout = {
+//   input: './src/kedroviz/index.js',
+//   output: [
+//     {
+//       file: 'kedrovizLayout.js',
+//       format: 'es',
+//       sourcemap: true
+//     }
+//   ],
+//   plugins: plugins
+// };
 
-export default [main, graphvizLayout, kedroLayout];
+export default [main, graphvizLayout];
