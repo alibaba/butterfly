@@ -1,6 +1,6 @@
 'use strict';
 
-const _ = require('lodash');
+const _ = require('./tiny-lodash');
 
 class CoordinateService {
   constructor(opts) {

@@ -1,7 +1,7 @@
 'use strict';
 
-const $ = require('jquery');
-const _ = require('lodash');
+const $ = require('./tiny-jquery');
+const _ = require('./tiny-lodash');
 
 class GuidelineService {
   constructor(opts) {
@@ -251,9 +251,10 @@ class GuidelineService {
     this.clearCanvas();
   }
   move(x, y) {
-    $(this.dom)
-      .css('left', x)
-      .css('top', y);
+    $(this.dom).css({
+      left: x,
+      top: y
+    });
     this.clearCanvas();
   }
   setOrigin(x, y) {

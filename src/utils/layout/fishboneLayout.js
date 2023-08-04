@@ -1,6 +1,6 @@
 'use strict';
 
-import _ from 'lodash';
+import _ from '../tiny-lodash';
 
 function fishboneLayout(params) {
   const _biasAngle = _.get(params, 'options.biasAngle', Math.PI / 3);

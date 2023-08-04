@@ -2,7 +2,7 @@
 
 import './toolTip.less';
 
-const $ = require('jquery');
+const $ = require('./tiny-jquery');
 
 const DEFUALT = {
   TEMPLATE:

@@ -1,4 +1,5 @@
 'use strict';
+const _ = require('../tiny-lodash')
 const SPEED_DIVISOR = 800;
 function fruchterman (param) {
     const self = param.opts
@@ -114,8 +115,8 @@ function fruchterman (param) {
         }
       }
   
-     // gravity
-     nodes.forEach((n, j) => {
+      // gravity
+      nodes.forEach((n, j) => {
         if (!_.isNumber(n.x) || !_.isNumber(n.y)) return;
         const gravityForce = 0.01 * k * gravity;
         displacements[j].x -= gravityForce * (n.x - center[0]);

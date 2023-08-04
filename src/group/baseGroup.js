@@ -2,8 +2,8 @@
 
 import './baseGroup.less';
 
-const $ = require('jquery');
-const _ = require('lodash');
+const $ = require('../utils/tiny-jquery');
+const _ = require('../utils/tiny-lodash');
 
 import Group from '../interface/group';
 import Endpoint from '../endpoint/baseEndpoint';
@@ -97,8 +97,10 @@ class BaseGroup extends Group {
     }
     let group = $(_dom);
     
-    let titleDom = $('<div></div>')
-      .attr('class', 'title');
+    let titleDom = $.create({
+      tag: 'div',
+      classNames: ['title']
+    });
     
     if (_.get(this, 'options.title')) {
       titleDom.text(_.get(this, 'options.title'));
@@ -232,7 +234,7 @@ class BaseGroup extends Group {
   }
   _moveTo(x, y) {
     // 自身移动
-    $(this.dom).css('top', y).css('left', x);
+    $(this.dom).css({top: y, left: x});
     // 节点组的锚点移动
     this.endpoints.forEach((item) => {
       item.moveTo(x - this.left + item._left, y - this.top + item._top);

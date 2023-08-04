@@ -1,5 +1,5 @@
 'use strict';
-import _ from 'lodash';
+import _ from './tiny-lodash';
 
 // todo:丰富箭头样式
 let ARROW_TYPE = {

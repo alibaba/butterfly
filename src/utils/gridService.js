@@ -1,7 +1,7 @@
 'use strict';
 
-const $ = require('jquery');
-const _ = require('lodash');
+const $ = require('./tiny-jquery');
+const _ = require('./tiny-lodash');
 
 class GridService {
   constructor(opts) {

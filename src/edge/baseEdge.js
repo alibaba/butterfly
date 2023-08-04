@@ -1,7 +1,7 @@
 'use strict';
 
-const _ = require('lodash');
-const $ = require('jquery');
+const _ = require('../utils/tiny-lodash');
+const $ = require('../utils/tiny-jquery');
 
 import ArrowUtil from '../utils/arrow';
 import * as DrawUtil from '../utils/link';
@@ -182,9 +182,10 @@ class BaseEdge extends Edge {
     }
     let labelLenth = length * this.labelPosition + this.labelOffset;
     let point = this.dom.getPointAtLength(labelLenth);
-    $(this.labelDom)
-      .css('left', point.x - this.labelDom.offsetWidth / 2)
-      .css('top', point.y - this.labelDom.offsetHeight / 2);
+    $(this.labelDom).css({
+      'left': point.x - this.labelDom.offsetWidth / 2,
+      'top': point.y - this.labelDom.offsetHeight / 2
+    });
   }
   drawLabel(label) {
     let isDom = typeof HTMLElement === 'object' ? (obj) => {
