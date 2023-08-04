@@ -271,3 +271,62 @@ collapseNode = (string) => {}
 ```js
 expandNode = (string) => {}
 ```
+
+## 事件处理：
+
+### [baseNode]：
+
+#### mousedown事件：
+
+支持传入自定义的名为 `canMouseDown` 的函数。
+
+*参数*
+
+* `event`：DOM事件对象
+
+*返回值*
+
+* `true`：表示执行内置的拖拽事件处理
+* `false`：表示不执行内置的拖拽事件处理
+
+#### click事件：
+
+支持传入自定义的名为 `canClick` 的函数。
+
+*参数*
+
+* `event`：DOM事件对象
+
+*返回值*
+
+* `true`：表示执行内置的点击事件处理
+* `false`：表示不执行内置的点击事件处理
+
+#### 示例：
+```js
+class BaseNode extends Node {
+  constructor(opts) {
+    super(opts);
+  }
+  canMouseDown = (event) => {
+    if (...) {
+      ... // 自定义的事件处理
+      return true;
+    } else {
+      ... // 自定义的事件处理
+      return false;
+    }
+    
+  }
+  canClick = (event) => {
+    if (...) {
+      ... // 自定义的事件处理
+      return true;
+    } else {
+      ... // 自定义的事件处理
+      return false;
+    }
+  }
+  ...
+}
+```
