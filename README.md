@@ -94,7 +94,7 @@ canvas.draw({
   * [左侧画板(pannel)](./docs/zh-CN/plugins-pannel.md)
   * [快捷键(hotkey)](./docs/zh-CN/plugins-hotkey.md)
 * React & Vue支持
-  * [React butterfly组件支持](./docs/zh-CN/react.md)
+  * [React butterfly组件支持](./docs/zh-CN/react.md) [不维护，推荐用原生小蝴蝶]
   * [Vue2 butterfly组件支持](./docs/zh-CN/vue.md)
 
 ## 🎨优秀案例

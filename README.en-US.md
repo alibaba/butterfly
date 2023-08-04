@@ -93,7 +93,7 @@ canvas.draw({
   * [arrow](./docs/en-US/plugins-arrows.md)
   * [pannel](./docs/en-US/plugins-pannel.md)
 * React & Vue Support
-  * [React butterfly](./docs/en-US/react.md)
+  * [React butterfly](./docs/en-US/react.md) [No maintenance, it is recommended to use native version]
   * [Vue2 butterfly](./docs/en-US/vue.md)
 
 ## 🎨Excellent Cases
