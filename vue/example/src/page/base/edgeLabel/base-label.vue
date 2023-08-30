@@ -13,9 +13,9 @@ export default {
     },
   },
   methods: {
-    labelClick(e) {
+    labelClick() {
       console.log('labelClick');
-      this.$emit('dblclick', 'emitlabelClick');
+      this.$emit('labelClick'); // 保持事件名一致
     }
   },
   created() {
