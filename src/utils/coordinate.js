@@ -17,7 +17,7 @@ class CoordinateService {
     this.scrollTop = 0;
     this.scrollLeft = 0;
     this.scrollTimer = undefined;
-    this._calcScrollPos(true);
+    // this._calcScrollPos(true);
 
     // 中心点
     this.originX = undefined;
@@ -127,7 +127,7 @@ class CoordinateService {
     return [this._terminal2canvas('x', coordinates[0], options), this._terminal2canvas('y', coordinates[1], options)];
   }
   _canvas2terminal(pos, coordinate, options) {
-    this._calcScrollPos();
+    // this._calcScrollPos();
     let scale = _.get(options, 'scale') || this.scale;
     let canOffsetX = _.get(options, 'canOffsetX') !== undefined ? _.get(options, 'canOffsetX') : this.canOffsetX;
     let canOffsetY = _.get(options, 'canOffsetY') !== undefined ? _.get(options, 'canOffsetY') : this.canOffsetY;
@@ -146,7 +146,7 @@ class CoordinateService {
   }
 
   _terminal2canvas(pos, coordinate, options) {
-    this._calcScrollPos();
+    // this._calcScrollPos();
     let scale = _.get(options, 'scale') || this.scale;
     let canOffsetX = _.get(options, 'canOffsetX') !== undefined ? _.get(options, 'canOffsetX') : this.canOffsetX;
     let canOffsetY = _.get(options, 'canOffsetY') !== undefined ? _.get(options, 'canOffsetY') : this.canOffsetY;
@@ -154,33 +154,33 @@ class CoordinateService {
     let terOffsetY = _.get(options, 'terOffsetY') !== undefined ? _.get(options, 'terOffsetY') : this.terOffsetY;
     let originX = _.get(options, 'originX') !== undefined ? _.get(options, 'originX') : this.originX || 0;
     let originY = _.get(options, 'originY') !== undefined ? _.get(options, 'originY') : this.originY || 0;
-    let scrollTop = this.scrollTop;
-    let scrollLeft = this.scrollLeft;
+    // let scrollTop = this.scrollTop;
+    // let scrollLeft = this.scrollLeft;
     if (pos === 'x') {
       let transformOriginX  = originX / 100 * this.terWidth;
-      return (coordinate - (transformOriginX * (1 - scale) + canOffsetX) - terOffsetX - scrollLeft) / scale;
+      return (coordinate - (transformOriginX * (1 - scale) + canOffsetX) - terOffsetX) / scale;
     }
     if (pos === 'y') {
       let transformOriginY  = originY / 100 * this.terHeight;
-      return (coordinate - (transformOriginY * (1 - scale) + canOffsetY) - terOffsetY - scrollTop) / scale;
+      return (coordinate - (transformOriginY * (1 - scale) + canOffsetY) - terOffsetY) / scale;
     }
   }
 
-  _calcScrollPos(isRealtime) {
-    if (isRealtime) {
-      clearTimeout(this.scrollTimer);
-      this.scrollTimer = undefined;
-    }
-    if (!this.scrollTimer) {
-      let root = this.canvas.root;
-      let rectSize = root.getBoundingClientRect();
-      this.scrollTop = rectSize.top - this.terOffsetY;
-      this.scrollLeft = rectSize.left - this.terOffsetX;
-      this.scrollTimer = setTimeout(() => { 
-        this.scrollTimer = undefined;
-      }, 100);
-    }
-  }
+  // _calcScrollPos(isRealtime) {
+  //   if (isRealtime) {
+  //     clearTimeout(this.scrollTimer);
+  //     this.scrollTimer = undefined;
+  //   }
+  //   if (!this.scrollTimer) {
+  //     let root = this.canvas.root;
+  //     let rectSize = root.getBoundingClientRect();
+  //     this.scrollTop = rectSize.top - this.terOffsetY;
+  //     this.scrollLeft = rectSize.left - this.terOffsetX;
+  //     this.scrollTimer = setTimeout(() => { 
+  //       this.scrollTimer = undefined;
+  //     }, 100);
+  //   }
+  // }
 }
 
 export default CoordinateService;
